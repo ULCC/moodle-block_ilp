@@ -96,6 +96,18 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         $mform->setType('label', PARAM_RAW);
         
         
+       	//text field for element label
+        $mform->addElement(
+            'textarea',
+            'description',
+            get_string('description', 'block_ilp'),
+            array('class' => 'form_input')
+        );
+        
+        $mform->addRule('description', null, 'maxlength', 1000, 'client');
+        $mform->addRule('description', null, 'required', null, 'client');
+        $mform->setType('description', PARAM_RAW);
+        
         
         $this->specific_definition($mform);
 

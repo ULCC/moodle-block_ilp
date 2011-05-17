@@ -238,7 +238,6 @@ class ilp_element_plugin {
 
         // get all the currently installed evidence resource types
         $plugins = ilp_records_to_menu($dbc->get_form_element_plugins(), 'id', 'name');
-
         
         
         $plugins_directory = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins';
