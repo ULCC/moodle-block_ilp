@@ -3,7 +3,9 @@
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
 
 class ilp_element_plugin_text_area extends ilp_element_plugin {
-	
+
+	public $minimumlength;		//defined by the form creator to validate user input
+	public $maximumlength;		//defined by the form creator to validate user input
 	
 	    /**
      * Constructor
@@ -29,7 +31,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
 			if (!empty($plugin_record)) {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
-				$this->required			=	$reportfield->required;
+				$this->required			=	$reportfield->req;
 				$this->minimumlength	=	$pluginrecord->minimumlength;
 				$this->maximumlength	=	$pluginrecord->maximumlength;
 				$this->position			=	$reportfield->position;

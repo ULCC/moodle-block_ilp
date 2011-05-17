@@ -20,6 +20,12 @@ define('BLOCK_NAME',                'assmgr');
 define('MOVE_UP',                  '1');
 define('MOVE_DOWN',                '0');
 
+define('PASTDATE',    1 );
+define('PRESENTDATE', 2 );
+define('FUTUREDATE',  3 );
+define('ANYDATE',     0 );
+
+
 
 
 
