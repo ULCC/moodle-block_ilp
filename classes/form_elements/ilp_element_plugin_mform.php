@@ -96,7 +96,7 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         $mform->setType('label', PARAM_RAW);
         
         
-       	//text field for element label
+       	//text field for element description
         $mform->addElement(
             'textarea',
             'description',

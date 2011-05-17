@@ -84,9 +84,6 @@ class ilp_element_plugin_text extends ilp_element_plugin {
     /// Launch add key unique_position_report
         $result = $result && add_key($table, $key);
 
-    /// Launch add key unique_position_report
-        $result = $result && add_key($table, $key);
-
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
         }
@@ -193,8 +190,8 @@ class ilp_element_plugin_text extends ilp_element_plugin {
             array('class' => 'form_input')
         );
         
-        if (!empty($this->minimumlength)) $mform->addRule("$this->reportfield_id", null, 'minlength', $this->maximumlength, 'client',array('size'=>'10'));
-        if (!empty($this->maximumlength)) $mform->addRule("$this->reportfield_id", null, 'maxlength', $this->maximumlength, 'client',array('size'=>'10'));
+        if (!empty($this->minimumlength)) $mform->addRule("$this->reportfield_id", null, 'minlength', $this->maximumlength, 'client');
+        if (!empty($this->maximumlength)) $mform->addRule("$this->reportfield_id", null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
         $mform->setType('label', PARAM_RAW);
     	
