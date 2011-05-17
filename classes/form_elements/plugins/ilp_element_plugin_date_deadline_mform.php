@@ -33,13 +33,13 @@ class ilp_element_plugin_date_deadline_mform  extends ilp_element_plugin_mform {
 	 
 	 protected function specific_process_data($data) {
 	  	
-	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record("block_ilp_plu_dat",$data->reportfield_id) : false;
+	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record("block_ilp_plu_ddl",$data->reportfield_id) : false;
 	 	
 	 	if (empty($plgrec)) {
-	 		return $this->dbc->create_plugin_record("block_ilp_plu_dat",$data);
+	 		return $this->dbc->create_plugin_record("block_ilp_plu_ddl",$data);
 	 	} else {
 	 		//get the old record from the elements plugins table 
-	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield("block_ilp_plu_dat",$data->reportfield_id);
+	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield("block_ilp_plu_ddl",$data->reportfield_id);
 	
 	 		//create a new object to hold the updated data
 	 		$pluginrecord 					=	new stdClass();
@@ -47,7 +47,7 @@ class ilp_element_plugin_date_deadline_mform  extends ilp_element_plugin_mform {
 			$pluginrecord->datetense			=	$data->datetense
 	 			
 	 		//update the plugin with the new data
-	 		return $this->dbc->update_plugin_record("block_ilp_plu_dat",$pluginrecord);
+	 		return $this->dbc->update_plugin_record("block_ilp_plu_ddl",$pluginrecord);
 	 	}
 	 }
 	 
