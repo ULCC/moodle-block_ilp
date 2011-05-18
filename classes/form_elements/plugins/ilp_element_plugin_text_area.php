@@ -198,7 +198,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
     * this function returns the mform elements taht will be added to a report form
 	*
     */
-    public	function entry_form(&$mform) {
+    public	function entry_form( &$mform ) {
     	
     	//text field for element label
         $mform->addElement(

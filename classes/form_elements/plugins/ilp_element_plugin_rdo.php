@@ -2,19 +2,18 @@
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
 
-class ilp_element_plugin_date_deadline extends ilp_element_plugin {
-
+class ilp_element_plugin_rdo extends ilp_element_plugin {
+	
 	public $tablename;
 	public $data_entry_tablename;
-	public $datetense;	//offers the form creator 'past', 'present' and 'future' options to control validation of the user input	
-	
+
     /**
      * Constructor
      */
     function __construct() {
     	
-    	$this->tablename = "block_ilp_plu_ddl";
-    	$this->data_entry_tablename = "block_ilp_plu_ddl_ent";
+    	$this->tablename = "block_ilp_plu_rdo";
+    	$this->data_entry_tablename = "block_ilp_plu_rdo_ent";
     	
     	parent::__construct();
     }
@@ -25,16 +24,16 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
      *
      */
     public function load($reportfield_id) {
-		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
+		$reportfield	=	$this->dbc->get_report_field_data($reportfield_id);	
 		if (!empty($reportfield)) {
-			$plugin		=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
+			$plugin			=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
 			$this->plugin_id	=	$plugin_id;
-			$pluginrecord	=	$this->dbc->get_form_element_data($this->tablename,$reportfield->id);
+			$pluginrecord		=	$this->dbc->get_form_element_data($this->tablename,$reportfield->id);
 			if (!empty($plugin_record)) {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
 				$this->required			=	$reportfield->req;
-				$this->datetense		=	$reportfield->datetense;
+				$this->maximumlength		=	$pluginrecord->maximumlength;
 				$this->position			=	$reportfield->position;
 			}
 		}
@@ -60,10 +59,6 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
         $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_report);
         
-        $table_datatense = new $this->xmldb_field('datatense');
-        $table_datatense->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
-        $table->addField($table_minlength);
-        
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_timemodified);
@@ -76,13 +71,10 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
         $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
         $table->addKey($table_key);
 
-        $table_key = new $this->xmldb_key('date_unique_reportfield');
+        $table_key = new $this->xmldb_key('textplugin_unique_reportfield');
         $table_key->setAttributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
         $table->addKey($table_key);
         
-
-    /// Launch add key unique_position_report
-        //$result = $result && add_key($table, $key);
 
     /// Launch add key unique_position_report
         $result = $result && add_key($table, $key);
@@ -124,6 +116,13 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
         $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
         $table->addKey($table_key);
         
+       	$table_key = new $this->xmldb_key('textplugin_unique_textfield');
+        $table_key->setAttributes(XMLDB_KEY_FOREIGN_UNIQUE, array('textfield_id'), $this->tablename ,'id');
+        $table->addKey($table_key);
+                
+        $table_key = new $this->xmldb_key('textplugin_unique_entry');
+        $table_key->setAttributes(XMLDB_KEY_FOREIGN, array('entry_id'),'block_ilp_entry','id');
+        $table->addKey($table_key);
         
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
@@ -147,21 +146,16 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
      *
      */
     public function audit_type() {
-        return 'Textarea Field';
+        return 'Radio group';
     }
     
     /**
     * function used to return the language strings for the plugin
     */
     function language_strings(&$string) {
-        $string['ilp_element_plugin_date'] 		= 'Date selector';
-        $string['ilp_element_plugin_date_type'] 	= 'date selector';
-        $string['ilp_element_plugin_date_description'] 	= 'A date entry element';
-        $string['ilp_element_plugin_datetense'] 	= 'Date tense';
-        $string['ilp_element_plugin_date_past'] 	= 'past';
-        $string['ilp_element_plugin_date_present'] 	= 'present';
-        $string['ilp_element_plugin_date_future'] 	= 'future';
-        $string['ilp_element_plugin_date_any'] 		= 'none of the above, or a mixture';
+        $string['ilp_element_plugin_rdo'] 		= 'Text';
+        $string['ilp_element_plugin_rdo_type'] 		= 'Text';
+        $string['ilp_element_plugin_rdo_description'] 	= 'A radio group';
         
         return $string;
     }
@@ -179,20 +173,22 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
     */
     public	function entry_form( &$mform ) {
     	
-
     	//text field for element label
         $mform->addElement(
-            'date_selector',
+            'text',
             "$this->reportfield_id",
             "$this->label",
             array('class' => 'form_input')
         );
         
+        if (!empty($this->minimumlength)) $mform->addRule("$this->reportfield_id", null, 'minlength', $this->maximumlength, 'client');
+        if (!empty($this->maximumlength)) $mform->addRule("$this->reportfield_id", null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
-	//@todo decide correct PARAM type for date element
-        $mform->setType($this->reportfield_id, PARAM_RAW);
+        $mform->setType('label', PARAM_RAW);
     	
-        //return $mform;
+        //return $mfrom;
+    	
+    	
     }
 }
 
