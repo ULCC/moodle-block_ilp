@@ -166,7 +166,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
         $string['ilp_element_plugin_date_past'] 	= 'past';
         $string['ilp_element_plugin_date_present'] 	= 'present';
         $string['ilp_element_plugin_date_future'] 	= 'future';
-        $string['ilp_element_plugin_date_any'] 		= 'none of the above, or a mixture';
+        $string['ilp_element_plugin_date_anydate']	= 'none of the above, or a mixture';
         
         return $string;
     }

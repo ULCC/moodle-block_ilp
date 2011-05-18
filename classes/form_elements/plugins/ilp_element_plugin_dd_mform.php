@@ -26,13 +26,13 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
         	$mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 		$typelist = array(
-			'single' => get_string( 'ilp_element_plugin_dd_single' ),
-			'multi' => get_string( 'ilp_element_plugin_dd_multi' )
+			'single' => get_string( 'ilp_element_plugin_dd_single' , 'block_ilp' ),
+			'multi' => get_string( 'ilp_element_plugin_dd_multi' , 'block_ilp' )
 		);
 		$mform->addElement(
 			'select',
 			'ilp_element_plugin_dd_type',
-			get_string( 'ilp_element_plugin_dd_typelabel' ),
+			get_string( 'ilp_element_plugin_dd_typelabel' , 'block_ilp' ),
 			$typelist,
 			array('class' => 'form_input')
 		);

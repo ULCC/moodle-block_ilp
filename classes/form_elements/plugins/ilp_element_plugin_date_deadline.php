@@ -161,7 +161,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
         $string['ilp_element_plugin_date_deadline_past'] 	= 'past';
         $string['ilp_element_plugin_date_deadline_present'] 	= 'present';
         $string['ilp_element_plugin_date_deadline_future'] 	= 'future';
-        $string['ilp_element_plugin_date_deadline_any'] 	= 'none of the above, or a mixture';
+        $string['ilp_element_plugin_date_deadline_anydate'] 	= 'none of the above, or a mixture';
         
         return $string;
     }
