@@ -4,10 +4,15 @@ echo $OUTPUT->header();
 <div class="ilp yui-skin-sam">
 <?php
 echo $OUTPUT->heading(get_string('createreport', 'block_ilp')); 
-
+?>
+<div class=""><?php echo get_string("previewdescription","block_ilp");?></div>
+<?php
 //render the form
 $mform->display();
 ?>
+<div><a href="<?php echo $editreporturl; ?>" class="button"><?php echo get_string("editreport","block_ilp");?></a></div>
+<div><a href="<?php echo $editfieldsurl ?>" class="button"><?php echo get_string("editreportfields","block_ilp");?></a></div>
+<div><a href="<?php echo $editpermissionsurl ?>" class="button"><?php echo get_string("continue","block_ilp");?></a></div>
 </div>
 <?php
 echo $OUTPUT->footer();

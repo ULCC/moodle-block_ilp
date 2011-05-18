@@ -20,11 +20,12 @@ class edit_report_mform extends ilp_moodleform {
 		/**
      	 * TODO comment this
      	 */
-		function __construct($course_id) {
+		function __construct($course_id,$report_id=null) {
 
 			global $CFG;
 			
 			$this->course_id	=	$course_id;
+			$this->report_id	=	$report_id;
 			$this->dbc			=	new ilp_db();
 			
 			// call the parent constructor
@@ -41,7 +42,7 @@ class edit_report_mform extends ilp_moodleform {
 
         	$mform =& $this->_form;
         	
-        	$fieldsettitle = get_string('createreport', 'block_ilp');
+        	$fieldsettitle = (!empty($this->report_id)) ? get_string('editreport', 'block_ilp') : get_string('createreport', 'block_ilp');
         	
         	//create a new fieldset
         	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
@@ -88,10 +89,6 @@ class edit_report_mform extends ilp_moodleform {
 	        
 	        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        
-
-	        
-	        
-	        
 	        //$this->add_action_buttons(true, get_string('submit'));
 	        
 	        //close the fieldset
@@ -106,7 +103,7 @@ class edit_report_mform extends ilp_moodleform {
 			if (empty($data->id)) {
             	$data->id = $this->dbc->create_report($data);
         	} else {
-            	$this->dbc->set_report($data);
+            	$this->dbc->update_report($data);
         	}
 	
     	    return $data->id;

@@ -431,6 +431,17 @@ class ilp_db_functions	extends ilp_logging {
 		return $this->dbc->get_record('block_ilp_report', array('id' => $id));
 	}
 	
+     /**
+     * Updates the report record with the data in the given object  
+     * the object must contain a id param with the id of the record 
+     * to be updated
+     *
+     * @param object $reportfield an object containing the data on the record
+     * @return bool true or false depending on result of query
+     */
+    function update_report($report) {
+    	return $this->update_record('block_ilp_report',$report);
+    }
 	
 	
 }

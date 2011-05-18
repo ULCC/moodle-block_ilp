@@ -6,6 +6,7 @@
 	$string['apply'] 				= 	'Apply'; 
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['createreport']			=	'Create Report';
+	$string['continue']				=	'Continue';
 	$string['defaulthozsize'] 		= 	'Default number of columns';
 	$string['defaulthozsizeconfig'] = 	'The default number of columns for all AJAX tables that do not override this setting.';
 	$string['defaultverticalperpage'] = 'Default number of table rows';
@@ -14,6 +15,7 @@
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
 	$string['editreport']			=	'Edit Report';
+	$string['editreportfields']		=	'Edit Report Fields';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	
@@ -35,8 +37,8 @@
 	$string['perpage'] 				=	'per page';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['preview'] 				= 	'Preview';
+	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
 	$string['req'] 					= 	'Required';
-	
 	$string['reportcreationsuc'] 	= 	'The report was successfully created';
 	$string['reportfields'] 		= 	'Report Fields';
 	$string['reportmustcontainfields'] 	= 	'The report must contain fields';

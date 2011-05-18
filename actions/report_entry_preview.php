@@ -65,5 +65,9 @@ if (empty($reportfields)) {
 
 $mform	= new	report_entry_preview_mform($course_id,$report_id);
 
+$editreporturl = "{$CFG->wwwroot}/blocks/ilp/actions/edit_report.php?course_id={$course_id}&report_id={$report_id}";
+$editfieldsurl = "{$CFG->wwwroot}/blocks/ilp/actions/edit_prompt.php?course_id={$course_id}&report_id={$report_id}";
+$editpermissionsurl = "{$CFG->wwwroot}/blocks/ilp/actions/edit_report_permissions.php?course_id={$course_id}&report_id={$report_id}";
+
 require_once($CFG->dirroot.'/blocks/ilp/views/report_entry_preview.html');
 ?>

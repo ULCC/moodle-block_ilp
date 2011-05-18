@@ -34,7 +34,7 @@ $report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	;
 $dbc = new ilp_db();
 
 //instantiate the edit_report_mform class
-$mform	=	new edit_report_mform($course_id);
+$mform	=	new edit_report_mform($course_id,$report_id);
 
 
 $course	=	$dbc->get_course($course_id);
@@ -87,6 +87,11 @@ if($mform->is_submitted()) {
 $pagetitle	=	(empty($report_id)) ? get_string('createreport', 'block_ilp') : get_string('editreport', 'block_ilp');
 
 
+if (!empty($report_id)) {
+	$reportrecord	=	$dbc->get_report_by_id($report_id);
+	$mform->set_data($reportrecord);
+} 
+
 //set the required level of permission needed to view this page
 
 
@@ -99,7 +104,7 @@ $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
 $PAGE->navbar->add($course->shortname,null,'title');
 
 //get string for create report
-$PAGE->navbar->add(get_string('createreport', 'block_ilp'),null,'title');
+$PAGE->navbar->add($pagetitle,null,'title');
 
 // setup the page title and heading
 $PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));
@@ -111,7 +116,7 @@ $PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
 
-ilp_element_plugin::install_new_plugins();
+//ilp_element_plugin::install_new_plugins();
 
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_report.html');
 
