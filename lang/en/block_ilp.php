@@ -51,7 +51,13 @@
 	
 	
 
-	
+	//CAPABILITY STRINGS
+	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
+	$string['ilp:addreport'] 			= 	'Add a report to user ilp';
+	$string['ilp:editreport'] 			= 	'Edit a report in a user ilp';
+	$string['ilp:deletereport'] 		= 	'Delete a report from a user ilp';
+	$string['ilp:updatestatus'] 		= 	'Update Status';
+	$string['ilp:viewreport'] 			= 	'View a report in a user ilp';
 	
 	//ERROR MESSAGES CHANGING THESE IS NOT RECOMMENDED
 	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';

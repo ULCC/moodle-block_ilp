@@ -116,7 +116,7 @@ $PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
 
-//ilp_element_plugin::install_new_plugins();
+ilp_element_plugin::install_new_plugins();
 
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_report.html');
 

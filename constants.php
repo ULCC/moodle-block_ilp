@@ -14,7 +14,7 @@ define('REDIRECT_DELAY',            1);
 
 define('MAXLENGTH_BREADCRUMB',      130);
 
-define('BLOCK_NAME',                'assmgr');
+define('BLOCK_NAME',                'ilp');
 
 
 define('MOVE_UP',                  '1');

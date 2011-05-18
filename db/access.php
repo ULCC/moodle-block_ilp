@@ -13,6 +13,8 @@
  * @version 2.0
  */
 
+
+
 // TODO moodle 2.0 complains that this should be $capabilities
 $block_ilp_capabilities = array(
 
@@ -83,4 +85,35 @@ $block_ilp_capabilities = array(
 	),
     
 );
+global $CFG;
+//test the version number if we are in 2.0 we need to pass the $block_ilp_capabilities to $capabilities
+
+if (stripos($CFG->release,"2.") !== false) {
+	
+	//pass the $block_ilp_capabilities to $capabilities
+	$capabilities	=	$block_ilp_capabilities;
+
+	//move all values in admin key to manager key 	
+	$capabilities['block/ilp:creeddelreport']['legacy']['manager'] = $capabilities['block/ilp:creeddelreport']['legacy']['admin'];
+	//unset the admin key
+	unset($capabilities['block/ilp:creeddelreport']['legacy']['admin']);
+	
+	$capabilities['block/ilp:addreport']['legacy']['manager'] = $capabilities['block/ilp:addreport']['legacy']['admin'];
+	unset($capabilities['block/ilp:addreport']['legacy']['admin']);
+	
+	$capabilities['block/ilp:editreport']['legacy']['manager'] = $capabilities['block/ilp:editreport']['legacy']['admin'];
+	unset($capabilities['block/ilp:editreport']['legacy']['admin']);
+	
+	$capabilities['block/ilp:deletereport']['legacy']['manager'] = $capabilities['block/ilp:deletereport']['legacy']['admin'];
+	unset($capabilities['block/ilp:deletereport']['legacy']['admin']);
+	
+	$capabilities['block/ilp:viewreport']['legacy']['manager'] = $capabilities['block/ilp:viewreport']['legacy']['admin'];
+	unset($capabilities['block/ilp:viewreport']['legacy']['admin']);
+	
+	unset($block_ilp_capabilities);
+}
+
+
+
+
 ?>

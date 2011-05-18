@@ -15,8 +15,6 @@ global $CFG, $PARSER,$USER;
 // get the id of the course
 $course_id = $PARSER->required_param('course_id', PARAM_INT);
 
-
-
 // the user must be logged in
 require_login(0, false);
 
@@ -26,12 +24,13 @@ $usercontext = get_context_instance(CONTEXT_USER, $USER->id);
 //get the system context
 $sitecontext = get_context_instance(CONTEXT_SYSTEM);
 
-
+//if there is no user context then throw an error
 if (!$usercontext) {
-    error("User ID is incorrect");
+    print_error("incorrectuserid",'block_ilp');
 }
 
-if (!has_capability('moodle/site:doanything', $sitecontext) || !has_capability('moodle/ilp:ilp:creeddelreport', $usercontext) ) {  // are we god ?
+//make sure that the user has the ability to manipulate reports if not throw an error
+if (!has_capability('block/ilp:creeddelreport', $usercontext) ) {  
    print_error('incorrectcreatereportpermissions', 'block_ilp');
 }
  
