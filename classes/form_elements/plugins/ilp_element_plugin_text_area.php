@@ -61,7 +61,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
 
         // create the table to store report fields
         $table = new $this->xmldb_table( $this->tablename );
-        $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'set_attributes';
+        $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
 
         $table_id = new $this->xmldb_field('id');
         $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
@@ -92,7 +92,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
         $table->addKey($table_key);
 
         $table_key = new $this->xmldb_key('textareaplugin_unique_reportfield');
-        $table_key->set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
         $table->addKey($table_key);
 
         if(!$this->dbman->table_exists($table)) {
