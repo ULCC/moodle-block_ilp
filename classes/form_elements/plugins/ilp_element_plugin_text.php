@@ -4,8 +4,8 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin
 
 class ilp_element_plugin_text extends ilp_element_plugin {
 	
-	public $tablename
-	public $data_entry_tablename
+	public $tablename;
+	public $data_entry_tablename;
 	public $minimumlength;
 	public $maximumlength;
 	
@@ -92,7 +92,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
         $table->addKey($table_key);
 
         $table_key = new $this->xmldb_key('textplugin_unique_reportfield');
-        $table_key->setAttributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
+        $table_key->set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
         $table->addKey($table_key);
         
 
@@ -106,7 +106,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
         
 	    // create the new table to store responses to fields
         $table = new $this->xmldb_table( $this->data_entry_tablename );
-        $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
+        $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'set_attributes';
 
         $table_id = new $this->xmldb_field('id');
         $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);

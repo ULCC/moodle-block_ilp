@@ -69,9 +69,9 @@ class ilp_element_plugin_date extends ilp_element_plugin {
         $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_report);
         
-        $table_datatense = new $this->xmldb_field('datatense');
-        $table_datatense->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
-        $table->addField($table_minlength);
+        $table_datetense = new $this->xmldb_field('datetense');
+        $table_datetense->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_datetense);
         
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
@@ -86,7 +86,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
         $table->addKey($table_key);
 
         $table_key = new $this->xmldb_key('date_unique_reportfield');
-        $table_key->setAttributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
         $table->addKey($table_key);
 
     /// Launch add key unique_position_report

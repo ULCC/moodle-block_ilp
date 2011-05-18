@@ -72,7 +72,7 @@ class ilp_element_plugin_rdo extends ilp_element_plugin {
         $table->addKey($table_key);
 
         $table_key = new $this->xmldb_key('textplugin_unique_reportfield');
-        $table_key->setAttributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
         $table->addKey($table_key);
         
 
