@@ -97,7 +97,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
         
 
     /// Launch add key unique_position_report
-        $result = $result && add_key($table, $key);
+        //$result = $result && add_key($table, $key);
 
     /// Launch add key unique_position_report
         //$result = $result && add_key($table, $key);
