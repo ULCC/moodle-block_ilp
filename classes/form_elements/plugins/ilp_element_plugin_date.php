@@ -41,7 +41,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
 			if (!empty($pluginrecord)) {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
-				$this->req				=	$reportfield->req;
+				$this->req			=	$reportfield->req;
 				$this->datetense		=	$this->datetense;
 				$this->position			=	$reportfield->position;
 				return true;	
@@ -162,7 +162,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
         $string['ilp_element_plugin_date'] 		= 'Date selector';
         $string['ilp_element_plugin_date_type'] 	= 'date selector';
         $string['ilp_element_plugin_date_description'] 	= 'A date entry element';
-        $string['ilp_element_plugin_datetense'] 	= 'Date tense';
+        $string['ilp_element_plugin_date_tense'] 	= 'Date tense';
         $string['ilp_element_plugin_date_past'] 	= 'past';
         $string['ilp_element_plugin_date_present'] 	= 'present';
         $string['ilp_element_plugin_date_future'] 	= 'future';

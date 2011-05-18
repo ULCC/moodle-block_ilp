@@ -13,7 +13,7 @@ class ilp_element_plugin_date_mform  extends ilp_element_plugin_mform {
 			PASTDATE => get_string( 'ilp_element_plugin_date_past' ),
 			PRESENTDATE => get_string( 'ilp_element_plugin_date_present' ),
 			FUTUREDATE => get_string( 'ilp_element_plugin_date_future' ),
-			ANYDATE => get_string( 'ilp_element_plugin_date_anydate' );
+			ANYDATE => get_string( 'ilp_element_plugin_date_anydate' )
 		);
 		$mform->addElement(
 			'select',
@@ -44,7 +44,7 @@ class ilp_element_plugin_date_mform  extends ilp_element_plugin_mform {
 	 		//create a new object to hold the updated data
 	 		$pluginrecord 					=	new stdClass();
 	 		$pluginrecord->id				=	$oldrecord->id;
-			$pluginrecord->datetense			=	$data->datetense
+			$pluginrecord->datetense			=	$data->datetense;
 	 			
 	 		//update the plugin with the new data
 	 		return $this->dbc->update_plugin_record("block_ilp_plu_dat",$pluginrecord);

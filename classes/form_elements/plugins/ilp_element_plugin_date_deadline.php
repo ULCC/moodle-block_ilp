@@ -28,7 +28,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
 		if (!empty($reportfield)) {
 			$plugin		=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
-			$this->plugin_id	=	$plugin_id;
+			$this->plugin_id=	$plugin_id;
 			$pluginrecord	=	$this->dbc->get_form_element_data($this->tablename,$reportfield->id);
 			if (!empty($plugin_record)) {
 				$this->label			=	$reportfield->label;
@@ -154,14 +154,14 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
     * function used to return the language strings for the plugin
     */
     function language_strings(&$string) {
-        $string['ilp_element_plugin_date'] 		= 'Date selector';
-        $string['ilp_element_plugin_date_type'] 	= 'date selector';
-        $string['ilp_element_plugin_date_description'] 	= 'A date entry element';
-        $string['ilp_element_plugin_datetense'] 	= 'Date tense';
-        $string['ilp_element_plugin_date_past'] 	= 'past';
-        $string['ilp_element_plugin_date_present'] 	= 'present';
-        $string['ilp_element_plugin_date_future'] 	= 'future';
-        $string['ilp_element_plugin_date_any'] 		= 'none of the above, or a mixture';
+        $string['ilp_element_plugin_date_deadline']		= 'Date selector';
+        $string['ilp_element_plugin_date_deadline_type'] 	= 'date selector';
+        $string['ilp_element_plugin_date_deadline_description']	= 'A date deadline entry element';
+        $string['ilp_element_plugin_date_deadline_tense'] 	= 'Date tense';
+        $string['ilp_element_plugin_date_deadline_past'] 	= 'past';
+        $string['ilp_element_plugin_date_deadline_present'] 	= 'present';
+        $string['ilp_element_plugin_date_deadline_future'] 	= 'future';
+        $string['ilp_element_plugin_date_deadline_any'] 	= 'none of the above, or a mixture';
         
         return $string;
     }

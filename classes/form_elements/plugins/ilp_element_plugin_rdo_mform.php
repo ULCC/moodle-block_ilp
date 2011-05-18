@@ -27,17 +27,6 @@ class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_mform {
         	$mform->addRule('optionlist', null, 'minlength', 1, 'client');
 		//@todo should we insist on a default option being chosen ?
 
-		$typelist = array(
-			'single' => get_string( 'ilp_element_plugin_dd_single' ),
-			'multi' => get_string( 'ilp_element_plugin_dd_multi' )
-		);
-		$mform->addElement(
-			'select',
-			'ilp_element_plugin_dd_type',
-			get_string( 'ilp_element_plugin_dd_typelabel' ),
-			$typelist,
-			array('class' => 'form_input')
-		);
 	  }
 	
 	 protected function specific_validation($data) {
