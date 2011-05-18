@@ -4,6 +4,8 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin
 
 class ilp_element_plugin_date extends ilp_element_plugin {
 
+	public $tablename;
+	public $data_entry_tablename;
 	public $datetense;	//offers the form creator 'past', 'present' and 'future' options to control validation of the user input	
 	
     /**
@@ -12,6 +14,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
     function __construct() {
     	
     	$this->tablename = "block_ilp_plu_dat";
+    	$this->data_entry_tablename = "block_ilp_plu_dat_ent";
     	
     	parent::__construct();
     }
@@ -55,7 +58,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
         global $CFG, $DB;
 
         // create the table to store report fields
-        $table = new $this->xmldb_table('block_ilp_plu_dat');
+        $table = new $this->xmldb_table( $this->tablename );
         $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
 
         $table_id = new $this->xmldb_field('id');
@@ -95,7 +98,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
         
         
 	    // create the new table to store responses to fields
-        $table = new $this->xmldb_table('block_ilp_plu_dat_ent');
+        $table = new $this->xmldb_table( $this->data_entry_tablename );
         $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
 
         $table_id = new $this->xmldb_field('id');
@@ -138,10 +141,10 @@ class ilp_element_plugin_date extends ilp_element_plugin {
      *
      */
     public function uninstall() {
-        $table = new $this->xmldb_table('block_ilp_plu_dat_ent');
+        $table = new $this->xmldb_table( $this->data_entry_tablename );
         drop_table($table);
         
-        $table = new $this->xmldb_table('block_ilp_plu_dat');
+        $table = new $this->xmldb_table( $this->tablename );
         drop_table($table);
     }
 	

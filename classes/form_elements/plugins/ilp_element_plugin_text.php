@@ -4,9 +4,10 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin
 
 class ilp_element_plugin_text extends ilp_element_plugin {
 	
-	
-	public		$minimumlength;
-	public		$maximumlength;
+	public $tablename
+	public $data_entry_tablename
+	public $minimumlength;
+	public $maximumlength;
 	
 	    /**
      * Constructor
@@ -14,6 +15,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
     function __construct() {
     	
     	$this->tablename = "block_ilp_plu_tex";
+    	$this->data_entry_tablename = "block_ilp_plu_tex_ent";
     	
     	parent::__construct();
     }
@@ -58,7 +60,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
         global $CFG, $DB;
 
         // create the table to store report fields
-        $table = new $this->xmldb_table('block_ilp_plu_tex');
+        $table = new $this->xmldb_table( $this->tablename );
         $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
 
         $table_id = new $this->xmldb_field('id');
@@ -103,7 +105,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
         
         
 	    // create the new table to store responses to fields
-        $table = new $this->xmldb_table('block_ilp_plu_tex_ent');
+        $table = new $this->xmldb_table( $this->data_entry_tablename );
         $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
 
         $table_id = new $this->xmldb_field('id');
@@ -135,7 +137,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
         $table->addKey($table_key);
         
        	$table_key = new $this->xmldb_key('textplugin_unique_textfield');
-        $table_key->setAttributes(XMLDB_KEY_FOREIGN_UNIQUE, array('textfield_id'),'block_ilp_plu_tex','id');
+        $table_key->setAttributes(XMLDB_KEY_FOREIGN_UNIQUE, array('textfield_id'), $this->tablename ,'id');
         $table->addKey($table_key);
                 
         $table_key = new $this->xmldb_key('textplugin_unique_entry');
@@ -153,10 +155,10 @@ class ilp_element_plugin_text extends ilp_element_plugin {
      *
      */
     public function uninstall() {
-        $table = new $this->xmldb_table('block_ilp_plu_tex');
+        $table = new $this->xmldb_table( $this->tablename );
         drop_table($table);
         
-        $table = new $this->xmldb_table('block_ilp_plu_tex_ent');
+        $table = new $this->xmldb_table( $this->data_entry_tablename );
         drop_table($table);
     }
 	
