@@ -9,6 +9,8 @@ $promptmform->display();
 
 require_once($CFG->dirroot.'/blocks/ilp/actions/view_reportfields_table.php');
 ?>
+<div><a href="<?php echo $previewreporturl; ?>" class="button"><?php echo get_string("viewreportpreview","block_ilp");?></a></div>
+
 </div>
 <?php
 echo $OUTPUT->footer();

@@ -25,6 +25,7 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/forms/add_prompt_mform.php');
 //get the id of the course that is currently being used
 $course_id = $PARSER->required_param('course_id', PARAM_INT);
 
+//get the id of the report that is currently in use
 $report_id = $PARSER->required_param('report_id', PARAM_INT);
 
 // instantiate the db
@@ -37,9 +38,14 @@ $course	=	$dbc->get_course($course_id);
 //
 
 // setup the navigation breadcrumbs
+//block name
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
+
+//course shortname
 $PAGE->navbar->add($course->shortname,null,'title');
-$PAGE->navbar->add($course->shortname,null,'title');
+
+//get string for create report
+$PAGE->navbar->add(get_string('createreport', 'block_ilp'),null,'title');
 
 // setup the page title and heading
 $PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));
@@ -55,6 +61,9 @@ if($promptmform->is_submitted()) {
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_field.php?report_id='.$report_id.'&course_id='.$course_id.'&plugin_id='.$formdata->plugin_id;
     redirect($return_url, get_string("addfield", 'block_ilp'), REDIRECT_DELAY);
 }
+
+
+$previewreporturl	= "{$CFG->wwwroot}/blocks/ilp/actions/report_entry_preview.php?course_id={$course_id}&report_id={$report_id}";
 
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_prompt.html');
 

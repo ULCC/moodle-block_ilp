@@ -92,9 +92,14 @@ $pagetitle	=	(empty($report_id)) ? get_string('createreport', 'block_ilp') : get
 
 
 // setup the navigation breadcrumbs
+//block name
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
+
+//course shortname
 $PAGE->navbar->add($course->shortname,null,'title');
-$PAGE->navbar->add($pagetitle,null,'title');
+
+//get string for create report
+$PAGE->navbar->add(get_string('createreport', 'block_ilp'),null,'title');
 
 // setup the page title and heading
 $PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));

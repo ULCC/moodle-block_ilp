@@ -15,6 +15,8 @@
 	$string['display'] 				= 	'Display';
 	$string['editreport']			=	'Edit Report';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
+	$string['formelementdeletesuc']	=	'The field was successfully deleted';
+	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	
 	
@@ -30,25 +32,19 @@
 	$string['moverightone'] 		= 'Move right 1';
 	$string['movetoend'] 			= 'Move to end';
 	$string['moveup']		 		= 'Move up';
-	
-	
-	
 	$string['perpage'] 				=	'per page';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['preview'] 				= 	'Preview';
-	$string['req'] 			= 	'Required';
+	$string['req'] 					= 	'Required';
+	
 	$string['reportcreationsuc'] 	= 	'The report was successfully created';
-	
 	$string['reportfields'] 		= 	'Report Fields';
+	$string['reportmustcontainfields'] 	= 	'The report must contain fields';
 	$string['required']	 			= 	'Required';
-	
-	
-	
 	$string['showingpages'] = 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 	= 	'Submit and display';
 	$string['type'] 				= 	'Type';
-	
-	
+	$string['viewreportpreview'] 				= 	'View Report Preview';
 	
 	
 	
@@ -59,7 +55,7 @@
 	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';
 	$string['fieldcreationerror'] 			= 	'A error occurred whilst creating the field';
 	$string['fieldmoveerror'] 				= 	'A has error occurred the field was not moved';
-	$string['formelementdeleteerror']		= 	'';
+	$string['formelementdeleteerror']		= 	'A error occurred whilst trying to delete the form element';
 	
 
 	

@@ -23,18 +23,27 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
      *
      */
     public function load($reportfield_id) {
-		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
+		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
 		if (!empty($reportfield)) {
+			//set the reportfield_id var
+			$this->reportfield_id	=	$reportfield_id;
+			
+			//get the record of the plugin used for the field 
 			$plugin		=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
-			$this->plugin_id	=	$plugin_id;
-			$pluginrecord	=	$this->dbc->get_form_element_data($this->tablename,$reportfield->id);
-			if (!empty($plugin_record)) {
+						
+			$this->plugin_id	=	$reportfield->plugin_id;
+			
+			//get the form element record for the reportfield 
+			$pluginrecord	=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
+			
+			if (!empty($pluginrecord)) {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
-				$this->required			=	$reportfield->req;
-				$this->minimumlength	=	$pluginrecord->minimumlength;
+				$this->req				=	$reportfield->req;
 				$this->maximumlength	=	$pluginrecord->maximumlength;
+				$this->minimumlength	=	$pluginrecord->minimumlength;
 				$this->position			=	$reportfield->position;
+				return true;	
 			}
 		}
 		return false;	
@@ -186,7 +195,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
     * this function returns the mform elements taht will be added to a report form
 	*
     */
-    public	function entry_form($mform) {
+    public	function entry_form(&$mform) {
     	
     	//text field for element label
         $mform->addElement(
@@ -200,10 +209,6 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
         if (!empty($this->maximumlength)) $mform->addRule("$this->reportfield_id", null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
         $mform->setType($this->reportfield_id, PARAM_RAW);
-    	
-        return $mfrom;
-    	
-    	
     }
 }
 

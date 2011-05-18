@@ -64,6 +64,8 @@ class ilp_element_plugin {
     var $dbman;
 
     var $set_attributes;
+    
+    var $req;
 
 
     /**

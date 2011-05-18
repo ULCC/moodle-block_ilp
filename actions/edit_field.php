@@ -39,28 +39,38 @@ $course	=	$dbc->get_course($course_id);
 //set the required level of permission needed to view this page
 
 // setup the navigation breadcrumbs
+//block name
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
+
+//course shortname
 $PAGE->navbar->add($course->shortname,null,'title');
-$PAGE->navbar->add($course->shortname,null,'title');
+
+//get string for create report
+$PAGE->navbar->add(get_string('createreport', 'block_ilp'),null,'title');
+
 
 // setup the page title and heading
 $PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));
 $PAGE->set_heading($course->fullname);
 $PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
 
+//get the plugin record that for the plugin 
 $pluginrecord	=	$dbc->get_plugin_by_id($plugin_id);
 
+//take the name field from the plugin as it will be used to call the instantiate the plugin class
 $classname = $pluginrecord->name;
 
-// include the moodle form for this table
+// include the class for the plugin
 include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
 
 if(!class_exists($classname)) {
  	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
 }
 
+//instantiate the plugin class
 $pluginclass	=	new $classname();
 
+//call the plugin edit function inside of which the plugin configuration mform
 $pluginclass->edit($course_id,$report_id,$plugin_id,$reportfield_id);
 
 

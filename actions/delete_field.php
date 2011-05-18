@@ -32,26 +32,31 @@ $reportfield_id = $PARSER->required_param('reportfield_id' ,PARAM_INT);
 $dbc = new ilp_db();
 
 //get the report field record
-$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
+$reportfield		=	$dbc->get_report_field_data($reportfield_id);
 
-//get the plugin used for the report field
-$pluginrecord	=	$dbc->get_plugin_by_id($reportfield->plugin_id);
-
-$classname = $pluginrecord->name;
-
-// include the moodle form for this table
-include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
-
-if(!class_exists($classname)) {
- 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
-}
-
-$pluginclass	=	new $classname();
-
-if ($classname->delete_form_element($reportfield_id)) {
-	$resulttext	=	get_string('formelementdeletesuc','block_ilp');
-}	else {
-	$resulttext	=	get_string('formelementdeleteerror','block_ilp');
+//check if the report field was found
+if (!empty($reportfield)) {
+	//get the plugin used for the report field
+	$pluginrecord	=	$dbc->get_plugin_by_id($reportfield->plugin_id);
+	
+	$classname = $pluginrecord->name;
+	
+	// include the moodle form for this table
+	include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
+	
+	if(!class_exists($classname)) {
+	 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+	}
+	
+	$pluginclass	=	new $classname();
+	
+	if ($pluginclass->delete_form_element($reportfield_id)) {
+		$resulttext	=	get_string('formelementdeletesuc','block_ilp');
+	}	else {
+		$resulttext	=	get_string('formelementdeleteerror','block_ilp');
+	}
+} else {
+	$resulttext	=	get_string('formelementdeleteerror','block_ilp');	
 }
 
 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&course_id='.$course_id;

@@ -34,4 +34,7 @@ require_once($CFG->dirroot.'/blocks/ilp/lib.php');
 //include the static constants
 require_once($CFG->dirroot.'/blocks/ilp/constants.php');
 
+//include the access checks file
+require_once($CFG->dirroot.'/blocks/ilp/db/accesscheck.php');
+
 ?>

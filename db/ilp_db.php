@@ -408,7 +408,7 @@ class ilp_db_functions	extends ilp_logging {
 	}
 	
 	
-	/**
+/**
      * Delete a report field record
      *
      * @param int $id the id of the record that you want to delete
@@ -418,6 +418,21 @@ class ilp_db_functions	extends ilp_logging {
 	function delete_report_field($id) {
 		return $this->delete_records('block_ilp_report_field', array('id' => $id));
 	}
+	
+	
+	/**
+     * get a report record using the id given 
+     *
+     * @param int $id the id of the record that you want to retrieve
+     * 
+     * @return mixed object or false if no record found
+     */
+	function get_report_by_id($id) {
+		return $this->dbc->get_record('block_ilp_report', array('id' => $id));
+	}
+	
+	
+	
 }
 
 
