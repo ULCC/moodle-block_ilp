@@ -18,7 +18,7 @@ class ilp_element_plugin_date_deadline_mform  extends ilp_element_plugin_mform {
 		$mform->addElement(
 			'select',
 			'datetense',
-			get_string( 'ilp_element_plugin_date_tense' , 'block_ilp' ),
+			get_string( 'ilp_element_plugin_date_deadline_tense' , 'block_ilp' ),
 			$optionlist
 		);
         	$mform->addRule('datetense', null, 'required', null, 'client');

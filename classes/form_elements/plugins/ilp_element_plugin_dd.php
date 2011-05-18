@@ -26,8 +26,9 @@ class ilp_element_plugin_dd extends ilp_element_plugin {
     public function load($reportfield_id) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
 		if (!empty($reportfield)) {
+			$this->reportfield_id	=	$reportfield_id;
+			$this->plugin_id	=	$reportfield->plugin_id;
 			$plugin		=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
-			$this->plugin_id	=	$plugin_id;
 			$pluginrecord	=	$this->dbc->get_form_element_data($this->tablename,$reportfield->id);
 			if (!empty($plugin_record)) {
 				$this->label			=	$reportfield->label;

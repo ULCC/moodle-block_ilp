@@ -186,8 +186,8 @@ class ilp_element_plugin_date extends ilp_element_plugin {
     	//text field for element label
         $mform->addElement(
             'date_selector',
-            "$this->reportfield_id",
-            "$this->label",
+            $this->reportfield_id,
+            $this->label,
             array('class' => 'form_input')
         );
         
