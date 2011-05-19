@@ -34,7 +34,6 @@ class ilp_element_plugin_dd extends ilp_element_plugin {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
 				$this->required			=	$reportfield->req;
-				$this->maximumlength		=	$pluginrecord->maximumlength;
 				$this->position			=	$reportfield->position;
 			}
 		}

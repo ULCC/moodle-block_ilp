@@ -41,7 +41,6 @@ echo '</pre>';
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
 				$this->required			=	$reportfield->req;
-				$this->maximumlength		=	$pluginrecord->maximumlength;
 				$this->position			=	$reportfield->position;
 			}
 		}
