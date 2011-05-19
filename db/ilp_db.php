@@ -408,7 +408,7 @@ class ilp_db_functions	extends ilp_logging {
 	}
 	
 	
-/**
+	/**
      * Delete a report field record
      *
      * @param int $id the id of the record that you want to delete
@@ -442,7 +442,103 @@ class ilp_db_functions	extends ilp_logging {
     function update_report($report) {
     	return $this->update_record('block_ilp_report',$report);
     }
-	
+    
+     /**
+     * returns an array containing all of the capabilities for the ilp block 
+     *
+     * @return mixed array of objects or false depending on result of query
+     */
+    function get_block_capabilities() {
+    	global		$CFG;
+    	
+    	$sql	=	"SELECT	*	
+    				 FROM	{$CFG->prefix}capabilities
+    				 WHERE	name	LIKE	'block/ilp:%'";
+    	
+    	return $this->dbc->get_records_sql($sql);
+    }
+    
+     /**
+     * returns whether any permission exists for the given report  
+     *
+     * @return bool true or false
+     */    
+    function permissions_exist($report_id) {
+    	return $this->dbc->record_exists("block_ilp_reportpermissions",array("report_id"=>$report_id));
+    }
+    
+    /**
+     * Deletes all report permission
+     *
+     * @param int $id the id of the record that you want to delete
+     * 
+     * @return bool true or false
+     */
+    function delete_permissions_by_report_id($report_id) {
+    	return $this->dbc->delete_records('block_ilp_reportpermissions', array('report_id' => $report_id));
+    }
+    
+    
+    
+   	/**
+     * Creates a new report permission
+     *
+     * @param object $permission an object containing the data to be saved
+     * @return mixed the id of the inserted record or false
+     */ 
+    function create_permisssion($permission) {
+    	return $this->insert_record("block_ilp_reportpermissions", $permission);
+    }
+    
+    
+    /**
+     * returns data that can be used with a pagable flexible_table
+     *
+     * @param object $flextable an object of type flextable
+     * @return mixed object containing report records or false
+     */ 
+    function get_reports_table($flextable)	{
+    	global $CFG;
+    	
+    	$select	=	"SELECT		*";
+    	
+    	$from	=	"FROM 		{$CFG->prefix}block_ilp_report";
+    	
+    	$where	=	"";
+
+    	// get a count of all the records for the pagination links
+        $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
+
+        // tell the table how many pages it needs
+        //$flextable->totalrows($count);
+    	
+    	$data = $this->dbc->get_records_sql(
+            $select.$from.$where,
+            null,
+            $flextable->get_page_start(),
+            $flextable->get_page_size()
+        );
+        
+        return $data;
+    } 
+    
+    /**
+     * Returns all courses in the current moodle
+     *
+     * @return mixed object containing all course records or false
+     */
+    function get_courses()	{	
+    	return $this->dbc->get_records("course");
+    }
+	 
+	 /**
+     * Returns all roles
+     *
+     * @return mixed object containing all course records or false
+     */
+    function get_roles()	{
+    	return $this->dbc->get_records("role");
+    }
 	
 }
 
