@@ -30,9 +30,8 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 			$this->reportfield_id	=	$reportfield_id;
 			$plugin		=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
 			$this->plugin_id=	$reportfield->plugin_id;
-			//$pluginrecord	=	$this->dbc->get_form_element_data($this->tablename,$reportfield->id);
 			$pluginrecord	=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
-			if (!empty($plugin_record)) {
+			if (!empty($pluginrecord)) {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
 				$this->required			=	$reportfield->req;

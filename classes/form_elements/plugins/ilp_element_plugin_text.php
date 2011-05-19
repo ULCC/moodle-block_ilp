@@ -38,6 +38,13 @@ class ilp_element_plugin_text extends ilp_element_plugin {
 			
 			//get the form element record for the reportfield 
 			$pluginrecord	=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
+/*
+echo '<pre>';
+echo __FILE__ . "\n";
+var_dump($plugin);
+var_dump($pluginrecord);
+echo '</pre>';
+*/
 			
 			if (!empty($pluginrecord)) {
 				$this->label			=	$reportfield->label;

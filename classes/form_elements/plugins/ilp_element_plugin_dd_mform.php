@@ -14,7 +14,7 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 		value1:label1\nvalue2:label2\nvalue3:label3
 		or some such
 		*/
-		
+
 		$mform->addElement(
 			'textarea',
 			'optionlist',
