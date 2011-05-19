@@ -1,6 +1,7 @@
 <?php
 
-require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
+//require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
 
 class ilp_element_plugin_rdo extends ilp_element_plugin_dd{
 	
