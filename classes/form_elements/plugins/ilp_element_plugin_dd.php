@@ -35,6 +35,8 @@ class ilp_element_plugin_dd extends ilp_element_plugin {
 				$this->description		=	$reportfield->description;
 				$this->required			=	$reportfield->req;
 				$this->position			=	$reportfield->position;
+				$this->optionlist		=	$pluginrecord->optionlist;
+				$this->selecttype		=	$pluginrecord->selecttype;
 			}
 		}
 		return false;	
@@ -58,6 +60,14 @@ class ilp_element_plugin_dd extends ilp_element_plugin {
         $table_report = new $this->xmldb_field('reportfield_id');
         $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_report);
+        
+        $table_optionlist = new $this->xmldb_field('optionlist');
+        $table_optionlist->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
+        $table->addField($table_optionlist);
+        
+        $table_optiontype = new $this->xmldb_field('selecttype');
+        $table_optiontype->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, null);	//1=single, 2=multi cf blocks/ilp/constants.php
+        $table->addField($table_optiontype);
         
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
@@ -171,19 +181,45 @@ class ilp_element_plugin_dd extends ilp_element_plugin {
     	return parent::delete_form_element($this->tablename, $reportfield_id);
     }
     
+    protected function optlist2Array( $optstring ){
+	//split on lines
+	$optsep = "\n";
+	$keysep = ":";
+	$optlist = explode( $optsep , $optstring );
+	//now split each entry into key and value
+	$outlist = array();
+	foreach( $optlist as $row ){
+		if( $row ){
+			$row = explode( $keysep, $row );
+			$key = trim( $row[0] );
+			if( 1 == count( $row ) ){
+				$value = trim( $row[0] );
+			}
+			elseif( 1 < count( $row ) ){
+				$value = trim( $row[1] );
+			}
+			$outlist[ $key ] = $value;
+		}
+	}
+	return $outlist;
+    }
     /**
     * this function returns the mform elements taht will be added to a report form
 	*
     */
     public	function entry_form( &$mform ) {
-    	
+	$optionlist = $this->optlist2Array( $this->optionlist);   	
     	//text field for element label
-        $mform->addElement(
-            'text',
-            "$this->reportfield_id",
-            "$this->label",
+        $select = &$mform->addElement(
+            'select',
+            $this->reportfield_id,
+            $this->label,
+	    $optionlist,
             array('class' => 'form_input')
         );
+	if( 2 == $this->selecttype ){
+		$select->setMultiple(true);
+	}
         
         if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
         $mform->setType('label', PARAM_RAW);

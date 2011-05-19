@@ -26,12 +26,12 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
         	$mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 		$typelist = array(
-			'single' => get_string( 'ilp_element_plugin_dd_single' , 'block_ilp' ),
-			'multi' => get_string( 'ilp_element_plugin_dd_multi' , 'block_ilp' )
+			OPTIONSINGLE => get_string( 'ilp_element_plugin_dd_single' , 'block_ilp' ),
+			OPTIONMULTI => get_string( 'ilp_element_plugin_dd_multi' , 'block_ilp' )
 		);
 		$mform->addElement(
 			'select',
-			'ilp_element_plugin_dd_type',
+			'selecttype',
 			get_string( 'ilp_element_plugin_dd_typelabel' , 'block_ilp' ),
 			$typelist,
 			array('class' => 'form_input')
@@ -55,8 +55,10 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield("block_ilp_plu_dd",$data->reportfield_id);
 	
 	 		//create a new object to hold the updated data
-	 		$pluginrecord 					=	new stdClass();
-	 		$pluginrecord->id				=	$oldrecord->id;
+	 		$pluginrecord 			=	new stdClass();
+	 		$pluginrecord->id		=	$oldrecord->id;
+	 		$pluginrecord->optionlist	=	$data->optionlist;
+			$pluginrecord->selecttype 	= 	$data->selecttype;
 	 			
 	 		//update the plugin with the new data
 	 		return $this->dbc->update_plugin_record("block_ilp_plu_dd",$pluginrecord);
