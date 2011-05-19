@@ -2,7 +2,7 @@
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
 
-class ilp_element_plugin_rdo extends ilp_element_plugin {
+class ilp_element_plugin_rdo extends ilp_element_plugin_dd{
 	
 	public $tablename;
 	public $data_entry_tablename;
@@ -11,15 +11,13 @@ class ilp_element_plugin_rdo extends ilp_element_plugin {
      * Constructor
      */
     function __construct() {
-    	
+    	parent::__construct();
     	$this->tablename = "block_ilp_plu_rdo";
     	$this->data_entry_tablename = "block_ilp_plu_rdo_ent";
-    	
-    	parent::__construct();
     }
 	
 	
-	/**
+     /**
      * TODO comment this
      *
      */
@@ -29,19 +27,13 @@ class ilp_element_plugin_rdo extends ilp_element_plugin {
 			$this->reportfield_id	=	$reportfield_id;
 			$this->plugin_id	=	$reportfield->plugin_id;
 			$plugin			=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
-			$pluginrecord	=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
-/*
-echo '<pre>';
-echo __FILE__ . "\n";
-var_dump($plugin);
-var_dump($pluginrecord);
-echo '</pre>';
-*/
+			$pluginrecord		=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
 			if (!empty($pluginrecord)) {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
 				$this->required			=	$reportfield->req;
 				$this->position			=	$reportfield->position;
+				$this->optionlist		=	$pluginrecord->optionlist;
 			}
 		}
 		return false;	
@@ -65,6 +57,10 @@ echo '</pre>';
         $table_report = new $this->xmldb_field('reportfield_id');
         $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_report);
+        
+        $table_optionlist = new $this->xmldb_field('optionlist');
+        $table_optionlist->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
+        $table->addField($table_optionlist);
         
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
@@ -161,7 +157,7 @@ echo '</pre>';
     */
     function language_strings(&$string) {
         $string['ilp_element_plugin_rdo'] 		= 'Radio group';
-        $string['ilp_element_plugin_rdo_type'] 		= 'checkbox';
+        $string['ilp_element_plugin_rdo_type'] 		= 'radio group';
         $string['ilp_element_plugin_rdo_description'] 	= 'A radio group';
         
         return $string;
@@ -180,17 +176,25 @@ echo '</pre>';
     */
     public	function entry_form( &$mform ) {
     	
+	$optionlist = $this->optlist2Array( $this->optionlist);   	
+
+	$elementname = $this->reportfield_id;
+	$radioarray = array();
+	foreach( $optionlist as $key => $value ){
+		$radioarray[] = &MoodleQuickForm::createElement( 'radio', $elementname, '', $value, $key );
+	}
+
     	//text field for element label
-        $mform->addElement(
-            'text',
-            "$this->reportfield_id",
-            "$this->label",
-            array('class' => 'form_input')
+        $mform->addGroup(
+            $radioarray,
+            $elementname,
+	    $this->label,
+            array('class' => 'form_input'),
+	    false
         );
         
-        if (!empty($this->minimumlength)) $mform->addRule("$this->reportfield_id", null, 'minlength', $this->maximumlength, 'client');
-        if (!empty($this->maximumlength)) $mform->addRule("$this->reportfield_id", null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
+
         $mform->setType('label', PARAM_RAW);
     	
         //return $mfrom;

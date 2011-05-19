@@ -46,8 +46,9 @@ class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_mform {
 	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield("block_ilp_plu_rdo",$data->reportfield_id);
 	
 	 		//create a new object to hold the updated data
-	 		$pluginrecord 					=	new stdClass();
-	 		$pluginrecord->id				=	$oldrecord->id;
+	 		$pluginrecord 				=	new stdClass();
+	 		$pluginrecord->id			=	$oldrecord->id;
+	 		$pluginrecord->optionlist		=	$data->optionlist;
 	 			
 	 		//update the plugin with the new data
 	 		return $this->dbc->update_plugin_record("block_ilp_plu_rdo",$pluginrecord);
