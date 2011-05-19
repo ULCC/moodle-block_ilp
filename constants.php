@@ -25,7 +25,8 @@ define('PRESENTDATE', 2 );
 define('FUTUREDATE',  3 );
 define('ANYDATE',     0 );
 
-
+define( 'OPTIONSINGLE' , 1 );
+define( 'OPTIONMULTI' , 2 );
 
 
 
