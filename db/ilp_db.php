@@ -490,6 +490,15 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->insert_record("block_ilp_reportpermissions", $permission);
     }
     
+	/**
+     * Returns permissions for the report with the given id
+     *
+     * @return mixed object containing all permissions records or false
+     */
+    function get_report_permissions($report_id)	{	
+    	return $this->dbc->get_records("block_ilp_reportpermissions",array('report_id'=>$report_id));
+    }
+    
     
     /**
      * returns data that can be used with a pagable flexible_table
@@ -522,7 +531,7 @@ class ilp_db_functions	extends ilp_logging {
         return $data;
     } 
     
-    /**
+	/**
      * Returns all courses in the current moodle
      *
      * @return mixed object containing all course records or false
@@ -539,6 +548,9 @@ class ilp_db_functions	extends ilp_logging {
     function get_roles()	{
     	return $this->dbc->get_records("role");
     }
+    
+    
+   
 	
 }
 

@@ -7,6 +7,11 @@
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['createreport']			=	'Create Report';
 	$string['continue']				=	'Continue';
+	
+	$string['contextcourse']		=	'Context Course';
+	$string['contextuser']			=	'Continue User';
+	$string['contextself']			=	'Context Self';
+	
 	$string['defaulthozsize'] 		= 	'Default number of columns';
 	$string['defaulthozsizeconfig'] = 	'The default number of columns for all AJAX tables that do not override this setting.';
 	$string['defaultverticalperpage'] = 'Default number of table rows';
@@ -14,15 +19,18 @@
 	
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
+	$string['disablereport']		= 	'Disable Report';
+	$string['editprompt']			=	'Edit Prompt';
+	$string['editpermissions']		=	'Edit Permisssions';
 	$string['editreport']			=	'Edit Report';
 	$string['editreportfields']		=	'Edit Report Fields';
+	$string['enablereport'] 		= 	'Enable Report';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
-	
-	
-	
+	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
+		
 	$string['label']				=	'Label';
 	$string['name']					=	'Name';
 	$string['notrequired']	 		= 	'Not required';
@@ -37,14 +45,24 @@
 	$string['perpage'] 				=	'per page';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['preview'] 				= 	'Preview';
+	$string['previewreport'] 		= 	'Preview Report';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
 	$string['req'] 					= 	'Required';
+	$string['reportconfiguration'] 	= 	'Report Configuration';
+	$string['reportconfigurationdesc'] 	= 	'The report configuration admininstration area allows you to create and edit reports. ';
 	$string['reportcreationsuc'] 	= 	'The report was successfully created';
 	$string['reportfields'] 		= 	'Report Fields';
 	$string['reportmustcontainfields'] 	= 	'The report must contain fields';
+	$string['reportname'] 			= 	'Report Name:';
 	$string['required']	 			= 	'Required';
+	$string['reportpermissions']	= 	'Report Permissions';
+	$string['reportpermissionsuc']	= 	'The Permissions have been successfully assigned to the {$a->name} report';
+	$string['reportpermissionsdescription']	= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
+	$string['statuschangesuc'] 		= 	'The reports status was successfully changed';
 	$string['showingpages'] = 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 	= 	'Submit and display';
+	
+	
 	$string['type'] 				= 	'Type';
 	$string['viewreportpreview'] 				= 	'View Report Preview';
 	
@@ -53,18 +71,20 @@
 
 	//CAPABILITY STRINGS
 	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
-	$string['ilp:addreport'] 			= 	'Add a report to user ilp';
-	$string['ilp:editreport'] 			= 	'Edit a report in a user ilp';
-	$string['ilp:deletereport'] 		= 	'Delete a report from a user ilp';
+	$string['ilp:addreport'] 			= 	'Add a report';
+	$string['ilp:editreport'] 			= 	'Edit a report';
+	$string['ilp:deletereport'] 		= 	'Delete a report';
 	$string['ilp:updatestatus'] 		= 	'Update Status';
-	$string['ilp:viewreport'] 			= 	'View a report in a user ilp';
+	$string['ilp:viewreport'] 			= 	'View a report';
 	
 	//ERROR MESSAGES CHANGING THESE IS NOT RECOMMENDED
 	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';
 	$string['fieldcreationerror'] 			= 	'A error occurred whilst creating the field';
 	$string['fieldmoveerror'] 				= 	'A has error occurred the field was not moved';
 	$string['formelementdeleteerror']		= 	'A error occurred whilst trying to delete the form element';
-	
+	$string['reportnotfouund']				= 	'The report with the id given was not found';
+	$string['statuschangeerror'] 			= 	'A error occurred whilst changing the report status. The status was not changed';
+	$string['fieldreqerror']				=	'A error occurred the required status was not updated';
 
 	
 	global $CFG;

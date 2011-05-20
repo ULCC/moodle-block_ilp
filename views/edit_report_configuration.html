@@ -1,0 +1,16 @@
+<?php
+echo $OUTPUT->header();
+?>
+<div class="ilp yui-skin-sam">
+<?php
+echo $OUTPUT->heading(get_string('reportconfiguration','block_ilp')); 
+?>
+<div class=""><?php echo get_string('reportconfigurationdesc','block_ilp');?></div>
+<?php
+require_once($CFG->dirroot.'/blocks/ilp/actions/view_reports_table.php');
+
+?>
+</div>
+<?php
+echo $OUTPUT->footer();
+?>

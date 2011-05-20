@@ -12,9 +12,6 @@
 
 global $CFG, $PARSER,$USER;
 
-// get the id of the course
-$course_id = $PARSER->required_param('course_id', PARAM_INT);
-
 // the user must be logged in
 require_login(0, false);
 

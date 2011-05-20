@@ -89,8 +89,6 @@ class edit_report_mform extends ilp_moodleform {
 	        
 	        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        
-	        //$this->add_action_buttons(true, get_string('submit'));
-	        
 	        //close the fieldset
 	        $mform->addElement('html', '</fieldset>');
 		}
@@ -102,6 +100,49 @@ class edit_report_mform extends ilp_moodleform {
 			
 			if (empty($data->id)) {
             	$data->id = $this->dbc->create_report($data);
+            	
+            	//setup report default permissions. They will match the permissions
+            	//that the block has for each role
+            	
+            	$report_id	=	$data->id;
+            	
+            	//get all roles in moodle 
+            	$roles		=	$this->dbc->get_roles();
+            	
+            	//get all capabilities for the ilp block
+				$blockcapabilities	=	$this->dbc->get_block_capabilities();
+
+				//loop through roles
+            	foreach ($roles as $r) {
+            		//secondary loop through capabilities
+            		foreach($blockcapabilities as $cap) {
+           			
+            			//if the capability is not in the array
+            			if (!in_array($cap->name,array('block/ilp:creeddelreport'))) {
+            				
+            				//initialise capable as an array
+            				$capable	=	array();
+            				//get all roles with the capability
+            				$capabilityroles	=	get_roles_with_capability($cap->name,CAP_ALLOW);
+							
+            				//put the ids of roles with the current capability into the capable array
+            				foreach($capabilityroles as $cr) {
+								$capable[]	=	$cr->id;
+							}
+							
+							//if the current role is one who has the capability
+							if (in_array($r->id,$capable)) {
+								
+								//create a permission for the report with this role
+								$permission					=	new stdClass();
+								$permission->role_id		=	$r->id;
+								$permission->capability_id	=	$cap->id;
+								$permission->report_id		=	$report_id;
+								$this->dbc->create_permisssion($permission);
+							}
+            			}	
+            		}
+            	}
         	} else {
             	$this->dbc->update_report($data);
         	}

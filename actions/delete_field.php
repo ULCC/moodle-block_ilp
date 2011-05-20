@@ -59,6 +59,6 @@ if (!empty($reportfield)) {
 	$resulttext	=	get_string('formelementdeleteerror','block_ilp');	
 }
 
-$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&course_id='.$course_id;
+$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&amp;course_id='.$course_id;
 redirect($return_url, $resulttext, REDIRECT_DELAY);
 

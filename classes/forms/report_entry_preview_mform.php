@@ -59,11 +59,8 @@ class report_entry_preview_mform extends ilp_moodleform {
         	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
             $mform->addElement('html', '<legend class="ftoggler">'.$report->name.'</legend>');
 			
-			$mform->addElement('html', '<div class="reportdescription">');
-            $mform->addElement('static', 'description', "",$report->description);
-            $mform->addElement('html', '</div>');
-            
-            
+			$mform->addElement('html', '<div class="descritivetext">'.$report->description.'</div>');
+                        
 			foreach ($reportfields as $field) {
 				
 				//get the plugin record that for the plugin 

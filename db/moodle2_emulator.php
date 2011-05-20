@@ -35,7 +35,7 @@ class moodle2_db_emulator {
             case 'record_exists_sql' :
             case 'count_records_sql' :
             case 'get_records_sql' :
-                unset($params[1]);
+                //unset($params[1]);
                 break;
 
             case 'get_field_sql' :

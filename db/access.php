@@ -24,7 +24,7 @@ $block_ilp_capabilities = array(
 	//defines whether the user is able to create,edit or delete a report
 	'block/ilp:creeddelreport' => array(
 		'captype' => 'write',
-        'contextlevel' => CONTEXT_BLOCK,
+        'contextlevel' => CONTEXT_SYSTEM,
         'legacy' => array(
             'student' => CAP_PREVENT,
             'editingteacher' => CAP_PREVENT,
@@ -74,7 +74,7 @@ $block_ilp_capabilities = array(
 	
 	//the capaability needed in order veiw a report in the ilp 
 	'block/ilp:viewreport' => array(
-		'captype' => 'write',
+		'captype' => 'read',
 		'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
             'student' => CAP_ALLOW,
@@ -84,6 +84,29 @@ $block_ilp_capabilities = array(
 	
 	),
     
+	
+	//the capaability needed in order to view an ilp 
+	'block/ilp:viewilp' => array(
+		'captype' => 'read',
+		'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'student' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW
+        )
+	
+	),
+	
+	//the capaability needed in order to view an ilp belong to someone else 
+	'block/ilp:viewotherilp' => array(
+		'captype' => 'read',
+		'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'student' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW
+        )
+	),
 );
 global $CFG;
 //test the version number if we are in 2.0 we need to pass the $block_ilp_capabilities to $capabilities

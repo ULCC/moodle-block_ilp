@@ -108,7 +108,9 @@ if (!empty($reportfields)) {
 		$icon	= 	$CFG->wwwroot."/blocks/ilp/pix/icons/";
 		$icon	.= 	(!empty($row->req)) ? "required.gif" : "notrequired.gif";
 		
-		$data[] 			=	"<img class='required' src='{$icon}' alt='{$title}' title='{$title}' />";
+		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_required.php?reportfield_id={$row->id}&report_id={$report_id}&course_id={$course_id}'>
+									<img class='required' src='{$icon}' alt='{$title}' title='{$title}' />
+								</a>";
 
 		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_field.php?reportfield_id={$row->id}&report_id={$report_id}&course_id={$course_id}'>
 									<img class='delete' src='".$OUTPUT->pix_url("/t/delete")."' alt='".get_string('delete')."' title='".get_string('delete')."' />

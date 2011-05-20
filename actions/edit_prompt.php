@@ -41,8 +41,8 @@ $course	=	$dbc->get_course($course_id);
 //block name
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
 
-//course shortname
-$PAGE->navbar->add($course->shortname,null,'title');
+//section name
+$PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php?course_id={$course_id}",'title');
 
 //get string for create report
 $PAGE->navbar->add(get_string('createreport', 'block_ilp'),null,'title');

@@ -156,7 +156,7 @@ function ilp_build_navigation($breadcrumbs) {
  */
 function uninstall_resources()  {
     global $CFG, $DB;
-    require_once($CFG->dirroot."/blocks/assmgr/db/assmgr_db.php");
+    require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
     $dbc = new assmgr_db();
 
     $resource_tables    =   $dbc->get_resource_types();
@@ -211,6 +211,30 @@ function lock_portfolio_if_possible($portfolio_id) {
     }
 }
 
+
+/**
+ * Take the given object containing block_ilp_reportpermissions records
+ * and converts them to an object with the role_id and capbility as params.
+ * This can then be used to populate the reports permission matrix
+ * 
+ * @param array $permissions recordset of block_ilp_permission records
+ * 
+ * return mixed object contain param with role_id and capabilty or false
+ */
+function reportformpermissions($permissions) {
+	
+	$formpermissions	=	new stdClass();
+
+	//loop through the permissions
+	foreach($permissions as $perm) {
+		//create the param name 
+		$param	=	$perm->role_id."_".$perm->capability_id;
+		//set the value of our new param to 1
+		$formpermissions->$param	=	1;
+	}
+	
+	return $formpermissions;	
+}
 
 /**
  * Truncates long strings and adds a tooltip with a longer verison.

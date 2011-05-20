@@ -43,8 +43,9 @@ $course	=	$dbc->get_course($course_id);
 //was the form cancelled?
 if ($mform->is_cancelled()) {
 	//send the user back
-	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php&course_id='.$course_id;
-    redirect($return_url, '', REDIRECT_DELAY);
+	
+	
+	
 }
 
 
@@ -92,6 +93,7 @@ if (!empty($report_id)) {
 } 
 
 
+
 // setup the navigation breadcrumbs
 //block name
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
@@ -99,14 +101,18 @@ $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
 //section name
 $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php?course_id={$course_id}",'title');
 
-//get string for create report
-$PAGE->navbar->add($pagetitle,null,'title');
 
 // setup the page title and heading
 $PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));
 $PAGE->set_heading($course->fullname);
 $PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
 
-require_once($CFG->dirroot.'/blocks/ilp/views/edit_report.html');
+
+require_once ($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
+
+//install new plugins
+ilp_element_plugin::install_new_plugins();
+
+require_once($CFG->dirroot.'/blocks/ilp/views/edit_report_configuration.html');
 
 ?>
