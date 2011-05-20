@@ -24,7 +24,38 @@ class ilp_element_plugin_course extends ilp_element_plugin_dd{
 	$string[ 'ilp_element_plugin_course_single' ] 		= 'Single select';
 	$string[ 'ilp_element_plugin_course_multi' ] 		= 'Multi select';
 	$string[ 'ilp_element_plugin_course_typelabel' ] 	= 'Select type (single/multi)';
+	$string[ 'ilp_element_plugin_course_noparticular' ] 	= 'no particular course';
         
         return $string;
     }
+    /**
+    * this function returns the mform elements taht will be added to a report form
+	*
+    */
+    public	function entry_form( &$mform ) {
+    	//text field for element label
+        $select = &$mform->addElement(
+            'select',
+            $this->reportfield_id,
+            $this->label,
+	    $this->get_courselist(),
+            array('class' => 'form_input')
+        );
+        
+        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
+        $mform->setType('label', PARAM_RAW);
+    	
+        //return $mform;
+    	
+    	
+    }
+	  protected function get_courselist(){
+		$noparticular = get_string( 'ilp_element_plugin_course_noparticular' , 'block_ilp' );
+		$db = new ilp_db_functions();
+		$outlist = array( 0 => $noparticular );
+		foreach( $db->get_courses() as $course ){
+			$outlist[ $course->id ] = $course->shortname;
+		}
+		return $outlist;
+	  }
 }
