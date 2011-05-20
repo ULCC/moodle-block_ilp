@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/ilp/db" VERSION="20110513" COMMENT="XMLDB file for Moodle blocks/ilp"
+<XMLDB PATH="blocks/ilp/db" VERSION="20110520" COMMENT="XMLDB file for Moodle blocks/ilp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -19,8 +19,10 @@
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="report name" PREVIOUS="description" NEXT="creator_id"/>
         <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="id of the user who created the report" PREVIOUS="name" NEXT="frequency"/>
         <FIELD NAME="frequency" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="The frequency at which this report may be carried out per user in moodle" PREVIOUS="creator_id" NEXT="frequencyformat"/>
-        <FIELD NAME="frequencyformat" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the interval duration of the frequency duration e.g an hour, day etc" PREVIOUS="frequency" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="frequencyformat" NEXT="timemodified"/>
+        <FIELD NAME="frequencyformat" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the interval duration of the frequency duration e.g an hour, day etc" PREVIOUS="frequency" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the report status enabled or disabled" PREVIOUS="frequencyformat" NEXT="usemaxedit"/>
+        <FIELD NAME="usemaxedit" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" COMMENT="bool flag to state whether the report will use moodle max edit time by default it will. note max edit means that after a preset time the record can not be edited" PREVIOUS="status" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="usemaxedit" NEXT="timemodified"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the report was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
@@ -33,7 +35,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="the name of the plugin" PREVIOUS="id" NEXT="tablename"/>
         <FIELD NAME="tablename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="the name of the table that the plugin data is held in" PREVIOUS="name" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the current status of the plugin 0 for disabled 1 for enabled" PREVIOUS="tablename" NEXT="timecreated"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the current status of the plugin 0 for disabled 1 for enabled" PREVIOUS="tablename" NEXT="timecreated"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the plugin record was created" PREVIOUS="status" NEXT="timemodified"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
@@ -41,7 +43,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_report_field" COMMENT="this table holds information on the individual fields in a report" PREVIOUS="block_ilp_plugin" NEXT="block_ilp_rolecapabilities">
+    <TABLE NAME="block_ilp_report_field" COMMENT="this table holds information on the individual fields in a report" PREVIOUS="block_ilp_plugin" NEXT="block_ilp_reportpermissions">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="label"/>
         <FIELD NAME="label" TYPE="char" LENGTH="255" NOTNULL="false" DEFAULT="null" SEQUENCE="false" ENUM="false" COMMENT="this field holds the label for the field as not all plugins may need labels it may be null" PREVIOUS="id" NEXT="description"/>
@@ -63,23 +65,23 @@
         <KEY NAME="unique_position_report" TYPE="unique" FIELDS="position, report_id" COMMENT="This prevents duplicate postions being created in a report" PREVIOUS="unique_label_reportfield"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_rolecapabilities" COMMENT="this table holds information on the capabilities that different roles have in ilp for reports and report fields" PREVIOUS="block_ilp_report_field" NEXT="block_ilp_entry">
+    <TABLE NAME="block_ilp_reportpermissions" COMMENT="this table holds information on capabilities that different roles (determined by context) have in the ilp report" PREVIOUS="block_ilp_report_field" NEXT="block_ilp_entry">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="title"/>
-        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="the capability title" PREVIOUS="id" NEXT="tablename"/>
-        <FIELD NAME="tablename" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="the table that the capability refers to (report or report_field)" PREVIOUS="title" NEXT="reportfield_id"/>
-        <FIELD NAME="reportfield_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the record in its releavant table (either the block_ilp_report or block_ilp_report_field table)" PREVIOUS="tablename" NEXT="role_id"/>
-        <FIELD NAME="role_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="id of the role in the moodle role table" PREVIOUS="reportfield_id" NEXT="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="report_id"/>
+        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the report to which this capability pertain" PREVIOUS="id" NEXT="capability_id"/>
+        <FIELD NAME="capability_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the capability in the capability table" PREVIOUS="report_id" NEXT="role_id"/>
+        <FIELD NAME="role_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="id of the role in the moodle role table" PREVIOUS="capability_id" NEXT="timecreated"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="role_id" NEXT="timemodified"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="cap_role"/>
-        <KEY NAME="cap_role" TYPE="foreign" FIELDS="role_id" REFTABLE="role" REFFIELDS="id" COMMENT="id of the role (in moodle role table) that the record refers to" PREVIOUS="primary" NEXT="f_reportfield"/>
-        <KEY NAME="f_reportfield" TYPE="foreign" FIELDS="reportfield_id" REFTABLE="block_ilp_report_field" REFFIELDS="id" PREVIOUS="cap_role"/>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="permission_report"/>
+        <KEY NAME="permission_report" TYPE="foreign" FIELDS="report_id" REFTABLE="block_ilp_report" REFFIELDS="id" COMMENT="the report id must exist in the report table" PREVIOUS="primary" NEXT="permission_role"/>
+        <KEY NAME="permission_role" TYPE="foreign" FIELDS="role_id" REFTABLE="role" REFFIELDS="id" COMMENT="the role must exist in the role table" PREVIOUS="permission_report" NEXT="unique_permission"/>
+        <KEY NAME="unique_permission" TYPE="unique" FIELDS="role_id, capability_id, report_id" COMMENT="the permission must beunique" PREVIOUS="permission_role"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_entry" COMMENT="this table holds entry information  (entries can be thought of as a set of answers to the questions in a report)" PREVIOUS="block_ilp_rolecapabilities" NEXT="block_ilp_entry_comment">
+    <TABLE NAME="block_ilp_entry" COMMENT="this table holds entry information  (entries can be thought of as a set of answers to the questions in a report)" PREVIOUS="block_ilp_reportpermissions" NEXT="block_ilp_entry_comment">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="report_id"/>
         <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the report that the entry is for" PREVIOUS="id" NEXT="creator_id"/>

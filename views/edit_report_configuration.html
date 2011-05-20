@@ -1,11 +1,11 @@
 <?php
 echo $OUTPUT->header();
 ?>
-<div class="ilp yui-skin-sam">
+<div class="ilp">
 <?php
 echo $OUTPUT->heading(get_string('reportconfiguration','block_ilp')); 
 ?>
-<div class=""><?php echo get_string('reportconfigurationdesc','block_ilp');?></div>
+<div class="desciptivetext"><?php echo get_string('reportconfigurationdesc','block_ilp');?></div>
 <?php
 require_once($CFG->dirroot.'/blocks/ilp/actions/view_reports_table.php');
 

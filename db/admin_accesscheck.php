@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-global $CFG, $PARSER,$USER;
+global $CFG, $PARSER,$USER,$PAGE;
 
 // the user must be logged in
 require_login(0, false);
@@ -31,5 +31,6 @@ if (!has_capability('block/ilp:creeddelreport', $usercontext) ) {
    print_error('incorrectcreatereportpermissions', 'block_ilp');
 }
  
-
+//TODO: we will should not be in the course context change to another context
+$PAGE->set_context($sitecontext);
 ?>

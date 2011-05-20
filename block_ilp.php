@@ -80,7 +80,6 @@ class block_ilp extends block_list {
          $this->content->icons[] = "";
 		//}
 
-
         return $this->content;
     }
     

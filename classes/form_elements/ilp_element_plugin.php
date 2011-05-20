@@ -165,13 +165,16 @@ class ilp_element_plugin {
 
         
         //enter a back u
-        $backurl = $CFG->dirroot."/blocks/ilp/actions/edit_prompt.php?course_id={$course_id}&report_id={$report_id}";
+        $backurl = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?course_id={$course_id}&report_id={$report_id}";
         
         
 	    //was the form cancelled?
 		if ($this->mform->is_cancelled()) {
+			
+			
+			
 			//send the user back
-			redirect($backurl, get_string('changescancelled', 'block_ilp'), REDIRECT_DELAY);
+			redirect($backurl, get_string('returnreportprompt', 'block_ilp'), REDIRECT_DELAY);
 		}
 
 

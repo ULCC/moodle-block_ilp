@@ -361,6 +361,15 @@ class moodle2_renderer_emulator {
         // so we can better handle page redirects
     }
 
+    /**
+     * This method is called in moodle 2.0 to set the context of the current page. This is 
+     * not required in moodle 1.9 so for now we will do nothing and this will be an empty method
+     */
+    public function set_context($object) {
+    	//do nothing for now
+    }
+    
+    
 }
 
 

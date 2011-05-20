@@ -550,6 +550,25 @@ class ilp_db_functions	extends ilp_logging {
     }
     
     
+	/**
+     * Create a plugin entry in the table given 
+     *
+     * @return mixed int id of new reocrd or false
+     */
+    function create_plugin_entry($tablename,$pluginentry)	{
+    	return $this->insert_record($tablename, $pluginentry);
+    }
+    
+    
+	/**
+     * Update a plugin entry record in the table given 
+     *
+     * @return bool true or false
+     */
+    function update_plugin_entry($tablename,$pluginentry)	{
+    	return $this->update_record($tablename, $pluginentry);
+    }
+    
    
 	
 }

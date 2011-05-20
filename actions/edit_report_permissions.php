@@ -56,7 +56,8 @@ $mform	=	new edit_report_permissions_mform($course_id,$report_id);
 //was the form cancelled?
 if ($mform->is_cancelled()) {
 	//send the user back to report configuration page
-	
+	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?course_id='.$course_id;
+    redirect($return_url, null, REDIRECT_DELAY);
 }
 
 

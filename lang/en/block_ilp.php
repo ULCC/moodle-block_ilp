@@ -26,6 +26,7 @@
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['enablereport'] 		= 	'Enable Report';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
+	$string['returnreportprompt']	=	'Returning to report prompts page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
@@ -54,6 +55,7 @@
 	$string['reportfields'] 		= 	'Report Fields';
 	$string['reportmustcontainfields'] 	= 	'The report must contain fields';
 	$string['reportname'] 			= 	'Report Name:';
+	$string['reportprompt']			= 	'Report Prompts';
 	$string['required']	 			= 	'Required';
 	$string['reportpermissions']	= 	'Report Permissions';
 	$string['reportpermissionsuc']	= 	'The Permissions have been successfully assigned to the {$a->name} report';
@@ -85,6 +87,8 @@
 	$string['reportnotfouund']				= 	'The report with the id given was not found';
 	$string['statuschangeerror'] 			= 	'A error occurred whilst changing the report status. The status was not changed';
 	$string['fieldreqerror']				=	'A error occurred the required status was not updated';
+	
+	
 
 	
 	global $CFG;
