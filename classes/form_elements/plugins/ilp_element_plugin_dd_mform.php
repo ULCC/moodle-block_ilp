@@ -4,6 +4,12 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin
 
 class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 	
+	public $tablename;
+	
+	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
+		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
+		$this->tablename = "block_ilp_plu_dd";
+	}
 	  	
 	
 	  protected function specific_definition($mform) {
@@ -49,10 +55,10 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record("block_ilp_plu_dd",$data->reportfield_id) : false;
 	 	
 	 	if (empty($plgrec)) {
-	 		return $this->dbc->create_plugin_record("block_ilp_plu_dd",$data);
+	 		return $this->dbc->create_plugin_record($this->tablename,$data);
 	 	} else {
 	 		//get the old record from the elements plugins table 
-	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield("block_ilp_plu_dd",$data->reportfield_id);
+	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield($this->tablename,$data->reportfield_id);
 	
 	 		//create a new object to hold the updated data
 	 		$pluginrecord 			=	new stdClass();
@@ -61,7 +67,7 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 			$pluginrecord->selecttype 	= 	$data->selecttype;
 	 			
 	 		//update the plugin with the new data
-	 		return $this->dbc->update_plugin_record("block_ilp_plu_dd",$pluginrecord);
+	 		return $this->dbc->update_plugin_record($this->tablename,$pluginrecord);
 	 	}
 	 }
 	 
