@@ -1,5 +1,6 @@
 <?php
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_plu_db.php');
 
 /*
  * much of the guts of this class inherited from ilp_element_plugin_dd
@@ -9,6 +10,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_dd{
 	public $tablename;
 	public $data_entry_tablename;
 	public $options_tablename;
+	public $optionlist_keyfield;
 	
     /**
      * Constructor
@@ -19,6 +21,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_dd{
     	$this->tablename = "block_ilp_plu_sts";
     	$this->data_entry_tablename = "block_ilp_plu_sts_ent";
     	$this->options_tablename = "block_ilp_plu_sts_items";
+	$this->optionlist_keyfield = "status_id";
     }
 
     public function install() {
@@ -70,10 +73,15 @@ class ilp_element_plugin_status extends ilp_element_plugin_dd{
         
         return $string;
     }
+    protected function rst_flatten( $rst , $keyfield , $valuefield='value' ){
+	$outlist = array();
+	foreach( $rst as $row ){
+		$outlist[ $row->$keyfield ] = $row->$valuefield;
+	}
+	return $outlist;
+    }
     protected function get_option_list(){
-	return array(
-		1 => 'alive',
-		2 => 'dead'
-	);
+	$db = new ilp_plu_db_functions();
+	return $this->rst_flatten( $db->get_all_records( $this->options_tablename ) , $this->optionlist_keyfield );
     }
 }
