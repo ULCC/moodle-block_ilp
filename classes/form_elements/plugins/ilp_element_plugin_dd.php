@@ -6,16 +6,15 @@ class ilp_element_plugin_dd extends ilp_element_plugin {
 	
 	public $tablename;
 	public $data_entry_tablename;
+	protected $selettype;	//1 for single, 2 for multi
 	
     /**
      * Constructor
      */
     function __construct() {
-    	
+    	parent::__construct();
     	$this->tablename = "block_ilp_plu_dd";
     	$this->data_entry_tablename = "block_ilp_plu_dd_ent";
-    	
-    	parent::__construct();
     }
 	
 	
@@ -203,12 +202,15 @@ class ilp_element_plugin_dd extends ilp_element_plugin {
 	}
 	return $outlist;
     }
+	protected function get_option_list(){
+		return $this->optlist2Array( $this->optionlist );   	
+	}
     /**
     * this function returns the mform elements taht will be added to a report form
 	*
     */
-    public	function entry_form( &$mform ) {
-	$optionlist = $this->optlist2Array( $this->optionlist);   	
+    public function entry_form( &$mform ) {
+	$optionlist = $this->get_option_list();
     	//text field for element label
         $select = &$mform->addElement(
             'select',
@@ -217,7 +219,7 @@ class ilp_element_plugin_dd extends ilp_element_plugin {
 	    $optionlist,
             array('class' => 'form_input')
         );
-	if( 2 == $this->selecttype ){
+	if( OPTIONMULTI == $this->selecttype ){
 		$select->setMultiple(true);
 	}
         

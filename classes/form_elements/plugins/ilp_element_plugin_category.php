@@ -17,8 +17,8 @@ class ilp_element_plugin_category extends ilp_element_plugin_dd{
     }
 
     function language_strings(&$string) {
-        $string['ilp_element_plugin_dd'] 			= 'Select';
-        $string['ilp_element_plugin_category_type'] 		= 'select';
+        $string['ilp_element_plugin_category'] 			= 'Category Select';
+        $string['ilp_element_plugin_category_type'] 		= 'category select';
         $string['ilp_element_plugin_category_description'] 	= 'A category selector';
 	$string[ 'ilp_element_plugin_category_optionlist' ] 	= 'Option List';
 	$string[ 'ilp_element_plugin_category_single' ] 	= 'Single select';
@@ -27,4 +27,32 @@ class ilp_element_plugin_category extends ilp_element_plugin_dd{
         
         return $string;
     }
+	protected function get_option_list(){
+//ultimately should take options from a table
+		return array(
+			1 => 'first cat',
+			2 => 'second cat',
+			3 => 'third cat',
+			10 => 'tenth cat'
+		);
+	}
+
+	public function entry_form( &$mform ) {
+    	//text field for element label
+		$optionlist = $this->get_option_list();
+       		$select = &$mform->addElement(
+       			'select',
+     			$this->reportfield_id,
+       			$this->label,
+			$optionlist,
+        		array('class' => 'form_input')
+       	 	);
+        
+        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
+        $mform->setType('label', PARAM_RAW);
+    	
+        //return $mform;
+    	
+    	
+	}
 }

@@ -20,7 +20,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_dd{
 
     function language_strings(&$string) {
         $string['ilp_element_plugin_state'] 			= 'Select';
-        $string['ilp_element_plugin_state_type'] 		= 'select';
+        $string['ilp_element_plugin_state_type'] 		= 'state select';
         $string['ilp_element_plugin_state_description'] 	= 'A state selector';
 	$string[ 'ilp_element_plugin_state_optionlist' ] 	= 'Option List';
 	$string[ 'ilp_element_plugin_state_single' ] 		= 'Single select';
@@ -28,5 +28,12 @@ class ilp_element_plugin_state extends ilp_element_plugin_dd{
 	$string[ 'ilp_element_plugin_state_typelabel' ] 	= 'Select type (single/multi)';
         
         return $string;
+    }
+    protected function get_option_list(){
+	return array(
+		1 => 'scared',
+		2 => 'calm',
+		3 => 'glutenous with self-approbation'
+	);
     }
 }
