@@ -61,7 +61,7 @@ class add_prompt_mform extends ilp_moodleform {
 			}
 			
         	
-        	$fieldsettitle = get_string('addprompt', 'block_ilp');
+        	$fieldsettitle = get_string('addfield', 'block_ilp');
         	
         	//create a new fieldset
         	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
@@ -73,11 +73,11 @@ class add_prompt_mform extends ilp_moodleform {
         	$mform->addElement('hidden', 'report_id',$this->report_id);
         	$mform->setType('report_id', PARAM_INT);
 
-        	$mform->addElement('select', 'plugin_id', get_string('addprompt', 'block_ilp'), $frmplugins);
+        	$mform->addElement('select', 'plugin_id', get_string('addfield', 'block_ilp'), $frmplugins);
         	$mform->addRule('plugin_id', null, 'required', null, 'client');
 	        $mform->setType('plugin_id', PARAM_INT);
 	        
-	        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('addprompt','block_ilp'));
+	        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('addfield','block_ilp'));
         		        
 	        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         

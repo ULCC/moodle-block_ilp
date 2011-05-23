@@ -45,7 +45,7 @@ $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
 $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php?course_id={$course_id}",'title');
 
 //get string for create report
-$PAGE->navbar->add(get_string('createreport', 'block_ilp'),null,'title');
+$PAGE->navbar->add(get_string('reportfields', 'block_ilp'),null,'title');
 
 // setup the page title and heading
 $PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));

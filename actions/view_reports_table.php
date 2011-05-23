@@ -72,7 +72,7 @@ if (!empty($reports)) {
 		
 		//set the edit report prompts link
 		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_prompt.php?report_id={$row->id}&course_id={$course_id}'>
-									<img class='prompt' src='' alt='".get_string('editprompt','block_ilp')."' title='".get_string('editprompt','block_ilp')."' />
+									<img class='prompt' src='' alt='".get_string('editfields','block_ilp')."' title='".get_string('editfields','block_ilp')."' />
 								 </a>";
 		
 		//set the edit report permissions link

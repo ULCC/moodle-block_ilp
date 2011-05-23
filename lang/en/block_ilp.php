@@ -2,7 +2,7 @@
 	
 	$string['addprompt'] 			= 	'Add Prompt';
 	$string['addfield'] 			= 	'Add Field';
-	$string['addpromptdots'] 		= 	'Add Prompt...'; 
+	$string['addpromptdots'] 		= 	'Select Field Type'; 
 	$string['apply'] 				= 	'Apply'; 
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['createreport']			=	'Create Report';
@@ -22,13 +22,14 @@
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
 	$string['disablereport']		= 	'Disable Report';
+	$string['editfields']			=	'Edit Fields';
 	$string['editprompt']			=	'Edit Prompt';
 	$string['editpermissions']		=	'Edit Permisssions';
 	$string['editreport']			=	'Edit Report';
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['enablereport'] 		= 	'Enable Report';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
-	$string['returnreportprompt']	=	'Returning to report prompts page';
+	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
@@ -56,6 +57,7 @@
 	$string['req'] 					= 	'Required';
 	$string['reports'] 				= 	'Reports';
 	$string['reportconfiguration'] 	= 	'Report Configuration';
+	$string['reportfields'] 				= 	'Report Fields';
 	$string['reportconfigurationdesc'] 	= 	'The report configuration admininstration area allows you to create and edit reports. ';
 	$string['reportcreationsuc'] 	= 	'The report was successfully created';
 	$string['reportfields'] 		= 	'Report Fields';
@@ -69,6 +71,8 @@
 	$string['statuschangesuc'] 		= 	'The reports status was successfully changed';
 	$string['showingpages'] = 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 	= 	'Submit and display';
+	$string['selecttype'] 			= 	'Select Field Type';
+	
 	
 	
 	$string['type'] 				= 	'Type';
