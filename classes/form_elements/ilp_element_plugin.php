@@ -14,6 +14,18 @@
 //abstract class assmgr_resource {
 class ilp_element_plugin {
 
+	/**
+	* table to store the properties of the element
+	*/
+	public $tablename;
+
+	/**
+	* table to store user data submitted from an element of this type
+	* (dd types will also have an intermediate table listing their options
+	* user input will be stored as a key to the items table)
+	*/
+	public $data_entry_tablename;
+
     /**
      * The element data
      *
@@ -339,5 +351,38 @@ class ilp_element_plugin {
     public function file_storage() {
         return false;
     }
+	/**
+    * this function saves the data entered on a entry form to the plugins _entry table
+	* the function expects the data object to contain the id of the entry (it should have been
+	* created before this function is called) in a param called id. 
+    */
+	 public	function entry_process_data($reportfield_id,$entry_id,$data) {
+	 	
+	 	//check to see if a entry record already exists for the reportfield in this plugin
+
+	 	//get the plugin table record that has the reportfield_id 
+	 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+	 	if (empty($pluginrecord)) {
+	 		print_error('pluginrecordnotfound');
+	 	}
+	 
+	 	//get the _entry table record that has the pluginrecord id
+	 	$entry 	=	$this->dbc->get_data_entry_record($this->data_entry_tablename,$pluginrecord->id);
+	 	
+	 	//if no record has been created create the entry record
+	 	if (empty($entry)) {
+	 		$pluginentry	=	new stdClass();
+	 		$pluginentry->value	=	$data->$reportfield_id;
+	 		$pluginentry->textfield_id	=	$pluginrecord->id;
+	 		$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+	 	} else {
+	 		//update the current record
+	 		$entry->value	=	$data->$reportfield_id;
+	 		$result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
+	 	}
+	 	
+	 	return (!empty($result)) ? true: false;
+	 	
+	 }
 }
 ?>

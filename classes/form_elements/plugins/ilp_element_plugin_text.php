@@ -212,39 +212,15 @@ class ilp_element_plugin_text extends ilp_element_plugin {
 	 }
 	 
 	/**
-    * this function saves the data entered on a entry form to the plugins _entry table
-	* the function expects the data object to contain the id of the entry (it should have been
-	* created before this function is called) in a param called id. 
-	*
-	* perhaps this should be in the element parent class
-    */
+	* handle user input
+	**/
 	 public	function entry_specific_process_data($reportfield_id,$entry_id,$data) {
-	 	
-	 	//check to see if a entry record already exists for the reportfield in this plugin
-
-	 	//get the plugin table record that has the reportfield_id 
-	 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
-	 	if (empty($pluginrecord)) {
-	 		print_error('pluginrecordnotfound');
-	 	}
-	 
-	 	//get the _entry table record that has the pluginrecord id
-	 	$entry 	=	$this->dbc->get_data_entry_record($this->data_entry_tablename,$pluginrecord->id);
-	 	
-	 	//if no record has been created create the entry record
-	 	if (empty($entry)) {
-	 		$pluginentry	=	new stdClass();
-	 		$pluginentry->value	=	$data->$reportfield_id;
-	 		$pluginentry->textfield_id	=	$pluginrecord->id;
-	 		$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
-	 	} else {
-	 		//update the current record
-	 		$entry->value	=	$data->$reportfield_id;
-	 		$result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
-	 	}
-	 	
-	 	return (!empty($result)) ? true: false;
-	 	
+		/*
+		* parent method is fine for simple form element types
+		* dd types will need something more elaborate to handle the intermediate
+		* items table and foreign key
+		*/
+		return $this->entry_process_data($reportfield_id,$entry_id,$data); 	
 	 }
 	 
 	 
