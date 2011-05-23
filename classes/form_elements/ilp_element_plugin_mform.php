@@ -26,6 +26,9 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
 	function definition() {
         global $USER, $CFG;
 
+        //get the plugin type by getting the plugin name
+        $currentplugin	=	$this->dbc->get_form_element_plugin($this->plugin_id);
+        
         $mform =& $this->_form;
         $fieldsettitle	=	get_string("addfield",'block_ilp');
         
@@ -39,7 +42,7 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
         
-        $mform->addElement('static', 'plugintypestatic',get_string('plugintype','block_ilp'));
+        $mform->addElement('static', 'plugintypestatic',get_string('plugintype','block_ilp'),get_string($currentplugin->name.'_type','block_ilp'));
         
         //button to state whether the element is required
         $mform->addElement('checkbox', 
@@ -169,6 +172,9 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
      * Force extending class to add its own processing method
      */
     abstract protected function specific_process_data($data);
+    
+
+    
 }
 
 
