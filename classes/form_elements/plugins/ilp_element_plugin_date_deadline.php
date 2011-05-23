@@ -148,7 +148,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
      *
      */
     public function audit_type() {
-        return 'Textarea Field';
+        return get_string('ilp_element_plugin_date_deadline_type','block_ilp');
     }
     
     /**

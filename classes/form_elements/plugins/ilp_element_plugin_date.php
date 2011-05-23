@@ -152,7 +152,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
      *
      */
     public function audit_type() {
-        return 'Textarea Field';
+        return get_string('ilp_element_plugin_date_type','block_ilp');
     }
     
     /**

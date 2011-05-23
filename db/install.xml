@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/ilp/db" VERSION="20110520" COMMENT="XMLDB file for Moodle blocks/ilp"
+<XMLDB PATH="blocks/ilp/db" VERSION="20110523" COMMENT="XMLDB file for Moodle blocks/ilp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -61,8 +61,7 @@
         <KEY NAME="f_report" TYPE="foreign" FIELDS="report_id" REFTABLE="block_ilp_report" REFFIELDS="id" COMMENT="id of the report record (in report table) that the field is in" PREVIOUS="primary" NEXT="f_plugin"/>
         <KEY NAME="f_plugin" TYPE="foreign" FIELDS="plugin_id" REFTABLE="block_ilp_plugin" REFFIELDS="id" COMMENT="id of the plugin that the field will use" PREVIOUS="f_report" NEXT="f_creator"/>
         <KEY NAME="f_creator" TYPE="foreign" FIELDS="creator_id" REFTABLE="user" REFFIELDS="id" COMMENT="the id of the user who created the field" PREVIOUS="f_plugin" NEXT="unique_label_reportfield"/>
-        <KEY NAME="unique_label_reportfield" TYPE="unique" FIELDS="label, report_id" COMMENT="this should prevent duplicate field names in a report" PREVIOUS="f_creator" NEXT="unique_position_report"/>
-        <KEY NAME="unique_position_report" TYPE="unique" FIELDS="position, report_id" COMMENT="This prevents duplicate postions being created in a report" PREVIOUS="unique_label_reportfield"/>
+        <KEY NAME="unique_label_reportfield" TYPE="unique" FIELDS="label, report_id" COMMENT="this should prevent duplicate field names in a report" PREVIOUS="f_creator"/>
       </KEYS>
     </TABLE>
     <TABLE NAME="block_ilp_reportpermissions" COMMENT="this table holds information on capabilities that different roles (determined by context) have in the ilp report" PREVIOUS="block_ilp_report_field" NEXT="block_ilp_entry">

@@ -52,7 +52,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 
         	$mform->addElement('html','<div><span>'.get_string('reportname','block_ilp').'</span><span>'.$report->name.'</span></div>');
         	
-        	$mform->addElement('html','<div class="descritivetext">'.get_string('reportpermissionsdescription','block_ilp', $report).'</div');
+        	$mform->addElement('html','<div class="desciptivetext">'.get_string('reportpermissionsdescription','block_ilp', $report).'</div');
         	
 			//create a new fieldset
         	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
@@ -63,7 +63,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 			$mform->addElement('hidden', 'report_id', $this->report_id);
         	$mform->setType('report_id', PARAM_INT);
 			
-			$mform->addElement('html','<table class="ilptable">');
+			$mform->addElement('html','<table id="ilppermissionstable">');
 			
 			$blockcapabilities	=	$this->dbc->get_block_capabilities();
 						

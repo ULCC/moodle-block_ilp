@@ -37,6 +37,13 @@ class ilp_element_plugin_category extends ilp_element_plugin_dd{
 		);
 	}
 
+    /**
+     *
+     */
+    public function audit_type() {
+        return get_string('ilp_element_plugin_category_type','block_ilp');
+    }
+	
 	public function entry_form( &$mform ) {
     	//text field for element label
 		$optionlist = $this->get_option_list();

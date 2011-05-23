@@ -39,6 +39,8 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
         
+        $mform->addElement('static', 'plugintypestatic',get_string('plugintype','block_ilp'));
+        
         //button to state whether the element is required
         $mform->addElement('checkbox', 
         				   'req', 
@@ -82,6 +84,8 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         $mform->setType('position', PARAM_INT);
         //set the field position of the field
         $mform->setDefault('position', $this->dbc->get_new_report_field_position($this->report_id));
+
+       
         
        	//text field for element label
         $mform->addElement(
@@ -105,7 +109,6 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         );
         
         $mform->addRule('description', null, 'maxlength', 1000, 'client');
-        $mform->addRule('description', null, 'required', null, 'client');
         $mform->setType('description', PARAM_RAW);
         
         

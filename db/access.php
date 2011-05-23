@@ -133,6 +133,12 @@ if (stripos($CFG->release,"2.") !== false) {
 	$capabilities['block/ilp:viewreport']['legacy']['manager'] = $capabilities['block/ilp:viewreport']['legacy']['admin'];
 	unset($capabilities['block/ilp:viewreport']['legacy']['admin']);
 	
+	$capabilities['block/ilp:viewotherilp']['legacy']['manager'] = $capabilities['block/ilp:viewotherilp']['legacy']['admin'];
+	unset($capabilities['block/ilp:viewotherilp']['legacy']['admin']);
+	
+	$capabilities['block/ilp:viewilp']['legacy']['manager'] = $capabilities['block/ilp:viewilp']['legacy']['admin'];
+	unset($capabilities['block/ilp:viewilp']['legacy']['admin']);
+	
 	unset($block_ilp_capabilities);
 }
 

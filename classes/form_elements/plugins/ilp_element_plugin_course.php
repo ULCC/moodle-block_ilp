@@ -28,7 +28,9 @@ class ilp_element_plugin_course extends ilp_element_plugin_dd{
         
         return $string;
     }
-	  protected function get_option_list(){
+	
+    
+    protected function get_option_list(){
 		//retrieve list of courses from the db
 		$noparticular = get_string( 'ilp_element_plugin_course_noparticular' , 'block_ilp' );
 		$db = new ilp_db_functions();
@@ -37,7 +39,15 @@ class ilp_element_plugin_course extends ilp_element_plugin_dd{
 			$outlist[ $course->id ] = $course->shortname;
 		}
 		return $outlist;
-	  }
+	}
+	
+    /**
+     *
+     */
+    public function audit_type() {
+        return get_string('ilp_element_plugin_course_type','block_ilp');
+    }
+	
     /**
     * this function returns the mform elements taht will be added to a report form
 	*

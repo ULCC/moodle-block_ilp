@@ -150,7 +150,7 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_dd{
      *
      */
     public function audit_type() {
-        return 'Radio group';
+        return get_string('ilp_element_plugin_rdo_type','block_ilp');
     }
     
     /**

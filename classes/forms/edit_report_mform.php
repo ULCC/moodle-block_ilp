@@ -68,6 +68,8 @@ class edit_report_mform extends ilp_moodleform {
 	        $mform->addRule('name', null, 'required', null, 'client');
 	        $mform->setType('name', PARAM_ALPHA);
 	        
+	        $mform->addElement('checkbox', 'maxedit',get_String('maxedit','block_ilp'),null);
+	        
 	        // DESCRIPTION element
 	        $mform->addElement(
 	            'htmleditor',

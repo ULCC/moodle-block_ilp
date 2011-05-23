@@ -6,10 +6,18 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('reportconfiguration','block_ilp')); 
 ?>
 <div class="desciptivetext"><?php echo get_string('reportconfigurationdesc','block_ilp');?></div>
+<fieldset id="reportfieldset" class="clearfix ilpfieldset">
+<legend class="ftoggler"><?php echo get_string('reports','block_ilp');?></legend>
+
 <?php
 require_once($CFG->dirroot.'/blocks/ilp/actions/view_reports_table.php');
 
 ?>
+</fieldset>
+<div class="pagelinks">
+<span id="leftlinks">
+	<a class="buttonlink" href="<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_report.php?course_id=".$course_id;?>"><?php echo get_string('createnewreport','block_ilp');?></a></a></div>
+</span>
 </div>
 <?php
 echo $OUTPUT->footer();

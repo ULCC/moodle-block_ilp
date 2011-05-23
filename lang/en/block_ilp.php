@@ -6,6 +6,8 @@
 	$string['apply'] 				= 	'Apply'; 
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['createreport']			=	'Create Report';
+	$string['createnewreport']		=	'Create New Report';
+	
 	$string['continue']				=	'Continue';
 	
 	$string['contextcourse']		=	'Context Course';
@@ -35,6 +37,7 @@
 	$string['label']				=	'Label';
 	$string['name']					=	'Name';
 	$string['notrequired']	 		= 	'Not required';
+	$string['maxedit'] 				= 	'Use Maximum Edit';	
 	$string['move']		 			= 'Move';
 	$string['movedown'] 			= 'Move down';
 	$string['moveleft'] 			= 'Move left';
@@ -45,10 +48,13 @@
 	$string['moveup']		 		= 'Move up';
 	$string['perpage'] 				=	'per page';
 	$string['pluginname'] 			= 	'ILP block';
+	$string['plugintype'] 			= 	'Plugin Type';
+	
 	$string['preview'] 				= 	'Preview';
 	$string['previewreport'] 		= 	'Preview Report';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
 	$string['req'] 					= 	'Required';
+	$string['reports'] 				= 	'Reports';
 	$string['reportconfiguration'] 	= 	'Report Configuration';
 	$string['reportconfigurationdesc'] 	= 	'The report configuration admininstration area allows you to create and edit reports. ';
 	$string['reportcreationsuc'] 	= 	'The report was successfully created';
@@ -67,6 +73,7 @@
 	
 	$string['type'] 				= 	'Type';
 	$string['viewreportpreview'] 				= 	'View Report Preview';
+
 	
 	
 	

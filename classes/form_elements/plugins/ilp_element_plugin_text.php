@@ -166,7 +166,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
      *
      */
     public function audit_type() {
-        return 'Text Field';
+        return get_string('ilp_element_plugin_text_type','block_ilp');
     }
     
     /**
@@ -174,7 +174,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
     */
     function language_strings(&$string) {
         $string['ilp_element_plugin_text'] 		= 'Text';
-        $string['ilp_element_plugin_text_type'] = 'Text';
+        $string['ilp_element_plugin_text_type'] = 'Text Field';
         $string['ilp_element_plugin_text_description'] = 'A text field';
         $string['ilp_element_plugin_text_maxlengthrange'] = 'The maximum length field must have a value between 0 and 255';
         $string['ilp_element_plugin_text_maxlessthanmin'] = 'The maximum length field must have a greater value than the minimum length';

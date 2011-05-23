@@ -161,7 +161,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
      *
      */
     public function audit_type() {
-        return 'Textarea Field';
+        return get_string('ilp_element_plugin_text_area_type','block_ilp');
     }
     
     /**

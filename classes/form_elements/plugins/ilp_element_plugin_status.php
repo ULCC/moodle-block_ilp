@@ -21,11 +21,11 @@ class ilp_element_plugin_status extends ilp_element_plugin_dd{
     	$this->tablename = "block_ilp_plu_sts";
     	$this->data_entry_tablename = "block_ilp_plu_sts_ent";
     	$this->options_tablename = "block_ilp_plu_sts_items";
-	$this->optionlist_keyfield = "status_id";
+		$this->optionlist_keyfield = "status_id";
     }
 
     public function install() {
-	parent::install();
+		parent::install();
 	
         $table = new $this->xmldb_table( $this->options_tablename );
         $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
@@ -62,26 +62,36 @@ class ilp_element_plugin_status extends ilp_element_plugin_dd{
             $this->dbman->create_table($table);
         }
     }
+    
     function language_strings(&$string) {
         $string['ilp_element_plugin_status'] 			= 'Select';
         $string['ilp_element_plugin_status_type'] 		= 'status select';
         $string['ilp_element_plugin_status_description'] 	= 'A status selector';
-	$string[ 'ilp_element_plugin_status_optionlist' ] 	= 'Option List';
-	$string[ 'ilp_element_plugin_status_single' ] 		= 'Single select';
-	$string[ 'ilp_element_plugin_status_multi' ] 		= 'Multi select';
-	$string[ 'ilp_element_plugin_status_typelabel' ] 	= 'Select type (single/multi)';
-        
+		$string[ 'ilp_element_plugin_status_optionlist' ] 	= 'Option List';
+		$string[ 'ilp_element_plugin_status_single' ] 		= 'Single select';
+		$string[ 'ilp_element_plugin_status_multi' ] 		= 'Multi select';
+		$string[ 'ilp_element_plugin_status_typelabel' ] 	= 'Select type (single/multi)';
+	        
         return $string;
     }
+    
     protected function rst_flatten( $rst , $keyfield , $valuefield='value' ){
-	$outlist = array();
-	foreach( $rst as $row ){
-		$outlist[ $row->$keyfield ] = $row->$valuefield;
-	}
-	return $outlist;
+		$outlist = array();
+		foreach( $rst as $row ){
+			$outlist[ $row->$keyfield ] = $row->$valuefield;
+		}
+		return $outlist;
     }
+    
     protected function get_option_list(){
-	$db = new ilp_plu_db_functions();
-	return $this->rst_flatten( $db->get_all_records( $this->options_tablename ) , $this->optionlist_keyfield );
+		$db = new ilp_plu_db_functions();
+		return $this->rst_flatten( $db->get_all_records( $this->options_tablename ) , $this->optionlist_keyfield );
+    }
+    
+     /**
+     *
+     */
+    public function audit_type() {
+        return get_string('ilp_element_plugin_status_type','block_ilp');
     }
 }
