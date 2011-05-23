@@ -214,8 +214,9 @@ class ilp_element_plugin_text extends ilp_element_plugin {
 	/**
     * this function saves the data entered on a entry form to the plugins _entry table
 	* the function expects the data object to contain the id of the entry (it should have been
-	* created before this function is caleed) in a param called id. 
+	* created before this function is called) in a param called id. 
 	*
+	* perhaps this should be in the element parent class
     */
 	 public	function entry_specific_process_data($reportfield_id,$entry_id,$data) {
 	 	
