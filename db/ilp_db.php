@@ -553,7 +553,7 @@ class ilp_db_functions	extends ilp_logging {
 	/**
      * Create a plugin entry in the table given 
      *
-     * @return mixed int id of new reocrd or false
+     * @return mixed int id of new record or false
      */
     function create_plugin_entry($tablename,$pluginentry)	{
     	return $this->insert_record($tablename, $pluginentry);
@@ -569,7 +569,49 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->update_record($tablename, $pluginentry);
     }
     
-   
+    /*
+    * check if any user data has been uploaded to a particular reportfield
+    * if it has then manager should not be allowed to delete any existing
+    * options
+    */
+    function plugin_data_item_exists( $tablename, $reportfield_id ){
+	global $CFG;
+	$tablename = $CFG->prefix . $tablename;
+	$element_table = $tablename;
+	$item_table = $tablename . "_items";
+	$entry_table = $tablename . "_ent";
+	$sql = "SELECT *
+		FROM $tablename ele
+		JOIN $item_table item ON item.parent_id = ele.id
+		JOIN $entry_table entry ON entry.item_value = item.item_value
+		WHERE ele.reportfield_id = $reportfield_id
+	";
+	$data = $this->dbc->get_records_sql( $sql );
+/*
+	var_crap($sql);exit;
+	var_crap($data);exit;
+*/
+	return $data;
+    }  
+
+    /*
+    * supply a reportfield id for a dropdown type element
+    * dropdown options are returned
+    */
+    function get_optionlist( $reportfield_id, $tablename ){
+	global $CFG;
+	$tablename = $CFG->prefix . $tablename;
+	$item_table = $tablename . "_items";
+	$plugin_table = $tablename;
+	$sql = "
+		SELECT item_value, item_name
+		FROM  {$CFG->prefix}block_ilp_report_field rptf
+		JOIN $plugin_table ON $plugin_table.reportfield_id = rptf.id
+		JOIN $item_table ON $item_table.parent_id = $plugin_table.id
+		WHERE $plugin_table.reportfield_id = $reportfield_id
+	";
+    	return $this->dbc->get_records_sql( $sql );
+    }
 	
 }
 

@@ -5,10 +5,12 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin
 class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 	
 	public $tablename;
+	public $items_tablename;
 	
 	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
 		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
 		$this->tablename = "block_ilp_plu_dd";
+		$this->items_tablename = "block_ilp_plu_dd_items";
 	}
 	  	
 	
@@ -42,6 +44,12 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 			$typelist,
 			array('class' => 'form_input')
 		);
+		$mform->addElement(
+			'static',
+			'existing_options',
+			get_string( 'ilp_element_plugin_dd_existing_options' , 'block_ilp' ),
+			''
+		);
 	  }
 	
 	 protected function specific_validation($data) {
@@ -51,12 +59,27 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 	 }
 	 
 	 protected function specific_process_data($data) {
+		$optionlist = ilp_element_plugin_dd::optlist2Array( $data->optionlist );
+		//entries from data to go into $this->tablename and $this->items_tablename
 	  	
-	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record("block_ilp_plu_dd",$data->reportfield_id) : false;
+	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;
 	 	
 	 	if (empty($plgrec)) {
-	 		return $this->dbc->create_plugin_record($this->tablename,$data);
+			//options for this dropdown need to be written to the items table
+			//each option is one row
+	 		$element_id = $this->dbc->create_plugin_record($this->tablename,$data);
+		
+			//$itemrecord is a container for item data
+			$itemrecord = new stdClass();	
+			$itemrecord->parent_id = $element_id;
+			foreach( $optionlist as $key=>$itemname ){
+				//one item row inserted here
+				$itemrecord->item_value = $key;
+				$itemrecord->item_name = $itemname;
+	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
+		}
 	 	} else {
+			//@todo make it possible to add items_tablename rows here
 	 		//get the old record from the elements plugins table 
 	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield($this->tablename,$data->reportfield_id);
 	
@@ -67,7 +90,7 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 			$pluginrecord->selecttype 	= 	$data->selecttype;
 	 			
 	 		//update the plugin with the new data
-	 		return $this->dbc->update_plugin_record($this->tablename,$pluginrecord);
+	 		//return $this->dbc->update_plugin_record($this->tablename,$pluginrecord);
 	 	}
 	 }
 	 

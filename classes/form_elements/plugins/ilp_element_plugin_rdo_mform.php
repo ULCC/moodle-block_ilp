@@ -2,9 +2,18 @@
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin_mform.php');
 
-class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_mform {
+class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_mform{
 	
 	  	
+	public $tablename;
+	public $items_tablename;
+	
+	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
+		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
+    		$this->tablename = "block_ilp_plu_rdo";
+	    	$this->data_entry_tablename = "block_ilp_plu_rdo_ent";
+		$this->items_tablename = "block_ilp_plu_rdo_items";
+	}
 	
 	  protected function specific_definition($mform) {
 		
@@ -15,6 +24,12 @@ class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_mform {
 		or some such
 		default option could be identified with '[default]' in the same line
 		*/
+		$html = <<<EOB
+			<p>
+				helllo
+			</p>
+EOB;
+		//$mform->addElement( 'html', $html );
 		
 		$mform->addElement(
 			'textarea',
@@ -35,6 +50,7 @@ class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_mform {
 	 	return $this->errors;
 	 }
 	 
+/*
 	 protected function specific_process_data($data) {
 	  	
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record("block_ilp_plu_rdo",$data->reportfield_id) : false;
@@ -52,6 +68,42 @@ class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_mform {
 	 			
 	 		//update the plugin with the new data
 	 		return $this->dbc->update_plugin_record("block_ilp_plu_rdo",$pluginrecord);
+	 	}
+	 }
+*/
+	 protected function specific_process_data($data) {
+		$optionlist = ilp_element_plugin_dd::optlist2Array( $data->optionlist );
+		//entries from data to go into $this->tablename and $this->items_tablename
+	  	
+	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;
+	 	
+	 	if (empty($plgrec)) {
+			//options for this dropdown need to be written to the items table
+			//each option is one row
+	 		$element_id = $this->dbc->create_plugin_record($this->tablename,$data);
+		
+			//$itemrecord is a container for item data
+			$itemrecord = new stdClass();	
+			$itemrecord->parent_id = $element_id;
+			foreach( $optionlist as $key=>$itemname ){
+				//one item row inserted here
+				$itemrecord->item_value = $key;
+				$itemrecord->item_name = $itemname;
+	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
+		}
+	 	} else {
+			//@todo make it possible to add items_tablename rows here
+	 		//get the old record from the elements plugins table 
+	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield($this->tablename,$data->reportfield_id);
+	
+	 		//create a new object to hold the updated data
+	 		$pluginrecord 			=	new stdClass();
+	 		$pluginrecord->id		=	$oldrecord->id;
+	 		$pluginrecord->optionlist	=	$data->optionlist;
+			$pluginrecord->selecttype 	= 	OPTIONSINGLE;
+	 			
+	 		//update the plugin with the new data
+	 		//return $this->dbc->update_plugin_record($this->tablename,$pluginrecord);
 	 	}
 	 }
 	 
