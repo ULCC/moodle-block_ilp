@@ -18,6 +18,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
     	$this->data_entry_tablename = "block_ilp_plu_crs_ent";
 	$this->items_tablename = false;		//items tablename is the course table
     	$this->selecttype = OPTIONSINGLE;
+	$this->optionlist = false;
     }
 
     function language_strings(&$string) {

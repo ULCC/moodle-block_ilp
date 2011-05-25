@@ -59,7 +59,14 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 	 }
 	 
 	 protected function specific_process_data($data) {
-		$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
+		if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
+			//dd type needs to take values from admin form and writen them to items table
+			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
+		}
+		else{
+			//prepopulated list type
+			$optionlist = array();
+		}
 		//entries from data to go into $this->tablename and $this->items_tablename
 	  	
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;

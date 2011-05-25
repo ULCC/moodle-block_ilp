@@ -19,7 +19,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
     	$this->tablename = "block_ilp_plu_ste";
     	$this->data_entry_tablename = "block_ilp_plu_ste_ent";
 	$this->items_tablename = "block_ilp_plu_ste_items";
-	$this->selecttype = OPTIONSINGLE;
+	$this->selecttype = OPTIONSINGLE;	
     }
 
     function language_strings(&$string) {

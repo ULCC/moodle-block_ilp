@@ -63,6 +63,8 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_itemlist{
             $radioarray,
             $elementname,
 	    $this->label,
+		'',
+		'',
             array('class' => 'form_input'),
 	    false
         );

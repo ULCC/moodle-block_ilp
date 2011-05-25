@@ -6,6 +6,10 @@ require_once( $CFG->dirroot . '/blocks/ilp/classes/form_elements/ilp_element_plu
 
 class ilp_element_plugin_itemlist extends ilp_element_plugin{
 
+
+    public function __construct(){
+	parent::__construct();
+    }
     public function load($reportfield_id) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
 		if (!empty($reportfield)) {
@@ -86,6 +90,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
         //return $mform;
     	
     	
+    }
+    public function delete_form_element($reportfield_id) {
+	return parent::delete_form_element($this->tablename,$reportfield_id); 
     }
 
     public function uninstall() {

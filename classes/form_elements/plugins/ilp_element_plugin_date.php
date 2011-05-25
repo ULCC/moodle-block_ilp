@@ -188,7 +188,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
             'date_selector',
             $this->reportfield_id,
             $this->label,
-            array('class' => 'form_input')
+            array('class' => 'form_input', 'optional' => false )
         );
         
         if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');

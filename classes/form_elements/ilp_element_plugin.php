@@ -79,6 +79,13 @@ class ilp_element_plugin {
     
     var $req;
 
+	/*
+	* local file for pre-populating particular types
+	* filename is classname . '_pre_items.config'
+	* eg ilp_element_plugin_category_pre_items.conf
+	* in the local plugins directory
+	*/
+    public $local_config_file;	
 
     /**
      * Constructor
@@ -104,6 +111,9 @@ class ilp_element_plugin {
         $this->xmldb_table = class_exists('xmldb_table') ? 'xmldb_table' : 'XMLDBTable';
         $this->xmldb_field = class_exists('xmldb_field') ? 'xmldb_field' : 'XMLDBField';
         $this->xmldb_key   = class_exists('xmldb_key')   ? 'xmldb_key'   : 'XMLDBKey';
+
+	$local_config_filename = get_class( $this ) . '_pre_items.conf';
+	$this->local_config_file = realpath( __DIR__ . '/plugins/' . $local_config_filename );
     }
 
     /**
@@ -171,6 +181,12 @@ class ilp_element_plugin {
             }
 	    $this->return_data( $reportfield );
         }
+	else{
+		//new element - check for config file
+		if($this->local_config_file){
+			$reportfield->optionlist = self::itemlist_flatten( parse_ini_file( $this->local_config_file ) );
+		}
+	}
         
         // instantiate the form and load the data
         $this->mform = new $classname($report_id,$plugin_id,$course_id,$USER->id);
@@ -221,6 +237,18 @@ class ilp_element_plugin {
 
     }
 
+    /*
+    * take an associative array returned from parsing an ini file
+    * and return a string formatted for displaying in a text area on a management form
+    */
+    public static function itemlist_flatten( $configarray, $linesep="\n", $keysep=":" ){
+	$outlist = array();
+	foreach( $configarray as $key=>$value ){
+		$outlist[] = "$key$keysep$value";
+	}
+	return implode( $linesep , $outlist );
+    }
+
     /**
      * Delete the form entry
      */
@@ -237,7 +265,10 @@ class ilp_element_plugin {
      */
     public function delete_form_element($tablename,$reportfield_id) {
         $reportfield	=	$this->dbc->get_plugin_record($tablename,$reportfield_id);
-        
+/*
+	var_crap( $tablename );
+        var_crap($reportfield_id);exit;
+*/
         if ($this->dbc->delete_form_element_by_reportfield($tablename,$reportfield_id)) {
     	   	//TODO: should we delete all entry records linked to this field?
         	//now delete the reportfield
