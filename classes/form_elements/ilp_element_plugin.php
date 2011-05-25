@@ -156,7 +156,9 @@ class ilp_element_plugin {
         	
         	//get the form element data from the plugin table
         	$form_element		=	$this->dbc->get_form_element_by_reportfield($plugin->tablename,$reportfield->id);
-
+		
+		
+		
         	
             $non_attrib = array('id', 'timemodified', 'timecreated');
 
@@ -167,10 +169,10 @@ class ilp_element_plugin {
                     }
                 }
             }
+	    $this->return_data( $reportfield );
         }
         
         // instantiate the form and load the data
-        
         $this->mform = new $classname($report_id,$plugin_id,$course_id,$USER->id);
 
         $this->mform->set_data($reportfield);
@@ -384,5 +386,7 @@ class ilp_element_plugin {
 	 	return (!empty($result)) ? true: false;
 	 	
 	 }
+	public function return_data( &$reportfield ){
+	}
 }
 ?>

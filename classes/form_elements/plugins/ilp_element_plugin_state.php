@@ -1,11 +1,14 @@
 <?php
 
-require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
+//require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin_itemlist.php');
 
-class ilp_element_plugin_state extends ilp_element_plugin_dd{
+class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 
 	public $tablename;
 	public $data_entry_tablename;
+	public $items_tablename;
+	public $selecttype;
 	
     /**
      * Constructor
@@ -15,7 +18,8 @@ class ilp_element_plugin_state extends ilp_element_plugin_dd{
     	parent::__construct();
     	$this->tablename = "block_ilp_plu_ste";
     	$this->data_entry_tablename = "block_ilp_plu_ste_ent";
-    	
+	$this->items_tablename = "block_ilp_plu_ste_items";
+	$this->selecttype = OPTIONSINGLE;
     }
 
     function language_strings(&$string) {
@@ -29,17 +33,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_dd{
         
         return $string;
     }
-    protected function get_option_list(){
-		return array(
-			1 => 'scared',
-			2 => 'calm',
-			3 => 'glutenous with self-approbation'
-		);
-    }
-    
-     /**
-     *
-     */
+
     public function audit_type() {
         return get_string('ilp_element_plugin_state_type','block_ilp');
     }

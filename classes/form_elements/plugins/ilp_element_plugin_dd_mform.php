@@ -59,7 +59,7 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform {
 	 }
 	 
 	 protected function specific_process_data($data) {
-		$optionlist = ilp_element_plugin_dd::optlist2Array( $data->optionlist );
+		$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
 		//entries from data to go into $this->tablename and $this->items_tablename
 	  	
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;

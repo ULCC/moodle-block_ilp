@@ -35,7 +35,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
 				$this->required			=	$reportfield->req;
-				$this->datetense		=	$reportfield->datetense;
+				$this->datetense		=	$this->datetense;
 				$this->position			=	$reportfield->position;
 			}
 		}
