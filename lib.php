@@ -212,6 +212,7 @@ function lock_portfolio_if_possible($portfolio_id) {
 }
 
 
+
 /**
  * Take the given object containing block_ilp_reportpermissions records
  * and converts them to an object with the role_id and capbility as params.
@@ -235,6 +236,92 @@ function reportformpermissions($permissions) {
 	
 	return $formpermissions;	
 }
+
+
+/**
+ * Takes the given report_id and creates a coursereport record 
+ * for it in the given course if one doesn't already exist. If a 
+ * disabled record already exists it enables the record.
+ * 
+ * @param int $course_id the id of the course that we will add the report to
+ * @param int $report_id the id of the report that will be added to the report
+ * 
+ * return bool true or false 
+ */
+function add_coursereport($course_id,$report_id) {
+	global $CFG,$USER;
+	
+	require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
+	
+	$dbc	=	new ilp_db();
+	
+	$coursereport	=	$dbc->get_coursereports($course_id,$report_id);
+	
+	//the result of the query should only give one record as the table does not allow more
+	//the same report to be added to a course twice
+	$creports		=	array_pop($coursereport);
+
+	//if a coursereport record for this report in this course could not be found
+	//then create a new one else reenable the old one 
+	if (empty($coursereport)) {
+		$cr		=	new stdClass();
+		$cr->course_id		=	$course_id;
+		$cr->report_id		=	$report_id;
+		$cr->creator_id		=	$USER->id;
+		$cr->status			=	ILP_ENABLED;
+		return $dbc->create_coursereport($cr);
+	} else {
+		if (empty($creports->status)) {
+			
+			$cr		=	new stdClass();
+			$cr->id	=	$creports->cr_id;
+			$cr->status	=	ILP_ENABLED;
+			return $dbc->update_coursereport($cr);
+		} 
+	}
+	return false;
+}
+
+
+/**
+ * Takes the given report_id and sets the coursereport record 
+ * for it in the given course to a status of disabled. 
+ * 
+ * @param int $course_id the id of the course that we will add the report to
+ * @param int $report_id the id of the report that will be added to the report
+ * 
+ * return bool true or false 
+ */
+function remove_coursereport($course_id,$report_id) {
+	global $CFG;
+	
+	require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
+	
+	$dbc	=	new ilp_db();
+	
+	$coursereport	=	$dbc->get_coursereports($course_id,$report_id);
+	
+	//the result of the query should only give one record as the table does not allow more
+	//the same report to be added to a course twice
+	$creports		=	array_pop($coursereport);
+	
+	if (!empty($creports)) {
+		if (!empty($creports->status)) {
+						
+			$cr		=	new stdClass();
+			$cr->id	=	$creports->cr_id;
+			$cr->status	=	ILP_DISABLED;
+			return $dbc->update_coursereport($cr);
+		} 
+	}
+}
+	
+	
+
+
+
+
+
 
 /**
  * Truncates long strings and adds a tooltip with a longer verison.

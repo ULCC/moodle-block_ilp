@@ -1,9 +1,12 @@
 <?php
-	
+	$string['addall'] 				= 	'Add all';
 	$string['addprompt'] 			= 	'Add Prompt';
 	$string['addfield'] 			= 	'Add Field';
-	$string['addpromptdots'] 		= 	'Select Field Type'; 
-	$string['apply'] 				= 	'Apply'; 
+	$string['addpromptdots'] 		= 	'Select Field Type';
+	$string['addsel'] 				= 	'Add selected';
+	 
+	$string['apply'] 				= 	'Apply';
+	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['createreport']			=	'Create Report';
 	$string['createnewreport']		=	'Create New Report';
@@ -13,6 +16,7 @@
 	$string['contextcourse']		=	'Context Course';
 	$string['contextuser']			=	'Continue User';
 	$string['contextself']			=	'Context Self';
+	$string['coursereports']		=	'Course Reports';
 	
 	$string['defaulthozsize'] 		= 	'Default number of columns';
 	$string['defaulthozsizeconfig'] = 	'The default number of columns for all AJAX tables that do not override this setting.';
@@ -54,6 +58,8 @@
 	$string['preview'] 				= 	'Preview';
 	$string['previewreport'] 		= 	'Preview Report';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
+	$string['removesel']			= 	'Remove selected';
+	$string['removeall']			= 	'Remove all';
 	$string['req'] 					= 	'Required';
 	$string['reports'] 				= 	'Reports';
 	$string['reportconfiguration'] 	= 	'Report Configuration';
@@ -72,6 +78,8 @@
 	$string['showingpages'] = 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 	= 	'Submit and display';
 	$string['selecttype'] 			= 	'Select Field Type';
+	$string['selectedreports']		= 	'Selected Reports';
+	$string['selectedreportlist']		= 	'Select report list options';
 	
 	
 	

@@ -33,6 +33,9 @@ define('CONTEXT_SELF',	05);
 define( 'OPTIONSINGLE' , 1 );
 define( 'OPTIONMULTI' , 2 );
 
+//deines whether something is enabled or disabled
+define( 'ILP_ENABLED' , 1 );
+define( 'ILP_DISABLED' , 0 );
 
 
 

@@ -553,7 +553,7 @@ class ilp_db_functions	extends ilp_logging {
 	/**
      * Create a plugin entry in the table given 
      *
-     * @return mixed int id of new record or false
+     * @return mixed int id of new reocrd or false
      */
     function create_plugin_entry($tablename,$pluginentry)	{
     	return $this->insert_record($tablename, $pluginentry);
@@ -569,29 +569,93 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->update_record($tablename, $pluginentry);
     }
     
+	/**
+     * Returns a list of all reports currently enabled in a course 
+     *
+     * @param int 	$course_id the id of the course who we want to 
+     * get report for
+     *  @param int $report_id the id of the report
+     * @return mixed array containing recordset objects or false 
+     */
+    function get_coursereports($course_id,$report_id=null,$status=null) {
+		global	$CFG;
+    	
+		$report_sql		=	(!empty($report_id)) ? " AND report_id = {$report_id} " : "";
+		$status_sql		=	(!empty($status)) ? " AND cr.status = {$status} " : "";	
+				
+    	$sql	=	"SELECT		*, cr.id as cr_id
+    				 FROM 		{$CFG->prefix}block_ilp_coursereports as cr,
+    				 			{$CFG->prefix}block_ilp_report as r
+    				 WHERE		cr.report_id	=	r.id
+    				 AND		course_id 	=	{$course_id}
+    				{$report_sql}
+    				{$status_sql}";
+    	
+    	return	$this->dbc->get_records_sql($sql);
+    }
+    
+	/**
+     * Returns a list of all ilp reports with an enabled status 
+     *
+     * @param array $reports a array contain the ids of reports that 
+     * you do not want included in the return values 
+     * @return mixed array containing recordset objects or false
+     */
+    function get_enabledreports($report_ids)	{
+    	global $CFG;
+    	$unwantedcourses	=	(!empty($report_ids)) ? " AND id NOT IN (".implode(',',$report_ids).")": "";
+    	
+    	$sql	=	"SELECT		*
+    				 FROM		{$CFG->prefix}block_ilp_report
+    				 WHERE		status	=	".ILP_ENABLED.
+    				 $unwantedcourses;
+   				 
+    	return	$this->dbc->get_records_sql($sql);
+    }
+    
+    /**
+     * Creates a record in the block_ilp_coursereports table that allows
+     * a report to be shown in a course 
+     *
+     * @param object $record the record that will be created 
+     * 
+     * @return mixed int the id of the record or false 
+     */
+    function create_coursereport($record) {
+    	return $this->insert_record("block_ilp_coursereports",$record);
+    }
+    
+	/**
+     * Updates the given coursereport record 
+     *
+     * @param object $record the record that will be updated 
+     * 
+     * @return bool true or false 
+     */
+    function update_coursereport($record) {
+    	return $this->update_record("block_ilp_coursereports",$record);
+    }
+
     /*
     * check if any user data has been uploaded to a particular reportfield
     * if it has then manager should not be allowed to delete any existing
     * options
     */
     function plugin_data_item_exists( $tablename, $reportfield_id ){
-	global $CFG;
-	$tablename = $CFG->prefix . $tablename;
-	$element_table = $tablename;
-	$item_table = $tablename . "_items";
-	$entry_table = $tablename . "_ent";
-	$sql = "SELECT *
-		FROM $tablename ele
-		JOIN $item_table item ON item.parent_id = ele.id
-		JOIN $entry_table entry ON entry.item_value = item.item_value
-		WHERE ele.reportfield_id = $reportfield_id
-	";
-	$data = $this->dbc->get_records_sql( $sql );
-/*
-	var_crap($sql);exit;
-	var_crap($data);exit;
-*/
-	return $data;
+		global $CFG;
+		
+		$tablename = $CFG->prefix . $tablename;
+		$element_table = $tablename;
+		$item_table = $tablename . "_items";
+		$entry_table = $tablename . "_ent";
+		$sql = "SELECT *
+				FROM $tablename ele
+				JOIN $item_table item ON item.parent_id = ele.id
+				JOIN $entry_table entry ON entry.item_value = item.item_value
+				WHERE ele.reportfield_id = $reportfield_id
+				";
+		$data = $this->dbc->get_records_sql( $sql );
+		return $data;
     }  
 
     /*
@@ -599,17 +663,16 @@ class ilp_db_functions	extends ilp_logging {
     * dropdown options are returned
     */
     function get_optionlist( $reportfield_id, $tablename ){
-	global $CFG;
-	$tablename = $CFG->prefix . $tablename;
-	$item_table = $tablename . "_items";
-	$plugin_table = $tablename;
-	$sql = "
-		SELECT item_value, item_name
-		FROM  {$CFG->prefix}block_ilp_report_field rptf
-		JOIN $plugin_table ON $plugin_table.reportfield_id = rptf.id
-		JOIN $item_table ON $item_table.parent_id = $plugin_table.id
-		WHERE $plugin_table.reportfield_id = $reportfield_id
-	";
+		global $CFG;
+		$tablename = $CFG->prefix . $tablename;
+		$item_table = $tablename . "_items";
+		$plugin_table = $tablename;
+		$sql = "SELECT item_value, item_name
+				FROM  {$CFG->prefix}block_ilp_report_field rptf
+				JOIN $plugin_table ON $plugin_table.reportfield_id = rptf.id
+				JOIN $item_table ON $item_table.parent_id = $plugin_table.id
+				WHERE $plugin_table.reportfield_id = $reportfield_id
+				";
     	return $this->dbc->get_records_sql( $sql );
     }
 	

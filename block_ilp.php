@@ -38,7 +38,7 @@ class block_ilp extends block_list {
     function get_content() {
         global $CFG, $USER, $COURSE, $SITE;
 
-        // include assessment manager db class
+        // include  db class
         require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 
         // include the parser class
@@ -102,7 +102,7 @@ class block_ilp extends block_list {
      * @return bool true
      */
     function instance_allow_config() {
-        return false;
+        return true;
     }
     
 
@@ -127,6 +127,134 @@ class block_ilp extends block_list {
     function instance_allow_multiple() {
         return false;
     }
+    
+    
+    
+	function instance_config_save($data) {
+
+		global $CFG;
+		
+		require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
+	
+		$dbc	=	new ilp_db();
+		
+		// include ilp lib file
+        require_once($CFG->dirroot.'/blocks/ilp/lib.php');
+
+		// remove the config_ prefixes
+        foreach($data as $key => $value) {
+            $key = preg_replace('/config_/', '', $key);
+            $data->$key = $value;
+        }
+        
+	  	$course_id		=	$data->course_id;
+	  	$sesskey		=	$data->sesskey;
+	  	$bui_editid		=	$data->bui_editid;
+	  	
+	  	$instanceid		=	$data->instanceid;
+	  	$blockaction	=	$data->blockaction;
+
+	  	
+	  	
+        if (!empty($data->addall) || !empty($data->addsel) || !empty($data->removeall) || !empty($data->removesel)) {
+		  	
+        	if (!empty($data->addall)) {
+
+					//the add all button was pressed
+			
+					//since the add all button was pressed it reasonable to assume that all enabled reports 
+					//will be added to this course so we get all enabled reports in the same manner the form 
+					//would have and pass them to the add_coursereport function		
+			
+					//get all reports that are enabled in this course
+			        $assignedreports	=	$dbc->get_coursereports($course_id,null,ILP_ENABLED);
+			        
+			        $coursereports		=	array();
+
+			        var_dump($assignedreports);
+			        
+			        //populate the areport var with key and values from the objects returned in $assignedreports
+			        $areport	=	array();
+			        if (!empty($assignedreports)) {
+				        foreach ($assignedreports as $r) {
+				        	$areport[$r->id]	=	$r->name;	
+				        }
+			        }
+			        
+			        if (!empty($assignedreports))	{
+			        	foreach ($assignedreports as $a) {
+							$coursereports[]	=	$a->report_id;	
+			        	}
+			        }
+			        
+			        //get all ilp reports that enabled except the ones already enabled in this course 
+			        $unassignedreports	=	$dbc->get_enabledreports($coursereports);		
+			
+					//loop through the options in the report field and add them to this course 	
+					//the add_coursereport will create the record for the report in this course
+					//if one doesn't exist if it does and it is disabled it will reenable it
+					
+					foreach ($unassignedreports	as $report) {
+						add_coursereport($course_id,$report->id);
+					}		
+		    } else if (!empty($data->addsel)) {
+		    	if (!empty($data->reports)) {
+					//add the individual report selection
+					//loop through the options in the report field and add them to this course 	
+					//the add_coursereport will create the record for the report in this course
+					//if one doesn't exist if it does and it is disabled it will reenable it
+			
+					foreach ($data->reports	as $report_id) {
+						if ($report_id == -1) continue; 
+						add_coursereport($course_id,$report_id);
+					}	
+		    	}
+		    } else if (!empty($data->removeall)) {
+		
+					//since the remove all button it is resonable to assume that all reports assigned to the 
+					//course are being removed so we will get all reports enabled in this course them we will 
+					//pass the records to remove_coursereport which will disable the reports. 
+					//NOTE these records are only disbaled as we dont want to orphan records 
+			
+					//get all reports that are enabled in this course
+			        $assignedreports	=	$dbc->get_coursereports($course_id,null,ILP_ENABLED);
+					
+					foreach ($assignedreports	as $report) {
+						remove_coursereport($course_id,$report->report_id);
+					}
+		    } else if (!empty($data->removesel)) {
+		    	if (!empty($data->coursereports)) {	
+					//remove the selected report
+			
+					//loop through the selected options and remove them from the course
+					//in practice the record for the course is not being removed as this may 
+					//orphan report entry records instead we will disable the report in the 
+					//course to stop any new reports being created (the report will no longer show)
+					//as a creatable report
+			
+					
+					foreach ($data->coursereports	as $report_id) {
+						if ($report_id == -1) continue; 
+						remove_coursereport($course_id,$report_id);
+					}	
+		
+		    	}
+		    }
+		    
+		    $returnurl	=	$CFG->wwwroot."/course/view.php?id={$course_id}&sesskey={$sesskey}";
+		    
+		    //use the bui_editid which is not present in mooodle 1.9 to decide which version we are in and send the user back to the 
+		    //the config page with the appropriate url
+		    $returnurl .= (!empty($bui_editid)) ?  "&bui_editid={$bui_editid}" : "&blockaction={$blockaction}&instanceid={$instanceid}";	
+		    //redirect the user back to the edit page
+        	 redirect($returnurl, '', REDIRECT_DELAY);
+        }
+        
+        // and now actually save it in the parent class
+    	return parent::instance_config_save($data);
+	}
+	
+	
     
 }
 ?>
