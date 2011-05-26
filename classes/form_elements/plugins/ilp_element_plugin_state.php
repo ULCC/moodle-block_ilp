@@ -15,11 +15,13 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
      */
     function __construct() {
     	
-    	parent::__construct();
+    	
     	$this->tablename = "block_ilp_plu_ste";
     	$this->data_entry_tablename = "block_ilp_plu_ste_ent";
-	$this->items_tablename = "block_ilp_plu_ste_items";
-	$this->selecttype = OPTIONSINGLE;	
+		$this->items_tablename = "block_ilp_plu_ste_items";
+		$this->selecttype = OPTIONSINGLE;	
+		
+		parent::__construct();
     }
 
     function language_strings(&$string) {

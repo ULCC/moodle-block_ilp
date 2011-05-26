@@ -712,7 +712,27 @@ class ilp_db_functions	extends ilp_logging {
     	return	$this->dbc->get_record("capabilities",array("name"=>$capability));
     }
     
+/**
+	 * Create a entry record  
+     *
+     * @param object $entry the entry that you want to insert
+     * 
+     * @return mixed int the id of the entry or false 
+     */  
+    function create_entry($entry) {
+    	return	$this->insert_record("block_ilp_entry", $entry);
+    }
     
+	/**
+	 * Updates an entry record  
+     *
+     * @param object entry the object that we want to update
+     * 
+     * @return bool true or false
+     */  
+    function update_entry($entry) {
+    	return	$this->update_record("block_ilp_entry", $entry);
+    }
    	
     
    

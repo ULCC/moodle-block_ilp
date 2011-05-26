@@ -192,18 +192,21 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
     */
     public	function entry_form( &$mform ) {
     	
+    	//create the fieldname
+    	$fieldname	=	"{$this->reportfield_id}_field";
+    	
     	//text field for element label
         $mform->addElement(
             'textarea',
-            "$this->reportfield_id",
+            $fieldname,
             "$this->label",
             array('class' => 'form_input')
         );
         
-        if (!empty($this->minimumlength)) $mform->addRule("$this->reportfield_id", null, 'minlength', $this->minimumlength, 'client');
-        if (!empty($this->maximumlength)) $mform->addRule("$this->reportfield_id", null, 'maxlength', $this->maximumlength, 'client');
-        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
-        $mform->setType($this->reportfield_id, PARAM_RAW);
+        if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
+        if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        $mform->setType($fieldname, PARAM_RAW);
     }
 	/**
 	* handle user input

@@ -392,7 +392,8 @@ class ilp_element_plugin {
 	 public	function entry_process_data($reportfield_id,$entry_id,$data) {
 	 	
 	 	//check to see if a entry record already exists for the reportfield in this plugin
-
+var_dump($data);
+die();
 	 	//get the plugin table record that has the reportfield_id 
 	 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
 	 	if (empty($pluginrecord)) {

@@ -19,13 +19,15 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
      */
     function __construct() {
     	
-    	parent::__construct();
+    	
     	$this->tablename = "block_ilp_plu_sts";
     	$this->data_entry_tablename = "block_ilp_plu_sts_ent";
     	$this->options_tablename = "block_ilp_plu_sts_items";
-	$this->items_tablename = "block_ilp_plu_sts_items";
-	$this->optionlist_keyfield = "status_id";
-	$this->selecttype = OPTIONSINGLE;
+		$this->items_tablename = "block_ilp_plu_sts_items";
+		$this->optionlist_keyfield = "status_id";
+		$this->selecttype = OPTIONSINGLE;
+		
+		parent::__construct();
     }
 
     

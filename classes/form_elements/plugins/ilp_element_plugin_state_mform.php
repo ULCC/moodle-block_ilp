@@ -16,6 +16,8 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 	}
 	protected function specific_definition($mform) {
 		
+		$fieldname	=	"{$this->reportfield_id}_field";
+		
 		/**
 		textarea element to contain the options the manager wishes to add to the user form
 		manager will be instructed to insert value/label pairs in the following plaintext format:

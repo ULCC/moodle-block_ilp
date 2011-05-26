@@ -53,19 +53,23 @@ class ilp_element_plugin_category extends ilp_element_plugin_itemlist{
     }
 	
 	public function entry_form( &$mform ) {
+		
+		//create the fieldname
+    	$fieldname	=	"{$this->reportfield_id}_field";
+		
 		//definition for user form
     	//text field for element label
 		$optionlist = $this->get_option_list( $this->reportfield_id );
        		$select = &$mform->addElement(
        			'select',
-     			$this->reportfield_id,
+     			$fieldname,
        			$this->label,
 			$optionlist,
         		array('class' => 'form_input')
        	 	);
         
-        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
-        $mform->setType('label', PARAM_RAW);
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        $mform->setType($fieldname, PARAM_RAW);
     	
         //return $mform;
     	

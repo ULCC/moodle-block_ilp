@@ -104,7 +104,7 @@ $PAGE->navbar->add($pagetitle,null,'title');
 // setup the page title and heading
 $PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));
 $PAGE->set_heading($course->fullname);
-$PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
+$PAGE->set_url($CFG->wwwroot.'/blocks/ilp/edit_report.php', $PARSER->get_params());
 
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_report.html');
 

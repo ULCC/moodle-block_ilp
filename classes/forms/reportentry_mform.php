@@ -34,8 +34,14 @@ class report_entry_mform extends ilp_moodleform {
 			
 			$this->dbc			=	new ilp_db();
 			
+			$query_string	=	"?report_id={$report_id}&amp;user_id={$user_id}";
+			
+			if (!empty($entry_id)) $query_string	.= "&amp;entry_id={$entry_id}";
+			if (!empty($course_id)) $query_string	.= "&amp;course_id={$course_id}"; 
+			
+			
 			// call the parent constructor
-       	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.php?course_id={$this->course_id}&report_id={$this->report_id}&user_id={$this->user_id}&entry_id={$this->entry_id}");
+       	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.php");
 		}
 	
 		
@@ -104,8 +110,8 @@ class report_entry_mform extends ilp_moodleform {
 				$pluginclass->entry_form($mform);
 			}
        		        
-	      	$buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('savechanges','block_ilp'));
-	      	$buttonarray[] = &$mform->createElement('cancel', 'cancelbutton', get_string('cancel'));
+	        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('submit'));
+	        $buttonarray[] = &$mform->createElement('cancel');
         		        
 	        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         
@@ -145,39 +151,45 @@ class report_entry_mform extends ilp_moodleform {
 				//$entry->course
 				
 				$entry_id	=	$this->dbc->create_entry($entry);
-				
-				//get all of the fields in the current report, they will be returned in order as
-				//no position has been specified
-				$reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
-				
-				foreach ($reportfields as $field) {
-					
-					//get the plugin record that for the plugin 
-					$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
-					
-					//take the name field from the plugin as it will be used to call the instantiate the plugin class
-					$classname = $pluginrecord->name;
-					
-					// include the class for the plugin
-					include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
-					
-					if(!class_exists($classname)) {
-					 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
-					}
-					
-					//instantiate the plugin class
-					$pluginclass	=	new $classname();
-					
-					$pluginclass->load($field->id);
-					
-					//call the plugins entry_form function which will add an instance of the plugin
-					//to the form
-					$pluginclass->entry_process_data($data);
-				}
+											
+			} else {
+				//update the entry
+				//as there is nothing to update but we want the entries timemodifed
+				//to be updated we will just re-add the report_id 
+				$entry					=	new stdClass();
+				$entry->report_id		=	$report_id;
+				$this->dbc->update_entry($entry);
 				
 			}
 			
-			 
+			//get all of the fields in the current report, they will be returned in order as
+			//no position has been specified
+			$reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+			
+			foreach ($reportfields as $field) {
+				
+				//get the plugin record that for the plugin 
+				$pluginrecord	=	$this->dbc->get_plugin_by_id($field->plugin_id);
+				
+				//take the name field from the plugin as it will be used to call the instantiate the plugin class
+				$classname = $pluginrecord->name;
+				
+				// include the class for the plugin
+				include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
+				
+				if(!class_exists($classname)) {
+				 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+				}
+				
+				//instantiate the plugin class
+				$pluginclass	=	new $classname();
+				
+				$pluginclass->load($field->id);
+				
+				//call the plugins entry_form function which will add an instance of the plugin
+				//to the form
+				$pluginclass->entry_process_data($field->id,$entry_id,$data);
+			}
 		}
 		
 		/**

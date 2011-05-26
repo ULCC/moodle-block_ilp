@@ -179,19 +179,22 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	*
     */
     public	function entry_form( &$mform ) {
-    	
+
+    	//create the fieldname
+    	$fieldname	=	"{$this->reportfield_id}_field";
 
     	//text field for element label
         $mform->addElement(
             'date_selector',
-            $this->reportfield_id,
+            $fieldname,
             $this->label,
             array('class' => 'form_input', 'optional' => false )
         );
         
-        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
-	//@todo decide correct PARAM type for date element
-        $mform->setType($this->reportfield_id, PARAM_RAW);
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+		
+        //@todo decide correct PARAM type for date element
+        $mform->setType($fieldname, PARAM_RAW);
     	
         //return $mform;
     }

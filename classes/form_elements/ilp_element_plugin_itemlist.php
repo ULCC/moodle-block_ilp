@@ -147,26 +147,28 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	*
     */
     public function entry_form( &$mform ) {
+    	
+    	//create the fieldname
+    	$fieldname	=	"{$this->reportfield_id}_field";
+    	
 		//definition for user form
-	$optionlist = $this->get_option_list( $this->reportfield_id );
+		$optionlist = $this->get_option_list( $this->reportfield_id );
     	//text field for element label
         $select = &$mform->addElement(
             'select',
-            $this->reportfield_id,
+            $fieldname,
             $this->label,
-	    $optionlist,
+	    	$optionlist,
             array('class' => 'form_input')
         );
-	if( OPTIONMULTI == $this->selecttype ){
-		$select->setMultiple(true);
-	}
+		
+        if( OPTIONMULTI == $this->selecttype ){
+			$select->setMultiple(true);
+		}
         
-        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType('label', PARAM_RAW);
-    	
-        //return $mform;
-    	
-    	
+
     }
     public function delete_form_element($reportfield_id) {
 	return parent::delete_form_element($this->tablename,$reportfield_id); 

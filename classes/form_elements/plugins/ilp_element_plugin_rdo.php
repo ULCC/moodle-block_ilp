@@ -51,31 +51,29 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_itemlist{
     */
     public	function entry_form( &$mform ) {
     	
-	$optionlist = $this->get_option_list( $this->reportfield_id );
-	$elementname = $this->reportfield_id;
-	$radioarray = array();
-	foreach( $optionlist as $key => $value ){
-		$radioarray[] = &MoodleQuickForm::createElement( 'radio', $elementname, '', $value, $key );
-	}
+    	$fieldname	=	"{$this->reportfield_id}_field";
+    	
+		$optionlist = $this->get_option_list( $this->reportfield_id );
+		$elementname = $fieldname;
+		$radioarray = array();
+		foreach( $optionlist as $key => $value ){
+			$radioarray[] = &MoodleQuickForm::createElement( 'radio', $elementname, '', $value, $key );
+		}
 
-    	//text field for element label
+
         $mform->addGroup(
             $radioarray,
             $elementname,
-	    $this->label,
-		'',
-		'',
+	    	$this->label,
+			'',
+			'',
             array('class' => 'form_input'),
-	    false
+		    false
         );
         
-        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
+        if (!empty($this->req)) $mform->addRule($elementname, null, 'required', null, 'client');
 
-        $mform->setType('label', PARAM_RAW);
-    	
-        //return $mfrom;
-    	
-    	
+        $mform->setType($elementname, PARAM_RAW);
     }
 }
 

@@ -39,7 +39,9 @@
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
-		
+	
+	$string['ilpname']				=	'ILP';
+	
 	$string['label']				=	'Label';
 	$string['name']					=	'Name';
 	$string['notrequired']	 		= 	'Not required';

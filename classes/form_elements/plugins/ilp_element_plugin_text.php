@@ -42,7 +42,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
 			if (!empty($pluginrecord)) {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
-				$this->req			=	$reportfield->req;
+				$this->req				=	$reportfield->req;
 				$this->maximumlength	=	$pluginrecord->maximumlength;
 				$this->minimumlength	=	$pluginrecord->minimumlength;
 				$this->position			=	$reportfield->position;
@@ -197,18 +197,20 @@ class ilp_element_plugin_text extends ilp_element_plugin {
     */
     public	function entry_form( &$mform ) {
   	
+    	$fieldname	=	"{$this->reportfield_id}_field";
+    	
     	//text field for element label
         $mform->addElement(
             'text',
-            $this->reportfield_id,
+            $fieldname,
             $this->label,
             array('class' => 'form_input')
         );
         
-        if (!empty($this->minimumlength)) $mform->addRule("$this->reportfield_id", null, 'minlength', $this->minimumlength, 'client');
-        if (!empty($this->maximumlength)) $mform->addRule("$this->reportfield_id", null, 'maxlength', $this->maximumlength, 'client');
-        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
-        $mform->setType('label', PARAM_RAW);
+        //if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
+        //if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
+        //if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        $mform->setType($fieldname, PARAM_RAW);
 	 }
 	 
 	/**

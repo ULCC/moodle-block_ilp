@@ -106,6 +106,7 @@ these 2 methods now in parent
 	* handle user input
 	**/
 	 public	function entry_specific_process_data($reportfield_id,$entry_id,$data) {
+	
 		/*
 		* parent method is fine for simple form element types
 		* dd types will need something more elaborate to handle the intermediate

@@ -12,7 +12,7 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
 //include any neccessary files
 
@@ -34,6 +34,8 @@ $entry_id	= $PARSER->optional_param('entry_id',NULL,PARAM_INT);
 
 //get the id of the course that is currently being used
 $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
+
+$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php",array('report_id'=>$report_id,'user_id'=>$user_id,'course_id'=>$course_id,'entry_id'=>$entry_id));
 
 // instantiate the db
 $dbc = new ilp_db();
@@ -77,6 +79,62 @@ if (empty($reportfields)) {
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/reportentry_mform.php');
 
 $mform	= new	report_entry_mform($report_id,$user_id,$entry_id,$course_id);
+
+//was the form cancelled?
+if ($mform->is_cancelled()) {
+	//send the user back to dashboard
+	//$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_reportentry.php&course_id='.$course_id;
+    redirect($return_url, '', REDIRECT_DELAY);
+}
+
+
+//was the form submitted?
+// has the form been submitted?
+if($mform->is_submitted()) {
+    // check the validation rules
+    if($mform->is_validated()) {
+
+        //get the form data submitted
+    	$formdata = $mform->get_data();
+    	  var_dump($formdata);  	
+        // process the data
+    	$success = $mform->process_data($formdata);
+
+    	//if saving the data was not successful
+        if(!$success) {
+			//print an error message	
+            print_error(get_string("entrycreationerror", 'block_ilp'), 'block_ilp');
+        }
+
+        if (!isset($formdata->saveanddisplaybutton)) { 
+            //$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&course_id='.$course_id;
+        	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
+        }
+    }
+}
+
+
+$plpuser	=	$dbc->get_user_by_id($user_id);
+
+
+if (!empty($plpuser)) {
+	$userinitals	=	$plpuser->firstname." ".$plpuser->lastname;	
+	
+}
+
+// setup the navigation breadcrumbs
+//block name
+$PAGE->navbar->add(get_string('ilpname', 'block_ilp'),null,'title');
+
+//user intials
+$PAGE->navbar->add($userinitals,null,'title');
+
+//section name
+$PAGE->navbar->add(get_string('reports', 'block_ilp'),null,'title');
+
+
+$PAGE->set_url($CFG->wwwroot.'/blocks/ilp/edit_reportentry.php', $PARSER->get_params());
+
 
 //require edit_reportentry html
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_reportentry.html');
