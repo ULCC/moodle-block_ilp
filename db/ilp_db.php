@@ -718,7 +718,7 @@ class ilp_db_functions	extends ilp_logging {
    
     
     /*
-    * check if any user data has been uploaded to a particular reportfield
+    * check if any user data has been uploaded to a particular list-type reportfield
     * if it has then manager should not be allowed to delete any existing
     * options
     */
@@ -737,7 +737,39 @@ class ilp_db_functions	extends ilp_logging {
 				";
 		$data = $this->dbc->get_records_sql( $sql );
 		return $data;
-    }  
+<<<<<<< .mine	var_crap($data);exit;
+*/
+	return $data;
+=======>>>>>>> .theirs    }  
+
+	/*
+	* delete option items for a plugin list-type element
+	* $tablename is the element table eg block_ilp_plu_category
+	*/
+    function delete_element_listitems( $tablename, $reportfield_id ){
+	global $CFG;
+	$real_tablename = $CFG->prefix . $tablename;
+	$element_table = $tablename;
+	$item_table = $tablename . "_items";
+	$entry_table = $tablename . "_ent";
+	//get parent_id
+	$parent_id = $this->get_element_id_from_reportfield_id( $tablename, $reportfield_id );
+	$sql = "
+		DELETE FROM $item_table 
+		WHERE parent_id = $parent_id
+	";
+    	return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) );
+    }
+    public function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
+	$element_record = array_shift( $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ) ) );
+	if( !empty( $element_record ) ){
+		return $element_record->id;
+	}
+	return false;
+    }
+    public function listelement_item_exists( $item_tablename, $conditionlist ){
+	return $this->dbc->get_records( $item_tablename, $conditionlist );
+    }
 
     /*
     * supply a reportfield id for a dropdown type element

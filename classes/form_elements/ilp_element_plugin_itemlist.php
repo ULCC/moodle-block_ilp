@@ -10,6 +10,58 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     public function __construct(){
 	parent::__construct();
     }
+	/**
+    * this function saves the data entered on a entry form to the plugins _entry table
+	* the function expects the data object to contain the id of the entry (it should have been
+	* created before this function is called) in a param called id. 
+	* as this is a select element, possibly a multi-select, we have to allow
+	* for the possibility that the input is an array of strings
+    */
+	 public	function entry_process_data($reportfield_id,$entry_id,$data) {
+	 	
+	 	//check to see if a entry record already exists for the reportfield in this plugin
+
+	 	//get the plugin table record that has the reportfield_id 
+	 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+	 	if (empty($pluginrecord)) {
+	 		print_error('pluginrecordnotfound');
+	 	}
+	 
+	 	//get the _entry table record that has the pluginrecord id
+	 	$entry 	=	$this->dbc->get_data_entry_record( $this->data_entry_tablename, $pluginrecord->id, $entry_id );
+	 	
+	 	//if no record has been created create the entry record
+	 	if (empty($entry)) {
+	 		$pluginentry	=	new stdClass();
+			$pluginentry->entry_id  = 	$entry_id;
+	 		$pluginentry->value	=	$data->$reportfield_id;
+	 		$pluginentry->textfield_id	=	$pluginrecord->id;
+			if( is_string( $pluginentry->value ) ){
+	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+			}
+			elseif( is_array( $pluginentry->value ) ){
+				$this->write_multiple( $this->data_entry_tablename, $pluginentry );
+			}
+	 	} else {
+	 		//update the current record
+	 		$entry->value	=	$data->$reportfield_id;
+	 		$result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
+	 	}
+	 	
+	 	return (!empty($result)) ? true: false;
+	 	
+	 }
+	protected function write_multiple( $tablename, $multi_pluginentry ){
+		//if we're here, assume $pluginentry->value is array
+		$pluginentry = $multi_pluginentry;
+		$resultlist = array();
+		foreach( $multi_pluginentry->value as $value ){
+			$pluginentry->item_value = $value;
+			$resultlist[] = $this->dbc->create_plugin_entry( $this->data_entry_tablename, $pluginentry );
+		}
+		//if any of the inserts didn't work, there will be a false in $resultlist
+		return $resultlist;
+	}
     public function load($reportfield_id) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
 		if (!empty($reportfield)) {

@@ -400,11 +400,12 @@ class ilp_element_plugin {
 	 	}
 	 
 	 	//get the _entry table record that has the pluginrecord id
-	 	$entry 	=	$this->dbc->get_data_entry_record($this->data_entry_tablename,$pluginrecord->id);
+	 	$entry 	=	$this->dbc->get_data_entry_record($this->data_entry_tablename,$pluginrecord->id, $entry_id);
 	 	
 	 	//if no record has been created create the entry record
 	 	if (empty($entry)) {
 	 		$pluginentry	=	new stdClass();
+			$pluginentry->entry_id = $entry_id;
 	 		$pluginentry->value	=	$data->$reportfield_id;
 	 		$pluginentry->textfield_id	=	$pluginrecord->id;
 	 		$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);

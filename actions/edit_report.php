@@ -81,7 +81,6 @@ if($mform->is_submitted()) {
     }
 }
 
-
 //set the page title
 $pagetitle	=	(empty($report_id)) ? get_string('createreport', 'block_ilp') : get_string('editreport', 'block_ilp');
 
