@@ -741,6 +741,9 @@ class ilp_db_functions	extends ilp_logging {
     * check if any user data has been uploaded to a particular list-type reportfield
     * if it has then manager should not be allowed to delete any existing
     * options
+    * @param string tablename
+    * @param int reportfield_id
+    * @return array of objects
     */
     function plugin_data_item_exists( $tablename, $reportfield_id ){
 		global $CFG;
@@ -762,6 +765,9 @@ class ilp_db_functions	extends ilp_logging {
 	/*
 	* delete option items for a plugin list-type element
 	* $tablename is the element table eg block_ilp_plu_category
+	* @param string tablename
+	* @param int reportfield_id
+	* @return boolean
 	*/
     function delete_element_listitems( $tablename, $reportfield_id ){
 	global $CFG;
@@ -777,20 +783,60 @@ class ilp_db_functions	extends ilp_logging {
 	";
     	return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) );
     }
-    public function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
+    /*
+    * only intended to be called by $this->delete_element_listitems()
+    * @param string tablename
+    * @param int reportfieldid
+    * @return int or false
+    */
+    protected function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
 	$element_record = array_shift( $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ) ) );
 	if( !empty( $element_record ) ){
 		return $element_record->id;
 	}
 	return false;
     }
+
+    /*
+    * @param string tablename
+    * @param array for where clause
+    * @return array of objects
+    */
     public function listelement_item_exists( $item_tablename, $conditionlist ){
 	return $this->dbc->get_records( $item_tablename, $conditionlist );
     }
 
     /*
+    * find user input in a particular data entry table
+    * @param string - element table
+    * @param string - record id
+    * @param string - entry_id (use for finding multiple records from a multi-select submit)
+    * @return array of objects or false
+    */
+    //public function get_data_entry_record( $tablename, $pluginrecord_id, $entry_id ){
+    public function get_data_entry_record( $tablename, $entry_id=false ){
+	if( !$entry_id ){
+		return false;
+	}
+	$entry_tablename = $tablename . '_ent';
+	$entry = array_shift( $this->dbc->get_records( $entry_tablename , array( 'id' => $entry_id ) ) );
+	//but are there other entries with the same parent_id and entry_id ?
+	if( !empty( $entry ) ){
+		$parent_id = $entry->parent_id;
+		$entry_id = $entry->entry_id;
+		$wider_condition = array( 'parent_id' => $parent_id, 'entry_id' => $entry_id );
+		return $this->dbc->get_records( $entry_tablename, $wider_condition );
+	}
+	//no records - return false
+	return false;
+    }
+
+    /*
     * supply a reportfield id for a dropdown type element
     * dropdown options are returned
+    * @param int
+    * @param string
+    * @return array of objects
     */
     function get_optionlist( $reportfield_id, $tablename ){
 		global $CFG;
