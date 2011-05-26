@@ -102,7 +102,8 @@ class block_ilp extends block_list {
      * @return bool true
      */
     function instance_allow_config() {
-        return true;
+    	
+        return false;
     }
     
 
@@ -131,7 +132,7 @@ class block_ilp extends block_list {
     
     
 	function instance_config_save($data) {
-
+	/* not needed now as we are not assigning reports to courses
 		global $CFG;
 		
 		require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
@@ -252,6 +253,7 @@ class block_ilp extends block_list {
         
         // and now actually save it in the parent class
     	return parent::instance_config_save($data);
+    	*/
 	}
 	
 	

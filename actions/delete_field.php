@@ -17,7 +17,7 @@ global $USER, $CFG, $SESSION, $PARSER;
 //include any neccessary files
 
 // Meta includes
-require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
+require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
 //get the id of the course that is currently being used
 $course_id = $PARSER->required_param('course_id', PARAM_INT);

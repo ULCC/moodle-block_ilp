@@ -635,7 +635,88 @@ class ilp_db_functions	extends ilp_logging {
     function update_coursereport($record) {
     	return $this->update_record("block_ilp_coursereports",$record);
     }
+    
+    
+    /**
+     * returns any reportpermission records that match the given
+     * criteria of report_id, role_id and capability (name) 
+     *
+     * @param int $report_id the id of the report whose permission 
+     * is being checked 
+     * @param mixed $role_id int a single role id or array filled with
+     * a series of role_ids
+     * @param the id of the capability we are checking if the user has for the report
+     * 
+     * @return mixed array with recordset objects or false 
+     */
+    function get_reportpermissions_by_criteria($report_id,$role_id,$capability_id) {
+ 		global	$CFG;
+    	
+    	if (!is_array($role_id)) {
+    		$role_id	=	array($role_id);	
+    	}
 
+    	
+    	$sql	=	"SELECT 	* 
+					 FROM 		{$CFG->prefix}block_ilp_reportpermissions AS rp, 
+					 			{$CFG->prefix}role AS r,
+								{$CFG->prefix}capabilities AS c
+					 WHERE		rp.capability_id	=	c.id
+					 AND		rp.role_id		=	r.id
+					 AND		rp.report_id	=	{$report_id}	
+					 AND		r.id IN (".implode(',',$role_id).")
+					 AND		c.id = {$capability_id}";
+								
+    	return 	$this->dbc->get_records_sql($sql);
+    }
+    
+    
+    /**
+     * returns true or false depending on whether role (or one of the roles given) 
+     * has a cappability in a report 
+     *
+     * @param int $report_id the id of the report whose permission 
+     * is being checked 
+     * @param mixed $role_id int a single role id or array filled with
+     * a series of role_ids
+     * @param the id of the capability we are checking if the user has for the report
+     * 
+     * @return mixed array with recordset objects or false 
+     */
+    function has_report_permission($report_id,$role_id,$capability_id)	{
+		//if permissions where returned from then the role (or one of the roles given) has the permission in the course    
+    	$permissions	=	$this->get_reportpermissions_by_criteria($report_id,$role_id,$capability_id);
+    	return 	(!empty($permissions)) ? true	:	false;
+    }
+    
+/**
+     * Get the a users record based on the id given
+     *
+     * @param int $user_id the id of the user
+     * 
+     * @return mixed objects containing user record or false 
+     */  
+    function get_user_by_id($user_id) {
+    	return	$this->dbc->get_record("user",array("id"=>$user_id));
+    }
+    
+	/**
+     * return the capability record for the capability with the 
+     * given name
+     *
+     * @param string capability name
+     * 
+     * @return mixed objects containing capability record or false 
+     */  
+    function get_capability_by_name($capability) {
+    	return	$this->dbc->get_record("capabilities",array("name"=>$capability));
+    }
+    
+    
+   	
+    
+   
+    
     /*
     * check if any user data has been uploaded to a particular reportfield
     * if it has then manager should not be allowed to delete any existing
@@ -675,6 +756,9 @@ class ilp_db_functions	extends ilp_logging {
 				";
     	return $this->dbc->get_records_sql( $sql );
     }
+    
+    
+    
 	
 }
 

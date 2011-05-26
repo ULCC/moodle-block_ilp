@@ -17,7 +17,7 @@ global $USER, $CFG, $SESSION, $PARSER;
 //include any neccessary files
 
 // Meta includes
-require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
+require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
 //if set get the id of the report to be edited
 $report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	

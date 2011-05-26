@@ -36,5 +36,5 @@ require_once($CFG->dirroot.'/blocks/ilp/constants.php');
 if (stripos($CFG->release,"2.") === false) require_once($CFG->dirroot.'/blocks/ilp/db/moodle2_emulator.php');
 
 //include the access checks file
-require_once($CFG->dirroot.'/blocks/ilp/db/accesscheck.php');
+require_once($CFG->dirroot.'/blocks/ilp/db/admin_accesscheck.php');
 ?>

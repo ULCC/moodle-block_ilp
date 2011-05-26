@@ -205,7 +205,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
             array('class' => 'form_input')
         );
         
-        if (!empty($this->minimumlength)) $mform->addRule("$this->reportfield_id", null, 'minlength', $this->maximumlength, 'client');
+        if (!empty($this->minimumlength)) $mform->addRule("$this->reportfield_id", null, 'minlength', $this->minimumlength, 'client');
         if (!empty($this->maximumlength)) $mform->addRule("$this->reportfield_id", null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
         $mform->setType('label', PARAM_RAW);

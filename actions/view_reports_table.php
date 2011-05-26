@@ -81,9 +81,9 @@ if (!empty($reports)) {
 								 </a>";
 
 		//decide whether the report is enabled or disabled and set the image and link accordingly
-		$title 			= 	(!empty($row->status)) ? get_string('enablereport','block_ilp') : get_string('disablereport','block_ilp');
+		$title 			= 	(!empty($row->status)) ? get_string('disablereport','block_ilp')  : get_string('enablereport','block_ilp');
 		
-		$icon	= 	(!empty($row->status)) ? "show" : "hide";
+		$icon	= 	(!empty($row->status)) ? "hide" : "show";
 		
 		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_status.php?report_id={$row->id}&course_id={$course_id}'>
 									<img class='status' src=".$OUTPUT->pix_url("/i/".$icon)." alt='".$title."' title='".$title."' />

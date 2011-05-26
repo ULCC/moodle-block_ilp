@@ -16,7 +16,7 @@ global $USER, $CFG, $SESSION, $PARSER;
 //include any neccessary files
 
 // Meta includes
-require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
+require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
 //include the report entry preview mform class
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_report_permissions_mform.php');

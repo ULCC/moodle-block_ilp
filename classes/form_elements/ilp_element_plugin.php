@@ -417,7 +417,10 @@ class ilp_element_plugin {
 	 	return (!empty($result)) ? true: false;
 	 	
 	 }
-	public function return_data( &$reportfield ){
-	}
+	 
+	 public function return_data( &$reportfield ){
+	 
+	 
+	 }
 }
 ?>

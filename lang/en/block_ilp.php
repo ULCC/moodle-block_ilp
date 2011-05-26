@@ -35,6 +35,7 @@
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
+	$string['for']					=	'for';
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
@@ -74,6 +75,7 @@
 	$string['reportpermissions']	= 	'Report Permissions';
 	$string['reportpermissionsuc']	= 	'The Permissions have been successfully assigned to the {$a->name} report';
 	$string['reportpermissionsdescription']	= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
+	$string['savechanges'] 			= 	'Save Changes';
 	$string['statuschangesuc'] 		= 	'The reports status was successfully changed';
 	$string['showingpages'] = 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 	= 	'Submit and display';
@@ -97,6 +99,8 @@
 	$string['ilp:deletereport'] 		= 	'Delete a report';
 	$string['ilp:updatestatus'] 		= 	'Update Status';
 	$string['ilp:viewreport'] 			= 	'View a report';
+	$string['ilp:viewilp'] 				= 	'View my own ilp';
+	$string['ilp:viewotherilp'] 		= 	'View others ilp';
 	
 	//ERROR MESSAGES CHANGING THESE IS NOT RECOMMENDED
 	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';
