@@ -58,14 +58,16 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
     * function used to return the language strings for the plugin
     */
     function language_strings(&$string) {
-        $string['ilp_element_plugin_dd'] 		= 'Select';
-        $string['ilp_element_plugin_dd_type'] 		= 'select';
-        $string['ilp_element_plugin_dd_description'] 	= 'A drop-down selector';
-	$string[ 'ilp_element_plugin_dd_optionlist' ] = 'Option List';
-	$string[ 'ilp_element_plugin_dd_single' ] = 'Single select';
-	$string[ 'ilp_element_plugin_dd_multi' ] = 'Multi select';
-	$string[ 'ilp_element_plugin_dd_typelabel' ] = 'Select type (single/multi)';
-	$string[ 'ilp_element_plugin_dd_existing_options' ] = 'existing options';
+        $string['ilp_element_plugin_dd'] 			= 'Select';
+        $string['ilp_element_plugin_dd_type'] 			= 'select';
+        $string['ilp_element_plugin_dd_description'] 		= 'A drop-down selector';
+	$string[ 'ilp_element_plugin_dd_optionlist' ] 		= 'Option List';
+	$string[ 'ilp_element_plugin_dd_single' ] 		= 'Single select';
+	$string[ 'ilp_element_plugin_dd_multi' ] 		= 'Multi select';
+	$string[ 'ilp_element_plugin_dd_typelabel' ] 		= 'Select type (single/multi)';
+	$string[ 'ilp_element_plugin_dd_existing_options' ] 	= 'existing options';
+	$string[ 'ilp_element_plugin_error_item_key_exists' ]		= 'The following key already exists in this element';
+	$string[ 'ilp_element_plugin_error_duplicate_key' ]	= 'Duplicate key';
         
         return $string;
     }
@@ -77,6 +79,8 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
     	return parent::delete_form_element($this->tablename, $reportfield_id);
     }
     
+/*
+these 2 methods now in parent
 	protected function get_option_list_text( $reportfield_id , $sep="\n" ){
 		$optionlist = $this->get_option_list( $reportfield_id );
 		$rtn = '';
@@ -97,6 +101,7 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
 			$reportfield->existing_options = $this->get_option_list_text( $reportfield->id , '<br />' );
 		}
 	}
+*/
 	/**
 	* handle user input
 	**/

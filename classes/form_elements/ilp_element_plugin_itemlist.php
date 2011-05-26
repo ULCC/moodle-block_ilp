@@ -28,6 +28,30 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		return false;	
     }	
 
+	/*
+	* get the list options with which to populate the edit element for this list element
+	*/
+	public function return_data( &$reportfield ){
+		$data_exists = $this->dbc->plugin_data_item_exists( $this->tablename, $reportfield->id );
+		if( empty( $data_exists ) ){
+			//if no, get options list
+			$reportfield->optionlist = $this->get_option_list_text( $reportfield->id );
+		}
+		else{
+			$reportfield->existing_options = $this->get_option_list_text( $reportfield->id , '<br />' );
+		}
+	}
+	protected function get_option_list_text( $reportfield_id , $sep="\n" ){
+		$optionlist = $this->get_option_list( $reportfield_id );
+		$rtn = '';
+		if( !empty( $optionlist ) ){
+			foreach( $optionlist as $key=>$value ){
+				$rtn .= "$key:$value$sep";
+			}
+		}
+		return $rtn;
+	}
+
 	protected function get_option_list( $reportfield_id ){
 		//return $this->optlist2Array( $this->get_optionlist() );   	
 		$outlist = array();
@@ -71,6 +95,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	*
     */
     public function entry_form( &$mform ) {
+		//definition for user form
 	$optionlist = $this->get_option_list( $this->reportfield_id );
     	//text field for element label
         $select = &$mform->addElement(
@@ -169,12 +194,8 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	        $table_itemkey->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
 	        $table->addField($table_itemkey);
 	*/
-	/*
-	        $table_report = new $this->xmldb_field('entry_id');
-	        $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
-	        $table->addField($table_report);
-	*/
-	       /* 
+
+       /* 
 	        $table_maxlength = new $this->xmldb_field('reportfield_id');
 	        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
 	        $table->addField($table_maxlength);
@@ -226,7 +247,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
         $table->addField($table_id);
         
         $table_maxlength = new $this->xmldb_field('reportfield_id');
-        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED);
         $table->addField($table_maxlength);
         
         $table_maxlength = new $this->xmldb_field('parent_id');
@@ -234,7 +255,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
         $table->addField($table_maxlength);
         
         $table_item_id = new $this->xmldb_field('item_value');	//foreign key -> $this->items_tablename
-        $table_item_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_item_id->$set_attributes(XMLDB_TYPE_CHAR, 255, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_item_id);
 
         $table_report = new $this->xmldb_field('entry_id');

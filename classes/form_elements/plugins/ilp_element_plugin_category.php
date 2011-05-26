@@ -53,6 +53,7 @@ class ilp_element_plugin_category extends ilp_element_plugin_itemlist{
     }
 	
 	public function entry_form( &$mform ) {
+		//definition for user form
     	//text field for element label
 		$optionlist = $this->get_option_list( $this->reportfield_id );
        		$select = &$mform->addElement(
