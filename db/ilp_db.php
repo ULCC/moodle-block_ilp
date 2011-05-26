@@ -784,12 +784,11 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) );
     }
     /*
-    * only intended to be called by $this->delete_element_listitems()
     * @param string tablename
     * @param int reportfieldid
     * @return int or false
     */
-    protected function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
+    public function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
 	$element_record = array_shift( $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ) ) );
 	if( !empty( $element_record ) ){
 		return $element_record->id;
