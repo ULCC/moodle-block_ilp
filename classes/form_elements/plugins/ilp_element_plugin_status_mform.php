@@ -1,7 +1,7 @@
 <?php
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin_mform_itemlist.php');
-require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
+//require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
 
 class ilp_element_plugin_status_mform  extends ilp_element_plugin_mform_itemlist {
 
@@ -15,6 +15,7 @@ class ilp_element_plugin_status_mform  extends ilp_element_plugin_mform_itemlist
 		
 		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id);
 	}
+/*
 	protected function specific_definition($mform) {
 		
 		/**
@@ -23,7 +24,7 @@ class ilp_element_plugin_status_mform  extends ilp_element_plugin_mform_itemlist
 		value1:label1\nvalue2:label2\nvalue3:label3
 		or some such
 		*/
-
+/*
 		$mform->addElement(
 			'textarea',
 			'optionlist',
@@ -35,4 +36,5 @@ class ilp_element_plugin_status_mform  extends ilp_element_plugin_mform_itemlist
         	$mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 	}
+*/
 }

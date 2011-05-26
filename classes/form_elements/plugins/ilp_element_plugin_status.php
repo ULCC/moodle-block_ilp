@@ -4,13 +4,12 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_plu_db.php');
 
 /*
- * much of the guts of this class inherited from ilp_element_plugin_dd
+ * much of the guts of this class inherited from ilp_element_plugin_itemlist
 */
 class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 
 	public $tablename;
 	public $data_entry_tablename;
-	public $options_tablename;
 	public $optionlist_keyfield;
 	public $selecttype;
 	
@@ -22,12 +21,11 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
     	
     	$this->tablename = "block_ilp_plu_sts";
     	$this->data_entry_tablename = "block_ilp_plu_sts_ent";
-    	$this->options_tablename = "block_ilp_plu_sts_items";
-		$this->items_tablename = "block_ilp_plu_sts_items";
-		$this->optionlist_keyfield = "status_id";
-		$this->selecttype = OPTIONSINGLE;
+	$this->items_tablename = "block_ilp_plu_sts_items";
+	$this->optionlist_keyfield = "status_id";
+	$this->selecttype = OPTIONSINGLE;
 		
-		parent::__construct();
+	parent::__construct();
     }
 
     

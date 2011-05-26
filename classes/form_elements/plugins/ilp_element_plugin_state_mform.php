@@ -2,7 +2,7 @@
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd_mform.php');
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin_mform_itemlist.php');
-require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
+//require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
 
 class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist {
 
@@ -16,7 +16,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 	}
 	protected function specific_definition($mform) {
 		
-		$fieldname	=	"{$this->reportfield_id}_field";
+		//$fieldname	=	"{$this->reportfield_id}_field";
 		
 		/**
 		textarea element to contain the options the manager wishes to add to the user form

@@ -401,7 +401,7 @@ die();
 	 	}
 	 
 	 	//get the _entry table record that has the pluginrecord id
-	 	$entry 	=	$this->dbc->get_data_entry_record($this->data_entry_tablename,$pluginrecord->id, $entry_id);
+	 	$entry 	=	$this->dbc->get_data_entry_record($this->tablename,$pluginrecord->id, $entry_id);
 	 	
 	 	//if no record has been created create the entry record
 	 	if (empty($entry)) {

@@ -10,6 +10,16 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     public function __construct(){
 	parent::__construct();
     }
+	public function test(){
+		$msg = $this->tablename;
+		$reportfield_id = 1;
+		$entry_id = false;
+	 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+	 	$entry 	=	$this->dbc->get_data_entry_record( $this->tablename, $entry_id );
+		$data = new stdClass();
+		$data->$reportfield_id = array( 'groucho' , 'harpo' );
+		return $this->entry_process_data( $reportfield_id, $entry_id, $data );
+	}
 	/**
     * this function saves the data entered on a entry form to the plugins _entry table
 	* the function expects the data object to contain the id of the entry (it should have been
@@ -18,7 +28,6 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	* for the possibility that the input is an array of strings
     */
 	 public	function entry_process_data($reportfield_id,$entry_id,$data) {
-	 	
 	 	//check to see if a entry record already exists for the reportfield in this plugin
 
 	 	//get the plugin table record that has the reportfield_id 
@@ -26,9 +35,8 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	 	if (empty($pluginrecord)) {
 	 		print_error('pluginrecordnotfound');
 	 	}
-	 
 	 	//get the _entry table record that has the pluginrecord id
-	 	$entry 	=	$this->dbc->get_data_entry_record( $this->data_entry_tablename, $pluginrecord->id, $entry_id );
+	 	$entry 	=	$this->dbc->get_data_entry_record( $this->tablename, $entry_id );
 	 	
 	 	//if no record has been created create the entry record
 	 	if (empty($entry)) {
