@@ -737,10 +737,7 @@ class ilp_db_functions	extends ilp_logging {
 				";
 		$data = $this->dbc->get_records_sql( $sql );
 		return $data;
-<<<<<<< .mine	var_crap($data);exit;
-*/
-	return $data;
-=======>>>>>>> .theirs    }  
+	}  
 
 	/*
 	* delete option items for a plugin list-type element
