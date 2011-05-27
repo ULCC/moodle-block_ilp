@@ -25,7 +25,7 @@ require_login(0, false);
 $sitecontext	=	get_context_instance(CONTEXT_SYSTEM);
 
 //get the user context
-$usercontext	=	get_context_instance(CONTEXT_USER,$user_id);
+$usercontext	=	get_context_instance(CONTEXT_USER,$USER->id);
 
 //if there is no user context then we must throw an error as the user context is the 
 //least that is needed in order to display the ilp
@@ -53,7 +53,8 @@ if ($user_id == $USER->id) {
 	$context		=	$sitecontext;
 } else if(isset($coursecontext)){
    $context		=	$coursecontext;
-} else if (has_capability('block/ilp:viewotherilp', $user->id)) {
+} else if (has_capability('block/ilp:viewotherilp', $usercontext,$USER->id)) {
+
 	$context		=	$usercontext;	
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/ilp/db" VERSION="20110524" COMMENT="XMLDB file for Moodle blocks/ilp"
+<XMLDB PATH="blocks/ilp/db" VERSION="20110527" COMMENT="XMLDB file for Moodle blocks/ilp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -20,9 +20,10 @@
         <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="id of the user who created the report" PREVIOUS="name" NEXT="frequency"/>
         <FIELD NAME="frequency" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="The frequency at which this report may be carried out per user in moodle" PREVIOUS="creator_id" NEXT="frequencyformat"/>
         <FIELD NAME="frequencyformat" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the interval duration of the frequency duration e.g an hour, day etc" PREVIOUS="frequency" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the report status enabled or disabled" PREVIOUS="frequencyformat" NEXT="usemaxedit"/>
-        <FIELD NAME="usemaxedit" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" COMMENT="bool flag to state whether the report will use moodle max edit time by default it will. note max edit means that after a preset time the record can not be edited" PREVIOUS="status" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="usemaxedit" NEXT="timemodified"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the report status enabled or disabled" PREVIOUS="frequencyformat" NEXT="maxedit"/>
+        <FIELD NAME="maxedit" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" COMMENT="bool flag to state whether the report will use moodle max edit time by default it will. note max edit means that after a preset time the record can not be edited" PREVIOUS="status" NEXT="comments"/>
+        <FIELD NAME="comments" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" COMMENT="should the report allow users to enter comments" PREVIOUS="maxedit" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="comments" NEXT="timemodified"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the report was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>

@@ -1,13 +1,9 @@
 <?php
-
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin_mform.php');
 
 class ilp_element_plugin_date_deadline_mform  extends ilp_element_plugin_mform {
 	
-	  	
-	
 	  protected function specific_definition($mform) {
-		
 	  	//element to define a date as past, present or future
 		$optionlist = array(
 			PASTDATE => get_string( 'ilp_element_plugin_date_deadline_past' , 'block_ilp' ),
@@ -15,24 +11,24 @@ class ilp_element_plugin_date_deadline_mform  extends ilp_element_plugin_mform {
 			FUTUREDATE => get_string( 'ilp_element_plugin_date_deadline_future' , 'block_ilp' ),
 			ANYDATE => get_string( 'ilp_element_plugin_date_deadline_anydate' , 'block_ilp' )
 		);
+		
 		$mform->addElement(
 			'select',
 			'datetense',
 			get_string( 'ilp_element_plugin_date_deadline_tense' , 'block_ilp' ),
 			$optionlist
 		);
-        	$mform->addRule('datetense', null, 'required', null, 'client');
-        	$mform->setType('datetense', PARAM_INT);
+        
+		$mform->addRule('datetense', null, 'required', null, 'client');
+        $mform->setType('datetense', PARAM_INT);
 	}
 	
 	 protected function specific_validation($data) {
- 	
-	 	$data = (object) $data;
+ 	 	$data = (object) $data;
 	 	return $this->errors;
 	 }
 	 
 	 protected function specific_process_data($data) {
-	  	
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record("block_ilp_plu_ddl",$data->reportfield_id) : false;
 	 	
 	 	if (empty($plgrec)) {

@@ -392,8 +392,10 @@ class ilp_element_plugin {
 	 public	function entry_process_data($reportfield_id,$entry_id,$data) {
 	 	
 	 	//check to see if a entry record already exists for the reportfield in this plugin
-var_dump($data);
-die();
+
+		//create the fieldname
+		$fieldname =	$reportfield_id."_field";
+
 	 	//get the plugin table record that has the reportfield_id 
 	 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
 	 	if (empty($pluginrecord)) {
@@ -401,28 +403,44 @@ die();
 	 	}
 	 
 	 	//get the _entry table record that has the pluginrecord id
-	 	$entry 	=	$this->dbc->get_data_entry_record($this->tablename,$pluginrecord->id, $entry_id);
+	 	$pluginentry 	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
 	 	
 	 	//if no record has been created create the entry record
-	 	if (empty($entry)) {
+	 	if (empty($pluginentry)) {
 	 		$pluginentry	=	new stdClass();
 			$pluginentry->entry_id = $entry_id;
-	 		$pluginentry->value	=	$data->$reportfield_id;
-	 		$pluginentry->textfield_id	=	$pluginrecord->id;
+	 		$pluginentry->value	=	$data->$fieldname;
+	 		$pluginentry->parent_id	=	$pluginrecord->id;
 	 		$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
 	 	} else {
 	 		//update the current record
-	 		$entry->value	=	$data->$reportfield_id;
+	 		$pluginentry->value	=	$data->$fieldname;
 	 		$result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
 	 	}
-	 	
+
 	 	return (!empty($result)) ? true: false;
-	 	
 	 }
-	 
-	 public function return_data( &$reportfield ){
-	 
-	 
+
+	 /**
+	  * places entry data for the report field given into the entryobj given by the user 
+	  * 
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * @param int $entry_id the id of the entry
+	  * @param object $entryobj an object that will add parameters to
+	  */
+	 public function entry_data( $reportfield_id,$entry_id,&$entryobj ){
+	 	//this function will suffix for 90% of plugins who only have one value field (named value) i
+	 	//in the _ent table of the plugin. However if your plugin has more fields you should override
+	 	//the function 
+	 	
+		//default entry_data 	
+	 	$fieldname	=	$reportfield_id."_field";
+	 	
+	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
+	 	
+	 	if (!empty($entry)) {
+	 		$entryobj->$fieldname	=	$entry->value;
+	 	}
 	 }
 }
 ?>

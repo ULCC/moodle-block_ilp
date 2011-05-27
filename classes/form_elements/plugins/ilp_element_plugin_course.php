@@ -1,6 +1,6 @@
 <?php
-//require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_dd.php');
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin_itemlist.php');
+
 class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 
 	public $tablename;

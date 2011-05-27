@@ -4,7 +4,7 @@
 	$string['addfield'] 			= 	'Add Field';
 	$string['addpromptdots'] 		= 	'Select Field Type';
 	$string['addsel'] 				= 	'Add selected';
-	 
+	$string['allowcomments']		= 	'Allow comments';
 	$string['apply'] 				= 	'Apply';
 	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';

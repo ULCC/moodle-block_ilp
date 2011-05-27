@@ -12,6 +12,8 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 		$this->tablename = "block_ilp_plu_cat";
 		$this->items_tablename = "block_ilp_plu_cat_items";
 	}
+	
+	
 	 protected function specific_validation($data) {
 	 	$data = (object) $data;
 		$optionlist = array();
@@ -32,7 +34,7 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 			else{
 				//check for keys in $optionlist which clash with already existing keys in the element items
 				foreach( $optionlist as $key=>$itemname ){
-					if( $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => $element_id, 'item_value' => $key ) ) ){
+					if( $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => $element_id, 'value' => $key ) ) ){
 						$this->errors[] = get_string( 'ilp_element_plugin_error_item_key_exists', 'block_ilp' ) . ": $key";
 					}
 				}
@@ -50,6 +52,7 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 		}
 	 	return $this->errors;
 	 }
+	 
 	protected function specific_definition($mform) {
 		
 		/**
@@ -94,8 +97,8 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 			$itemrecord->parent_id = $element_id;
 			foreach( $optionlist as $key=>$itemname ){
 				//one item row inserted here
-				$itemrecord->item_value = $key;
-				$itemrecord->item_name = $itemname;
+				$itemrecord->value = $key;
+				$itemrecord->name = $itemname;
 	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	 	} else {
@@ -116,7 +119,7 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 				//purge $optionlist of already existing item_keys
 				//then it will be safe to write the items to the items table
 				foreach( $optionlist as $key=>$itemname ){
-					if( $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => $element_id, 'item_value' => $key ) ) ){
+					if( $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => $element_id, 'value' => $key ) ) ){
 						//this should never happen, because it shouldn't have passed validation, but you never know
 						unset( $optionlist[ $key ] );
 						//alert the user
@@ -126,8 +129,8 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 			//now write fresh options from $data
 			foreach( $optionlist as $key=>$itemname ){
 				//one item row inserted here
-				$itemrecord->item_value = $key;
-				$itemrecord->item_name = $itemname;
+				$itemrecord->value = $key;
+				$itemrecord->name = $itemname;
 		 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	

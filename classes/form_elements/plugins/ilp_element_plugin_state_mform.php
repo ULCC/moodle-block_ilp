@@ -10,14 +10,12 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 	public $items_tablename;
 	
 	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
-		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
 		$this->tablename = "block_ilp_plu_ste";
 		$this->items_tablename = "block_ilp_plu_ste_items";
+		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
 	}
+	
 	protected function specific_definition($mform) {
-		
-		//$fieldname	=	"{$this->reportfield_id}_field";
-		
 		/**
 		textarea element to contain the options the manager wishes to add to the user form
 		manager will be instructed to insert value/label pairs in the following plaintext format:
@@ -33,7 +31,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 	        );
 
 		//manager must specify at least 1 option, with at least 1 character
-        	$mform->addRule('optionlist', null, 'minlength', 1, 'client');
+        $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 	}
 }

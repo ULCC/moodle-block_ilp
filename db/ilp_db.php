@@ -380,9 +380,8 @@ class ilp_db_functions	extends ilp_logging {
 		$positionsql	=	"";
 		//the operand that will be used
 		if (!empty($position)) {
-			
-			$operator		=	(!empty($type)) ? " <= " : " >= ";
-			$positionsql 	= 	"AND		position	{$operator}  {$position}";
+			$otherfield		=	(!empty($type)) ? $position-1 : $position+1;
+			$positionsql 	=  "AND position = {$position} ||  position = {$otherfield}";
 		}
 		
 		$sql	=	"SELECT		*
@@ -390,7 +389,8 @@ class ilp_db_functions	extends ilp_logging {
 					 WHERE		report_id	=	{$report_id}
 					{$positionsql}
 					 ORDER BY 	position";
-
+					
+					
 		return		$this->dbc->get_records_sql($sql);
 	}
 	
@@ -734,7 +734,31 @@ class ilp_db_functions	extends ilp_logging {
     	return	$this->update_record("block_ilp_entry", $entry);
     }
    	
-    
+    /**
+	 * get the data entry record with the id given  
+     *
+     * @param string tablename the name of the table that will be interrogated
+     * @param int 	$entry_id the entry id of the records that will be returned 
+     * @param int 	$reportfield_id the id of the report field	
+     * @param bool 	$multiple is there a chance multiple records will be return
+     * if yes set mutliple to true
+     * @return mixed object the entry record or false
+     */
+	function get_pluginentry($tablename,$entry_id,$reportfield_id,$multiple=false) {
+		global	$CFG;
+		
+		$entrytable		=	"{$CFG->prefix}{$tablename}_ent";
+		$parenttable	=	"{$CFG->prefix}{$tablename}";
+		
+		$sql	=	"SELECT		*
+					 FROM 		{$parenttable} as p,
+					 			{$entrytable} as e
+					 WHERE 		e.parent_id	=	p.id
+					 AND		e.entry_id	=	{$entry_id}
+					 AND		p.reportfield_id	=	{$reportfield_id}";
+		
+		return (empty($multiple)) ? $this->dbc->get_record_sql($sql) : $this->dbc->get_records_sql($sql);
+	}
    
     
     /*
@@ -743,69 +767,71 @@ class ilp_db_functions	extends ilp_logging {
     * options
     * @param string tablename
     * @param int reportfield_id
-    * @return array of objects
+    * @return mixed array of objects or false
     */
     function plugin_data_item_exists( $tablename, $reportfield_id ){
 		global $CFG;
 		
-		$tablename = $CFG->prefix . $tablename;
-		$element_table = $tablename;
-		$item_table = $tablename . "_items";
-		$entry_table = $tablename . "_ent";
+		$tablename 		= $CFG->prefix . $tablename;
+		$item_table 	= $tablename . "_items";
+		$entry_table 	= $tablename . "_ent";
+		
 		$sql = "SELECT *
-				FROM $tablename ele
-				JOIN $item_table item ON item.parent_id = ele.id
-				JOIN $entry_table entry ON entry.item_value = item.item_value
-				WHERE ele.reportfield_id = $reportfield_id
+				FROM {$tablename} ele
+				JOIN {$item_table} item ON item.parent_id = ele.id
+				JOIN {$entry_table} entry ON entry.item_value = item.item_value
+				WHERE ele.reportfield_id = {$reportfield_id}
 				";
-		$data = $this->dbc->get_records_sql( $sql );
-		return $data;
+		
+		return	$this->dbc->get_records_sql( $sql ); 
 	}  
+	
+	
+	
 
-	/*
+	/**
 	* delete option items for a plugin list-type element
 	* $tablename is the element table eg block_ilp_plu_category
 	* @param string tablename
 	* @param int reportfield_id
-	* @return boolean
+	* 
+	* @return boolean true or false
 	*/
     function delete_element_listitems( $tablename, $reportfield_id ){
-	global $CFG;
-	$real_tablename = $CFG->prefix . $tablename;
-	$element_table = $tablename;
-	$item_table = $tablename . "_items";
-	$entry_table = $tablename . "_ent";
-	//get parent_id
-	$parent_id = $this->get_element_id_from_reportfield_id( $tablename, $reportfield_id );
-	$sql = "
-		DELETE FROM $item_table 
-		WHERE parent_id = $parent_id
-	";
+		global $CFG;
+		$real_tablename = $CFG->prefix . $tablename;
+		$element_table = $tablename;
+		$item_table = $tablename . "_items";
+		$entry_table = $tablename . "_ent";
+		//get parent_id
+		$parent_id = $this->get_element_id_from_reportfield_id( $tablename, $reportfield_id );
+
     	return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) );
     }
-    /*
+    
+    /**
     * @param string tablename
     * @param int reportfieldid
     * @return int or false
     */
     public function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
-	$element_record = array_shift( $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ) ) );
-	if( !empty( $element_record ) ){
-		return $element_record->id;
-	}
-	return false;
-    }
+		$element_record = array_shift( $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ) ) );
+		if( !empty( $element_record ) ){
+			return $element_record->id;
+		}
+			return false;
+	    }
 
-    /*
+	/**
     * @param string tablename
     * @param array for where clause
     * @return array of objects
-    */
-    public function listelement_item_exists( $item_tablename, $conditionlist ){
-	return $this->dbc->get_records( $item_tablename, $conditionlist );
+    */    
+	 public function listelement_item_exists( $item_tablename, $conditionlist ){
+		return $this->dbc->get_records( $item_tablename, $conditionlist );
     }
 
-    /*
+    /**
     * find user input in a particular data entry table
     * @param string - element table
     * @param string - record id
@@ -813,20 +839,19 @@ class ilp_db_functions	extends ilp_logging {
     * @return array of objects or false
     */
     //public function get_data_entry_record( $tablename, $pluginrecord_id, $entry_id ){
-    public function get_data_entry_record( $tablename, $entry_id=false ){
-	if( !$entry_id ){
-		return false;
-	}
-	$entry_tablename = $tablename . '_ent';
-	$entry = array_shift( $this->dbc->get_records( $entry_tablename , array( 'id' => $entry_id ) ) );
-	//but are there other entries with the same parent_id and entry_id ?
-	if( !empty( $entry ) ){
-		$parent_id = $entry->parent_id;
-		$entry_id = $entry->entry_id;
-		$wider_condition = array( 'parent_id' => $parent_id, 'entry_id' => $entry_id );
-		return $this->dbc->get_records( $entry_tablename, $wider_condition );
-	}
-	//no records - return false
+    public function get_data_entry_record( $tablename, $entry_id ){
+	
+		$entry_tablename = $tablename . '_ent';
+		$entry = array_shift( $this->dbc->get_records( $entry_tablename , array( 'id' => $entry_id ) ) );
+
+		//but are there other entries with the same parent_id and entry_id ?
+		if( !empty( $entry ) ){
+			$parent_id = $entry->parent_id;
+			$entry_id = $entry->entry_id;
+			$wider_condition = array( 'parent_id' => $parent_id, 'entry_id' => $entry_id );
+			return $this->dbc->get_records( $entry_tablename, $wider_condition );
+		}
+		//no records - return false
 	return false;
     }
 
@@ -852,7 +877,29 @@ class ilp_db_functions	extends ilp_logging {
     }
     
     
+    /**
+     * Return the entry record that matches the id given
+     * 
+     * @param	int $entry_id the id of the entry that will be returned
+     * 
+     * @return mixed object the entry record or false
+     */
+    function get_entry_by_id($entry_id) {
+    	return $this->dbc->get_record("block_ilp_entry",array('id'=>$entry_id));
+    }
     
+    /**
+     * Deletes a record in the given table matching its id field
+     * 
+     * @param   string $tablename the name of the table that the record
+     * will be deleted form
+     * @param	int $id the id of the record you will be deleting
+     * 
+     * @return mixed true or false
+     */
+    function delete_element_record_by_id ($tablename,$id) {
+    	return $this->delete_records($tablename, array('id'=>$id));
+    }
 	
 }
 

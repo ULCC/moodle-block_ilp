@@ -6,7 +6,7 @@ class ilp_element_plugin_text_mform  extends ilp_element_plugin_mform {
 	
 	  	
 	
-	  protected function specific_definition($mform) {
+	protected function specific_definition($mform) {
 		
 	  	
 	  	//set the maximum length of the field default to 255
@@ -34,7 +34,7 @@ class ilp_element_plugin_text_mform  extends ilp_element_plugin_mform {
         $mform->setType('maximumlength', PARAM_INT);
 	}
 	
-	 protected function specific_validation($data) {
+	protected function specific_validation($data) {
  	
 	 	$data = (object) $data;
  	

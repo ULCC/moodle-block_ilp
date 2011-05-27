@@ -96,7 +96,7 @@ if($mform->is_submitted()) {
 
         //get the form data submitted
     	$formdata = $mform->get_data();
-    	  var_dump($formdata);  	
+  	
         // process the data
     	$success = $mform->process_data($formdata);
 
@@ -112,6 +112,54 @@ if($mform->is_submitted()) {
         }
     }
 }
+
+
+if (!empty($entry_id)) {
+	
+	//create a entry_data object this will hold the data that will be passed to the form
+	$entry_data		=	new stdClass();
+	
+	//get the main entry record
+	$entry	=	$dbc->get_entry_by_id($entry_id);
+	
+	//get all of the fields in the current report, they will be returned in order as
+	//no position has been specified
+	$reportfields		=	$dbc->get_report_fields_by_position($report_id);
+			
+	foreach ($reportfields as $field) {
+		
+		//get the plugin record that for the plugin 
+		$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
+		
+		//take the name field from the plugin as it will be used to call the instantiate the plugin class
+		$classname = $pluginrecord->name;
+		
+		// include the class for the plugin
+		include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
+		
+		if(!class_exists($classname)) {
+		 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+		}
+		
+		//instantiate the plugin class
+		$pluginclass	=	new $classname();
+		
+		$pluginclass->load($field->id);
+
+		//create the fieldname
+		$fieldname	=	$field->id."_field";		
+		
+		
+		$pluginclass->load($field->id);
+		
+		//call the plugin class entry data method
+		$pluginclass->entry_data($field->id,$entry_id,$entry_data);
+	}
+
+//loop through the plugins and get the data for each one
+	$mform->set_data($entry_data);
+	
+} 
 
 
 $plpuser	=	$dbc->get_user_by_id($user_id);

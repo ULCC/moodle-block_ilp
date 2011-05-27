@@ -41,6 +41,7 @@ $dbc = new ilp_db();
 
 $reportfields 	= 	$dbc->get_report_fields_by_position($report_id,$position,$move);
 
+
 $movesuc	=	true;
 
 //loop through fields returned
@@ -48,6 +49,7 @@ if (!empty($reportfields)) {
 	foreach($reportfields as $field) {
 		
 		if ($field->id != $reportfield_id) {
+			
 			
 			//if the field is being moved up all other fields have postion value increased
 			//if the field is being moved down all other fields have postion value decreased 

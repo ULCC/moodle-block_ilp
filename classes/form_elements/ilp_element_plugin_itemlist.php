@@ -8,69 +8,111 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 
 
     public function __construct(){
-	parent::__construct();
-    }
-	public function test(){
-		$msg = $this->tablename;
-		$reportfield_id = 1;
-		$entry_id = false;
-	 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
-	 	$entry 	=	$this->dbc->get_data_entry_record( $this->tablename, $entry_id );
-		$data = new stdClass();
-		$data->$reportfield_id = array( 'groucho' , 'harpo' );
-		return $this->entry_process_data( $reportfield_id, $entry_id, $data );
-	}
-	/**
-    * this function saves the data entered on a entry form to the plugins _entry table
-	* the function expects the data object to contain the id of the entry (it should have been
-	* created before this function is called) in a param called id. 
-	* as this is a select element, possibly a multi-select, we have to allow
-	* for the possibility that the input is an array of strings
-    */
-	 public	function entry_process_data($reportfield_id,$entry_id,$data) {
-	 	//check to see if a entry record already exists for the reportfield in this plugin
-
-	 	//get the plugin table record that has the reportfield_id 
-	 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
-	 	if (empty($pluginrecord)) {
-	 		print_error('pluginrecordnotfound');
-	 	}
-	 	//get the _entry table record that has the pluginrecord id
-	 	$entry 	=	$this->dbc->get_data_entry_record( $this->tablename, $entry_id );
+		
+    	parent::__construct();
+	    
+    	}
+		
+    	public function test(){
+			$msg = $this->tablename;
+			$reportfield_id = 1;
+			$entry_id = false;
+		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+		 	$entry 	=	$this->dbc->get_data_entry_record( $this->tablename, $entry_id );
+			$data = new stdClass();
+			$data->$reportfield_id = array( 'groucho' , 'harpo' );
+			return $this->entry_process_data( $reportfield_id, $entry_id, $data );
+		}
+		
+		/**
+	    * this function saves the data entered on a entry form to the plugins _entry table
+		* the function expects the data object to contain the id of the entry (it should have been
+		* created before this function is called) in a param called id. 
+		* as this is a select element, possibly a multi-select, we have to allow
+		* for the possibility that the input is an array of strings
+	    */
+	  	public	function entry_process_data($reportfield_id,$entry_id,$data) {
 	 	
-	 	//if no record has been created create the entry record
-	 	if (empty($entry)) {
-	 		$pluginentry	=	new stdClass();
+		  	//create the fieldname
+			$fieldname =	$reportfield_id."_field";
+	
+		 	//get the plugin table record that has the reportfield_id 
+		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+		 	if (empty($pluginrecord)) {
+		 		print_error('pluginrecordnotfound');
+		 	}
+		 	
+		 	//check to see if a entry record already exists for the reportfield in this plugin
+		 	$entrydata 	=	$this->dbc->get_pluginentry($this->tablename, $entry_id,$reportfield_id,true);
+		 	
+		 	//if there are records connected to this entry in this reportfield_id 
+			if (!empty($entrydata)) {
+				//delete all of the entries
+				foreach ($entrydata as $e)	{
+					$this->dbc->delete_element_record_by_id($this->data_entry_tablename,$e->id);
+				}
+			}  
+		 	
+			//create new entries
+			$pluginentry			=	new stdClass();
 			$pluginentry->entry_id  = 	$entry_id;
-	 		$pluginentry->value	=	$data->$reportfield_id;
-	 		$pluginentry->textfield_id	=	$pluginrecord->id;
-			if( is_string( $pluginentry->value ) ){
+	 		$pluginentry->value		=	$data->$fieldname;
+	 		$pluginentry->parent_id	=	$pluginrecord->id;
+	 		
+			if( is_string( $pluginentry->value ))	{
 	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
-			}
-			elseif( is_array( $pluginentry->value ) ){
+			} else if (is_array( $pluginentry->value ))	{
 				$this->write_multiple( $this->data_entry_tablename, $pluginentry );
 			}
-	 	} else {
-	 		//update the current record
-	 		$entry->value	=	$data->$reportfield_id;
-	 		$result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
-	 	}
-	 	
-	 	return (!empty($result)) ? true: false;
+ 
 	 	
 	 }
-	protected function write_multiple( $tablename, $multi_pluginentry ){
+	 
+	 /**
+	  * places entry data for the report field given into the entryobj given by the user 
+	  * 
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * @param int $entry_id the id of the entry
+	  * @param object $entryobj an object that will add parameters to
+	  */
+	 public function entry_data( $reportfield_id,$entry_id,&$entryobj ){
+	 	//this function will suffix for 90% of plugins who only have one value field (named value) i
+	 	//in the _ent table of the plugin. However if your plugin has more fields you should override
+	 	//the function 
+	 	
+		//default entry_data 	
+	 	$fieldname	=	$reportfield_id."_field";
+	 	
+	 	
+	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+ 
+	 	if (!empty($entry)) {
+		 	$fielddata	=	array();
+
+		 	//loop through all of the data for this entry in the particular entry		 	
+		 	foreach($entry as $e) {
+		 		$fielddata[]	=	$e->value;
+		 	}
+		 	
+		 	//save the data to the objects field
+	 		$entryobj->$fieldname	=	$fielddata;
+	 	}
+	 }
+
+	 
+	 protected function write_multiple( $tablename, $multi_pluginentry ){
 		//if we're here, assume $pluginentry->value is array
 		$pluginentry = $multi_pluginentry;
-		$resultlist = array();
+		$result		=	true;
 		foreach( $multi_pluginentry->value as $value ){
-			$pluginentry->item_value = $value;
-			$resultlist[] = $this->dbc->create_plugin_entry( $this->data_entry_tablename, $pluginentry );
+			$pluginentry->value = $value;
+			if ($this->dbc->create_plugin_entry( $this->data_entry_tablename, $pluginentry )) $result = false;
 		}
-		//if any of the inserts didn't work, there will be a false in $resultlist
-		return $resultlist;
-	}
-    public function load($reportfield_id) {
+		//if any of the didn't work $result will be false
+		return $result;
+	 }
+	 
+     public function load($reportfield_id) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
 		if (!empty($reportfield)) {
 			$this->reportfield_id	=	$reportfield_id;
@@ -101,6 +143,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 			$reportfield->existing_options = $this->get_option_list_text( $reportfield->id , '<br />' );
 		}
 	}
+	
 	protected function get_option_list_text( $reportfield_id , $sep="\n" ){
 		$optionlist = $this->get_option_list( $reportfield_id );
 		$rtn = '';
@@ -118,7 +161,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		if( $reportfield_id ){
 			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename );
 			foreach( $objlist as $obj ){
-				$outlist[ $obj->item_value ] = $obj->item_name;
+				$outlist[ $obj->value ] = $obj->name;
 			}
 		}
 		if( !count( $outlist ) ){
@@ -128,26 +171,26 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	}
 
     public static function optlist2Array( $optstring ){
-	//split on lines
-	$optsep = "\n";
-	$keysep = ":";
-	$optlist = explode( $optsep , $optstring );
-	//now split each entry into key and value
-	$outlist = array();
-	foreach( $optlist as $row ){
-		if( $row ){
-			$row = explode( $keysep, $row );
-			$key = trim( $row[0] );
-			if( 1 == count( $row ) ){
-				$value = trim( $row[0] );
+		//split on lines
+		$optsep = "\n";
+		$keysep = ":";
+		$optlist = explode( $optsep , $optstring );
+		//now split each entry into key and value
+		$outlist = array();
+		foreach( $optlist as $row ){
+			if( $row ){
+				$row = explode( $keysep, $row );
+				$key = trim( $row[0] );
+				if( 1 == count( $row ) ){
+					$value = trim( $row[0] );
+				}
+				elseif( 1 < count( $row ) ){
+					$value = trim( $row[1] );
+				}
+				$outlist[ $key ] = $value;
 			}
-			elseif( 1 < count( $row ) ){
-				$value = trim( $row[1] );
-			}
-			$outlist[ $key ] = $value;
 		}
-	}
-	return $outlist;
+		return $outlist;
     }
 
     /**
@@ -178,8 +221,11 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
         $mform->setType('label', PARAM_RAW);
 
     }
+    
+
+    
     public function delete_form_element($reportfield_id) {
-	return parent::delete_form_element($this->tablename,$reportfield_id); 
+		return parent::delete_form_element($this->tablename,$reportfield_id); 
     }
 
     public function uninstall() {
@@ -209,12 +255,6 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
         $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_report);
         
-/*
-        $table_optionlist = new $this->xmldb_field('optionlist');
-        $table_optionlist->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
-        $table->addField($table_optionlist);
-*/
-        
         $table_optiontype = new $this->xmldb_field('selecttype');
         $table_optiontype->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, null);	//1=single, 2=multi cf blocks/ilp/constants.php
         $table->addField($table_optiontype);
@@ -241,7 +281,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
         }
         
 	    // create the new table to store dropdown options
-	if( $this->items_tablename ){
+		if( $this->items_tablename ){
 	        $table = new $this->xmldb_table( $this->items_tablename );
 	
 	        $table_id = new $this->xmldb_field('id');
@@ -251,23 +291,12 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	        $table_textfieldid = new $this->xmldb_field('parent_id');
 	        $table_textfieldid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
 	        $table->addField($table_textfieldid);
-	/*
-	        $table_itemkey = new $this->xmldb_field('item_key');
-	        $table_itemkey->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
-	        $table->addField($table_itemkey);
-	*/
-
-       /* 
-	        $table_maxlength = new $this->xmldb_field('reportfield_id');
-	        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
-	        $table->addField($table_maxlength);
-	*/
 	        
-	        $table_itemvalue = new $this->xmldb_field('item_value');
+	        $table_itemvalue = new $this->xmldb_field('value');
 	        $table_itemvalue->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
 	        $table->addField($table_itemvalue);
 	        
-	        $table_itemname = new $this->xmldb_field('item_name');
+	        $table_itemname = new $this->xmldb_field('name');
 	        $table_itemname->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
 	        $table->addField($table_itemname);
 	
@@ -300,23 +329,18 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	        }
 	}
         
-///////////////////////////////////////////////////////////////////////////
 	    // create the new table to store responses to fields
         $table = new $this->xmldb_table( $this->data_entry_tablename );
 
         $table_id = new $this->xmldb_field('id');
         $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
         $table->addField($table_id);
-        
-        $table_maxlength = new $this->xmldb_field('reportfield_id');
-        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED);
-        $table->addField($table_maxlength);
-        
+       
         $table_maxlength = new $this->xmldb_field('parent_id');
         $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_maxlength);
         
-        $table_item_id = new $this->xmldb_field('item_value');	//foreign key -> $this->items_tablename
+        $table_item_id = new $this->xmldb_field('value');	//foreign key -> $this->items_tablename
         $table_item_id->$set_attributes(XMLDB_TYPE_CHAR, 255, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_item_id);
 

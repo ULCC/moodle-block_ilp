@@ -8,9 +8,9 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform_itemlist {
 	public $items_tablename;
 	
 	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
-		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
 		$this->tablename = "block_ilp_plu_dd";
 		$this->items_tablename = "block_ilp_plu_dd_items";
+		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
 	}
 	  	
 	
@@ -31,12 +31,13 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform_itemlist {
 	        );
 
 		//manager must specify at least 1 option, with at least 1 character
-        	$mform->addRule('optionlist', null, 'minlength', 1, 'client');
+        $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 		$typelist = array(
 			OPTIONSINGLE => get_string( 'ilp_element_plugin_dd_single' , 'block_ilp' ),
 			OPTIONMULTI => get_string( 'ilp_element_plugin_dd_multi' , 'block_ilp' )
 		);
+		
 		$mform->addElement(
 			'select',
 			'selecttype',
@@ -44,6 +45,7 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform_itemlist {
 			$typelist,
 			array('class' => 'form_input')
 		);
+		
 		$mform->addElement(
 			'static',
 			'existing_options',
@@ -53,7 +55,6 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform_itemlist {
 	  }
 	
 	 protected function specific_validation($data) {
- 	
 	 	$data = (object) $data;
 	 	return $this->errors;
 	 }

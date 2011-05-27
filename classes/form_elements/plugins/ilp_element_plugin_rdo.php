@@ -15,11 +15,11 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_itemlist{
      * Constructor
      */
     function __construct() {
-    	parent::__construct();
     	$this->tablename = "block_ilp_plu_rdo";
     	$this->data_entry_tablename = "block_ilp_plu_rdo_ent";
-	$this->items_tablename = "block_ilp_plu_rdo_items";
-	$this->selecttype = OPTIONSINGLE;
+		$this->items_tablename = "block_ilp_plu_rdo_items";
+		$this->selecttype = OPTIONSINGLE;
+		parent::__construct();
     }
 	
 	

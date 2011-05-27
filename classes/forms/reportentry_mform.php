@@ -139,7 +139,7 @@ class report_entry_mform extends ilp_moodleform {
 			
 			//get the id of the course
 			$course_id	=	$data->course_id;
-			
+			$result = true;
 			
 			if (empty($entry_id)) {
 				//create the entry	
@@ -157,8 +157,9 @@ class report_entry_mform extends ilp_moodleform {
 				//as there is nothing to update but we want the entries timemodifed
 				//to be updated we will just re-add the report_id 
 				$entry					=	new stdClass();
+				$entry->id				=	$entry_id;
 				$entry->report_id		=	$report_id;
-				$this->dbc->update_entry($entry);
+				if (!$this->dbc->update_entry($entry)) $result = false;
 				
 			}
 			
@@ -188,8 +189,11 @@ class report_entry_mform extends ilp_moodleform {
 				
 				//call the plugins entry_form function which will add an instance of the plugin
 				//to the form
-				$pluginclass->entry_process_data($field->id,$entry_id,$data);
+				if (!$pluginclass->entry_process_data($field->id,$entry_id,$data)) $result = false;
+				
 			}
+			
+			return $result;
 		}
 		
 		/**
