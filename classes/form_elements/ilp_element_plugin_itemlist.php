@@ -33,6 +33,8 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	    */
 	  	public	function entry_process_data($reportfield_id,$entry_id,$data) {
 	 	
+	  		$result	=	true;
+	  		
 		  	//create the fieldname
 			$fieldname =	$reportfield_id."_field";
 	
@@ -62,10 +64,11 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 			if( is_string( $pluginentry->value ))	{
 	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
 			} else if (is_array( $pluginentry->value ))	{
-				$this->write_multiple( $this->data_entry_tablename, $pluginentry );
+				$result	=	$this->write_multiple( $this->data_entry_tablename, $pluginentry );
 			}
  
 	 	
+			return	$result;
 	 }
 	 
 	 /**
