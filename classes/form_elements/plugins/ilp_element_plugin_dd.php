@@ -16,8 +16,8 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
     function __construct() {
     	$this->tablename = "block_ilp_plu_dd";
     	$this->data_entry_tablename = "block_ilp_plu_dd_ent";
-		$this->items_tablename = "block_ilp_plu_dd_items";
-		parent::__construct();
+	$this->items_tablename = "block_ilp_plu_dd_items";
+	parent::__construct();
     }
 	
 	

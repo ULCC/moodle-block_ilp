@@ -8,9 +8,9 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_mform_itemlist {
 	public $items_tablename;
 	
 	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
+		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
 		$this->tablename = "block_ilp_plu_dd";
 		$this->items_tablename = "block_ilp_plu_dd_items";
-		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
 	}
 	  	
 	
