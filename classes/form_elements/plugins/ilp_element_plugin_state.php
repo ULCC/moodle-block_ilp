@@ -24,6 +24,13 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		parent::__construct();
     }
 
+    /*
+    * should not be able to add a state selector if there is already one one the form
+    */
+    public function can_add( $report_id ){
+        return !$this->dbc->element_type_exists( $report_id, $this->tablename );
+    }
+
     function language_strings(&$string) {
         $string['ilp_element_plugin_state'] 			= 'Select';
         $string['ilp_element_plugin_state_type'] 		= 'state select';

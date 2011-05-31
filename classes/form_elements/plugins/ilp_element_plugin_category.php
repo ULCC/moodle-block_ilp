@@ -18,6 +18,13 @@ class ilp_element_plugin_category extends ilp_element_plugin_itemlist{
 		$this->selecttype = OPTIONSINGLE;
 		parent::__construct();
     }
+    
+    /*
+    * should not be able to add a category selector if there is already one one the form
+    */
+    public function can_add( $report_id ){
+        return !$this->dbc->element_type_exists( $report_id, $this->tablename );
+    }
 
     function language_strings(&$string) {
         $string['ilp_element_plugin_category'] 			= 'Category Select';

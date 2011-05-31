@@ -779,7 +779,7 @@ class ilp_db_functions	extends ilp_logging {
 		$sql = "SELECT *
 				FROM {$tablename} ele
 				JOIN {$item_table} item ON item.parent_id = ele.id
-				JOIN {$entry_table} entry ON entry.item_value = item.item_value
+				JOIN {$entry_table} entry ON entry.value = item.value
 				WHERE ele.reportfield_id = {$reportfield_id}
 				";
 		
@@ -856,7 +856,7 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /*
-    * supply a reportfield id for a dropdown type element
+    * supply a reportfield id for a dropdown (or other list-type) element
     * dropdown options are returned
     * @param int
     * @param string
@@ -867,7 +867,7 @@ class ilp_db_functions	extends ilp_logging {
 		$tablename = $CFG->prefix . $tablename;
 		$item_table = $tablename . "_items";
 		$plugin_table = $tablename;
-		$sql = "SELECT item_value, item_name
+		$sql = "SELECT `value`, `name`
 				FROM  {$CFG->prefix}block_ilp_report_field rptf
 				JOIN $plugin_table ON $plugin_table.reportfield_id = rptf.id
 				JOIN $item_table ON $item_table.parent_id = $plugin_table.id
@@ -899,6 +899,25 @@ class ilp_db_functions	extends ilp_logging {
      */
     function delete_element_record_by_id ($tablename,$id) {
     	return $this->delete_records($tablename, array('id'=>$id));
+    }
+
+    /*
+    * see if an element of a particular type already exists in a report
+    * @param int $report_id 
+    * @param string $tablename
+    * @return int
+    */
+    public function element_type_exists( $report_id , $tablename ){
+		global $CFG;
+        $sql = "
+            SELECT COUNT( rpt.id ) n
+            FROM {$CFG->prefix}block_ilp_report rpt
+            JOIN {$CFG->prefix}block_ilp_report_field rptf ON rptf.report_id = rpt.id
+            JOIN {$CFG->prefix}block_ilp_plugin pln ON pln.id = rptf.plugin_id
+            WHERE rpt.id = $report_id AND pln.tablename = '$tablename'
+        ";
+        $res = $this->dbc->get_record_sql( $sql );
+        return $res->n;
     }
 	
 }

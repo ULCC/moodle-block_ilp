@@ -37,6 +37,13 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 	        
         return $string;
     }
+
+    /*
+    * should not be able to add a status selector if there is already one one the form
+    */
+    public function can_add( $report_id ){
+        return !$this->dbc->element_type_exists( $report_id, $this->tablename );
+    }
     
     protected function rst_flatten( $rst , $keyfield , $valuefield='value' ){
 		$outlist = array();

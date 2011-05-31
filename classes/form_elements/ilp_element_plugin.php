@@ -384,6 +384,17 @@ class ilp_element_plugin {
     public function file_storage() {
         return false;
     }
+
+    /*
+    * make descendents of this function return false on occasions when
+    * the element should not be added to a form
+    * eg adding a category selector when there is already a
+    * category selector in the same form
+    */
+    public function can_add( $report_id ){
+        return true;
+    }
+
 	/**
     * this function saves the data entered on a entry form to the plugins _entry table
 	* the function expects the data object to contain the id of the entry (it should have been
