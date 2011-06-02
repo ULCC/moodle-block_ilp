@@ -201,7 +201,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
         
         //if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
         //if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
-        //if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
 	 }
 	 

@@ -37,9 +37,9 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
 				$this->id			=	$pluginrecord->id;
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
-				$this->required			=	$reportfield->req;
+				$this->req			=	$reportfield->req;
 				$this->position			=	$reportfield->position;
-				$this->selecttype	=	$pluginrecord->selecttype;
+				$this->selecttype		=	$pluginrecord->selecttype;
 
 			}
 		}

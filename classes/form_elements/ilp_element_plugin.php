@@ -187,7 +187,7 @@ class ilp_element_plugin {
 			$reportfield->optionlist = self::itemlist_flatten( parse_ini_file( $this->local_config_file ) );
 		}
 	}
-        
+
         // instantiate the form and load the data
         $this->mform = new $classname($report_id,$plugin_id,$course_id,$USER->id);
 
@@ -237,6 +237,13 @@ class ilp_element_plugin {
 
     }
 
+        /*
+        * only necessary in listitem types
+        * just here for completeness
+        */
+        public function return_data( &$reportfield ){
+        }
+        
     /*
     * take an associative array returned from parsing an ini file
     * and return a string formatted for displaying in a text area on a management form

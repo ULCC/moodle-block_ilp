@@ -11,7 +11,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		
     	parent::__construct();
 	    
-    	}
+   }
 		
     	public function test(){
 			$msg = $this->tablename;
@@ -152,7 +152,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 				$this->id			=	$pluginrecord->id;
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
-				$this->required			=	$reportfield->req;
+				$this->req			=	$reportfield->req;
 				$this->position			=	$reportfield->position;
 			}
 		}
@@ -194,7 +194,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 			}
 		}
 		if( !count( $outlist ) ){
-			echo "no items in {$this->items_tablename}";
+			//echo "no items in {$this->items_tablename}";
 		}
 		return $outlist;
 	}
