@@ -251,6 +251,70 @@ class ilp_db_functions	extends ilp_logging {
         return $this->insert_record('block_ilp_plugin', $type);
     }
     
+/**
+     * Gets the full list of dashboard plugins already installed
+     *
+     * @return array Result objects
+     */
+    function get_dashboard_plugins() {
+        // check for the presence of a table to determine which query to run
+        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_plugin}'");
+
+        // return resource types or false
+        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_plugin', array()) : false;
+	}
+    
+    
+	/**
+     * Creates a new dashboard plugin record.
+     *
+     * @param string $name the name of the new form element plugin
+     * @return mixed the id of the inserted record or false
+     */
+    function create_dashboard_plugin($name,$type,$dir=null) {
+        $type = new object();
+        $type->name 		= $name;
+        $type->directory 	= $dir;
+        
+        //TODO: should the dashboard plugin be enabled by default? 
+        $type->status 		= 1;
+
+        return $this->insert_record('block_ilp_dash_plugin', $type);
+    }
+    
+    /**
+     * Gets the full list of dashboard plugins already installed
+     *
+     * @return array Result objects
+     */
+    function get_dashboard_tabs() {
+        // check for the presence of a table to determine which query to run
+        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_tab}'");
+
+        // return resource types or false
+        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
+	}
+    
+    
+	/**
+     * Creates a new dashboard plugin record.
+     *
+     * @param string $name the name of the new form element plugin
+     * @return mixed the id of the inserted record or false
+     */
+    function create_dashboard_tab($name) {
+        $type = new object();
+        $type->name 		= $name;
+                
+        //TODO: should the dashboard plugin be enabled by default? 
+        $type->status 		= 1;
+
+        return $this->insert_record('block_ilp_dash_tab', $type);
+    }
+    
+    
+    
+    
     /**
      * Retrieve the information for the course 
      *
@@ -395,7 +459,7 @@ class ilp_db_functions	extends ilp_logging {
 	}
 	
 	
-	/**
+/**
      * Delete the record from the given table with the reportfield_id matching the given id
      *
      * @param string $tablename the table that you want to delete the record from
@@ -405,6 +469,18 @@ class ilp_db_functions	extends ilp_logging {
      */
 	function delete_form_element_by_reportfield($tablename,$id) {
 		return $this->delete_records($tablename, array('reportfield_id' => $id));
+	}
+	
+	/**
+     * Generic delete function used to delete items from the items table
+     *
+     * @param string $tablename the table that you want to delete the record from
+     * @param int $parent_id the parent_id that all fields to be deleted should have 
+     * 
+     * @return bool true or false
+     */
+	function delete_items($tablename,$parent_id) {
+		return $this->delete_records($tablename, array('parent_id' => $id));
 	}
 	
 	
@@ -601,7 +677,7 @@ class ilp_db_functions	extends ilp_logging {
      * you do not want included in the return values 
      * @return mixed array containing recordset objects or false
      */
-    function get_enabledreports($report_ids)	{
+    function get_enabledreports($report_ids=null)	{
     	global $CFG;
     	$unwantedcourses	=	(!empty($report_ids)) ? " AND id NOT IN (".implode(',',$report_ids).")": "";
     	
@@ -856,7 +932,7 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /*
-    * supply a reportfield id for a dropdown (or other list-type) element
+    * supply a reportfield id for a dropdown type element
     * dropdown options are returned
     * @param int
     * @param string
@@ -867,7 +943,7 @@ class ilp_db_functions	extends ilp_logging {
 		$tablename = $CFG->prefix . $tablename;
 		$item_table = $tablename . "_items";
 		$plugin_table = $tablename;
-		$sql = "SELECT `value`, `name`
+		$sql = "SELECT value, name
 				FROM  {$CFG->prefix}block_ilp_report_field rptf
 				JOIN $plugin_table ON $plugin_table.reportfield_id = rptf.id
 				JOIN $item_table ON $item_table.parent_id = $plugin_table.id
@@ -901,6 +977,171 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->delete_records($tablename, array('id'=>$id));
     }
 
+    
+     /**
+     * Returns all user entries for the given report
+     * 
+     * @param  int $report_id the id of the report that we are looking for
+     * @param  int $user_id	the id of user who will be retrieving report entries for  
+     * 
+     * @return mixed array of objects containing databases recordsets or false
+     */
+    function get_user_report_entries($report_id,$user_id,$status_id=null)	{
+    	global		$CFG;
+    	$tables		=	"";
+    	$where		=	"";
+    	
+    	//if the the id of a status has been given then we need to add mroe contitions to
+    	//find the reports in this status
+    	if (!empty($status_id)) {
+    		$tables		=	", {$CFG->prefix}block_ilp_report as r,
+    						   {$CFG->prefix}block_ilp_report_field as rf,
+    						   {$CFG->prefix}block_ilp_plugin as p,
+    						   {$CFG->prefix}block_ilp_plu_ste as s,
+    						   {$CFG->prefix}block_ilp_plu_ste_items as si,
+    						   ";
+    						   
+    		$where		=	" AND	r.id				=	e.report_id
+    						  AND	r.id				=	rf.report_id
+    						  AND 	rf.plugin_id		=	p.id
+    						  AND	rf.id				=	s.reportfield_id
+    						  AND	si.parent_id		=	s.id
+    						  AND	si.id				=	{$status_id}";
+    						   		
+    	}
+    	
+    	$sql	=	"SELECT		e.*
+    				 FROM		{$CFG->prefix}block_ilp_entry as e
+    				 			{$tables}
+    				 WHERE		e.id		=	{$report_id}
+    				 AND 		e.user_id	=	{$user_id}
+    				 {$where}";
+    	
+    	
+    	return $this->dbc->get_records_sql($sql);
+    }
+    
+    
+     /**
+     * Returns true or false depending on whether the report given has a state field
+     * 
+     * @param  int $report_id the id of the report that we are looking for
+     * 
+     * @return bool true or false
+     */
+    function has_state_fields($report_id) {
+    	global	$CFG;
+    	
+    	$sql	=	"SELECT rf.id 	
+    	 			 FROM 	{$CFG->prefix}block_ilp_report_field as rf,
+    	 					{$CFG->prefix}block_ilp_plugin as p
+    	 			 WHERE	report_id	=	{$report_id}
+    	 			 AND 	rf.plugin_id	=	p.id
+   		 			 AND	p.name	=	'ilp_element_plugin_state'";
+	
+    	 return $this->dbc->get_records_sql($sql);
+    }
+    
+    
+    /**
+     * Returns the all elements of the state field for the given report
+     * 
+     * @param  int $report_id the id of the report that we want to get the state items for
+     * 
+     * @return mixed array recordset of objects or false
+     */
+    function get_report_stateitems($report_id)	{
+    	global	$CFG;
+    	
+    	$sql	=	"SELECT		*
+    	 			 FROM 		{$CFG->prefix}block_ilp_report_field as rf,
+    	 						{$CFG->prefix}block_ilp_plugin as p,
+    	 						{$CFG->prefix}block_ilp_plu_ste as s,
+    	 						{$CFG->prefix}block_ilp_plu_ste_items as si
+    	 			WHERE		rf.plugin_id	=	p.id
+    	 			AND		rf.id			=	s.reportfield_id
+    	 			AND		s.id			=	si.parent_id
+    	 			AND		rf.report_id	=	{$report_id}
+    	 			AND		p.name			=	'ilp_element_plugin_state'";
+    	 			
+    	 return		$this->dbc->get_records_sql($sql);			
+    }
+    
+     /**
+     * Returns a report field table record for the report given if one exists that is of the course selector
+     * type. The primary purpose of this function is to enable the user to test whether a report
+     * has a course selector or not 
+     * 
+     * @param  int $report_id the id of the report that is being checked to see if it has a 
+     *  course selector ()
+     * 
+     * @return mixed array recordset of objects or false
+     */    
+    function has_course_relation($report_id)	{
+    	global	$CFG;
+    	
+    	$sql	=	"SELECT rf.id 	
+    	 			 FROM 	{$CFG->prefix}block_ilp_report_field as rf,
+    	 					{$CFG->prefix}block_ilp_plugin as p
+    	 			 WHERE	report_id	=	{$report_id}
+    	 			 AND 	rf.plugin_id	=	p.id
+   		 			 AND	p.name	=	'ilp_element_plugin_course'";
+    	 					
+    	 return		$this->dbc->get_records_sql($sql);					
+    	 					
+    } 
+    
+      /**
+     * Returns a report field table record for the report given if one exists that is of the datedeadline type.
+     * The primary purpose of this function is to enable the user to test whether a report
+     * has a course selector or not 
+     * 
+     * @param  int $report_id the id of the report that is being checked to see if it has a 
+     *  course selector ()
+     * 
+     * @return mixed array recordset of objects or false
+     */    
+    function has_datedeadline($report_id)	{
+    	global 	$CFG;
+    	
+    	$sql	=	"SELECT rf.id 	
+    	 			 FROM 	{$CFG->prefix}block_ilp_report_field as rf,
+    	 					{$CFG->prefix}block_ilp_plugin as p
+    	 			 WHERE	report_id	=	{$report_id}
+    	 			 AND 	rf.plugin_id	=	p.id
+   		 			 AND	p.name	=	'ilp_element_plugin_date_deadline'";
+    	 					
+    	 return		$this->dbc->get_records_sql($sql);					
+    } 
+    
+    /**
+     * Wrapper for the has_datedeadline function 
+     * 
+     * @param  int $report_id the id of the report that is being checked to see if it has a 
+     *  course selector ()
+     * 
+     * @return mixed array recordset of objects or false
+     */
+    function get_datedeadline_field($report_id)	{
+    	return $this->has_datedeadline($report_id);
+    }
+    
+    
+    
+    /**
+     * Wrapper for the has_course_relation function 
+     * 
+     * @param  int $report_id the id of the report that is being checked to see if it has a 
+     *  course selector ()
+     * 
+     * @return mixed array recordset of objects or false
+     */
+    function get_courserelated_field($report_id) {
+    	return $this->has_course_relation($report_id);
+    }
+    
+    
+
     /*
     * see if an element of a particular type already exists in a report
     * @param int $report_id 
@@ -919,7 +1160,6 @@ class ilp_db_functions	extends ilp_logging {
         $res = $this->dbc->get_record_sql( $sql );
         return $res->n;
     }
-	
 }
 
 

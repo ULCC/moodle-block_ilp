@@ -264,11 +264,9 @@ class ilp_element_plugin {
      * Delete a form element
      */
     public function delete_form_element($tablename,$reportfield_id) {
+    	
         $reportfield	=	$this->dbc->get_plugin_record($tablename,$reportfield_id);
-/*
-	var_crap( $tablename );
-        var_crap($reportfield_id);exit;
-*/
+
         if ($this->dbc->delete_form_element_by_reportfield($tablename,$reportfield_id)) {
     	   	//TODO: should we delete all entry records linked to this field?
         	//now delete the reportfield
@@ -378,12 +376,7 @@ class ilp_element_plugin {
     }
 
 
-    /**
-     * function used to specify whether the current resource requires file storage
-     */
-    public function file_storage() {
-        return false;
-    }
+
 
     /*
     * make descendents of this function return false on occasions when
@@ -396,7 +389,7 @@ class ilp_element_plugin {
     }
 
 	/**
-    * this function saves the data entered on a entry form to the plugins _entry table
+    * This function saves the data entered on a entry form to the plugins _entry table
 	* the function expects the data object to contain the id of the entry (it should have been
 	* created before this function is called) in a param called id. 
     */
@@ -453,5 +446,21 @@ class ilp_element_plugin {
 	 		$entryobj->$fieldname	=	$entry->value;
 	 	}
 	 }
+	 
+	  /**
+	  * places entry data formated for viewing for the report field given  into the  
+	  * entryobj given by the user. By default the entry_data function is called to provide
+	  * the data. Any child class which needs to have its data formated should override this
+	  * function. 
+	  * 
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * @param int $entry_id the id of the entry
+	  * @param object $entryobj an object that will add parameters to
+	  */
+	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+		$this->entry_data( $reportfield_id,$entry_id, $entryobj );
+	 }
+	 
+	 
 }
 ?>

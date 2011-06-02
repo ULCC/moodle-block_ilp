@@ -57,6 +57,40 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
     public function audit_type() {
         return get_string('ilp_element_plugin_course_type','block_ilp');
     }
+    
+    
+	 /**
+	  * places entry data formated for viewing for the report field given  into the  
+	  * entryobj given by the user. By default the entry_data function is called to provide
+	  * the data. This is a specific instance of the view_data function for the 
+	  * 
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * @param int $entry_id the id of the entry
+	  * @param object $entryobj an object that will add parameters to
+	  */
+	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+	  		$fieldname	=	$reportfield_id."_field";
+	 		
+	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+ 	var_dump('course');
+ 	var_dump($entry);
+ 			
+ 	
+			if (!empty($entry)) {
+		 		$fielddata	=	array();
+		 		$comma	= "";
+		 		
+		 		
+			 	//loop through all of the data for this entry in the particular entry		 	
+			 	foreach($entry as $e) {
+			 		if (!empty($e->value)) {
+			 			$course	=	$this->dbc->get_course($e->value);
+			 			$entryobj->$fieldname	.=	$course->shortname.$comma;
+			 			$comma	=	",";
+			 		}
+			 	}
+	 		}
+	  }
 	
     /**
     * this function returns the mform elements taht will be added to a report form

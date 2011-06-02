@@ -1,0 +1,94 @@
+<div class="clearer">&nbsp;</div>
+<div class="ilp_reportview">
+<?php
+
+if (!empty($entries))	{ 
+
+
+	foreach ($entries as $entry)	{
+
+		$entry_data	=	new stdClass();
+
+		$creator	=	$dbc->get_user_by_id($entry->creator_id);
+
+		//TODO: is there a better way of doing this?
+		//I am currently looping through each of the fields in the report and get the data for it 
+		//by using the plugin class. I do this for two reasons it may lock the database for less time then
+		//making a large sql query and 2 it will also allow for plugins which return multiple values. However
+		//I am not naive enough to think there is not a better way!
+
+		foreach ($reportfields as $field) {
+		
+			//get the plugin record that for the plugin 
+			$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
+		
+			//take the name field from the plugin as it will be used to call the instantiate the plugin class
+			$classname = $pluginrecord->name;
+		
+			// include the class for the plugin
+			include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
+		
+			if(!class_exists($classname)) {
+			 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+			}
+		
+			//instantiate the plugin class
+			$pluginclass	=	new $classname();
+		
+			$pluginclass->load($field->id);
+
+			$pluginclass->load($field->id);
+		
+			//call the plugin class entry data method
+			$pluginclass->view_data($field->id,$entry->id,$entry_data);
+		}
+var_dump($entry_data);
+
+
+?>
+	<div class="ilp_post yui-t4">
+		<div class="bd" role="main">
+			<div class="yui-b">
+				<div class="yui-gd">
+					<div class="yui-u first">
+						<?php //reportname?> report name
+					</div>
+					<div class="yui-u">
+				<?php foreach ($reportfields as $field) 	{
+						if (!in_array($field->id,$dontdisplay)) {
+						?>
+						<div>
+							<?php
+								//create the fieldname which will be used in to retrieve data from the object
+								$fieldname	=	$field->id."_field";					
+							?>
+							<span><?php echo $field->label; ?></span>
+							<span><?php	echo $entry_data->$fieldname;	?></span>
+						</div>
+						<?php 
+							}
+						} ?>
+					</div>
+				</div>
+				<div class="yui-b">
+					<ul>
+						<li><?php echo get_string('entrycreator','block_ilp');?>: <?php echo $creator->firstname." ".$creator->lastname;?></li>
+						<?php if (!empty($has_courserelated)) { 
+						
+						?>
+							<li><?php echo get_string('course','block_ilp');?>: </li>
+						<?php } ?>
+						
+						<?php if (!empty($has_deadline)) {?><li><?php echo get_string('deadline','block_ilp');?>: <?php //userdate($entry->deadline, get_string('strftimedate'));?>date</li><?php } ?>
+						<li></li>					
+					</ul>
+				</div>
+			</div>
+
+<?php
+	}
+
+
+}
+?>
+</div>

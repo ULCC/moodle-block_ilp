@@ -43,7 +43,7 @@ $course	=	$dbc->get_course($course_id);
 //was the form cancelled?
 if ($mform->is_cancelled()) {
 	//send the user back
-	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php&course_id='.$course_id;
+	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?course_id='.$course_id;
     redirect($return_url, '', REDIRECT_DELAY);
 }
 

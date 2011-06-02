@@ -107,7 +107,7 @@ if($mform->is_submitted()) {
         }
 
         if (!isset($formdata->saveanddisplaybutton)) { 
-            //$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&course_id='.$course_id;
+            $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id;
         	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
         }
     }
@@ -121,44 +121,60 @@ if (!empty($entry_id)) {
 	
 	//get the main entry record
 	$entry	=	$dbc->get_entry_by_id($entry_id);
-	
-	//get all of the fields in the current report, they will be returned in order as
-	//no position has been specified
-	$reportfields		=	$dbc->get_report_fields_by_position($report_id);
+
+	if (!empty($entry)) 	{
+		//check if the maximum edit field has been set for this report
+		if (!empty($report->maxedit)) 	{
+			//calculate the age of the report entry
+			$entryage	=	time() 	-	$entry->timecreated;
+
+			//if the entry is older than the max editing time 
+			//then return the user to the 
+			if ($entryage > $CFG->maxeditingtime)	{
+				 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id;
+        		redirect($return_url, get_string("maxeditexceed", 'block_ilp'), REDIRECT_DELAY);
+			}
 			
-	foreach ($reportfields as $field) {
-		
-		//get the plugin record that for the plugin 
-		$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
-		
-		//take the name field from the plugin as it will be used to call the instantiate the plugin class
-		$classname = $pluginrecord->name;
-		
-		// include the class for the plugin
-		include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
-		
-		if(!class_exists($classname)) {
-		 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
 		}
 		
-		//instantiate the plugin class
-		$pluginclass	=	new $classname();
 		
-		$pluginclass->load($field->id);
-
-		//create the fieldname
-		$fieldname	=	$field->id."_field";		
-		
-		
-		$pluginclass->load($field->id);
-		
-		//call the plugin class entry data method
-		$pluginclass->entry_data($field->id,$entry_id,$entry_data);
-	}
-
-//loop through the plugins and get the data for each one
-	$mform->set_data($entry_data);
+		//get all of the fields in the current report, they will be returned in order as
+		//no position has been specified
+		$reportfields		=	$dbc->get_report_fields_by_position($report_id);
+				
+		foreach ($reportfields as $field) {
+			
+			//get the plugin record that for the plugin 
+			$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
+			
+			//take the name field from the plugin as it will be used to call the instantiate the plugin class
+			$classname = $pluginrecord->name;
+			
+			// include the class for the plugin
+			include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
+			
+			if(!class_exists($classname)) {
+			 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+			}
+			
+			//instantiate the plugin class
+			$pluginclass	=	new $classname();
+			
+			$pluginclass->load($field->id);
 	
+			//create the fieldname
+			$fieldname	=	$field->id."_field";		
+			
+			
+			$pluginclass->load($field->id);
+			
+			//call the plugin class entry data method
+			$pluginclass->entry_data($field->id,$entry_id,$entry_data);
+		}
+	
+		//loop through the plugins and get the data for each one
+		$mform->set_data($entry_data);
+	}	
 } 
 
 
@@ -178,10 +194,10 @@ $PAGE->navbar->add(get_string('ilpname', 'block_ilp'),null,'title');
 $PAGE->navbar->add($userinitals,null,'title');
 
 //section name
-$PAGE->navbar->add(get_string('reports', 'block_ilp'),null,'title');
+$PAGE->navbar->add($report->name,null,'title');
 
 
-$PAGE->set_url($CFG->wwwroot.'/blocks/ilp/edit_reportentry.php', $PARSER->get_params());
+$PAGE->set_url($CFG->wwwroot.'/blocks/ilp/actions/edit_reportentry.php', $PARSER->get_params());
 
 
 //require edit_reportentry html

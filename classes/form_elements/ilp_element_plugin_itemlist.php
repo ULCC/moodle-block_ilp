@@ -84,12 +84,12 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	 	//the function 
 	 	
 		//default entry_data 	
-	 	$fieldname	=	$reportfield_id."_field";
+		$fieldname	=	$reportfield_id."_field";
 	 	
 	 	
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
  
-	 	if (!empty($entry)) {
+		if (!empty($entry)) {
 		 	$fielddata	=	array();
 
 		 	//loop through all of the data for this entry in the particular entry		 	
@@ -101,6 +101,32 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	 		$entryobj->$fieldname	=	$fielddata;
 	 	}
 	 }
+	 
+	 /**
+	  * places entry data formated for viewing for the report field given  into the  
+	  * entryobj given by the user. By default the entry_data function is called to provide
+	  * the data. Any child class which needs to have its data formated should override this
+	  * function. 
+	  * 
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * @param int $entry_id the id of the entry
+	  * @param object $entryobj an object that will add parameters to
+	  */
+	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+	  		$fieldname	=	$reportfield_id."_field";
+	 		 	
+	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+ 	
+			if (!empty($entry)) {
+		 		$fielddata	=	array();
+		 		$comma	= "";
+			 	//loop through all of the data for this entry in the particular entry		 	
+			 	foreach($entry as $e) {
+			 		$entryobj->$fieldname	.=	$e->name.$comma;
+			 		$comma	=	",";
+			 	}
+	 		}
+	  }
 
 	 
 	 protected function write_multiple( $tablename, $multi_pluginentry ){
@@ -119,9 +145,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
 		if (!empty($reportfield)) {
 			$this->reportfield_id	=	$reportfield_id;
-			$this->plugin_id	=	$reportfield->plugin_id;
-			$plugin			=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
-			$pluginrecord		=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
+			$this->plugin_id		=	$reportfield->plugin_id;
+			$plugin					=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
+			$pluginrecord			=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
 			if (!empty($pluginrecord)) {
 				$this->id			=	$pluginrecord->id;
 				$this->label			=	$reportfield->label;
@@ -226,9 +252,20 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     }
     
 
-    
+   	/**
+     * Deletes a form element and any items that it may have 
+     *  
+     *  @param int $reportfield_id the id of the reportfield 
+     */
     public function delete_form_element($reportfield_id) {
-		return parent::delete_form_element($this->tablename,$reportfield_id); 
+	   	//get the record for the field
+    	$pluginrecord			=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield_id);
+    	
+    	//delete all items for the field then delete the field itself by calling the function in the
+    	//parent class
+    	$this->dbc->delete_items($this->data_entry_tablename,$pluginrecord->id);
+    	
+    	return parent::delete_form_element($this->tablename,$reportfield_id);
     }
 
     public function uninstall() {
@@ -239,7 +276,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
         drop_table($table);
         if( $this->items_tablename ){
         	$table = new $this->xmldb_table( $this->items_tablename );
-	}
+		}
         drop_table($table);
     }
 

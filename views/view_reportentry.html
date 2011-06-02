@@ -1,0 +1,20 @@
+<?php
+echo $OUTPUT->header();
+?>
+<div class="ilp yui-skin-sam">
+<div>
+<?php
+//require report_tabs
+require_once($CFG->dirroot.'/blocks/ilp/actions/report_tabs.php');
+?>
+</div>
+<div>
+<?php
+//require the report list page
+require_once($CFG->dirroot.'/blocks/ilp/actions/view_reportslist.php');
+?>
+</div>
+</div>
+<?php
+echo $OUTPUT->footer();
+?>

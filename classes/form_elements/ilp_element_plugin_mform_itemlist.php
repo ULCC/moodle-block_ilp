@@ -9,8 +9,6 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 	
 	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
 		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
-		$this->tablename = "block_ilp_plu_cat";
-		$this->items_tablename = "block_ilp_plu_cat_items";
 	}
 	
 	
@@ -79,6 +77,7 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 	*/
 	 protected function specific_process_data($data) {
 		$optionlist = array();
+		
 		if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
 			//dd type needs to take values from admin form and writen them to items table
 			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );

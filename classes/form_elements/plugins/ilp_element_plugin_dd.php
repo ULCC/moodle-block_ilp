@@ -70,13 +70,6 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
         return $string;
     }
 
-   	/**
-     * Delete a form element
-     */
-    public function delete_form_element($reportfield_id) {
-    	return parent::delete_form_element($this->tablename, $reportfield_id);
-    }
-
 	/**
 	* handle user input
 	**/
