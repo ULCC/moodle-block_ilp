@@ -129,6 +129,13 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	  }
 
 	 
+	/*
+	* called by entry_process_data
+	* allows multi-select values to be written as multiple rows in entry table
+	* @param string $tablename
+	* @param object $multi_pluginentry ($multi_pluginentry->value is array of strings)
+	* @return boolean
+	*/
 	 protected function write_multiple( $tablename, $multi_pluginentry ){
 		//if we're here, assume $pluginentry->value is array
 		$pluginentry = $multi_pluginentry;
