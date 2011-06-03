@@ -72,9 +72,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 	  		$fieldname	=	$reportfield_id."_field";
 	 		
 	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
- 	var_dump('course');
- 	var_dump($entry);
- 			
+			
  	
 			if (!empty($entry)) {
 		 		$fielddata	=	array();

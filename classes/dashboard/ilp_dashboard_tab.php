@@ -1,8 +1,9 @@
 <?php
 /**
- * An abstract class that holds methods and attributes common to all element dashboard plugin
+ * An abstract class that holds methods and attributes common to all element dashboard tab
  * classes.
  *
+ * @abstract
  *
  * @copyright &copy; 2011 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -10,11 +11,13 @@
  * @package ILP
  * @version 2.0
  */
+
+
+
 //require the ilp_plugin.php class 
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_plugin.php');
 
-
-abstract class ilp_dashboard_plugin extends ilp_plugin {
+class ilp_dashboard_tabs extends ilp_plugin {
 
     /**
      * Constructor
@@ -23,7 +26,7 @@ abstract class ilp_dashboard_plugin extends ilp_plugin {
     	global	$CFG;
     	
 		//set the directory where plugin files of type ilp_dashboard_tab are stored  
-    	$this->plugin_class_directory	=	$CFG->dirroot."/blocks/ilp/classes/dashboard/plugins";
+    	$this->plugin_class_directory	=	$CFG->dirroot."/blocks/ilp/classes/dashboard/tabs";
     	
     	//set the table that the details of these plugins are stored in
     	$this->plugintable	=	"block_ilp_dash_plugin";
@@ -45,17 +48,12 @@ abstract class ilp_dashboard_plugin extends ilp_plugin {
         //when not in object context
         $dbc = new ilp_db();
     	
+    	
     	//call the install new plugins function from the parent class
     	//pass the list of plugins currently installed to it
-        parent::install_new_plugins($dbc->get_dashboard_plugins(),$CFG->dirroot."/blocks/ilp/classes/dashboard/plugins");
+        parent::install_new_plugins($dbc->get_dashboard_tabs(),$CFG->dirroot."/blocks/ilp/classes/dashboard/tabs");
 
     }
-    
-    
-   	 /**
-     * Force extending class to implement a display function
-     */
-     abstract function display();
 
 }
 ?>

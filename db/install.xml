@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/ilp/db" VERSION="20110601" COMMENT="XMLDB file for Moodle blocks/ilp"
+<XMLDB PATH="blocks/ilp/db" VERSION="20110602" COMMENT="XMLDB file for Moodle blocks/ilp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -162,7 +162,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_dash_tab" COMMENT="Holds information on dashboard tab plugins that have been installed" PREVIOUS="block_ilp_dash_plugin">
+    <TABLE NAME="block_ilp_dash_tab" COMMENT="Holds information on dashboard tab plugins that have been installed" PREVIOUS="block_ilp_dash_plugin" NEXT="block_ilp_dash_temp">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="the name of the tab plugin this must also be the name of the plugins class" PREVIOUS="id" NEXT="directory"/>
@@ -173,6 +173,31 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_ilp_dash_temp" COMMENT="block_ilp_dash_temp table retrofitted from MySQL" PREVIOUS="block_ilp_dash_tab" NEXT="block_ilp_dash_temp_region">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="name" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="status" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_ilp_dash_temp_region" COMMENT="block_ilp_dash_temp_region table retrofitted from MySQL" PREVIOUS="block_ilp_dash_temp">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="template_id"/>
+        <FIELD NAME="template_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="name" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="template_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="region_template"/>
+        <KEY NAME="region_template" TYPE="foreign" FIELDS="template_id" REFTABLE="block_ilp_dash_temp" REFFIELDS="id" COMMENT="the region must have a template" PREVIOUS="primary"/>
       </KEYS>
     </TABLE>
   </TABLES>

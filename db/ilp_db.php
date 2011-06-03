@@ -263,25 +263,7 @@ class ilp_db_functions	extends ilp_logging {
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_plugin', array()) : false;
 	}
-    
-    
-	/**
-     * Creates a new dashboard plugin record.
-     *
-     * @param string $name the name of the new form element plugin
-     * @return mixed the id of the inserted record or false
-     */
-    function create_dashboard_plugin($name,$type,$dir=null) {
-        $type = new object();
-        $type->name 		= $name;
-        $type->directory 	= $dir;
-        
-        //TODO: should the dashboard plugin be enabled by default? 
-        $type->status 		= 1;
-
-        return $this->insert_record('block_ilp_dash_plugin', $type);
-    }
-    
+	
     /**
      * Gets the full list of dashboard plugins already installed
      *
@@ -294,26 +276,47 @@ class ilp_db_functions	extends ilp_logging {
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
 	}
-    
-    
-	/**
-     * Creates a new dashboard plugin record.
+
+    /**
+     * Gets the full list of dashboard templates already installed
      *
+     * @return array Result objects
+     */
+    function get_dashboard_templates() {
+        // check for the presence of a table to determine which query to run
+        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_temp}'");
+
+        // return resource types or false
+        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_temp', array()) : false;
+	}
+	
+    
+    /**
+     * Creates a new  plugin record.
+     *
+     * @param string $tablename	the name of the table the record will be saved to 
      * @param string $name the name of the new form element plugin
      * @return mixed the id of the inserted record or false
      */
-    function create_dashboard_tab($name) {
+    function create_plugin($tablename,$name) {
         $type = new object();
         $type->name 		= $name;
                 
         //TODO: should the dashboard plugin be enabled by default? 
         $type->status 		= 1;
 
-        return $this->insert_record('block_ilp_dash_tab', $type);
+        return $this->insert_record($tablename, $type);
     }
     
-    
-    
+    /**
+     * Creates a new region record.
+     *
+     * @param object $region the region object to be inserted into the db 
+     * @return mixed the id of the inserted record or false
+     */
+    function create_region($region) {
+        return $this->insert_record('block_ilp_dash_temp_region',$region);
+    }
     
     /**
      * Retrieve the information for the course 
@@ -1159,6 +1162,11 @@ class ilp_db_functions	extends ilp_logging {
         ";
         $res = $this->dbc->get_record_sql( $sql );
         return $res->n;
+    }
+    
+    
+    public	function get_enabled_template()	{
+    	return $this->dbc->get_record('block_ilp_dash_temp',array('status'=>'1'));
     }
 }
 
