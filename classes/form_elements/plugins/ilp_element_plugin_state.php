@@ -76,7 +76,6 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
     */
 	protected function get_option_list_text( $reportfield_id , $sep="\n", $field=false ){
 		$option_data = $this->get_option_list( $reportfield_id, $field );
-var_crap( $option_data );exit;
 		$optionlist = $option_data[ 'optlist' ];
 		$rtn = '';
 		if( !empty( $optionlist ) ){
