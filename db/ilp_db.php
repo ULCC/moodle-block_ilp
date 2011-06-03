@@ -941,17 +941,28 @@ class ilp_db_functions	extends ilp_logging {
     * @param string
     * @return array of objects
     */
-    function get_optionlist( $reportfield_id, $tablename ){
+    function get_optionlist( $reportfield_id, $tablename, $field=false ){
 		global $CFG;
+
+        $fieldlist = array( 'value', 'name' );
+        if( $field ){
+            $fieldlist[] = $field;
+        }
+
 		$tablename = $CFG->prefix . $tablename;
 		$item_table = $tablename . "_items";
 		$plugin_table = $tablename;
-		$sql = "SELECT value, name
+
+        $whereandlist = array(
+            "$plugin_table.reportfield_id = $reportfield_id"
+        );
+
+		$sql = "SELECT " . implode( ',' , $fieldlist ) . "
 				FROM  {$CFG->prefix}block_ilp_report_field rptf
 				JOIN $plugin_table ON $plugin_table.reportfield_id = rptf.id
 				JOIN $item_table ON $item_table.parent_id = $plugin_table.id
 				WHERE $plugin_table.reportfield_id = $reportfield_id
-				";
+		";
     	return $this->dbc->get_records_sql( $sql );
     }
     
