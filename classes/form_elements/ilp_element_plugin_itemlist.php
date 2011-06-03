@@ -13,6 +13,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	    
    }
 		
+        /* just for test purposes
+        * not to be called on a production site
+        */
     	public function test(){
 			$msg = $this->tablename;
 			$reportfield_id = 1;
@@ -180,8 +183,14 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		}
 	}
 	
-	protected function get_option_list_text( $reportfield_id , $sep="\n" ){
-		$optionlist = $this->get_option_list( $reportfield_id );
+    /*
+    * get options from the items table for this plugin, and concatenate them into a string
+    * @param int $reportfield_id
+    * @param string $sep
+    * @param string $field - optional additional field to retrieve, along with value and name
+    */
+	protected function get_option_list_text( $reportfield_id , $sep="\n", $field=false ){
+		$optionlist = $this->get_option_list( $reportfield_id, $field );
 		$rtn = '';
 		if( !empty( $optionlist ) ){
 			foreach( $optionlist as $key=>$value ){
@@ -191,11 +200,16 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		return $rtn;
 	}
 
-	protected function get_option_list( $reportfield_id ){
+    /*
+    * read rows from item table and return them as array of key=>value
+    * @param int $reportfield_id
+    * @param string $field - extra field to read from items table: used by ilp_element_plugin_state
+    */
+	protected function get_option_list( $reportfield_id, $field=false ){
 		//return $this->optlist2Array( $this->get_optionlist() );   	
 		$outlist = array();
 		if( $reportfield_id ){
-			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename );
+			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, $field );
 			foreach( $objlist as $obj ){
 				$outlist[ $obj->value ] = $obj->name;
 			}
@@ -230,7 +244,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     }
 
     /**
-    * this function returns the mform elements taht will be added to a report form
+    * this function returns the mform elements that will be added to a report form
 	*
     */
     public function entry_form( &$mform ) {

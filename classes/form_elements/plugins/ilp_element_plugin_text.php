@@ -23,7 +23,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
 	
 	/**
      * TODO comment this
-     *
+     * called when user form is submitted
      */
     public function load($reportfield_id) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
@@ -54,7 +54,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
 
 	
 	/**
-     *
+     * create tables for this plugin
      */
     public function install() {
         global $CFG, $DB;
