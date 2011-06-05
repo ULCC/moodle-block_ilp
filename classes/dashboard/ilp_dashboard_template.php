@@ -124,14 +124,15 @@ abstract class ilp_dashboard_template extends ilp_plugin {
     /**
      * This fucntion echo or returns the template file with all plugins in the specified regions   
      */
-    public function display_template($return=false)	{	
+    public function display_template($student_id=false,$return=false)	{	
+    	global	$CFG;
     	
 		$templatecontents	=	$this->get_template();
     	
     	if (!empty($templatecontents))	{ 
     	
 	    	//get all of the dashboard_plugins that are enabled for this template
-    		$plugins	=	$this->dbc->get_template_plugins();
+    		$plugins	=	$this->dbc->get_template_plugins(get_class($this));
     		    		
     		//loop through recordset
     		foreach($plugins as $p) {
@@ -146,8 +147,8 @@ abstract class ilp_dashboard_template extends ilp_plugin {
 		        }
     			
     			//instantiate dashboard_plugin class
-    			$dashplugin		=	new $classname();	
-
+    			$dashplugin		=	new $classname($student_id);	
+    			
     			//replace the region in the template file with the plugin code
     			$templatecontents	=	$this->region_plugin($templatecontents,$p->region_name,$dashplugin->display());	
 
@@ -170,7 +171,7 @@ abstract class ilp_dashboard_template extends ilp_plugin {
     /**
      * 
      */
-    public final function region_plugin($contents,$region,$plugin)	{
+    public final function region_plugin($content,$region,$plugin)	{
     	return 	str_replace($region,$plugin,$content);
     }
     

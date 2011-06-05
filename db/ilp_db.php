@@ -304,7 +304,7 @@ class ilp_db_functions	extends ilp_logging {
                 
         //TODO: should the dashboard plugin be enabled by default? 
         $type->status 		= 1;
-
+        
         return $this->insert_record($tablename, $type);
     }
     
@@ -1179,6 +1179,37 @@ class ilp_db_functions	extends ilp_logging {
     public	function get_enabled_template()	{
     	return $this->dbc->get_record('block_ilp_dash_temp',array('status'=>'1'));
     }
+    
+    
+    /**
+     * Returns the records of plugins enabled for the given template
+     * 
+     *  @param string $templatename the name of the template
+     *  
+     *  @return mixed array of recordset objects or false
+     */
+    public	function get_template_plugins($templatename)	{
+    	
+    	global	$CFG;
+    	
+    	$sql	=	"SELECT 	tr.name as region_name,
+    							p.name as plugin_name, 
+    							tr.id as region_id,
+    							p.id as plugin_id
+    				 FROM 		{$CFG->prefix}block_ilp_dash_temp	as t,
+    				 			{$CFG->prefix}block_ilp_dash_temp_region as tr,
+    				 			{$CFG->prefix}block_ilp_dash_region_plugin as rp,
+    				 			{$CFG->prefix}block_ilp_dash_plugin as p
+    				 WHERE 		t.id 	=	tr.template_id
+    				 AND		tr.id	=	rp.region_id
+    				 AND		rp.plugin_id	=	p.id
+    				 AND 		t.name	=	'{$templatename}'";
+    				 			
+    				 			
+    	return	$this->dbc->get_records_sql($sql);
+    }
+    
+    
 }
 
 

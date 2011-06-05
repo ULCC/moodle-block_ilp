@@ -18,12 +18,14 @@ class ilp_dashboard_student_info extends ilp_dashboard_plugin {
 	public		$student_id;	
 	
 	
-	function __construct($student_id)	{
+	function __construct($student_id = null)	{
 		//set the id of the student that will be displayed by this 
 		$this->student_id	=	$student_id;
 		
 		//set the name of the directory that holds any files for this plugin
 		$this->directory	=	'studentinfo';
+		
+		parent::__construct();
 		
 	}
 	
@@ -34,18 +36,29 @@ class ilp_dashboard_student_info extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG;
+		global	$CFG,$OUTPUT;
 
 		//set any variables needed by the display page	
 		
 		//get students full name
-		$student	=	$this->dbc->get_user($this->student_id);
-		
+		$student	=	$this->dbc->get_user_by_id($this->student_id);
+
 		if (!empty($student))	{ 
 			$studentname	=	fullname($student);
-			$studentpicture	=	print_user_picture($student, null, null, 0, true, false);
+			$studentpicture	=	$OUTPUT->user_picture($student); 
 		
+			//we need to buffer output to prevent it being sent straight to screen
+			ob_start();
 			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/plugins/'.$this->directory.'/ilp_dashboard_student_info.html');
+			
+			//pass the output instead to the output var
+			$pluginoutput = ob_get_contents();
+			
+			ob_end_clean();
+			
+			
+			return $pluginoutput;
+			
 		} else {
 		
 			//the student was not found display and error 

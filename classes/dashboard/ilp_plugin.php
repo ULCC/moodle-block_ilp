@@ -165,7 +165,7 @@ class ilp_plugin {
                     $class = basename($file, ".php");
                     
                     $dashpluginobj = new $class();
-
+                    
                     // update the resource_types table
                     $id	=	$dbc->create_plugin($dashpluginobj->get_plugin_table(),$dashpluginobj->get_name());
                     
