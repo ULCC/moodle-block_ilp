@@ -51,7 +51,7 @@ class ilp_dashboard_student_info extends ilp_dashboard_plugin {
 			$displayattendance	= false;
 			
 			//include the attendance 
-			include_once();
+			//include_once();
 			
 			//if the user has the capability to view others ilp and this ilp is not there own 
 			//then they may change the students status otherwise they can only view 
