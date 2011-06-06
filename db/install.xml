@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/ilp/db" VERSION="20110602" COMMENT="XMLDB file for Moodle blocks/ilp"
+<XMLDB PATH="blocks/ilp/db" VERSION="20110606" COMMENT="XMLDB file for Moodle blocks/ilp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -187,7 +187,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_dash_temp_region" COMMENT="block_ilp_dash_temp_region table retrofitted from MySQL" PREVIOUS="block_ilp_dash_temp">
+    <TABLE NAME="block_ilp_dash_temp_region" COMMENT="block_ilp_dash_temp_region table retrofitted from MySQL" PREVIOUS="block_ilp_dash_temp" NEXT="block_ilp_dash_region_plugin">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
         <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="template_id"/>
@@ -198,6 +198,19 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="region_template"/>
         <KEY NAME="region_template" TYPE="foreign" FIELDS="template_id" REFTABLE="block_ilp_dash_temp" REFFIELDS="id" COMMENT="the region must have a template" PREVIOUS="primary"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_ilp_dash_region_plugin" COMMENT="block_ilp_dash_region_plugin table retrofitted from MySQL" PREVIOUS="block_ilp_dash_temp_region">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="region_id"/>
+        <FIELD NAME="region_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="plugin_id"/>
+        <FIELD NAME="plugin_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="region_id" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="plugin_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="changeme"/>
+        <KEY NAME="changeme" TYPE="" FIELDS="" PREVIOUS="primary"/>
       </KEYS>
     </TABLE>
   </TABLES>

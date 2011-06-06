@@ -373,11 +373,16 @@ class moodle2_renderer_emulator {
      * This method emulates the 
      * @param user $user
      */
-    public function user_picture($user,$course)	{
+    public function user_picture($user,$options)	{
     	//if the course is not empty pass the course id
-    	$course_id = (!empty($course_id)) ? $course[0]	 : null;
+    	$course_id 	= (isset($options['courseid'])) ? $options['courseid']	 : null;
+    	$size 		= (isset($options['size'])) ? $options['size']	 		 : 0;
+    	$return 	= (isset($options['return'])) ? $options['return']	 	 : false;
+    	$link 		= (isset($options['link'])) ? $options['link']	 		 : true;
+    	$target		= (isset($options['target'])) ? $options['target']	 	 : '';
+    	$alttext	= (isset($options['alttext'])) ? $options['alttext']	 : true;
     	
-    	return print_user_picture($user, $course_id, null, 0, true, false);
+    	return print_user_picture($user, $course_id, null, $size, $return, $link, $target,$alttext);
     }
     
 }

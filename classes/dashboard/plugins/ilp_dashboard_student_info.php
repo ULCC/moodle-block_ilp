@@ -45,8 +45,26 @@ class ilp_dashboard_student_info extends ilp_dashboard_plugin {
 
 		if (!empty($student))	{ 
 			$studentname	=	fullname($student);
-			$studentpicture	=	$OUTPUT->user_picture($student); 
-		
+			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100)); 
+			
+			//set the display attendance flag to false
+			$displayattendance	= false;
+			
+			//include the attendance 
+			include_once();
+			
+			//if the user has the capability to view others ilp and this ilp is not there own 
+			//then they may change the students status otherwise they can only view 
+			
+			
+			
+			
+			/*
+			if (!empty())	{
+				
+				
+			} 
+		*/
 			//we need to buffer output to prevent it being sent straight to screen
 			ob_start();
 			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/plugins/'.$this->directory.'/ilp_dashboard_student_info.html');
