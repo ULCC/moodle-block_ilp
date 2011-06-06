@@ -42,12 +42,13 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		$string[ 'ilp_element_plugin_state_fail' ] 	        = 'fail';
 		$string[ 'ilp_element_plugin_state_pass' ] 	        = 'pass';
 		$string[ 'ilp_element_plugin_state_unset' ] 	    = 'unset';
+        $string[ 'ilp_element_plugin_error_not_valid_item' ]= 'Not a valid option';
         
         return $string;
     }
 
     /*
-    * similar to parent, but with extra field for grade
+    * similar to parent, but with extra field for passfail
     */
      public function load($reportfield_id) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
@@ -62,7 +63,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 				$this->description		=	$reportfield->description;
 				$this->req			    =	$reportfield->req;
 				$this->position			=	$reportfield->position;
-				$this->grade			=	$reportfield->grade;
+				$this->passfail			=	$reportfield->passfail;
 			}
 		}
 		return false;	
@@ -104,11 +105,11 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, $field );
 			foreach( $objlist as $obj ){
 				$outlist[ $obj->value ] = $obj->name;
-                if( 'grade' == $field ){
-                    if( ILP_GRADE_FAIL == $obj->grade ){
+                if( 'passfail' == $field ){
+                    if( ILP_PASSFAIL_FAIL == $obj->passfail ){
                         $faillist[] = $obj->name;
                     }
-                    if( ILP_GRADE_PASS == $obj->grade ){
+                    if( ILP_PASSFAIL_PASS == $obj->passfail ){
                         $passlist[] = $obj->name;
                     }
                 }
@@ -131,11 +132,11 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		$data_exists = $this->dbc->plugin_data_item_exists( $this->tablename, $reportfield->id );
 		if( empty( $data_exists ) ){
 			//if no, get options list
-            $options_data = $this->get_option_list_text( $reportfield->id, "\n", 'grade' );
+            $options_data = $this->get_option_list_text( $reportfield->id, "\n", 'passfail' );
 			$reportfield->optionlist = $options_data[ 'options' ];
 		}
 		else{
-			$options_data = $this->get_option_list_text( $reportfield->id , '<br />', 'grade' );
+			$options_data = $this->get_option_list_text( $reportfield->id , '<br />', 'passfail' );
 			$reportfield->existing_options = $options_data[ 'options' ];
 		}
         $reportfield->fail = $options_data[ 'fail' ];
@@ -212,9 +213,9 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 
             //special field to categorise states as pass or fail
             //0=unset,1=fail,2=pass
-            $table_itemgrade = new $this->xmldb_field( 'grade' );
-	        $table_itemgrade->$set_attributes( XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, null, '0' );
-            $table->addField( $table_itemgrade );
+            $table_itempassfail = new $this->xmldb_field( 'passfail' );
+	        $table_itempassfail->$set_attributes( XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL, '0', null, null, '0' );
+            $table->addField( $table_itempassfail );
 	
 	        $table_timemodified = new $this->xmldb_field('timemodified');
 	        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);

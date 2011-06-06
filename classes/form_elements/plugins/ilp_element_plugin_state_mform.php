@@ -18,22 +18,22 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
     /*
     * the manager has entered the states in the unset, fail and pass textareas on the mform
     * the values in those textareas have been made into arrays and sent to this function, to be categorised as fail, pass or unset 
-    * @param array $statelist - list of values - should be a key and value from the state selector, so that if either of them matches, we can return a grade
+    * @param array $statelist - list of values - should be a key and value from the state selector, so that if either of them matches, we can return a pass or fail value
     * @param array $fail_list - list of values to be classified as fail
     * @param array $pass_list - list of values to be classified as pass
     * @param array $unset_list - not really necessary ... if nothing matches, we default to unset anyway
     */
-    protected function deduceGradeFromLists( $state_list, $fail_list, $pass_list, $keysep=':' ){
+    protected function deducePassFailFromLists( $state_list, $fail_list, $pass_list, $keysep=':' ){
         foreach( $state_list as $grade ){
 	        $grade = trim( $grade );
 	        if( in_array( $grade, $fail_list ) ){
-	            return ILP_GRADE_FAIL;
+	            return ILP_PASSFAIL_FAIL;
 	        }
 	        if( in_array( $grade, $pass_list ) ){
-	            return ILP_GRADE_PASS;
+	            return ILP_PASSFAIL_PASS;
 	        }
         }
-        return ILP_GRADE_UNSET;
+        return ILP_PASSFAIL_UNSET;
     }
 	
 		/**
@@ -77,22 +77,55 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
         $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 	}
+    protected function is_valid_item( $item, $item_list, $keysep=":" ){
+        $item = trim( $item );
+        $itemparts = explode( $keysep, $item );
+        foreach( $itemparts  as $item ){
+            //$item should be either a key or value of $item_list
+            if( in_array( $item, array_values( $item_list ) ) || in_array( $item, array_keys( $item_list ) ) ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+	protected function specific_validation($data) {
+		$optionlist = array();
+		if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
+			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data[ 'optionlist' ] );
+		}
+        //all contents of $data->fail and $data->pass must match valid keys or values in $optionlist
+        $sep = "\n";
+        $keysep = ":";
+        $fail_item_list = explode( $sep, $data[ 'fail' ] );
+        $pass_item_list = explode( $sep, $data[ 'pass' ] );
+        foreach( array( $fail_item_list, $pass_item_list ) as $item_list ){
+            foreach( $item_list as $submitted_item ){
+                if( !$this->is_valid_item( $submitted_item , $optionlist, $keysep ) ){
+                    $this->errors[] = get_string( 'ilp_element_plugin_error_not_valid_item' , 'block_ilp' ) . ": <em>$submitted_item</em>";
+                }
+            }
+        }
+    }
+
+
 	/*
 	* take input from the management form and write the element info
 	*/
 	 protected function specific_process_data($data) {
 		$optionlist = array();
 		if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
-			//dd type needs to take values from admin form and writen them to items table
+			//dd type needs to take values from admin form and write them to items table
 			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
 		}
+
+        $sep = "\n";
+        $keysep = ":";
 		//entries from data to go into $this->tablename and $this->items_tablename
 
         $gradekeylist = array(
             'pass', 'fail'
         );
-        $sep = "\n";
-        $keysep = ":";
         foreach( $gradekeylist as $key ){
             $v = $key . '_list';
             $$v = explode( $sep, $data->$key );
@@ -123,7 +156,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 				//one item row inserted here
 				$itemrecord->value = $key;
 				$itemrecord->name = $itemname;
-                $itemrecord->grade = $this->deduceGradeFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
 	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	 	} else {
@@ -156,7 +189,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 				//one item row inserted here
 				$itemrecord->value = $key;
 				$itemrecord->name = $itemname;
-                $itemrecord->grade = $this->deduceGradeFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
 		 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	
