@@ -209,8 +209,7 @@
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="changeme"/>
-        <KEY NAME="changeme" TYPE="" FIELDS="" PREVIOUS="primary"/>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
       </KEYS>
     </TABLE>
   </TABLES>
