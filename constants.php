@@ -37,9 +37,9 @@ define( 'OPTIONMULTI' , 2 );
 define( 'ILP_ENABLED' , 1 );
 define( 'ILP_DISABLED' , 0 );
 
-define( 'ILP_GRADE_UNSET' , 0 );
-define( 'ILP_GRADE_FAIL' , 1 );
-define( 'ILP_GRADE_PASS' , 2 );
+define( 'ILP_PASSFAIL_UNSET' , 0 );
+define( 'ILP_PASSFAIL_FAIL' , 1 );
+define( 'ILP_PASSFAIL_PASS' , 2 );
 
 
 
