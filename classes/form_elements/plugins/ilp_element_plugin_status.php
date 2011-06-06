@@ -25,6 +25,45 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 		parent::__construct();
     }
 
+    public function install(){
+        parent::install();
+        //extra table for this plugin
+        $tablename = "block_ilp_plu_user_status";
+        $table = new $this->xmldb_table( $tablename );
+        $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
+
+        $table_id = new $this->xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+        
+        $table_uid = new $this->xmldb_field('user_id');
+        $table_uid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_uid);
+        
+        $table_sii = new $this->xmldb_field('status_item_id');
+        $table_sii->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_sii);
+        
+        $table_umi = new $this->xmldb_field('user_modified_id');
+        $table_umi->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_umi);
+        
+        $table_timemodified = new $this->xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $this->xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_key = new $this->xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        if(!$this->dbman->table_exists($table)) {
+            $this->dbman->create_table($table);
+        }
+    }
     
     function language_strings(&$string) {
         $string['ilp_element_plugin_status'] 			= 'Select';
