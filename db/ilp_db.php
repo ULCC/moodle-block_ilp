@@ -175,21 +175,6 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->dbc->get_record($tablename,array("id"=>$form_element_id));
     }
     
-     /**
-     * Returns the record from the given ilp form element plugin table with the reportfield_id given 
-     *
-     * @param int    $reportfield_id the id of the element in the given table
-     * @param string $tablename the name of the plugin table that holds the data that will be retrieved
-     * @return object containing plugin record that matches criteria
-     */    
-    
-    function get_form_element_by_reportfield($tablename,$reportfield_id) {
-    	return $this->dbc->get_record($tablename,array("reportfield_id"=>$reportfield_id));
-    }
-    
-    
-    
-    
 	/**
      * Returns all report field records for the report with the given id  
      *
@@ -408,6 +393,8 @@ class ilp_db_functions	extends ilp_logging {
     }
     
      /**
+     * This is the same as get_form_element_plugin() above
+     * @todo refactor calls to this function 
      * Returns the plugin record that has the matching id 
      *
      * @param int $plugin_id the id of the plugin that will be retrieved
@@ -415,6 +402,15 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_plugin_by_id($plugin_id) {
     	return $this->dbc->get_record('block_ilp_plugin',array('id'=>$plugin_id));
+    }
+
+    /*
+    * get plugin data from the plugin name
+    * @param string $plugin_name
+     * @return mixed object containing the plugin record or false
+    */
+    function get_plugin_by_name($plugin_name) {
+    	return $this->dbc->get_record('block_ilp_plugin',array('name'=>$plugin_name));
     }
     
    	/**
@@ -1208,6 +1204,37 @@ class ilp_db_functions	extends ilp_logging {
     				 			
     	return	$this->dbc->get_records_sql($sql);
     }
+    
+     /**
+     * Returns the record from the given ilp form element plugin table with the reportfield_id given 
+     *
+     * @param int    $reportfield_id the id of the element in the given table
+     * @param string $tablename the name of the plugin table that holds the data that will be retrieved
+     * @return object containing plugin record that matches criteria
+     */    
+    function get_form_element_by_reportfield($tablename,$reportfield_id) {
+    	return $this->dbc->get_record($tablename,array("reportfield_id"=>$reportfield_id));
+    }
+    
+    
+    /*
+    * gets max position for a report and returns 1 more
+    * if no entries yet, returns 1
+    * @param int $report_id
+    * @return int
+    */
+    public function get_next_position( $report_id, $tablename ){
+    	global $CFG;
+        $tablename = $CFG->prefix . $tablename;
+        $sql = "SELECT MAX( position ) n FROM  $tablename WHERE report_id = $report_id";
+        $res = array_values( $this->dbc->get_records_sql( $sql ) );
+        $n = $res[0]->n;
+        if( $n ){
+            return $n + 1;
+        }
+        return 1;
+    }
+    
     
     
 }
