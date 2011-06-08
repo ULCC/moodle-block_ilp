@@ -6,7 +6,7 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_report_mform.php');
 $course_id = $PARSER->required_param('course_id', PARAM_INT);
 $dbc = new ilp_db();
 
-$course	=	$dbc->get_course($course_id);
+//$course	=	$dbc->get_course($course_id);
 
 disp( main() );
 
@@ -87,6 +87,11 @@ class quickdb{
 	}
 }
 
+/*
+* scan blocks/ilp/predefined reports for files with names like report_[anything]
+* these files should contain php code to add entries to $reportlist
+* @return array of arrays
+*/
 function get_report_list(){
 	global $CFG;
 	$reports_dir = realpath( $CFG->dirroot.'/blocks/ilp/predefined_reports' );
@@ -100,6 +105,11 @@ function get_report_list(){
 	return $reportlist;
 }
 
+/*
+* truncate the ILP plugin tables to reset the system
+* only useful for testing - should not be called on production system
+* @param mysqli connection $conn
+*/
 function trunc_ilp_tables( $conn ){
 	global $CFG;
 	$tablelist = array(
@@ -137,6 +147,11 @@ function trunc_ilp_tables( $conn ){
 	return $count;
 }
 
+/*
+* the main function of this action page
+* scan the predefined reports directory and insert its contents into the ilp report tables
+* @return array of ints
+*/
 function main(){
 	global $USER, $CFG, $SESSION, $PARSER, $course_id, $dbc;
 	$conn = quickdb::get_connection();
@@ -154,6 +169,7 @@ function main(){
 				$label = $element[ "label" ];
 				$description = $element[ "description" ];
 				$req = $element[ "req" ];
+				//everything ok - add the element to the report
 				$info[] = apply_to_report( $conn, $course_id, $report_id, $plugin_id, $label, $description, $req, $element );
 			}
 		}
@@ -161,26 +177,18 @@ function main(){
 	return $info;
 }
 
-function insert_report_field( $conn, $report_id, $label, $description, $plugin_id, $req ){
-	global $USER, $CFG;
-	$tablename = 'block_ilp_report_field';
-	$tablename = $CFG->prefix . $tablename;
-	$position = get_next_position( $report_id );
-	$sql = "
-		INSERT INTO $tablename ( label, description, report_id, plugin_id, position, req, creator_id, timecreated, timemodified )
-		VALUES( '$label', '$description', $report_id, $plugin_id, $position, $req, $USER->id, NOW(), NOW() )
-	";
-	//exit( realpath( $CFG->dirroot . '/lib' ) . DIRECTORY_SEPARATOR . 'dmllib.php' );
-	return quickdb::execute_sql( $conn, $sql );
-	
-}
-
-function get_next_position( $report_id ){
-	global $dbc;
-	$tablename = 'block_ilp_report_field';
-	return $dbc->get_next_position( $report_id , $tablename );
-}
-
+/*
+* add a control to a report
+* @param mysqli connection $conn
+* @param int $course_id
+* @param int $report_id
+* @param int $plugin_id
+* @param string $label
+* @param string $description
+* @param int $req
+* @param array $element
+* @return int
+*/
 function apply_to_report( $conn, $course_id, $report_id, $plugin_id, $label, $description, $req, $element ){
 	global $dbc, $CFG;
 	$pluginrecord	=	$dbc->get_plugin_by_id($plugin_id);
@@ -189,6 +197,7 @@ function apply_to_report( $conn, $course_id, $report_id, $plugin_id, $label, $de
 	$specific_sql = "INSERT INTO {$CFG->prefix}{$pluginrecord->tablename} ( reportfield_id, timecreated, timemodified ) VALUES ($reportfield_id, NOW(), NOW() )";
 	$specific_parent_id = quickdb::execute_sql( $conn, $specific_sql );
 	if( in_array( 'opts' , array_keys( $element ) ) ){
+		//it's a list type element (radio, dropdown, select) with some option items
 		$itemtable = $plugin_table_name . '_items';
 		foreach( $element[ "opts" ] as $value=>$name ){
 			$sql = "INSERT INTO {$CFG->prefix}$itemtable ( parent_id, value, name, timemodified, timecreated ) VALUES ( $specific_parent_id, '$value', '$name', NOW(), NOW() )";
@@ -200,6 +209,44 @@ function apply_to_report( $conn, $course_id, $report_id, $plugin_id, $label, $de
 	return $specific_parent_id;
 }
 
+/*
+* add a control to a report (called by apply_to_report())
+* @param mysqli connection $conn
+* @param int $report_id
+* @param string $label
+* @param string $description
+* @param int $plugin_id
+* @param int $req
+*/
+function insert_report_field( $conn, $report_id, $label, $description, $plugin_id, $req ){
+	global $USER, $CFG;
+	$tablename = 'block_ilp_report_field';
+	$tablename = $CFG->prefix . $tablename;
+	$position = get_next_position( $report_id );
+	$sql = "
+		INSERT INTO $tablename ( label, description, report_id, plugin_id, position, req, creator_id, timecreated, timemodified )
+		VALUES( '$label', '$description', $report_id, $plugin_id, $position, $req, $USER->id, NOW(), NOW() )
+	";
+	return quickdb::execute_sql( $conn, $sql );
+	
+}
+
+/*
+* find max position value for a report and return 1 higher
+* @param int report_id
+* @return int
+*/
+function get_next_position( $report_id ){
+	global $dbc;
+	$tablename = 'block_ilp_report_field';
+	return $dbc->get_next_position( $report_id , $tablename );
+}
+
+/*
+* take an everyday element type name (eg 'radio') and return the correct type_id
+* @param string $element_type (eg 'dropdown', 'text', 'textarea' - anything which is a key in $plugin_name_list)
+* @return int or false
+*/
 function get_element_type_id_from_control_type( $element_type ){
 	global $dbc;
 	$plugin_name_list = array(
@@ -226,6 +273,13 @@ function get_element_type_id_from_control_type( $element_type ){
 	return $plugin_name;
 }
 
+/*
+* insert a new report with name and description, and return the id
+* @param int $course_id
+* @param string $name
+* @param string $description
+* @return int
+*/
 function create_report( $course_id, $name, $description ){
 	global $USER;
 	//$name .= "-" . date( 'Hms' );
@@ -235,12 +289,16 @@ function create_report( $course_id, $name, $description ){
 	$formdata->creator_id = $USER->id;
 	$formdata->name = $name;
 	$formdata->description = $description;
+	$formdata->status = 1;
 	$mform	= new edit_report_mform( $course_id, null );
     	$report_id = $mform->process_data($formdata);
 	return $report_id;
 }
 
+/*
+* utility function for testing
+* @param string s
+*/
 function disp( $s ){
 	var_crap( $s );
 }
-exit( "course_id = $course_id" );
