@@ -34,57 +34,6 @@ class quickdb{
 		return false;
 	}
 	
-	/*
-	* run a query
-	* @param string $command (sql)
-	* @param boolean $feedback (not used)
-	* @return boolean
-	*/
-	public static function wrong_execute_sql( $command, $feedback=true ){
-		
-	/// Completely general function - it just runs some SQL and reports success.
-	
-	    global $DB, $db, $CFG;
-		if( is_null( $db ) ){
-			$db = $DB;
-		}
-	
-	
-	    if ($CFG->version >= 2006101007) { //Look for trailing ; from Moodle 1.7.0
-	        $command = trim($command);
-	    /// If the trailing ; is there, fix and warn!
-	        if (substr($command, strlen($command)-1, 1) == ';') {
-	        /// One noticeable exception, Oracle PL/SQL blocks require ending in ";"
-	            if ($CFG->dbfamily == 'oracle' && substr($command, -4) == 'END;') {
-	                /// Nothing to fix/warn. The command is one PL/SQL block, so it's ok.
-	            } else {
-	                $command = trim($command, ';');
-	                debugging('Warning. Avoid to end your SQL commands with a trailing ";".', DEBUG_DEVELOPER);
-	            }
-	        }
-	    }
-	
-	    $empty_rs_cache = array();  // Clear out the cache, just in case changes were made to table structures
-	
-	    //if (defined('MDL_PERFDB')) { global $PERF ; $PERF->dbqueries++; };
-	
-		if( 'ADODB_mysql' == get_class( $db ) ){
-			//moodle 1.9
-				return $db->Execute( $command );
-/*
-			$res = $db->GetAll( $command );
-			$rs = array();
-			foreach( $res as $row ){
-				$rs[] = (object) $row;
-			}
-			return $rs;
-*/
-		}
-		//to get this far, we must be on moodle >=2.0
-		return $db->execute( $command, array() );
-	    	//return $db->get_records_sql($command);
-
-	}
 }
 
 /*
@@ -155,9 +104,12 @@ function trunc_ilp_tables( $conn ){
 function main(){
 	global $USER, $CFG, $SESSION, $PARSER, $course_id, $dbc;
 	$conn = quickdb::get_connection();
-	$trunccount = trunc_ilp_tables( $conn );
-	$s = ( 1 == $trunccount ) ? '' : 's' ;
-	disp( "$trunccount table$s truncated" );
+	if(1){
+		//turn off this block on production systems !
+		$trunccount = trunc_ilp_tables( $conn );
+		$s = ( 1 == $trunccount ) ? '' : 's' ;
+		disp( "$trunccount table$s truncated" );
+	}
 	$info = array();
 	foreach( get_report_list() as $report ){
 		$report_title = $report[ "title" ];
