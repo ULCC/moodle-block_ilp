@@ -48,7 +48,14 @@ function get_report_list(){
 	$reportlist = array();
 	while( ( $file = $dir->read() ) !==false ){
 		if( 'report_' == substr( $file, 0, 7 ) ){
-			include( $reports_dir . DIRECTORY_SEPARATOR . $file );
+			$fullpath = $reports_dir . DIRECTORY_SEPARATOR . $file;
+			$info = pathinfo( $file );
+			if( 'php' == $info[ 'extension' ] ){
+				include( $fullpath );
+			}
+			elseif( 'xml' == $info[ 'extension' ] ){
+				$reportlist[] = simple_xml_2_array( new SimpleXMLElement( file_get_contents( $fullpath ) ) );
+			}
 		}
 	}
 	return $reportlist;
@@ -104,7 +111,7 @@ function trunc_ilp_tables( $conn ){
 function main(){
 	global $USER, $CFG, $SESSION, $PARSER, $course_id, $dbc;
 	$conn = quickdb::get_connection();
-	if(1){
+	if(0){
 		//turn off this block on production systems !
 		$trunccount = trunc_ilp_tables( $conn );
 		$s = ( 1 == $trunccount ) ? '' : 's' ;
@@ -127,6 +134,68 @@ function main(){
 		}
 	}
 	return $info;
+}
+
+/*
+* take in an array and generate xml
+* @param array $report
+* @return string of xml
+*/
+function generate_xml( $report ){
+	$xml = new SimpleXMLElement( '<?xml version=\'1.0\'?><xml/>' );
+	foreach( $report as $key=>$value ){
+		recursive_add( $xml, $key, $value );
+	}
+	return $xml->asXML();
+}
+
+/*
+* receive a reference to a SimpleXMLElement and add new values as children
+* @param SimpleXMLElement $simple_xml
+* @param string $childname
+* @param mixed $childvalue (could be int, string or array)
+*/
+function recursive_add( &$simple_xml, $childname, $childvalue ){
+	if( is_numeric( $childvalue ) ){
+		//coerce to string
+		$childvalue = '' . $childvalue;
+	}
+	if( is_string( $childvalue ) ){
+		$child = $simple_xml->addChild( $childname, $childvalue );
+		return $child;
+	}
+	if( is_array( $childvalue ) ){
+		$element = $simple_xml->addChild( $childname );
+		foreach( $childvalue as $key=>$value ){
+			$attribs = array();
+			if( is_numeric( $key ) ){
+				$key = 'listitem' . $key;
+				$attribs[ 'value' ] = $key;
+			}
+			recursive_add( $element, $key, $value );
+		}
+	}
+}
+
+/*
+* adapted from http://us2.php.net/manual/en/ref.simplexml.php:XMLToArray($xml)
+* @param SimpleXMLElement $simple_xml
+* @return array
+*/
+function simple_xml_2_array( $simple_xml ){
+	if( is_string( $simple_xml ) ){
+		$simple_xml = new SimpleXMLElement( $simple_xml );
+	}
+	foreach ( (array) $simple_xml as $index => $node ){
+	    if( 'listitem' == substr( $index, 0, 8 ) ){
+		$outkey = substr( $index, 8 );
+	    }
+	    else{
+		$outkey = $index;
+	    }
+            $out[$outkey] = ( is_object ( $node ) ) ? simple_xml_2_array( $node ) : $node;
+	}
+        return $out;
 }
 
 /*
