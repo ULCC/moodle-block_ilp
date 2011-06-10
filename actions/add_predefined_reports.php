@@ -32,10 +32,19 @@ class quickdb{
 	}
 	
 }
+
+/*
+* This class allows us to define ilp reports in text files and turn them into live reports in the moodle install.
+* The text files are kept in blocks/ilp/predefined_reports.
+* They can be written as PHP arrays or as xml.
+* This class contains methods - simple_xml_2_array and generate_xml - for converting between the 2 formats.
+* Usage: $P = new ilp_predefined_reports(); $p->main();
+*/
 class ilp_predefined_reports{
 	public function __construct(){
 		global $CFG, $USER, $SESSION, $PARSER;
 		$this->dbc = new ilp_db();
+		$this->reports_dir = realpath( $CFG->dirroot.'/blocks/ilp/predefined_reports' );
 	}
 	/*
 	* scan blocks/ilp/predefined reports for files with names like report_[anything]
@@ -44,13 +53,12 @@ class ilp_predefined_reports{
 	*/
 	function get_report_list(){
 		global $CFG;
-		$reports_dir = realpath( $CFG->dirroot.'/blocks/ilp/predefined_reports' );
-		$dir = dir( $reports_dir );
+		$dir = dir( $this->reports_dir );
 		$reportlist = array();
 		//while( ( $file = $dir->read() ) !==false ){
-		foreach( scandir( $reports_dir ) as $file ){
+		foreach( scandir( $this->reports_dir ) as $file ){
 			if( 'report_' == substr( $file, 0, 7 ) ){
-				$fullpath = $reports_dir . DIRECTORY_SEPARATOR . $file;
+				$fullpath = $this->reports_dir . DIRECTORY_SEPARATOR . $file;
 				$info = pathinfo( $file );
 				if( 'php' == $info[ 'extension' ] ){
 					include( $fullpath );
