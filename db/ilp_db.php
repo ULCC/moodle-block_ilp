@@ -1238,6 +1238,9 @@ class ilp_db_functions	extends ilp_logging {
      /**
      * returns whether any record already exists given a table, field and value
      *
+     * @param string $table
+     * @param string $field
+     * @param mixed $value
      * @return bool true or false
      */    
     function record_exists($table, $field, $value ) {
