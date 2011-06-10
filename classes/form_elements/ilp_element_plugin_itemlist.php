@@ -62,7 +62,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 			$pluginentry			=	new stdClass();
 			$pluginentry->entry_id  = 	$entry_id;
 	 		$pluginentry->value		=	$data->$fieldname;
-	 		$pluginentry->parent_id	=	$pluginrecord->id;
+	 		$state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$fieldname);
+	 		
+	 		$pluginentry->parent_id	=	$state_item->id;	
 	 		
 			if( is_string( $pluginentry->value ))	{
 	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
@@ -117,9 +119,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	  */
 	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
 	  		$fieldname	=	$reportfield_id."_field";
-	 		 	
+	  		
 	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
- 	
+	 		
 			if (!empty($entry)) {
 		 		$fielddata	=	array();
 		 		$comma	= "";
@@ -254,6 +256,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     	
 		//definition for user form
 		$optionlist = $this->get_option_list( $this->reportfield_id );
+
     	//text field for element label
         $select = &$mform->addElement(
             'select',

@@ -172,6 +172,7 @@ class moodle2_renderer_emulator {
 
     public $requires;
     public $navbar;
+    public	$context;
 
     /**
      * Constructor. Calls the $PAGE->requires replacement so that libraries for JS are available
@@ -362,11 +363,12 @@ class moodle2_renderer_emulator {
     }
 
     /**
-     * This method is called in moodle 2.0 to set the context of the current page. This is 
-     * not required in moodle 1.9 so for now we will do nothing and this will be an empty method
+     * This method is called in moodle 2.0 to set the context of the current page. We will save the context to
+     * the class context var which we can access later to find out the current context 
      */
     public function set_context($object) {
-    	//do nothing for now
+
+    	$this->context	=	$object;
     }
     
     /**
@@ -448,11 +450,12 @@ class moodle2_page_requires {
             // do not load (the style will loaded throught the style.php)
             return;
         } else {
+        	/*
             // check if it contains the "yui_" prefix
             if (strpos($scripts, "yui_") === false) {
                 $scripts = "yui_".$scripts;
             }
-
+*/
             // load
             require_js($scripts);
         }

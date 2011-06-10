@@ -163,10 +163,7 @@ class report_entry_mform extends ilp_moodleform {
 				
 			}
 			
-		if (empty($result) ) {
-					var_crap($result,'entry');
-					die();
-				}
+
 			//get all of the fields in the current report, they will be returned in order as
 			//no position has been specified
 			$reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
@@ -194,11 +191,6 @@ class report_entry_mform extends ilp_moodleform {
 				//call the plugins entry_form function which will add an instance of the plugin
 				//to the form
 				if (!$pluginclass->entry_process_data($field->id,$entry_id,$data)) $result = false;
-			if (empty($result) ) {
-					var_crap($result,'plugin');
-					var_crap($pluginrecord->name);
-					die();
-				}
 			}
 			
 			return $result;

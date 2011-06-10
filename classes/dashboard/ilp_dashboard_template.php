@@ -133,28 +133,31 @@ abstract class ilp_dashboard_template extends ilp_plugin {
     	
 	    	//get all of the dashboard_plugins that are enabled for this template
     		$plugins	=	$this->dbc->get_template_plugins(get_class($this));
-    		    		
-    		//loop through recordset
-    		foreach($plugins as $p) {
-				
-    			$classname	=	$p->plugin_name;
-    				
-    			//include the dashboard_plugin class file
-    	        include_once("{$CFG->dirroot}/blocks/ilp/classes/dashboard/plugins/{$classname}.php");
+    		
+    		if (!empty($plugins))	{
+		    	//loop through recordset
+	    		foreach($plugins as $p) {
+					
+	    			$classname	=	$p->plugin_name;
+	    				
+	    			//include the dashboard_plugin class file
+	    	        include_once("{$CFG->dirroot}/blocks/ilp/classes/dashboard/plugins/{$classname}.php");
+	
+			        if(!class_exists($classname)) {
+			            print_error('pluginclassnotfound', 'block_ilp', '', $classname);
+			        }
+	    			
+	    			//instantiate dashboard_plugin class
+	    			$dashplugin		=	new $classname($student_id);	
+	    			
+	    			//replace the region in the template file with the plugin code
+	    			$templatecontents	=	$this->region_plugin($templatecontents,$p->region_name,$dashplugin->display());	
 
-		        if(!class_exists($classname)) {
-		            print_error('pluginclassnotfound', 'block_ilp', '', $classname);
-		        }
-    			
-    			//instantiate dashboard_plugin class
-    			$dashplugin		=	new $classname($student_id);	
-    			
-    			//replace the region in the template file with the plugin code
-    			$templatecontents	=	$this->region_plugin($templatecontents,$p->region_name,$dashplugin->display());	
-
-    			//end loop
-    		}
-    	    
+	    			//end loop
+	    		}
+    		} else {
+				$templatecontents	=	get_string('notemplateplugins','block_ilp');    			
+    		}    	    
     		
     		if (empty($return)) {
 				//echo out the template file	
@@ -163,6 +166,8 @@ abstract class ilp_dashboard_template extends ilp_plugin {
     			return $templatecontents;
     		}
 
+    	} else {
+    		print_error('templatenotfound','block_ilp');
     	}
     	
     }

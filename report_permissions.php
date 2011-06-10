@@ -27,7 +27,7 @@ if (!isset($context)) {
 $role_ids	=	 array();
 if ($roles = get_user_roles($context, $USER->id)) {
  	foreach ($roles as $role) {
- 		$role_ids	= $role->roleid;
+ 		$role_ids[]	= $role->roleid;
  	}
 }
 

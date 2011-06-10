@@ -1,0 +1,51 @@
+
+		<div id='ilp-target-overview' class='generalbox'>
+			<div class="yui-b" >
+				<div class="yui-gd">
+					<div class="yui-u" style="display:inline; float: left;">
+					<?php foreach ($reportfields as $field) 	{
+							if (!in_array($field->id,$dontdisplay)) {
+						?>
+						<div>
+							<?php
+								//create the fieldname which will be used in to retrieve data from the object
+								$fieldname	=	$field->id."_field";					
+							?>
+							<span><?php echo $field->label; ?></span>
+							<span><?php	echo $entry_data->$fieldname;	?></span>
+						</div>
+						<?php 
+							}
+						} ?>
+					</div>
+				</div>
+				<div  style="display: inline; " >
+					<ul>
+						<li><?php echo get_string('entrycreator','block_ilp')." : ".$entry_data->creator;?></li>
+						<?php if (!empty($has_courserelated)) { ?><li><?php echo get_string('course','block_ilp')." : ".$entry_data->coursename;?> </li><?php } ?>
+						<?php if (!empty($has_deadline)) {?><li><?php echo get_string('deadline','block_ilp');?>: <?php //userdate($entry->deadline, get_string('strftimedate'));?>date</li><?php } ?>
+						<li><?php echo get_string('date')." : ".$entry_data->modified;?></li>
+					</ul>
+				</div>
+			</div>
+			<h3 class="headingblock" id="entry_<?php echo $entry->id; ?>" ><?php echo get_string('comments','block_ilp'); ?></h3>
+			<div id="entry_<?php echo $entry->id; ?>_selector" class='generalbox' >
+				<?php 
+					if (!empty($comments)) {	
+						foreach ($comments as $c) { ?>
+							<div><?php  echo $c->value; ?>
+								<div>
+									<span>
+										<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportcomment.php?report_id={$report_id}&entry_id={$entry->id}&comment_id={$c->id}"?> '> <img src=<?php ?> alt='<?php echo get_string('edit'); ?>'></a>
+									</span>
+									<span>
+										<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/delete_reportcomment.php?report_id={$report_id}&entry_id={$entry->id}&comment_id={$c->id}"?> '> <img src=<?php ?> alt='<?php echo get_string('delete'); ?>'></a>
+									</span>
+								</div>
+							</div>
+					<?php } 
+					} else {
+						echo get_string('nocomments','block_ilp');
+					}?>
+			</div>
+		</div>

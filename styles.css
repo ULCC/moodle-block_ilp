@@ -78,6 +78,51 @@
 	
 }
 
+.ilp #studentinfoimage	{
+	display					: inline;
+	padding					: 0 20px 0px 20px;
+	float					: left;	
+}
+
+.ilp #infoarea	label	{
+	display					:	block;
+	float					:	left;
+	margin					:	0 15px 0 0;
+}
+
+.ilp #infoarea div	{
+	padding-bottom			: 	0 px;	
+			
+}
+
+
+.ilp .percentagebar {
+	margin					:	2px;
+	border-style			:	solid;
+	border-color			:	black;
+	border-width			:	thin;
+	width					:	200px;
+	height					:	10px;
+	float					:	left;
+	display 				:	block;
+}
+
+
+.ilp .percentage-green		{
+	background-color		:	green;
+	height					:	10px;
+}
+
+.ilp .percentage-orange		{
+	background-color		:	orange;
+	height					:	10px;
+}
+
+.ilp .percentage-red		{
+	background-color		:	red;
+	height					:	10px;
+}
+
 /* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific
 *  css class for the table this is BAD BAD BAD and should be sorted out.
 */

@@ -1,19 +1,26 @@
 <div>
-	<div id="bd">
-	   <div id="yui-main">
-			<div class="yui-b"> <p class="main">MAIN COLUMN 1</p>
-				<div> 
-					<div>student status</div>
-					 
-					<div>percentage</div>
-					<div>percentage</div>
-					<div>percentage</div>
-				</div>
-			</div>
+	<h1><?php echo $studentname; ?></h1>
+	<div class="" style="">
+		<div id="studentinfoimage" >
+			<?php echo $studentpicture; ?>
 		</div>
-		<div class="yui-b">
-			<div><?php echo $studentname; ?></div>
-			<div><?php echo $studentpicture; ?></div>
+		<div style="display: inline;"> 
+			<div id="infoarea">
+				<label><?php echo get_string('studentstatus','block_ilp');?></label>
+
+					<?php  if (!empty($can_editstatus)) { ?>
+						editable user status
+					<?php } else {?>
+						nochangableuserstatus 
+					<?php } ?>
+					<br />
+				<?php if (!empty($precentagebars)) {  
+							foreach($precentagebars	as $p) {?>
+					<label><?php echo $p->name; ?></label><div class='percentagebar'  ><div class='<?php echo $p->cssclass; ?>' style='width: <?php echo $p->percentage; ?>%' ></div></div><br />
+					<?php } 
+						  }?>
+			</div>
 		</div>
 	</div>
 </div>
+<div class="clearer"></div>

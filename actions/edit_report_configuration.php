@@ -119,8 +119,12 @@ require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_templat
 ilp_dashboard_template::install_new_plugins();
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_plugin.php');
-//install new templates
+//install new dashboard plugins
 ilp_dashboard_plugin::install_new_plugins();
+
+require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_tab.php');
+//install new tabs
+ilp_dashboard_tab::install_new_plugins();
 
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_report_configuration.html');
 

@@ -16,6 +16,7 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_plugin.php');
 
 abstract class ilp_dashboard_plugin extends ilp_plugin {
 
+	
     /**
      * Constructor
      */
@@ -50,6 +51,7 @@ abstract class ilp_dashboard_plugin extends ilp_plugin {
         parent::install_new_plugins($dbc->get_dashboard_plugins(),$CFG->dirroot."/blocks/ilp/classes/dashboard/plugins");
 
     }
+
     
     
    	 /**

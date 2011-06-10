@@ -1,4 +1,5 @@
 <?php
+	$string['achieved'] 			= 	'Achieved';
 	$string['addall'] 				= 	'Add all';
 	$string['addprompt'] 			= 	'Add Prompt';
 	$string['addfield'] 			= 	'Add Field';
@@ -10,7 +11,7 @@
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['createreport']			=	'Create Report';
 	$string['createnewreport']		=	'Create New Report';
-	
+	$string['comments']				=	'Comments';
 	$string['continue']				=	'Continue';
 	
 	$string['contextcourse']		=	'Context Course';
@@ -32,6 +33,8 @@
 	$string['editreport']			=	'Edit Report';
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['enablereport'] 		= 	'Enable Report';
+	$string['entrycreator'] 		= 	'Tutor';
+	
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
@@ -43,8 +46,6 @@
 	$string['ilpname']				=	'ILP';
 	
 	$string['label']				=	'Label';
-	$string['name']					=	'Name';
-	$string['notrequired']	 		= 	'Not required';
 	$string['maxedit'] 				= 	'Use Maximum Edit';	
 	$string['move']		 			= 'Move';
 	$string['movedown'] 			= 'Move down';
@@ -54,6 +55,12 @@
 	$string['moverightone'] 		= 'Move right 1';
 	$string['movetoend'] 			= 'Move to end';
 	$string['moveup']		 		= 'Move up';
+	$string['name']					=	'Name';
+	$string['notrequired']	 		= 	'Not required';
+	$string['notfound']	 			= 	'Not found';
+	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';
+	$string['nocomments']			=	'No Comments';
+	
 	$string['perpage'] 				=	'per page';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['plugintype'] 			= 	'Plugin Type';
@@ -79,17 +86,22 @@
 	$string['reportpermissionsdescription']	= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
 	$string['savechanges'] 			= 	'Save Changes';
 	$string['statuschangesuc'] 		= 	'The reports status was successfully changed';
-	$string['showingpages'] = 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
-	$string['submitanddisplay'] 	= 	'Submit and display';
 	$string['selecttype'] 			= 	'Select Field Type';
 	$string['selectedreports']		= 	'Selected Reports';
 	$string['selectedreportlist']		= 	'Select report list options';
+	$string['studentstatus']		= 	'Student Status';
+	$string['studentnotfound']		= 	'Student not found';
+	
+	
+	$string['showingpages'] = 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
+	$string['submitanddisplay'] 	= 	'Submit and display';
+
 	
 	
 	
 	$string['type'] 				= 	'Type';
 	$string['viewreportpreview'] 				= 	'View Report Preview';
-
+	
 	
 	
 	
@@ -145,3 +157,33 @@
 	        }
 	    }
 	}
+	
+
+	$tabs	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs';
+	
+	// get all the currently installed tab plugins plugins
+	$tab_plugins = ilp_records_to_menu($dbc->get_dashboard_tabs(), 'id', 'name');
+	//echo count($tab_plugins);
+	//this section gets language strings for all tab plugins 
+	
+	foreach ($tab_plugins as $plugin_file) {
+		
+	    if (file_exists($tabs.'/'.$plugin_file.".php")) 
+	    {
+	        require_once($tabs.'/'.$plugin_file.".php");
+	        // instantiate the object
+	        $class = basename($plugin_file, ".php");
+	        $tabobj = new $class();
+	        
+	        $method = array($tabobj, 'language_strings');
+        
+	        //check whether the language string element has been defined
+	        if (is_callable($method,true)) {
+	            $tabobj->language_strings($string);
+	        }
+	        
+	    }
+	}
+
+	
+	

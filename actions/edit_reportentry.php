@@ -196,10 +196,10 @@ $PAGE->navbar->add($userinitals,null,'title');
 //section name
 $PAGE->navbar->add($report->name,null,'title');
 
+$titleprefix	=	 (!empty($entry_id)) ? get_string('edit') : get_string('add');	
 
-$PAGE->set_url($CFG->wwwroot.'/blocks/ilp/actions/edit_reportentry.php', $PARSER->get_params());
 
-
+$PAGE->set_title($titleprefix." ".$report->name);
 //require edit_reportentry html
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_reportentry.html');
 ?>

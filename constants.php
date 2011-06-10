@@ -41,6 +41,11 @@ define( 'ILP_PASSFAIL_UNSET' , 0 );
 define( 'ILP_PASSFAIL_FAIL' , 1 );
 define( 'ILP_PASSFAIL_PASS' , 2 );
 
+if (stripos($CFG->release,"2.") === false) {
+	define( 'YUIPATH' , '/lib/yui/');
+} else {
+	define( 'YUIPATH' , '/lib/yui/2.8.2/build');
+}
 
 
 

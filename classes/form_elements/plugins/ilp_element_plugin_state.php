@@ -57,13 +57,14 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 			$this->plugin_id		=	$reportfield->plugin_id;
 			$plugin					=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
 			$pluginrecord			=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
+			
 			if (!empty($pluginrecord)) {
 				$this->id			    =	$pluginrecord->id;
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
 				$this->req			    =	$reportfield->req;
 				$this->position			=	$reportfield->position;
-				$this->passfail			=	$reportfield->passfail;
+				//$this->passfail			=	$pluginrecord->passfail;
 			}
 		}
 		return false;	
@@ -94,7 +95,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
     /*
     * read rows from item table and return them as array of key=>value
     * @param int $reportfield_id
-    * @param string $field - extra field to read from items table: used by ilp_element_plugin_state
+    * @param string $field - the name of a extra field to read from items table: used by ilp_element_plugin_state
     */
 	protected function get_option_list( $reportfield_id, $field=false ){
 		//return $this->optlist2Array( $this->get_optionlist() );   	
@@ -102,10 +103,17 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		$passlist = array();
 		$faillist = array();
 		if( $reportfield_id ){
+			//get the list of options for this reportfield in the given table from the db 
 			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, $field );
+			
+			
 			foreach( $objlist as $obj ){
+				//place the name into an array with value as key
 				$outlist[ $obj->value ] = $obj->name;
+				
+				//if the the name of the extra field is passfail then 
                 if( 'passfail' == $field ){
+                	//if the field value is fail add to fail list
                     if( ILP_PASSFAIL_FAIL == $obj->passfail ){
                         $faillist[] = $obj->name;
                     }
@@ -118,11 +126,16 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		if( !count( $outlist ) ){
 			//echo "no items in {$this->items_tablename}";
 		}
-		return array(
+		
+		
+		$adminvalues = array(
             'optlist' => $outlist,
             'pass' => $passlist,
             'fail' => $faillist
         );
+        
+        //we only need to return the admin values if the $field value is not false (it should be set to passfail to get admin values) 
+        return (!empty($field)) ? $adminvalues : $outlist; 
 	}
 
 	/*

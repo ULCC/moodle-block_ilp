@@ -1,5 +1,25 @@
+<?php
+
+/*
+$yahoomin	=	YUIPATH."/yahoo/yahoo-min.js";
+// include standard libraries
+$PAGE->requires->yui2_lib("yahoo-min");
+$PAGE->requires->yui2_lib("event-mins");
+$PAGE->requires->yui2_lib("dom-min");
+$PAGE->requires->yui2_lib("animation-min");
+$PAGE->requires->yui2_lib("container-min");
+
+// include the assmgr custom library
+$PAGE->requires->js('/blocks/ilp/views/js/lib.js');
+*/
+echo $OUTPUT->header();
+?>
+<div class="ilp">
 <?php 
 //call the display function to 
 $template->display_template($user_id);
-
+?>
+</div>
+<?php
+echo $OUTPUT->footer();
 ?>

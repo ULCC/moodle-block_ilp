@@ -403,16 +403,18 @@ class ilp_db_functions	extends ilp_logging {
     function get_plugin_by_id($plugin_id) {
     	return $this->dbc->get_record('block_ilp_plugin',array('id'=>$plugin_id));
     }
-
+/*
+ TODO: remove this unused duplicate
     /*
     * get plugin data from the plugin name
     * @param string $plugin_name
      * @return mixed object containing the plugin record or false
     */
+    /*
     function get_plugin_by_name($plugin_name) {
     	return $this->dbc->get_record('block_ilp_plugin',array('name'=>$plugin_name));
     }
-    
+  */  
    	/**
      * Sets the new position of a field 
      *
@@ -825,16 +827,21 @@ class ilp_db_functions	extends ilp_logging {
 		$entrytable		=	"{$CFG->prefix}{$tablename}_ent";
 		$parenttable	=	"{$CFG->prefix}{$tablename}";
 		
+		$itemtable		=	(!empty($multiple)) ? "{$CFG->prefix}{$tablename}_items as i," : '';		
+		$where			=	(!empty($multiple)) ? "e.parent_id	=	i.id AND i.parent_id	=	p.id" : "e.parent_id	=	p.id";
+		
 		$sql	=	"SELECT		*
 					 FROM 		{$parenttable} as p,
+					 			{$itemtable}
 					 			{$entrytable} as e
-					 WHERE 		e.parent_id	=	p.id
+					 WHERE 		{$where}
 					 AND		e.entry_id	=	{$entry_id}
 					 AND		p.reportfield_id	=	{$reportfield_id}";
-		
+					 			
 		return (empty($multiple)) ? $this->dbc->get_record_sql($sql) : $this->dbc->get_records_sql($sql);
 	}
    
+	
     
     /*
     * check if any user data has been uploaded to a particular list-type reportfield
@@ -996,13 +1003,30 @@ class ilp_db_functions	extends ilp_logging {
      * 
      * @return mixed array of objects containing databases recordsets or false
      */
-    function get_user_report_entries($report_id,$user_id,$status_id=null)	{
+    function get_user_report_entries($report_id,$user_id,$state_id=null)	{
     	global		$CFG;
     	$tables		=	"";
     	$where		=	"";
-    	
+
+    	/*
+       			$sql	=	"SELECT		r.*,
+    					 FROM 		{$CFG->prefix}block_ilp_entry as e,	
+   									{$CFG->prefix}block_ilp_report_field as rf,
+    					 			{$CFG->prefix}block_ilp_plugin as p,
+    					 			{$CFG->prefix}block_ilp_pu_sts as s,
+    					 			{$CFG->prefix}block_ilp_pu_sts_items as si,
+    					 			{$CFG->prefix}block_ilp_pu_sts_ent as se
+    					 WHERE		e.report_id		=	$rf.report_id
+    					 AND		p.id			=	rf.plugin_id
+    					 AND		s.reportfield_id	=	rf.id    					 
+				 		 AND		rf.id			=	{$report_id}
+				 		 AND		s.id			=	si.parent_id
+				 		 AND		si.id			=	se.parent_id
+    					 AND		p.name			=	'{$pluginname}'
+    					 AND		e.user_id		=	{$user_id}";
+    	*/
     	//if the the id of a status has been given then we need to add mroe contitions to
-    	//find the reports in this status
+    	//find the reports in this state
     	if (!empty($status_id)) {
     		$tables		=	", {$CFG->prefix}block_ilp_report as r,
     						   {$CFG->prefix}block_ilp_report_field as rf,
@@ -1014,44 +1038,23 @@ class ilp_db_functions	extends ilp_logging {
     		$where		=	" AND	r.id				=	e.report_id
     						  AND	r.id				=	rf.report_id
     						  AND 	rf.plugin_id		=	p.id
+    						  AND	p.name				=	'{$pluginname}'
     						  AND	rf.id				=	s.reportfield_id
     						  AND	si.parent_id		=	s.id
-    						  AND	si.id				=	{$status_id}";
+    						  AND	si.id				=	{$state_id}";
     						   		
     	}
     	
     	$sql	=	"SELECT		e.*
     				 FROM		{$CFG->prefix}block_ilp_entry as e
     				 			{$tables}
-    				 WHERE		e.id		=	{$report_id}
+    				 WHERE		e.report_id		=	{$report_id}
     				 AND 		e.user_id	=	{$user_id}
     				 {$where}";
     	
     	
     	return $this->dbc->get_records_sql($sql);
     }
-    
-    
-     /**
-     * Returns true or false depending on whether the report given has a state field
-     * 
-     * @param  int $report_id the id of the report that we are looking for
-     * 
-     * @return bool true or false
-     */
-    function has_state_fields($report_id) {
-    	global	$CFG;
-    	
-    	$sql	=	"SELECT rf.id 	
-    	 			 FROM 	{$CFG->prefix}block_ilp_report_field as rf,
-    	 					{$CFG->prefix}block_ilp_plugin as p
-    	 			 WHERE	report_id	=	{$report_id}
-    	 			 AND 	rf.plugin_id	=	p.id
-   		 			 AND	p.name	=	'ilp_element_plugin_state'";
-	
-    	 return $this->dbc->get_records_sql($sql);
-    }
-    
     
     /**
      * Returns the all elements of the state field for the given report
@@ -1076,81 +1079,6 @@ class ilp_db_functions	extends ilp_logging {
     	 			
     	 return		$this->dbc->get_records_sql($sql);			
     }
-    
-     /**
-     * Returns a report field table record for the report given if one exists that is of the course selector
-     * type. The primary purpose of this function is to enable the user to test whether a report
-     * has a course selector or not 
-     * 
-     * @param  int $report_id the id of the report that is being checked to see if it has a 
-     *  course selector ()
-     * 
-     * @return mixed array recordset of objects or false
-     */    
-    function has_course_relation($report_id)	{
-    	global	$CFG;
-    	
-    	$sql	=	"SELECT rf.id 	
-    	 			 FROM 	{$CFG->prefix}block_ilp_report_field as rf,
-    	 					{$CFG->prefix}block_ilp_plugin as p
-    	 			 WHERE	report_id	=	{$report_id}
-    	 			 AND 	rf.plugin_id	=	p.id
-   		 			 AND	p.name	=	'ilp_element_plugin_course'";
-    	 					
-    	 return		$this->dbc->get_records_sql($sql);					
-    	 					
-    } 
-    
-      /**
-     * Returns a report field table record for the report given if one exists that is of the datedeadline type.
-     * The primary purpose of this function is to enable the user to test whether a report
-     * has a course selector or not 
-     * 
-     * @param  int $report_id the id of the report that is being checked to see if it has a 
-     *  course selector ()
-     * 
-     * @return mixed array recordset of objects or false
-     */    
-    function has_datedeadline($report_id)	{
-    	global 	$CFG;
-    	
-    	$sql	=	"SELECT rf.id 	
-    	 			 FROM 	{$CFG->prefix}block_ilp_report_field as rf,
-    	 					{$CFG->prefix}block_ilp_plugin as p
-    	 			 WHERE	report_id	=	{$report_id}
-    	 			 AND 	rf.plugin_id	=	p.id
-   		 			 AND	p.name	=	'ilp_element_plugin_date_deadline'";
-    	 					
-    	 return		$this->dbc->get_records_sql($sql);					
-    } 
-    
-    /**
-     * Wrapper for the has_datedeadline function 
-     * 
-     * @param  int $report_id the id of the report that is being checked to see if it has a 
-     *  course selector ()
-     * 
-     * @return mixed array recordset of objects or false
-     */
-    function get_datedeadline_field($report_id)	{
-    	return $this->has_datedeadline($report_id);
-    }
-    
-    
-    
-    /**
-     * Wrapper for the has_course_relation function 
-     * 
-     * @param  int $report_id the id of the report that is being checked to see if it has a 
-     *  course selector ()
-     * 
-     * @return mixed array recordset of objects or false
-     */
-    function get_courserelated_field($report_id) {
-    	return $this->has_course_relation($report_id);
-    }
-    
-    
 
     /*
     * see if an element of a particular type already exists in a report
@@ -1201,7 +1129,7 @@ class ilp_db_functions	extends ilp_logging {
     				 AND		rp.plugin_id	=	p.id
     				 AND 		t.name	=	'{$templatename}'";
     				 			
-    				 			
+    		 			
     	return	$this->dbc->get_records_sql($sql);
     }
     
@@ -1248,6 +1176,210 @@ class ilp_db_functions	extends ilp_logging {
     }
     
     
+    
+    /**
+     * Returns all records in the reports table with the given status
+     * 
+     * @param int	$status	the status that the returned report records shoulds
+     * have
+     * @return	mixed array of recordsets or false 
+     */
+    public function	get_reports($status)	{	
+    	return $this->dbc->get_records('block_ilp_report',array('status'=>$status));
+    }
+
+    
+    /**
+     * Count the number of entries for given user in the given report
+     * 
+     * @param	int $report_id	the id of the report whose entries will be counted
+     * @param	int $user_id the id of the  user whose entries will be counted
+     * 
+     * @return	mixed int the number of entries or false
+     */
+    public function count_report_entries($report_id,$user_id)	{
+    	global $CFG;
+    	
+    	$sql	=	"SELECT		* 
+    				 FROM		{$CFG->prefix}block_ilp_entry		as 	e
+    				 WHERE		user_id			=		{$user_id}
+    				 AND		report_id		=		{$report_id}";
+    	
+    	return	$this->dbc->count_records('block_ilp_entry',array('user_id'=>$user_id,'report_id'=>$report_id));
+    }
+    
+    /**
+     * 
+     * Returns whether the given report has a plugins field
+     * @param int $report_id the id of the report that we will 
+     * check if it has a the plugins field
+     * 
+     * @return	bool true or false
+     */
+    public function	has_plugin_field($report_id,$pluginname)	{
+    	global 	$CFG;
+    	
+    	$sql	=	"SELECT			*
+    				 FROM			{$CFG->prefix}block_ilp_plugin as p,
+    				 				{$CFG->prefix}block_ilp_report_field as rf
+    				 WHERE			rf.plugin_id	=	p.id
+    				 AND			rf.report_id	=	{$report_id}
+    				 AND			p.name			=	'{$pluginname}'";
+    				 				
+    	return 		$this->dbc->get_records_sql($sql);
+    } 
+    
+    
+    /**
+     * Count the number of entries in the given report with a pass state
+     * 
+     * @param	int $report_id	the id of the report whose entries will be counted
+     * @param	int $user_id the id of the  user whose entries will be counted
+     * @param	int	$state the state that the report entry should have 
+     * 
+     * @return	mixed int the number of entries or false    
+     */
+    public	function count_report_entries_with_state($report_id,$user_id,$state)	{
+			global 		$CFG;
+    	
+    		$sql	=	"SELECT		count(e.id)
+    					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
+    					 			{$CFG->prefix}block_ilp_plu_ste_ent as pe,
+    					 			{$CFG->prefix}block_ilp_plu_ste_items as pi
+    					 WHERE		e.id			=	pe.entry_id
+    					 AND		pe.parent_id	=	pi.id
+    					 AND		e.report_id		=	{$report_id}
+    					 AND		e.user_id		=	{$user_id}
+    					 AND		pi.passfail		=	{$state}";
+
+    		return 		$this->dbc->count_records_sql($sql);
+    }
+    
+    
+   /**
+    * Returns the last updated entry for the given student in the gicen report
+    * 
+    * @param	int $report_id	the id of the report whose entry will be returned
+    * @param	int $user_id the id of the user whose entry will be returned
+    * 
+    * @return	mixed object the  of entries or false    
+    */
+    public function	get_lastupdatedentry($report_id,$user_id)	{	
+    	global 	$CFG;
+    	
+    	$sql	=	"SELECT			*
+    				 FROM 			{$CFG->prefix}block_ilp_entry
+    				 WHERE			timemodified	=(SELECT MAX(timemodified)
+    				 								  FROM 			{$CFG->prefix}block_ilp_entry
+    				 								  WHERE			report_id	=	{$report_id}
+    				 								  AND			user_id		=	{$user_id}
+    				 								 )";
+    	
+    	return $this->dbc->get_record_sql($sql);
+    } 
+    
+     /**
+     * Returns the plugin record that has the matching name in the given table 
+     *
+     * @param string $tablename the name of the plugin table that willbe queried
+     * @param string $pluginname the name of the plugin we are looking for
+     * @return mixed object containing the plugin record or false
+     */
+    function get_plugin_by_name($tablename,$pluginname) {
+    	return $this->dbc->get_record($tablename,array('name'=>$pluginname));
+    }
+    
+    
+    /**
+     * Returns the status of the user in the ilp of the user with the given user id
+     * 
+     * @param int $user_id the users whose status you want to retrieve
+     * 
+     * @return mixed object contain the status of the user or false 
+     */
+    function get_user_status($user_id)	{
+    	global 	$CFG;
+    	
+    	$sql	=	"SELECT			*
+    				 FROM 			";
+    	
+    }
+    
+    
+    
+    /**
+     * Get all state items for the given report
+     * 
+     * @param	int $report_id	the id of the report whose entries will be counted
+     * @param	int $user_id the id of the  user whose entries will be counted
+     * @param	int	$state the state that the report entry should have 
+     * 
+     * @return	mixed int the number of entries or false    
+     */
+    public	function get_report_state_items($report_id,$pluginname)	{
+			global 		$CFG;
+    	
+			$sql	=	"SELECT		s.name as name,
+    								s.value as value,
+    								s.id as id
+    					 FROM 		{$CFG->prefix}block_ilp_report_field as rf,
+    					 			{$CFG->prefix}block_ilp_plugin as p,
+    					 			{$CFG->prefix}block_ilp_pu_sts as s,
+    					 WHERE		p.id			=	rf.plugin_id
+    					 AND		s.reportfield_id	=	rf.id
+    					 AND		rf.id			=	{$report_id}
+    					 AND		p.name			=	'{$pluginname}'";
+
+    		return 		$this->dbc->get_records_sql($sql);
+    }
+    
+    
+    
+   public function 	get_report_entries_with_state()	{	
+   		global $CFG;
+   			
+   			$sql	=	"SELECT		r.*,
+    					 FROM 		{$CFG->prefix}block_ilp_entry as e,	
+   									{$CFG->prefix}block_ilp_report_field as rf,
+    					 			{$CFG->prefix}block_ilp_plugin as p,
+    					 			{$CFG->prefix}block_ilp_pu_sts as s,
+    					 			{$CFG->prefix}block_ilp_pu_sts_items as si,
+    					 			{$CFG->prefix}block_ilp_pu_sts_ent as se
+    					 WHERE		e.report_id		=	$rf.report_id
+    					 AND		p.id			=	rf.plugin_id
+    					 AND		s.reportfield_id	=	rf.id    					 
+				 		 AND		rf.id			=	{$report_id}
+				 		 AND		s.id			=	si.parent_id
+				 		 AND		si.id			=	se.parent_id
+    					 AND		p.name			=	'{$pluginname}'
+    					 AND		e.user_id		=	{$user_id}
+";
+
+    		return 		$this->dbc->get_records_sql($sql);
+   }
+    
+   
+   /**
+    * Returns the id of the item with the given value
+    * 
+    * @param	int $parent_id	the id of the state item record that is the parent of the item
+    * @param	int $itemvalue the actual value of the field
+    * 
+    * @return	mixed object or false
+    */
+   public function get_state_item_id($tablename,$parent_id,$itemvalue)	{
+   		global 	$CFG;
+
+   		//add _items to the end of the tablename 
+   		$tablename	=	$tablename."_items";
+   		
+   		$sql	=	"SELECT		* 
+   					 FROM 		{$CFG->prefix}{$tablename} 	as si
+   					 WHERE		parent_id	=	{$parent_id}
+   					 AND		value		=	'{$itemvalue}'";
+   		
+   		return 		$this->dbc->get_record_sql($sql);
+   }
 }
 
 
