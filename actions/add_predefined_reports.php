@@ -46,7 +46,8 @@ function get_report_list(){
 	$reports_dir = realpath( $CFG->dirroot.'/blocks/ilp/predefined_reports' );
 	$dir = dir( $reports_dir );
 	$reportlist = array();
-	while( ( $file = $dir->read() ) !==false ){
+	//while( ( $file = $dir->read() ) !==false ){
+	foreach( scandir( $reports_dir ) as $file ){
 		if( 'report_' == substr( $file, 0, 7 ) ){
 			$fullpath = $reports_dir . DIRECTORY_SEPARATOR . $file;
 			$info = pathinfo( $file );
@@ -142,7 +143,7 @@ function main(){
 * @return string of xml
 */
 function generate_xml( $report ){
-	$xml = new SimpleXMLElement( '<?xml version=\'1.0\'?><xml/>' );
+	$xml = new SimpleXMLElement( "<?xml version='1.0'?><xml/>" );
 	foreach( $report as $key=>$value ){
 		recursive_add( $xml, $key, $value );
 	}
