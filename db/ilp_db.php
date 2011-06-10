@@ -1235,6 +1235,14 @@ class ilp_db_functions	extends ilp_logging {
         return 1;
     }
     
+     /**
+     * returns whether any record already exists given a table, field and value
+     *
+     * @return bool true or false
+     */    
+    function record_exists($table, $field, $value ) {
+    	return $this->dbc->record_exists( $table, array( $field => $value ) );
+    }
     
     
 }
