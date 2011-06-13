@@ -1364,19 +1364,30 @@ class ilp_db_functions	extends ilp_logging {
     * 
     * @param	int $parent_id	the id of the state item record that is the parent of the item
     * @param	int $itemvalue the actual value of the field
+    * @param	string $keyfield field from $itemtable to use as key
+    * @param	string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
     * 
     * @return	mixed object or false
     */
-   public function get_state_item_id($tablename,$parent_id,$itemvalue)	{
+   public function get_state_item_id($tablename,$parent_id,$itemvalue, $keyfield='value', $itemtable=false )	{
    		global 	$CFG;
 
-   		//add _items to the end of the tablename 
-   		$tablename	=	$tablename."_items";
+        if( $itemtable ){
+            $tablename = $itemtable;
+        }
+        else{
+   		    //add '_items' to the end of the tablename 
+   		    $tablename	= $tablename."_items";
+        }
    		
    		$sql	=	"SELECT		* 
    					 FROM 		{$CFG->prefix}{$tablename} 	as si
-   					 WHERE		parent_id	=	{$parent_id}
-   					 AND		value		=	'{$itemvalue}'";
+        ";
+        $sql    .=  " WHERE		$keyfield		=	'{$itemvalue}'";
+        if( !$itemtable ){
+            //not an '_items' table - so comes from some other area eg course and has no parent id
+   		    $sql    .=  " AND   	parent_id	=	{$parent_id}";
+        }
    		
    		return 		$this->dbc->get_record_sql($sql);
    }

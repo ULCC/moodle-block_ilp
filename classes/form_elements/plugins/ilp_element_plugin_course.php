@@ -19,6 +19,8 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 		$this->items_tablename = false;		//items tablename is the course table
     	$this->selecttype = OPTIONSINGLE;
 		$this->optionlist = false;
+        $this->external_items_table = 'course';
+        $this->external_items_keyfield = 'id';
     }
 
     function language_strings(&$string) {

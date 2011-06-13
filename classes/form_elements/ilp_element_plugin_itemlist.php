@@ -10,6 +10,8 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     public function __construct(){
 		
     	parent::__construct();
+        $this->external_items_table = false;
+        $this->external_items_keyfield = 'value';
 	    
    }
 		
@@ -48,7 +50,8 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		 	}
 		 	
 		 	//check to see if a entry record already exists for the reportfield in this plugin
-		 	$entrydata 	=	$this->dbc->get_pluginentry($this->tablename, $entry_id,$reportfield_id,true);
+            $multiple = !empty( $this->items_tablename );
+		 	$entrydata 	=	$this->dbc->get_pluginentry($this->tablename, $entry_id,$reportfield_id,$multiple);
 		 	
 		 	//if there are records connected to this entry in this reportfield_id 
 			if (!empty($entrydata)) {
@@ -62,7 +65,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 			$pluginentry			=	new stdClass();
 			$pluginentry->entry_id  = 	$entry_id;
 	 		$pluginentry->value		=	$data->$fieldname;
-	 		$state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$fieldname);
+	 		$state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$fieldname, $this->external_items_keyfield, $this->external_items_table );
 	 		
 	 		$pluginentry->parent_id	=	$state_item->id;	
 	 		
