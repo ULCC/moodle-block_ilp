@@ -65,13 +65,13 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 			$pluginentry			=	new stdClass();
 			$pluginentry->entry_id  = 	$entry_id;
 	 		$pluginentry->value		=	$data->$fieldname;
-	 		$state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$fieldname, $this->external_items_keyfield, $this->external_items_table );
-	 		
-	 		$pluginentry->parent_id	=	$state_item->id;	
-	 		
+
 			if( is_string( $pluginentry->value ))	{
+	 		    $state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$fieldname, $this->external_items_keyfield, $this->external_items_table );
+	 		    $pluginentry->parent_id	=	$state_item->id;	
 	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
 			} else if (is_array( $pluginentry->value ))	{
+                $pluginentry->parent_id = $reportfield_id;
 				$result	=	$this->write_multiple( $this->data_entry_tablename, $pluginentry );
 			}
  
@@ -150,7 +150,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		$result		=	true;
 		foreach( $multi_pluginentry->value as $value ){
 			$pluginentry->value = $value;
-			if ($this->dbc->create_plugin_entry( $this->data_entry_tablename, $pluginentry )) $result = false;
+			if (!$this->dbc->create_plugin_entry( $this->data_entry_tablename, $pluginentry )) $result = false;
 		}
 		//if any of the didn't work $result will be false
 		return $result;
