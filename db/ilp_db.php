@@ -946,15 +946,14 @@ class ilp_db_functions	extends ilp_logging {
     */
     function get_optionlist( $reportfield_id, $tablename, $field=false ){
 		global $CFG;
-
-        $fieldlist = array( 'value', 'name' );
-        if( $field ){
-            $fieldlist[] = $field;
-        }
-
 		$tablename = $CFG->prefix . $tablename;
 		$item_table = $tablename . "_items";
 		$plugin_table = $tablename;
+
+        $fieldlist = array( "$item_table.id", 'value', 'name' );
+        if( $field ){
+            $fieldlist[] = $field;
+        }
 
         $whereandlist = array(
             "$plugin_table.reportfield_id = $reportfield_id"
