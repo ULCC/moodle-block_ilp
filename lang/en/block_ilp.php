@@ -1,10 +1,14 @@
 <?php
 	$string['achieved'] 			= 	'Achieved';
 	$string['addall'] 				= 	'Add all';
+	$string['addcomment']			= 	'Add Comment';
+	
 	$string['addprompt'] 			= 	'Add Prompt';
 	$string['addfield'] 			= 	'Add Field';
 	$string['addpromptdots'] 		= 	'Select Field Type';
+	$string['addnew'] 				= 	'Add New';
 	$string['addsel'] 				= 	'Add selected';
+	
 	$string['allowcomments']		= 	'Allow comments';
 	$string['apply'] 				= 	'Apply';
 	$string['availablereports']		= 	'Available Reports'; 
@@ -12,12 +16,14 @@
 	$string['createreport']			=	'Create Report';
 	$string['createnewreport']		=	'Create New Report';
 	$string['comments']				=	'Comments';
+	$string['comment']				=	'Comment';
 	$string['continue']				=	'Continue';
 	
 	$string['contextcourse']		=	'Context Course';
 	$string['contextuser']			=	'Continue User';
 	$string['contextself']			=	'Context Self';
 	$string['coursereports']		=	'Course Reports';
+	$string['dashboard']	 		= 	'Dashboard';
 	
 	$string['defaulthozsize'] 		= 	'Default number of columns';
 	$string['defaulthozsizeconfig'] = 	'The default number of columns for all AJAX tables that do not override this setting.';
@@ -27,6 +33,7 @@
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
 	$string['disablereport']		= 	'Disable Report';
+	$string['editcomment']			= 	'Edit Comment';
 	$string['editfields']			=	'Edit Fields';
 	$string['editprompt']			=	'Edit Prompt';
 	$string['editpermissions']		=	'Edit Permisssions';

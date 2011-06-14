@@ -84,6 +84,13 @@
 	float					: left;	
 }
 
+
+.ilp #reportimage	{
+
+	padding					: 0 20px 0 0; 	
+	
+}
+
 .ilp #infoarea	label	{
 	display					:	block;
 	float					:	left;
@@ -122,6 +129,37 @@
 	background-color		:	red;
 	height					:	10px;
 }
+
+.ilp .view_report .view_report_fields {
+	width					:	70%;
+	
+}
+
+
+.ilp .view_report .view_report_fields label {
+	display					:	block;
+	float					:	left;
+	margin					:	0 15px 0 0;
+
+}
+
+
+.ilp .view_report .view_report_details  {
+	width					: 	25%; 
+}
+
+.ilp .view_comments h3	{
+	display	:	inline;
+	
+}
+
+.ilp .view_comments div	{
+	
+	
+}
+
+
+
 
 /* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific
 *  css class for the table this is BAD BAD BAD and should be sorted out.

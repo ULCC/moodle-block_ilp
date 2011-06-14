@@ -1,51 +1,54 @@
 
-		<div id='ilp-target-overview' class='generalbox'>
-			<div class="yui-b" >
-				<div class="yui-gd">
-					<div class="yui-u" style="display:inline; float: left;">
+		<div class='generalbox view_report'>
+					<div class="view_report_fields">
 					<?php foreach ($reportfields as $field) 	{
 							if (!in_array($field->id,$dontdisplay)) {
 						?>
-						<div>
+						
 							<?php
 								//create the fieldname which will be used in to retrieve data from the object
 								$fieldname	=	$field->id."_field";					
 							?>
-							<span><?php echo $field->label; ?></span>
-							<span><?php	echo $entry_data->$fieldname;	?></span>
-						</div>
+							<label><?php echo $field->label; ?></label><?php	echo $entry_data->$fieldname;	?><br />
 						<?php 
 							}
 						} ?>
+						
 					</div>
-				</div>
-				<div  style="display: inline; " >
-					<ul>
-						<li><?php echo get_string('entrycreator','block_ilp')." : ".$entry_data->creator;?></li>
-						<?php if (!empty($has_courserelated)) { ?><li><?php echo get_string('course','block_ilp')." : ".$entry_data->coursename;?> </li><?php } ?>
-						<?php if (!empty($has_deadline)) {?><li><?php echo get_string('deadline','block_ilp');?>: <?php //userdate($entry->deadline, get_string('strftimedate'));?>date</li><?php } ?>
-						<li><?php echo get_string('date')." : ".$entry_data->modified;?></li>
-					</ul>
-				</div>
-			</div>
-			<h3 class="headingblock" id="entry_<?php echo $entry->id; ?>" ><?php echo get_string('comments','block_ilp'); ?></h3>
+					<div class="view_report_details" >
+						<ul>
+							<li><?php echo get_string('entrycreator','block_ilp')." : ".$entry_data->creator;?></li>
+							<?php if (!empty($has_courserelated)) { ?><li><?php echo get_string('course','block_ilp')." : ".$entry_data->coursename;?> </li><?php } ?>
+							<?php if (!empty($has_deadline)) {?><li><?php echo get_string('deadline','block_ilp');?>: <?php //userdate($entry->deadline, get_string('strftimedate'));?>date</li><?php } ?>
+							<li><?php echo get_string('date')." : ".$entry_data->modified;?></li>
+						</ul>
+						<div class="commands">
+							<?php if (!empty($access_report_editreports)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}"?>'><?php echo get_string('edit');?>
+																			 <img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" /></a> |
+																	<?php } ?> 
+							<?php if (!empty($access_report_deletereports)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/delete_reportentry.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}"?>'><?php echo get_string('delete');?>
+																				<img src="<?php echo $OUTPUT->pix_url("/i/delete");?>" alt="<?php echo get_string('delete');?>" />
+																				</a>
+																	  <?php } ?>						
+						</div>
+					</div>
+					
+
+
+			<div class="view_comments"><h3 id="entry_<?php echo $entry->id; ?>" ><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}"?>'><?php echo get_string('addcomment','block_ilp');?></a></div>
+			<?php 
+			if (!empty($comments)) {
+			?>
 			<div id="entry_<?php echo $entry->id; ?>_selector" class='generalbox' >
-				<?php 
-					if (!empty($comments)) {	
-						foreach ($comments as $c) { ?>
+					<?php foreach ($comments as $c) { ?>
 							<div><?php  echo $c->value; ?>
 								<div>
-									<span>
-										<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportcomment.php?report_id={$report_id}&entry_id={$entry->id}&comment_id={$c->id}"?> '> <img src=<?php ?> alt='<?php echo get_string('edit'); ?>'></a>
-									</span>
-									<span>
-										<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/delete_reportcomment.php?report_id={$report_id}&entry_id={$entry->id}&comment_id={$c->id}"?> '> <img src=<?php ?> alt='<?php echo get_string('delete'); ?>'></a>
-									</span>
+									<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportcomment.php?report_id={$report_id}&entry_id={$entry->id}&comment_id={$c->id}"?> '> <img src='<?php echo $OUTPUT->pix_url("/i/edit");?>' alt='<?php echo get_string('edit'); ?>'><?php echo get_string('edit'); ?></a>|
+									<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/delete_reportcomment.php?report_id={$report_id}&entry_id={$entry->id}&comment_id={$c->id}"?> '> <img src='<?php echo $OUTPUT->pix_url("/i/delete");?>' alt='<?php echo get_string('delete'); ?>'><?php echo get_string('delete'); ?></a>
+									
 								</div>
 							</div>
-					<?php } 
-					} else {
-						echo get_string('nocomments','block_ilp');
-					}?>
+					<?php } ?> 
 			</div>
+			<?php }	?>
 		</div>

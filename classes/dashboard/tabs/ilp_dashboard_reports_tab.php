@@ -128,13 +128,20 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 	 * @return none
 	  */
 	function display($selectedtab=null)	{
-		global 	$CFG, $PAGE, $USER, $OUTPUT;
+		global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 		
 		$pluginoutput	=	"";
 
 		if ($this->dbc->get_user_by_id($this->student_id)) {
+	
+			//get the selecttab param if has been set
+			$this->selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
 
-			$this->selectedtab	=	$selectedtab;
+			//get the tabitem param if has been set
+			$this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_INT);
+			
+			
+			
 	/*
 			// load custom javascript
 			$module = array(
@@ -243,11 +250,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 								
 								//get the creator of the entry
 								$creator				=	$this->dbc->get_user_by_id($entry->creator_id);
-															
+
+								//get comments for this entry
+								$comments				=	$this->dbc->get_entry_comments($entry->id);
+								
 								//
 								$entry_data->creator		=	(!empty($creator)) ? fullname($creator)	: get_string('notfound','block_ilp');
 								$entry_data->created		=	userdate($entry->timecreated);
 								$entry_data->modified		=	userdate($entry->timemodified);
+								$entry_data->user_id		=	$entry->user_id;
+								$entry_data->entry_id		=	$entry->id;
 								
 								if ($has_courserelated) {
 									$course	=	$this->dbc->get_course_by_id($courserelatedfield_id);

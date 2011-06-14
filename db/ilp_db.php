@@ -1390,6 +1390,37 @@ class ilp_db_functions	extends ilp_logging {
    		
    		return 		$this->dbc->get_record_sql($sql);
    }
+   
+   
+   /**
+    * Creates a entry comment record in the database 
+    *
+    * @param	object	$comment an object contain the information to be saved to the database
+    * 
+    * @return	mixed int the id of the created record or false
+    */
+   function  create_entry_comment($comment)	{
+   		return $this->insert_record('block_ilp_entry_comment', $comment);
+  	}
+  	
+   /**
+    * Updates a entry comment record in the database 
+    *
+    * @param	object	$comment an object contain the information to be saved to the database
+    * 
+    * @return	bool true or false
+    */
+   function  update_entry_comment($comment)	{
+   		return $this->update_record('block_ilp_entry_comment', $comment);
+  	}
+  	
+  	
+  	
+  	function  get_entry_comments($entry_id)	{
+  		global 	$CFG;
+ 		
+  		return	$this->dbc->get_records('block_ilp_entry_comment',array('entry_id'=>$entry_id));
+  	}
 }
 
 

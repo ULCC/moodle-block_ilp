@@ -1,18 +1,22 @@
 <?php foreach ($reportslist as $rep) {?>
 <div id='content'>
 	<div id='ilp-target-overview' class='generalbox'>
-		
-		<img alt='' src=''>
 		<h2>
 			<a href=''><?php echo $rep->name?></a>
 		</h2>
-		<div class='ilpadd'>
-			<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}"; ?>' ><?php echo get_string('add')." ".$rep->name?></a>
+		<div style="width: 80%" >
+			<div style="float:left; width: 50%;">
+				<div style="float:left">
+					<img id="reportimage" alt="<?php echo $rep->name." ".get_string('reports','block_ilp'); ?>"" src="<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif"?>" />
+				</div>
+				<?php if (!empty($rep->achieved) && $rep->achieved != 0) { echo $rep->achieved."/".$rep->entries." ".get_string('achieved','block_ilp'); } else { echo $rep->entries." ".get_string('reports','block_ilp');} ?><br />
+				<?php echo get_string('ilp_dashboard_entries_tab_lastupdate','block_ilp');?>: <?php echo $rep->lastmod; ?><br />
+			</div>
+			<div class='ilpadd' style="float:right">
+				<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}"; ?>' ><?php echo get_string('addnew','block_ilp'); ?></a>
+			</div>
+			<div class='clearer'>&nbsp;</div>
 		</div>
-		<div><?php if (!empty($rep->achieved) && $rep->achieved != 0) { echo $rep->achieved."/".$rep->entries." ".get_string('achieved','block_ilp'); } else { echo $rep->entries." ".get_string('reports','block_ilp');} ?></div>
-		<div><?php echo get_string('ilp_dashboard_entries_tab_lastupdate','block_ilp');?>: <?php echo $rep->lastmod; ?></div>
-		<div class='clearer'>&nbsp;</div>
-		
 	</div>
 </div>
 <?php } ?>
