@@ -101,7 +101,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
         $pass_item_list = explode( $sep, $data[ 'pass' ] );
         foreach( array( $fail_item_list, $pass_item_list ) as $item_list ){
             foreach( $item_list as $submitted_item ){
-                if( !$this->is_valid_item( $submitted_item , $optionlist, $keysep ) ){
+                if( trim( $submitted_item ) && !$this->is_valid_item( $submitted_item , $optionlist, $keysep ) ){
                     $this->errors[] = get_string( 'ilp_element_plugin_error_not_valid_item' , 'block_ilp' ) . ": <em>$submitted_item</em>";
                 }
             }
