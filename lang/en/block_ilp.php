@@ -136,6 +136,13 @@
 	$string['fieldreqerror']				=	'A error occurred the required status was not updated';
 	
 	
+	//LOGGING
+	$string[ 'ilp_element_plugin_add' ]		=	"ILP Form Plugin INSERT";
+	$string[ 'ilp_element_plugin_update' ]		=	"ILP Form Plugin UPDATE";
+	$string[ 'ilp_element_plugin_delete' ]		=	"ILP Form Plugin DELETE";
+	$string[ 'ilp_report' ]				=	"ILP Report";
+	$string[ 'ilp_plugin_element_data' ]		=	"Data";
+	$string[ 'user_data' ]				=	"User Data";
 
 	
 	global $CFG;

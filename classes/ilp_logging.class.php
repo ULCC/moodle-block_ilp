@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Class to enable the logging of user actions in the assessment manager
+ * Class to enable the logging of user actions in the ilp manager
  *
  * @copyright &copy; 2009-2010 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package AssMgr
+ * @package ilp
  * @version 2.0
  */
 
@@ -16,7 +16,7 @@ class ilp_logging {
 
     /**
      * Protected member function to update a record and
-     * add a entry into the assmgr_log table
+     * add a entry into the ilp_log table
      *
      * @param string $table The name of the table being updated
      * @param object $paramsobject the object that contains the data that will be used in the update
@@ -30,19 +30,17 @@ class ilp_logging {
 
         $currobject = (!empty($paramsobj->id)) ? $this->dbc->get_record($table, array('id' => $paramsobj->id)) : false ;
 
-
          $success = $this->dbc->update_record($table, $paramsobj);
          
-         /**** REINSTATE CODE WHEN add_to_audit has been modified to work with 
-          *    ilp
-          */
-         //$this->add_to_audit($table,LOG_UPDATE,$paramsobj,$currobject);
+        if( $success ){
+         $this->add_to_audit($table,LOG_UPDATE,$paramsobj,$currobject);
+        }
          return $success;
      }
 
     /**
      * Protected member function to create a record and add an entry into the
-     * assmgr_log table
+     * ilp_log table
      *
      * @param string $table The name of the table where the record will be created
      * @param object $paramsobject the object that contains the data that will be used to create the record
@@ -55,11 +53,7 @@ class ilp_logging {
         $paramsobj->id = $this->dbc->insert_record($table, $paramsobj);
 
         if ($paramsobj->id) {
-        	
-        	/**** REINSTATE CODE WHEN add_to_audit has been modified to work with 
-          *    ilp
-          */
-            //$this->add_to_audit($table,LOG_ADD,$paramsobj);
+          $this->add_to_audit($table,LOG_ADD,$paramsobj);
         }
 
         return $paramsobj->id;
@@ -67,7 +61,7 @@ class ilp_logging {
 
     /**
      * Protected member function to delete a record and add a entry into the
-     * assmgr_log table
+     * ilp_log table
      *
      * @param string $table The name of the table where the record will be created
      * @param mixed $params the object (or array) that contains the data that will be used to create the record
@@ -77,7 +71,6 @@ class ilp_logging {
          //deletes are often carried out with an array
          //audit expects a object so a quick conversion
          //is needed
-         //$log_class = new assmgr_logging();
          if (is_array($params)) $auditobj = (array) $params;
          $deleteobject = $this->dbc->get_records($table, $params );
          $success = $this->dbc->delete_records($table, $params);
@@ -89,41 +82,12 @@ class ilp_logging {
              	/**** REINSTATE CODE WHEN add_to_audit has been modified to work with 
           		*    ilp
           		*/
-                //$this->add_to_audit($table,LOG_DELETE,$delobj);
+                $this->add_to_audit($table,LOG_DELETE,$delobj);
              }
 
          }
 
          return $success;
-     }
-
-    /**
-     * Private member function to delete a record and add a entry into the
-     * assmgr_log table
-     *
-     * @param string $table The name of the table where the record will be created
-     * @param object $select the object that contains the data that will be used to create the record
-     * @return mixed The success of the action
-     */
-    protected function delete_records_select($table,$select) {
-        //$log_class = new assmgr_logging();
-         $deleteobject = $this->dbc->get_records_select($table, $select );
-         $success = $this->dbc->delete_records_select($table, $select);
-
-         if (!empty($deleteobject)) {
-
-             foreach ($deleteobject as $delobj) {
-                
-             	/**** REINSTATE CODE WHEN add_to_audit has been modified to work with 
-          		*    ilp
-          		*/
-             	//$this->add_to_audit($table,LOG_DELETE,$delobj);
-             }
-
-         }
-
-         return $success;
-
      }
 
     /**
@@ -138,145 +102,111 @@ class ilp_logging {
     function add_to_audit($table, $action, $newobject, $currobject=NULL)  {
         global $USER;
         $attributes    =   array();
-
+        $disp = false;  //purely used for debugging - always leave false on production systems
+        $now = time();
+        
         switch($table) {
 
-            case 'block_assmgr_evidence':
-                $attributes =    array('id', 'description');
-                break;
-
-            case 'block_assmgr_resource':
-                $attributes =    array('record_id');
-                break;
-
-            case 'block_assmgr_confirmation':
-                $attributes =    array('status', 'feedback');
-                break;
-
-            case 'block_assmgr_sub_evid_type':
-                $attributes =    array('evidence_type_id');
-                break;
-
-            case 'block_assmgr':
-                $attributes =    array('evidence_id', 'hidden');
-                break;
-
-            case 'block_assmgr_claim':
-                $attributes =    array('outcome_id');
-                break;
-
-            case 'block_assmgr_portfolio':
-                $attributes =    array('course_id', 'needassess', 'verified');
-                break;
-
-            case 'portfolio_grade':
-                $attributes =    array('str_grade', 'comments');
-                break;
-            case 'block_assmgr_grade':
-                $attributes =    array('grade','feedback','outcome_id');
+            case 'block_ilp_report':
+                $attributes =    array( 'id', 'creator_id', 'name', 'description', 'status' );
                 break;
 
 
-            case 'portfolio_outcome_grade':
-                $attributes =    array('str_grade');
+            case 'block_ilp_reportpermissions':
+                $attributes =    array( 'id', 'role_id', 'capability_id', 'report_id' );
                 break;
 
-            case 'submission_comment':
-                $attributes =    array('feedback');
+            case 'block_ilp_report_field':
+                $attributes =    array( 'id' , 'label' );
                 break;
 
-            case 'assessment_date':
-                $attributes =    array('date', 'comment');
-                break;
-
-            case 'block_assmgr_verification':
-                $attributes = array('category_id','course_id','assessor_id','complete');
-                break;
-
-            case 'block_assmgr_verify_form':
-                $attributes = array('accurate','accurate_comment','constructive','constructive_comment','needs_amending','amendment_comment','actions');
-                break;
+            case 'block_ilp_entry':
+                $attributes = array();
+                return;
 
             default:
                 $attributes = array();
         }
 
-        $now = time();
 
-        foreach ($newobject as $key => $val) {
-            if ((in_array($key,$attributes) &&
-                ($this->diff_object($table,$newobject,$currobject,$key,$action) || $action == LOG_DELETE))) {
+        //log data entry
+        if( in_array( $table, array(
+            'block_ilp_plu_are_ent',
+            'block_ilp_plu_cat_ent',
+            'block_ilp_plu_crs_ent',
+            'block_ilp_plu_dat_ent',
+            'block_ilp_plu_dd_ent',
+            'block_ilp_plu_dat_ent',
+            'block_ilp_plu_ddl_ent',
+            'block_ilp_plu_hte_ent',
+            'block_ilp_plu_rdo_ent',
+            'block_ilp_plu_ste_ent',
+            'block_ilp_plu_sts_ent',
+            'block_ilp_plu_tex_ent'
+        ) ) ){
+	                $log = new object();
+	                $log->creator_id = $USER->id;
+	                $log->user_id = $USER->id;
+	                $log->candidate_id = $USER->id;
+	                $log->course_id = false;
+                    $log->type = get_string( 'user_data', 'block_ilp' );
+                    $log->entity = get_string( 'ilp_report' , 'block_ilp' );
+                    $log->record_id = $newobject->entry_id;
+                    $log->attribute = 'value';
+                    $log->oldvalue = false;
+                    $log->newvalue = $newobject->value;
+	                $log->timecreated = $now;
+	                $log->timemodified = $now;
+	                $this->dbc->insert_record('block_ilp_log',$log);
+        }
+        else{
+            //log management changes
 
-                $log = new object();
-                $log->creator_id = $USER->id;
-
-                $log->candidate_id = $this->log_candidate($table,$newobject,$action);
-                $log->type = $this->action_type($table,$action,$log->candidate_id,$log->creator_id);
-
-                //record id pertain to the actual submission or
-                $log->record_id = $this->log_record_id($table,$newobject);
-
-                $log->entity = $this->entity_type($table,$newobject);
-                $log->attribute = $this->attribute_type($table,$newobject,$key);
-
-                $log->course_id = $this->log_course($table,$newobject);
-                if ($action != LOG_ADD) {
-                    $log->old_value = ($action != LOG_DELETE ) ? $this->interpret_value($table,$currobject,$key,$this->get_old_value($table,$newobject,$currobject,$key,$action)) : $this->interpret_value($table,$newobject,$key,$val);
-                }
-                $log->new_value = ($action != LOG_DELETE ) ? $this->interpret_value($table,$newobject,$key,$val) : NULL;
-                $log->timecreated = $now;
-                $log->timemodified = $now;
-
-                $this->dbc->insert_record('block_assmgr_log',$log);
-
-
-            }
+	        foreach ($newobject as $key => $val) {
+	            if ((in_array($key,$attributes) &&
+	                ($this->diff_object($table,$newobject,$currobject,$key,$action) || $action == LOG_DELETE))) {
+	
+	                $log = new object();
+	                $log->creator_id = $USER->id;
+	
+	                $log->user_id = $USER->id;
+	                $log->candidate_id = $USER->id;
+	                $log->course_id = false;
+	
+	                //jfp report or audit_type
+	                $log->type = $this->action_type($table,$action,$log->candidate_id,$log->creator_id);
+	                //$log->type = $action;
+	
+	                $log->entity = $this->entity_type($table,$newobject);
+	                //record id pertain to the actual submission or
+	                $log->record_id = $this->log_record_id($table,$newobject);
+	
+	                $log->attribute = $this->attribute_type($table,$newobject,$key);
+	
+	                $log->course_id = $this->log_course($table,$newobject);
+	                if ($action != LOG_ADD) {
+	                    $log->oldvalue = ($action != LOG_DELETE ) ? $this->interpret_value($table,$currobject,$key,$this->get_old_value($table,$newobject,$currobject,$key,$action)) : $this->interpret_value($table,$newobject,$key,$val);
+	                }
+	                $log->newvalue = ($action != LOG_DELETE ) ? $this->interpret_value($table,$newobject,$key,$val) : NULL;
+	                $log->timecreated = $now;
+	                $log->timemodified = $now;
+	
+	/*jfp debugging*/
+	if( $disp ){
+	    var_crap( __LINE__ );
+	    var_crap( $table );
+	    var_crap( $newobject );
+	    var_crap( $log );
+	}
+	
+	                $this->dbc->insert_record('block_ilp_log',$log);
+	
+	
+	            }
+	        }
         }
     }
 
-    /**
-     * returns the candidate for the given record
-     *
-     * @param string $table The name of the table that will hold the object
-     * @param object $obj the object that contains the data that will be logged
-     * @return mixed The success of the action
-     */
-    private function log_candidate($table,$obj) {
-        global $USER;
-
-         switch ($table) {
-             case 'submission_outcome_grade':
-
-             case 'block_assmgr_sub_evid_type':
-                $submission = $this->get_submission_by_id($obj->submission_id);
-                if (!empty($submission)) $evidence = $this->get_evidence($submission->evidence_id);
-                return (!empty($evidence)) ? $evidence->candidate_id : $USER->id;
-
-            case 'block_assmgr_resource':
-                $evidence = $this->get_evidence($obj->evidence_id);
-                return (!empty($evidence)) ? $evidence->candidate_id : $USER->id;
-
-            case 'block_assmgr_portfolio':
-
-            case 'portfolio_outcome_grade':
-
-            case 'submission_comment':
-
-            case 'portfolio_grade':
-
-            case 'assessment_date':
-                return $obj->candidate_id;
-                break;
-
-            case 'block_assmgr_verification':
-
-            case 'block_assmgr_verify_form':
-                return NULL;
-
-             default:
-                 return $USER->id;
-         }
-     }
 
     /**
      * returns the record id that the given obj pertains to
@@ -288,54 +218,12 @@ class ilp_logging {
     private function log_record_id($table, $obj) {
 
         switch($table) {
-            case 'block_assmgr_resource':
-
-            case 'block_assmgr_confirmation':
-                $record_id = (!empty($obj->evidence_id)) ? $obj->evidence_id : NULL;
-                break;
-
-            case 'block_assmgr_sub_evid_type':
-
-            case 'block_assmgr_claim':
-
-            case 'block_assmgr_grade':
-
-            case 'submission_comment':
-                $record_id = (!empty($obj->submission_id)) ? $obj->submission_id : NULL;
-                break;
-
-            case 'block_assmgr':
-
-            case 'block_assmgr_evidence':
-
-            case 'block_assmgr_portfolio':
-                $record_id = (!empty($obj->id)) ? $obj->id : NULL;
-                break;
-
-            case 'assessment_date':
-                if (!empty($obj->portfolio_id) || !empty($obj->group_id)) {
-                    $record_id  = (!empty($obj->group_id)) ? $obj->group_id : $obj->portfolio_id;
-                } else {
-                    $record_id = (!empty($obj->course_id)) ? $obj->course_id : NULL;
-                }
-                break;
-
-            case 'portfolio_grade':
-
-            case 'portfolio_outcome_grade':
-                $portfolio = $this->get_portfolio($obj->candidate_id, $obj->course_id);
-                $record_id = $portfolio->id;
-                break;
-//TODO I m not sure whether block_assmgr_verification and block_assmgr_verify_form cases should
-//use the verification id or the portfolio id/submission id
-            case 'block_assmgr_verification':
-                $record_id = $obj->id;
-                break;
-
-           case 'block_assmgr_verify_form':
-                $record_id = $obj->verification_id;
-                break;
-
+            case 'block_ilp_report':
+                return $obj->id;
+            case 'block_ilp_reportpermissions':
+                return $obj->id;
+            case 'block_ilp_report_field':
+                return $obj->id;
             default:
                 $record_id = NULL;
         }
@@ -723,32 +611,19 @@ class ilp_logging {
      private function action_type($table,$action,$candidate_id,$creator_id) {
             switch($action) {
                 case LOG_ADD:
-                    if ($table == 'assessment_date') return get_string('setassessmentdate', 'block_assmgr');
-                    if ($table == 'block_assmgr_verify_form' || $table == 'block_assmgr_verification') return get_string('verification', 'block_assmgr');
-                    if ($table == 'block_assmgr_grade') return get_string('assessment', 'block_assmgr');
-                    return ($table == 'block_assmgr_sub_evid_type' && ($candidate_id != $creator_id)) ? get_string('assessment', 'block_assmgr') : get_string('create', 'block_assmgr');
-
+                    if( $table == 'block_ilp_report' ) return get_string( 'ilp_report', 'block_ilp' );
+                    if( $table == 'block_ilp_reportpermissions' ) return get_string( 'reportpermissions', 'block_ilp' );
+                    if( $table == 'block_ilp_report_field' ) return get_string( 'ilp_element_plugin_add', 'block_ilp' );
                     break;
                 case LOG_UPDATE:
-                    if ($table == 'assessment_date') return get_string('updateassessmentdate', 'block_assmgr');
-                    if ($table == 'block_assmgr_verify_form' || $table == 'block_assmgr_verification') return get_string('verification', 'block_assmgr');
-                    return get_string('update', 'block_assmgr');
+                    if( $table == 'block_ilp_report' ) return get_string( 'ilp_report', 'block_ilp' );
+                    if( $table == 'block_ilp_reportpermissions' ) return get_string( 'reportpermissions', 'block_ilp' );
+                    if( $table == 'block_ilp_report_field' ) return get_string( 'ilp_element_plugin_update', 'block_ilp' );
                     break;
                 case LOG_DELETE:
-                    if ($table == 'assessment_date') return get_string('cancelassessmentdate', 'block_assmgr');
-                    return get_string('delete', 'block_assmgr');
-                    break;
-                case LOG_VIEW:
-                    return get_string('view', 'block_assmgr');
-                    break;
-               case LOG_ASSESSMENT:
-                    return get_string('assessment', 'block_assmgr');
-                    break;
-               case LOG_CLAIM:
-                    return get_string('claim', 'block_assmgr');
-                    break;
-               case LOG_VERIFY:
-                    return get_string('verification', 'block_assmgr');
+                    if( $table == 'block_ilp_report' ) return get_string( 'ilp_report', 'block_ilp' );
+                    if( $table == 'block_ilp_reportpermissions' ) return get_string( 'reportpermissions', 'block_ilp' );
+                    if( $table == 'block_ilp_report_field' ) return get_string( 'ilp_element_plugin_delete', 'block_ilp' );
                     break;
 
                default:
@@ -853,53 +728,16 @@ class ilp_logging {
      private function entity_type($table, $obj=NULL) {
 
         switch($table) {
-            case 'block_assmgr_evidence':
-
-            case 'block_assmgr_resource':
-
-            case 'block_assmgr_confirmation':
-                return get_string('evidence', 'block_assmgr');
-                break;
-
-            case 'block_assmgr_sub_evid_type':
-
-            case 'block_assmgr':
-
-            case 'block_assmgr_claim':
-
-            case 'block_assmgr_grade':
-
-            case  'submission_comment':
-
-                return get_string('submission', 'block_assmgr');
-                break;
-
-            case 'block_assmgr_portfolio':
-
-            case 'portfolio_outcome_grade':
-
-            case 'portfolio_grade':
-                return get_string('portfolio', 'block_assmgr');
-
-            case 'assessment_date':
-                if (!empty($obj->group_id)){
-                    return get_string('group', 'block_assmgr');
-                } else if (!empty($obj->portfolio_id)) {
-                    return get_string('portfolio', 'block_assmgr');
-                } else {
-                    return get_string('course', 'block_assmgr');
-                }
-                break;
-
-            case 'block_assmgr_verification':
-                return get_string('verificationsample','block_assmgr');
-
-            case 'block_assmgr_verify_form':
-                return (!empty($obj->submission_id)) ? get_string('submission','block_assmgr') : get_string('portfolio','block_assmgr') ;
-
-
+            case 'block_ilp_report':
+                return get_string( 'ilp_report', 'block_ilp' );
+            case 'block_ilp_reportpermissions':
+                return get_string( 'ilp_report', 'block_ilp' );
+            case 'block_ilp_report_field':
+                return get_string( 'ilp_report', 'block_ilp' );
+                
             default:
-                return get_string('unknown', 'block_assmgr');
+                return 'unknown';
+                //return get_string('unknown', 'block_assmgr');
         }
 
      }

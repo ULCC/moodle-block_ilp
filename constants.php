@@ -47,7 +47,11 @@ if (stripos($CFG->release,"2.") === false) {
 	define( 'YUIPATH' , '/lib/yui/2.8.2/build');
 }
 
-
+//constants used by ilp_logging class
+define( 'LOG_ADD', 1 );
+define( 'LOG_UPDATE', 2 );
+define( 'LOG_DELETE', 3 );
+define( 'LOG_ASSESSMENT', 4 );
 
 
 ?>
