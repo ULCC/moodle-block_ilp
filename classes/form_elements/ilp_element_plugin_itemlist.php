@@ -290,6 +290,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     	
     	//delete all items for the field then delete the field itself by calling the function in the
     	//parent class
+    	$this->dbc->delete_items($this->items_tablename, $pluginrecord->id);
+
+	//also delete any submitted data - it'll survive in ghostly form in the log table
     	$this->dbc->delete_items($this->data_entry_tablename,$pluginrecord->id);
     	
     	return parent::delete_form_element($this->tablename,$reportfield_id);
