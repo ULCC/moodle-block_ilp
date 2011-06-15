@@ -19,9 +19,6 @@ global $USER, $CFG, $SESSION, $PARSER;
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
-//get the id of the course that is currently being used
-$course_id = $PARSER->required_param('course_id', PARAM_INT);
-
 //the id of the report  that the field will be in 
 $report_id = $PARSER->required_param('report_id', PARAM_INT);
 
@@ -42,7 +39,7 @@ $reportfield->req	=	(empty($reportfield->req)) ? 1 : 0;
 
 $resulttext = ($dbc->update_report_field($reportfield)) ? get_string("fieldreqsuc", 'block_ilp') : get_string("fieldreqerror", 'block_ilp');
 
-$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&course_id='.$course_id;
+$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
 redirect($return_url, $resulttext, REDIRECT_DELAY);
 
 ?>

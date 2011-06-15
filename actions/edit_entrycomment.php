@@ -126,37 +126,29 @@ if($mform->is_submitted()) {
 
 if (!empty($comment_id)) {
 	
+	$comment	=	$dbc->get_comment_by_id($comment_id);
 	
-	
-	
+	if (!empty($comment)) {
+		//only the creator has the right to edit
+		if ($comment->creator_id == $USER->id) {
+			//set the form values to the current comment
+			$mform->set_data($comment);
+		} else {
+			print_error('commentmayonlybeeditedbyowner','block_ilp');
+		}
+	} else {
+		print_error('commentnotfound','block_ilp');
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 $plpuser	=	$dbc->get_user_by_id($user_id);
-
-
-if (!empty($plpuser)) {
-	$userinitals	=	$plpuser->firstname." ".$plpuser->lastname;	
-	
-}
 
 // setup the navigation breadcrumbs
 //block name
 $PAGE->navbar->add(get_string('ilpname', 'block_ilp'),null,'title');
 
 //user intials
-$PAGE->navbar->add($userinitals,null,'title');
+$PAGE->navbar->add(fullname($plpuser),null,'title');
 
 //section name
 $PAGE->navbar->add(get_string('dashboard','block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&selectedtab={$selectedtab}&tabitem={$tabitem}",'title');
@@ -169,17 +161,4 @@ $PAGE->navbar->add($title);
 $PAGE->set_title($title);
 //require edit_reportentry html
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_entrycomment.html');
-
-
-
-
-
-
-
-
-
-
-
-
-
 

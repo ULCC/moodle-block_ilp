@@ -19,9 +19,6 @@ global $USER, $CFG, $SESSION, $PARSER;
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
-//get the id of the course that is currently being used
-$course_id = $PARSER->required_param('course_id', PARAM_INT);
-
 //the id of the report  that the field will be in 
 $report_id = $PARSER->required_param('report_id', PARAM_INT);
 
@@ -49,6 +46,8 @@ if (!empty($reportfield)) {
 	}
 	
 	$pluginclass	=	new $classname();
+
+	
 	
 	if ($pluginclass->delete_form_element($reportfield_id)) {
 		$resulttext	=	get_string('formelementdeletesuc','block_ilp');
@@ -59,6 +58,6 @@ if (!empty($reportfield)) {
 	$resulttext	=	get_string('formelementdeleteerror','block_ilp');	
 }
 
-$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&amp;course_id='.$course_id;
+$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
 redirect($return_url, $resulttext, REDIRECT_DELAY);
 

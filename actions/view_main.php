@@ -32,17 +32,24 @@ $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
 $dbc = new ilp_db();
 
 
-// setup the page title and heading
-$user	=	$dbc->get_user_by_id($user_id);
+$plpuser	=	$dbc->get_user_by_id($user_id);
 
+// setup the navigation breadcrumbs
+//block name
+$PAGE->navbar->add(get_string('ilpname', 'block_ilp'),null,'title');
 
-$PAGE->set_title(fullname($user).': '.get_string('ilpname','block_ilp'));
+//user intials
+$PAGE->navbar->add(fullname($plpuser),null,'title');
+
+//section name
+$PAGE->navbar->add(get_string('dashboard','block_ilp'),null,'title');
+
+$PAGE->set_title(fullname($plpuser).': '.get_string('ilpname','block_ilp'));
 
 $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_main.php",array('user_id'=>$user_id,'course_id'=>$course_id));
 
 //get the enabled template
 $temp	=	$dbc->get_enabled_template();
-
 
 $classname	=	$temp->name;
 

@@ -46,7 +46,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 		
 		if (!empty($student))	{ 
 			$studentname	=	fullname($student);
-			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100)); 
+			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true')); 
 			$precentagebars	=	array();
 			
 			
@@ -83,6 +83,9 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    	        	    	        //if total_possible is empty then there will be nothing to report
 	    	        if (!empty($misinfo->total)) {
 		    	        //calculate the percentage
+		    	        
+	    	        	
+	    	        	
 		    	        $misinfo->percentage	=	$misinfo->actual/$misinfo->total	* 100;	
 	    	        
 	    		        $misinfo->name	=	get_string('punchuality','block_ilp');
@@ -99,8 +102,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    	        	if ($misinfo->percentage	> 75) {
 	    	        		$misinfo->cssclass	=	"percentage-green";	
 	    	        	}
-	    		        
-	    		        
+	    	        	
 	    		        //pass the object to the percentage bars array
 	    	    	    $precentagebars[]	=	$misinfo;
 	    	        }
@@ -187,9 +189,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 					
 				}
 			}
-
+			
 			//we need to buffer output to prevent it being sent straight to screen
 			ob_start();
+			
+			
+			
 			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/plugins/'.$this->directory.'/ilp_dashboard_student_info.html');
 			
 			//pass the output instead to the output var
@@ -210,13 +215,44 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 		
 	}
 	
-		/**
+	/**
 	 * Adds the string values from the tab to the language file
 	 *
 	 * @param	array &$string the language strings array passed by reference so we  
 	 * just need to simply add the plugins entries on to it
 	 */
-	 function language_strings(&$string) {
+	function userstatus_select()	{
+		global	$USER;
+		
+		$form	= "<form id='studentstatusform'>";
+				
+		$statusitems	=	$this->dbc->get_user_status_items();
+		
+		$form	.=	"<input type='hidden' id='student_id' value='{$this->student_id}' >";
+		$form	.=	"<input type='hidden' id='user_modified_id' value='{$USER->id}' >";
+		
+		$form .= "<select id='select_userstatus' onchange='saveuserstatus(this.value)'>";
+		
+		foreach ($statusitems	as  $s) {
+			$form .= "<option value='{$s->value}'>{$s->name}</option>";
+		}
+		
+		$form .= '<select>';
+		
+		$form .= '</form>';
+		
+		return $form;
+		
+	}
+	
+	
+	/**
+	 * Adds the string values from the tab to the language file
+	 *
+	 * @param	array &$string the language strings array passed by reference so we  
+	 * just need to simply add the plugins entries on to it
+	 */
+	function language_strings(&$string) {
         $string['ilp_dashboard_student_info_plugin'] 					= 'student info plugin';
         $string['ilp_dashboard_student_info_plugin_name'] 				= 'student info';
 	        

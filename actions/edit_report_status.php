@@ -22,9 +22,6 @@ require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 //if set get the id of the report to be edited
 $report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	
 
-//get the id of the course that is currently being used
-$course_id = $PARSER->required_param('course_id', PARAM_INT);
-
 // instantiate the db
 $dbc = new ilp_db();
 
@@ -46,7 +43,7 @@ if ($dbc->update_report($report)) {
 	$resulttext	=	get_string('statuschangeerror','block_ilp');
 } 
 
-$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?report_id='.$report_id.'&amp;course_id='.$course_id;
+$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?report_id='.$report_id;
 redirect($return_url, $resulttext, REDIRECT_DELAY);
 
 ?>

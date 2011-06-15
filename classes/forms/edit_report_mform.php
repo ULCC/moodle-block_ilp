@@ -12,24 +12,22 @@
 
 
 class edit_report_mform extends ilp_moodleform {
-	
-		public 		$course_id;
+
 		public		$report_id;
 		public		$dbc;
 	
 		/**
      	 * TODO comment this
      	 */
-		function __construct($course_id,$report_id=null) {
+		function __construct($report_id=null) {
 
 			global $CFG;
-			
-			$this->course_id	=	$course_id;
+
 			$this->report_id	=	$report_id;
 			$this->dbc			=	new ilp_db();
 			
 			// call the parent constructor
-       	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_report.php?course_id={$this->course_id}&report_id={$this->report_id}");
+       	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_report.php?report_id={$this->report_id}");
 		}
 		
 		/**
@@ -47,9 +45,7 @@ class edit_report_mform extends ilp_moodleform {
         	//create a new fieldset
         	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
             $mform->addElement('html', '<legend class="ftoggler">'.$fieldsettitle.'</legend>');
-        	
-       	 	$mform->addElement('hidden', 'course_id', $this->course_id);
-        	$mform->setType('course_id', PARAM_INT);
+
         	
         	$mform->addElement('hidden', 'id');
         	$mform->setType('id', PARAM_INT);

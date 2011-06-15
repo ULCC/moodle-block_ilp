@@ -15,19 +15,16 @@
 
 class edit_report_permissions_mform extends ilp_moodleform {
 
-	
-		public 		$course_id;
 		public		$report_id;
 		public		$dbc;
 	
 		/**
      	 * TODO comment this
      	 */
-		function __construct($course_id,$report_id) {
+		function __construct($report_id) {
 
 			global $CFG;
-			
-			$this->course_id	=	$course_id;
+
 			$this->report_id	=	$report_id;
 			
 			// include the ilb db
@@ -36,7 +33,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 			$this->dbc			=	new ilp_db();
 			
 			// call the parent constructor
-       	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_report_permissions.php?course_id={$this->course_id}&report_id={$this->report_id}");
+       	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_report_permissions.php?report_id={$this->report_id}");
 		}
 	
 		

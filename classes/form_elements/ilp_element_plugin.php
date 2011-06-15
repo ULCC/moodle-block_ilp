@@ -137,7 +137,7 @@ class ilp_element_plugin {
      *
      * @param object $plugin
      */
-    public final function edit($course_id,$report_id,$plugin_id,$reportfield_id) {
+    public final function edit($report_id,$plugin_id,$reportfield_id) {
         global $CFG, $PARSER,$USER;
 
         //get the report field record
@@ -189,13 +189,13 @@ class ilp_element_plugin {
 	}
 
         // instantiate the form and load the data
-        $this->mform = new $classname($report_id,$plugin_id,$course_id,$USER->id);
+        $this->mform = new $classname($report_id,$plugin_id,$USER->id);
 
         $this->mform->set_data($reportfield);
 
         
         //enter a back u
-        $backurl = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?course_id={$course_id}&report_id={$report_id}";
+        $backurl = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
         
         
 	    //was the form cancelled?
@@ -229,7 +229,7 @@ class ilp_element_plugin {
 		                
 		         if ($this->mform->is_submitted()) { 
 		            //return the user to the 
-		        	$return_url = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?course_id={$course_id}&report_id={$report_id}";
+		        	$return_url = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
 		        	redirect($return_url, get_string("fieldcreationsuc", 'block_ilp'), REDIRECT_DELAY);
 		        }
 		    }

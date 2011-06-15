@@ -6,14 +6,17 @@
 		</div>
 		<div style="display: inline;"> 
 			<div id="infoarea">
-				<label><?php echo get_string('studentstatus','block_ilp');?></label>
-
+				<p>
+					<label><?php echo get_string('studentstatus','block_ilp');?></label>
+					
 					<?php  if (!empty($can_editstatus)) { ?>
 						editable user status
 					<?php } else {?>
-						nochangableuserstatus 
+						<span id="user_status" >cuurentstatus</span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" onclick="saveuserstatus(this.value)" id="edit_userstatus_icon" />
+						<?php //echo $this->userstatus_select(); ?>
 					<?php } ?>
-					<br />
+				</p>
+					
 				<?php if (!empty($precentagebars)) {  
 							foreach($precentagebars	as $p) {?>
 					<label><?php echo $p->name; ?></label><div class='percentagebar'  ><div class='<?php echo $p->cssclass; ?>' style='width: <?php echo $p->percentage; ?>%' ></div></div><br />

@@ -95,11 +95,8 @@
 	display					:	block;
 	float					:	left;
 	margin					:	0 15px 0 0;
-}
-
-.ilp #infoarea div	{
-	padding-bottom			: 	0 px;	
-			
+	width					:	150px;
+	text-align				: 	right;
 }
 
 
@@ -120,7 +117,7 @@
 	height					:	10px;
 }
 
-.ilp .percentage-orange		{
+.ilp .percentage-amber		{
 	background-color		:	orange;
 	height					:	10px;
 }
@@ -131,32 +128,49 @@
 }
 
 .ilp .view_report .view_report_fields {
-	width					:	70%;
+	width					:	60%;
+
+
+	
 	
 }
 
+.ilp .view_report .view_report_details  {
+	width					: 	30%; 
+	
+}
 
 .ilp .view_report .view_report_fields label {
-	display					:	block;
 	float					:	left;
 	margin					:	0 15px 0 0;
-
+	width					:	150px;
+	text-align				:	right;
 }
 
 
-.ilp .view_report .view_report_details  {
-	width					: 	25%; 
+
+
+
+.ilp .view_comments 	{
+	width					:	100%;
+	margin-left				:	20px;
 }
 
 .ilp .view_comments h3	{
-	display	:	inline;
-	
+	display					:	inline;
+	margin-right			:	80%
 }
 
-.ilp .view_comments div	{
-	
-	
+
+
+.ilp  .comment	{
+	margin					: 	0pt 20px 10px 20px;
+	border-bottom-style		:	dotted;
+	border-width			:	0.5px;
 }
+
+
+ 
 
 
 

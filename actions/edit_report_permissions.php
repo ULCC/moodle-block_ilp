@@ -21,37 +21,32 @@ require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 //include the report entry preview mform class
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_report_permissions_mform.php');
 
-//get the id of the course that is currently being used
-$course_id = $PARSER->required_param('course_id', PARAM_INT);
-
 //get the id of the report that is currently in use
 $report_id = $PARSER->required_param('report_id', PARAM_INT);
 
 // instantiate the db
 $dbc = new ilp_db();
 
-$course	=	$dbc->get_course($course_id);
-
 // setup the navigation breadcrumbs
 //block name
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
 
 //section name
-$PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php?course_id={$course_id}",'title');
+$PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php",'title');
 
 //get string for create report
 $PAGE->navbar->add(get_string('reportpermissions', 'block_ilp'),null,'title');
 
 // setup the page title and heading
-$PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));
-$PAGE->set_heading($course->fullname);
+$PAGE->set_title(get_string('blockname','block_ilp'));
+$PAGE->set_heading(get_string('reportconfiguration', 'block_ilp'));
 $PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
 
 $blockcapabilities	=	$dbc->get_block_capabilities();
 
 $report		=	$dbc->get_report_by_id($report_id);
 
-$mform	=	new edit_report_permissions_mform($course_id,$report_id);
+$mform	=	new edit_report_permissions_mform($report_id);
 
 //was the form cancelled?
 if ($mform->is_cancelled()) {

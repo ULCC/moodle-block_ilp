@@ -13,6 +13,7 @@
 	$string['apply'] 				= 	'Apply';
 	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';
+	$string['creator']				=	'Creator';
 	$string['createreport']			=	'Create Report';
 	$string['createnewreport']		=	'Create New Report';
 	$string['comments']				=	'Comments';

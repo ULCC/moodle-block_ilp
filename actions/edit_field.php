@@ -19,8 +19,6 @@ global $USER, $CFG, $SESSION, $PARSER;
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
-//get the id of the course that is currently being used
-$course_id = $PARSER->required_param('course_id', PARAM_INT);
 
 //the id of the report  that the field will be in 
 $report_id = $PARSER->required_param('report_id', PARAM_INT);
@@ -34,8 +32,6 @@ $reportfield_id = $PARSER->optional_param('reportfield_id',null ,PARAM_INT);
 // instantiate the db
 $dbc = new ilp_db();
 
-$course	=	$dbc->get_course($course_id);
-
 //set the required level of permission needed to view this page
 
 // setup the navigation breadcrumbs
@@ -43,15 +39,15 @@ $course	=	$dbc->get_course($course_id);
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
 
 //section name
-$PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php?course_id={$course_id}",'title');
+$PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php",'title');
 
 //get string for create report
 $PAGE->navbar->add(get_string('reportfields', 'block_ilp'),null,'title');
 
 
 // setup the page title and heading
-$PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));
-$PAGE->set_heading($course->fullname);
+$PAGE->set_title(get_string('blockname','block_ilp'));
+$PAGE->set_heading(get_string('reportconfiguration', 'block_ilp'));
 $PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
 
 //get the plugin record that for the plugin 
@@ -70,8 +66,15 @@ if(!class_exists($classname)) {
 //instantiate the plugin class
 $pluginclass	=	new $classname();
 
+//has the maximum number of this field type in this report been reached? 
+if (!$pluginclass->can_add($report_id))	{
+	
+	
+}
+
+
 //call the plugin edit function inside of which the plugin configuration mform
-$pluginclass->edit($course_id,$report_id,$plugin_id,$reportfield_id);
+$pluginclass->edit($report_id,$plugin_id,$reportfield_id);
 
 
 

@@ -9,17 +9,16 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
 	public 		$dbc;
 	
 	
-	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
+	function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
 		global $CFG;
 		
 		$this->report_id		=	$report_id;
 		$this->plugin_id		=	$plugin_id;
 		$this->creator_id		=	$creator_id;
-		$this->course_id		=	$course_id;
 		$this->reportfield_id	=	$reportfield_id;
 		$this->dbc				=	new ilp_db();
 		
-		parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_field.php?course_id={$course_id}&plugin_id={$plugin_id}&report_id={$report_id}");
+		parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_field.php?plugin_id={$plugin_id}&report_id={$report_id}");
 
 	}
 	

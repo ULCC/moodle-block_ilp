@@ -481,7 +481,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false
      */
 	function delete_items($tablename,$parent_id) {
-		return $this->delete_records($tablename, array('parent_id' => $id));
+		return $this->delete_records($tablename, array('parent_id' => $parent_id));
 	}
 	
 	
@@ -821,7 +821,7 @@ class ilp_db_functions	extends ilp_logging {
      * if yes set mutliple to true
      * @return mixed object the entry record or false
      */
-	function get_pluginentry($tablename,$entry_id,$reportfield_id,$multiple=false) {
+    function get_pluginentry($tablename,$entry_id,$reportfield_id,$multiple=false) {
 		global	$CFG;
 		
 		$entrytable		=	"{$CFG->prefix}{$tablename}_ent";
@@ -841,7 +841,27 @@ class ilp_db_functions	extends ilp_logging {
 		return (empty($multiple)) ? $this->dbc->get_record_sql($sql) : $this->dbc->get_records_sql($sql);
 	}
    
-	
+
+    /**
+	 * get the status of the   
+     *
+     * @param int 	$entry_id the entry id of the records that will be returned 
+     * @param int 	$reportfield_id the id of the report field
+     * 	
+     * @return mixed object the entry record or false
+     */
+	function get_entrystatus($entry_id,$reportfield_id)	{
+		global 	$CFG;
+		
+		$sql	=	"SELECT			*
+					 FROM			{$CFG->prefix}block_ilp_plu_rf_sts as s,
+					 				{$CFG->prefix}block_ilp_plu_sts_ent as se
+					 WHERE			se.parent_id		=	s.id
+					 AND			se.entry_id			=	{$entry_id}
+					 AND			s.reportfield_id	=	{$reportfield_id}";
+					 				
+		return 		$this->dbc->get_record_sql($sql);
+	}
     
     /*
     * check if any user data has been uploaded to a particular list-type reportfield
@@ -1410,17 +1430,67 @@ class ilp_db_functions	extends ilp_logging {
     * 
     * @return	bool true or false
     */
-   function  update_entry_comment($comment)	{
+  	function  update_entry_comment($comment)	{
    		return $this->update_record('block_ilp_entry_comment', $comment);
   	}
   	
   	
-  	
+  	/**
+    * Returns all comments attached to a entry 
+    *
+    * @param	int	$entry_id	the id of the entry whose comments we are retrieving
+    * 
+    * @return	mixed  array of recordset objects or bool false if nothing found  
+    */
   	function  get_entry_comments($entry_id)	{
-  		global 	$CFG;
- 		
-  		return	$this->dbc->get_records('block_ilp_entry_comment',array('entry_id'=>$entry_id));
+ 		return	$this->dbc->get_records('block_ilp_entry_comment',array('entry_id'=>$entry_id));
   	}
+  	
+  	/**
+    * Returns the entry comment with the given id 
+    *
+    * @param	int	$commnet_id	the id of the comment being retrieved
+    * 
+    * @return	mixed  object containing the record or bool false  
+    */
+  	function get_comment_by_id($comment_id)	{
+  		return 	$this->dbc->get_record('block_ilp_entry_comment',array('id'=>$comment_id));
+  	}
+  	
+  	/**
+    * Returns the items that can be used for user status, note this should always be the first status field 
+    * created so item parent ids should have a value of 1 
+    * 
+    * @return	mixed  object containing the record or bool false  
+    */
+  	function get_user_status_items()	{
+  		return $this->dbc->get_records('block_ilp_status_items',array('parent_id'=>1));	
+  	}
+
+  	/**
+    * Returns whether a link between a given report and the given status field exists   
+    * 
+    * @return	mixed  object containing the record or bool false  
+    */
+  	function has_statusfield($status_id,$report_id)	{
+  		global	$CFG;
+  		
+  		$sql	=	"SELECT			*
+  					FROM 			{$CFG->prefix}block_ilp_report as r,
+  									{$CFG->prefix}block_ilp_report_field as rf,
+  									{$CFG->prefix}block_ilp_plu_rf_sts as s
+  					WHERE			r.id	=	rf.report_id
+  					AND				rf.id	=	s.reportfield_id
+  					AND				s.id	=	{$status_id}
+  					AND				r.id	=	{$report_id}";
+  		
+  		return ($this->dbc->get_records_sql($sql)) ? true: false; 
+  	}
+  	
+  	function create_statusfield($statusfield)	{
+  		$this->insert_record('block_ilp_plu_rf_sts', $statusfield);
+  	}
+  	
 }
 
 

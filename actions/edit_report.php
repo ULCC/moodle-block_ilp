@@ -23,9 +23,6 @@ require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_report_mform.php');
 
 
-//get the id of the course that is currently being used
-$course_id = $PARSER->required_param('course_id', PARAM_INT);
-
 //if set get the id of the report to be edited
 $report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	;
 
@@ -34,16 +31,13 @@ $report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	;
 $dbc = new ilp_db();
 
 //instantiate the edit_report_mform class
-$mform	=	new edit_report_mform($course_id,$report_id);
-
-
-$course	=	$dbc->get_course($course_id);
+$mform	=	new edit_report_mform($report_id);
 
 
 //was the form cancelled?
 if ($mform->is_cancelled()) {
 	//send the user back
-	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?course_id='.$course_id;
+	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php';
     redirect($return_url, '', REDIRECT_DELAY);
 }
 
@@ -96,14 +90,14 @@ if (!empty($report_id)) {
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
 
 //section name
-$PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php?course_id={$course_id}",'title');
+$PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php",'title');
 
 //get string for create report
 $PAGE->navbar->add($pagetitle,null,'title');
 
 // setup the page title and heading
-$PAGE->set_title($course->shortname.': '.get_string('blockname','block_ilp'));
-$PAGE->set_heading($course->fullname);
+$PAGE->set_title(get_string('blockname','block_ilp'));
+$PAGE->set_heading(get_string('reportconfiguration', 'block_ilp'));
 $PAGE->set_url($CFG->wwwroot.'/blocks/ilp/edit_report.php', $PARSER->get_params());
 
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_report.html');

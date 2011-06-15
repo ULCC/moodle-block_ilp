@@ -22,17 +22,17 @@ class report_entry_preview_mform extends ilp_moodleform {
 		/**
      	 * TODO comment this
      	 */
-		function __construct($course_id,$report_id) {
+		function __construct($report_id) {
 
 			global $CFG;
 			
-			$this->course_id	=	$course_id;
+			
 			$this->report_id	=	$report_id;
 			
 			$this->dbc			=	new ilp_db();
 			
 			// call the parent constructor
-       	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/report_entry_preview.php?course_id={$this->course_id}&report_id={$this->report_id}");
+       	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/report_entry_preview.php?report_id={$this->report_id}");
 		}
 	
 		
@@ -85,10 +85,6 @@ class report_entry_preview_mform extends ilp_moodleform {
 				//to the form
 				$pluginclass->entry_form($mform);
 			}
-       		        
-	      //  $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('addprompt','block_ilp'));
-        		        
-	        //$mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         
 	        //close the fieldset
 	        $mform->addElement('html', '</fieldset>');

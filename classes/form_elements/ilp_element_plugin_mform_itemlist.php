@@ -7,8 +7,8 @@ class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
 	public $tablename;
 	public $items_tablename;
 	
-	function __construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null) {
-		parent::__construct($report_id,$plugin_id,$course_id,$creator_id,$reportfield_id=null);
+	function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
+		parent::__construct($report_id,$plugin_id,$creator_id,$reportfield_id=null);
         //remember to define $this->tablename and $this->items_tablename in the child class
 	}
 	

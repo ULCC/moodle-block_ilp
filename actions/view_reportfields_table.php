@@ -11,10 +11,10 @@ require_once ($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_tablelib.class.php')
 //create the field table
 
 //instantiate the flextable table class
-$flextable = new flexible_table("course_id{$course_id}report_id{$report_id}user_id".$USER->id);
+$flextable = new flexible_table("report_id{$report_id}user_id".$USER->id);
 
 //define the base url that the table will return to
-$flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?course_id={$course_id}&amp;report_id={$report_id}");
+$flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}");
 
 
 //setup the array holding the column ids
@@ -77,7 +77,7 @@ if (!empty($reportfields)) {
 			$icon	=	$OUTPUT->pix_url("/t/up");
 			$movetype	=	"up";
 			
-			$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_field.php?reportfield_id={$row->id}&report_id={$report_id}&move=".MOVE_UP."&position={$row->position}&course_id={$course_id}'>
+			$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_field.php?reportfield_id={$row->id}&report_id={$report_id}&move=".MOVE_UP."&position={$row->position}'>
 									<img class='move' src='{$icon}' alt='{$title}' title='{$title}' />
 								 	</a>";
 		} else {
@@ -90,7 +90,7 @@ if (!empty($reportfields)) {
 			$icon	=	$OUTPUT->pix_url("/t/down");
 			$movetype	=	"down";
 			
-			$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_field.php?reportfield_id={$row->id}&report_id={$report_id}&move=".MOVE_DOWN."&position={$row->position}&course_id={$course_id}'>
+			$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_field.php?reportfield_id={$row->id}&report_id={$report_id}&move=".MOVE_DOWN."&position={$row->position}'>
 									<img class='move' src='{$icon}' alt='{$title}' title='{$title}' />
 								 	</a>";
 		} else {
@@ -99,7 +99,7 @@ if (!empty($reportfields)) {
 	
 	
 		//set the edit field
-		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field.php?reportfield_id={$row->id}&report_id={$report_id}&course_id={$course_id}&plugin_id={$row->plugin_id}'>
+		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field.php?reportfield_id={$row->id}&report_id={$report_id}&plugin_id={$row->plugin_id}'>
 									<img class='edit' src='".$OUTPUT->pix_url("/i/edit")."' alt='".get_string('edit')."' title='".get_string('edit')."' />
 								 </a>";
 		
@@ -108,11 +108,11 @@ if (!empty($reportfields)) {
 		$icon	= 	$CFG->wwwroot."/blocks/ilp/pix/icons/";
 		$icon	.= 	(!empty($row->req)) ? "required.gif" : "notrequired.gif";
 		
-		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_required.php?reportfield_id={$row->id}&report_id={$report_id}&course_id={$course_id}'>
+		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_required.php?reportfield_id={$row->id}&report_id={$report_id}'>
 									<img class='required' src='{$icon}' alt='{$title}' title='{$title}' />
 								</a>";
 
-		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_field.php?reportfield_id={$row->id}&report_id={$report_id}&course_id={$course_id}'>
+		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_field.php?reportfield_id={$row->id}&report_id={$report_id}'>
 									<img class='delete' src='".$OUTPUT->pix_url("/t/delete")."' alt='".get_string('delete')."' title='".get_string('delete')."' />
 								 </a>";
 		

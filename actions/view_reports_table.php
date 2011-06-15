@@ -11,10 +11,10 @@ require_once ($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_tablelib.class.php')
 //create the field table
 
 //instantiate the flextable table class
-$flextable = new flexible_table("configurationcourse_id{$course_id}report_id{$report_id}user_id".$USER->id);
+$flextable = new flexible_table("configurationreport_id{$report_id}user_id".$USER->id);
 
 //define the base url that the table will return to
-$flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php?course_id={$course_id}&amp;report_id={$report_id}");
+$flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php?report_id={$report_id}");
 
 
 //setup the array holding the column ids
@@ -66,17 +66,17 @@ if (!empty($reports)) {
 		$data[] 		=	$row->name;
 
 		//set the edit report link
-		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report.php?report_id={$row->id}&course_id={$course_id}'>
+		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report.php?report_id={$row->id}'>
 									<img class='edit' src='".$OUTPUT->pix_url("/i/edit")."' alt='".get_string('edit')."' title='".get_string('edit')."' />
 								 </a>";
 		
 		//set the edit report prompts link
-		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_prompt.php?report_id={$row->id}&course_id={$course_id}'>
+		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_prompt.php?report_id={$row->id}'>
 									<img class='prompt' src='' alt='".get_string('editfields','block_ilp')."' title='".get_string('editfields','block_ilp')."' />
 								 </a>";
 		
 		//set the edit report permissions link
-		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_permissions.php?report_id={$row->id}&course_id={$course_id}'>
+		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_permissions.php?report_id={$row->id}'>
 									<img class='permissions' src='' alt='".get_string('editpermissions','block_ilp')."' title='".get_string('editpermissions','block_ilp')."' />
 								 </a>";
 
@@ -85,7 +85,7 @@ if (!empty($reports)) {
 		
 		$icon	= 	(!empty($row->status)) ? "hide" : "show";
 		
-		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_status.php?report_id={$row->id}&course_id={$course_id}'>
+		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_status.php?report_id={$row->id}'>
 									<img class='status' src=".$OUTPUT->pix_url("/i/".$icon)." alt='".$title."' title='".$title."' />
 							</a>";
 		

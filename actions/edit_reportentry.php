@@ -180,18 +180,12 @@ if (!empty($entry_id)) {
 
 $plpuser	=	$dbc->get_user_by_id($user_id);
 
-
-if (!empty($plpuser)) {
-	$userinitals	=	$plpuser->firstname." ".$plpuser->lastname;	
-	
-}
-
 // setup the navigation breadcrumbs
 //block name
 $PAGE->navbar->add(get_string('ilpname', 'block_ilp'),null,'title');
 
 //user intials
-$PAGE->navbar->add($userinitals,null,'title');
+$PAGE->navbar->add(fullname($plpuser),null,'title');
 
 //section name
 $PAGE->navbar->add($report->name,null,'title');
