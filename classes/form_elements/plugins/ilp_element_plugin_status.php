@@ -192,4 +192,24 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
     public function audit_type() {
         return get_string('ilp_element_plugin_status_type','block_ilp');
     }
+    
+    /*
+    * read rows from item table and return them as array of key=>value
+    * @param int $reportfield_id
+    * @param string $field - extra field to read from items table: used by ilp_element_plugin_state
+    */
+	protected function get_option_list( $reportfield_id ){
+  	
+		$outlist = array();
+		if( $reportfield_id ){
+			$objlist = $this->dbc->get_status_options($reportfield_id);
+			foreach( $objlist as $obj ){
+				$outlist[ $obj->value ] = $obj->name;
+			}
+		}
+		if( !count( $outlist ) ){
+			//echo "no items in {$this->items_tablename}";
+		}
+		return $outlist;
+	}
 }

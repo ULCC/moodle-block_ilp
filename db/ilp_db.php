@@ -989,6 +989,22 @@ class ilp_db_functions	extends ilp_logging {
     }
     
     
+    function get_status_options( $reportfield_id )	{
+    	
+    	global	$CFG;
+    	
+    		$sql	=	"SELECT i.id, i.name, i.value
+    					 FROM 	{$CFG->prefix}block_ilp_plu_rf_sts as rs,
+    					 		{$CFG->prefix}block_ilp_plu_sts as s,
+    					 		{$CFG->prefix}block_ilp_plu_sts_items as i
+    					 WHERE	rs.status_id	=	s.id
+    					 AND	s.id			=	i.parent_id
+    					 AND	rs.reportfield_id	=	{$reportfield_id}";	
+    
+    	return $this->dbc->get_records_sql( $sql );
+    }
+    
+    
     /**
      * Return the entry record that matches the id given
      * 

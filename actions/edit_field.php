@@ -68,8 +68,10 @@ $pluginclass	=	new $classname();
 
 //has the maximum number of this field type in this report been reached? 
 if (!$pluginclass->can_add($report_id))	{
+		
 	
-	
+	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
+    redirect($return_url, get_string("fieldmaximum", 'block_ilp',$pluginclass->audit_type()), REDIRECT_DELAY);
 }
 
 

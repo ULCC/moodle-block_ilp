@@ -44,6 +44,8 @@
 	$string['entrycreator'] 		= 	'Tutor';
 	
 	$string['fieldcreationsuc']		=	'The field was successfully created';
+	$string['fieldmaximum']			=	'The mamximum number of {$a} fields has been added you can not add anymore';
+	
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	$string['for']					=	'for';
