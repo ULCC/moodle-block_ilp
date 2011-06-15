@@ -37,7 +37,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG,$OUTPUT;
+		global	$CFG,$OUTPUT,$PAGE;
 
 		//set any variables needed by the display page	
 		
@@ -47,9 +47,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 		if (!empty($student))	{ 
 			$studentname	=	fullname($student);
 			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true')); 
+			
+			//get the students current status
+			$studentstatus	=	$this->dbc->get_user_status($this->student_id);
+			
 			$precentagebars	=	array();
-			
-			
+						
 			//set the display attendance flag to false
 			$displayattendance	= false;
 			
@@ -237,7 +240,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			$form .= "<option value='{$s->value}'>{$s->name}</option>";
 		}
 		
-		$form .= '<select>';
+		$form .= '</select>';
 		
 		$form .= '</form>';
 		

@@ -1325,20 +1325,8 @@ class ilp_db_functions	extends ilp_logging {
     }
     
     
-    /**
-     * Returns the status of the user in the ilp of the user with the given user id
-     * 
-     * @param int $user_id the users whose status you want to retrieve
-     * 
-     * @return mixed object contain the status of the user or false 
-     */
-    function get_user_status($user_id)	{
-    	global 	$CFG;
-    	
-    	$sql	=	"SELECT			*
-    				 FROM 			";
-    	
-    }
+
+
     
     
     
@@ -1479,8 +1467,8 @@ class ilp_db_functions	extends ilp_logging {
     * 
     * @return	mixed  object containing the record or bool false  
     */
-  	function get_user_status_items()	{
-  		return $this->dbc->get_records('block_ilp_status_items',array('parent_id'=>1));	
+  	function get_user_status_items($parent_id=1)	{
+  		return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$parent_id));	
   	}
 
   	/**
@@ -1505,6 +1493,42 @@ class ilp_db_functions	extends ilp_logging {
   	
   	function create_statusfield($statusfield)	{
   		$this->insert_record('block_ilp_plu_rf_sts', $statusfield);
+  	}
+  	
+  	
+  	
+  	/**
+    * Creates a user status record 
+    * 
+    * @param $userstatus object containing data to saved
+    * 
+    * @return	mixed  int the new record id or bool false  
+    */
+  	function create_userstatus($userstatus)	{
+  		$this->insert_record('block_ilp_user_status',$userstatus);
+  	}
+  	
+  	
+  	/**
+    * updates a user status record 
+    * 
+    * @param $userstatus object containing data to saved
+    * 
+    * @return	bool true if update successful false if not  
+    */
+  	function update_userstatus($userstatus)	{
+  		$this->update_record('block_ilp_user_status',$userstatus);
+  	}
+  	
+  	    /**
+     * Returns the status of the user in the ilp of the user with the given user id
+     * 
+     * @param int $user_id the users whose status you want to retrieve
+     * 
+     * @return mixed object contain the status of the user or false 
+     */
+  	function get_user_status($user_id)	{
+  		return $this->dbc->get_record('block_ilp_user_status',array('user_id'=>$user_id));
   	}
   	
 }

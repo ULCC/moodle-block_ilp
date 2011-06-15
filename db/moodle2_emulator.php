@@ -450,12 +450,12 @@ class moodle2_page_requires {
             // do not load (the style will loaded throught the style.php)
             return;
         } else {
-        	/*
+        	
             // check if it contains the "yui_" prefix
             if (strpos($scripts, "yui_") === false) {
                 $scripts = "yui_".$scripts;
             }
-*/
+
             // load
             require_js($scripts);
         }
@@ -565,13 +565,15 @@ class moodle2_page_requires {
             // create script params
             $params = array_map('json_encode', $jsarguments);
             $params = implode(', ', $params);
-
+			
+            $params	= (!empty($params)) ? ', '.$params: '';
+            
             // execute it
             if($onDOMready){
                 echo "<script type='text/javascript'>
                         //<![CDATA[
                         function {$module['name']}_".str_replace(".", "_", $function)."() {
-                            $function(M, $params );
+                            $function(M $params );
                         }
                         YAHOO.util.Event.onDOMReady({$module['name']}_".str_replace(".", "_", $function).");
                         //]]>
@@ -579,7 +581,7 @@ class moodle2_page_requires {
             } else {
                  echo "<script type='text/javascript'>
                         //<![CDATA[
-                        M.blocks_assmgr.init(M, $params );
+                        M.blocks_assmgr.init(M $params );
                         //]]>
                     </script>";
             }

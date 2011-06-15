@@ -15,7 +15,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 	
 	function __construct($student_id=null)	{
 		global 	$CFG,$USER,$PAGE;
-		
+				
 		$this->linkurl				=	$CFG->wwwroot.$_SERVER["SCRIPT_NAME"]."?user_id=".$student_id;
 		
 		$this->student_id	=	$student_id;
@@ -46,8 +46,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {		
-			
-			
+	
 			//get all of the users roles in the current context and save the id of the roles into
 			//an array 
 			$role_ids	=	 array();

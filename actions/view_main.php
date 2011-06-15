@@ -58,7 +58,16 @@ require_once($CFG->dirroot."/blocks/ilp/classes/dashboard/templates/{$classname}
 
 $template	=	new $classname();
 
-
+//check if the student has a user status record if not create one
+if (!$dbc->get_user_status($user_id)) {
+	
+	$studentstatus	=	new stdClass();
+	$studentstatus->user_id					=	$user_id;
+	$studentstatus->user_modified_id		=	$USER->id;
+	$studentstatus->value					=	ILP_DEFAULT_USERSTATUS;
+	
+	$dbc->create_userstatus($studentstatus);
+}  
 
 //require the view_main.html file
 require_once($CFG->dirroot."/blocks/ilp/views/view_main.html");

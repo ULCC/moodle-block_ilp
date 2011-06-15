@@ -41,17 +41,15 @@ define( 'ILP_PASSFAIL_UNSET' , 0 );
 define( 'ILP_PASSFAIL_FAIL' , 1 );
 define( 'ILP_PASSFAIL_PASS' , 2 );
 
-if (stripos($CFG->release,"2.") === false) {
-	define( 'YUIPATH' , '/lib/yui/');
-} else {
-	define( 'YUIPATH' , '/lib/yui/2.8.2/build');
-}
+define( 'ILP_DEFAULT_USERSTATUS' , 'green' );
 
 //constants used by ilp_logging class
 define( 'LOG_ADD', 1 );
 define( 'LOG_UPDATE', 2 );
 define( 'LOG_DELETE', 3 );
 define( 'LOG_ASSESSMENT', 4 );
+
+
 
 
 ?>
