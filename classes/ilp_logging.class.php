@@ -165,9 +165,6 @@ class ilp_logging {
                     $log->record_id = $newobject->id;
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
-if( $table == 'block_ilp_plu_crs_ent' ){
-//var_crap($action);var_crap($currobject);exit;
-}
 
                     foreach( $attributes as $value ){
                         $log->attribute = $value;
