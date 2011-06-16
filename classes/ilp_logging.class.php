@@ -144,6 +144,10 @@ class ilp_logging {
             'block_ilp_plu_sts_ent',
             'block_ilp_plu_tex_ent'
         ) ) ){
+                    $newobject->entry_table = $table;
+
+                    $attributes = array( 'id', 'entry_id', 'parent_id', 'value' , 'entry_table' );
+
 	                $log = new object();
 	                $log->creator_id = $USER->id;
 	                $log->user_id = $USER->id;
@@ -151,13 +155,22 @@ class ilp_logging {
 	                $log->course_id = false;
                     $log->type = get_string( 'user_data', 'block_ilp' );
                     $log->entity = get_string( 'ilp_report' , 'block_ilp' );
-                    $log->record_id = $newobject->entry_id;
-                    $log->attribute = 'value';
-                    $log->oldvalue = false;
-                    $log->newvalue = $newobject->value;
+                    $log->record_id = $newobject->id;
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
-	                $this->dbc->insert_record('block_ilp_log',$log);
+
+                    $log->oldvalue = '';
+                    foreach( $attributes as $value ){
+                        $log->attribute = $value;
+                        $log->newvalue = $newobject->$value;
+
+	                    if ($action != LOG_ADD) {
+                            $log->oldvalue = $this->get_old_value($table,$newobject,$currobject,$value,$action);
+                             
+                        }
+
+	                    $this->dbc->insert_record('block_ilp_log',$log);
+                    }
         }
         else{
             //log management changes
@@ -313,6 +326,10 @@ class ilp_logging {
         $new_value = NULL;
 
         switch($table) {
+            case 'block_ilp_report':
+                return $obj->$attrib;
+                break;
+/*
             case 'block_assmgr':
                  $new_value = $this->interpret_submission_value($obj,$attrib,$value);
                  break;
@@ -350,6 +367,7 @@ class ilp_logging {
            case 'block_assmgr_verify_form':
                 $new_value = $this->interpret_verification_value($attrib,$value);
                 break;
+*/
 
             default:
                 $new_value = $value;
@@ -569,7 +587,9 @@ class ilp_logging {
      */
      private function diff_object($table,$newobj,$currobj,$attrib,$action) {
          if ($action == LOG_UPDATE || $action == LOG_ASSESSMENT) {
-             if (empty($newobj->$attrib)) return false;
+             //if ( 0 != $newobj->$attrib && empty($newobj->$attrib)) return false;
+                //empty is too generous a criterion: if 0 is the value, we should capture it
+             if( !isset( $currobj->$attrib ) ) return false;
              if (empty($currobj->$attrib)) return true;
              return ( $newobj->$attrib != $currobj->$attrib ) ? true : false;
          }
