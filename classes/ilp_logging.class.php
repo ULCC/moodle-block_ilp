@@ -144,6 +144,12 @@ class ilp_logging {
             'block_ilp_plu_sts_ent',
             'block_ilp_plu_tex_ent'
         ) ) ){
+                    $oplist = array(
+                        LOG_ADD => 'INSERT',
+                        LOG_UPDATE => 'UPDATE',
+                        LOG_DELETE => 'DELETE',
+                   
+                    );
                     $newobject->entry_table = $table;
 
                     $attributes = array( 'id', 'entry_id', 'parent_id', 'value' , 'entry_table' );
@@ -154,18 +160,25 @@ class ilp_logging {
 	                $log->candidate_id = $USER->id;
 	                $log->course_id = false;
                     $log->type = get_string( 'user_data', 'block_ilp' );
+                    $log->type .= " " . $oplist[ $action ];
                     $log->entity = get_string( 'ilp_report' , 'block_ilp' );
                     $log->record_id = $newobject->id;
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
+if( $table == 'block_ilp_plu_crs_ent' ){
+//var_crap($action);var_crap($currobject);exit;
+}
 
-                    $log->oldvalue = '';
                     foreach( $attributes as $value ){
                         $log->attribute = $value;
                         $log->newvalue = $newobject->$value;
 
-	                    if ($action != LOG_ADD) {
-                            $log->oldvalue = $this->get_old_value($table,$newobject,$currobject,$value,$action);
+                        $log->oldvalue = '';
+	                    if ($action != LOG_ADD && 'value' == $value ) {
+                            if( !empty( $currobject ) ){
+                                $log->oldvalue = $currobject->value;
+                            }
+                            //$log->oldvalue = $this->get_old_value($table,$newobject,$currobject,$value,$action);
                              
                         }
 
@@ -609,6 +622,8 @@ class ilp_logging {
      * @return mixed The value or NULL
      */
      private function get_old_value($table,$obj,$currobj,$attrib,$action) {
+            return $obj->$attrib;
+/*
           if ($table == 'block_assmgr_resource' && !empty($currobj)) {
 
             $resource_type = $this->get_resource_type($currobj->resource_type_id);
@@ -617,6 +632,7 @@ class ilp_logging {
             return $resource_fields->get_link();
           }
           return (!empty($currobj->$attrib)) ? $currobj->$attrib : NULL;
+*/
      }
 
      /**
