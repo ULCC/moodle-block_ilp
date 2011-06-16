@@ -314,6 +314,17 @@ class ilp_db_functions	extends ilp_logging {
     }
     
     /**
+     * Wrapper for get_course 
+     *
+     * @param int $course_id The id of the course
+     * @return array containing a course object that matches the outcomes
+     */
+    function get_course_by_id($course_id) {
+       return $this->get_course($course_id);
+    }
+    
+    
+    /**
      * Creates a new report record
      *
      * @param object $report an object containing data on 
