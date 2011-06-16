@@ -266,7 +266,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 								}
 								
 								foreach ($reportfields as $field) {
-		
 									//get the plugin record that for the plugin 
 									$pluginrecord	=	$this->dbc->get_plugin_by_id($field->plugin_id);
 								
@@ -289,7 +288,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 									$pluginclass->view_data($field->id,$entry->id,$entry_data);
 
 								}
-								include_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.html');							
+								include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.html');							
 								
 							}
 						} else {

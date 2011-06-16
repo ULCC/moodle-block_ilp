@@ -276,6 +276,7 @@ class ilp_element_plugin {
 
         if ($this->dbc->delete_form_element_by_reportfield($tablename,$reportfield_id)) {
     	   	//TODO: should we delete all entry records linked to this field?
+		//yes we should, and it has been implemented in ilp_element_plugin_itemlist::delete_form_element
         	//now delete the reportfield
         	return $this->dbc->delete_report_field($reportfield_id);
         } 
@@ -448,7 +449,6 @@ class ilp_element_plugin {
 	 	$fieldname	=	$reportfield_id."_field";
 	 	
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
-	 	
 	 	if (!empty($entry)) {
 	 		$entryobj->$fieldname	=	$entry->value;
 	 	}

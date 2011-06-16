@@ -848,7 +848,7 @@ class ilp_db_functions	extends ilp_logging {
 					 WHERE 		{$where}
 					 AND		e.entry_id	=	{$entry_id}
 					 AND		p.reportfield_id	=	{$reportfield_id}";
-					 			
+	
 		return (empty($multiple)) ? $this->dbc->get_record_sql($sql) : $this->dbc->get_records_sql($sql);
 	}
    

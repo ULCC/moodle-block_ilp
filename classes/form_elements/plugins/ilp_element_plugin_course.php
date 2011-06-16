@@ -73,7 +73,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
 	  		$fieldname	=	$reportfield_id."_field";
 	 		
-	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,false);
 			
  	
 			if (!empty($entry)) {
@@ -91,6 +91,86 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 			 	}
 	 		}
 	  }
+	 /**
+	  * places entry data for the report field given into the entryobj given by the user 
+	  * 
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * @param int $entry_id the id of the entry
+	  * @param object $entryobj an object that will add parameters to
+	  */
+	 public function entry_data( $reportfield_id,$entry_id,&$entryobj ){
+	 	//this function will suffix for 90% of plugins who only have one value field (named value) i
+	 	//in the _ent table of the plugin. However if your plugin has more fields you should override
+	 	//the function 
+	 	
+		//default entry_data 	
+		$fieldname	=	$reportfield_id."_field";
+	 	
+	 	
+	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,false);
+ 
+		if (!empty($entry)) {
+		 	$fielddata	=	array();
+
+		 	//loop through all of the data for this entry in the particular entry		 	
+		 	//foreach($entry as $e) {
+		 		$fielddata[]	=	$entry->value;
+		 		//$fielddata[]	=	$e;
+		 	//}
+		 	
+		 	//save the data to the objects field
+	 		$entryobj->$fieldname	=	$fielddata;
+	 	}
+	 }
+		/**
+	    * this function saves the data entered on a entry form to the plugins _entry table
+		* the function expects the data object to contain the id of the entry (it should have been
+		* created before this function is called) in a param called id. 
+		* as this is a select element, possibly a multi-select, we have to allow
+		* for the possibility that the input is an array of strings
+	    */
+	  	public	function entry_process_data($reportfield_id,$entry_id,$data) {
+	 	
+	  		$result	=	true;
+	  		
+		  	//create the fieldname
+			$fieldname =	$reportfield_id."_field";
+	
+		 	//get the plugin table record that has the reportfield_id 
+		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+		 	if (empty($pluginrecord)) {
+		 		print_error('pluginrecordnotfound');
+		 	}
+		 	
+		 	//check to see if a entry record already exists for the reportfield in this plugin
+            $multiple = !empty( $this->items_tablename );
+		 	$entrydata 	=	$this->dbc->get_pluginentry($this->tablename, $entry_id,$reportfield_id,$multiple);
+		 	
+		 	//if there are records connected to this entry in this reportfield_id 
+			if (!empty($entrydata)) {
+				//delete all of the entries
+				//foreach ($entrydata as $e)	{
+					$this->dbc->delete_element_record_by_id($this->data_entry_tablename,$entrydata->id);
+				//}
+			}  
+		 	
+			//create new entries
+			$pluginentry			=	new stdClass();
+			$pluginentry->entry_id  = 	$entry_id;
+	 		$pluginentry->value		=	$data->$fieldname;
+
+			if( is_string( $pluginentry->value ))	{
+	 		    $state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$fieldname, $this->external_items_keyfield, $this->external_items_table );
+	 		    $pluginentry->parent_id	=	$pluginrecord->id;	
+	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+			} else if (is_array( $pluginentry->value ))	{
+                $pluginentry->parent_id = $reportfield_id;
+				$result	=	$this->write_multiple( $this->data_entry_tablename, $pluginentry );
+			}
+ 
+	 	
+			return	$result;
+	 }
 	
     /**
     * this function returns the mform elements taht will be added to a report form

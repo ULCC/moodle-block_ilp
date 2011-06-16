@@ -144,6 +144,9 @@
 	$string[ 'ilp_plugin_element_data' ]		=	"Data";
 	$string[ 'user_data' ]				=	"User Data";
 
+	$string[ 'maxeditexceed' ]			=	"Max Edit Exceed";	//just put this here to stop an error on edit_report_entry
+	$string[ 'course' ]				=	"Course";	//just put this here to stop an error on edit_report_entry
+
 	
 	global $CFG;
 
