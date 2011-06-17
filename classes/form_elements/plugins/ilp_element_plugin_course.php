@@ -157,7 +157,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 		 	
 			//create new entries
 			$pluginentry			=	new stdClass();
-            $pluginentry->audit_type = $this->audit_type();
+            $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
 			$pluginentry->entry_id  = 	$entry_id;
 	 		$pluginentry->value		=	$data->$fieldname;
 

@@ -417,17 +417,18 @@ class ilp_element_plugin {
 	 	//get the _entry table record that has the pluginrecord id
 	 	$pluginentry 	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
 
-        $pluginentry->audit_type = $this->audit_type();
 	 	
 	 	//if no record has been created create the entry record
 	 	if (empty($pluginentry)) {
 	 		$pluginentry	=	new stdClass();
+            $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
 			$pluginentry->entry_id = $entry_id;
 	 		$pluginentry->value	=	$data->$fieldname;
 	 		$pluginentry->parent_id	=	$pluginrecord->id;
 	 		$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
 	 	} else {
 	 		//update the current record
+            $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
 	 		$pluginentry->value	=	$data->$fieldname;
 	 		$result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
 	 	}
