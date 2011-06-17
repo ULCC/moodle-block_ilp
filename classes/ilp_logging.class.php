@@ -132,6 +132,11 @@ class ilp_logging {
                 $attributes = array();
         }
 
+        $oplist = array(
+                LOG_ADD => 'INSERT',
+                LOG_UPDATE => 'UPDATE',
+                LOG_DELETE => 'DELETE',
+         );
 
         //log data entry
         if( in_array( $table, array(
@@ -148,12 +153,6 @@ class ilp_logging {
             'block_ilp_plu_sts_ent',
             'block_ilp_plu_tex_ent'
         ) ) ){
-                    $oplist = array(
-                        LOG_ADD => 'INSERT',
-                        LOG_UPDATE => 'UPDATE',
-                        LOG_DELETE => 'DELETE',
-                   
-                    );
                     $newobject->entry_table = $table;
                     //$newobject->audit_type = 'audittype';
 
@@ -205,6 +204,7 @@ class ilp_logging {
 	
 	                //jfp report or audit_type
 	                $log->type = $this->action_type($table,$action,$log->candidate_id,$log->creator_id);
+                    $log->type .= " " . $oplist[ $action ];
 	                //$log->type = $action;
 	
 	                $log->entity = $this->entity_type($table,$newobject);
