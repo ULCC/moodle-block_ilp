@@ -479,8 +479,8 @@ class ilp_db_functions	extends ilp_logging {
      * 
      * @return bool true or false
      */
-	function delete_form_element_by_reportfield($tablename,$id) {
-		return $this->delete_records($tablename, array('reportfield_id' => $id));
+	function delete_form_element_by_reportfield( $tablename,$id, $extraparams=array() ) {
+		return $this->delete_records($tablename, array('reportfield_id' => $id), $extraparams );
 	}
 	
 	/**
@@ -491,8 +491,8 @@ class ilp_db_functions	extends ilp_logging {
      * 
      * @return bool true or false
      */
-	function delete_items($tablename,$parent_id) {
-		return $this->delete_records($tablename, array('parent_id' => $parent_id));
+	function delete_items($tablename,$parent_id, $extraparams=array() ) {
+		return $this->delete_records( $tablename, array('parent_id' => $parent_id), $extraparams );
 	}
 	
 	
@@ -503,8 +503,8 @@ class ilp_db_functions	extends ilp_logging {
      * 
      * @return bool true or false
      */
-	function delete_report_field($id) {
-		return $this->delete_records('block_ilp_report_field', array('id' => $id));
+	function delete_report_field( $id, $extraparams=array() ) {
+		return $this->delete_records('block_ilp_report_field', array( 'id' => $id ), $extraparams );
 	}
 	
 	
@@ -910,7 +910,7 @@ class ilp_db_functions	extends ilp_logging {
 	* 
 	* @return boolean true or false
 	*/
-    function delete_element_listitems( $tablename, $reportfield_id ){
+    function delete_element_listitems( $tablename, $reportfield_id , $extraparams=array() ){
 		global $CFG;
 		$real_tablename = $CFG->prefix . $tablename;
 		$element_table = $tablename;
@@ -919,7 +919,7 @@ class ilp_db_functions	extends ilp_logging {
 		//get parent_id
 		$parent_id = $this->get_element_id_from_reportfield_id( $tablename, $reportfield_id );
 
-    	return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) );
+    	return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
     }
     
     /**
@@ -1036,8 +1036,8 @@ class ilp_db_functions	extends ilp_logging {
      * 
      * @return mixed true or false
      */
-    function delete_element_record_by_id ($tablename,$id) {
-    	return $this->delete_records($tablename, array('id'=>$id));
+    function delete_element_record_by_id ( $tablename,$id, $extraparams=array() ) {
+    	return $this->delete_records( $tablename, array('id'=>$id), $extraparams );
     }
 
     

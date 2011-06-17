@@ -150,12 +150,14 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 			if (!empty($entrydata)) {
 				//delete all of the entries
 				//foreach ($entrydata as $e)	{
-					$this->dbc->delete_element_record_by_id($this->data_entry_tablename,$entrydata->id);
+                    $extraparams = array( 'audit_type' => $this->audit_type() );
+					$this->dbc->delete_element_record_by_id($this->data_entry_tablename,$entrydata->id,$extraparams);
 				//}
 			}  
 		 	
 			//create new entries
 			$pluginentry			=	new stdClass();
+            $pluginentry->audit_type = $this->audit_type();
 			$pluginentry->entry_id  = 	$entry_id;
 	 		$pluginentry->value		=	$data->$fieldname;
 

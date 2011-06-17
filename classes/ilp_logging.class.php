@@ -67,7 +67,7 @@ class ilp_logging {
      * @param mixed $params the object (or array) that contains the data that will be used to create the record
      * @return mixed The success of the action
      */
-    protected function delete_records($table,$params) {
+    protected function delete_records( $table,$params, $extraparams ) {
          //deletes are often carried out with an array
          //audit expects a object so a quick conversion
          //is needed
@@ -79,9 +79,13 @@ class ilp_logging {
 
              foreach ($deleteobject as $delobj) {
              	
-             	/**** REINSTATE CODE WHEN add_to_audit has been modified to work with 
-          		*    ilp
-          		*/
+                $logging_extraparams = array( 'audit_type');
+                foreach( $logging_extraparams as $key ){
+                    if( in_array( $key, array_keys( $extraparams ) ) ){
+                        $delobj->$key = $extraparams[ $key ];
+                    }
+                }
+
                 $this->add_to_audit($table,LOG_DELETE,$delobj);
              }
 
@@ -151,8 +155,9 @@ class ilp_logging {
                    
                     );
                     $newobject->entry_table = $table;
+                    //$newobject->audit_type = 'audittype';
 
-                    $attributes = array( 'id', 'entry_id', 'parent_id', 'value' , 'entry_table' );
+                    $attributes = array( 'id', 'entry_id', 'parent_id', 'value' , 'entry_table', 'audit_type' );
 
 	                $log = new object();
 	                $log->creator_id = $USER->id;
@@ -168,7 +173,7 @@ class ilp_logging {
 
                     foreach( $attributes as $value ){
                         $log->attribute = $value;
-                        $log->newvalue = $newobject->$value;
+                        $log->newvalue = isset( $newobject->$value ) ? $newobject->$value : 'unknown' ;
 
                         $log->oldvalue = '';
 	                    if ($action != LOG_ADD && 'value' == $value ) {
@@ -178,8 +183,10 @@ class ilp_logging {
                             //$log->oldvalue = $this->get_old_value($table,$newobject,$currobject,$value,$action);
                              
                         }
-
-	                    $this->dbc->insert_record('block_ilp_log',$log);
+                            //do not log the event if it is an update and this field is unchanged
+                        if( trim( $log->oldvalue ) != trim( $log->newvalue ) ){
+	                        $this->dbc->insert_record('block_ilp_log',$log);
+                        }
                     }
         }
         else{

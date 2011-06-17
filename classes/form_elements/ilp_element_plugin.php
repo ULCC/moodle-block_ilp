@@ -416,6 +416,8 @@ class ilp_element_plugin {
 	 
 	 	//get the _entry table record that has the pluginrecord id
 	 	$pluginentry 	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
+
+        $pluginentry->audit_type = $this->audit_type();
 	 	
 	 	//if no record has been created create the entry record
 	 	if (empty($pluginentry)) {
