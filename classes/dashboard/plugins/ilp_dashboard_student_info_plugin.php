@@ -225,24 +225,37 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * just need to simply add the plugins entries on to it
 	 */
 	function userstatus_select()	{
-		global	$USER;
-		
-		$form	= "<form id='studentstatusform'>";
-				
+		global	$USER, $CFG;
+		$form	=	"<span id='studentstatusform'>";
+
 		$statusitems	=	$this->dbc->get_user_status_items();
 		
-		$form	.=	"<input type='hidden' id='student_id' value='{$this->student_id}' >";
-		$form	.=	"<input type='hidden' id='user_modified_id' value='{$USER->id}' >";
-		
-		$form .= "<select id='select_userstatus' onchange='saveuserstatus(this.value)'>";
-		
-		foreach ($statusitems	as  $s) {
-			$form .= "<option value='{$s->value}'>{$s->name}</option>";
+		if (!empty($statusitems)) {
+			$form	.= "<form action='{$CFG->wwwroot}/blocks/ilp/actions/save_userstatus.php' method='GET' >";
+					
+			$form	.=	"<input type='hidden' name='student_id' id='student_id' value='{$this->student_id}' >";
+			$form	.=	"<input type='hidden' name='user_modified_id' id='user_modified_id' value='{$USER->id}' >";
+			$form	.=	"<input type='hidden' name='ajax' id='ajax' value='false' >";
+			
+			$form .= "<select id='select_userstatus'  >";
+
+			foreach ($statusitems	as  $s) {
+				$form .= "<option value='{$s->value}'>{$s->name}</option>";
+			}
+			
+			$form .= '</select>';
+			
+			$form .= '<input type="submit" value="Change Status" id="studentstatussub" />';
+			
+			$form .= '</form>';
+		} else {
+			
+			$form	.= 'STATUS ITEMS NOT SET PLEASE CONTACT ADMIN';
+			
 		}
 		
-		$form .= '</select>';
 		
-		$form .= '</form>';
+		$form .= '</span>';
 		
 		return $form;
 		

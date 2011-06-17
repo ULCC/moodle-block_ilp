@@ -1,13 +1,14 @@
 <?php 
-/*
+
 $jsmodule = array(
-    'name'     => 'ilp_dashbaord_student_info',
-    'fullpath' => '/blocks/ilp/classes/dashboard/plugins/studentinfo/ilp_dashboard_student_info.js',
-	'requires' => array('yui2-dom')
+    'name'     	=> 'ilp_dashboard_student_info',
+    'fullpath' 	=> '/blocks/ilp/classes/dashboard/plugins/studentinfo/ilp_dashboard_student_info.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
 );
 
 $PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $jsmodule);
-*/
+
+
 ?>
 <div>
 	<h1><?php echo $studentname; ?></h1>
@@ -24,7 +25,7 @@ $PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $
 					<?php  if (!empty($can_editstatus)) { ?>
 						editable user status
 					<?php } else {?>
-						<span id="user_status" ><?php echo $studentstatus->value; ?></span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>"  id="edit_userstatus_icon" />
+						<span id="user_status" class="hidden" ><?php echo $studentstatus->value; ?></span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" class="hidden editicon" id="edit_userstatus_icon" />
 						<?php echo $this->userstatus_select(); ?>
 					<?php } ?>
 				</p>

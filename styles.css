@@ -170,7 +170,24 @@
 }
 
 
- 
+.ilp span.nothidden {
+    display             : inline;
+    visibility			: visible;
+    
+}
+
+.ilp span.hidden, .ilp img.hidden  {
+    display             : none;
+    visibility			: hidden;
+}
+.ilp .editicon {
+    cursor              : pointer;
+}
+
+ilp #studentstatussub .hidden {
+	visibility			: hidden;
+	display				: none;
+}
 
 
 
