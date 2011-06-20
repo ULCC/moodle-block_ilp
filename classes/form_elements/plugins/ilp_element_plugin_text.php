@@ -46,6 +46,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
 				$this->maximumlength	=	$pluginrecord->maximumlength;
 				$this->minimumlength	=	$pluginrecord->minimumlength;
 				$this->position			=	$reportfield->position;
+                $this->audit_type       =   $this->audit_type();
 				return true;	
 			}
 		}
@@ -180,7 +181,14 @@ class ilp_element_plugin_text extends ilp_element_plugin {
      * Delete a form element
      */
     public function delete_form_element($reportfield_id) {
-    	return parent::delete_form_element($this->tablename, $reportfield_id);
+		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
+        $extraparams = array(
+            'audit_type' => $this->audit_type(),
+            'label' => $reportfield->label,
+            'description' => $reportfield->description,
+            'id' => $reportfield_id
+        );
+    	return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
     }
     
     /**

@@ -216,6 +216,7 @@ class ilp_element_plugin {
 		
 		        //get the form data submitted
 		    	$formdata = $this->mform->get_data();
+                $formdata->audit_type = $this->audit_type();
 		    	    	
 		        // process the data
 		    	$success = $this->mform->process_data($formdata);
@@ -270,15 +271,14 @@ class ilp_element_plugin {
 	/**
      * Delete a form element
      */
-    public function delete_form_element($tablename,$reportfield_id) {
-    	
-        $reportfield	=	$this->dbc->get_plugin_record($tablename,$reportfield_id);
+    public function delete_form_element( $tablename,$reportfield_id,$extraparams=array() ) {
+        $reportfield	=	$this->dbc->get_plugin_record($tablename,$reportfield_id); 
 
-        if ($this->dbc->delete_form_element_by_reportfield($tablename,$reportfield_id)) {
+        if ($this->dbc->delete_form_element_by_reportfield($tablename,$reportfield_id, $extraparams )) {
     	   	//TODO: should we delete all entry records linked to this field?
-		//yes we should, and it has been implemented in ilp_element_plugin_itemlist::delete_form_element
+		    //yes we should, and it has been implemented in ilp_element_plugin_itemlist::delete_form_element
         	//now delete the reportfield
-        	return $this->dbc->delete_report_field($reportfield_id);
+        	return $this->dbc->delete_report_field( $reportfield_id, $extraparams );
         } 
         return false;
     }

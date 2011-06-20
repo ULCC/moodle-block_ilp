@@ -21,16 +21,39 @@ class quickdb{
 		return new mysqli( $host, $username, $password, $dbname ) ;
 	}
 
-	public static function execute_sql( $conn, $sql ){
+	public static function execute_sql( $conn, $sql, $dbc=null ){
 		if( $res = $conn->query( $sql ) ){
-			if( $conn->insert_id ){
-				return $conn->insert_id;
+			if( $insertid = $conn->insert_id ){
+                if( $dbc ){
+                 self::log_action( $sql, $dbc, $insertid );
+                }
+				return $insertid;
 			}
 			return true;
 		}
 		return false;
 	}
 	
+    public static function log_action( $sql, $dbc, $id=null ){
+		global $CFG;
+        $sql = trim( $sql );
+        $action = false;
+        $table = false;
+        //var_crap( "logging $sql" );
+        if( 'INSERT' == strtoupper( substr( $sql, 0, 6 ) ) ){
+            $sqlwords = preg_split( '/\s/', $sql );
+            $table = $sqlwords[ 2 ];
+            $action = LOG_ADD;
+            
+        }
+        if( $CFG->prefix = substr( $table, 0, strlen( $CFG->prefix ) ) ){
+            $table = substr( $table, strlen( $CFG->prefix ) );
+        }
+        $newobject = new stdClass();
+        $newobject->id = $id;
+        //var_crap( $newobject );
+        $dbc->add_to_audit( $table, $action, $newobject );
+    }
 }
 
 /*
@@ -51,7 +74,7 @@ class ilp_predefined_reports{
 	* these files should contain php code to add entries to $reportlist
 	* @return array of arrays
 	*/
-	function get_report_list(){
+	protected function get_report_list(){
 		global $CFG;
 		$dir = dir( $this->reports_dir );
 		$reportlist = array();
@@ -76,27 +99,41 @@ class ilp_predefined_reports{
 	* only useful for testing - should not be called on production system
 	* @param mysqli connection $conn
 	*/
-	function trunc_ilp_tables( $conn ){
+	protected function trunc_ilp_tables( $conn ){
 		global $CFG;
 		$tablelist = array(
 			'block_ilp_report',
 			'block_ilp_report_field',
-			'block_ilp_plu_user_status',
+			//'block_ilp_plu_user_status',
 			'block_ilp_plu_tex',
+			'block_ilp_plu_tex_ent',
 			'block_ilp_plu_sts',
+			'block_ilp_plu_sts_ent',
 			'block_ilp_plu_sts_items',
 			'block_ilp_plu_ste',
+			'block_ilp_plu_ste_ent',
 			'block_ilp_plu_ste_items',
 			'block_ilp_plu_rdo',
+			'block_ilp_plu_rdo_ent',
 			'block_ilp_plu_rdo_items',
 			'block_ilp_plu_hte',
+			'block_ilp_plu_hte_ent',
 			'block_ilp_plu_dd',
+			'block_ilp_plu_dd_ent',
+			'block_ilp_plu_dd_items',
 			'block_ilp_plu_dat',
+			'block_ilp_plu_dat_ent',
 			'block_ilp_plu_ddl',
+			'block_ilp_plu_ddl_ent',
 			'block_ilp_plu_crs',
+			'block_ilp_plu_crs_ent',
 			'block_ilp_plu_cat',
-			'block_ilp_plu_are',
+			'block_ilp_plu_cat_ent',
 			'block_ilp_plu_cat_items',
+			'block_ilp_plu_are',
+			'block_ilp_plu_are_ent',
+			'block_ilp_log',
+			'block_ilp_report',
 			'block_ilp_reportpermissions'
 		);
 		$count = 0;
@@ -121,7 +158,7 @@ class ilp_predefined_reports{
 	public function main(){
 		global $USER, $CFG, $SESSION, $PARSER;
 		$conn = quickdb::get_connection();
-		if(0){
+		if(1){
 			//turn off this block on production systems !
 			$trunccount = $this->trunc_ilp_tables( $conn );
 			$s = ( 1 == $trunccount ) ? '' : 's' ;
@@ -132,10 +169,13 @@ class ilp_predefined_reports{
 				'elementlist' => array()
 		);
 		foreach( $this->get_report_list() as $report ){
+            //$outfile = $this->reports_dir . DIRECTORY_SEPARATOR . 'report' . $report[ 'title' ] . '.xml';
+            //file_put_contents( $outfile, $this->generate_xml( $report ) );
 			$report_title = $report[ "title" ];
 			$report_description = $report[ "description" ];
 			$report_id = $this->create_report( $report_title, $report_description );
-			if( $report_id ){
+			//if( $report_id ){
+			if(1){
 				$info[ 'reportlist' ][] = $report_title;
 				foreach( $report[ "fieldlist" ] as $element ){
 					$plugin_id = $this->get_element_type_id_from_control_type( $element[ "type" ] );
@@ -153,6 +193,7 @@ class ilp_predefined_reports{
 			else{
 				$info[ 'warninglist' ][] = "Report already exists: $report_title";
 			}
+            break;
 		}
 		return $info;
 	}
@@ -176,7 +217,7 @@ class ilp_predefined_reports{
 	* @param string $childname
 	* @param mixed $childvalue (could be int, string or array)
 	*/
-	function recursive_add( &$simple_xml, $childname, $childvalue ){
+	protected function recursive_add( &$simple_xml, $childname, $childvalue ){
 		if( is_numeric( $childvalue ) ){
 			//coerce to string
 			$childvalue = '' . $childvalue;
@@ -203,7 +244,7 @@ class ilp_predefined_reports{
 	* @param SimpleXMLElement $simple_xml
 	* @return array
 	*/
-	function simple_xml_2_array( $simple_xml ){
+	protected function simple_xml_2_array( $simple_xml ){
 		if( is_string( $simple_xml ) ){
 			$simple_xml = new SimpleXMLElement( $simple_xml );
 		}
@@ -218,6 +259,30 @@ class ilp_predefined_reports{
 		}
 	        return $out;
 	}
+
+    protected function get_specific_sql( $element, $pluginrecord, $reportfield_id ){
+		global $CFG;
+        $insertfieldlist = array(
+            'reportfield_id' => $reportfield_id, 
+            'timecreated' => 'NOW()',
+            'timemodified' => 'NOW()'
+        );
+        if( in_array( 'selecttype' , array_keys( $element ) ) ){
+            $insertfieldlist[ 'selecttype' ] = $element[ 'selecttype' ];
+        }
+        $valuelist = array();
+        foreach( $insertfieldlist as $key => $value ){
+            if( 'NOW()' == $value || is_numeric( $value ) ){
+                $valuelist[] = $value;
+            }
+            else{
+                $valuelist[] = "'$value'";
+            }
+        }
+		//$specific_sql = "INSERT INTO {$CFG->prefix}{$pluginrecord->tablename} ( reportfield_id, timecreated, timemodified ) VALUES ($reportfield_id, NOW(), NOW() )";
+		$specific_sql = "INSERT INTO {$CFG->prefix}{$pluginrecord->tablename} ( " . implode( ',' , array_keys( $insertfieldlist ) ) . " ) VALUES ( " . implode( ',', $valuelist ) . " )";
+        return $specific_sql;
+    }
 	
 	/*
 	* add a control to a report
@@ -235,14 +300,19 @@ class ilp_predefined_reports{
 		$pluginrecord	=	$this->dbc->get_plugin_by_id($plugin_id);
 		$plugin_table_name = $pluginrecord->tablename;
 		$reportfield_id = $this->insert_report_field( $conn, $report_id, $label, $description, $plugin_id, $req );
-		$specific_sql = "INSERT INTO {$CFG->prefix}{$pluginrecord->tablename} ( reportfield_id, timecreated, timemodified ) VALUES ($reportfield_id, NOW(), NOW() )";
-		$specific_parent_id = quickdb::execute_sql( $conn, $specific_sql );
+		$specific_sql = $this->get_specific_sql( $element, $pluginrecord, $reportfield_id );
+		$specific_parent_id = quickdb::execute_sql( $conn, $specific_sql, $this->dbc );
 		if( in_array( 'opts' , array_keys( $element ) ) ){
+            /*
+            * at this point we could probe for a pre_items.config file for this element type,
+            * but I think this might cause confusion at install time.
+            * Simpler just to specify all the required options in the one install file for this report
+            */
 			//it's a list type element (radio, dropdown, select) with some option items
 			$itemtable = $plugin_table_name . '_items';
 			foreach( $element[ "opts" ] as $value=>$name ){
 				$sql = "INSERT INTO {$CFG->prefix}$itemtable ( parent_id, value, name, timemodified, timecreated ) VALUES ( $specific_parent_id, '$value', '$name', NOW(), NOW() )";
-				if( !quickdb::execute_sql( $conn, $sql ) ){
+				if( !quickdb::execute_sql( $conn, $sql, $this->dbc ) ){
 					$this->disp( "FAILED: $sql" );
 				}
 			}
@@ -268,7 +338,7 @@ class ilp_predefined_reports{
 			INSERT INTO $tablename ( label, description, report_id, plugin_id, position, req, creator_id, timecreated, timemodified )
 			VALUES( '$label', '$description', $report_id, $plugin_id, $position, $req, $USER->id, NOW(), NOW() )
 		";
-		return quickdb::execute_sql( $conn, $sql );
+		return quickdb::execute_sql( $conn, $sql, $this->dbc );
 		
 	}
 	
@@ -306,7 +376,12 @@ class ilp_predefined_reports{
 			$plugin_name = $plugin_name_list[ $element_type ];
 		}
 		if( $plugin_name ){
-			$plugin = $this->dbc->get_plugin_by_name( $plugin_name );
+            try{
+			    $plugin = $this->dbc->get_plugin_by_name( 'block_ilp_plugin' , $plugin_name );
+            }
+            catch( exception $e ){
+                exit( $e->getMessage() );
+            }
 			return $plugin->id;
 		}
 		return $plugin_name;

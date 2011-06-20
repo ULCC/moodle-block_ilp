@@ -31,6 +31,7 @@ class ilp_logging {
         $currobject = (!empty($paramsobj->id)) ? $this->dbc->get_record($table, array('id' => $paramsobj->id)) : false ;
 
          $success = $this->dbc->update_record($table, $paramsobj);
+//$success=true;
          
         if( $success ){
          $this->add_to_audit($table,LOG_UPDATE,$paramsobj,$currobject);
@@ -65,6 +66,7 @@ class ilp_logging {
      *
      * @param string $table The name of the table where the record will be created
      * @param mixed $params the object (or array) that contains the data that will be used to create the record
+     * @extraparams mixed $key=>$value pairs of extra data to be inseted in logging table
      * @return mixed The success of the action
      */
     protected function delete_records( $table,$params, $extraparams ) {
@@ -79,13 +81,13 @@ class ilp_logging {
 
              foreach ($deleteobject as $delobj) {
              	
-                $logging_extraparams = array( 'audit_type');
-                foreach( $logging_extraparams as $key ){
-                    if( in_array( $key, array_keys( $extraparams ) ) ){
-                        $delobj->$key = $extraparams[ $key ];
-                    }
+                //$logging_extraparams = array( 'audit_type');
+                foreach( $extraparams as $key=>$value ){
+                    //if( in_array( $key, array_keys( $extraparams ) ) ){
+                        //$delobj->$key = $extraparams[ $key ];
+                        $delobj->$key = $value;
+                    //}
                 }
-
                 $this->add_to_audit($table,LOG_DELETE,$delobj);
              }
 
@@ -106,13 +108,13 @@ class ilp_logging {
     function add_to_audit($table, $action, $newobject, $currobject=NULL)  {
         global $USER;
         $attributes    =   array();
-        $disp = false;  //purely used for debugging - always leave false on production systems
         $now = time();
+
         
         switch($table) {
 
             case 'block_ilp_report':
-                $attributes =    array( 'id', 'creator_id', 'name', 'description', 'status' );
+                $attributes =    array( 'id', 'creator_id', 'name', 'description' );
                 break;
 
 
@@ -121,7 +123,13 @@ class ilp_logging {
                 break;
 
             case 'block_ilp_report_field':
-                $attributes =    array( 'id' , 'label' );
+                $attributes =    array( 'id' , 'label', 'audit_type', 'description' );
+//if( LOG_DELETE == $action ){
+if(0){
+//echo 'deleting';
+var_crap($attributes);
+var_crap($newobject);exit;
+}
                 break;
 
             case 'block_ilp_entry':
@@ -163,9 +171,13 @@ class ilp_logging {
 	                $log->user_id = $USER->id;
 	                $log->candidate_id = $USER->id;
 	                $log->course_id = false;
+/*
                     $log->type = get_string( 'user_data', 'block_ilp' );
                     $log->type .= " " . $oplist[ $action ];
+*/
+                    $log->type = " " . $oplist[ $action ];
                     $log->entity = get_string( 'ilp_report' , 'block_ilp' );
+                    $log->entity .= " " . get_string( 'user_data', 'block_ilp' );
                     $log->record_id = $newobject->id;
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
@@ -202,34 +214,32 @@ class ilp_logging {
 	                $log->candidate_id = $USER->id;
 	                $log->course_id = false;
 	
-	                //jfp report or audit_type
-	                $log->type = $this->action_type($table,$action,$log->candidate_id,$log->creator_id);
-                    $log->type .= " " . $oplist[ $action ];
-	                //$log->type = $action;
+                    $log->type = " " . $oplist[ $action ];
 	
 	                $log->entity = $this->entity_type($table,$newobject);
 	                //record id pertain to the actual submission or
 	                $log->record_id = $this->log_record_id($table,$newobject);
 	
-	                $log->attribute = $this->attribute_type($table,$newobject,$key);
+	                //$log->attribute = $this->attribute_type($table,$newobject,$key);
+                    $log->attribute = $key;
 	
 	                $log->course_id = $this->log_course($table,$newobject);
-	                if ($action != LOG_ADD) {
-	                    $log->oldvalue = ($action != LOG_DELETE ) ? $this->interpret_value($table,$currobject,$key,$this->get_old_value($table,$newobject,$currobject,$key,$action)) : $this->interpret_value($table,$newobject,$key,$val);
+	                if ( $action != LOG_ADD ) {
+	                    //$log->oldvalue = ($action != LOG_DELETE ) ? $this->interpret_value($table,$currobject,$key,$this->get_old_value($table,$newobject,$currobject,$key,$action)) : $this->interpret_value($table,$newobject,$key,$val);
+                        if( isset( $currobject->$key ) ){
+                            $log->oldvalue = $currobject->$key;
+                        }
+                        elseif( isset( $newobject->$key ) ){
+                            $log->oldvalue = $newobject->$key;
+                        }
 	                }
-	                $log->newvalue = ($action != LOG_DELETE ) ? $this->interpret_value($table,$newobject,$key,$val) : NULL;
+	                //$log->newvalue = ($action != LOG_DELETE ) ? $this->interpret_value($table,$newobject,$key,$val) : NULL;
+	                $log->newvalue = ($action != LOG_DELETE ) ? $newobject->$key : NULL;
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
 	
-	/*jfp debugging*/
-	if( $disp ){
-	    var_crap( __LINE__ );
-	    var_crap( $table );
-	    var_crap( $newobject );
-	    var_crap( $log );
-	}
 	
-	                $this->dbc->insert_record('block_ilp_log',$log);
+	                $id = $this->dbc->insert_record('block_ilp_log',$log);
 	
 	
 	            }
@@ -344,47 +354,8 @@ class ilp_logging {
 
         switch($table) {
             case 'block_ilp_report':
-                return $obj->$attrib;
+                $new_value = $obj->$attrib;
                 break;
-/*
-            case 'block_assmgr':
-                 $new_value = $this->interpret_submission_value($obj,$attrib,$value);
-                 break;
-
-            case 'portfolio_grade':
-
-            case 'portfolio_outcome_grade':
-
-            case 'block_assmgr_grade':
-
-            case 'block_assmgr_claim':
-                $new_value = $this->interpret_grade_value($obj,$attrib,$value);
-                break;
-
-            case 'block_assmgr_resource':
-                $new_value = $this->interpret_resource_value($obj,$attrib,$value);
-                break;
-
-            case 'block_assmgr_confirmation':
-                $new_value = $this->interpret_confirmation_value($attrib,$value);
-                break;
-
-            case 'block_assmgr_evidence':
-                $new_value = $this->interpret_evidence_value($attrib,$value);
-                break;
-
-            case 'block_assmgr_sub_evid_type':
-                $new_value = $this->interpret_evidence_type_value($attrib,$value);
-                break;
-
-            case 'block_assmgr_portfolio':
-                $new_value = $this->interpret_portfolio_value($attrib,$value);
-                break;
-
-           case 'block_assmgr_verify_form':
-                $new_value = $this->interpret_verification_value($attrib,$value);
-                break;
-*/
 
             default:
                 $new_value = $value;
@@ -409,32 +380,6 @@ class ilp_logging {
            return (!empty($value)) ? $value : NULL;
      }
 
-
-     /**
-     * Private member function to interpret the value
-     * of a given submission attribute
-     *
-     * @param object $obj the object that contains the value that will be interpreted
-     * @param string $attrib the name of the attribute that will be interpreted
-     * @param int $value the actual value that will be interpreted
-     * @return mixed The attribute's interpreted value
-     */
-     private function interpret_submission_value($obj,$attrib,$value) {
-         if (empty($obj)) return NULL;
-          switch ($attrib) {
-              case 'evidence_id':
-                    $interpvalue = (!empty($value)) ? $this->get_evidence($value) : NULL;
-                    return (!empty($interpvalue)) ? $interpvalue->name : $value;
-                    break;
-              case 'hidden':
-                    $new_value = NULL;
-                    if ($value === 0) $new_value = 'visible';
-                    if ($value == 1) $new_value = 'hidden' ;
-                    return $new_value;
-                    break;
-          }
-          return $value;
-     }
 
      /**
      * Private member function to interpret the value
@@ -475,121 +420,6 @@ class ilp_logging {
          return (!empty($value)) ? $value : NULL;
      }
 
-     /**
-     * Private member function to interpret the value
-     * of a given grade attribute
-     *
-     * @param object $obj the object that contains the value that will be interpreted
-     * @param string $attrib the name of the attribute that will be interpreted
-     * @param int $value the actual value that will be interpreted
-     * @return mixed The attribute's interpreted value
-     */
-     private function interpret_grade_value($obj, $attrib, $value) {
-
-         if ((empty($obj) || empty($value)) && $attrib != 'rawgrade') return NULL;
-
-         switch ($attrib) {
-             case 'outcome_id':
-                    $outcomeobj = $this->get_outcome($obj->outcome_id);
-                    return (!empty($outcomeobj)) ? $outcomeobj->shortname : $value;
-                    break;
-
-             case 'submission_id':
-                      $submission = $this->get_submission_by_id($value);
-                      if (!empty($submission)) $evidence = $this->get_evidence($submission->evidence_id);
-                      return (!empty($evidence)) ? $evidence->name : $value;
-                      break;
-
-             case 'grade':
-                    $outcomeobj = $this->get_outcome($obj->outcome_id);
-                    // TODO this should be given the optional gradepass param
-                    $scaleobj = $this->get_scale($outcomeobj->scaleid);
-                    // TODO this should be using $scale->render_scale_item()
-                    $scale = explode(',',$scaleobj->scale);
-                    return  ($value-1 >= 0) ? $scale[$value-1] : $scale[0];
-             default:
-                   return $value;
-                   break;
-          }
-     }
-
-     /**
-     * Private member function to interpret the value
-     * of a given resource attribute
-     *
-     * @param string $attrib the name of the attribute that will be interpreted
-     * @param int $value the actual value that will be interpreted
-     * @return mixed The attribute's interpreted value
-     */
-     private function interpret_confirmation_value($attrib, $value) {
-
-         if (empty($obj) || empty($value)) return NULL;
-
-         if ($attrib == 'status') {
-
-             switch ($value) {
-                case CONFIRMATION_CONFIRMED:
-                    return get_string('confirmed', 'block_assmgr');
-                    break;
-
-                case CONFIRMATION_PENDING:
-                    return get_string('pending', 'block_assmgr');
-                    break;
-
-                case CONFIRMATION_REJECTED:
-                    return get_string('rejected', 'block_assmgr');
-                    break;
-             }
-         }
-         return $value;
-     }
-
-     /**
-      * Private member function to interpret the value
-      * of a given evidence type attribute. Currently only works for 'evidence_type_id'
-      *
-      * @param string $attrib the name of the attribute that will be interpreted
-      * @param int $value the actual value that will be interpreted
-      * @return mixed The attribute's interpreted value
-      */
-     private function interpret_evidence_type_value($attrib, $value) {
-
-         $evidence_name = '';
-
-         if (empty($value)) {
-             return NULL;
-         }
-
-         if ($attrib == 'evidence_type_id') {
-
-             // get the evidence type with this id
-             $evidence_type = $this->get_evidence_types($value);
-             foreach ($evidence_type as $et) {
-                $evidence_name = get_string($et->name, 'block_assmgr');
-             }
-
-         }
-         return (empty($evidence_name)) ? $value : $evidence_name;
-     }
-
-     /**
-      * Private member function to interpret the value
-      * of a given resource attribute. Turns constants into text.
-      *
-      * @param string $attrib the name of the attribute that will be interpreted
-      * @param int $value the actual value that will be interpreted
-      * @return mixed The attribute's interpreted value
-      */
-     private function interpret_resource_value($obj,$attrib,$value) {
-         if (!empty($obj->resource_type_id)) {
-            $resource_type = $this->get_resource_type($obj->resource_type_id);
-            $resource_fields = new $resource_type->name;
-            $resource_fields->load($obj->id);
-
-            return str_replace("'","\'",$resource_fields->get_link());
-         }
-         return NULL;
-     }
 
      /**
      * Private member function to check if the given object attrib differs
@@ -603,7 +433,7 @@ class ilp_logging {
      * @return bool The success of the action
      */
      private function diff_object($table,$newobj,$currobj,$attrib,$action) {
-         if ($action == LOG_UPDATE || $action == LOG_ASSESSMENT) {
+         if ($action == LOG_UPDATE || $action == LOG_ADD || $action == LOG_DELETE || $action == LOG_ASSESSMENT) {
              //if ( 0 != $newobj->$attrib && empty($newobj->$attrib)) return false;
                 //empty is too generous a criterion: if 0 is the value, we should capture it
              if( !isset( $currobj->$attrib ) ) return false;
@@ -625,9 +455,9 @@ class ilp_logging {
      * @param string $action the name of the database operation about to be performed
      * @return mixed The value or NULL
      */
+/*
      private function get_old_value($table,$obj,$currobj,$attrib,$action) {
             return $obj->$attrib;
-/*
           if ($table == 'block_assmgr_resource' && !empty($currobj)) {
 
             $resource_type = $this->get_resource_type($currobj->resource_type_id);
@@ -636,8 +466,8 @@ class ilp_logging {
             return $resource_fields->get_link();
           }
           return (!empty($currobj->$attrib)) ? $currobj->$attrib : NULL;
-*/
      }
+*/
 
      /**
      * function to return the action type of given action
@@ -681,6 +511,7 @@ class ilp_logging {
      * @param string $key the attribute name
      * @return string the attribute type
      */
+/*
      private function attribute_type($table,$obj,$key) {
          switch($table) {
            case 'block_assmgr_resource':
@@ -756,6 +587,7 @@ class ilp_logging {
 
 
      }
+*/
 
 
      /**
@@ -773,7 +605,7 @@ class ilp_logging {
             case 'block_ilp_reportpermissions':
                 return get_string( 'ilp_report', 'block_ilp' );
             case 'block_ilp_report_field':
-                return get_string( 'ilp_report', 'block_ilp' );
+                return get_string( 'ilp_report_field', 'block_ilp' );
                 
             default:
                 return 'unknown';

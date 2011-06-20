@@ -141,6 +141,7 @@
 	$string[ 'ilp_element_plugin_update' ]		=	"ILP Form Plugin UPDATE";
 	$string[ 'ilp_element_plugin_delete' ]		=	"ILP Form Plugin DELETE";
 	$string[ 'ilp_report' ]				=	"ILP Report";
+	$string[ 'ilp_report_field' ]				=	"ILP Report Field";
 	$string[ 'ilp_plugin_element_data' ]		=	"Data";
 	$string[ 'user_data' ]				=	"User Data";
 

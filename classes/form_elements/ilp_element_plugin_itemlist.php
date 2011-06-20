@@ -299,7 +299,14 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	//also delete any submitted data - it'll survive in ghostly form in the log table
     	$this->dbc->delete_items($this->data_entry_tablename,$pluginrecord->id);
     	
-    	return parent::delete_form_element($this->tablename,$reportfield_id);
+		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
+        $extraparams = array(
+            'audit_type' => $this->audit_type(),
+            'label' => $reportfield->label,
+            'description' => $reportfield->description,
+            'id' => $reportfield_id
+        );
+    	return parent::delete_form_element($this->tablename,$reportfield_id,$extraparams);
     }
 
     public function uninstall() {
