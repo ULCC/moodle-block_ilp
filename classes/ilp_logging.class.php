@@ -31,7 +31,6 @@ class ilp_logging {
         $currobject = (!empty($paramsobj->id)) ? $this->dbc->get_record($table, array('id' => $paramsobj->id)) : false ;
 
          $success = $this->dbc->update_record($table, $paramsobj);
-//$success=true;
          
         if( $success ){
          $this->add_to_audit($table,LOG_UPDATE,$paramsobj,$currobject);
@@ -124,12 +123,6 @@ class ilp_logging {
 
             case 'block_ilp_report_field':
                 $attributes =    array( 'id' , 'label', 'audit_type', 'description' );
-//if( LOG_DELETE == $action ){
-if(0){
-//echo 'deleting';
-var_crap($attributes);
-var_crap($newobject);exit;
-}
                 break;
 
             case 'block_ilp_entry':
@@ -433,7 +426,7 @@ var_crap($newobject);exit;
      * @return bool The success of the action
      */
      private function diff_object($table,$newobj,$currobj,$attrib,$action) {
-         if ($action == LOG_UPDATE || $action == LOG_ADD || $action == LOG_DELETE || $action == LOG_ASSESSMENT) {
+         if ($action == LOG_UPDATE || $action == LOG_DELETE || $action == LOG_ASSESSMENT) {
              //if ( 0 != $newobj->$attrib && empty($newobj->$attrib)) return false;
                 //empty is too generous a criterion: if 0 is the value, we should capture it
              if( !isset( $currobj->$attrib ) ) return false;
