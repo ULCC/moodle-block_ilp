@@ -72,12 +72,10 @@ class block_ilp extends block_list {
         $this->content = new stdClass;
         $this->content->footer = '';
 
-
 		 $label = get_string('mypersonallearningplan', 'block_ilp');
          $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}";
          $this->content->items[] = "<a href='{$url}'>{$label}</a>";
          $this->content->icons[] = "";
-
          
         return $this->content;
     }

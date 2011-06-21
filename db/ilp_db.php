@@ -1603,6 +1603,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed int the id of the new record or false 
      */
   	function get_status_items($id)	{
+  		
   		return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$id));
   	}
   	

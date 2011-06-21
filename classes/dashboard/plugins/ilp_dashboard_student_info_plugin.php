@@ -51,6 +51,10 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			//get the students current status
 			$studentstatus	=	$this->dbc->get_user_status($this->student_id);
 			
+			if (!empty($studentstatus)) {
+				$statusitem		=	$this->dbc->get_status_items($studentstatus->id);
+			}   
+			
 			$precentagebars	=	array();
 						
 			//set the display attendance flag to false
