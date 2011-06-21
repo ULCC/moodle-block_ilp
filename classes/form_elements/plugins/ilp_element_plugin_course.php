@@ -53,6 +53,23 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 	}
     
 	
+	/*
+	* get the list options with which to populate the edit element for this list element
+    * this type is unusual in that the item table is 'course' (not the usual item table for list elements)
+    * so we have to call plugin_data_item_exists with extra args
+	*/
+	public function return_data( &$reportfield ){
+        global $CFG;
+        $item_table = $CFG->prefix . 'course';
+		$data_exists = $this->dbc->plugin_data_item_exists( $this->tablename, $reportfield->id , $item_table, '', 'id' );
+		if( empty( $data_exists ) ){
+			//if no, get options list
+			$reportfield->optionlist = $this->get_option_list_text( $reportfield->id );
+		}
+		else{
+			$reportfield->existing_options = $this->get_option_list_text( $reportfield->id , '<br />' );
+		}
+	}
     /**
      *
      */

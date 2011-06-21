@@ -207,7 +207,7 @@ class ilp_logging {
 	                $log->candidate_id = $USER->id;
 	                $log->course_id = false;
 	
-                    $log->type = " " . $oplist[ $action ];
+                    $log->type = ( isset( $newobject->capability_id ) ) ? get_string( 'reportpermissions' , 'block_ilp' ) :  " " . $oplist[ $action ];
 	
 	                $log->entity = $this->entity_type($table,$newobject);
 	                //record id pertain to the actual submission or
