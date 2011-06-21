@@ -72,14 +72,13 @@ class block_ilp extends block_list {
         $this->content = new stdClass;
         $this->content->footer = '';
 
-        //check if the user has the relevant permission before allowing them to see the create report link
-        //if () {
-		 $label = get_string('reportconfiguration', 'block_ilp');
-         $url  = "{$CFG->wwwroot}/blocks/ilp/actions/edit_report_configuration.php?course_id={$course_id}";
+
+		 $label = get_string('mypersonallearningplan', 'block_ilp');
+         $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}";
          $this->content->items[] = "<a href='{$url}'>{$label}</a>";
          $this->content->icons[] = "";
-		//}
 
+         
         return $this->content;
     }
     

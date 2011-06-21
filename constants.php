@@ -56,6 +56,16 @@ define( 'LOG_UPDATE', 2 );
 define( 'LOG_DELETE', 3 );
 define( 'LOG_ASSESSMENT', 4 );
 
+//default css passfail colours
+define('ILP_CSSCOLOUR_FAIL','#FF0000');
+define('ILP_CSSCOLOUR_PASS','#C0FF3E');
+define('ILP_CSSCOLOUR_MID','#FF4500');
+
+//default css passfail colours
+define('ILP_DEFAULT_FAIL_PERCENTAGE',50);
+define('ILP_DEFAULT_PASS_PERCENTAGE',75);
+
+
 
 
 

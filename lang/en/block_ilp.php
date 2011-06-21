@@ -50,6 +50,10 @@
 	$string['enablereport'] 		= 	'Enable Report';
 	$string['entrycreator'] 		= 	'Tutor';
 	
+	$string['failcsscolour']		=	'Fail CSS colour';
+	$string['failcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in a fail state';
+	$string['failpercent']			=	'Fail Percentage';
+	$string['failpercentconfig']	=	'The percentage that should be considered a fail (all percentages equal to and below this)';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['fieldmaximum']			=	'The mamximum number of {$a} fields has been added you can not add anymore';
 	
@@ -64,6 +68,9 @@
 	
 	$string['label']				=	'Label';
 	$string['maxedit'] 				= 	'Use Maximum Edit';	
+	
+	$string['midcsscolour']			=	'Mid range CSS colour';
+	$string['midcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in the mid range';
 	$string['move']		 			= 	'Move';
 	$string['movedown'] 			= 	'Move down';
 	$string['moveleft'] 			= 	'Move left';
@@ -72,12 +79,19 @@
 	$string['moverightone'] 		= 	'Move right 1';
 	$string['movetoend'] 			= 	'Move to end';
 	$string['moveup']		 		= 	'Move up';
+	
+	$string['mypersonallearningplan']	=	'My Personal Plan';
+	
 	$string['name']					=	'Name';
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';
 	$string['nocomments']			=	'No Comments';
 	
+	$string['passpercent']			=	'Pass Percentage';
+	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
+	$string['passcsscolour']		=	'Pass CSS colour';
+	$string['passcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in a pass state';
 	$string['perpage'] 				=	'per page';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['plugintype'] 			= 	'Plugin Type';
@@ -109,7 +123,7 @@
 	$string['selectedreportlist']				= 	'Select report list options';
 	$string['studentstatus']					= 	'Student Status';
 	$string['studentnotfound']					= 	'Student not found';
-	
+	$string['editstatusitems']					=	'Edit Status Items';
 	
 	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 				= 	'Submit and display';

@@ -59,6 +59,16 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			//can the current user change the users status
 			$can_editstatus	=	(!empty($access_viewotherilp) && $USER->id != $user_id) ? true : false;
 			
+			$passpercentage	=	get_config('block_ilp', 'passpercent');
+			
+			//just in case the pass percentage has not been set 
+			$passpercentage	=	(empty($passpercentage)) ? ILP_DEFAULT_PASS_PERCENTAGE : $passpercentage;
+			
+			$failpercentage	=	get_config('block_ilp', 'failpercent');
+			
+			//just in case the fail percentage has not been set 
+			$failpercentage	=	(empty($failpercentage)) ? ILP_DEFAULT_FAIL_PERCENTAGE : $failpercentage;
+			
 			//include the attendance 
 			$misclassfile	=	$CFG->docroot."/blocks/ilp/classes/mis.class.php";
 			
@@ -92,17 +102,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    		        $misinfo->name	=	get_string('punchuality','block_ilp');
 	    	        
 	    		        //sets the colour of the percentage bar
-	    	        	if ($misinfo->percentage	< 50) {
-	    	        		$misinfo->cssclass	=	"percentage-red";	
-	    	        	}	
+	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->cssclass	=	 get_config('block_ilp','failcsscolour');	
+	    	       	
+	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->cssclass	=	 get_config('block_ilp','midcsscolour');	
 	    	        	
-	    	        	if ($misinfo->percentage	>= 50 && $misinfo->percentage <= 75) {
-	    	        		$misinfo->cssclass	=	"percentage-amber";	
-	    	        	}	
-	    	        	
-	    	        	if ($misinfo->percentage	> 75) {
-	    	        		$misinfo->cssclass	=	"percentage-green";	
-	    	        	}
+	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->cssclass	=	get_config('block_ilp','passcsscolour');	
+	    	       
 	    	        	
 	    		        //pass the object to the percentage bars array
 	    	    	    $precentagebars[]	=	$misinfo;
@@ -123,20 +128,14 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    	        	$misinfo->percentage	=	$misinfo->actual/$misinfo->total	* 100;
 	    	        
 	    	        	$misinfo->name	=	get_string('attendance','block_ilp');
-	    	        
 	    	        		
-	    	        if ($misinfo->percentage	< 50) {
-	    	        		$misinfo->cssclass	=	"percentage-red";	
-	    	        	}	
+   	    		        //sets the colour of the percentage bar
+	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->cssclass	=	 get_config('block_ilp','failcsscolour');	
+	    	       	
+	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->cssclass	=	 get_config('block_ilp','midcsscolour');	
 	    	        	
-	    	        	if ($misinfo->percentage	>= 50 && $misinfo->percentage <= 75) {
-	    	        		$misinfo->cssclass	=	"percentage-amber";	
-	    	        	}	
-	    	        	
-	    	        	if ($misinfo->percentage	> 75) {
-	    	        		$misinfo->cssclass	=	"percentage-green";	
-	    	        	}	
-	    	        	
+	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->cssclass	=	get_config('block_ilp','passcsscolour');	
+	    	       	
 	    	        	$precentagebars[]	=	$misinfo;
 	    	        }
 	    	        
@@ -170,20 +169,13 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    	        	$reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
 	    	        
 	    	        	$reportinfo->name	=	$r->name;
-	    	        
-	    	        	//set the colour of the percentage bar
-	    	        	if ($reportinfo->percentage	< 50) {
-	    	        		$reportinfo->cssclass	=	"percentage-red";	
-	    	        	}	
 	    	        	
-	    	        	if ($reportinfo->percentage	>= 50 && $reportinfo->percentage <= 75) {
-	    	        		$reportinfo->cssclass	=	"percentage-amber";	
-	    	        	}	
+	    	        	     //sets the colour of the percentage bar
+	    	        	if ($reportinfo->percentage	<= $passpercentage) $reportinfo->cssclass	=	 get_config('block_ilp','failcsscolour');	
+	    	       	
+	    	        	if ($reportinfo->percentage	> $failpercentage && $reportinfo->percentage < $passpercentage) $reportinfo->cssclass	=	 get_config('block_ilp','midcsscolour');	
 	    	        	
-	    	        	if ($reportinfo->percentage	> 75) {
-	    	        		$reportinfo->cssclass	=	"percentage-green";	
-	    	        	}
-	    	        	
+	    	        	if ($reportinfo->percentage	>= $passpercentage) $reportinfo->cssclass	=	get_config('block_ilp','passcsscolour');	
 	    	        	
 	    	        	$precentagebars[]	=	$reportinfo;
 	    	        }
