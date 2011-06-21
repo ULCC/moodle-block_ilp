@@ -65,18 +65,12 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 			array('class' => 'form_input')
 	    );
 
-/*
-		$mform->addElement(
-			'textarea',
-			'unset',
-			get_string( 'ilp_element_plugin_state_unset', 'block_ilp' ),
-			array('class' => 'form_input')
-	    );
-*/
 		//manager must specify at least 1 option, with at least 1 character
         $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 	}
+	
+	
     protected function is_valid_item( $item, $item_list, $keysep=":" ){
         $item = trim( $item );
         $itemparts = explode( $keysep, $item );

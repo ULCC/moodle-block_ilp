@@ -46,29 +46,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
         
         return $string;
     }
-
-    /*
-    * similar to parent, but with extra field for passfail
-    */
-     public function load($reportfield_id) {
-		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
-		if (!empty($reportfield)) {
-			$this->reportfield_id	=	$reportfield_id;
-			$this->plugin_id		=	$reportfield->plugin_id;
-			$plugin					=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
-			$pluginrecord			=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
-			
-			if (!empty($pluginrecord)) {
-				$this->id			    =	$pluginrecord->id;
-				$this->label			=	$reportfield->label;
-				$this->description		=	$reportfield->description;
-				$this->req			    =	$reportfield->req;
-				$this->position			=	$reportfield->position;
-				//$this->passfail			=	$pluginrecord->passfail;
-			}
-		}
-		return false;	
-    }	
+	
 
     /*
     * get options from the items table for this plugin, and concatenate them into a string
@@ -106,7 +84,6 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 			//get the list of options for this reportfield in the given table from the db 
 			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, $field );
 			
-			
 			foreach( $objlist as $obj ){
 				//place the name into an array with value as key
 				$outlist[ $obj->value ] = $obj->name;
@@ -126,8 +103,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		if( !count( $outlist ) ){
 			//echo "no items in {$this->items_tablename}";
 		}
-		
-		
+
 		$adminvalues = array(
             'optlist' => $outlist,
             'pass' => $passlist,

@@ -106,7 +106,9 @@ class block_ilp extends block_list {
         return false;
     }
     
-
+    
+ 
+    
     /**
      * Only allow this block to be mounted to a course or the home page.
      *
@@ -128,6 +130,23 @@ class block_ilp extends block_list {
     function instance_allow_multiple() {
         return false;
     }
+    
+    /*
+     * Functions that we want to run directly after the block has been installed 
+     *  
+     */
+	function after_install() {
+		
+		global $CFG;
+		
+		//call the install.php script (used for moodle 2) that has the operations that need to be carried 
+		//out after installation 
+		require_once($CFG->dirroot.'/blocks/ilp/db/install.php');
+		
+		//call the block_ilp_install function used by moodle 2.0
+		xmldb_block_ilp_install();
+		
+	}
     
     
     

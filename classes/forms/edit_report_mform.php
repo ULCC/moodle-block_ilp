@@ -83,9 +83,8 @@ class edit_report_mform extends ilp_moodleform {
 	        //TODO add the elements to implement the frequency functionlaity
 	        
 	        
-	        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submitanddisplay','block_ilp'));
-	        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('submit'));
-        	$buttonarray[] = &$mform->createElement('cancel');
+	        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
+	        $buttonarray[] = &$mform->createElement('cancel');
 	        
 	        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        

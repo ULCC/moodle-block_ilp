@@ -32,11 +32,29 @@ $reportfield_id = $PARSER->optional_param('reportfield_id',null ,PARAM_INT);
 // instantiate the db
 $dbc = new ilp_db();
 
-//set the required level of permission needed to view this page
+
 
 // setup the navigation breadcrumbs
+
+//siteadmin or modules
+//we need to determine which moodle we are in and give the correct area name
+$sectionname	=	(stripos($CFG->release,"2.") !== false) ? get_string('administrationsite') : get_string('administration');
+
+$PAGE->navbar->add($sectionname,null,'title');
+
+
+//plugins or modules
+//we need to determine which moodle we are in and give the correct area name
+$sectionname	=	(stripos($CFG->release,"2.") !== false) ? get_string('plugins','admin') : get_string('managemodules');
+
+$PAGE->navbar->add($sectionname,null,'title');
+
+$PAGE->navbar->add(get_string('blocks'),null,'title');
+
+
 //block name
-$PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
+$url	=	"http://ilpdev2.local/admin/settings.php?section=blocksettingilp";
+$PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
 
 //section name
 $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php",'title');
@@ -44,6 +62,10 @@ $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot.
 //get string for create report
 $PAGE->navbar->add(get_string('reportfields', 'block_ilp'),null,'title');
 
+$pagetitle	=	(!empty($reportfield_id)) ? get_string('editfield','block_ilp') : get_string('addfield','block_ilp');
+
+//get string for page
+$PAGE->navbar->add($pagetitle,null,'title');
 
 // setup the page title and heading
 $PAGE->set_title(get_string('blockname','block_ilp'));

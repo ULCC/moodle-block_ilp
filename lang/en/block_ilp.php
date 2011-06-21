@@ -13,6 +13,9 @@
 	$string['apply'] 				= 	'Apply';
 	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';
+	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
+	
+	
 	$string['creator']				=	'Creator';
 	$string['createreport']			=	'Create Report';
 	$string['createnewreport']		=	'Create New Report';
@@ -26,10 +29,14 @@
 	$string['coursereports']		=	'Course Reports';
 	$string['dashboard']	 		= 	'Dashboard';
 	
-	$string['defaulthozsize'] 		= 	'Default number of columns';
-	$string['defaulthozsizeconfig'] = 	'The default number of columns for all AJAX tables that do not override this setting.';
-	$string['defaultverticalperpage'] = 'Default number of table rows';
-	$string['defaultverticalperpageconfig'] = 'How many rows to show in the tables as the default for the vertical pagination';
+	$string['defaulthozsize'] 					= 	'Default number of columns';
+	$string['defaulthozsizeconfig'] 			= 	'The default number of columns for all AJAX tables that do not override this setting.';
+	$string['defaultverticalperpage'] 			= 	'Default number of table rows';
+	$string['defaultverticalperpageconfig'] 	= 	'How many rows to show in the tables as the default for the vertical pagination';
+	$string['defaultstatusitem']	 			= 	'Default user status';
+	$string['defaultstatusitemconfig'] 			= 	'The default status item that will be assigned to users ';
+	
+	
 	
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
@@ -57,14 +64,14 @@
 	
 	$string['label']				=	'Label';
 	$string['maxedit'] 				= 	'Use Maximum Edit';	
-	$string['move']		 			= 'Move';
-	$string['movedown'] 			= 'Move down';
-	$string['moveleft'] 			= 'Move left';
-	$string['moveleftone'] 			= 'Move left 1';
-	$string['moveright'] 			= 'Move right';
-	$string['moverightone'] 		= 'Move right 1';
-	$string['movetoend'] 			= 'Move to end';
-	$string['moveup']		 		= 'Move up';
+	$string['move']		 			= 	'Move';
+	$string['movedown'] 			= 	'Move down';
+	$string['moveleft'] 			= 	'Move left';
+	$string['moveleftone'] 			= 	'Move left 1';
+	$string['moveright'] 			= 	'Move right';
+	$string['moverightone'] 		= 	'Move right 1';
+	$string['movetoend'] 			= 	'Move to end';
+	$string['moveup']		 		= 	'Move up';
 	$string['name']					=	'Name';
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
@@ -82,34 +89,35 @@
 	$string['removeall']			= 	'Remove all';
 	$string['req'] 					= 	'Required';
 	$string['reports'] 				= 	'Reports';
-	$string['reportconfiguration'] 	= 	'Report Configuration';
-	$string['reportfields'] 				= 	'Report Fields';
-	$string['reportconfigurationdesc'] 	= 	'The report configuration admininstration area allows you to create and edit reports. ';
-	$string['reportcreationsuc'] 	= 	'The report was successfully created';
-	$string['reportfields'] 		= 	'Report Fields';
-	$string['reportmustcontainfields'] 	= 	'The report must contain fields';
-	$string['reportname'] 			= 	'Report Name:';
-	$string['reportprompt']			= 	'Report Prompts';
-	$string['required']	 			= 	'Required';
-	$string['reportpermissions']	= 	'Report Permissions';
-	$string['reportpermissionsuc']	= 	'The Permissions have been successfully assigned to the {$a->name} report';
-	$string['reportpermissionsdescription']	= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
-	$string['savechanges'] 			= 	'Save Changes';
-	$string['statuschangesuc'] 		= 	'The reports status was successfully changed';
-	$string['selecttype'] 			= 	'Select Field Type';
-	$string['selectedreports']		= 	'Selected Reports';
-	$string['selectedreportlist']		= 	'Select report list options';
-	$string['studentstatus']		= 	'Student Status';
-	$string['studentnotfound']		= 	'Student not found';
+	$string['reportconfiguration'] 				= 	'Report Configuration';
+	$string['reportconfigurationsection'] 		= 	'Report Configuration Section';
+	$string['reportfields'] 					= 	'Report Fields';
+	$string['reportconfigurationdesc'] 			= 	'The report configuration admininstration area allows you to create and edit reports. ';
+	$string['reportcreationsuc'] 				= 	'The report was successfully created';
+	$string['reportfields'] 					= 	'Report Fields';
+	$string['reportmustcontainfields'] 			= 	'The report must contain fields';
+	$string['reportname'] 						= 	'Report Name:';
+	$string['reportprompt']						= 	'Report Prompts';
+	$string['required']	 						= 	'Required';
+	$string['reportpermissions']				= 	'Report Permissions';
+	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
+	$string['reportpermissionsdescription']		= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
+	$string['savechanges'] 						= 	'Save Changes';
+	$string['statuschangesuc'] 					= 	'The reports status was successfully changed';
+	$string['selecttype'] 						= 	'Select Field Type';
+	$string['selectedreports']					= 	'Selected Reports';
+	$string['selectedreportlist']				= 	'Select report list options';
+	$string['studentstatus']					= 	'Student Status';
+	$string['studentnotfound']					= 	'Student not found';
 	
 	
-	$string['showingpages'] = 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
-	$string['submitanddisplay'] 	= 	'Submit and display';
+	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
+	$string['submitanddisplay'] 				= 	'Submit and display';
 
 	
 	
 	
-	$string['type'] 				= 	'Type';
+	$string['type'] 							= 	'Type';
 	$string['viewreportpreview'] 				= 	'View Report Preview';
 	
 	
@@ -137,16 +145,17 @@
 	
 	
 	//LOGGING
-	$string[ 'ilp_element_plugin_add' ]		=	"ILP Form Plugin INSERT";
+	$string[ 'ilp_element_plugin_add' ]			=	"ILP Form Plugin INSERT";
 	$string[ 'ilp_element_plugin_update' ]		=	"ILP Form Plugin UPDATE";
 	$string[ 'ilp_element_plugin_delete' ]		=	"ILP Form Plugin DELETE";
-	$string[ 'ilp_report' ]				=	"ILP Report";
+	$string[ 'ilp_report' ]						=	"ILP Report";
 	$string[ 'ilp_report_field' ]				=	"ILP Report Field";
 	$string[ 'ilp_plugin_element_data' ]		=	"Data";
-	$string[ 'user_data' ]				=	"User Data";
+	$string[ 'user_data' ]						=	"User Data";
+	$string[ 'userstatus' ]						=	"User Status";
 
-	$string[ 'maxeditexceed' ]			=	"Max Edit Exceed";	//just put this here to stop an error on edit_report_entry
-	$string[ 'course' ]				=	"Course";	//just put this here to stop an error on edit_report_entry
+	$string[ 'maxeditexceed' ]					=	"Max Edit Exceed";	//just put this here to stop an error on edit_report_entry
+	$string[ 'course' ]							=	"Course";	//just put this here to stop an error on edit_report_entry
 
 	
 	global $CFG;

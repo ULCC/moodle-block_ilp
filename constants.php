@@ -41,7 +41,14 @@ define( 'ILP_PASSFAIL_UNSET' , 0 );
 define( 'ILP_PASSFAIL_FAIL' , 1 );
 define( 'ILP_PASSFAIL_PASS' , 2 );
 
-define( 'ILP_DEFAULT_USERSTATUS' , 'green' );
+//this is the default status record that will be used for all users it should be set to 1
+//as the user status record is created on installation any changes to the status items can
+//be made from the block settings page
+define( 'ILP_DEFAULT_USERSTATUS_RECORD' , '1' );
+
+//the id of the user who we will give say is responsible for all changes made by the block
+//e.g staus creation
+define( 'ILP_DEFAULT_USER_ID' , '1' );
 
 //constants used by ilp_logging class
 define( 'LOG_ADD', 1 );

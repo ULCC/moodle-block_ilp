@@ -87,8 +87,6 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    	        if (!empty($misinfo->total)) {
 		    	        //calculate the percentage
 		    	        
-	    	        	
-	    	        	
 		    	        $misinfo->percentage	=	$misinfo->actual/$misinfo->total	* 100;	
 	    	        
 	    		        $misinfo->name	=	get_string('punchuality','block_ilp');

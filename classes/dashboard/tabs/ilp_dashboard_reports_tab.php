@@ -41,12 +41,25 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      * Override this to define the second tab row should be defined in this function  
      */
     function define_second_row()	{
-    	global 	$USER,$PAGE,$OUTPUT;
+    	global 	$CFG,$USER,$PAGE,$OUTPUT;
     	
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {		
-	
+			
+			
+			
+			//check if the set_context method exists
+			if (!isset($PAGE->context) === false) {
+				if (method_exists($PAGE,'set_context')) {
+					$PAGE->set_context(get_context_instance(CONTEXT_SYSTEM));
+				}	else {
+					$PAGE->context = get_context_instance(CONTEXT_SYSTEM);		
+				}
+				
+			} 
+			
+			
 			//get all of the users roles in the current context and save the id of the roles into
 			//an array 
 			$role_ids	=	 array();
@@ -62,16 +75,17 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			
 			//get all reports
 			$reports	=	$this->dbc->get_reports(ILP_ENABLED);
-			
-			//create a tab for each enabled report
-			foreach($reports as $r)	{
-				if ($this->dbc->has_report_permission($r->id,$role_ids,$capability->id)) {
-
-					//the tabitem and selectedtab query string params are added to the linkurl in the 
-					//second_row() function  
-					$this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
+			if (!empty($reports)) {
+				//create a tab for each enabled report
+				foreach($reports as $r)	{
+					if ($this->dbc->has_report_permission($r->id,$role_ids,$capability->id)) {
+	
+						//the tabitem and selectedtab query string params are added to the linkurl in the 
+						//second_row() function  
+						$this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
+					}
+					
 				}
-				
 			}
 		}
     }

@@ -1549,7 +1549,7 @@ class ilp_db_functions	extends ilp_logging {
   		$this->update_record('block_ilp_user_status',$userstatus);
   	}
   	
-  	    /**
+  	 /**
      * Returns the status of the user in the ilp of the user with the given user id
      * 
      * @param int $user_id the users whose status you want to retrieve
@@ -1559,6 +1559,53 @@ class ilp_db_functions	extends ilp_logging {
   	function get_user_status($user_id)	{
   		return $this->dbc->get_record('block_ilp_user_status',array('user_id'=>$user_id));
   	}
+  	
+  	/**
+     * Returns the regions for a template
+     * 
+     * @param int $template_id the id of the template whose regions you want to retrieve
+     * 
+     * @return mixed array of objects containing the regions or false 
+     */
+  	function get_template_regions($template_id) {
+  		return $this->dbc->get_records('block_ilp_dash_temp_region',array('template_id'=>$template_id));
+  	}
+  	
+  	/**
+     * Gets the dashboard plugin record for the 
+     * 
+     * @param string $plugin_name the name of the template
+     * 
+     * @return mixed array of objects containing the regions or false 
+     */
+  	function get_dashboard_plugin_by_name($name)	{
+  		return $this->dbc->get_record('block_ilp_dash_plugin',array('name'=>$name));
+  	}
+  	
+  	/**
+     * Create a record in the block_ilp_dash_region_plugin table 
+     * 
+     * @param object $regionplugin the record to be saved to the 
+     * block_ilp_dash_region_plugin table 
+     * 
+     * @return mixed int the id of the new record or false 
+     */  	
+  	function create_region_plugin($regionplugin) {
+  		return $this->insert_record('block_ilp_dash_region_plugin', $regionplugin);
+  	}
+  	
+  	/**
+     * Returns the  
+     * 
+     * @param object $regionplugin the record to be saved to the 
+     * block_ilp_dash_region_plugin table 
+     * 
+     * @return mixed int the id of the new record or false 
+     */
+  	function get_status_items($id)	{
+  		return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$id));
+  	}
+  	
   	
 }
 

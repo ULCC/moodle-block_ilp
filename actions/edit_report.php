@@ -64,12 +64,8 @@ if($mform->is_submitted()) {
         $report_id	= (empty($report_id)) ? $success : $report_id;
         
         //decide whether the user has chosen to save and exit or save or display
-        if (!isset($formdata->saveanddisplaybutton)) { 
-            //return the user to the 
-        	$return_url = $CFG->wwwroot.'/course/view.php?id='.$course_id;
-        	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
-        } else {
-        	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&course_id='.$course_id;
+        if (isset($formdata->saveanddisplaybutton)) { 
+        	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
         	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
         }
     }
@@ -85,9 +81,29 @@ if (!empty($report_id)) {
 } 
 
 
+
+
 // setup the navigation breadcrumbs
+
+//siteadmin or modules
+//we need to determine which moodle we are in and give the correct area name
+$sectionname	=	(stripos($CFG->release,"2.") !== false) ? get_string('administrationsite') : get_string('administration');
+
+$PAGE->navbar->add($sectionname,null,'title');
+
+
+//plugins or modules
+//we need to determine which moodle we are in and give the correct area name
+$sectionname	=	(stripos($CFG->release,"2.") !== false) ? get_string('plugins','admin') : get_string('managemodules');
+
+$PAGE->navbar->add($sectionname,null,'title');
+
+$PAGE->navbar->add(get_string('blocks'),null,'title');
+
+
 //block name
-$PAGE->navbar->add(get_string('blockname', 'block_ilp'),null,'title');
+$url	=	"http://ilpdev2.local/admin/settings.php?section=blocksettingilp";
+$PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
 
 //section name
 $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php",'title');
