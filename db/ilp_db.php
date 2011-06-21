@@ -880,19 +880,37 @@ class ilp_db_functions	extends ilp_logging {
     * options
     * @param string tablename
     * @param int reportfield_id
+    * @param string item_table - use this item_table if item_table name is not simply $tablename . "_items"
+    * @param string item_key - use this foreign key if specific item_table has been sent as arg. Send empty string to simply get all rows from the item table
+    * @param string item_value_field - field from the item table to use as the value submitted to the user entry table
     * @return mixed array of objects or false
     */
-    function plugin_data_item_exists( $tablename, $reportfield_id ){
+    function plugin_data_item_exists( $tablename, $reportfield_id, $item_table=false, $item_key=false, $item_value_field=false ){
 		global $CFG;
 		
 		$tablename 		= $CFG->prefix . $tablename;
-		$item_table 	= $tablename . "_items";
+        if( !$item_table ){
+		    $item_table 	= $tablename . "_items";
+        }
+        if( false === $item_key ){
+		    $item_key 	= 'parent_id';
+        }
 		$entry_table 	= $tablename . "_ent";
+
+        $item_on_clause = '';
+        if( $item_key ){
+            $item_on_clause = "ON item.$item_key = ele.id";
+        }
+
+        if( !$item_value_field ){
+            $item_value_field = 'value';
+        }
+        
 		
 		$sql = "SELECT *
 				FROM {$tablename} ele
-				JOIN {$item_table} item ON item.parent_id = ele.id
-				JOIN {$entry_table} entry ON entry.value = item.value
+				JOIN {$item_table} item  $item_on_clause
+				JOIN {$entry_table} entry ON entry.value = item.$item_value_field
 				WHERE ele.reportfield_id = {$reportfield_id}
 				";
 		
