@@ -29,13 +29,13 @@
 																			 <img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" /></a> |
 																	<?php } ?> 
 							<?php if (!empty($access_report_deletereports)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/delete_reportentry.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}"?>'><?php echo get_string('delete');?>
-																				<img src="<?php echo $OUTPUT->pix_url("/i/delete");?>" alt="<?php echo get_string('delete');?>" />
+																				<img src="<?php echo $OUTPUT->pix_url("/t/delete");?>" alt="<?php echo get_string('delete');?>" />
 																				</a>
 																	  <?php } ?>						
 						</div>
 					</span>
 			<br />
-			<div class="view_comments"><h3 id="entry_<?php echo $entry->id; ?>" ><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}"?>'  ><?php echo get_string('addcomment','block_ilp');?></a></div>
+			<div class="view_comments"><h3 id="entry_<?php echo $entry->id; ?>" class="commentheading"><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}"?>'  ><?php echo get_string('addcomment','block_ilp');?></a></div>
 			<?php 
 			if (!empty($comments)) {
 			?>
@@ -48,7 +48,7 @@
 								<?php echo get_string('creator','block_ilp').": ".fullname($comment_creator);?> |
 								<?php echo get_string('date').": ".userdate($c->timemodified, get_string('strftimedate'));?> |
 								<?php if ($c->creator_id == $USER->id) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&comment_id={$c->id}"?>'><?php echo get_string('edit'); ?> <img src='<?php echo $OUTPUT->pix_url("/i/edit");?>' alt='<?php echo get_string('edit'); ?>'></a>|
-								<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&comment_id={$c->id}" ?>'><?php echo get_string('delete'); ?> <img src='<?php echo $OUTPUT->pix_url("/i/delete");?>' alt='<?php echo get_string('delete'); ?>'></a><?php } ?>
+								<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&comment_id={$c->id}" ?>'><?php echo get_string('delete'); ?> <img src='<?php echo $OUTPUT->pix_url("/t/delete");?>' alt='<?php echo get_string('delete'); ?>'></a><?php } ?>
 					</div>					
 								
 					<?php } ?> 

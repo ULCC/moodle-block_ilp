@@ -1546,7 +1546,7 @@ class ilp_db_functions	extends ilp_logging {
     * @return	bool true if update successful false if not  
     */
   	function update_userstatus($userstatus)	{
-  		$this->update_record('block_ilp_user_status',$userstatus);
+  		return $this->update_record('block_ilp_user_status',$userstatus);
   	}
   	
   	 /**
@@ -1594,17 +1594,27 @@ class ilp_db_functions	extends ilp_logging {
   		return $this->insert_record('block_ilp_dash_region_plugin', $regionplugin);
   	}
   	
-  	/**
-     * Returns the  
+/**
+     * Returns all items with a parent id matching the one given
      * 
-     * @param object $regionplugin the record to be saved to the 
-     * block_ilp_dash_region_plugin table 
-     * 
-     * @return mixed int the id of the new record or false 
+     * @param int $id the parent id the items returned should have 
+          * 
+     * @return mixed array of recordset objects or false 
      */
   	function get_status_items($id)	{
-  		
   		return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$id));
+  	}
+  	
+  	
+	/**
+     * Returns the status item with the id given
+     * 
+     * @param int $id the id of the status item we want to return 
+          * 
+     * @return mixed object containing recordset with matching id or false 
+     */
+  	function get_status_item_by_id($id)	{
+  		return $this->dbc->get_record('block_ilp_plu_sts_items',array('id'=>$id));
   	}
   	
   	

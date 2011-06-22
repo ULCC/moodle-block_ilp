@@ -38,7 +38,7 @@ $tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_RAW);
 $ajax		= $PARSER->required_param('ajax',PARAM_RAW);
 
 //get the changed status
-$status		= $PARSER->required_param('value',PARAM_RAW);
+$status_id		= $PARSER->required_param('select_userstatus',PARAM_RAW);
 
 
 
@@ -54,32 +54,25 @@ if (empty($student)) {
 }
 
 //
-$stausitem	=		$dbc->get_user_status_items();
+$stausitem	=		$dbc->get_status_item_by_id($status_id);
 
 
-
-$statusrecord						= 	new stdClass();
-$statusrecord->user_id				=	$student_id;
-$statusrecord->user_modified_id		=	$USER->id;
-$statusrecord->value				=	'';
+$userstatus	=	$dbc->get_user_status($student_id);
 
 
+$userstatus->user_modified_id		=	$USER->id;
+$userstatus->parent_id			=	$status_id;
 
 
-if ($dbc->update_userstatus($statusrecord)) {
+if ($dbc->update_userstatus($userstatus)) {
 	
 	if (empty($ajax)) {
-		
 		 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$student_id.'&tabitem='.$tabitem.'&selectedtab='.$selecttedtab;
          redirect($return_url, get_string("stausupdated", 'block_ilp'), REDIRECT_DELAY); 
-		
 	} else {
-		
-		echo $statusitem->name;
-		
+		echo $stausitem->name;
 	}
-	
-	
+
 } else {
 	
 	//output an error 

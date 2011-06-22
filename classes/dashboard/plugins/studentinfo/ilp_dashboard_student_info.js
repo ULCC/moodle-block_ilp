@@ -35,16 +35,15 @@ M.ilp_dashboard_student_info = {
 		
         
         save_userstatus : function (value) {
-        	
         	// get course_id and candidate_id from the form
-            var student_id = document.getElementById('student_id');
+            var student_id = document.getElementById('student_id').value;
 
             ajaxinprogress = true;
 
             YAHOO.util.Connect.asyncRequest('POST',
                                             '/blocks/ilp/actions/save_userstatus.php',
                                             M.ilp_dashboard_student_info.callback,
-                                            'ajax=true&student_id='+student_id);
+                                            'ajax=true&student_id='+student_id+'&select_userstatus='+value);
         	
         },
         
@@ -85,7 +84,7 @@ M.ilp_dashboard_student_info = {
         
 
  
-M.ilp_dashboard_student_info.init = function(Y) {
+M.ilp_dashboard_student_info.init = function(Y,statusval) {
 
 	//hide select and submit button 
 	 
@@ -98,9 +97,10 @@ M.ilp_dashboard_student_info.init = function(Y) {
     M.ilp_dashboard_student_info.showelement(userstatus);
     M.ilp_dashboard_student_info.showelement(editicon);
     M.ilp_dashboard_student_info.hideelement(statusform);
-	
+    
 	YAHOO.util.Event.addListener("edit_userstatus_icon", "click", M.ilp_dashboard_student_info.addselect);
 	//YAHOO.util.Event.addListener("select_userstatus", "change", alert('tesdt'));
+
 	
 	//add the onchange event to the select button
 	document.getElementById('select_userstatus').addEventListener(

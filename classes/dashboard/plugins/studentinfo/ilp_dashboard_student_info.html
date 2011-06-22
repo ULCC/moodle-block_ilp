@@ -26,7 +26,7 @@ $PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $
 						editable user status
 					<?php } else {?>
 						<span id="user_status" class="hidden" ><?php echo $statusitem->name; ?></span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" class="hidden editicon" id="edit_userstatus_icon" />
-						<?php echo $this->userstatus_select(); ?>
+						<?php echo $this->userstatus_select($statusitem->id); ?>
 					<?php } ?>
 				</p>
 					

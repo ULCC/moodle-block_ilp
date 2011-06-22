@@ -52,7 +52,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			$studentstatus	=	$this->dbc->get_user_status($this->student_id);
 			
 			if (!empty($studentstatus)) {
-				$statusitem		=	$this->dbc->get_status_items($studentstatus->id);
+				$statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->id);
 			}   
 			
 			$precentagebars	=	array();
@@ -218,7 +218,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * @param	array &$string the language strings array passed by reference so we  
 	 * just need to simply add the plugins entries on to it
 	 */
-	function userstatus_select()	{
+	function userstatus_select($selected_value =null)	{
 		global	$USER, $CFG;
 		$form	=	"<span id='studentstatusform'>";
 
@@ -234,7 +234,10 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			$form .= "<select id='select_userstatus'  >";
 
 			foreach ($statusitems	as  $s) {
-				$form .= "<option value='{$s->value}'>{$s->name}</option>";
+				
+				$selected	=	($s->id	==	$selected_value) ? 'selected="selected"' : '';
+				
+				$form .= "<option value='{$s->id}' $selected >{$s->name}</option>";
 			}
 			
 			$form .= '</select>';

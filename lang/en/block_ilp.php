@@ -21,11 +21,15 @@
 	$string['createnewreport']		=	'Create New Report';
 	$string['comments']				=	'Comments';
 	$string['comment']				=	'Comment';
+	$string['commentcreationsuc']	=	'Comment was successfully created';
 	$string['continue']				=	'Continue';
 	
 	$string['contextcourse']		=	'Context Course';
 	$string['contextuser']			=	'Continue User';
 	$string['contextself']			=	'Context Self';
+	
+	
+	
 	$string['coursereports']		=	'Course Reports';
 	$string['dashboard']	 		= 	'Dashboard';
 	
@@ -42,6 +46,7 @@
 	$string['display'] 				= 	'Display';
 	$string['disablereport']		= 	'Disable Report';
 	$string['editcomment']			= 	'Edit Comment';
+	$string['editfield']			=	'Edit Field';
 	$string['editfields']			=	'Edit Fields';
 	$string['editprompt']			=	'Edit Prompt';
 	$string['editpermissions']		=	'Edit Permisssions';

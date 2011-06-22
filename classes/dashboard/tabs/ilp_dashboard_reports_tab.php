@@ -155,11 +155,11 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			
 			
 			
-	/*
+	
 			// load custom javascript
 			$module = array(
-			    'name'      => 'view_main',
-			    'fullpath'  => '/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab/js/animate_accordions.js',
+			    'name'      => 'ilp_dashboard_reports_tab',
+			    'fullpath'  => '/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.js',
 			    'requires'  => array('yui2-dom', 'yui2-event', 'yui2-connection', 'yui2-container', 'yui2-animation')
 			);
 			
@@ -170,8 +170,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			);
 			
 			// initialise the js for the page
-			$PAGE->requires->js_init_call('M.blocks_ilp_animate_accordions.init', $jsarguments, true, $module);
-		*/	
+			$PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
+		
 				//start buffering output
 				ob_start();
 					
