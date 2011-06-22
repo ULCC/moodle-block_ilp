@@ -70,40 +70,6 @@ class ilp_element_plugin_status_mform  extends ilp_element_plugin_mform_itemlist
     }
 	
 	
-	/**
-	textarea element to contain the options the manager wishes to add to the user form
-	manager will be instructed to insert value/label pairs in the following plaintext format:
-	value1:label1\nvalue2:label2\nvalue3:label3
-	or some such
-	*/
-	protected function config_specific_definition($mform) {
-
-		$mform->addElement(
-			'textarea',
-			'optionlist',
-			get_string( 'ilp_element_plugin_dd_optionlist', 'block_ilp' ),
-			array('class' => 'form_input')
-	    );
-
-		$mform->addElement(
-			'textarea',
-			'fail',
-			get_string( 'ilp_element_plugin_state_fail', 'block_ilp' ),
-			array('class' => 'form_input')
-	    );
-
-		$mform->addElement(
-			'textarea',
-			'pass',
-			get_string( 'ilp_element_plugin_state_pass', 'block_ilp' ),
-			array('class' => 'form_input')
-	    );
-
-		//manager must specify at least 1 option, with at least 1 character
-        $mform->addRule('optionlist', null, 'minlength', 1, 'client');
-
-	}
-	
     protected function is_valid_item( $item, $item_list, $keysep=":" ){
         $item = trim( $item );
         $itemparts = explode( $keysep, $item );
