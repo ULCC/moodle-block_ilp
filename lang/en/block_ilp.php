@@ -135,7 +135,8 @@
 	$string['viewreportpreview'] 				= 	'View Report Preview';
 	
 	
-	
+	//edit_status_items.php
+	$string[ 'edit_status_items' ]		=	'Edit Status';
 	
 
 	//CAPABILITY STRINGS
