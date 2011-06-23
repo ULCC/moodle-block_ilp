@@ -100,7 +100,7 @@
 	$string['perpage'] 				=	'per page';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['plugintype'] 			= 	'Plugin Type';
-	
+	$string['print'] 				= 	'Print';
 	$string['preview'] 				= 	'Preview';
 	$string['previewreport'] 		= 	'Preview Report';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
@@ -123,6 +123,8 @@
 	$string['reportpermissionsdescription']		= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
 	$string['savechanges'] 						= 	'Save Changes';
 	$string['statuschangesuc'] 					= 	'The reports status was successfully changed';
+	$string['statusitemupdatesuc'] 				= 	'The status items have been updated';
+	
 	$string['selecttype'] 						= 	'Select Field Type';
 	$string['selectedreports']					= 	'Selected Reports';
 	$string['selectedreportlist']				= 	'Select report list options';
@@ -141,7 +143,7 @@
 	
 	
 	//edit_status_items.php
-	$string[ 'edit_status_items' ]		=	'Edit Status';
+	$string[ 'edit_status_items' ]		=	'Edit Status Items';
 	
 
 	//CAPABILITY STRINGS
@@ -162,6 +164,7 @@
 	$string['reportnotfouund']				= 	'The report with the id given was not found';
 	$string['statuschangeerror'] 			= 	'A error occurred whilst changing the report status. The status was not changed';
 	$string['fieldreqerror']				=	'A error occurred the required status was not updated';
+	$string['statusitemupdateerror']			=	'A error occurred whilst updating status items';
 	
 	
 	//LOGGING

@@ -191,6 +191,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
 						echo $this->get_header($report->name);
 						
+						//output the print icon
+						echo "<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon'></a></div>
+							 <div class='clearer'></div>";
+						
 						$reportname	=	$report->name;	
 						//get all of the fields in the current report, they will be returned in order as
 						//no position has been specified

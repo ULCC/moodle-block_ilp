@@ -58,24 +58,181 @@ class block_ilp extends block_list {
 
         $coursecontext = get_context_instance(CONTEXT_COURSE, $course_id);
 
-        //check user capabilities 
-        /*
-        // are we a student on the course?
-        $access_iscandidate = has_capability('block/assmgr:creddelevidenceforself', $coursecontext, $USER->id, false);
-		*/
-
         // cache the content of the block
         if($this->content !== null) {
             return $this->content;
         }
+       
+        //we need to get the capabilites of the current user so we can deceide what to display in the block 
+        $access_viewilp			=	has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false);
+		$access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false);
+        
+        /*
+        //check if the user has the viewotherilp capability
+      //  if (!empty($access_viewotherilp)) {
+        
+        
+        //} else {
+			//TODO place percentage bar code into a class 
+        	//the following code handles the creation of the percentage bars (this will be placed into a function)
+        	
+	        $percentagebars	=	array();
+						
+			//set the display attendance flag to false
+			$displayattendance	= false;
+			
+			$passpercentage	=	get_config('block_ilp', 'passpercent');
+			
+			//just in case the pass percentage has not been set 
+			$passpercentage	=	(empty($passpercentage)) ? ILP_DEFAULT_PASS_PERCENTAGE : $passpercentage;
+			
+			$failpercentage	=	get_config('block_ilp', 'failpercent');
+			
+			//just in case the fail percentage has not been set 
+			$failpercentage	=	(empty($failpercentage)) ? ILP_DEFAULT_FAIL_PERCENTAGE : $failpercentage;
+			
+			//include the attendance 
+			$misclassfile	=	$CFG->docroot."/blocks/ilp/classes/mis.class.php";
+			
+			if (file_exists($misclassfile)) {
+				
+				//create an instance of the MIS class
+				$misclass	=	new mis();
+				
+				//set the student in question
+				$misclass->get_student_data($this->student_id);
+				
+				$punch_method1 = array($misclass, 'get_total_punchuality');
+				$punch_method2 = array($misclass, 'get_student_punchuality');
+				$attend_method1 = array($misclass, 'get_total_attendance');
+				$attend_method2 = array($misclass, 'get_student_attendance');
+        
+					        //check whether the necessary functions have been defined
+		        if (is_callable($punch_method1,true) && is_callable($punch_method2,true)) {
+		        	$misinfo	=	new stdClass();
+		        	//call the get_total_punchuality function to get the total number of times the student could have been on time
+		  	        $misinfo->total	=	$misclass->get_total_punchuality();
+		  	        //call the get_student_punchuality fucntion to get the total number of times the student was on time
+	    	        $misinfo->actual	=	$misclass->get_student_punchuality();
+	    	        
+	    	        	    	        //if total_possible is empty then there will be nothing to report
+	    	        if (!empty($misinfo->total)) {
+		    	        //calculate the percentage
+		    	        
+		    	        $misinfo->percentage	=	$misinfo->actual/$misinfo->total	* 100;	
+	    	        
+	    		        $misinfo->name	=	get_string('punchuality','block_ilp');
+	    	        
+	    		        //sets the colour of the percentage bar
+	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','failcsscolour');	
+	    	       	
+	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','midcsscolour');	
+	    	        	
+	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->csscolor	=	get_config('block_ilp','passcsscolour');	
+	    	       
+	    	        	
+	    		        //pass the object to the percentage bars array
+	    	    	    $percentagebars[]	=	$misinfo;
+	    	        }
+	        	}
+	        	
+				//check whether the necessary functions have been defined
+		        if (is_callable($attend_method1,true) && is_callable($attend_method2,true)) {
+		        	$misinfo	=	new stdClass();
+		        	//call the get_total_punchuality function to get the total number of times the student could have been on time
+		  	        $misinfo->total	=	$misclass->get_total_attendance();
+		  	        //call the get_student_punchuality fucntion to get the total number of times the student was on time
+	    	        $misinfo->actual	=	$misclass->get_student_attendance();
+	    	        
+	    	        //if total_possible is empty then there will be nothing to report
+	    	        if (!empty($misinfo->total)) {
+	    	        	//calculate the percentage
+	    	        	$misinfo->percentage	=	$misinfo->actual/$misinfo->total	* 100;
+	    	        
+	    	        	$misinfo->name	=	get_string('attendance','block_ilp');
+	    	        		
+   	    		        //sets the colour of the percentage bar
+	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','failcsscolour');	
+	    	       	
+	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','midcsscolour');	
+	    	        	
+	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->csscolor	=	get_config('block_ilp','passcsscolour');	
+	    	       	
+	    	        	$percentagebars[]	=	$misinfo;
+	    	        }
+	    	        
+	        	}
+				
+				
+			}
+        	
+        	
+        	//get all enabled reports in this ilp
+			$reports		=	$dbc->get_reports(ILP_ENABLED);
+			
 
-        $this->content = new stdClass;
+			
+			
+			//we are going to output the add any reports that have state fields to the percentagebar array 
+			foreach ($reports as $r) {
+				if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
+
+					
+					
+					$reportinfo				=	new stdClass();
+					$reportinfo->total		=	$dbc->count_report_entries($r->id,$USER->id);
+					$reportinfo->actual		=	$dbc->count_report_entries_with_state($r->id,$USER->id,ILP_PASSFAIL_PASS);
+				
+	    	        //if total_possible is empty then there will be nothing to report
+	    	        if (!empty($reportinfo->total)) {
+	    	        	//calculate the percentage
+	    	        	$reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
+	    	        
+	    	        	$reportinfo->name	=	$r->name;
+	    	        	
+	    	        	     //sets the colour of the percentage bar
+	    	        	if ($reportinfo->percentage	<= $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','failcsscolour');	
+	    	       	
+	    	        	if ($reportinfo->percentage	> $failpercentage && $reportinfo->percentage < $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','midcsscolour');	
+	    	        	
+	    	        	if ($reportinfo->percentage	>= $passpercentage) $reportinfo->csscolor	=	get_config('block_ilp','passcsscolour');	
+	    	        	
+	    	        	$percentagebars[]	=	$reportinfo;
+	    	        }
+					
+				}
+			}
+				
+
+	         $this->content->text	= "";
+	         
+	         					
+			var_dump($percentagebars);
+	         
+	         foreach ($percentagebars as $p) {
+	         	$this->content->items[]	=	"<br /><label style='font-size: 10px; font-size:normal;'>{$p->name}</label><div style='margin:	2px; border-style:	solid; border-color:	black; height: 10px; width : 100px;'  ><div class='ilppercentagebar' style='width: {$p->percentage}%' ></div></div>";
+	         }
+	         
+        	
+        	
+       // }
+        
+         */
+		
+		$this->content = new stdClass;
         $this->content->footer = '';
-
-		 $label = get_string('mypersonallearningplan', 'block_ilp');
-         $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}";
-         $this->content->items[] = "<a href='{$url}'>{$label}</a>";
-         $this->content->icons[] = "";
+         
+	//	if (!empty($access_viewotherilp)) {
+        
+        
+      //  } else {
+			 $label = get_string('mypersonallearningplan', 'block_ilp');
+	         $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}";
+	         $this->content->items[] = "<a href='{$url}'>{$label}</a>";
+	         $this->content->icons[] = "";
+        //}
+		
+		
          
         return $this->content;
     }

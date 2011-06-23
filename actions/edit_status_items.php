@@ -21,7 +21,7 @@ $mform	=	new edit_status_item_mform($report_id);
 //was the form cancelled?
 if ($mform->is_cancelled()) {
 	//send the user back
-	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php';
+	$return_url = $CFG->wwwroot.'/admin/settings.php?section=blocksettingilp';
     redirect($return_url, '', REDIRECT_DELAY);
 }
 
@@ -45,7 +45,7 @@ if($mform->is_submitted()) {
     	//if saving the data was not successful
         if(!$success) {
 			//print an error message	
-            print_error(get_string("reportcreationerror", 'block_ilp'), 'block_ilp');
+            print_error(get_string("statusitemupdateerror", 'block_ilp'), 'block_ilp');
         }
 
         //if the report_id ahs not already been set
@@ -53,8 +53,8 @@ if($mform->is_submitted()) {
         
         //decide whether the user has chosen to save and exit or save or display
         if (isset($formdata->saveanddisplaybutton)) { 
-        	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
-        	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
+        	$return_url = $CFG->wwwroot.'/admin/settings.php?section=blocksettingilp';
+        	redirect($return_url, get_string("statusitemupdatesuc", 'block_ilp'), REDIRECT_DELAY);
         }
     }
 }
@@ -93,7 +93,7 @@ $PAGE->navbar->add($pagetitle,null,'title');
 // setup the page title and heading
 $PAGE->set_title(get_string('blockname','block_ilp'));
 $PAGE->set_heading(get_string('reportconfiguration', 'block_ilp'));
-$PAGE->set_url($CFG->wwwroot.'/blocks/ilp/edit_report.php', $PARSER->get_params());
+$PAGE->set_url($CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php', $PARSER->get_params());
 
-require_once($CFG->dirroot.'/blocks/ilp/views/edit_report.html');
+require_once($CFG->dirroot.'/blocks/ilp/views/edit_status_items.html');
 ?>

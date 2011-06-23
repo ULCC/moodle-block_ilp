@@ -1,22 +1,40 @@
-<?php foreach ($reportslist as $rep) {?>
-<div id='content'>
-	<div id='ilp-target-overview' class='generalbox'>
+<?php 
+
+$i	=	0;
+
+foreach ($reportslist as $rep) {
+	
+	$floatclass	=	'';
+	//add the extra class in to make the 
+	if ($i == 0) $floatclass	=	'entry_floatleft';
+
+?>
+
+	<div id='ilp-target-overview' class='generalbox  entries_entry  <?php echo $floatclass;?>'>
 		<h2>
 			<a href=''><?php echo $rep->name?></a>
 		</h2>
-		<div style="width: 80%" >
-			<div style="float:left; width: 50%;">
-				<div style="float:left">
+		<div class='entries_reportentry' >
+			<div class='entries_report'>
+				<div class='entries_report_img'>
 					<img id="reportimage" alt="<?php echo $rep->name." ".get_string('reports','block_ilp'); ?>"" src="<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif"?>" />
 				</div>
 				<?php if (!empty($detail->state_report)) { echo $rep->achieved."/".$rep->entries." ".get_string('achieved','block_ilp'); } else { echo $rep->entries." ".get_string('reports','block_ilp');} ?><br />
 				<?php echo get_string('ilp_dashboard_entries_tab_lastupdate','block_ilp');?>: <?php echo $rep->lastmod; ?><br />
 			</div>
-			<div class='ilpadd' style="float:right">
+			<div class='entries_report_add'>
 				<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}"; ?>' ><?php echo get_string('addnew','block_ilp'); ?></a>
 			</div>
 			<div class='clearer'>&nbsp;</div>
 		</div>
 	</div>
-</div>
-<?php } ?>
+<?php 
+	//
+	if ($i == 0) {
+?>
+	<div class="entry_floatright"><a href=''><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
+	<div class='clearer'></div>
+<?php 
+	}
+	$i++;
+} ?>

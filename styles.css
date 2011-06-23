@@ -122,21 +122,35 @@
 	height					:	10px;
 }
 
-.ilp .percentage-red		{
-	background-color		:	red;
+
+ilppercentagebarborder-small		{
 	height					:	10px;
 }
 
+
+ilppercentagebarborder-large {
+	margin					:	2px;
+	border-style			:	solid;
+	border-color			:	black;
+	border-width			:	thin;
+	width					:	200px;
+	height					:	20px;
+	float					:	left;
+	display 				:	block
+}
+
 .ilp .view_report .view_report_fields {
-	width					:	60%;
-
-
-	
+	/*width					:	60%;*/
+	display					:	inline;
+	float					:	left;					
 	
 }
 
 .ilp .view_report .view_report_details  {
-	width					: 	30%; 
+	/*width					: 	30%;*/
+	display					:	inline;
+	float					:	right; 
+	
 	
 }
 
@@ -152,8 +166,10 @@
 
 
 .ilp .view_comments 	{
+	clear					:	both;
 	width					:	100%;
 	margin-left				:	20px;
+	padding-top				:	10px;
 }
 
 .ilp .view_comments h3	{
@@ -190,7 +206,47 @@ ilp #studentstatussub .hidden {
 }
 
 
+ilp .hiddencontainer	{
+	height				:	0px;	
+}
 
+.ilp .commentheading .collapse {
+    padding-right   : 5px;	
+}
+
+
+.ilp .entries_reportentry	{
+	width				: 	80%;	
+}
+
+.ilp .entries_report	{
+	float				:	left; 
+	width				: 	50%;
+}
+
+.ilp .entries_report_img	{
+	float				:	left; 
+}
+
+.ilp .entries_report_add	{
+	float				:	right; 
+}
+
+.ilp .entries_entry {
+	width				:	70%;	
+}
+
+.ilp .entry_floatleft {
+	 float				:  left;	
+}
+
+.ilp .entry_floatright {
+	 float				:  right;	
+}
+
+.ilp .ilp_print_icon {
+	padding				:	5px;	
+}
 
 /* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific
 *  css class for the table this is BAD BAD BAD and should be sorted out.

@@ -46,7 +46,7 @@ class edit_status_item_mform extends ilp_moodleform {
 	
 	        	$mform =& $this->_form;
         	
-       		 	$fieldsettitle = (!empty($this->report_id)) ? get_string('editreport', 'block_ilp') : get_string('createreport', 'block_ilp');
+       		 	$fieldsettitle = get_string('edit_status_items', 'block_ilp');
         	
        		 	//create a new fieldset
        		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
@@ -203,6 +203,7 @@ class edit_status_item_mform extends ilp_moodleform {
 		        }
 			return $valid;
 		}
+		
 		//adapted from ilp_element_plugin_state_mform
 		protected function is_valid_item( $item, $item_list, $keysep=":" ){
 		        $item = trim( $item );

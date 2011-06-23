@@ -55,7 +55,9 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 				$statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->id);
 			}   
 			
-			$precentagebars	=	array();
+			//TODO place percentage bar code into a class 
+			
+			$percentagebars	=	array();
 						
 			//set the display attendance flag to false
 			$displayattendance	= false;
@@ -106,15 +108,15 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    		        $misinfo->name	=	get_string('punchuality','block_ilp');
 	    	        
 	    		        //sets the colour of the percentage bar
-	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->cssclass	=	 get_config('block_ilp','failcsscolour');	
+	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','failcsscolour');	
 	    	       	
-	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->cssclass	=	 get_config('block_ilp','midcsscolour');	
+	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','midcsscolour');	
 	    	        	
-	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->cssclass	=	get_config('block_ilp','passcsscolour');	
+	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->csscolor	=	get_config('block_ilp','passcsscolour');	
 	    	       
 	    	        	
 	    		        //pass the object to the percentage bars array
-	    	    	    $precentagebars[]	=	$misinfo;
+	    	    	    $percentagebars[]	=	$misinfo;
 	    	        }
 	        	}
 	        	
@@ -134,13 +136,13 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    	        	$misinfo->name	=	get_string('attendance','block_ilp');
 	    	        		
    	    		        //sets the colour of the percentage bar
-	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->cssclass	=	 get_config('block_ilp','failcsscolour');	
+	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','failcsscolour');	
 	    	       	
-	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->cssclass	=	 get_config('block_ilp','midcsscolour');	
+	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','midcsscolour');	
 	    	        	
-	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->cssclass	=	get_config('block_ilp','passcsscolour');	
+	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->csscolor	=	get_config('block_ilp','passcsscolour');	
 	    	       	
-	    	        	$precentagebars[]	=	$misinfo;
+	    	        	$percentagebars[]	=	$misinfo;
 	    	        }
 	    	        
 	        	}
@@ -175,13 +177,13 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    	        	$reportinfo->name	=	$r->name;
 	    	        	
 	    	        	     //sets the colour of the percentage bar
-	    	        	if ($reportinfo->percentage	<= $passpercentage) $reportinfo->cssclass	=	 get_config('block_ilp','failcsscolour');	
+	    	        	if ($reportinfo->percentage	<= $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','failcsscolour');	
 	    	       	
-	    	        	if ($reportinfo->percentage	> $failpercentage && $reportinfo->percentage < $passpercentage) $reportinfo->cssclass	=	 get_config('block_ilp','midcsscolour');	
+	    	        	if ($reportinfo->percentage	> $failpercentage && $reportinfo->percentage < $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','midcsscolour');	
 	    	        	
-	    	        	if ($reportinfo->percentage	>= $passpercentage) $reportinfo->cssclass	=	get_config('block_ilp','passcsscolour');	
+	    	        	if ($reportinfo->percentage	>= $passpercentage) $reportinfo->csscolor	=	get_config('block_ilp','passcsscolour');	
 	    	        	
-	    	        	$precentagebars[]	=	$reportinfo;
+	    	        	$percentagebars[]	=	$reportinfo;
 	    	        }
 					
 				}
