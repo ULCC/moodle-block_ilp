@@ -83,10 +83,11 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 							
 							//get all entries for this student in report
 							$detail->entries		=	($this->dbc->count_report_entries($r->id,$this->student_id)) ? $this->dbc->count_report_entries($r->id,$this->student_id) : 0;
-							
+							$detail->state_report	=	false;
 							if ($this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
 								//get the number of entries achieved
 								$detail->achieved	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
+								$detail->state_report	=	true;
 							}
 		
 							//get the last updated report entry

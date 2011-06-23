@@ -9,15 +9,17 @@
 								//create the fieldname which will be used in to retrieve data from the object
 								$fieldname	=	$field->id."_field";					
 							?>
-							<p >
+							<p>
 								<label><?php echo $field->label; ?></label><?php	echo $entry_data->$fieldname;	?>
 							</p>
+								
+							
 						<?php 
 							}
 						} ?>
 						
 					</div>
-					<span class="view_report_details" >
+					<div class="view_report_details" >
 						<ul>
 							<li><?php echo get_string('entrycreator','block_ilp')." : ".$entry_data->creator;?></li>
 							<?php if (!empty($has_courserelated)) { ?><li><?php echo get_string('course','block_ilp')." : ".$entry_data->coursename;?> </li><?php } ?>
@@ -33,13 +35,13 @@
 																				</a>
 																	  <?php } ?>						
 						</div>
-					</span>
+					</div>
 			<br />
 			<div class="view_comments"><h3 id="entry_<?php echo $entry->id; ?>" class="commentheading"><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}"?>'  ><?php echo get_string('addcomment','block_ilp');?></a></div>
 			<?php 
 			if (!empty($comments)) {
 			?>
-			<div id="entry_<?php echo $entry->id; ?>_selector" class='generalbox' >
+			<div id="entry_<?php echo $entry->id; ?>_container" class='generalbox' >
 					<?php foreach ($comments as $c) { 
 						$comment_creator	=	$this->dbc->get_user_by_id($c->creator_id);
 					?>

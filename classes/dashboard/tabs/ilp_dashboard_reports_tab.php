@@ -162,11 +162,11 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			    'fullpath'  => '/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.js',
 			    'requires'  => array('yui2-dom', 'yui2-event', 'yui2-connection', 'yui2-container', 'yui2-animation')
 			);
-			
+
 			// js arguments
 			$jsarguments = array(
-			    'open_image'   => $OUTPUT->pix_url('t/switch_minus'),
-			    'closed_image' => $OUTPUT->pix_url('t/switch_plus')
+			    'open_image'   => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_minus.gif",
+			    'closed_image' => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_plus.gif",
 			);
 			
 			// initialise the js for the page

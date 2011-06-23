@@ -104,8 +104,9 @@ M.ilp_dashboard_reports_tab = {
     closed_image : null,
 
     init : function(Y, open_image, closed_image) {
-
-		this.open_image = open_image;
+    	console.log(open_image);
+    	console.log(closed_image);
+    	this.open_image = open_image;
 		this.closed_image = closed_image;
 
 		var heights = new Array();
@@ -116,16 +117,16 @@ M.ilp_dashboard_reports_tab = {
 		// get the currently selected accordion
 		var current = new RegExp("#(.+)").exec(window.location.href);
 
-		console.log(headers);
-		
 		for(i=0; i<headers.length; i++) {
 			
 			//cjheck if the _selector div exists if it doesn't there are no comments and thus no need for the 
 			//onclick
-			if (document.getElementById(headers[i].id+'_selector') != null) {
+			if (document.getElementById(headers[i].id+'_container') != null) {
 				// get the height of the container element
-				heights[headers[i].id] = get_height(Dom.get(headers[i].id+'_selector'));
+				heights[headers[i].id] = get_height(Dom.get(headers[i].id+'_container'));
 	
+				Dom.setStyle(Dom.get(headers[i].id+'_container'),"hiddencontainer");
+				
 				// set the cursor style so the user can see this is clickable
 				Dom.setStyle(headers[i], "cursor", "pointer");
 	
@@ -133,6 +134,9 @@ M.ilp_dashboard_reports_tab = {
 				img = document.createElement('img');
 				img.setAttribute('id', headers[i].id+'_icon');
 				img.setAttribute('class', 'collapse');
+				console.log(img);
+				
+				
 				headers[i].insertBefore(img, document.getElementById(headers[i].id).firstChild);
 	
 				// check if this container should be closed
@@ -144,9 +148,8 @@ M.ilp_dashboard_reports_tab = {
 					headers[i].onclick = function() { toggle_container(this, 0, heights[this.id]); };
 	
 					// close and hide the container
-					Dom.setStyle(Dom.get(headers[i].id+'_selector'), "display", "none");
-					Dom.setStyle(Dom.get(headers[i].id+'_selector'), "overflow", "hidden");
-					Dom.setStyle(Dom.get(headers[i].id+'_selector'), "height", "0px");
+					Dom.setStyle(Dom.get(headers[i].id+'_container'), "display", "none");
+					Dom.setStyle(Dom.get(headers[i].id+'_container'), "overflow", "hidden");
 	
 					// add the closed icon
 					document.getElementById(headers[i].id+'_icon').setAttribute('src', closed_image);
