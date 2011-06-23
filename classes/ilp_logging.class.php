@@ -121,7 +121,7 @@ class ilp_logging {
                 break;
 
             case 'block_ilp_report_field':
-                $attributes =    array( 'id' , 'label', 'audit_type', 'description' );
+                $attributes =    array( 'id' , 'label', 'audit_type', 'description', 'req' );
                 break;
 
             case 'block_ilp_entry':
@@ -129,13 +129,26 @@ class ilp_logging {
                 return;
 
             case 'block_ilp_plu_sts_items':
-		$newobject->audit_type = 'ilp status item';
-		$newobject->record_id = $newobject->id;
+		        $newobject->audit_type = 'ilp status item';
+        		$newobject->record_id = $newobject->id;
                 $attributes =    array( 'id', 'key', 'value', 'audit_type' );
                 break;
 
             default:
                 $attributes = array();
+
+            if( LOG_UPDATE == $action ){
+                if( 'block_ilp_plu_' == substr( $table, 0, 14 ) ){
+                    $newobject->record_id = $newobject->id;
+                    $attributes[] = 'minimumlength';
+                    $attributes[] = 'maximumlength';
+                    $newobject->entity = get_string( 'ilp_report_field' , 'block_ilp' );
+                    /*
+                    $attributes[] = 'table';
+                    $newobject->table = $table;
+                    */
+                }
+            }
         }
 
         $oplist = array(
@@ -201,6 +214,9 @@ class ilp_logging {
         else{
             //log management changes
 
+            $validation_paramlist = array(
+                'req' , 'minimumlength', 'maximumlength'
+            );
 	        foreach ($newobject as $key => $val) {
 	            if ((in_array($key,$attributes) &&
 	                ($this->diff_object($table,$newobject,$currobject,$key,$action) || $action == LOG_DELETE))) {
@@ -213,15 +229,21 @@ class ilp_logging {
 	                $log->course_id = false;
 	
                     $log->type = ( isset( $newobject->capability_id ) ) ? get_string( 'reportpermissions' , 'block_ilp' ) :  " " . $oplist[ $action ];
+                    if( in_array( $key, $validation_paramlist ) ){
+                        $log->type .= " " . 'validation';
+                    }
 	
 	                $log->entity = $this->entity_type($table,$newobject);
+                    if( !empty( $newobject->audit_type ) ){
+                        $log->entity .= " " . $newobject->audit_type;
+                    }
 	                //record id pertain to the actual submission or
-			if( isset( $newobject->record_id ) ){
-				$log->record_id = $newobject->record_id;
-			}
-			else{
-	                	$log->record_id = $this->log_record_id($table,$newobject);
-			}
+        			if( isset( $newobject->record_id ) ){
+	             			$log->record_id = $newobject->record_id;
+           			}
+		        	else{
+	                     	$log->record_id = $this->log_record_id($table,$newobject);
+        			}
 			
 	
 	                //$log->attribute = $this->attribute_type($table,$newobject,$key);
@@ -242,6 +264,7 @@ class ilp_logging {
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
 	
+//var_crap(__LINE__);if( 'req' == $key ){var_crap($currobject);var_crap($newobject);var_crap($log);exit;}
 	
 	                $id = $this->dbc->insert_record('block_ilp_log',$log);
 	
@@ -440,7 +463,13 @@ class ilp_logging {
          if ($action == LOG_UPDATE || $action == LOG_DELETE || $action == LOG_ASSESSMENT) {
              //if ( 0 != $newobj->$attrib && empty($newobj->$attrib)) return false;
                 //empty is too generous a criterion: if 0 is the value, we should capture it
-             if( !isset( $currobj->$attrib ) ) return false;
+             if( !isset( $currobj->$attrib ) ) {
+                if( isset( $newobj->$attrib ) ){
+                    //one is set and the other isn't - they must be different
+                    return true;
+                }
+                return false;
+             }
              if (empty($currobj->$attrib)) return true;
              return ( $newobj->$attrib != $currobj->$attrib ) ? true : false;
          }
@@ -610,6 +639,28 @@ class ilp_logging {
                 return get_string( 'ilp_report', 'block_ilp' );
             case 'block_ilp_report_field':
                 return get_string( 'ilp_report_field', 'block_ilp' );
+            case 'block_ilp_plu_are':
+                return get_string( 'ilp_report_field_textarea', 'block_ilp' );
+            case 'block_ilp_plu_cat':
+                return get_string( 'ilp_report_field_category', 'block_ilp' );
+            case 'block_ilp_plu_crs':
+                return get_string( 'ilp_report_field_course', 'block_ilp' );
+            case 'block_ilp_plu_dat':
+                return get_string( 'ilp_report_field_date', 'block_ilp' );
+            case 'block_ilp_plu_dd':
+                return get_string( 'ilp_report_field_dropdown', 'block_ilp' );
+            case 'block_ilp_plu_ddl':
+                return get_string( 'ilp_report_field_datedeadline', 'block_ilp' );
+            case 'block_ilp_plu_hte':
+                return get_string( 'ilp_report_field_html', 'block_ilp' );
+            case 'block_ilp_plu_rdo':
+                return get_string( 'ilp_report_field_radio', 'block_ilp' );
+            case 'block_ilp_plu_ste':
+                return get_string( 'ilp_report_field_state', 'block_ilp' );
+            case 'block_ilp_plu_sts':
+                return get_string( 'ilp_report_field_status', 'block_ilp' );
+            case 'block_ilp_plu_tex':
+                return get_string( 'ilp_report_field_text', 'block_ilp' );
             case 'block_ilp_plu_sts_items':
                 return get_string( 'ilp_user_status_item', 'block_ilp' );
                 

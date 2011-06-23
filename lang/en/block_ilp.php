@@ -170,8 +170,22 @@
 	$string[ 'ilp_element_plugin_delete' ]		=	"ILP Form Plugin DELETE";
 	$string[ 'ilp_report' ]						=	"ILP Report";
 	$string[ 'ilp_report_field' ]				=	"ILP Report Field";
+	$string[ 'ilp_report_field_textarea' ]		=	"ILP textarea element";
+	$string[ 'ilp_report_field_category' ]		=	"ILP category element";
+	$string[ 'ilp_report_field_course' ]		=	"ILP course element";
+	$string[ 'ilp_report_field_date' ]			=	"ILP date element";
+	$string[ 'ilp_report_field_dropdown' ]		=	"ILP dropdown element";
+	$string[ 'ilp_report_field_datedeadline' ]	=	"ILP deadline element";
+	$string[ 'ilp_report_field_html' ]			=	"ILP html element";
+	$string[ 'ilp_report_field_radio' ]			=	"ILP radio element";
+	$string[ 'ilp_report_field_state' ]			=	"ILP state element";
+	$string[ 'ilp_report_field_status' ]		=	"ILP status element";
+	$string[ 'ilp_report_field_text' ]		    =	"ILP text element";
+	$string[ 'block_ilp_plu_tex' ]				=	"ILP text element";
+
+
 	$string[ 'ilp_plugin_element_data' ]		=	"Data";
-	$string[ 'ilp_user_status_item' ]		=	"ilp user status item";
+	$string[ 'ilp_user_status_item' ]		    =	"ilp user status item";
 	$string[ 'user_data' ]						=	"User Data";
 	$string[ 'userstatus' ]						=	"User Status";
 
