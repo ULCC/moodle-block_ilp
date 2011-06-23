@@ -404,20 +404,6 @@ class ilp_db_functions	extends ilp_logging {
     }
     
      /**
-     * Get the plugin instance record that has the id given 
-     * similar to get_plugin_record above
-     * status control has no reportfield_id, so we need to retrieve it
-     * directly from its id
-     *
-     * @param string $tablename the name of the table that will be updated
-     * @param int $reportfield_id the reportfield_id that the record must have
-     * @return mixed object containing the plugin instance record or false
-     */
-    function get_plugin_record_by_id($tablename,$id) {
-    	return $this->dbc->get_record($tablename, array('id' => $id));
-    }
-    
-     /**
      * This is the same as get_form_element_plugin() above
      * @todo refactor calls to this function 
      * Returns the plugin record that has the matching id 
