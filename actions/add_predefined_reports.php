@@ -160,7 +160,7 @@ class ilp_predefined_reports{
 	public function main(){
 		global $USER, $CFG, $SESSION, $PARSER;
 		$conn = quickdb::get_connection();
-		if(1){
+		if(0){
 			//turn off this block on production systems !
 			$trunccount = $this->trunc_ilp_tables( $conn );
 			$s = ( 1 == $trunccount ) ? '' : 's' ;
