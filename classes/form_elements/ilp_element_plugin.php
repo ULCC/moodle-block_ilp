@@ -444,7 +444,7 @@ class ilp_element_plugin {
 	  * @param object $entryobj an object that will add parameters to
 	  */
 	 public function entry_data( $reportfield_id,$entry_id,&$entryobj ){
-	 	//this function will suffix for 90% of plugins who only have one value field (named value) i
+	 	//this function will suffice for 90% of plugins who only have one value field (named value) i
 	 	//in the _ent table of the plugin. However if your plugin has more fields you should override
 	 	//the function 
 	 	

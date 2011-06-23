@@ -21,11 +21,11 @@ class quickdb{
 		return new mysqli( $host, $username, $password, $dbname ) ;
 	}
 
-	public static function execute_sql( $conn, $sql, $dbc=null ){
+	public static function execute_sql( $conn, $sql, $dbc=null, $extraparams=array() ){
 		if( $res = $conn->query( $sql ) ){
 			if( $insertid = $conn->insert_id ){
                 if( $dbc ){
-                 self::log_action( $sql, $dbc, $insertid );
+                 self::log_action( $sql, $dbc, $insertid, $extraparams );
                 }
 				return $insertid;
 			}
@@ -34,7 +34,7 @@ class quickdb{
 		return false;
 	}
 	
-    public static function log_action( $sql, $dbc, $id=null ){
+    public static function log_action( $sql, $dbc, $id=null, $extraparams=array() ){
 		global $CFG;
         $sql = trim( $sql );
         $action = false;
@@ -51,7 +51,9 @@ class quickdb{
         }
         $newobject = new stdClass();
         $newobject->id = $id;
-        //var_crap( $newobject );
+        foreach( $extraparams as $key=>$value ){
+            $newobject->$key = $value;      //add extra params for logging
+        }
         $dbc->add_to_audit( $table, $action, $newobject );
     }
 }
@@ -164,6 +166,7 @@ class ilp_predefined_reports{
 			$s = ( 1 == $trunccount ) ? '' : 's' ;
 			$this->disp( "$trunccount table$s truncated" );
 		}
+        //$info will just contain user messages about the running of this script - does not affect the data writing
 		$info = array( 'reportlist' => array(), 
 				'warninglist' => array(), 
 				'elementlist' => array()
@@ -299,9 +302,15 @@ class ilp_predefined_reports{
 		global $CFG;
 		$pluginrecord	=	$this->dbc->get_plugin_by_id($plugin_id);
 		$plugin_table_name = $pluginrecord->tablename;
-		$reportfield_id = $this->insert_report_field( $conn, $report_id, $label, $description, $plugin_id, $req );
+        
+        //$extraparams - to be sent through to logging class
+        $extraparams = array(
+            'audit_type' => $element[ 'type' ],
+            'label' => $label
+        );
+		$reportfield_id = $this->insert_report_field( $conn, $report_id, $label, $description, $plugin_id, $req, $extraparams );
 		$specific_sql = $this->get_specific_sql( $element, $pluginrecord, $reportfield_id );
-		$specific_parent_id = quickdb::execute_sql( $conn, $specific_sql, $this->dbc );
+		$specific_parent_id = quickdb::execute_sql( $conn, $specific_sql, $this->dbc, $extraparams );
 		if( in_array( 'opts' , array_keys( $element ) ) ){
             /*
             * at this point we could probe for a pre_items.config file for this element type,
@@ -312,7 +321,7 @@ class ilp_predefined_reports{
 			$itemtable = $plugin_table_name . '_items';
 			foreach( $element[ "opts" ] as $value=>$name ){
 				$sql = "INSERT INTO {$CFG->prefix}$itemtable ( parent_id, value, name, timemodified, timecreated ) VALUES ( $specific_parent_id, '$value', '$name', NOW(), NOW() )";
-				if( !quickdb::execute_sql( $conn, $sql, $this->dbc ) ){
+				if( !quickdb::execute_sql( $conn, $sql, $this->dbc, $extraparams ) ){
 					$this->disp( "FAILED: $sql" );
 				}
 			}
@@ -329,7 +338,7 @@ class ilp_predefined_reports{
 	* @param int $plugin_id
 	* @param int $req
 	*/
-	protected function insert_report_field( $conn, $report_id, $label, $description, $plugin_id, $req ){
+	protected function insert_report_field( $conn, $report_id, $label, $description, $plugin_id, $req, $extraparams=array() ){
 		global $USER, $CFG;
 		$tablename = 'block_ilp_report_field';
 		$tablename = $CFG->prefix . $tablename;
@@ -338,7 +347,7 @@ class ilp_predefined_reports{
 			INSERT INTO $tablename ( label, description, report_id, plugin_id, position, req, creator_id, timecreated, timemodified )
 			VALUES( '$label', '$description', $report_id, $plugin_id, $position, $req, $USER->id, NOW(), NOW() )
 		";
-		return quickdb::execute_sql( $conn, $sql, $this->dbc );
+		return quickdb::execute_sql( $conn, $sql, $this->dbc, $extraparams );
 		
 	}
 	

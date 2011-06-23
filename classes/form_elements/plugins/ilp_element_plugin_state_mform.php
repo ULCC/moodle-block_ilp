@@ -16,7 +16,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 	}
 
     /*
-    * the manager has entered the states in the unset, fail and pass textareas on the mform
+    * the manager has entered the states in the fail and pass textareas on the mform
     * the values in those textareas have been made into arrays and sent to this function, to be categorised as fail, pass or unset 
     * @param array $statelist - list of values - should be a key and value from the state selector, so that if either of them matches, we can return a pass or fail value
     * @param array $fail_list - list of values to be classified as fail
@@ -113,28 +113,28 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
 		}
 
-        $sep = "\n";
-        $keysep = ":";
+	        $sep = "\n";
+	        $keysep = ":";
 		//entries from data to go into $this->tablename and $this->items_tablename
 
-        $gradekeylist = array(
-            'pass', 'fail'
-        );
-        foreach( $gradekeylist as $key ){
-            $v = $key . '_list';
-            $$v = explode( $sep, $data->$key );
-            //deal with pesky whitespace
-            foreach( $$v as &$entry ){
-                $entry = trim( $entry );
-                $entryparts = explode( $keysep , $entry );
-                if( 1 < count( $entryparts ) ){
-                    //manager has copied a whole key:value string into the pass or fail textarea
-                    //so throw away the key 
-                    $entry = $entryparts[1];
-                }
-            }
-        }
-        //we now have 2 lists: $pass_list and $fail_list 
+	        $gradekeylist = array(
+       		     'pass', 'fail'
+	        );
+	        foreach( $gradekeylist as $key ){
+       		     $v = $key . '_list';
+       		     $$v = explode( $sep, $data->$key );
+       		     //deal with pesky whitespace
+       		     foreach( $$v as &$entry ){
+       		         $entry = trim( $entry );
+       		         $entryparts = explode( $keysep , $entry );
+       		         if( 1 < count( $entryparts ) ){
+       		             //manager has copied a whole key:value string into the pass or fail textarea
+       		             //so throw away the key 
+       		             $entry = $entryparts[1];
+       		         }
+       		     }
+       		 }
+	        //we now have 2 lists: $pass_list and $fail_list 
 	  	
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;
 	 	
@@ -150,7 +150,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 				//one item row inserted here
 				$itemrecord->value = $key;
 				$itemrecord->name = $itemname;
-                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+                		$itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
 	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	 	} else {
@@ -183,7 +183,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_mform_itemlist 
 				//one item row inserted here
 				$itemrecord->value = $key;
 				$itemrecord->name = $itemname;
-                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+                		$itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
 		 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	
