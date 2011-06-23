@@ -311,6 +311,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         $table_key = new $this->xmldb_key('primary');
         $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
         $table->addKey($table_key);
+	
+       	$table_key = new $this->xmldb_key('listplugin_unique_fk');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('parent_id'), $this->tablename, 'id');
+        $table->addKey($table_key);
         
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
@@ -383,6 +387,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 
         $table_key = new $this->xmldb_key('primary');
         $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+	
+       	$table_key = new $this->xmldb_key('listpluginentry_unique_fk');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('parent_id'), $this->tablename, 'id');
         $table->addKey($table_key);
         
         if(!$this->dbman->table_exists($table)) {
