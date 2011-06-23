@@ -17,7 +17,7 @@ class ilp_element_plugin_html_editor_mform  extends ilp_element_plugin_mform {
         );
         
         $mform->addRule('minimumlength', null, 'maxlength', 3, 'client');
-        $mform->addRule('minimumlength', null, 'required', null, 'client');
+        //$mform->addRule('minimumlength', null, 'required', null, 'client');
         $mform->setType('minimumlength', PARAM_INT);
 	  	
         //set the maximum length of the field default to 255
@@ -29,7 +29,7 @@ class ilp_element_plugin_html_editor_mform  extends ilp_element_plugin_mform {
         );
         
         $mform->addRule('maximumlength', null, 'maxlength', 4, 'client');
-        $mform->addRule('maximumlength', null, 'required', null, 'client');
+        //$mform->addRule('maximumlength', null, 'required', null, 'client');
         $mform->setType('maximumlength', PARAM_INT);
 	}
 	
