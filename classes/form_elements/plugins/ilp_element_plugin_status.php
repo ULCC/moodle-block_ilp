@@ -19,10 +19,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
     function __construct() {
     	$this->tablename = "block_ilp_plu_sts";
     	$this->data_entry_tablename = "block_ilp_plu_sts_ent";
-		$this->items_tablename = "block_ilp_plu_sts_items";
-		$this->optionlist_keyfield = "status_id";
-		$this->selecttype = OPTIONSINGLE;
-		parent::__construct();
+	$this->items_tablename = "block_ilp_plu_sts_items";
+	$this->optionlist_keyfield = "status_id";
+	$this->selecttype = OPTIONSINGLE;
+	parent::__construct();
     }
     
     
@@ -35,31 +35,149 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 	*/
 	public function config_specific_definition(&$mform) {
 
-		$mform->addElement(
+		$E = $mform->addElement(
 			'textarea',
 			'optionlist',
 			get_string( 'ilp_element_plugin_dd_optionlist', 'block_ilp' ),
 			array('class' => 'form_input')
 	    );
+		$info = $this->get_option_list_text( ILP_DEFAULT_USERSTATUS_RECORD , "\n", 'passfail' ) ;
+		$E->setValue( $info[ 'options' ] );
 
-		$mform->addElement(
+		$F = $mform->addElement(
 			'textarea',
 			'fail',
 			get_string( 'ilp_element_plugin_state_fail', 'block_ilp' ),
 			array('class' => 'form_input')
 	    );
+		$F->setValue( $info[ 'fail' ] );
 
-		$mform->addElement(
+		$G = $mform->addElement(
 			'textarea',
 			'pass',
 			get_string( 'ilp_element_plugin_state_pass', 'block_ilp' ),
 			array('class' => 'form_input')
 	    );
+		$G->setValue( $info[ 'pass' ] );
 
 		//manager must specify at least 1 option, with at least 1 character
         $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 	}
+	protected function config_specific_validation($data) {
+		$optionlist = array();
+		if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
+			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data[ 'optionlist' ] );
+		}
+        //all contents of $data->fail and $data->pass must match valid keys or values in $optionlist
+        $sep = "\n";
+        $keysep = ":";
+        $fail_item_list = explode( $sep, $data[ 'fail' ] );
+        $pass_item_list = explode( $sep, $data[ 'pass' ] );
+        foreach( array( $fail_item_list, $pass_item_list ) as $item_list ){
+            foreach( $item_list as $submitted_item ){
+                if( trim( $submitted_item ) && !$this->is_valid_item( $submitted_item , $optionlist, $keysep ) ){
+                    $this->errors[] = get_string( 'ilp_element_plugin_error_not_valid_item' , 'block_ilp' ) . ": <em>$submitted_item</em>";
+                }
+            }
+        }
+    }
+
+
+	/*
+	* take input from the management form and write the element info
+	*/
+	 protected function config_specific_process_data($data) {
+		$optionlist = array();
+		if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
+			//dd type needs to take values from admin form and write them to items table
+			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
+		}
+
+        $sep = "\n";
+        $keysep = ":";
+		//entries from data to go into $this->tablename and $this->items_tablename
+
+        $gradekeylist = array(
+            'pass', 'fail'
+        );
+        foreach( $gradekeylist as $key ){
+            $v = $key . '_list';
+            $$v = explode( $sep, $data->$key );
+            //deal with pesky whitespace
+            foreach( $$v as &$entry ){
+                $entry = trim( $entry );
+                $entryparts = explode( $keysep , $entry );
+                if( 1 < count( $entryparts ) ){
+                    //manager has copied a whole key:value string into the pass or fail textarea
+                    //so throw away the key 
+                    $entry = $entryparts[1];
+                }
+            }
+        }
+        //we now have 2 lists: $pass_list and $fail_list 
+	  	
+	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;
+	 	
+	 	if (empty($plgrec)) {
+			//options for this dropdown need to be written to the items table
+			//each option is one row
+	 		$element_id = $this->dbc->create_plugin_record($this->tablename,$data);
+		
+			//$itemrecord is a container for item data
+			$itemrecord = new stdClass();	
+			$itemrecord->parent_id = $element_id;
+			foreach( $optionlist as $key=>$itemname ){
+				//one item row inserted here
+				$itemrecord->value = $key;
+				$itemrecord->name = $itemname;
+                		$itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
+			}
+	 	} else {
+	 		//get the old record from the elements plugins table 
+	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield($this->tablename,$data->reportfield_id);
+			$data_exists = $this->dbc->plugin_data_item_exists( $this->tablename, $data->reportfield_id );
+			$element_id = $this->dbc->get_element_id_from_reportfield_id( $this->tablename, $data->reportfield_id );
+			//$itemrecord is a container for item data
+			$itemrecord = new stdClass();	
+			$itemrecord->parent_id = $element_id;
+
+			if( empty( $data_exists ) ){
+				//no user data - go ahead and delete existing items for this element, to be replaced by the submitted ones in $data
+				$delstatus = $this->dbc->delete_element_listitems( $this->tablename, $data->reportfield_id );
+					//if $delstatus false, there has been an error - alert the user
+			} else {
+				//user data has been submitted already - don't delete existing items, but add new ones if they are in $data
+				//purge $optionlist of already existing item_keys
+				//then it will be safe to write the items to the items table
+				foreach( $optionlist as $key=>$itemname ){
+					if( $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => $element_id, 'value' => $key ) ) ){
+						//this should never happen, because it shouldn't have passed validation, but you never know
+						unset( $optionlist[ $key ] );
+						//alert the user
+					}
+				}
+			}
+			//now write fresh options from $data
+			foreach( $optionlist as $key=>$itemname ){
+				//one item row inserted here
+				$itemrecord->value = $key;
+				$itemrecord->name = $itemname;
+                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+		 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
+			}
+	
+	 		//create a new object to hold the updated data
+	 		$pluginrecord 			=	new stdClass();
+	 		$pluginrecord->id		=	$oldrecord->id;
+	 		$pluginrecord->optionlist	=	$data->optionlist;
+			$pluginrecord->selecttype 	= 	OPTIONSINGLE;
+	 			
+	 		//update the plugin with the new data
+	 		//return $this->dbc->update_plugin_record($this->tablename,$pluginrecord);
+	 	}
+	 }
 
 	 /**
 	  * places entry data for the report field given into the entryobj given by the user 
@@ -235,6 +353,41 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
         }
+
+	    // create the new table to store user input
+        $table = new $this->xmldb_table( $this->data_entry_tablename );
+
+        $table_id = new $this->xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+       
+        $table_maxlength = new $this->xmldb_field('parent_id');
+        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_maxlength);
+        
+        $table_item_id = new $this->xmldb_field('value');	//foreign key -> $this->items_tablename
+        $table_item_id->$set_attributes(XMLDB_TYPE_CHAR, 255, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_item_id);
+
+        $table_report = new $this->xmldb_field('entry_id');
+        $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_report);
+        
+        $table_timemodified = new $this->xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $this->xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_key = new $this->xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+        
+        if(!$this->dbman->table_exists($table)) {
+            $this->dbman->create_table($table);
+        }
     }
     
     function language_strings(&$string) {
@@ -322,7 +475,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 		$faillist = array();
 		if( $reportfield_id ){
 			//get the list of options for this reportfield in the given table from the db 
-			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, $field );
+			//$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, $field );
+			$objlist = $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) );
 			
 			foreach( $objlist as $obj ){
 				//place the name into an array with value as key

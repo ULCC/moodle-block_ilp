@@ -15,6 +15,9 @@ class edit_status_item_mform extends ilp_moodleform {
 
 		public		$report_id;
 		public		$dbc;
+		public		$tablename;
+		public		$items_tablename;
+		public		$data_entry_tablename;
 	
 		/**
      	 * TODO comment this
@@ -25,6 +28,9 @@ class edit_status_item_mform extends ilp_moodleform {
 
 			$this->report_id	=	$report_id;
 			$this->dbc			=	new ilp_db();
+			$this->tablename = "block_ilp_plu_sts";
+			$this->items_tablename = "block_ilp_plu_sts_items";
+			$this->data_entry_tablename = "block_ilp_plu_sts_ent";
 			
 			// call the parent constructor
        	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_status_items.php?report_id={$this->report_id}");
@@ -36,38 +42,38 @@ class edit_status_item_mform extends ilp_moodleform {
 		function definition() {
 			 global $USER, $CFG;
 
-        	$dbc = new ilp_db;
+	        	$dbc = new ilp_db;
+	
+	        	$mform =& $this->_form;
+        	
+       		 	$fieldsettitle = (!empty($this->report_id)) ? get_string('editreport', 'block_ilp') : get_string('createreport', 'block_ilp');
+        	
+       		 	//create a new fieldset
+       		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
+       		     	$mform->addElement('html', '<legend class="ftoggler">'.$fieldsettitle.'</legend>');
 
-        	$mform =& $this->_form;
         	
-        	$fieldsettitle = (!empty($this->report_id)) ? get_string('editreport', 'block_ilp') : get_string('createreport', 'block_ilp');
+       		 	$mform->addElement( 'hidden', 'id', ILP_DEFAULT_USERSTATUS_RECORD );
+       		 	$mform->setType('id', PARAM_INT);
         	
-        	//create a new fieldset
-        	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
-            	$mform->addElement('html', '<legend class="ftoggler">'.$fieldsettitle.'</legend>');
-
-        	
-        	$mform->addElement('hidden', 'id');
-        	$mform->setType('id', PARAM_INT);
-        	
-        	$mform->addElement('hidden', 'creator_id', $USER->id);
-        	$mform->setType('creator_id', PARAM_INT);
+       		 	$mform->addElement('hidden', 'creator_id', $USER->id);
+       		 	$mform->setType('creator_id', PARAM_INT);
 
 	        
 //instantiate status class
-		require_once( "{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_status.php" );
-		$status = new ilp_element_plugin_status();
+			require_once( "{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_status.php" );
+			$status = new ilp_element_plugin_status();
 //call the definition
-		$status->config_specific_definition( $mform );
+			$status->config_specific_definition( $mform );
 		
+			        
+		        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
+		        $buttonarray[] = &$mform->createElement('cancel');
+		        
+		        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        
-	        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
-	        $buttonarray[] = &$mform->createElement('cancel');
-	        
-	        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
-	        
-	        //close the fieldset
-	        $mform->addElement('html', '</fieldset>');
+		        //close the fieldset
+		        $mform->addElement('html', '</fieldset>');
 		}
 		
 		/**
@@ -76,57 +82,161 @@ class edit_status_item_mform extends ilp_moodleform {
 		function process_data($data) {
 			
 			if (empty($data->id)) {
-            	$data->id = $this->dbc->create_report($data);
-            	
-            	//setup report default permissions. They will match the permissions
-            	//that the block has for each role
-            	
-            	$report_id	=	$data->id;
-            	
-            	//get all roles in moodle 
-            	$roles		=	$this->dbc->get_roles();
-            	
-            	//get all capabilities for the ilp block
-				$blockcapabilities	=	$this->dbc->get_block_capabilities();
-
-				//loop through roles
-            	foreach ($roles as $r) {
-            		//secondary loop through capabilities
-            		foreach($blockcapabilities as $cap) {
-           			
-            			//if the capability is not in the array
-            			if (!in_array($cap->name,array('block/ilp:creeddelreport'))) {
-            				
-            				//initialise capable as an array
-            				$capable	=	array();
-            				//get all roles with the capability
-            				$capabilityroles	=	get_roles_with_capability($cap->name,CAP_ALLOW);
-							
-            				//put the ids of roles with the current capability into the capable array
-            				foreach($capabilityroles as $cr) {
-								$capable[]	=	$cr->id;
-							}
-							
-							//if the current role is one who has the capability
-							if (in_array($r->id,$capable)) {
-								
-								//create a permission for the report with this role
-								$permission					=	new stdClass();
-								$permission->role_id		=	$r->id;
-								$permission->capability_id	=	$cap->id;
-								$permission->report_id		=	$report_id;
-								$this->dbc->create_permisssion($permission);
-							}
-            			}	
-            		}
-            	}
-        	} else {
-            	$this->dbc->update_report($data);
-        	}
+				//we shouldn't be here
+	        	} else {
+				//$status = new ilp_element_plugin_status();
+				$this->errors = array();
+				if( $this->specific_validation( $data ) ){
+					//valid input
+					//rewrite the options
+					$this->specific_process_data( $data );
+				}
+				else{
+					var_crap( $this->errors, 'Validation Errors' );
+				}
+	        	}
 	
-    	    return $data->id;
+    	    		return $data->id;
+	    	}
+
+		function specific_process_data( $data ){
+			//if we are here, we can assume $data is valid
+			$optionlist = array();
+			if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
+				//dd type needs to take values from admin form and write them to items table
+				$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
+			}
+
+		        $sep = "\n";
+		        $keysep = ":";
+			//entries from data to go into $this->tablename and $this->items_tablename
+	
+		        $gradekeylist = array(
+	       		     'pass', 'fail'
+		        );
+		        foreach( $gradekeylist as $key ){
+	       		     $v = $key . '_list';
+	       		     $$v = explode( $sep, $data->$key );
+	       		     //deal with pesky whitespace
+	       		     foreach( $$v as &$entry ){
+	       		         $entry = trim( $entry );
+	       		         $entryparts = explode( $keysep , $entry );
+	       		         if( 1 < count( $entryparts ) ){
+	       		             //manager has copied a whole key:value string into the pass or fail textarea
+	       		             //so throw away the key 
+	       		             $entry = $entryparts[1];
+	       		         }
+	       		     }
+	       		 }
+		        //we now have 2 lists: $pass_list and $fail_list 
+	  	
+			$element_id = ILP_DEFAULT_USERSTATUS_RECORD;
+	 		$plgrec = $this->dbc->get_form_element_data( $this->tablename, $element_id );
+			//check for existing user data - if there is any then we can't delete any status options
+			$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) );
+			//$itemrecord is a container for item data
+			$itemrecord = new stdClass();	
+			$itemrecord->parent_id = $element_id;
+
+			if( empty( $data_exists ) ){
+				//no user data - go ahead and delete existing items for this element, to be replaced by the submitted ones in $data
+				$delstatus = $this->dbc->delete_element_listitems_by_parent_id( $this->tablename, $element_id );
+					//if $delstatus false, there has been an error - alert the user
+			} else {
+				//user data has been submitted already - don't delete existing items, but add new ones if they are in $data
+				//purge $optionlist of already existing item_keys
+				//then it will be safe to write the items to the items table
+				foreach( $optionlist as $key=>$itemname ){
+					if( $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => $element_id, 'value' => $key ) ) ){
+						//this should never happen, because it shouldn't have passed validation, but you never know
+						unset( $optionlist[ $key ] );
+						//alert the user
+					}
+				}
+			}
+			//now write fresh options from $data
+			foreach( $optionlist as $key=>$itemname ){
+				if( trim( $key ) ){
+					//one item row inserted here
+					$itemrecord->value = $key;
+					$itemrecord->name = $itemname;
+	                		$itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+			 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
+				}
+			}
+	
+			//don't think any of the below is necessary
+
+	 		//create a new object to hold the updated data
+			/*
+	 		$pluginrecord 			=	new stdClass();
+	 		$pluginrecord->id		=	$oldrecord->id;
+	 		$pluginrecord->optionlist	=	$data->optionlist;
+			$pluginrecord->selecttype 	= 	OPTIONSINGLE;
+			*/
+	 			
+	 		//update the plugin with the new data
+	 		//return $this->dbc->update_plugin_record($this->tablename,$pluginrecord);
+			
 		}
 		
+		//adapted from ilp_element_plugin_state_mform
+		function specific_validation( $data ){
+			$valid = true;
+			$optionlist = array();
+			if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
+				//$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data[ 'optionlist' ] );
+				$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
+			}
+		        //all contents of $data->fail and $data->pass must match valid keys or values in $optionlist
+		        $sep = "\n";
+		        $keysep = ":";
+		        $fail_item_list = explode( $sep, $data->fail );
+		        $pass_item_list = explode( $sep, $data->pass );
+		        foreach( array( $fail_item_list, $pass_item_list ) as $item_list ){
+		            foreach( $item_list as $submitted_item ){
+		                if( trim( $submitted_item ) && !$this->is_valid_item( $submitted_item , $optionlist, $keysep ) ){
+		                    $this->errors[] = get_string( 'ilp_element_plugin_error_not_valid_item' , 'block_ilp' ) . ": <em>$submitted_item</em>";
+				    $valid = false;
+		                }
+		            }
+		        }
+			return $valid;
+		}
+		//adapted from ilp_element_plugin_state_mform
+		protected function is_valid_item( $item, $item_list, $keysep=":" ){
+		        $item = trim( $item );
+		        $itemparts = explode( $keysep, $item );
+		        foreach( $itemparts  as $item ){
+		            //$item should be either a key or value of $item_list
+		            if( in_array( $item, array_values( $item_list ) ) || in_array( $item, array_keys( $item_list ) ) ){
+		                return true;
+		            }
+		        }
+		        return false;
+		}
+		
+    /*
+    * copied from ilp_element_plugin_state_mform
+    * the manager has entered the states in the fail and pass textareas on the mform
+    * the values in those textareas have been made into arrays and sent to this function, to be categorised as fail, pass or unset 
+    * @param array $statelist - list of values - should be a key and value from the state selector, so that if either of them matches, we can return a pass or fail value
+    * @param array $fail_list - list of values to be classified as fail
+    * @param array $pass_list - list of values to be classified as pass
+    * @param array $unset_list - not really necessary ... if nothing matches, we default to unset anyway
+    */
+    protected function deducePassFailFromLists( $state_list, $fail_list, $pass_list, $keysep=':' ){
+        foreach( $state_list as $grade ){
+	        $grade = trim( $grade );
+	        if( in_array( $grade, $fail_list ) ){
+	            return ILP_PASSFAIL_FAIL;
+	        }
+	        if( in_array( $grade, $pass_list ) ){
+	            return ILP_PASSFAIL_PASS;
+	        }
+        }
+        return ILP_PASSFAIL_UNSET;
+    }
 		/**
      	 * TODO comment this
      	 */

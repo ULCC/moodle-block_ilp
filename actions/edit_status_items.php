@@ -18,9 +18,47 @@ $dbc = new ilp_db();
 //instantiate the edit_status_item_mform class
 $mform	=	new edit_status_item_mform($report_id);
 
+//was the form cancelled?
+if ($mform->is_cancelled()) {
+	//send the user back
+	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php';
+    redirect($return_url, '', REDIRECT_DELAY);
+}
+
+
 /*
 data processing
 */
+
+//was the form submitted?
+// has the form been submitted?
+if($mform->is_submitted()) {
+    // check the validation rules
+    if($mform->is_validated()) {
+
+        //get the form data submitted
+    	$formdata = $mform->get_data();
+    	    	
+        // process the data
+    	$success = $mform->process_data($formdata);
+
+    	//if saving the data was not successful
+        if(!$success) {
+			//print an error message	
+            print_error(get_string("reportcreationerror", 'block_ilp'), 'block_ilp');
+        }
+
+        //if the report_id ahs not already been set
+        $report_id	= (empty($report_id)) ? $success : $report_id;
+        
+        //decide whether the user has chosen to save and exit or save or display
+        if (isset($formdata->saveanddisplaybutton)) { 
+        	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
+        	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
+        }
+    }
+}
+
 
 
 // setup the navigation breadcrumbs

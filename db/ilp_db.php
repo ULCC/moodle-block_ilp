@@ -939,6 +939,26 @@ class ilp_db_functions	extends ilp_logging {
 
     	return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
     }
+
+	/**
+	* delete option items for a plugin list-type element referenced by element_id (parent_id) instead of reportfield_id
+	* $tablename is the element table eg block_ilp_plu_category
+	* @param string tablename
+	* @param int reportfield_id
+	* 
+	* @return boolean true or false
+	*/
+    function delete_element_listitems_by_parent_id( $tablename, $parent_id , $extraparams=array() ){
+		global $CFG;
+		$real_tablename = $CFG->prefix . $tablename;
+		$element_table = $tablename;
+		$item_table = $tablename . "_items";
+		$entry_table = $tablename . "_ent";
+		//get parent_id
+
+    	//return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
+    	return $this->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
+    }
     
     /**
     * @param string tablename

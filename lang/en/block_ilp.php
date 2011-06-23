@@ -171,6 +171,7 @@
 	$string[ 'ilp_report' ]						=	"ILP Report";
 	$string[ 'ilp_report_field' ]				=	"ILP Report Field";
 	$string[ 'ilp_plugin_element_data' ]		=	"Data";
+	$string[ 'ilp_user_status_item' ]		=	"ilp user status item";
 	$string[ 'user_data' ]						=	"User Data";
 	$string[ 'userstatus' ]						=	"User Status";
 

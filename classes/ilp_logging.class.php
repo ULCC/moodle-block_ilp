@@ -109,7 +109,6 @@ class ilp_logging {
         $attributes    =   array();
         $now = time();
 
-        
         switch($table) {
 
             case 'block_ilp_report':
@@ -128,6 +127,12 @@ class ilp_logging {
             case 'block_ilp_entry':
                 $attributes = array();
                 return;
+
+            case 'block_ilp_plu_sts_items':
+		$newobject->audit_type = 'ilp status item';
+		$newobject->record_id = $newobject->id;
+                $attributes =    array( 'id', 'key', 'value', 'audit_type' );
+                break;
 
             default:
                 $attributes = array();
@@ -211,7 +216,13 @@ class ilp_logging {
 	
 	                $log->entity = $this->entity_type($table,$newobject);
 	                //record id pertain to the actual submission or
-	                $log->record_id = $this->log_record_id($table,$newobject);
+			if( isset( $newobject->record_id ) ){
+				$log->record_id = $newobject->record_id;
+			}
+			else{
+	                	$log->record_id = $this->log_record_id($table,$newobject);
+			}
+			
 	
 	                //$log->attribute = $this->attribute_type($table,$newobject,$key);
                     $log->attribute = $key;
@@ -599,6 +610,8 @@ class ilp_logging {
                 return get_string( 'ilp_report', 'block_ilp' );
             case 'block_ilp_report_field':
                 return get_string( 'ilp_report_field', 'block_ilp' );
+            case 'block_ilp_plu_sts_items':
+                return get_string( 'ilp_user_status_item', 'block_ilp' );
                 
             default:
                 return 'unknown';
