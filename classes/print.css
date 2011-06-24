@@ -1,0 +1,6 @@
+/* elementary print stylesheet for ilp view_main pages */
+@media print{
+	div.ilp div div:first-child{display:none}	/* this suppresses the user profile section at the top of the page */
+	.noprint{display:none}				/* this will suppress any block element with class="noprint" - not that there are any yet */
+	#ilp-target-overview{ display: block }		/* this allows the content below the tabs to be visible */
+}
