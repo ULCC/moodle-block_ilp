@@ -97,6 +97,16 @@ class edit_status_item_mform extends ilp_moodleform {
 	        	}
    	    		return $data->id;
 	    	}
+        
+        /*
+        * @param object $item
+        * @return object
+        */
+        protected function item_record_exists( $item ){
+            //see if $item->value is already in items table
+            $rst = $this->dbc->listelement_item_exists( $this->items_tablename, array( 'value' => $item->value ) );
+            return array_shift( $rst );
+        }
 
 		function specific_process_data( $data ){
 			//if we are here, we can assume $data is valid
@@ -106,7 +116,7 @@ class edit_status_item_mform extends ilp_moodleform {
 				$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
 			}
 			//check for existing user data - if there is any then we can't delete any status options
-			$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) );
+			//$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) );
 
 		        $sep = "\n";
 		        $keysep = ":";
@@ -137,11 +147,12 @@ class edit_status_item_mform extends ilp_moodleform {
 			$itemrecord = new stdClass();	
 			$itemrecord->parent_id = $element_id;
 
-			if( empty( $data_exists ) ){
+			//if( empty( $data_exists ) ){
+			if( 0 ){
 				//no user data - go ahead and delete existing items for this element, to be replaced by the submitted ones in $data
 				$delstatus = $this->dbc->delete_element_listitems_by_parent_id( $this->tablename, $element_id );
 					//if $delstatus false, there has been an error - alert the user
-			} else {
+			} elseif( 0 ) {
 				//user data has been submitted already - don't delete existing items, but add new ones if they are in $data
 				//purge $optionlist of already existing item_keys
 				//then it will be safe to write the items to the items table
@@ -154,28 +165,59 @@ class edit_status_item_mform extends ilp_moodleform {
 				}
 			}
 			//now write fresh options from $data
+            //keep a list of ids to be protected from deletion later
+            $active_id_list = array();
 			foreach( $optionlist as $key=>$itemname ){
 				if( trim( $key ) ){
 					//one item row inserted here
+                    $itemrecord = new stdClass();
 					$itemrecord->value = $key;
 					$itemrecord->name = $itemname;
 	           		$itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
-			 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
+                    if( $existing_record = $this->item_record_exists( $itemrecord ) ){
+                        //update the record
+                        $itemrecord->id = $existing_record->id;
+                        $this->dbc->update_plugin_record( $this->items_tablename, $itemrecord );
+                        $active_id_list[] = $existing_record->id;
+                    }
+                    else{
+                        $itemrecord->parent_id = ILP_DEFAULT_USERSTATUS_RECORD;
+			 		    $active_id_list[] = $this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
+                    }
 				}
 			}
 	
             //that's dealt with the fresh options submitted
             //but we still need to re-assign pass and fail to the existing items, should they have changed
             foreach( $this->dbc->listelement_item_exists( $this->items_tablename, array() ) as $obj ){
+                $update = false;    //set to true if data from form make it necessary to update the item record
                 //actually this will set all the passfail values, so if we keep this block, we don't need the  line above involving $this->deducePassFailFromLists
                 $old_passfail = $obj->passfail;
                 $new_passfail = $this->deducePassFailFromLists( array( $obj->name, $obj->value ), $fail_list, $pass_list );               
                 if( $old_passfail != $new_passfail ){
                     $obj->passfail = $new_passfail;
+                    $update = true;
+                }
+
+                //keys correspond to field names, values correspond to element names from the form
+                $editable_fields = array(
+                    'value' => 'itemvalue_' . $obj->id,
+                    'name'  => 'itemname_' . $obj->id
+                );
+                foreach( $editable_fields as $fieldname=>$form_element_name ){
+                    $oldvalue = trim( $obj->$fieldname );
+                    if( isset( $data->$form_element_name ) ){
+                        $newvalue = trim( $data->$form_element_name );
+	                    if( $newvalue && $oldvalue != $newvalue ){
+	                        $obj->$fieldname = $newvalue;
+	                        $update = true;
+	                    }
+                    }
+                }
+                if( $update ){
                     $this->dbc->update_plugin_record( $this->items_tablename, $obj );
                 }
             }
-			
 		}
 		
 		//adapted from ilp_element_plugin_state_mform
@@ -187,13 +229,14 @@ class edit_status_item_mform extends ilp_moodleform {
 				//$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data[ 'optionlist' ] );
 				$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
 			}
-            //optionlist is now the options just submitted from the mform, but if user_data exists, this is not complete:
+            //optionlist is now the options just submitted from the mform, but this is not complete:
             //we must merge it with the options from the items table
-			$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) );
-            if( $data_exists ){
+			//$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) );
+            if( 1 ){
 			    //$status = new ilp_element_plugin_status();
                 $existing_options = $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) ) ;
                 foreach( $existing_options as $obj ){
+                    //$optionlist[ $obj->value ] = $obj->name;
                     $optionlist[ $obj->value ] = $obj->name;
                 }
             }
@@ -206,6 +249,7 @@ class edit_status_item_mform extends ilp_moodleform {
 		        foreach( array( $fail_item_list, $pass_item_list ) as $item_list ){
 		            foreach( $item_list as $submitted_item ){
 		                if( trim( $submitted_item ) && !$this->is_valid_item( $submitted_item , $optionlist, $keysep ) ){
+var_crap( $submitted_item );var_crap( $optionlist );
 		                    $this->errors[] = get_string( 'ilp_element_plugin_error_not_valid_item' , 'block_ilp' ) . ": <em>$submitted_item</em>";
         				    $valid = false;
 		                }

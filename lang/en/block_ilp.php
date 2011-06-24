@@ -145,6 +145,7 @@
 	//edit_status_items.php
 	$string[ 'edit_status_items' ]		=	'Edit Status Items';
 	$string[ 'existing_options' ]		=	'Existing options (not editable)';
+	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]		=	'Additional Options';
 	
 
 	//CAPABILITY STRINGS

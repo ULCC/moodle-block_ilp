@@ -18,7 +18,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
      */
     function __construct() {
     	$this->tablename = "block_ilp_plu_sts";
-    	$this->data_entry_tablename = "block_ilp_plu_sts_ent";
+    	//$this->data_entry_tablename = "block_ilp_plu_sts_ent";
+    	$this->data_entry_tablename = "block_ilp_user_status";
 	$this->items_tablename = "block_ilp_plu_sts_items";
 	$this->optionlist_keyfield = "status_id";
 	$this->selecttype = OPTIONSINGLE;
@@ -38,29 +39,55 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 	or some such
 	*/
 	public function config_specific_definition(&$mform) {
-
+        global $CFG;
         //if any rows in status entry table, then data exists, so existing options should nt be editable
 		$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array() );
 
 		$info = $this->get_option_list_text( ILP_DEFAULT_USERSTATUS_RECORD , "\n", 'passfail' ) ;
 
-        if( $data_exists ){
+        if( 1 ){
+            foreach( $info[ 'objlist' ] as $option ){
+                $A = $mform->addElement(
+                    'text',
+                    'itemvalue_' . $option->id,
+                    'value',
+			        array('class' => 'form_input')
+                );
+                $A->setValue( $option->value );
+                $B = $mform->addElement(
+                    'text',
+                    'itemname_' . $option->id,
+                    'label',
+			        array('class' => 'form_input')
+                );
+                $B->setValue( $option->name );
+                if( !$data_exists ){
+                    $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
+                    $mform->addElement(
+                        'static',
+                        'delete_link',
+                        '<a href="' . $deleteurl . '">X</a>'
+                    );
+                }
+            }
+/*
             $mform->addElement(
                 'static',
                 'description',
                 get_string( 'existing_options', 'block_ilp' ),
                 $this->config_format_option_list( $info[ "optionlist" ] )
             );
+*/
         }
 
 		$E = $mform->addElement(
 			'textarea',
 			'optionlist',
-			get_string( 'ilp_element_plugin_dd_optionlist', 'block_ilp' ),
+			get_string( 'ilp_element_plugin_dd_optionlist_additional', 'block_ilp' ),
 			array('class' => 'form_input')
 	    );
 
-        if( !$data_exists ){
+        if( 0 ){
 		    $E->setValue( $info[ 'options' ] );
         }
 
@@ -80,8 +107,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 	    );
 		$G->setValue( $info[ 'pass' ] );
 
-		//manager must specify at least 1 option, with at least 1 character
-        $mform->addRule('optionlist', null, 'minlength', 1, 'client');
+		
+        //$mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 	}
 	protected function config_specific_validation($data) {
@@ -487,7 +514,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             'options' => $rtn,
             'optionlist' => $optionlist,
             'pass' => implode( $sep, $option_data[ 'pass' ] ),
-            'fail' => implode( $sep, $option_data[ 'fail' ] )
+            'fail' => implode( $sep, $option_data[ 'fail' ] ),
+            'objlist' => $option_data[ 'objlist' ]
         );
 	}
     
@@ -529,6 +557,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 		}
 		
 		$adminvalues = array(
+            'objlist' => $objlist,
             'optlist' => $outlist,
             'pass' => $passlist,
             'fail' => $faillist
