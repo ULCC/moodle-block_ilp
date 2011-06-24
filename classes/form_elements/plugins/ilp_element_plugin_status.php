@@ -26,6 +26,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
     }
     
     
+    protected function config_format_option_list( $list ){
+        $sep = '<br />';
+        return implode( $sep, array_values( $list ) );
+    }
 	
 	/**
 	textarea element to contain the options the manager wishes to add to the user form
@@ -35,14 +39,30 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 	*/
 	public function config_specific_definition(&$mform) {
 
+        //if any rows in status entry table, then data exists, so existing options should nt be editable
+		$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array() );
+
+		$info = $this->get_option_list_text( ILP_DEFAULT_USERSTATUS_RECORD , "\n", 'passfail' ) ;
+
+        if( $data_exists ){
+            $mform->addElement(
+                'static',
+                'description',
+                get_string( 'existing_options', 'block_ilp' ),
+                $this->config_format_option_list( $info[ "optionlist" ] )
+            );
+        }
+
 		$E = $mform->addElement(
 			'textarea',
 			'optionlist',
 			get_string( 'ilp_element_plugin_dd_optionlist', 'block_ilp' ),
 			array('class' => 'form_input')
 	    );
-		$info = $this->get_option_list_text( ILP_DEFAULT_USERSTATUS_RECORD , "\n", 'passfail' ) ;
-		$E->setValue( $info[ 'options' ] );
+
+        if( !$data_exists ){
+		    $E->setValue( $info[ 'options' ] );
+        }
 
 		$F = $mform->addElement(
 			'textarea',
@@ -465,6 +485,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 		}
 		return array(
             'options' => $rtn,
+            'optionlist' => $optionlist,
             'pass' => implode( $sep, $option_data[ 'pass' ] ),
             'fail' => implode( $sep, $option_data[ 'fail' ] )
         );
@@ -476,7 +497,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
     * @param int $reportfield_id
     * @param string $field - the name of a extra field to read from items table: used by ilp_element_plugin_state
     */
-	protected function get_option_list( $reportfield_id, $field=false ){
+	public function get_option_list( $reportfield_id, $field=false ){
 		//return $this->optlist2Array( $this->get_optionlist() );   	
 		$outlist = array();
 		$passlist = array();
