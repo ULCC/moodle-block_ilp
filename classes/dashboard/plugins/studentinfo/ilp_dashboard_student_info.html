@@ -16,10 +16,11 @@ $PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $
 		<div id="studentinfoimage" >
 			<?php echo $studentpicture; ?>
 		</div>
+		
 		<div style="display: inline;"> 
 			<div id="infoarea">
 				<p>
-
+					
 					<label><?php echo get_string('studentstatus','block_ilp');?></label>
 					
 					<?php  if (!empty($can_editstatus)) { ?>
@@ -37,6 +38,9 @@ $PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $
 					<label><?php echo $p->name; ?></label><div class='percentagebar'  ><div style='width: <?php echo $p->percentage; ?>%; background-color: <?php echo $p->csscolor; ?>' ></div></div><br />
 					<?php } 
 						  }?>
+			</div>
+			<div id='mytutors'>
+				<label><?php echo get_string('mytutor','block_ilp');?></label><span><?php echo implode(', ',$tutorslist); ?></span>
 			</div>
 		</div>
 	</div>

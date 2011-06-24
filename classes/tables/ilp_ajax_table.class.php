@@ -6,10 +6,10 @@
  *
  * @uses flexible_table()
  *
- * @copyright &copy; 2009-2010 University of London Computer Centre
+ * @copyright &copy; 2011 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package AssMgr
+ * @package ILP
  * @version 2.0
  */
 
@@ -284,7 +284,7 @@ class ilp_ajax_table extends flexible_table {
             $this->sess->i_last  = '';
         }
 
-        $params = optional_param($this->uniqueid, array());
+        $params = optional_param($this->uniqueid, array(),PARAM_RAW);
         $this->currpage = isset($params[$this->request[TABLE_VAR_PAGE]]) ? $params[$this->request[TABLE_VAR_PAGE]] : $SESSION->flextable[$this->uniqueid]->currpage;
         $this->setup = true;
 

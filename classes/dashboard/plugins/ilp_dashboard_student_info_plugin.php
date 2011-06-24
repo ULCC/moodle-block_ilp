@@ -48,6 +48,16 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			$studentname	=	fullname($student);
 			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true')); 
 			
+			$tutors	=	$this->dbc->get_student_tutors($this->student_id);
+			$tutorslist	=	array();
+			if (!empty($tutors)) {
+				foreach ($tutors as $t) {
+					$tutorslist[]	=	fullname($t);
+				}					
+			} else {
+				$tutorslist[]	=	get_string('unknown','block_ilp');
+			}
+			
 			//get the students current status
 			$studentstatus	=	$this->dbc->get_user_status($this->student_id);
 			
@@ -222,12 +232,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 */
 	function userstatus_select($selected_value =null)	{
 		global	$USER, $CFG;
-		$form	=	"<span id='studentstatusform'>";
+
 
 		$statusitems	=	$this->dbc->get_user_status_items();
 		
 		if (!empty($statusitems)) {
-			$form	.= "<form action='{$CFG->wwwroot}/blocks/ilp/actions/save_userstatus.php' method='GET' >";
+			$form	= "<form action='{$CFG->wwwroot}/blocks/ilp/actions/save_userstatus.php' method='GET' id='studentstatusform' >";
 					
 			$form	.=	"<input type='hidden' name='student_id' id='student_id' value='{$this->student_id}' >";
 			$form	.=	"<input type='hidden' name='user_modified_id' id='user_modified_id' value='{$USER->id}' >";
@@ -248,13 +258,17 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			
 			$form .= '</form>';
 		} else {
+
+			$form	=	"<span id='studentstatusform'>";
 			
 			$form	.= 'STATUS ITEMS NOT SET PLEASE CONTACT ADMIN';
+			
+			$form 	.= '</span>';
 			
 		}
 		
 		
-		$form .= '</span>';
+		
 		
 		return $form;
 		

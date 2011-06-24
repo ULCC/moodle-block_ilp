@@ -186,16 +186,24 @@ ilppercentagebarborder-large {
 }
 
 
-.ilp span.nothidden {
+.ilp #infoarea p {
+    display             : inline;
+}
+
+.ilp .hidden, .ilp img.hidden  {
+    display             : none;
+    visibility			: hidden;
+}
+
+.ilp .nothidden {
     display             : inline;
     visibility			: visible;
     
 }
 
-.ilp span.hidden, .ilp img.hidden  {
-    display             : none;
-    visibility			: hidden;
-}
+
+
+
 .ilp .editicon {
     cursor              : pointer;
 }
@@ -246,6 +254,20 @@ ilp .hiddencontainer	{
 
 .ilp .ilp_print_icon {
 	padding				:	5px;	
+}
+
+.ilp #infoarea	{
+	width				:	40%;
+	float				:	left;	
+}
+
+.ilp #mytutors	{
+	width				:	30%;
+	float				:	right;	
+}
+
+.ilp #mytutors	label{
+	padding				: 10px;	
 }
 
 /* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific

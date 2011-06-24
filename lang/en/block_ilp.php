@@ -52,9 +52,10 @@
 	$string['editpermissions']		=	'Edit Permisssions';
 	$string['editreport']			=	'Edit Report';
 	$string['editreportfields']		=	'Edit Report Fields';
+	$string['edit_status_items']	=	'Edit Status Items';
 	$string['enablereport'] 		= 	'Enable Report';
 	$string['entrycreator'] 		= 	'Tutor';
-	
+	$string['existing_options']		=	'Existing options (not editable)';
 	$string['failcsscolour']		=	'Fail CSS colour';
 	$string['failcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in a fail state';
 	$string['failpercent']			=	'Fail Percentage';
@@ -70,8 +71,12 @@
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
 	
 	$string['ilpname']				=	'ILP';
+	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	
 	$string['label']				=	'Label';
+	$string['lastupdated']			=	'Last Updated';
+	
+	
 	$string['maxedit'] 				= 	'Use Maximum Edit';	
 	
 	$string['midcsscolour']			=	'Mid range CSS colour';
@@ -84,6 +89,8 @@
 	$string['moverightone'] 		= 	'Move right 1';
 	$string['movetoend'] 			= 	'Move to end';
 	$string['moveup']		 		= 	'Move up';
+	$string['mytutor']				=	'My Tutor:';
+	$string['mytutees']				=	'My Tutees';
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';
 	
@@ -128,25 +135,22 @@
 	$string['selecttype'] 						= 	'Select Field Type';
 	$string['selectedreports']					= 	'Selected Reports';
 	$string['selectedreportlist']				= 	'Select report list options';
+	$string['status']							= 	'Status';
 	$string['studentstatus']					= 	'Student Status';
 	$string['studentnotfound']					= 	'Student not found';
 	$string['editstatusitems']					=	'Edit Status Items';
 	
 	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 				= 	'Submit and display';
+	
+	$string['studentslist'] 					= 	'Student list description';
 
 	
 	
 	
 	$string['type'] 							= 	'Type';
 	$string['viewreportpreview'] 				= 	'View Report Preview';
-	
-	
-	//edit_status_items.php
-	$string[ 'edit_status_items' ]		=	'Edit Status Items';
-	$string[ 'existing_options' ]		=	'Existing options (not editable)';
-	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]		=	'Additional Options';
-	
+	$string['unknown'] 							= 	'Unknown';
 
 	//CAPABILITY STRINGS
 	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';

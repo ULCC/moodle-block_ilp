@@ -1,0 +1,27 @@
+<?php
+
+// include standard libraries
+$PAGE->requires->yui2_lib("yahoo");
+$PAGE->requires->yui2_lib("event");
+$PAGE->requires->yui2_lib("dom");
+$PAGE->requires->yui2_lib("animation");
+$PAGE->requires->yui2_lib("container");
+$PAGE->requires->yui2_lib("connection");
+
+// load the standard YUI style sheet
+$PAGE->requires->css_theme(new moodle_url($CFG->wwwroot.'/lib/yui/container/assets/container.css'));
+
+
+echo $OUTPUT->header();
+
+?>
+
+<div class="ilp">
+<?php
+   // display the table
+   require_once($CFG->dirroot.'/blocks/ilp/actions/view_studentlist.ajax.php');
+?>
+</div>
+<?php
+echo $OUTPUT->footer();
+?>

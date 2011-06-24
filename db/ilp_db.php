@@ -1640,7 +1640,143 @@ class ilp_db_functions	extends ilp_logging {
   		return $this->dbc->get_record('block_ilp_plu_sts_items',array('id'=>$id));
   	}
   	
+  	/**
+     * Returns the tutor of the user with the given id
+     * 
+     * @param int $user_id the id of the user whose tutor we want to fid 
+     * 
+     * @return mixed array of objects containing recordsets of user who 
+     * tutor the given user or bool false 
+     */
+  	function get_student_tutors($user_id)	{
+  		
+  		$sql	=	"SELECT 	u.*
+                       FROM 	{role_assignments} ra, {context} c, {user} u
+                      WHERE 	ra.contextid = c.id
+                        AND 	c.instanceid = u.id
+                        AND 	c.contextlevel = ".CONTEXT_USER
+                        ." AND 	u.id =	{$user_id}";
+
+  		return $this->dbc->get_records_sql($sql);
+  	}
   	
+  	/**
+     * Returns the all tutees for the given user 
+     * 
+     * @param int $user_id the id of the user whose tutee we want to find 
+     * 
+     * @return mixed array of object containing all users who are tutored 
+     * by the given user or bool false
+     */
+  	function get_user_tutees($user_id) {
+  		$sql	=	"SELECT 	u.id
+                       FROM 	{role_assignments} ra, {context} c, {user} u
+                      WHERE 	ra.userid = {$user_id}
+                        AND 	ra.contextid = c.id
+                        AND 	c.instanceid = u.id
+                        AND 	c.contextlevel = ".CONTEXT_USER;
+  		
+  		return	$this->dbc->get_records_sql($sql);
+ 	}
+  	
+ 	/**
+     * Returns the user records of all users enrolled into the given course 
+     * 
+     * @param int $course_id the id of the course whose enrolled users 
+     * we want to retrieve 
+     * 
+     * @return mixed array of object containing all users enrolled in the course 
+     * or bool false
+     */
+ 	function get_course_users($course_id) {
+ 		
+ 		if ($usercontexts		=	get_parent_contexts(CONTEXT_COURSE))	{
+ 				$listofcontexts	=	'('.impolde(',',$usercontexts).')';
+ 		} else {
+ 			$sitecontext = get_context_instance(CONTEXT_SYSTEM, SITEID);
+
+        	$listofcontexts = '('.$sitecontext->id.')'; // must be site
+ 		}
+ 		
+ 		$context = get_context_instance(CONTEXT_COURSE, $course_id);
+ 		
+ 		$sql	=	"SELECT		u.id
+ 					  FROM		{user} u INNER JOIN {role_assignments} ra on u.id = ra.userid 
+ 					  			LEFT OUTER JOIN {user_lastaccess} ul on (ra.userid and ul.courseid = {$course_id})
+ 					  			LEFT OUTER JOIN {role} r on ra.roleid = r.id
+ 					  			
+ 					  WHERE		(ra.contextid = {$context->id} OR ra.contextid in {$listofcontexts})
+ 					    AND		u.deleted = 0
+ 					    AND		(ul.courseid = {$course_id} OR ul.courseid IS NULL)
+ 					    AND		u.username <> 'guest'
+ 					    AND		r.id = 5";
+ 		
+ 		return $this->dbc->get_records_sql($sql);
+ 	}
+ 	
+ 	
+    /**
+     * Returns a paginated list of all students
+     *
+     * @param object $flextable the table where the matrix will be displayed
+     */
+    function get_students_matrix($flextable,$student_ids) {
+    	
+    	$studentssql	=	 (!empty($students)) ? " AND u.id IN (".implode(",",$student_ids).")" : "" ;
+    	
+        $select = "SELECT 		u.id as s_id,
+        						u.firstname as s_firstname,
+        						u.lastname as s_lastname,
+        						si.name	as u_status ";
+
+        $from = " FROM 			{user} as u,
+        						{block_ilp_user_status} as us,
+        						{block_ilp_plu_sts_items} as si ";
+
+        $where = "WHERE 		u.id = us.user_id
+        		  AND			us.parent_id = si.id
+        		  {$studentssql}";
+
+        $sort = "";
+
+        // fetch any additional filters provided by the table
+        $sql_where = $flextable->get_sql_where();
+        if(!empty($sql_where)) {
+            $where .= ' AND '.$sql_where;
+        }
+
+        // fetch any sort keys provided by the table
+        $sql_sort = $flextable->get_sql_sort();
+        if(!empty($sql_sort)) {
+            $sort = ' ORDER BY '.$sql_sort;
+        }
+
+        // get a count of all the records for the pagination links
+        $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
+
+        // tell the table how many pages it needs
+        $flextable->totalrows($count);
+
+        return $this->dbc->get_records_sql(
+            $select.$from.$where.$sort,
+            null,
+            $flextable->get_page_start(),
+            $flextable->get_page_size()
+        );
+    }
+  	
+  	
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 

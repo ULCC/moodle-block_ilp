@@ -66,18 +66,6 @@ $access_viewreports		=	has_capability('block/ilp:viewreport', $context);
 $access_viewilp			=	has_capability('block/ilp:viewilp', $context);
 $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $context);
 
-
-//we will determine the users capabilities depending on the context in use
-
-$access_createreports	=	has_capability('block/ilp:addreport', $context);
-$access_editreports		=	has_capability('block/ilp:editreport', $context);
-$access_deletereports	=	has_capability('block/ilp:deletereport', $context);
-$access_viewreports		=	has_capability('block/ilp:viewreport', $context);	
-$access_viewilp			=	has_capability('block/ilp:viewilp', $context);
-$access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $context);;
-
-
-
 //TODO: we will should not be in the course context change to another context
 $PAGE->set_context($context);
 
