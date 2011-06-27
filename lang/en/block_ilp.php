@@ -150,6 +150,9 @@
 	
 	$string['type'] 							= 	'Type';
 	$string['viewreportpreview'] 				= 	'View Report Preview';
+	$string['viewplp'] 							= 	'View';
+	
+	
 	$string['unknown'] 							= 	'Unknown';
 
 	//CAPABILITY STRINGS

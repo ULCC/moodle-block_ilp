@@ -12,7 +12,7 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $OUTPUT, $PAGE;
 
 //include any neccessary files
 

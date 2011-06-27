@@ -12,7 +12,7 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER, $PAGE;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE, $OUTPUT;
 
 //include the default class
 require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_ajax_table.class.php');
@@ -71,15 +71,20 @@ if (file_exists($misclassfile)) {
 	$attend_method1 = array($misclass, 'get_total_attendance');
 	$attend_method2 = array($misclass, 'get_student_attendance');
         
+	//check whether the necessary functions have been defined
+	 if (is_callable($attend_method1,true) && is_callable($attend_method2,true)) {
+	 	$headers[] = get_string('attendance','block_ilp');
+	 	$columns[] = 'u_attendcance';
+	 	$misattendavailable = true;
+	 }	
+	 
 	 //check whether the necessary functions have been defined
 	 if (is_callable($punch_method1,true) && is_callable($punch_method2,true)) {
-	 	$headers[] = get_string('attendance','block_ilp');
 	 	$headers[] = get_string('punctulaity','block_ilp');
-	 	
-	 	$columns[] = 'u_attendcance';
-	 	$columns[] = 'u_punctuality';
-	 	$misavailable = true;
-	 }	
+		$columns[] = 'u_punctuality';
+		$mispunchavailable = true;
+	 }
+	 
 }
 
 //get all enabled reports in this ilp
@@ -118,12 +123,56 @@ if (!empty($course_id)) {
 
 $studentslist	=	$dbc->get_students_matrix($flextable,$users);
 
-var_dump($studentslist);
-
-
 if(!empty($studentslist)) {
+	
+	
     foreach($studentslist as $stu) {
+    	$data	=	array();
     	
+    	$data['user']	=	$OUTPUT->user_picture($stu,array('return'=>true,'size'=>50));
+    	$data['u_status'] =   $stu->u_status; 
+
+    	if (!empty($misattendavailable)) {
+    		$total 		=	$misclass->get_total_attendance();
+    		$actual 	=	$misclass->get_student_attendance();
+    		//we only want to try to find the percentage if we can get the total possible
+    		// attendance else set it to 0;
+    		$data['u_attendcance'] =	(!empty($total)) ? $actual / $total	* 100 : 0 ;
+    	}
+    	
+    	
+    	if (!empty($misattendavailable)) {
+    		$total 		=	$misclass->get_total_attendance();
+    		$actual 	=	$misclass->get_student_attendance();
+    		//we only want to try to find the percentage if we can get the total possible
+    		// attendance else set it to 0;
+    		$data['u_attendcance'] =	(!empty($total)) ? $actual / $total	* 100 : 0 ;
+    	}
+	
+
+      	foreach ($reports as $r) {
+
+      		//get the number of this report that have been created
+      		$reportnumber	=	$dbc->count_report_entries($r->id,$stu->id);
+      		
+      		$reporttext	=	"{$reportnumber} ".$r->name;
+      		
+      		//check if the report has a state field
+      		if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
+      			
+      			//count the number of entries with a pass state
+      			$reportentered = $dbc->count_report_entries_with_state($r->id,$stu->id,ILP_PASSFAIL_PASS);
+      			$reporttext	= $reportentered. "/".$reportentered." ".get_string('achieved','block_ilp');	
+      		}
+      		
+			$data[$r->id]	=	$reporttext;	
+		}
+    	
+    	
+		
+		$data['view']	=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$stu->id}' >".get_string('viewplp','block_ilp')."</a>";
+    	 $flextable->add_data_keyed($data);
     }
 }    
  
+$flextable->print_html();

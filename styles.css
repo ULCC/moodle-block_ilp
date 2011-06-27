@@ -190,12 +190,12 @@ ilppercentagebarborder-large {
     display             : inline;
 }
 
-.ilp .hidden, .ilp img.hidden  {
+.ilp form.hidden, .ilp img.hidden  {
     display             : none;
     visibility			: hidden;
 }
 
-.ilp .nothidden {
+.ilp form.nothidden {
     display             : inline;
     visibility			: visible;
     

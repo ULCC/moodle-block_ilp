@@ -1724,10 +1724,13 @@ class ilp_db_functions	extends ilp_logging {
     	
     	$studentssql	=	 (!empty($students)) ? " AND u.id IN (".implode(",",$student_ids).")" : "" ;
     	
-        $select = "SELECT 		u.id as s_id,
-        						u.firstname as s_firstname,
-        						u.lastname as s_lastname,
-        						si.name	as u_status ";
+        $select = "SELECT 		u.id as id,
+        						u.firstname as firstname,
+        						u.lastname as lastname,
+        						si.name	as u_status,
+        						u.picture as picture,
+        						u.imagealt as imagealt,
+        						u.email as email ";
 
         $from = " FROM 			{user} as u,
         						{block_ilp_user_status} as us,
