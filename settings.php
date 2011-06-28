@@ -57,16 +57,35 @@ $settings->add($failpercentage);
 $passpercentage			=	new admin_setting_configtext('block_ilp/passpercent',get_string('passpercent','block_ilp'),get_string('passpercentconfig','block_ilp'),ILP_DEFAULT_PASS_PERCENTAGE,PARAM_INT);
 $settings->add($passpercentage);
 
+
+$mis_settings 	= new admin_setting_heading('block_ilp/mis_connection', get_string('mis_connection', 'block_ilp'), '');
+$settings->add($mis_settings);
+$options = array(
+    'msql',
+    'mysql',
+    'oracle',
+    'sqlserver'
+);
+$mis_connection			= 	new admin_setting_configselect('block_ilp/dbconnectiontype',get_string('db_connection','block_ilp'),get_string('reportconfigurationsection','block_ilp'), 'mysql', $options);
+$settings->add( $mis_connection );
+/*
+*/
+
+$dbname			=	new admin_setting_configtext('block_ilp/dbname',get_string( 'db_name', 'block_ilp' ),get_string( 'set_db_name', 'block_ilp' ),'moodle',PARAM_RAW);
+$settings->add($dbname);
+
+$dbprefix			=	new admin_setting_configtext('block_ilp/dbprefix',get_string( 'db_prefix', 'block_ilp' ),get_string( 'prefix_for_tablenames', 'block_ilp' ),'mdl_',PARAM_RAW);
+$settings->add($dbprefix);
+
+$dbhost			=	new admin_setting_configtext('block_ilp/dbhost',get_string( 'db_host', 'block_ilp' ), get_string( 'host_name_or_ip', 'block_ilp' ),'mdl_',PARAM_RAW);
+$settings->add($dbhost);
+
+$dbpass			=	new admin_setting_configtext('block_ilp/dbpass',get_string( 'db_pass', 'block_ilp' ), get_string( 'db_pass', 'block_ilp' ),'',PARAM_RAW);
+$settings->add($dbpass);
+/*
+*/
 $link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
 $settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
-
-$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php">'.get_string('reportconfigurationsection', 'block_ilp').'</a>';
-$settings->add(new admin_setting_heading('block_ilp_reportconfiguration', '', $link));
-
-
-
-
-
 
 
 

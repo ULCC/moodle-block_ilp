@@ -155,6 +155,17 @@
 	
 	$string['unknown'] 							= 	'Unknown';
 
+    //Config Form DB Connection Section
+    $string[ 'mis_connection' ]                  =   'MIS Connection';
+    $string[ 'db_connection' ]                  =   'DB Connection';
+    $string[ 'db_name' ]                        =   'DB Name';
+    $string[ 'set_db_name' ]                    =   'set the name of the DB';
+    $string[ 'db_prefix' ]                      =   'DB Prefix';
+    $string[ 'prefix_for_tablenames' ]          =   'Prefix for tablenames (if any)';
+    $string[ 'db_host' ]                        =   'DB host';
+    $string[ 'host_name_or_ip' ]                =   'DB Hostname or IP';
+    $string[ 'db_pass' ]           =   'DB Password';
+
 	//CAPABILITY STRINGS
 	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
 	$string['ilp:addreport'] 			= 	'Add a report';
@@ -204,6 +215,10 @@
 	$string[ 'maxeditexceed' ]					=	"Max Edit Exceed";	//just put this here to stop an error on edit_report_entry
 	$string[ 'course' ]							=	"Course";	//just put this here to stop an error on edit_report_entry
 
+//ATENDENCE REPORT
+	$string[ 'attendenceconfiguration' ]		=	"MIS Report Configuration";	
+
+	$string[ 'mis_configuration_settings' ]		=	"MIS Configuration Settings";	
 	
 	global $CFG;
 
