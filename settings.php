@@ -61,10 +61,12 @@ $settings->add($passpercentage);
 $mis_settings 	= new admin_setting_heading('block_ilp/mis_connection', get_string('mis_connection', 'block_ilp'), '');
 $settings->add($mis_settings);
 $options = array(
-    'msql',
-    'mysql',
-    'oracle',
-    'sqlserver'
+    'mssql' => 'Mssql',
+    'mysql' => 'Mysql',
+    'odbc' => 'Odbc',
+    'oracle' => 'Oracle',
+    'postgres' => 'Postgres',
+    'sybase' => 'Sybase'
 );
 $mis_connection			= 	new admin_setting_configselect('block_ilp/dbconnectiontype',get_string('db_connection','block_ilp'),get_string('reportconfigurationsection','block_ilp'), 'mysql', $options);
 $settings->add( $mis_connection );
@@ -79,6 +81,9 @@ $settings->add($dbprefix);
 
 $dbhost			=	new admin_setting_configtext('block_ilp/dbhost',get_string( 'db_host', 'block_ilp' ), get_string( 'host_name_or_ip', 'block_ilp' ),'mdl_',PARAM_RAW);
 $settings->add($dbhost);
+
+$dbuser			=	new admin_setting_configtext('block_ilp/dbuser',get_string( 'db_user', 'block_ilp' ), get_string( 'db_user', 'block_ilp' ),'',PARAM_RAW);
+$settings->add( $dbuser );
 
 $dbpass			=	new admin_setting_configtext('block_ilp/dbpass',get_string( 'db_pass', 'block_ilp' ), get_string( 'db_pass', 'block_ilp' ),'',PARAM_RAW);
 $settings->add($dbpass);

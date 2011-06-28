@@ -164,7 +164,8 @@
     $string[ 'prefix_for_tablenames' ]          =   'Prefix for tablenames (if any)';
     $string[ 'db_host' ]                        =   'DB host';
     $string[ 'host_name_or_ip' ]                =   'DB Hostname or IP';
-    $string[ 'db_pass' ]           =   'DB Password';
+    $string[ 'db_pass' ]                        =   'DB Password';
+    $string[ 'db_user' ]                        =   'DB Username';
 
 	//CAPABILITY STRINGS
 	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
