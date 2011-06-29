@@ -18,9 +18,11 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 	public		$student_id;	
 	
 	
-	function __construct($student_id = null)	{
+	function __construct($student_id = null,$course_id=null)	{
 		//set the id of the student that will be displayed by this 
 		$this->student_id	=	$student_id;
+	 
+		$this->course_id	=	$course_id;
 		
 		//set the name of the directory that holds any files for this plugin
 		$this->directory	=	'main';
@@ -48,7 +50,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 		
 		if (!empty($student))	{ 
 				
-			$linkurl	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$this->student_id}";
+			$linkurl	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}";
 			//get the selectedtab param if it is in the url
 			$selectedtab	=	$PARSER->optional_param('selectedtab',1,PARAM_RAW);
 			
@@ -81,7 +83,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 		            print_error('pluginclassnotfound', 'block_ilp', '', $classname);
 		        }
 		        
-				$dasttab	=	new $classname($this->student_id);
+				$dasttab	=	new $classname($this->student_id,$this->course_id);
 				
 				$tabrows[]	=	new tabobject($dt->id,$linkurl."&selectedtab={$dt->id}&tabitem={$dt->id}",$dasttab->display_name());
 

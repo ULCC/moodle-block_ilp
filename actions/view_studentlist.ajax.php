@@ -17,11 +17,14 @@ global $USER, $CFG, $SESSION, $PARSER, $PAGE, $OUTPUT;
 //include the default class
 require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_ajax_table.class.php');
 
-//get the id of the course that is currently being used
-$course_id 	= $PARSER->optional_param('course_id', NULL, PARAM_INT);
+//get the id of the course that is currently being used if set
+$course_id 	= $PARSER->optional_param('course_id', 0, PARAM_INT);
 
 //get the tutor flag
-$tutor		=	$PARSER->optional_param('tutor', NULL, PARAM_INT);
+$tutor		=	$PARSER->optional_param('tutor', 0, PARAM_INT);
+
+//get the status_id if set
+$status_id		=	$PARSER->optional_param('status_id', 0, PARAM_INT);
 
 // instantiate the db
 $dbc = new ilp_db();
@@ -34,20 +37,22 @@ $flextable = new ilp_ajax_table('student_list');
 
 
 
-$flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/view_students.php?course_id={$course_id}&tutor={$tutor}");
-$flextable->define_ajaxurl($CFG->wwwroot."/blocks/ilp/actions/view_students.ajax.php?course_id={$course_id}&tutor={$tutor}");
+$flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
+$flextable->define_ajaxurl($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.ajax.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
 
 
 
 
 // set the basic details to dispaly in the table
 $headers = array(
+	get_string('userpicture', 'block_ilp'),
     get_string('name', 'block_ilp'),
     get_string('status', 'block_ilp')
 );
 
 $columns = array(
-  	'user',
+	'picture',
+  	'fullname',
 	'u_status'
 );
 
@@ -106,12 +111,13 @@ $columns[]	=	'view';
 $flextable->define_columns($columns);
 $flextable->define_headers($headers);
 
-$flextable->initialbars(true);
+
 
 $flextable->set_attribute('summary', get_string('studentslist', 'block_ilp'));
 $flextable->set_attribute('cellspacing', '0');
 $flextable->set_attribute('class', 'generaltable fit');
-
+$flextable->define_fragment('studentlist');
+$flextable->initialbars(true);
 $flextable->setup();
 
 if (!empty($course_id)) {
@@ -120,17 +126,38 @@ if (!empty($course_id)) {
 	$users	=	$dbc->get_user_tutees($USER->id);
 }
 
+$students	=	array();
 
-$studentslist	=	$dbc->get_students_matrix($flextable,$users);
+foreach ($users	as $u) {
+	$students[]	=	$u->id;
+}
+
+
+$studentslist	=	$dbc->get_students_matrix($flextable,$students,$status_id);
+
+//get the default status item which will be used as the status for students who
+//have not entered their ilp and have not had a status assigned
+$default_status_item_id	=	get_config('block_ilp', 'defaultstatusitem');
+
+//get the status item record
+$default_status_item	=	$dbc->get_status_item_by_id($default_status_item_id);
+
+
+$status_item	=	(!empty($default_status_item)) ? $default_status_item->name : get_string('unknown','block_ilp');
+
+//this is needed if the current user has capabilities in the course context, it allows view_main page to view the user
+//in the course context
+$courseparam	=	(!empty($course_id)) ? "&course_id={$course_id}": '';
 
 if(!empty($studentslist)) {
-	
-	
-    foreach($studentslist as $stu) {
+	foreach($studentslist as $stu) {
     	$data	=	array();
     	
-    	$data['user']	=	$OUTPUT->user_picture($stu,array('return'=>true,'size'=>50));
-    	$data['u_status'] =   $stu->u_status; 
+    	$data['picture']	=	$OUTPUT->user_picture($stu,array('return'=>true,'size'=>50));
+    	$data['fullname']	=	"<a href='{$CFG->wwwroot}/user/view.php?id={$stu->id}' class=\"userlink\">".fullname($stu)."</a>";
+    	//if the student status has been set then show it else they have not had there ilp setup
+    	//thus there status is the default
+    	$data['u_status'] =   (!empty($stu->u_status)) ? $stu->u_status : $status_item; 
 
     	if (!empty($misattendavailable)) {
     		$total 		=	$misclass->get_total_attendance();
@@ -140,7 +167,6 @@ if(!empty($studentslist)) {
     		$data['u_attendcance'] =	(!empty($total)) ? $actual / $total	* 100 : 0 ;
     	}
     	
-    	
     	if (!empty($misattendavailable)) {
     		$total 		=	$misclass->get_total_attendance();
     		$actual 	=	$misclass->get_student_attendance();
@@ -148,29 +174,28 @@ if(!empty($studentslist)) {
     		// attendance else set it to 0;
     		$data['u_attendcance'] =	(!empty($total)) ? $actual / $total	* 100 : 0 ;
     	}
-	
 
       	foreach ($reports as $r) {
 
       		//get the number of this report that have been created
-      		$reportnumber	=	$dbc->count_report_entries($r->id,$stu->id);
+      		$createdentries	=	$dbc->count_report_entries($r->id,$stu->id);
       		
-      		$reporttext	=	"{$reportnumber} ".$r->name;
+      		$reporttext	=	"{$createdentries} ".$r->name;
       		
       		//check if the report has a state field
       		if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
       			
       			//count the number of entries with a pass state
-      			$reportentered = $dbc->count_report_entries_with_state($r->id,$stu->id,ILP_PASSFAIL_PASS);
-      			$reporttext	= $reportentered. "/".$reportentered." ".get_string('achieved','block_ilp');	
+      			$achievedentries = $dbc->count_report_entries_with_state($r->id,$stu->id,ILP_PASSFAIL_PASS);
+      			$reporttext	= $achievedentries. "/".$createdentries." ".get_string('achieved','block_ilp');	
       		}
       		
 			$data[$r->id]	=	$reporttext;	
 		}
-    	
-    	
 		
-		$data['view']	=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$stu->id}' >".get_string('viewplp','block_ilp')."</a>";
+    	$lastentry	=	$dbc->get_lastupdate($stu->id);
+		$data['lastupdated']	=	(!empty($lastentry->timemodified)) ?userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
+		$data['view']	=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$stu->id}{$courseparam}' >".get_string('viewplp','block_ilp')."</a>";
     	 $flextable->add_data_keyed($data);
     }
 }    

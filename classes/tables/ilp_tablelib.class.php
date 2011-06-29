@@ -621,8 +621,9 @@ class flexible_table {
         if(!isset($this->columns['fullname'])) {
             return '';
         }
-
-        $LIKE = $DB->sql_ilike();
+        
+        $LIKE = (method_exists($DB,'sql_ilike')) ? $DB->sql_ilike()  : $DB->sql_like();
+        
         if(!empty($this->sess->i_first) && !empty($this->sess->i_last)) {
             return 'firstname '.$LIKE.' \''.$this->sess->i_first.'%\' AND lastname '.$LIKE.' \''.$this->sess->i_last.'%\'';
         }

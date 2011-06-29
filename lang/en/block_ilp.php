@@ -10,12 +10,13 @@
 	$string['addsel'] 				= 	'Add selected';
 	
 	$string['allowcomments']		= 	'Allow comments';
+	$string['anystatus']			= 	'Any Status';
 	$string['apply'] 				= 	'Apply';
 	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
 	
-	
+	$string['changecourse']			=	'Change Course';
 	$string['creator']				=	'Creator';
 	$string['createreport']			=	'Create Report';
 	$string['createnewreport']		=	'Create New Report';
@@ -93,12 +94,16 @@
 	$string['mytutees']				=	'My Tutees';
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';
+	$string['mycoursegroups']			=	'My Course Groups';
 	
 	$string['name']					=	'Name';
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';
 	$string['nocomments']			=	'No Comments';
+	$string['notapplicable']		=	'N/A';
+	$string['nothingtodisplay']		=	'Nothing to display';
+	
 	
 	$string['passpercent']			=	'Pass Percentage';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
@@ -137,6 +142,8 @@
 	$string['selectedreportlist']				= 	'Select report list options';
 	$string['status']							= 	'Status';
 	$string['studentstatus']					= 	'Student Status';
+	$string['students']							= 	'Students';
+	
 	$string['studentnotfound']					= 	'Student not found';
 	$string['editstatusitems']					=	'Edit Status Items';
 	
@@ -151,6 +158,9 @@
 	$string['type'] 							= 	'Type';
 	$string['viewreportpreview'] 				= 	'View Report Preview';
 	$string['viewplp'] 							= 	'View';
+	$string['userpicture'] 						= 	'Student Picture';
+	
+	
 	
 	
 	$string['unknown'] 							= 	'Unknown';

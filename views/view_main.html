@@ -10,12 +10,21 @@ $PAGE->requires->yui2_lib("animation");
 $PAGE->requires->yui2_lib("container");
 $PAGE->requires->yui2_lib("connection");
 
+$jsmodule = array(
+    'name'     	=> 'ilp_standard_functions',
+    'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
+);
+
+$PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmodule);
+
+
 echo $OUTPUT->header();
 ?>
 <div class="ilp">
 <?php 
 //call the display function to 
-$template->display_template($user_id);
+$template->display_template($user_id,$course_id);
 ?>
 </div>
 <?php

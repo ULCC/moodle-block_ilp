@@ -44,7 +44,7 @@ class edit_report_mform extends ilp_moodleform {
         	
         	//create a new fieldset
         	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
-            $mform->addElement('html', '<legend class="ftoggler">'.$fieldsettitle.'</legend>');
+            $mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
         	
         	$mform->addElement('hidden', 'id');
         	$mform->setType('id', PARAM_INT);

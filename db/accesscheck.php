@@ -16,7 +16,7 @@ global $CFG, $PARSER,$USER;
 $user_id   = $PARSER->optional_param('user_id',$USER->id,PARAM_INT);
 
 // get the id of the course
-$course_id = $PARSER->optional_param('course_id', '',PARAM_INT);
+$course_id = $PARSER->optional_param('course_id', SITEID,PARAM_INT);
 
 
 // the user must be logged in
@@ -49,14 +49,20 @@ if (!empty($course_id)) {
 $context	=	$sitecontext;
 
 //if we are in the coursecontext
-if ($user_id == $USER->id) {
-	$context		=	$sitecontext;
-} else if(isset($coursecontext)){
-   $context		=	$coursecontext;
-} else if (has_capability('block/ilp:viewotherilp', $usercontext,$USER->id)) {
-
+if(isset($coursecontext)){
+	$context		=	$coursecontext;
+} else  if (has_capability('block/ilp:viewotherilp', $usercontext,$user_id)) {
 	$context		=	$usercontext;	
-}
+	
+	var_dump('users');
+	exit;
+	
+} else if ($user_id == $USER->id) {
+	$context		=	$sitecontext;
+	
+	var_dump(site);
+	exit;
+} 
 
 //CAPABILITIES
 $access_createreports	=	has_capability('block/ilp:addreport', $context);

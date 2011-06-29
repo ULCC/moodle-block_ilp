@@ -124,7 +124,7 @@ abstract class ilp_dashboard_template extends ilp_plugin {
     /**
      * This fucntion echo or returns the template file with all plugins in the specified regions   
      */
-    public function display_template($student_id=false,$return=false)	{	
+    public function display_template($student_id=NULL,$course_id=NULL,$return=false)	{	
     	global	$CFG;
     	
 		$templatecontents	=	$this->get_template();
@@ -148,7 +148,7 @@ abstract class ilp_dashboard_template extends ilp_plugin {
 			        }
 	    			
 	    			//instantiate dashboard_plugin class
-	    			$dashplugin		=	new $classname($student_id);	
+	    			$dashplugin		=	new $classname($student_id,$course_id);	
 	    			
 	    			//replace the region in the template file with the plugin code
 	    			$templatecontents	=	$this->region_plugin($templatecontents,$p->region_name,$dashplugin->display());	

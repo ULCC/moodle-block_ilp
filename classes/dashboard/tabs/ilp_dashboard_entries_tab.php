@@ -6,17 +6,19 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_tab.php'
 class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 	
 	public		$student_id;
+	public		$course_id;
 	public 		$filepath;
 	public		$linkurl;
 	public 		$selectedtab;
 	
 	
-	function __construct($student_id=null)	{
+	function __construct($student_id=null,$course_id=NULL)	{
 		global 	$CFG;
 		
-		$this->linkurl				=	$CFG->wwwroot.$_SERVER["SCRIPT_NAME"]."?user_id=".$student_id;		
+		$this->linkurl				=	$CFG->wwwroot.$_SERVER["SCRIPT_NAME"]."?user_id=".$student_id."&course_id={$course_id}";		
 		
 		$this->student_id	=	$student_id;
+		$this->course_id	=	$course_id;
 		$this->filepath		=	$CFG->dirroot."/blocks/ilp/classes/dashboard/tabs/entries/overview.php";
 
 		
@@ -93,7 +95,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 							//get the last updated report entry
 							$lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
 							
-							$detail->lastmod	=	(!empty($lastentry)) ?  userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : 'n/a';	
+							$detail->lastmod	=	(!empty($lastentry->timemodified)) ?  userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');	
 							$reportslist[]			=	$detail;
 						}
 					}

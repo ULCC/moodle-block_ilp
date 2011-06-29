@@ -34,8 +34,9 @@ $PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $
 				<?php
 		
 				 if (!empty($percentagebars)) {  
-							foreach($percentagebars	as $p) {?>
-					<label><?php echo $p->name; ?></label><div class='percentagebar'  ><div style='width: <?php echo $p->percentage; ?>%; background-color: <?php echo $p->csscolor; ?>' ></div></div><br />
+							foreach($percentagebars	as $p) {
+							?>
+					<br /><label><?php echo $p->name; ?></label><div class='percentagebar'  ><div style='width: <?php echo $p->percentage; ?>%; height: 10px; background-color: <?php echo $p->csscolor; ?>' ></div></div><br />
 					<?php } 
 						  }?>
 			</div>

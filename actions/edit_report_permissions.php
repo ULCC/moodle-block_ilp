@@ -97,7 +97,7 @@ if($mform->is_submitted()) {
         $report_id	= (empty($report_id)) ? $success : $report_id;
         
         //return the user to the report configuration page
-        $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?course_id='.$course_id;
+        $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php';
         redirect($return_url, get_string("reportpermissionsuc", 'block_ilp',$report), REDIRECT_DELAY);
     }
 }

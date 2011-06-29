@@ -744,6 +744,8 @@ class ilp_db_functions	extends ilp_logging {
     		$role_id	=	array($role_id);	
     	}
 
+
+    	
     	
     	$sql	=	"SELECT 	* 
 					 FROM 		{$CFG->prefix}block_ilp_reportpermissions AS rp, 
@@ -848,7 +850,7 @@ class ilp_db_functions	extends ilp_logging {
 					 WHERE 		{$where}
 					 AND		e.entry_id	=	{$entry_id}
 					 AND		p.reportfield_id	=	{$reportfield_id}";
-	
+					 			
 		return (empty($multiple)) ? $this->dbc->get_record_sql($sql) : $this->dbc->get_records_sql($sql);
 	}
    
@@ -1689,29 +1691,47 @@ class ilp_db_functions	extends ilp_logging {
      * or bool false
      */
  	function get_course_users($course_id) {
+ 		global $CFG;
  		
- 		if ($usercontexts		=	get_parent_contexts(CONTEXT_COURSE))	{
- 				$listofcontexts	=	'('.impolde(',',$usercontexts).')';
- 		} else {
- 			$sitecontext = get_context_instance(CONTEXT_SYSTEM, SITEID);
+ 		if (stripos($CFG->release,"2.") === false) {
+ 		
+ 			if ($usercontexts		=	get_parent_contexts(CONTEXT_COURSE))	{
+ 					$listofcontexts	=	'('.impolde(',',$usercontexts).')';
+ 			} else {
+ 				$sitecontext = get_context_instance(CONTEXT_SYSTEM, SITEID);
 
-        	$listofcontexts = '('.$sitecontext->id.')'; // must be site
+        		$listofcontexts = '('.$sitecontext->id.')'; // must be site
+ 			}
+ 		
+ 			$context = get_context_instance(CONTEXT_COURSE, $course_id);
+ 		
+ 		
+ 		
+	 		$sql	=	"SELECT		u.id
+	 					  FROM		{user} u INNER JOIN {role_assignments} ra on u.id = ra.userid 
+	 					  			LEFT OUTER JOIN {user_lastaccess} ul on (ra.userid and ul.courseid = {$course_id})
+	 					  			LEFT OUTER JOIN {role} r on ra.roleid = r.id
+	 					  			
+	 					  WHERE		(ra.contextid = {$context->id} OR ra.contextid in {$listofcontexts})
+	 					    AND		u.deleted = 0
+	 					    AND		(ul.courseid = {$course_id} OR ul.courseid IS NULL)
+	 					    AND		u.username <> 'guest'
+	 					    AND		r.id = 5";
+	 		
+ 		} else {
+ 			//get the list of users for moodle 2.0
+ 			 
+ 			$context = get_context_instance(CONTEXT_COURSE, $course_id);
+ 			list($sql, $params) = get_enrolled_sql($context,NULL);
+ 			
+ 			return $this->dbc->get_records_sql($sql,$params);
+
  		}
+ 		 
  		
- 		$context = get_context_instance(CONTEXT_COURSE, $course_id);
+		
  		
- 		$sql	=	"SELECT		u.id
- 					  FROM		{user} u INNER JOIN {role_assignments} ra on u.id = ra.userid 
- 					  			LEFT OUTER JOIN {user_lastaccess} ul on (ra.userid and ul.courseid = {$course_id})
- 					  			LEFT OUTER JOIN {role} r on ra.roleid = r.id
- 					  			
- 					  WHERE		(ra.contextid = {$context->id} OR ra.contextid in {$listofcontexts})
- 					    AND		u.deleted = 0
- 					    AND		(ul.courseid = {$course_id} OR ul.courseid IS NULL)
- 					    AND		u.username <> 'guest'
- 					    AND		r.id = 5";
  		
- 		return $this->dbc->get_records_sql($sql);
  	}
  	
  	
@@ -1719,10 +1739,13 @@ class ilp_db_functions	extends ilp_logging {
      * Returns a paginated list of all students
      *
      * @param object $flextable the table where the matrix will be displayed
+     * @param array  $student_ids an array contain the ids of studdents to be displayed
+     * 
+     * @return mixed array of object containing all students in a course or false
      */
-    function get_students_matrix($flextable,$student_ids) {
+    function get_students_matrix($flextable,$student_ids,$status_id) {
     	
-    	$studentssql	=	 (!empty($students)) ? " AND u.id IN (".implode(",",$student_ids).")" : "" ;
+
     	
         $select = "SELECT 		u.id as id,
         						u.firstname as firstname,
@@ -1732,13 +1755,26 @@ class ilp_db_functions	extends ilp_logging {
         						u.imagealt as imagealt,
         						u.email as email ";
 
-        $from = " FROM 			{user} as u,
-        						{block_ilp_user_status} as us,
-        						{block_ilp_plu_sts_items} as si ";
+        $from = " FROM 			{user} as u LEFT JOIN {block_ilp_user_status} as us on (u.id = us.user_id) LEFT JOIN 
+        						{block_ilp_plu_sts_items} as si on (us.parent_id = si.id)";
 
-        $where = "WHERE 		u.id = us.user_id
-        		  AND			us.parent_id = si.id
-        		  {$studentssql}";
+        if (!empty($student_ids) || !empty($status_id)) { 
+        	    $where = " WHERE "; 
+        	    $and = '';
+        	    
+        	    $studentssql	=	 (!empty($student_ids)) ? " u.id IN (".implode(",",$student_ids).")" : "" ;
+    			$statussql		=	 (!empty($status_id)) ? " si.id = {$status_id} " : '';
+        	    
+        		if (!empty($student_ids)) {
+        	    	$where .= " {$studentssql} ";
+        	    	$and = 'AND';
+        	    }
+        	    
+        		if (!empty($status_id)) {
+	       	    	$where .= " {$and} {$statussql} ";
+        	    }
+        }
+        	    
 
         $sort = "";
 
@@ -1753,10 +1789,12 @@ class ilp_db_functions	extends ilp_logging {
         if(!empty($sql_sort)) {
             $sort = ' ORDER BY '.$sql_sort;
         }
-
+        
         // get a count of all the records for the pagination links
         $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
 
+        
+        
         // tell the table how many pages it needs
         $flextable->totalrows($count);
 
@@ -1768,7 +1806,46 @@ class ilp_db_functions	extends ilp_logging {
         );
     }
   	
+    /**
+     * 
+     * Returns the latest entry reocrd for the given student
+     * 
+     * @param int $student_id the id of the student whose 
+     * last entry will be retrieved
+     * 
+     * @return  
+     */
+    function get_lastupdate($user_id) {
+    	
+    	$sql	=	"SELECT		MAX(timemodified) as timemodified
+    				 FROM		{block_ilp_entry}
+    				 WHERE		user_id	=	{$user_id}";
+    	
+    	
+    	return	$this->dbc->get_record_sql($sql);
+    }
   	
+    
+     /**
+     * 
+     * Returns all courses that the user with the given id is enrolled
+     * in
+     * 
+     * @param int $user_id	the id of the user whose course we will retrieve 
+     * 
+     * @return  array of recordset objects or bool false
+     */
+    function get_user_courses($user_id)	{
+    	global $CFG;
+    	
+    	if (stripos($CFG->release,"2.") !== false) {
+    		$courses	=	enrol_get_users_courses($user_id);
+    	} else {
+    		$courses	=	get_my_courses($user_id);
+    	}
+
+    	return $courses;
+    }
     
     
     

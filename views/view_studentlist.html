@@ -11,16 +11,75 @@ $PAGE->requires->yui2_lib("connection");
 // load the standard YUI style sheet
 $PAGE->requires->css_theme(new moodle_url($CFG->wwwroot.'/lib/yui/container/assets/container.css'));
 
+$jsmodule = array(
+    'name'     	=> 'ilp_standard_functions',
+    'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
+);
+
+$PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmodule);
+
+
+$jsmodule = array(
+    'name'     	=> 'ilp_view_studentlist',
+    'fullpath' 	=> '/blocks/ilp/views/js/view_studentlist.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
+);
+
+$PAGE->requires->js_init_call('M.ilp_view_studentlist.init', null, true, $jsmodule);
+
 
 echo $OUTPUT->header();
 
 ?>
 
 <div class="ilp">
-<?php
-   // display the table
-   require_once($CFG->dirroot.'/blocks/ilp/actions/view_studentlist.ajax.php');
+<h2><?php echo get_string('students','block_ilp').": ".$pagetitle;?></h2>
+
+	<form method="get" action='<?php echo $CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php?tutor=false";?>' id='filter_form' >
+	<?php 
+if (isset($course_id)) { 
+	if	(!empty($user_courses) && count($user_courses) > 0) { 
 ?>
+	<label for='course_id'><?php echo get_string('changecourse','block_ilp'); ?></label>
+	<select id='select_course_id' name='course_id'>
+		<?php foreach ($user_courses as $c) {?>
+			<option value='<?php echo $c->id; ?>'  <?php if ($course_id == $c->id) echo 'selected="selected"';?> ><?php echo $c->shortname?></option>
+		<?php } ?> 
+	</select>
+	<br />
+<?php } else { ?>
+	<input type='hidden' name='course_id' value='<?php if (isset($course_id)) echo $course_id?>' >
+<?php
+	}
+} 
+
+if (isset($tutor)) { 
+?>
+<input type='hidden' name='tutor' value='<?php if (isset($tutor)) echo $tutor?>' >
+<?php } ?>
+	<label for='status_id'><?php echo get_string('status','block_ilp'); ?></label>
+	<select id='select_status' name='status_id'>
+		<option value='0' <?php if ($status_id == 0) echo "selected='selected'"; ?> ><?php echo get_string('anystatus','block_ilp'); ?></option>
+		<?php foreach ($status_items as $s) {?>
+			<option value='<?php echo $s->id; ?>' <?php if ($status_id == $s->id) echo 'selected="selected"';?> ><?php echo $s->name?></option>
+		<?php } ?> 
+	</select>
+
+	
+	<input id='coursesubmit' type='submit' value='select course'>
+	</form>
+
+
+
+<div class="entry_floatright"><a href='#' onclick="M.ilp_standard_functions.printfunction()"><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
+<div class='clearer'></div>
+	<div class="centable">
+	<?php
+	   // display the table
+	   require_once($CFG->dirroot.'/blocks/ilp/actions/view_studentlist.ajax.php');
+	?>
+	</div>
 </div>
 <?php
 echo $OUTPUT->footer();

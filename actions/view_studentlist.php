@@ -19,10 +19,13 @@ global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
 //get the id of the course that is currently being used
-$course_id 	= $PARSER->optional_param('course_id', NULL, PARAM_INT);
+$course_id 	= $PARSER->optional_param('course_id', 0, PARAM_INT);
 
 //get the tutor flag
-$tutor		=	$PARSER->optional_param('tutor', NULL, PARAM_INT);
+$tutor		=	$PARSER->optional_param('tutor', 0, PARAM_RAW);
+
+//get the status_id if set
+$status_id		=	$PARSER->optional_param('status_id', 0, PARAM_INT);
 
 
 
@@ -32,10 +35,14 @@ $dbc = new ilp_db();
 //check if the any of the users roles in the 
 //current context has the create report capability for this report
 
-if (empty($access_viewotherilp))	{
+
+if (empty($access_viewotherilp)  && !empty($course_id))	{
 	//the user doesnt have the capability to create this type of report entry
 	print_error('userdoesnothavecapability','block_ilp');	
 }
+
+
+//check if any tutess exist
 
 // setup the navigation breadcrumbs
 //block name
@@ -62,13 +69,34 @@ $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php",array('t
 
 //we need to list all of the students in the course with the given id
 if (!empty($course_id)) {
-
 	//get all of the students in this class
 	$students	=	$dbc->get_course_users($course_id);
+	$course		=	$dbc->get_course_by_id($course_id);
+	$pagetitle	=	$course->shortname;
+	
+	$ucourses	=	$dbc->get_user_courses($USER->id);
+	$user_courses	=	array();
+	
+	
+	foreach ($ucourses as $uc) {
+		$coursecontext = get_context_instance(CONTEXT_COURSE, $uc->id);
+		//if the user has the capability to view the course then add it to the array
+		if (has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false))	{
+			$user_courses[]	=	$uc;	
+		}
+	}
+	
+	
+	
 } else {
 	//get the list of tutess for this user	
 	$student	=	$dbc->get_user_tutees($USER->id);
+	
+	$pagetitle	=	get_string('mytutees','block_ilp');
 }
+
+$status_items	=	$dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);	
+
 
 //require the view_studentlist.html page
 require_once($CFG->dirroot.'/blocks/ilp/views/view_studentlist.html');

@@ -190,7 +190,7 @@ ilppercentagebarborder-large {
     display             : inline;
 }
 
-.ilp form.hidden, .ilp img.hidden  {
+.ilp form.hidden, .ilp img.hidden  .ilp input.hidden {
     display             : none;
     visibility			: hidden;
 }
@@ -200,6 +200,16 @@ ilppercentagebarborder-large {
     visibility			: visible;
     
 }
+
+.ilp #filter_form label {
+	display					:	block;
+	float					:	left;
+	margin					:	0 15px 0 0;
+	width					:	150px;
+	text-align				: 	right;
+		
+}
+
 
 
 
@@ -268,6 +278,15 @@ ilp .hiddencontainer	{
 
 .ilp #mytutors	label{
 	padding				: 10px;	
+}
+
+.ilp .centable	{
+	width 				:80%;	
+	margin-left			:10%;
+}
+
+.ilp .centable .flexible	{
+	width 				:100%;	
 }
 
 /* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific

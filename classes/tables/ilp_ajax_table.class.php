@@ -234,13 +234,13 @@ class ilp_ajax_table extends flexible_table {
         }
 
         if(isset($_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]])) {
-            if(empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]]) || is_numeric(strpos(get_string('alphabet'), $_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]]))) {
+            if(empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]]) || is_numeric(strpos(get_string('alphabet','langconfig'), $_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]]))) {
                 $this->sess->i_last = $_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]];
             }
         }
 
         if(isset($_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]])) {
-            if(empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]]) || is_numeric(strpos(get_string('alphabet'), $_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]]))) {
+            if(empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]]) || is_numeric(strpos(get_string('alphabet','langconfig'), $_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]]))) {
                 $this->sess->i_first = $_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]];
             }
         }
@@ -333,6 +333,7 @@ class ilp_ajax_table extends flexible_table {
         $return = array();
 
         $where = parent::get_sql_where();
+        
         if(!empty($where)) {
             $return[] = $where;
         }
@@ -356,9 +357,15 @@ class ilp_ajax_table extends flexible_table {
      * This function is not part of the public api.
      */
     function print_initials_bar(){
+    	
+    	
+    	
+    	
         if ((!empty($this->sess->i_last) || !empty($this->sess->i_first) || $this->use_initials)
                     && isset($this->columns['fullname'])) {
 
+           	
+                    	
             $strall = get_string('all');
             $alpha  = explode(',', get_string('alphabet', 'langconfig'));
 

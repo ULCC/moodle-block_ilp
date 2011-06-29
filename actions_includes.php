@@ -1,19 +1,5 @@
 <?php
 
-/**
- * Autoload function means that files in the main classes folder (not subfolders)
- * will be included automatically when the classes are instantiated
- */
-
-/*
-function __autoload($classname) {
-    global $CFG;
-    if (file_exists($CFG->dirroot.'/blocks/ilp/classes/'.$classname.'class.php')) {
-        require_once($CFG->dirroot.'/blocks/ilp/classes/'.$classname.'class.php');
-    }
-}
-*/
-
 //include the moodle library
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 

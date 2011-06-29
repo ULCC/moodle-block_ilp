@@ -56,23 +56,64 @@ class block_ilp extends block_list {
         // get the course
         $course = $dbc->get_course($course_id);
 
-        $coursecontext = get_context_instance(CONTEXT_COURSE, $course_id);
+        
+        
+        
 
         // cache the content of the block
         if($this->content !== null) {
             return $this->content;
         }
        
-        //we need to get the capabilites of the current user so we can deceide what to display in the block 
-        $access_viewilp			=	has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false);
-		$access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false);
+        //get all course that the current user is enrolled in 
+		$my_courses				=	$dbc->get_user_courses($USER->id);
+		$access_viewilp			=	false;
+		$access_viewotherilp	= 	false;
+		
+		//we are going to loop through all the courses the user is enrolled in so that we can 
+		//choose which display they will see 
+		foreach($my_courses	as $c) {
+        			$coursecontext = get_context_instance(CONTEXT_COURSE, $c->id);
+			
+			        //we need to get the capabilites of the current user so we can deceide what to display in the block 
+        			if (has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false)) {
+        				$access_viewilp		=	true;
+        			}
+        			
+        			if (has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false)) {
+        				$intial_course_id	=	$c->id;
+        				$access_viewotherilp	=	true;
+        								
+        			}
         
-        /*
+		}
+        
+		//
+		$usertutees	=	$dbc->get_user_tutees($USER->id);
+
+		
+		$this->content = new stdClass;
+        $this->content->footer = '';
+		
         //check if the user has the viewotherilp capability
-      //  if (!empty($access_viewotherilp)) {
+        if (!empty($access_viewotherilp) || !empty($usertutees)) {
         
+        	if (!empty($access_viewotherilp)) {    	
+			 	$label = get_string('mycoursegroups', 'block_ilp');
+	         	$url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$intial_course_id}";
+	         	$this->content->items[] = "<a href='{$url}'>{$label}</a>";
+	         	$this->content->icons[] = "";
+    		}
+    		
+        	if (!empty($usertutees)) {    	
+			 	$label = get_string('mytutees', 'block_ilp');
+	         	$url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
+	         	$this->content->items[] = "<a href='{$url}'>{$label}</a>";
+	         	$this->content->icons[] = "";
+    		}
+        	
         
-        //} else {
+        } else {
 			//TODO place percentage bar code into a class 
         	//the following code handles the creation of the percentage bars (this will be placed into a function)
         	
@@ -206,30 +247,24 @@ class block_ilp extends block_list {
 
 	         $this->content->text	= "";
 	         
-	         					
-			var_dump($percentagebars);
-	         
 	         foreach ($percentagebars as $p) {
 	         	$this->content->items[]	=	"<br /><label style='font-size: 10px; font-size:normal;'>{$p->name}</label><div style='margin:	2px; border-style:	solid; border-color:	black; height: 10px; width : 100px;'  ><div class='ilppercentagebar' style='width: {$p->percentage}%' ></div></div>";
 	         }
 	         
+        	$label = get_string('mypersonallearningplan', 'block_ilp');
+	         $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}";
+	         $this->content->items[] = "<a href='{$url}'>{$label}</a>";
+	         $this->content->icons[] = "";
         	
-        	
-       // }
-        
-         */
+        }
 		
-		$this->content = new stdClass;
-        $this->content->footer = '';
+		
          
 	//	if (!empty($access_viewotherilp)) {
         
         
       //  } else {
-			 $label = get_string('mypersonallearningplan', 'block_ilp');
-	         $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}";
-	         $this->content->items[] = "<a href='{$url}'>{$label}</a>";
-	         $this->content->icons[] = "";
+
         //}
 		
 		
