@@ -75,6 +75,10 @@ class ilp_mis_connection{
         return $this->db;
     }
 
+    /*
+    * @param int $student_id
+    * @return associative array
+    */
     public function get_report( $student_id ){
         $courselist = $this->get_courselist( $student_id );
         $reportlist = array();
@@ -90,6 +94,10 @@ class ilp_mis_connection{
         );
     }
 
+    /*
+    * @param int $student_id
+    * @return associative array
+    */
     protected function get_student_details( $student_id ){
         $student = $this->params[ 'student_table' ];
         $id = $this->params[ 'student_unique_key' ];
@@ -98,6 +106,11 @@ class ilp_mis_connection{
         return array_shift( $res );
     }
 
+    /*
+    * @param int $course_id
+    * @param int $student_id
+    * @param string $course_name
+    */
     protected function get_attendance_report( $course_id, $student_id, $course_name='un-named' ){
         $nof_lectures = $this->get_lecturecount( $course_id );
         $nof_attended = $this->get_attendance_details( $course_id, $student_id, $this->params[ 'present_code_list' ], true );
@@ -111,10 +124,18 @@ class ilp_mis_connection{
         );
     }
 
+    /*
+    * @param float $r
+    * @return string
+    */
     public function format_percentage( $r ){
         return number_format( round( $r * 100 ) ) . '%';
     }
 
+    /*
+    * @param int $course_id
+    * @return int
+    */
     protected function get_lecturecount( $course_id ){
         $lecture_table = $this->params[ 'lecture_table' ];
         $course_fk_field = $this->params[ 'lecture_courseid' ];
@@ -128,6 +149,10 @@ class ilp_mis_connection{
         return $toprow[ 'n' ];
     }
 
+    /*
+    * @param int student_id
+    * @return array of arrays
+    */
     protected function get_courselist( $student_id ){
         $id = $this->params[ 'attendance_table_unique_key' ];
         $student_course = $this->params[ 'student_course_table' ];
@@ -149,27 +174,45 @@ EOQ;
         return $res;
     }
 
-    public function get_attendance_details( $course_id, $student_id=0, $attendancecode_list=array(), $countonly=false ){
+    /*
+    * @param int $course_id
+    * @param int $student_id
+    * @param array of strings $attendancecode_list
+    * @param boolean $countonly
+    * @return int if $countonly, array of arrays otherwise
+    */
+    public function get_attendance_details( $course_id, $student_id, $attendancecode_list=array(), $countonly=false ){
+        $attendancecode_id_field = $this->params[ 'attendancecode_id_field' ];
+        $attendance_studentid = $this->params[ 'attendance_studentid' ];
+        $lecture_table = $this->params[ 'lecture_table' ]; 
+        $lecture_courseid = $this->params[ 'lecture_courseid' ];
+        $attendance_table = $this->params[ 'attendance_table' ];
+        $attendancecode_table = $this->params[ 'attendancecode_table' ];
+        $attendancecode_unique_key = $this->params[ 'attendancecode_unique_key' ];
+        $lecture_attendance_id = $this->params[ 'lecture_attendance_id' ];
+        $lecture_unique_key = $this->params[ 'lecture_unique_key' ];
+        $attendance_lectureid = $this->params[ 'attendance_lectureid' ];
         if( $countonly ){
             $selectclause = "COUNT(*) n";
         }
         else{
-            $selectclause = "sl.id, acode.{$this->params[ 'attendancecode_id_field' ]}";
+            //$selectclause = "sl.id, acode.{$this->params[ 'attendancecode_id_field' ]}";
+            $selectclause = "sl.id, acode.$attendancecode_id_field";
         }
         $whereandlist = array(
-            "sl.{$this->params[ 'attendance_studentid' ]} = $student_id",
-            "{$this->params[ 'lecture_table' ]}.{$this->params[ 'lecture_courseid' ]} = $course_id"
+            "sl.$attendance_studentid = $student_id",
+            "$lecture_table.$lecture_courseid = $course_id"
         );
         if( count( $attendancecode_list ) ){
             //$whereandlist[] = "{$this->params[ 'attendancecode_table' ]}.{$this->params[ 'attendancecode_id_field' ]} IN  ('" . implode( "','" , $attendancecode_list ) . "')";
-            $whereandlist[] = "acode.{$this->params[ 'attendancecode_id_field' ]} IN  ('" . implode( "','" , $attendancecode_list ) . "')";
+            $whereandlist[] = "acode.$attendancecode_id_field IN  ('" . implode( "','" , $attendancecode_list ) . "')";
         }
         $whereclause = implode( ' AND ' , $whereandlist );
         $sql = <<<EOQ
             SELECT $selectclause
-            FROM {$this->params[ 'attendance_table' ]} sl
-            JOIN {$this->params[ 'attendancecode_table' ]} acode ON acode.{$this->params[ 'attendancecode_unique_key' ]} = sl.{$this->params[ 'lecture_attendance_id' ]}
-            JOIN {$this->params[ 'lecture_table' ]} lecture ON lecture.{$this->params[ 'lecture_unique_key' ]} = sl.{$this->params[ 'attendance_lectureid' ] }
+            FROM $attendance_table sl
+            JOIN $attendancecode_table acode ON acode.$attendancecode_unique_key = sl.$lecture_attendance_id
+            JOIN $lecture_table lecture ON lecture.$lecture_unique_key = sl.$attendance_lectureid
             WHERE $whereclause
 EOQ;
         $res = $this->execute( $sql )->getRows();
@@ -180,6 +223,9 @@ EOQ;
         return $res;
     }
 
+    /*
+    * @param associative array $params
+    */
     public function set_params( $params ){
         foreach( $params as $key=>$value ){
             if( in_array( $key, $this->settable_params ) ){
