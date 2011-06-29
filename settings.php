@@ -79,7 +79,7 @@ $settings->add($dbname);
 $dbprefix			=	new admin_setting_configtext('block_ilp/dbprefix',get_string( 'db_prefix', 'block_ilp' ),get_string( 'prefix_for_tablenames', 'block_ilp' ),'mdl_',PARAM_RAW);
 $settings->add($dbprefix);
 
-$dbhost			=	new admin_setting_configtext('block_ilp/dbhost',get_string( 'db_host', 'block_ilp' ), get_string( 'host_name_or_ip', 'block_ilp' ),'mdl_',PARAM_RAW);
+$dbhost			=	new admin_setting_configtext('block_ilp/dbhost',get_string( 'db_host', 'block_ilp' ), get_string( 'host_name_or_ip', 'block_ilp' ),'localhost',PARAM_RAW);
 $settings->add($dbhost);
 
 $dbuser			=	new admin_setting_configtext('block_ilp/dbuser',get_string( 'db_user', 'block_ilp' ), get_string( 'db_user', 'block_ilp' ),'',PARAM_RAW);
