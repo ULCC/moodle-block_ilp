@@ -12,6 +12,11 @@ require_once($CFG->dirroot.'/lib/adodb/adodb.inc.php');
 * Therefore we invoke a fresh Adodb for this purpose.
 * The type of db and connection details are configured on the configuration page /admin/settings.php
 * Names of user table and attendance table can be sent in as params.
+* For example usage see ilp/actions/dbtest.php.
+*
+* We assume that there will be some kind of user table for student data, some kind of course table and some kind of attendance table.
+* Names of the tables and key fields are abstracted so they can be configured for the individual system (using set_params() ).
+* If the system is much different in structure, then some of these methods will have to be customised further.
 */
 class ilp_mis_connection{
 
