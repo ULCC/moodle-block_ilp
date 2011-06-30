@@ -69,34 +69,132 @@ class ilp_mis_connection{
             'student_course_student_key',       //fk field in student-course link table matching student id
             'student_course_course_key',        //fk firld in student_course link table matching course id
             'present_code_list',                //array of attendance codes classified as present
-            'absent_code_list'                  //array of attendance codes classified as absent
+            'absent_code_list',                 //array of attendance codes classified as absent
+            'late_code_list',                   //array of attendance codes classified as late (should be subset of present_code_list)
+            'timetable_table',                  //table containing info about the date of each lecture (will be set same as lecture_table if not given)
+            'lecture_time_field',               //name of field giving the date/time of each lecture, for time-limiting reports
+            'start_date',                       //start date to be applied generically to queries
+            'end_date',                          //end date to be applied generically to queries
+
+            'attendance_view',                  //view or table containing all the relevant attendance data
+            'studentlecture_attendance_id',      //primary key of attendance view - unique identifier for a single student-lecture attendance event
+            'student_id_field',                 //fieldname in attendance_view identifying a student
+            'course_id_field',                  //fieldname in attendance_view identifying a course
+            'course_label_field',               //fieldname in attendance_view giving a course display name
+            'lecture_id_field',               //fieldname in attendance_view giving a lecture id
+            'timefield',                        //fieldname in attendance_view giving the date of a lecture
+            'code_field'                        //fieldname in attendance_veiw containing the attendance code
         );
         foreach( $this->settable_params as $var ){
                 $this->params[ $var ] = false;
         }
         $this->set_params( $params );
         $this->db = ADONewConnection( $this->params[ 'dbconnectiontype' ] );
+        $this->db->SetFetchMode(ADODB_FETCH_ASSOC);
         $this->db->Connect( $this->params[ 'host' ], $this->params[ 'user' ], $this->params[ 'pass' ], $this->params[ 'dbname' ] );
         return $this->db;
+    }
+
+    public function get_student_list(){
+    }
+
+    protected function generate_time_conditions( $fieldalias=false, $english=false ){
+        $rtn = array();
+        if( !$fieldalias ){
+            $timetable_table = $this->params[ 'attendance_view' ];
+            $timefield = $this->params[ 'timefield' ];
+            $fieldalias = "$timetable_table.$timefield";
+        }
+        if( $param_start = $this->params[ 'start_date' ] ){
+            if( $english ){
+                $rtn[] = "from $param_start";
+            }
+            else{
+                $rtn[] = "$fieldalias >= '$param_start'";
+            }
+        }
+        if( $param_end = $this->params[ 'end_date' ] ){
+            if( $english ){
+                $rtn[] = "to $param_end";
+            }
+            else{
+                $rtn[] = "$fieldalias <= '$param_end'";
+            }
+        }
+        if( $english ){
+            return implode( ' ' , $rtn );
+        }
+        return $rtn;
     }
 
     /*
     * @param int $student_id
     * @return associative array
     */
-    public function get_report( $student_id ){
-        $courselist = $this->get_courselist( $student_id );
-        $reportlist = array();
-        foreach( $courselist as $course ){
-            $course_id = $course[ 'course_id' ];
-            $course_title = $course[ 'course_name' ];
-            $reportlist[] = $this->get_attendance_report( $course_id, $student_id, $course_title );
+    public function get_report( $student_id=false ){
+        if( $student_id ){
+            $student_id_list = array( $student_id );
         }
-        return array(
-            'student_details' => $this->get_student_details( $student_id ),
-            //'courselist' => $courselist,
-            'reportlist' => $reportlist
-        );
+        else{
+            $student_id_list = $this->get_student_id_list();
+        }
+        $uber_reportlist = array();
+        $time_heading = '';
+        if( $time_heading = $this->generate_time_conditions( false, true ) ){
+            $time_heading = " " . $time_heading;
+        }
+        foreach( $student_id_list as $student_id ){
+	        $courselist = $this->get_courselist( $student_id );
+	        $reportlist = array();
+	        foreach( $courselist as $course ){
+	            $course_id = $course[ 'course_id' ];
+	            $course_title = $course[ 'course_title' ];
+	            $reportlist[] = $this->get_attendance_report( $course_id, $student_id, $course_title );
+	        }
+	        $uber_reportlist[] = array(
+	            'student_details' => $this->get_student_details( $student_id ),
+	            //'courselist' => $courselist,
+	            "course attendance$time_heading" => $reportlist
+	        );
+        }
+        return $uber_reportlist;
+    }
+
+    protected function get_student_id_list(){
+        $id = $this->params[ 'student_unique_key' ];
+        $student = $this->params[ 'student_table' ];
+        $sql = "SELECT $id FROM $student";
+        return $this->get_column_valuelist( $this->execute( $sql )->getRows() , $id );
+    }
+
+    /*
+    * intended to return just the front item from an array of arrays (eg a recordset)
+    * if just the array is sent, just the first row will be returned
+    * if 2nd argument sent, then just the value of that field in the first row will be returned
+    * @param array $a
+    * @param string $fieldname
+    * @return mixed (array or single value)
+    */
+    protected function get_top_item( $a , $fieldname=false ){
+        $toprow = array_shift( $a );
+        if( $fieldname ){
+            return $toprow[ $fieldname ];
+        }
+        return $toprow;
+    }
+
+    /*
+    * take a result array and return a list of the values in a single field
+    * @param array of arrays $a
+    * @param string $fieldname
+    * @return array of scalars
+    */
+    protected function get_column_valuelist( $a, $fieldname ){
+        $rtn = array();
+        foreach( $a as $row ){
+            $rtn[] = $row[ $fieldname ];
+        }
+        return $rtn;
     }
 
     /*
@@ -108,7 +206,7 @@ class ilp_mis_connection{
         $id = $this->params[ 'student_unique_key' ];
         $sql = " SELECT * FROM $student WHERE $id = $student_id ";
         $res = $this->execute( $sql )->getRows();
-        return array_shift( $res );
+        return $this->get_top_item( $res );
     }
 
     /*
@@ -119,13 +217,29 @@ class ilp_mis_connection{
     protected function get_attendance_report( $course_id, $student_id, $course_name='un-named' ){
         $nof_lectures = $this->get_lecturecount( $course_id );
         $nof_attended = $this->get_attendance_details( $course_id, $student_id, $this->params[ 'present_code_list' ], true );
-        $attendance = $this->format_percentage( $nof_attended / $nof_lectures );
+        $nof_late = $this->get_attendance_details( $course_id, $student_id, $this->params[ 'late_code_list' ], true );
+        if( $nof_lectures ){
+            $attendance = $this->format_percentage( $nof_attended / $nof_lectures );
+            if( $nof_attended > 0 ){
+                $punctuality = $this->format_percentage( 1 - ( $nof_late / $nof_attended ) );
+            }
+            else{
+                $punctuality = 'n/a';
+            }
+        }
+        else{
+            //division by 0
+            $attendance = 'n/a';
+            $punctuality = 'n/a';
+        }
         return array(
             'course_name' => $course_name,
             'course_id' => $course_id,
             'no. of lectures' => $nof_lectures,
             'lectures attended' => $nof_attended,
-            'attendance' => $attendance
+            'late' => $nof_late,
+            'attendance' => $attendance,
+            'punctuality' => $punctuality
         );
     }
 
@@ -142,16 +256,32 @@ class ilp_mis_connection{
     * @return int
     */
     protected function get_lecturecount( $course_id ){
+        $table = $this->params[ 'attendance_view' ];
+        $lecture_id_field = $this->params[ 'lecture_id_field' ];
+        $course_id_field = $this->params[ 'course_id_field' ];
+        $sql = "SELECT COUNT( DISTINCT( $lecture_id_field ) ) n
+                FROM $table
+                WHERE $course_id_field = $course_id";
+        $res = $this->execute( $sql )->getRows();
+        return $this->get_top_item( $res, 'n' );
+    
+/*
         $lecture_table = $this->params[ 'lecture_table' ];
         $course_fk_field = $this->params[ 'lecture_courseid' ];
+        $timefield = $this->params[ 'lecture_time_field' ];
+        $whereandlist = array(
+            "$lecture_table.$course_fk_field = $course_id"
+        );
+        $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( "$lecture_table.$timefield" ) );
+        $whereclause = implode( ' AND ', $whereandlist );
         $sql = "
             SELECT COUNT(*) n 
             FROM $lecture_table
-            WHERE $lecture_table.$course_fk_field = $course_id
+            WHERE $whereclause
         ";
         $res = $this->execute( $sql )->getRows();
-        $toprow = array_shift( $res );
-        return $toprow[ 'n' ];
+        return $this->get_top_item( $res, 'n' );
+*/
     }
 
     /*
@@ -159,6 +289,19 @@ class ilp_mis_connection{
     * @return array of arrays
     */
     protected function get_courselist( $student_id ){
+        $course_id_field = $this->params[ 'course_id_field' ];
+        $course_label_field = $this->params[ 'course_label_field' ];
+        $student_id_field = $this->params[ 'student_id_field' ];
+        $table = $this->params[ 'attendance_view' ];
+        $sql = <<<EOQ
+            SELECT $course_id_field, $course_label_field 
+            FROM $table 
+            WHERE $student_id_field = "$student_id"
+            GROUP BY $course_id_field
+EOQ;
+        return $this->execute( $sql )->getRows();
+/*
+
         $id = $this->params[ 'attendance_table_unique_key' ];
         $student_course = $this->params[ 'student_course_table' ];
         $student_id_fieldname = $this->params[ 'attendance_studentid' ];
@@ -177,6 +320,7 @@ class ilp_mis_connection{
 EOQ;
         $res = $this->execute( $sql )->getRows();
         return $res;
+*/
     }
 
     /*
@@ -187,6 +331,41 @@ EOQ;
     * @return int if $countonly, array of arrays otherwise
     */
     public function get_attendance_details( $course_id, $student_id, $attendancecode_list=array(), $countonly=false ){
+        $table = $this->params[ 'attendance_view' ];
+        $slid_field = $this->params[ 'studentlecture_attendance_id' ];
+        $acode_field = $this->params[ 'code_field' ];
+        $student_id_field = $this->params[ 'student_id_field' ];
+        $course_id_field = $this->params[ 'course_id_field' ];
+        $timefield = $this->params[ 'timefield' ];
+        
+        if( $countonly ){
+            $selectclause = "COUNT(*) n";
+        }
+        else{
+            $selectclause = "$slid_field id, $acode_field";
+        }
+        $whereandlist = array(
+            "$student_id_field= '$student_id'",
+            "$course_id_field = '$course_id'"
+        );
+        $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( $timefield ) );
+        if( count( $attendancecode_list ) ){
+            //$whereandlist[] = "{$this->params[ 'attendancecode_table' ]}.{$this->params[ 'attendancecode_id_field' ]} IN  ('" . implode( "','" , $attendancecode_list ) . "')";
+            $whereandlist[] = "$acode_field IN  ('" . implode( "','" , $attendancecode_list ) . "')";
+        }
+        $whereclause = implode( ' AND ' , $whereandlist );
+        $sql = <<<EOQ
+            SELECT $selectclause
+            FROM $table
+            WHERE $whereclause
+EOQ;
+        $res = $this->execute( $sql )->getRows();
+        if( $countonly ){
+            return $this->get_top_item( $res, 'n' );
+        }
+        return $res;
+
+/*
         $attendancecode_id_field = $this->params[ 'attendancecode_id_field' ];
         $attendance_studentid = $this->params[ 'attendance_studentid' ];
         $lecture_table = $this->params[ 'lecture_table' ]; 
@@ -197,6 +376,10 @@ EOQ;
         $lecture_attendance_id = $this->params[ 'lecture_attendance_id' ];
         $lecture_unique_key = $this->params[ 'lecture_unique_key' ];
         $attendance_lectureid = $this->params[ 'attendance_lectureid' ];
+
+        //$timetable_table = $this->params[ 'timetable_table' ];
+        $timefield = $this->params[ 'lecture_time_field' ];
+        $timefield_alias = "lecture.$timefield";
         if( $countonly ){
             $selectclause = "COUNT(*) n";
         }
@@ -208,6 +391,7 @@ EOQ;
             "sl.$attendance_studentid = $student_id",
             "$lecture_table.$lecture_courseid = $course_id"
         );
+        $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( $timefield_alias ) );
         if( count( $attendancecode_list ) ){
             //$whereandlist[] = "{$this->params[ 'attendancecode_table' ]}.{$this->params[ 'attendancecode_id_field' ]} IN  ('" . implode( "','" , $attendancecode_list ) . "')";
             $whereandlist[] = "acode.$attendancecode_id_field IN  ('" . implode( "','" , $attendancecode_list ) . "')";
@@ -222,10 +406,10 @@ EOQ;
 EOQ;
         $res = $this->execute( $sql )->getRows();
         if( $countonly ){
-            $toprow = array_shift( $res );
-            return $toprow[ 'n' ];
+            return $this->get_top_item( $res, 'n' );
         }
         return $res;
+*/
     }
 
     /*
@@ -236,6 +420,9 @@ EOQ;
             if( in_array( $key, $this->settable_params ) ){
                 $this->params[ $key ] = $value;  
             }
+        }
+        if( !( $this->params[ 'timetable_table' ] ) ){
+            $this->params[ 'timetable_table' ] = $this->params[ 'lecture_table' ];
         }
     }
 
@@ -256,8 +443,8 @@ EOQ;
     * @param string $sql
     * @return array of arrays      
     */
-    public function execute( $sql ){
-        $res = $this->db->Execute( $sql ) or die( 'db error' );
+    public function execute( $sql , $arg=false ){
+        $res = $this->db->Execute( $sql, $arg ) or die( $this->db->ErrorMsg() );
         return $res;
     }
         
