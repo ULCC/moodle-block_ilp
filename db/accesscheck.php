@@ -53,15 +53,8 @@ if(isset($coursecontext)){
 	$context		=	$coursecontext;
 } else  if (has_capability('block/ilp:viewotherilp', $usercontext,$user_id)) {
 	$context		=	$usercontext;	
-	
-	var_dump('users');
-	exit;
-	
 } else if ($user_id == $USER->id) {
 	$context		=	$sitecontext;
-	
-	var_dump(site);
-	exit;
 } 
 
 //CAPABILITIES

@@ -43,22 +43,38 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      * Override this to define the second tab row should be defined in this function  
      */
     function define_second_row()	{
-    	global 	$CFG,$USER,$PAGE,$OUTPUT;
+    	global 	$CFG,$USER,$PAGE,$OUTPUT,$PARSER;
     	
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {		
 			
 			
-			
+			/****
+			 * This code is in place as moodle insists on calling the settings functions on normal pages
+			 * 
+			 */
 			//check if the set_context method exists
 			if (!isset($PAGE->context) === false) {
-				if (method_exists($PAGE,'set_context')) {
-					$PAGE->set_context(get_context_instance(CONTEXT_SYSTEM));
-				}	else {
-					$PAGE->context = get_context_instance(CONTEXT_SYSTEM);		
-				}
 				
+				$course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
+				$user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
+				
+				if ($course_id != SITEID)	{ 
+					if (method_exists($PAGE,'set_context')) {
+						//check if the siteid has been set if not 
+						$PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
+					}	else {
+						$PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);		
+					}
+				} else {
+					if (method_exists($PAGE,'set_context')) {
+						//check if the siteid has been set if not 
+						$PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
+					}	else {
+						$PAGE->context = get_context_instance(CONTEXT_USER,$user_id);		
+					}
+				}
 			} 
 			
 			

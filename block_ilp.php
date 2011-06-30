@@ -213,38 +213,38 @@ class block_ilp extends block_list {
 			
 
 			
-			
-			//we are going to output the add any reports that have state fields to the percentagebar array 
-			foreach ($reports as $r) {
-				if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
-
+			if (!empty($reports)) {
+				//we are going to output the add any reports that have state fields to the percentagebar array 
+				foreach ($reports as $r) {
+					if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
+	
+						
+						
+						$reportinfo				=	new stdClass();
+						$reportinfo->total		=	$dbc->count_report_entries($r->id,$USER->id);
+						$reportinfo->actual		=	$dbc->count_report_entries_with_state($r->id,$USER->id,ILP_PASSFAIL_PASS);
 					
-					
-					$reportinfo				=	new stdClass();
-					$reportinfo->total		=	$dbc->count_report_entries($r->id,$USER->id);
-					$reportinfo->actual		=	$dbc->count_report_entries_with_state($r->id,$USER->id,ILP_PASSFAIL_PASS);
-				
-	    	        //if total_possible is empty then there will be nothing to report
-	    	        if (!empty($reportinfo->total)) {
-	    	        	//calculate the percentage
-	    	        	$reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
-	    	        
-	    	        	$reportinfo->name	=	$r->name;
-	    	        	
-	    	        	     //sets the colour of the percentage bar
-	    	        	if ($reportinfo->percentage	<= $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','failcsscolour');	
-	    	       	
-	    	        	if ($reportinfo->percentage	> $failpercentage && $reportinfo->percentage < $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','midcsscolour');	
-	    	        	
-	    	        	if ($reportinfo->percentage	>= $passpercentage) $reportinfo->csscolor	=	get_config('block_ilp','passcsscolour');	
-	    	        	
-	    	        	$percentagebars[]	=	$reportinfo;
-	    	        }
-					
+		    	        //if total_possible is empty then there will be nothing to report
+		    	        if (!empty($reportinfo->total)) {
+		    	        	//calculate the percentage
+		    	        	$reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
+		    	        
+		    	        	$reportinfo->name	=	$r->name;
+		    	        	
+		    	        	     //sets the colour of the percentage bar
+		    	        	if ($reportinfo->percentage	<= $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','failcsscolour');	
+		    	       	
+		    	        	if ($reportinfo->percentage	> $failpercentage && $reportinfo->percentage < $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','midcsscolour');	
+		    	        	
+		    	        	if ($reportinfo->percentage	>= $passpercentage) $reportinfo->csscolor	=	get_config('block_ilp','passcsscolour');	
+		    	        	
+		    	        	$percentagebars[]	=	$reportinfo;
+		    	        }
+						
+					}
 				}
-			}
-				
-
+			}	
+			
 	         $this->content->text	= "";
 	         
 	         foreach ($percentagebars as $p) {

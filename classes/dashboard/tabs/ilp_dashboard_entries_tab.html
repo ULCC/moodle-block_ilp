@@ -19,7 +19,8 @@ foreach ($reportslist as $rep) {
 				<div class='entries_report_img'>
 					<img id="reportimage" alt="<?php echo $rep->name." ".get_string('reports','block_ilp'); ?>"" src="<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif"?>" />
 				</div>
-				<?php if (!empty($detail->state_report)) { echo $rep->achieved."/".$rep->entries." ".get_string('achieved','block_ilp'); } else { echo $rep->entries." ".get_string('reports','block_ilp');} ?><br />
+				<?php 
+				if (!empty($rep->state_report)) { echo $rep->achieved."/".$rep->entries." ".get_string('achieved','block_ilp'); } else { echo $rep->entries." ".get_string('reports','block_ilp');} ?><br />
 				<?php echo get_string('ilp_dashboard_entries_tab_lastupdate','block_ilp');?>: <?php echo $rep->lastmod; ?><br />
 			</div>
 			<div class='entries_report_add'>

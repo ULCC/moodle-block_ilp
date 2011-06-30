@@ -62,7 +62,7 @@ class moodle2_db_emulator {
             case 'get_field' :
             case 'count_records' :
                 $params = $this->flatten($params);
-                break;
+
         }
         
         // execute the query and return the sanatised result
@@ -563,9 +563,11 @@ class moodle2_page_requires {
             $this->js($module['fullpath']);
 
             // create script params
-            $params = array_map('json_encode', $jsarguments);
-            $params = implode(', ', $params);
-			
+            if (is_array($jsarguments)) {
+            	$params = array_map('json_encode', $jsarguments);
+            	$params = implode(', ', $params);
+            }
+            
             $params	= (!empty($params)) ? ', '.$params: '';
             
             // execute it

@@ -743,9 +743,6 @@ class ilp_db_functions	extends ilp_logging {
     	if (!is_array($role_id)) {
     		$role_id	=	array($role_id);	
     	}
-
-
-    	
     	
     	$sql	=	"SELECT 	* 
 					 FROM 		{$CFG->prefix}block_ilp_reportpermissions AS rp, 
@@ -756,8 +753,8 @@ class ilp_db_functions	extends ilp_logging {
 					 AND		rp.report_id	=	{$report_id}	
 					 AND		r.id IN (".implode(',',$role_id).")
 					 AND		c.id = {$capability_id}";
-								
-    	return 	$this->dbc->get_records_sql($sql);
+					
+    	return 	(!empty($role_id)) ? $this->dbc->get_records_sql($sql) : false;
     }
     
     
@@ -1652,13 +1649,17 @@ class ilp_db_functions	extends ilp_logging {
      */
   	function get_student_tutors($user_id)	{
   		
-  		$sql	=	"SELECT 	u.*
-                       FROM 	{role_assignments} ra, {context} c, {user} u
+  		$sql	=	"SELECT 	tu.*
+                       FROM 	{role_assignments} AS ra, 
+                       			{context} AS c, 
+                       			{user} AS u,
+                       			{user} AS tu
                       WHERE 	ra.contextid = c.id
                         AND 	c.instanceid = u.id
-                        AND 	c.contextlevel = ".CONTEXT_USER
-                        ." AND 	u.id =	{$user_id}";
-
+                        AND 	u.id =	{$user_id}
+                        AND		ra.userid = tu.id
+                        AND 	c.contextlevel = ".CONTEXT_USER;
+                        
   		return $this->dbc->get_records_sql($sql);
   	}
   	
@@ -1693,19 +1694,20 @@ class ilp_db_functions	extends ilp_logging {
  	function get_course_users($course_id) {
  		global $CFG;
  		
+ 		$params	= false;
+ 		
  		if (stripos($CFG->release,"2.") === false) {
  		
- 			if ($usercontexts		=	get_parent_contexts(CONTEXT_COURSE))	{
- 					$listofcontexts	=	'('.impolde(',',$usercontexts).')';
+ 			$coursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
+ 			
+ 			if ($usercontexts		=	get_parent_contexts($coursecontext))	{
+ 					$listofcontexts	=	'('.implode(',',$usercontexts).')';
  			} else {
  				$sitecontext = get_context_instance(CONTEXT_SYSTEM, SITEID);
-
         		$listofcontexts = '('.$sitecontext->id.')'; // must be site
  			}
  		
  			$context = get_context_instance(CONTEXT_COURSE, $course_id);
- 		
- 		
  		
 	 		$sql	=	"SELECT		u.id
 	 					  FROM		{user} u INNER JOIN {role_assignments} ra on u.id = ra.userid 
@@ -1717,21 +1719,13 @@ class ilp_db_functions	extends ilp_logging {
 	 					    AND		(ul.courseid = {$course_id} OR ul.courseid IS NULL)
 	 					    AND		u.username <> 'guest'
 	 					    AND		r.id = 5";
-	 		
  		} else {
  			//get the list of users for moodle 2.0
- 			 
  			$context = get_context_instance(CONTEXT_COURSE, $course_id);
  			list($sql, $params) = get_enrolled_sql($context,NULL);
- 			
- 			return $this->dbc->get_records_sql($sql,$params);
-
  		}
- 		 
  		
-		
- 		
- 		
+		return (empty($params)) ? $this->dbc->get_records_sql($sql) : $this->dbc->get_records_sql($sql,$params) ;
  	}
  	
  	
@@ -1758,6 +1752,8 @@ class ilp_db_functions	extends ilp_logging {
         $from = " FROM 			{user} as u LEFT JOIN {block_ilp_user_status} as us on (u.id = us.user_id) LEFT JOIN 
         						{block_ilp_plu_sts_items} as si on (us.parent_id = si.id)";
 
+        $where = "";
+        
         if (!empty($student_ids) || !empty($status_id)) { 
         	    $where = " WHERE "; 
         	    $and = '';

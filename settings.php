@@ -92,6 +92,9 @@ $settings->add($dbpass);
 $link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
 $settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
 
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php">'.get_string('reportconfigurationsection', 'block_ilp').'</a>';
+$settings->add(new admin_setting_heading('block_ilp_report_configuration', '', $link));
+
 
 
 ?>

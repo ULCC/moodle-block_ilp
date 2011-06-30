@@ -12,6 +12,8 @@
 	$string['allowcomments']		= 	'Allow comments';
 	$string['anystatus']			= 	'Any Status';
 	$string['apply'] 				= 	'Apply';
+	$string['applyfilter'] 				= 	'Apply Filter';
+	
 	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
