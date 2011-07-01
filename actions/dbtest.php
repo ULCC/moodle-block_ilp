@@ -2,6 +2,7 @@
 /* test the ilp_mis_connection class */
 require_once('../configpath.php');
 require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
+require_once($CFG->dirroot.'/blocks/ilp/db/calendarfuncs.php');
 require_once($CFG->dirroot.'/blocks/ilp/db/ilp_mis_connection.php');
 require_once($CFG->dirroot.'/blocks/ilp/db/mis_constants.php');
 
@@ -48,7 +49,8 @@ $db = new ilp_mis_connection( $params );
 //$studentid = 3; $courseid = 6;
 
 //var_crap( $db->get_report( 6 ) );
-var_crap( $db->test_mis_connection() );
+//var_crap( $db->test_mis_connection() );
 //var_crap( $db->get_student_list() );
 
-
+$cal = new calendarfuncs();
+var_crap( $cal->display_calendar() );
