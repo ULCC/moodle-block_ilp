@@ -6,12 +6,15 @@
 */
 class calendarfuncs{
 
-    protected $termdatelist;  //for each term, array( start, end )
+    public $termdatelist;  //for each term, array( start, end )
     protected $timeformat;    //mysql or unix
     protected $firstdayofweek;//Sunday, Monday or another day
-    public $readabledateformat = 'D Y-m-d H:i:s';
+    public $readabledateformat = 'Y-m-d H:i:s';
     //protected $weekdays = array( 'Sunday', ' Monday', ' Tuesday', ' Wednesday', ' Thursday', ' Friday', ' Saturday');
 
+    /*
+    * @param array of arrays $termdatelist
+    */
     public function __construct( $termdatelist=array() ){
         if( $termdatelist ){
             $this->termdatelist = $termdatelist;
@@ -27,11 +30,17 @@ class calendarfuncs{
         $this->firstdayofweek = 1;    //1=Monday, 7=Sunday ... please do not use 0
     }
     
+    /*
+    *
+    */
     public function display_calendar(){
         var_crap( $this->generate_dates() );
     }
     
-    protected function generate_dates(){
+    /*
+    * @return array of arrays
+    */
+    public function generate_dates(){
         $dateinfo = array();
         $counter = 0;
         foreach( $this->termdatelist as $startend ){
@@ -44,7 +53,12 @@ class calendarfuncs{
         return $dateinfo;
     }
 
-    protected function generate_sub_dates( $start, $end, $name ){
+    /*
+    * @param mixed $start
+    * @param mixed $end
+    * @param string $name
+    */
+    public function generate_sub_dates( $start, $end, $name ){
         $startdayofweek = $this->calc_day_of_week( $start );
         $enddayofweek = $this->calc_day_of_week( $end );
         return array(
@@ -56,6 +70,11 @@ class calendarfuncs{
         );
     }
 
+    /*
+    * @param mixed $start
+    * @param mixed $end
+    * @return array of arrays
+    */
     protected function calc_sub_week_limits( $start, $end ){
         $dt_start = new DateTime( $start );
         $dt_end = new DateTime( $end );
@@ -88,6 +107,11 @@ class calendarfuncs{
         return $weekslist;
     }
     
+    /*
+    * @param mixed $start
+    * @param mixed $end
+    * @return array of arrays
+    */
     protected function calc_sub_month_limits( $start, $end ){
         $utime_start = $this->getutime( $start );
         $utime_end = $this->getutime( $end );
@@ -111,7 +135,7 @@ class calendarfuncs{
                 $lastday = date( 't', $tmp );
             }
             $lastdateofmonth = mktime( 0, 0, 0, $tmpmonth, $lastday, $tmpyear );
-        $monthdatelist = array( $this->getreadabletime( $tmp ), $this->getreadabletime( $lastdateofmonth ) );
+        $monthdatelist = array( array( $this->getreadabletime( $tmp ), $this->getreadabletime( $lastdateofmonth ) ) );
 
         $tmpmonth = date( 'n', $tmp );
         $tmpyear = date( 'Y', $tmp );

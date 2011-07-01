@@ -48,9 +48,9 @@ $params = array(
 $db = new ilp_mis_connection( $params );
 //$studentid = 3; $courseid = 6;
 
-//var_crap( $db->get_report( 6 ) );
+var_crap( $db->get_report( 6 ) );
 //var_crap( $db->test_mis_connection() );
 //var_crap( $db->get_student_list() );
 
-$cal = new calendarfuncs();
-var_crap( $cal->display_calendar() );
+//$cal = new calendarfuncs();
+//var_crap( $cal->display_calendar() );

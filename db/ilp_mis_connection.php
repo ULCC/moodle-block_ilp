@@ -253,11 +253,17 @@ class ilp_mis_connection{
 	            $course_id = $course[ 'course_id' ];
 	            $course_title = $course[ 'course_title' ];
 	            $reportlist[] = $this->get_attendance_report( $course_id, $student_id, $course_title );
+	            $report_by_term_list[] = $this->get_attendance_report_by_term( $course_id, $student_id, $course_title );
+	            $report_by_week_list[] = $this->get_attendance_report_by_week( $course_id, $student_id, $course_title );
+	            $report_by_month_list[] = $this->get_attendance_report_by_month( $course_id, $student_id, $course_title );
 	        }
 	        $uber_reportlist[] = array(
 	            'student_details' => $this->get_student_details( $student_id ),
 	            //'courselist' => $courselist,
-	            "course attendance$time_heading" => $reportlist
+	            "course attendance$time_heading" => $reportlist,
+	            "course attendance$time_heading by term" => $report_by_term_list,
+	            "course attendance$time_heading by month" => $report_by_month_list,
+	            "course attendance$time_heading by week" => $report_by_week_list
 	        );
         }
         return $uber_reportlist;
@@ -316,8 +322,72 @@ class ilp_mis_connection{
     * @param int $course_id
     * @param int $student_id
     * @param string $course_name
+    * @return array of arrays
     */
-    protected function get_attendance_report( $course_id, $student_id, $course_name='un-named' ){
+    public function get_attendance_report_by_term( $course_id, $student_id, $course_name ){
+        $cal = new calendarfuncs();
+        $reportlist = array();
+        foreach( $cal->termdatelist as $startend ){
+            $start = $startend[ 0 ];
+            $end = $startend[ 1 ];
+            $this->params[ 'start_date' ] = $start;
+            $this->params[ 'end_date' ] = $end;
+            $name = "Attendance at $course_name from $start to $end";
+            $reportlist[] = $this->get_attendance_report( $course_id, $student_id, $name );
+        }
+        return $reportlist;
+    }
+
+    /*
+    * @param int $course_id
+    * @param int $student_id
+    * @param string $course_name
+    * @return array of arrays
+    */
+    public function get_attendance_report_by_month( $course_id, $student_id, $course_name ){
+        $cal = new calendarfuncs();
+        $datesinfo = $cal->generate_dates();
+        $months = $datesinfo[1][ 'months' ];
+        foreach($months as $startend ){
+            $start = $startend[ 0 ];
+            $end = $startend[ 1 ];
+            $this->params[ 'start_date' ] = $start;
+            $this->params[ 'end_date' ] = $end;
+            $name = "Attendance at $course_name from $start to $end";
+            $reportlist[] = $this->get_attendance_report( $course_id, $student_id, $name );
+        }
+        return $reportlist;
+    }
+
+    /*
+    * @param int $course_id
+    * @param int $student_id
+    * @param string $course_name
+    * @return array of arrays
+    */
+    public function get_attendance_report_by_week( $course_id, $student_id, $course_name ){
+        $cal = new calendarfuncs();
+        $datesinfo = $cal->generate_dates();
+        $weeks = $datesinfo[1][ 'weeks' ];
+        $reportlist = array();
+        foreach( $weeks as $startend ){
+            $start = $startend[ 0 ];
+            $end = $startend[ 1 ];
+            $this->params[ 'start_date' ] = $start;
+            $this->params[ 'end_date' ] = $end;
+            $name = "Attendance at $course_name from $start to $end";
+            $reportlist[] = $this->get_attendance_report( $course_id, $student_id, $name );
+        }
+        return $reportlist;
+    }
+
+    /*
+    * @param int $course_id
+    * @param int $student_id
+    * @param string $course_name
+    * @return array of scalars
+    */
+    protected function get_attendance_report( $course_id, $student_id, $course_name='un-named', $startdate=null, $enddate=null ){
         $nof_lectures = $this->get_lecturecount( $course_id );
         $nof_attended = $this->get_attendance_details( $course_id, $student_id, $this->params[ 'present_code_list' ], true );
         $nof_late = $this->get_attendance_details( $course_id, $student_id, $this->params[ 'late_code_list' ], true );
