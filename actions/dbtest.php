@@ -30,8 +30,8 @@ $params = array(
             'present_code_list' => $PRESENT_CODE,
             'absent_code_list' => $ABSENT_CODE,
             'late_code_list' => $LATE_CODE,
-            'start_date' => '2011-01-15',
-            'end_date' => '2011-01-25',
+            'start_date' => '2011-01-01',
+            'end_date' => '2011-02-28',
             'lecture_time_field' => 'start',
 
             'attendance_view' => 'attendance_overview',
@@ -47,7 +47,8 @@ $params = array(
 $db = new ilp_mis_connection( $params );
 //$studentid = 3; $courseid = 6;
 
-var_crap( $db->get_report() );
+//var_crap( $db->get_report( 6 ) );
+var_crap( $db->test_mis_connection() );
 //var_crap( $db->get_student_list() );
 
 

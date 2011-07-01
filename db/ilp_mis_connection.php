@@ -4,7 +4,11 @@
 * if adodb is removed from moodle in the future, we might need
 * to include it specially within ILP
 */
-require_once($CFG->dirroot.'/lib/adodb/adodb.inc.php');
+$adodb_dir = $CFG->dirroot . '/lib/adodb';
+require_once( "$adodb_dir/adodb.inc.php" );
+require_once( "$adodb_dir/adodb-exceptions.inc.php" );
+require_once( "$adodb_dir/adodb-errorhandler.inc.php" );
+//require_once($CFG->dirroot.'/lib/adodb/adodb.inc.php');
 
 /*
 * This class is intended for querying the student database for attendance data.
@@ -28,6 +32,7 @@ class ilp_mis_connection{
     protected $attendance_studentid;   //fk fieldname in attendance table matching student_id
     protected $lecture_table;          //name of table listing all lectures
     protected $lecture_courseid;       //fk fieldname in lecture_table identifying a course
+    public $errorlist;                   //collect a list of errors
 
     /*
     * $params array should have keys corresponding to the class variable names listed in the foreach
@@ -37,6 +42,7 @@ class ilp_mis_connection{
     public function __construct( $params=array(), $debug=false ){
         global $CFG;
         $this->db = false;
+        $this->errorlist = array();
         //$this->prefix = $CFG->prefix;
         $this->params = array(
 		    'dbconnectiontype' => get_config( 'block_ilp', 'dbconnectiontype' ),
@@ -79,6 +85,7 @@ class ilp_mis_connection{
             'attendance_view',                  //view or table containing all the relevant attendance data
             'studentlecture_attendance_id',      //primary key of attendance view - unique identifier for a single student-lecture attendance event
             'student_id_field',                 //fieldname in attendance_view identifying a student
+            'student_name_field',                 //fieldname in attendance_view giving a student name for display
             'course_id_field',                  //fieldname in attendance_view identifying a course
             'course_label_field',               //fieldname in attendance_view giving a course display name
             'lecture_id_field',               //fieldname in attendance_view giving a lecture id
@@ -89,13 +96,109 @@ class ilp_mis_connection{
                 $this->params[ $var ] = false;
         }
         $this->set_params( $params );
-        $this->db = ADONewConnection( $this->params[ 'dbconnectiontype' ] );
-        $this->db->SetFetchMode(ADODB_FETCH_ASSOC);
-        $this->db->Connect( $this->params[ 'host' ], $this->params[ 'user' ], $this->params[ 'pass' ], $this->params[ 'dbname' ] );
+        $connectioninfo = $this->get_mis_connection( 
+            $this->params[ 'dbconnectiontype' ],  
+            $this->params[ 'host' ], 
+            $this->params[ 'user' ], $this->params[ 'pass' ], 
+            $this->params[ 'dbname' ] 
+        );
+        if( $errorlist = $connectioninfo[ 'errorlist' ] ){
+            //var_crap( $errorlist );exit;
+        }
+        $this->errorlist = array_merge( $this->errorlist, $connectioninfo[ 'errorlist' ] );
+        if( $this->errorlist ){
+            //var_crap( $this->errorlist );
+            return false;
+        }
+        $this->db = $connectioninfo[ 'db' ];
         return $this->db;
     }
 
+    public function get_mis_connection( $type, $host, $user, $pass, $dbname ){
+        $errorlist = array();
+        $db = false;
+        try{
+            $db = ADONewConnection( $type );
+        }
+        catch( exception $e ){
+            $errorlist[] = $e->getMessage();
+        }
+        if( $db ){
+	        try{
+	            $db->SetFetchMode(ADODB_FETCH_ASSOC);
+	            $db->Connect( $host, $user, $pass, $dbname );
+	        }
+	        catch( exception $e ){
+	            $errorlist[] = $e->getMessage();
+	        }
+        }
+        return array(
+            'errorlist' => $errorlist,
+            'db' => $db
+        );
+    }
+
+
     public function get_student_list(){
+    }
+
+    public function test_mis_connection(){
+        $msglist = array();
+        $valid = false;
+        if( $this->db ){
+            $msglist[] = 'connection OK';
+            $sql = $this->db->metaTablesSQL; 
+            $view = $this->params[ 'attendance_view' ];
+            $viewfound = false;
+            foreach( $this->execute( $sql )->getRows() as $row ){
+                if( in_array( $view, array_values( $row ) ) ){
+                    $viewfound = true;break;
+                }
+            }
+            if( $viewfound ){
+                $msglist[] = 'Attendance overview table found OK';
+                $testsql = "SELECT * FROM $view LIMIT 1";
+                $testdata = $this->execute( $testsql )->getRows();
+                if( count( $testdata ) > 0 ){
+                    $foundfieldlist = array_keys( array_shift( $testdata ) );
+                    $requiredlist = array(
+                        'lecture_time_field', 
+                        'studentlecture_attendance_id',
+                        'student_id_field',
+                        'student_name_field',
+                        'course_id_field',
+                        'course_label_field',
+                        'lecture_id_field',
+                        'timefield',
+                        'code_field'
+                    );
+                    $missinglist = array();
+                    foreach( $requiredlist as $param ){
+                        $actualfieldname = $this->params[ $param ];
+                        if( !in_array( $actualfieldname, $foundfieldlist ) ){
+                            $missinglist[] = $param;
+                            $msglist[] = "Could not find $param field (seeking  \"$actualfieldname\" defined in params)";
+                        }
+                    }
+                    if( $missinglist ){}
+                    else{
+                        $msglist[] = "All necessary fields found OK";
+                        $valid = true;
+                    }
+                }
+                else{
+                    $msglist[] = "View or table $view found, but contains no data.";
+                }
+            }
+            else{
+                $msglist[] = "No attendance data found. Seeking $view";
+            }
+        }
+        else{
+            $msglist = array_merge( $msglist, $this->errorlist );
+        }
+        var_crap( implode( "\n", $msglist ), 'Messages' );
+        return $valid;
     }
 
     protected function generate_time_conditions( $fieldalias=false, $english=false ){
@@ -259,9 +362,13 @@ class ilp_mis_connection{
         $table = $this->params[ 'attendance_view' ];
         $lecture_id_field = $this->params[ 'lecture_id_field' ];
         $course_id_field = $this->params[ 'course_id_field' ];
+        $timefield = $this->params[ 'timefield' ];
+        $whereandlist = array( "$course_id_field = '$course_id'" );
+        $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( $timefield ) );
+        $whereclause = implode( ' AND ' , $whereandlist );
         $sql = "SELECT COUNT( DISTINCT( $lecture_id_field ) ) n
                 FROM $table
-                WHERE $course_id_field = $course_id";
+                WHERE $whereclause";
         $res = $this->execute( $sql )->getRows();
         return $this->get_top_item( $res, 'n' );
     
