@@ -60,7 +60,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 				$course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
 				$user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
 				
-				if ($course_id != SITEID)	{ 
+				if ($course_id != SITEID && !empty($course_id))	{ 
 					if (method_exists($PAGE,'set_context')) {
 						//check if the siteid has been set if not 
 						$PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
@@ -174,23 +174,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			
 			
 	
-			// load custom javascript
-			$module = array(
-			    'name'      => 'ilp_dashboard_reports_tab',
-			    'fullpath'  => '/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.js',
-			    'requires'  => array('yui2-dom', 'yui2-event', 'yui2-connection', 'yui2-container', 'yui2-animation')
-			);
-
-			// js arguments
-			$jsarguments = array(
-			    'open_image'   => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_minus.gif",
-			    'closed_image' => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_plus.gif",
-			);
-			
-			// initialise the js for the page
-			$PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
-		
-				//start buffering output
+			//start buffering output
 				ob_start();
 					
 					
@@ -217,6 +201,11 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 						//get all of the fields in the current report, they will be returned in order as
 						//no position has been specified
 						$reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+						
+						$reporticon	= (!empty($report->iconfile)) ? '' : '';
+							
+						 
+						
 						
 						//does this report give user the ability to add comments 
 						$has_comments	=	(!empty($report->comments)) ? true	:	false;
@@ -336,9 +325,29 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							echo get_string('nothingtodisplay');
 							
 						}
-					}					
+					}	
+
+							// load custom javascript
+					$module = array(
+					    'name'      => 'ilp_dashboard_reports_tab',
+					    'fullpath'  => '/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.js',
+					    'requires'  => array('yui2-dom', 'yui2-event', 'yui2-connection', 'yui2-container', 'yui2-animation')
+					);
+		
+					// js arguments
+					$jsarguments = array(
+					    'open_image'   => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_minus.gif",
+					    'closed_image' => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_plus.gif",
+					);
+					
+					// initialise the js for the page
+					$PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
+					
+					
 					$pluginoutput = ob_get_contents();
 				
+			
+					
 					ob_end_clean();
 				
 				} else {

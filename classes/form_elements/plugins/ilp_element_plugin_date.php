@@ -194,6 +194,9 @@ class ilp_element_plugin_date extends ilp_element_plugin {
 	
         //@todo decide correct PARAM type for date element
         $mform->setType($fieldname, PARAM_RAW);
+        
+        //the description for the field
+    	$mform->addElement('static', "{$fieldname}_desc", '', $this->description);
     }
 	 
 	/**

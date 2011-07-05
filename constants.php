@@ -65,6 +65,17 @@ define('ILP_CSSCOLOUR_MID','#FF4500');
 define('ILP_DEFAULT_FAIL_PERCENTAGE',50);
 define('ILP_DEFAULT_PASS_PERCENTAGE',75);
 
+//The mamximum size of uploaded files
+define('ILP_MAXFILE_SIZE',1048576 );
+
+//the type of files that may be uploaded as icons
+define('ILP_ICON_TYPES','*.jpg,*.png, *.jpeg');
+
+//The default number of reports displayed in a list
+define('ILP_DEFAULT_LIST_REPORTS',10 );
+
+
+
 
 
 

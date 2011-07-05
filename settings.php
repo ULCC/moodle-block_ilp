@@ -35,6 +35,10 @@ if (!empty($items)) {
 
 $userstatus			= 	new admin_setting_configselect('block_ilp/defaultstatusitem',get_string('defaultstatusitem','block_ilp'),get_string('defaultstatusitemconfig','block_ilp'), 'simulationassignment',$options);
 
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php">'.get_string('reportconfigurationsection', 'block_ilp').'</a>';
+$settings->add(new admin_setting_heading('block_ilp_report_configuration', '', $link));
+
+
 $settings->add($userstatus);
 
 
@@ -56,6 +60,9 @@ $settings->add($failpercentage);
 //the fail percentage
 $passpercentage			=	new admin_setting_configtext('block_ilp/passpercent',get_string('passpercent','block_ilp'),get_string('passpercentconfig','block_ilp'),ILP_DEFAULT_PASS_PERCENTAGE,PARAM_INT);
 $settings->add($passpercentage);
+
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
+$settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
 
 
 $mis_settings 	= new admin_setting_heading('block_ilp/mis_connection', get_string('mis_connection', 'block_ilp'), '');
@@ -87,13 +94,14 @@ $settings->add( $dbuser );
 
 $dbpass			=	new admin_setting_configtext('block_ilp/dbpass',get_string( 'db_pass', 'block_ilp' ), get_string( 'db_pass', 'block_ilp' ),'',PARAM_RAW);
 $settings->add($dbpass);
-/*
-*/
-$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
-$settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
 
-$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php">'.get_string('reportconfigurationsection', 'block_ilp').'</a>';
-$settings->add(new admin_setting_heading('block_ilp_report_configuration', '', $link));
+$miscsettings 	= new admin_setting_heading('block_ilp/miscoptions', get_string('miscoptions', 'block_ilp'), '');
+
+$settings->add($miscsettings);
+
+$maxreports			=	new admin_setting_configtext('block_ilp/maxreports',get_string('maxreports','block_ilp'),get_string('maxreportsconfig','block_ilp'),ILP_DEFAULT_LIST_REPORTS,PARAM_INT);
+$settings->add($maxreports);
+
 
 
 

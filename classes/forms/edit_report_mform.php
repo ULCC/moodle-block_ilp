@@ -44,7 +44,7 @@ class edit_report_mform extends ilp_moodleform {
         	
         	//create a new fieldset
         	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
-            $mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
+           $mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
         	
         	$mform->addElement('hidden', 'id');
         	$mform->setType('id', PARAM_INT);
@@ -80,8 +80,11 @@ class edit_report_mform extends ilp_moodleform {
 	        $mform->setType('description', PARAM_RAW);
         	
 	        //TODO add the elements to implement the frequency functionlaity
-	        
-	        
+			if (stripos($CFG->release,"2.") !== false) {
+				$mform->addElement('filepicker', 'iconfile',get_string('iconfile', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
+			} else {
+        		$mform->addElement('file', 'iconfile', get_string('iconfile', 'block_ilp'));				
+			}
 	        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
 	        $buttonarray[] = &$mform->createElement('cancel');
 	        

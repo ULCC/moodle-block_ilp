@@ -199,6 +199,8 @@ class ilp_element_plugin_text extends ilp_element_plugin {
   	
     	$fieldname	=	"{$this->reportfield_id}_field";
     	
+    	
+
     	//text field for element label
         $mform->addElement(
             'text',
@@ -211,6 +213,9 @@ class ilp_element_plugin_text extends ilp_element_plugin {
         if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
+        
+        //the description for the field
+    	$mform->addElement('static', "{$fieldname}_desc", '', $this->description);
 	 }
 	 
 	/**

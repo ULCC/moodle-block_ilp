@@ -60,5 +60,8 @@ class ilp_element_plugin_category extends ilp_element_plugin_itemlist{
         
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
+        
+        //the description for the field
+    	$mform->addElement('static', "{$fieldname}_desc", '', $this->description);
 	}
 }

@@ -22,11 +22,9 @@ require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 //include the report form class
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_report_mform.php');
 
-//missing variable
-$course_id = ( isset( $course_id ) ) ? $course_id : 0 ;
 
 //if set get the id of the report to be edited
-$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	;
+$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	
 
 
 // instantiate the db
@@ -52,7 +50,15 @@ if($mform->is_submitted()) {
 
         //get the form data submitted
     	$formdata = $mform->get_data();
-    	    	
+    	if ($mform->get_file_content('iconfile') != false) {
+    	  		$formdata->iconfile	=	addslashes($mform->get_file_content('iconfile'));
+    	}
+    	
+    	
+    	$formdata->maxedit	=	(empty($formdata->maxedit)) ? 0 : $formdata->maxedit;
+    	
+    	$formdata->comments	=	(empty($formdata->comments)) ? 0 : $formdata->comments;
+    	
         // process the data
     	$success = $mform->process_data($formdata);
 
@@ -62,7 +68,7 @@ if($mform->is_submitted()) {
             print_error(get_string("reportcreationerror", 'block_ilp'), 'block_ilp');
         }
 
-        //if the report_id ahs not already been set
+        //if the report_id has not already been set
         $report_id	= (empty($report_id)) ? $success : $report_id;
         
         //decide whether the user has chosen to save and exit or save or display

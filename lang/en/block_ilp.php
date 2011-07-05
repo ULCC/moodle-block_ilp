@@ -47,6 +47,9 @@
 	
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
+	$string['displayingreports'] 				= 	'Display Reports';
+	
+	
 	$string['disablereport']		= 	'Disable Report';
 	$string['editcomment']			= 	'Edit Comment';
 	$string['editfield']			=	'Edit Field';
@@ -73,6 +76,8 @@
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
 	
+	
+	$string['iconfile']				=	'Icon File';
 	$string['ilpname']				=	'ILP';
 	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	
@@ -81,9 +86,11 @@
 	
 	
 	$string['maxedit'] 				= 	'Use Maximum Edit';	
-	
+	$string['maxreports']			= 	'Maximum Reports In Lists';
+	$string['maxreportsconfig']			= 	'The maximum number of reports displayed in a list. Change this setting if you are having to scroll list due to a large number or reports.';
 	$string['midcsscolour']			=	'Mid range CSS colour';
 	$string['midcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in the mid range';
+	$string['miscoptions']		 	= 	'Misc Options';
 	$string['move']		 			= 	'Move';
 	$string['movedown'] 			= 	'Move down';
 	$string['moveleft'] 			= 	'Move left';

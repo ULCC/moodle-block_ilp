@@ -11,22 +11,7 @@ $PAGE->requires->yui2_lib("connection");
 // load the standard YUI style sheet
 $PAGE->requires->css_theme(new moodle_url($CFG->wwwroot.'/lib/yui/container/assets/container.css'));
 
-$jsmodule = array(
-    'name'     	=> 'ilp_standard_functions',
-    'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
-	'requires'  	=> array('yahoo','event','dom','element','connection')
-);
 
-$PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmodule);
-
-
-$jsmodule = array(
-    'name'     	=> 'ilp_view_studentlist',
-    'fullpath' 	=> '/blocks/ilp/views/js/view_studentlist.js',
-	'requires'  	=> array('yahoo','event','dom','element','connection')
-);
-
-$PAGE->requires->js_init_call('M.ilp_view_studentlist.init', null, true, $jsmodule);
 
 
 echo $OUTPUT->header();
@@ -82,5 +67,24 @@ if (isset($tutor)) {
 	</div>
 </div>
 <?php
+
+$jsmodule = array(
+    'name'     	=> 'ilp_standard_functions',
+    'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
+);
+
+$PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmodule);
+
+
+$jsmodule = array(
+    'name'     	=> 'ilp_view_studentlist',
+    'fullpath' 	=> '/blocks/ilp/views/js/view_studentlist.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
+);
+
+$PAGE->requires->js_init_call('M.ilp_view_studentlist.init', null, true, $jsmodule);
+
+
 echo $OUTPUT->footer();
 ?>

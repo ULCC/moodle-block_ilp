@@ -262,6 +262,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		//definition for user form
 		$optionlist = $this->get_option_list( $this->reportfield_id );
 
+		//the description for the field
+    	$mform->addElement('static', "{$fieldname}_desc", '', $this->description);
+		
     	//text field for element label
         $select = &$mform->addElement(
             'select',

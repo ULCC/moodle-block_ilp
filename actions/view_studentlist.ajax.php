@@ -94,12 +94,23 @@ if (file_exists($misclassfile)) {
 
 //get all enabled reports in this ilp
 $reports		=	$dbc->get_reports(ILP_ENABLED);
-			
+
+//get the mamximum reports that can be displayed on the screen in the list
+$maxreports		=	get_config('block_ilp','ilp_max_reports');
+
+//check if maxreports is empty if yes then set to 
+$maxreports		=	(!empty($maxreports)) ? $maxreports	: ILP_DEFAULT_LIST_REPORTS;
+
+//set the number of report columns to display
+$reports	=	$flextable->limitcols($reports,$maxreports);
+
 //we are going to create headers and columns for all enabled reports 
 foreach ($reports as $r) {
-	$headers[]	=	$r->name;
-	$columns[]	=	$r->id;
+	$headers[]			=	$r->name;
+	$columns[]			=	$r->id;
 }
+
+$flextable->hoz_string = 'displayingreports';
 
 $headers[]	=	get_string('lastupdated','block_ilp');
 $columns[]	=	'lastupdated';
@@ -117,6 +128,7 @@ $flextable->set_attribute('summary', get_string('studentslist', 'block_ilp'));
 $flextable->set_attribute('cellspacing', '0');
 $flextable->set_attribute('class', 'generaltable fit');
 $flextable->define_fragment('studentlist');
+
 $flextable->initialbars(true);
 $flextable->setup();
 

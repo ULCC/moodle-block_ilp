@@ -1,15 +1,3 @@
-<?php 
-
-$jsmodule = array(
-    'name'     	=> 'ilp_dashboard_student_info',
-    'fullpath' 	=> '/blocks/ilp/classes/dashboard/plugins/studentinfo/ilp_dashboard_student_info.js',
-	'requires'  	=> array('yahoo','event','dom','element','connection')
-);
-
-$PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $jsmodule);
-
-
-?>
 <div>
 	<h1><?php echo $studentname; ?></h1>
 	<div class="" style="">
@@ -47,3 +35,15 @@ $PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $
 	</div>
 </div>
 <div class="clearer"></div>
+<?php 
+
+$jsmodule = array(
+    'name'     	=> 'ilp_dashboard_student_info',
+    'fullpath' 	=> '/blocks/ilp/classes/dashboard/plugins/studentinfo/ilp_dashboard_student_info.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
+);
+
+$PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $jsmodule);
+
+
+?>
