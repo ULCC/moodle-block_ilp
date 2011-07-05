@@ -18,9 +18,10 @@ require_once( "$adodb_dir/adodb-errorhandler.inc.php" );
 * Names of user table and attendance table can be sent in as params.
 * For example usage see ilp/actions/dbtest.php.
 *
-* We assume that there will be some kind of user table for student data, some kind of course table and some kind of attendance table.
-* Names of the tables and key fields are abstracted so they can be configured for the individual system (using set_params() ).
-* If the system is much different in structure, then some of these methods will have to be customised further.
+* We assume that the owner of the system will have made available a view or table of student attendence data
+* Each row will represent one expected attendance by one student at one lecture
+* Each row needs student id, course id, lecture id, lecture time, attendence code
+* A lists of codes representing presence, lates and absences are defined in ilp/db/mis_constants.php
 */
 class ilp_mis_connection{
 
@@ -231,6 +232,7 @@ class ilp_mis_connection{
     }
 
     /*
+    * the main function for returning data back to the controller for display
     * @param int $student_id
     * @return associative array
     */
@@ -382,12 +384,21 @@ class ilp_mis_connection{
     }
 
     /*
+    * set class values for  start_date and end_date, then call this function to get the data within those time limits
+    * optional $startdate and $enddate will take priority over previously set class value, if both are sent in
     * @param int $course_id
     * @param int $student_id
     * @param string $course_name
+    * @param string $startdate
+    * @param string $enddate
     * @return array of scalars
     */
     protected function get_attendance_report( $course_id, $student_id, $course_name='un-named', $startdate=null, $enddate=null ){
+        if( $startdate && $enddate ){
+            //not the expected use, but if the time limits are sent in as arguments, use them
+            $this->params[ 'start_date' ] = $startdate;
+            $this->params[ 'end_date' ] = $enddate;
+        }
         $nof_lectures = $this->get_lecturecount( $course_id );
         $nof_attended = $this->get_attendance_details( $course_id, $student_id, $this->params[ 'present_code_list' ], true );
         $nof_late = $this->get_attendance_details( $course_id, $student_id, $this->params[ 'late_code_list' ], true );
@@ -425,6 +436,7 @@ class ilp_mis_connection{
     }
 
     /*
+    * count distinct lectures for a particular course within time limits
     * @param int $course_id
     * @return int
     */
@@ -441,24 +453,6 @@ class ilp_mis_connection{
                 WHERE $whereclause";
         $res = $this->execute( $sql )->getRows();
         return $this->get_top_item( $res, 'n' );
-    
-/*
-        $lecture_table = $this->params[ 'lecture_table' ];
-        $course_fk_field = $this->params[ 'lecture_courseid' ];
-        $timefield = $this->params[ 'lecture_time_field' ];
-        $whereandlist = array(
-            "$lecture_table.$course_fk_field = $course_id"
-        );
-        $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( "$lecture_table.$timefield" ) );
-        $whereclause = implode( ' AND ', $whereandlist );
-        $sql = "
-            SELECT COUNT(*) n 
-            FROM $lecture_table
-            WHERE $whereclause
-        ";
-        $res = $this->execute( $sql )->getRows();
-        return $this->get_top_item( $res, 'n' );
-*/
     }
 
     /*
@@ -477,30 +471,12 @@ class ilp_mis_connection{
             GROUP BY $course_id_field
 EOQ;
         return $this->execute( $sql )->getRows();
-/*
-
-        $id = $this->params[ 'attendance_table_unique_key' ];
-        $student_course = $this->params[ 'student_course_table' ];
-        $student_id_fieldname = $this->params[ 'attendance_studentid' ];
-        $course = $this->params[ 'course_table' ];
-        $course_id_field = $this->params[ 'course_table_unique_key' ];
-        $studentcourse_id_field = $this->params[ 'student_course_student_key' ];
-        $studentcourse_course_id_field = $this->params[ 'student_course_course_key' ];
-        $name = $this->params[ 'course_table_namefield' ];
-        $student_id_fieldname = $this->params[ 'attendance_studentid' ];
-        $sql = <<<EOQ
-            SELECT $course.$course_id_field course_id, $course.$name course_name
-            FROM $student_course
-            JOIN $course ON $course.$course_id_field = $student_course.$studentcourse_course_id_field
-            WHERE $student_course.$student_id_fieldname = $student_id
-            ORDER BY course_name
-EOQ;
-        $res = $this->execute( $sql )->getRows();
-        return $res;
-*/
     }
 
     /*
+    * query the data for a particular student on a particular course
+    * if $attendancecode_list is defined, the query will be restricted to those codes
+    * if $countonly=true, a simple integer willb be returned instead of a nested array
     * @param int $course_id
     * @param int $student_id
     * @param array of strings $attendancecode_list
@@ -527,7 +503,6 @@ EOQ;
         );
         $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( $timefield ) );
         if( count( $attendancecode_list ) ){
-            //$whereandlist[] = "{$this->params[ 'attendancecode_table' ]}.{$this->params[ 'attendancecode_id_field' ]} IN  ('" . implode( "','" , $attendancecode_list ) . "')";
             $whereandlist[] = "$acode_field IN  ('" . implode( "','" , $attendancecode_list ) . "')";
         }
         $whereclause = implode( ' AND ' , $whereandlist );
@@ -541,55 +516,10 @@ EOQ;
             return $this->get_top_item( $res, 'n' );
         }
         return $res;
-
-/*
-        $attendancecode_id_field = $this->params[ 'attendancecode_id_field' ];
-        $attendance_studentid = $this->params[ 'attendance_studentid' ];
-        $lecture_table = $this->params[ 'lecture_table' ]; 
-        $lecture_courseid = $this->params[ 'lecture_courseid' ];
-        $attendance_table = $this->params[ 'attendance_table' ];
-        $attendancecode_table = $this->params[ 'attendancecode_table' ];
-        $attendancecode_unique_key = $this->params[ 'attendancecode_unique_key' ];
-        $lecture_attendance_id = $this->params[ 'lecture_attendance_id' ];
-        $lecture_unique_key = $this->params[ 'lecture_unique_key' ];
-        $attendance_lectureid = $this->params[ 'attendance_lectureid' ];
-
-        //$timetable_table = $this->params[ 'timetable_table' ];
-        $timefield = $this->params[ 'lecture_time_field' ];
-        $timefield_alias = "lecture.$timefield";
-        if( $countonly ){
-            $selectclause = "COUNT(*) n";
-        }
-        else{
-            //$selectclause = "sl.id, acode.{$this->params[ 'attendancecode_id_field' ]}";
-            $selectclause = "sl.id, acode.$attendancecode_id_field";
-        }
-        $whereandlist = array(
-            "sl.$attendance_studentid = $student_id",
-            "$lecture_table.$lecture_courseid = $course_id"
-        );
-        $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( $timefield_alias ) );
-        if( count( $attendancecode_list ) ){
-            //$whereandlist[] = "{$this->params[ 'attendancecode_table' ]}.{$this->params[ 'attendancecode_id_field' ]} IN  ('" . implode( "','" , $attendancecode_list ) . "')";
-            $whereandlist[] = "acode.$attendancecode_id_field IN  ('" . implode( "','" , $attendancecode_list ) . "')";
-        }
-        $whereclause = implode( ' AND ' , $whereandlist );
-        $sql = <<<EOQ
-            SELECT $selectclause
-            FROM $attendance_table sl
-            JOIN $attendancecode_table acode ON acode.$attendancecode_unique_key = sl.$lecture_attendance_id
-            JOIN $lecture_table lecture ON lecture.$lecture_unique_key = sl.$attendance_lectureid
-            WHERE $whereclause
-EOQ;
-        $res = $this->execute( $sql )->getRows();
-        if( $countonly ){
-            return $this->get_top_item( $res, 'n' );
-        }
-        return $res;
-*/
     }
 
     /*
+    * step through an array of $key=>$value and assign them to the class $params array
     * @param associative array $params
     */
     public function set_params( $params ){
