@@ -112,7 +112,7 @@ class calendarfuncs{
     * @param mixed $end
     * @return array of arrays
     */
-    protected function calc_sub_month_limits( $start, $end ){
+    public function calc_sub_month_limits( $start, $end ){
         $utime_start = $this->getutime( $start );
         $utime_end = $this->getutime( $end );
 
@@ -194,6 +194,8 @@ class calendarfuncs{
     }
     
     public function split_mysql_date( $date, $sep="-" ){
+        $dateparts = explode( ' ' , $date );
+        $date = $dateparts[ 0 ];
         return explode( $sep, $date );
     }
 }
