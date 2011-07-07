@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/ilp/db" VERSION="20110621" COMMENT="XMLDB file for Moodle blocks/ilp"
+<XMLDB PATH="blocks/ilp/db" VERSION="20110707" COMMENT="XMLDB file for Moodle blocks/ilp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
     <TABLE NAME="block_ilp" COMMENT="Default comment for ilp, please edit me" NEXT="block_ilp_report">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -14,17 +14,18 @@
     </TABLE>
     <TABLE NAME="block_ilp_report" COMMENT="this table holds information on all reports that have been created in the ilp block" PREVIOUS="block_ilp" NEXT="block_ilp_plugin">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="description"/>
-        <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="report name" PREVIOUS="description" NEXT="creator_id"/>
-        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="id of the user who created the report" PREVIOUS="name" NEXT="frequency"/>
-        <FIELD NAME="frequency" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="The frequency at which this report may be carried out per user in moodle" PREVIOUS="creator_id" NEXT="frequencyformat"/>
-        <FIELD NAME="frequencyformat" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the interval duration of the frequency duration e.g an hour, day etc" PREVIOUS="frequency" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the report status enabled or disabled" PREVIOUS="frequencyformat" NEXT="maxedit"/>
-        <FIELD NAME="maxedit" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" COMMENT="bool flag to state whether the report will use moodle max edit time by default it will. note max edit means that after a preset time the record can not be edited" PREVIOUS="status" NEXT="comments"/>
-        <FIELD NAME="comments" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" ENUM="false" COMMENT="should the report allow users to enter comments" PREVIOUS="maxedit" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="comments" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the report was last modified" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="description"/>
+        <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="report name" PREVIOUS="description" NEXT="creator_id"/>
+        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of the user who created the report" PREVIOUS="name" NEXT="frequency"/>
+        <FIELD NAME="frequency" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="The frequency at which this report may be carried out per user in moodle" PREVIOUS="creator_id" NEXT="frequencyformat"/>
+        <FIELD NAME="frequencyformat" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the interval duration of the frequency duration e.g an hour, day etc" PREVIOUS="frequency" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="the report status enabled or disabled" PREVIOUS="frequencyformat" NEXT="maxedit"/>
+        <FIELD NAME="maxedit" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" COMMENT="bool flag to state whether the report will use moodle max edit time by default it will. note max edit means that after a preset time the record can not be edited" PREVIOUS="status" NEXT="comments"/>
+        <FIELD NAME="comments" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" COMMENT="should the report allow users to enter comments" PREVIOUS="maxedit" NEXT="binary_icon"/>
+        <FIELD NAME="binary_icon" TYPE="binary" LENGTH="medium" NOTNULL="false" SEQUENCE="false" PREVIOUS="comments" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was created" PREVIOUS="binary_icon" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the report was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="report_creator"/>
@@ -33,12 +34,12 @@
     </TABLE>
     <TABLE NAME="block_ilp_plugin" COMMENT="this table holds information on installed plugins" PREVIOUS="block_ilp_report" NEXT="block_ilp_report_field">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="the name of the plugin" PREVIOUS="id" NEXT="tablename"/>
-        <FIELD NAME="tablename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="the name of the table that the plugin data is held in" PREVIOUS="name" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the current status of the plugin 0 for disabled 1 for enabled" PREVIOUS="tablename" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the plugin record was created" PREVIOUS="status" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the name of the plugin" PREVIOUS="id" NEXT="tablename"/>
+        <FIELD NAME="tablename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the name of the table that the plugin data is held in" PREVIOUS="name" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="the current status of the plugin 0 for disabled 1 for enabled" PREVIOUS="tablename" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the plugin record was created" PREVIOUS="status" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -46,16 +47,16 @@
     </TABLE>
     <TABLE NAME="block_ilp_report_field" COMMENT="this table holds information on the individual fields in a report" PREVIOUS="block_ilp_plugin" NEXT="block_ilp_reportpermissions">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="label"/>
-        <FIELD NAME="label" TYPE="char" LENGTH="255" NOTNULL="false" DEFAULT="null" SEQUENCE="false" ENUM="false" COMMENT="this field holds the label for the field as not all plugins may need labels it may be null" PREVIOUS="id" NEXT="description"/>
-        <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="this field holds the optional description for the field" PREVIOUS="label" NEXT="report_id"/>
-        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="id of report that the field has been taken from" PREVIOUS="description" NEXT="plugin_id"/>
-        <FIELD NAME="plugin_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the plugin being used on the field" PREVIOUS="report_id" NEXT="position"/>
-        <FIELD NAME="position" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the postion in the form that the field will take" PREVIOUS="plugin_id" NEXT="req"/>
-        <FIELD NAME="req" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="is the field required. 0 = not required 1 = required" PREVIOUS="position" NEXT="creator_id"/>
-        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the creator of the field" PREVIOUS="req" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="creator_id" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="label"/>
+        <FIELD NAME="label" TYPE="char" LENGTH="255" NOTNULL="false" DEFAULT="null" SEQUENCE="false" COMMENT="this field holds the label for the field as not all plugins may need labels it may be null" PREVIOUS="id" NEXT="description"/>
+        <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="this field holds the optional description for the field" PREVIOUS="label" NEXT="report_id"/>
+        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of report that the field has been taken from" PREVIOUS="description" NEXT="plugin_id"/>
+        <FIELD NAME="plugin_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the plugin being used on the field" PREVIOUS="report_id" NEXT="position"/>
+        <FIELD NAME="position" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the postion in the form that the field will take" PREVIOUS="plugin_id" NEXT="req"/>
+        <FIELD NAME="req" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="is the field required. 0 = not required 1 = required" PREVIOUS="position" NEXT="creator_id"/>
+        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the creator of the field" PREVIOUS="req" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was created" PREVIOUS="creator_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="f_report"/>
@@ -67,12 +68,12 @@
     </TABLE>
     <TABLE NAME="block_ilp_reportpermissions" COMMENT="this table holds information on capabilities that different roles (determined by context) have in the ilp report" PREVIOUS="block_ilp_report_field" NEXT="block_ilp_entry">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="report_id"/>
-        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the report to which this capability pertain" PREVIOUS="id" NEXT="capability_id"/>
-        <FIELD NAME="capability_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the capability in the capability table" PREVIOUS="report_id" NEXT="role_id"/>
-        <FIELD NAME="role_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="id of the role in the moodle role table" PREVIOUS="capability_id" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="role_id" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="report_id"/>
+        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the report to which this capability pertain" PREVIOUS="id" NEXT="capability_id"/>
+        <FIELD NAME="capability_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the capability in the capability table" PREVIOUS="report_id" NEXT="role_id"/>
+        <FIELD NAME="role_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="id of the role in the moodle role table" PREVIOUS="capability_id" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was created" PREVIOUS="role_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="permission_report"/>
@@ -83,12 +84,12 @@
     </TABLE>
     <TABLE NAME="block_ilp_entry" COMMENT="this table holds entry information  (entries can be thought of as a set of answers to the questions in a report)" PREVIOUS="block_ilp_reportpermissions" NEXT="block_ilp_entry_comment">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="report_id"/>
-        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the report that the entry is for" PREVIOUS="id" NEXT="creator_id"/>
-        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the user that created the entry" PREVIOUS="report_id" NEXT="user_id"/>
-        <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the user who the entry is being created for" PREVIOUS="creator_id" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="user_id" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="report_id"/>
+        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the report that the entry is for" PREVIOUS="id" NEXT="creator_id"/>
+        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the user that created the entry" PREVIOUS="report_id" NEXT="user_id"/>
+        <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the user who the entry is being created for" PREVIOUS="creator_id" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was created" PREVIOUS="user_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="entry_report"/>
@@ -99,12 +100,12 @@
     </TABLE>
     <TABLE NAME="block_ilp_entry_comment" COMMENT="This table holds comments made about entry records" PREVIOUS="block_ilp_entry" NEXT="block_ilp_log">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="value"/>
-        <FIELD NAME="value" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="the comment" PREVIOUS="id" NEXT="entry_id"/>
-        <FIELD NAME="entry_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" ENUM="false" COMMENT="the id of the record in the entry table that the comment is about" PREVIOUS="value" NEXT="creator_id"/>
-        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the user id (from user table) of the person who made the comment" PREVIOUS="entry_id" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was created" PREVIOUS="creator_id" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="value"/>
+        <FIELD NAME="value" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" COMMENT="the comment" PREVIOUS="id" NEXT="entry_id"/>
+        <FIELD NAME="entry_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="the id of the record in the entry table that the comment is about" PREVIOUS="value" NEXT="creator_id"/>
+        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the user id (from user table) of the person who made the comment" PREVIOUS="entry_id" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was created" PREVIOUS="creator_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was last modified" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="comment_creator"/>
@@ -114,18 +115,18 @@
     </TABLE>
     <TABLE NAME="block_ilp_log" COMMENT="This table holds log information for the ilp" PREVIOUS="block_ilp_entry_comment" NEXT="block_ilp_coursereports">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="creator_id"/>
-        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="user_id"/>
-        <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="creator_id" NEXT="course_id"/>
-        <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the course id" PREVIOUS="user_id" NEXT="type"/>
-        <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="the type of log entry likely to be create, update, delete though more may be identifed and added to the list." PREVIOUS="course_id" NEXT="entity"/>
-        <FIELD NAME="entity" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="the entity that was being edited" PREVIOUS="type" NEXT="record_id"/>
-        <FIELD NAME="record_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the record action (that is being logged) in its respective table" PREVIOUS="entity" NEXT="attribute"/>
-        <FIELD NAME="attribute" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="record_id" NEXT="oldvalue"/>
-        <FIELD NAME="oldvalue" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="the old value of the action being logged if any (may be null if create log)" PREVIOUS="attribute" NEXT="newvalue"/>
-        <FIELD NAME="newvalue" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="The new value of the action being logged (may be null if delete action)" PREVIOUS="oldvalue" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the log action was created" PREVIOUS="newvalue" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the log entry was last modified. In practice this field should never contain a value different to the timecreated field" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="creator_id"/>
+        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="user_id"/>
+        <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="creator_id" NEXT="course_id"/>
+        <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the course id" PREVIOUS="user_id" NEXT="type"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="the type of log entry likely to be create, update, delete though more may be identifed and added to the list." PREVIOUS="course_id" NEXT="entity"/>
+        <FIELD NAME="entity" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the entity that was being edited" PREVIOUS="type" NEXT="record_id"/>
+        <FIELD NAME="record_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the record action (that is being logged) in its respective table" PREVIOUS="entity" NEXT="attribute"/>
+        <FIELD NAME="attribute" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="record_id" NEXT="oldvalue"/>
+        <FIELD NAME="oldvalue" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the old value of the action being logged if any (may be null if create log)" PREVIOUS="attribute" NEXT="newvalue"/>
+        <FIELD NAME="newvalue" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The new value of the action being logged (may be null if delete action)" PREVIOUS="oldvalue" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the log action was created" PREVIOUS="newvalue" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the log entry was last modified. In practice this field should never contain a value different to the timecreated field" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -133,13 +134,13 @@
     </TABLE>
     <TABLE NAME="block_ilp_coursereports" COMMENT="Holds information on the reports available to users in a particular course" PREVIOUS="block_ilp_log" NEXT="block_ilp_dash_plugin">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="course_id"/>
-        <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the course that the report will be in" PREVIOUS="id" NEXT="report_id"/>
-        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the report" PREVIOUS="course_id" NEXT="creator_id"/>
-        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the person who assigned the report to the course" PREVIOUS="report_id" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the status of the report" PREVIOUS="creator_id" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="status" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="course_id"/>
+        <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the course that the report will be in" PREVIOUS="id" NEXT="report_id"/>
+        <FIELD NAME="report_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the report" PREVIOUS="course_id" NEXT="creator_id"/>
+        <FIELD NAME="creator_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the person who assigned the report to the course" PREVIOUS="report_id" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="the status of the report" PREVIOUS="creator_id" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="status" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="unique_coursereport"/>
@@ -150,13 +151,13 @@
     </TABLE>
     <TABLE NAME="block_ilp_dash_plugin" COMMENT="plugins used on the dashboard of the ilp" PREVIOUS="block_ilp_coursereports" NEXT="block_ilp_dash_tab">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="the name of the plugin this must be the same as the name of the plugins class" PREVIOUS="id" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="is the plugin enabled or not 0 = disabled 1 = enabled" PREVIOUS="name" NEXT="directory"/>
-        <FIELD NAME="directory" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" COMMENT="the directory in which files for this plugin are held" PREVIOUS="status" NEXT="type"/>
-        <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="type of plugin at the moment display and tab are the only two types but in the future there maybe more" PREVIOUS="directory" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the time at which the plugin was created" PREVIOUS="type" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="the name of the plugin this must be the same as the name of the plugins class" PREVIOUS="id" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="is the plugin enabled or not 0 = disabled 1 = enabled" PREVIOUS="name" NEXT="directory"/>
+        <FIELD NAME="directory" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the directory in which files for this plugin are held" PREVIOUS="status" NEXT="type"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="type of plugin at the moment display and tab are the only two types but in the future there maybe more" PREVIOUS="directory" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the plugin was created" PREVIOUS="type" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -164,12 +165,12 @@
     </TABLE>
     <TABLE NAME="block_ilp_dash_tab" COMMENT="Holds information on dashboard tab plugins that have been installed" PREVIOUS="block_ilp_dash_plugin" NEXT="block_ilp_dash_temp">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="the name of the tab plugin this must also be the name of the plugins class" PREVIOUS="id" NEXT="directory"/>
-        <FIELD NAME="directory" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" COMMENT="the directory in which files for the tab are stored" PREVIOUS="name" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" COMMENT="the status of the tab plugin 1 = enabled 0 = disabled" PREVIOUS="directory" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="status" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="the name of the tab plugin this must also be the name of the plugins class" PREVIOUS="id" NEXT="directory"/>
+        <FIELD NAME="directory" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="the directory in which files for the tab are stored" PREVIOUS="name" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="the status of the tab plugin 1 = enabled 0 = disabled" PREVIOUS="directory" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="status" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -177,11 +178,11 @@
     </TABLE>
     <TABLE NAME="block_ilp_dash_temp" COMMENT="block_ilp_dash_temp table retrofitted from MySQL" PREVIOUS="block_ilp_dash_tab" NEXT="block_ilp_dash_temp_region">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="status"/>
-        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="name" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="status" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="name" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="status" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -189,37 +190,50 @@
     </TABLE>
     <TABLE NAME="block_ilp_dash_temp_region" COMMENT="block_ilp_dash_temp_region table retrofitted from MySQL" PREVIOUS="block_ilp_dash_temp" NEXT="block_ilp_dash_region_plugin">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="template_id"/>
-        <FIELD NAME="template_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="name" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="template_id" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="template_id"/>
+        <FIELD NAME="template_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="name" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="template_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="region_template"/>
         <KEY NAME="region_template" TYPE="foreign" FIELDS="template_id" REFTABLE="block_ilp_dash_temp" REFFIELDS="id" COMMENT="the region must have a template" PREVIOUS="primary"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_dash_region_plugin" COMMENT="block_ilp_dash_region_plugin table retrofitted from MySQL" PREVIOUS="block_ilp_dash_temp_region" NEXT="block_ilp_user_status">
+    <TABLE NAME="block_ilp_dash_region_plugin" COMMENT="block_ilp_dash_region_plugin table retrofitted from MySQL" PREVIOUS="block_ilp_dash_temp_region" NEXT="block_ilp_mis_plugin">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="region_id"/>
-        <FIELD NAME="region_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="plugin_id"/>
-        <FIELD NAME="plugin_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="region_id" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="plugin_id" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="region_id"/>
+        <FIELD NAME="region_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="plugin_id"/>
+        <FIELD NAME="plugin_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="region_id" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="plugin_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_user_status" COMMENT="block_ilp_user_status table retrofitted from MySQL" PREVIOUS="block_ilp_dash_region_plugin">
+    <TABLE NAME="block_ilp_mis_plugin" COMMENT="Holds information on installed mis plugins" PREVIOUS="block_ilp_dash_region_plugin" NEXT="block_ilp_user_status">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="user_id"/>
-        <FIELD NAME="user_id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="user_modified_id"/>
-        <FIELD NAME="user_modified_id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="user_id" NEXT="parent_id"/>
-        <FIELD NAME="parent_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" COMMENT="the id of the parent record that sets the user status" PREVIOUS="user_modified_id" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="parent_id" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="" SEQUENCE="false" PREVIOUS="id" NEXT="directory"/>
+        <FIELD NAME="directory" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="" SEQUENCE="false" PREVIOUS="name" NEXT="status"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="directory" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="status" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="mis_plugin_primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_ilp_user_status" COMMENT="block_ilp_user_status table retrofitted from MySQL" PREVIOUS="block_ilp_mis_plugin">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="user_id"/>
+        <FIELD NAME="user_id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="user_modified_id"/>
+        <FIELD NAME="user_modified_id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="user_id" NEXT="parent_id"/>
+        <FIELD NAME="parent_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the parent record that sets the user status" PREVIOUS="user_modified_id" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="parent_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="timecreated"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="status_user"/>
