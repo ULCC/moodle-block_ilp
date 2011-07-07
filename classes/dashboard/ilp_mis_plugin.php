@@ -45,7 +45,8 @@ abstract class ilp_mis_plugin extends ilp_plugin {
     	$this->templatefile		=	$this->plugin_class_directory.'/'.$this->name.'.html';
     }
 	
-	
+	public display(){
+    }
 	
 	
 	
