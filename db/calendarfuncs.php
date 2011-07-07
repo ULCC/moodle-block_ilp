@@ -60,8 +60,7 @@ class calendarfuncs{
     */
     public function generate_sub_dates( $start, $end, $name ){
         $startdayofweek = $this->calc_day_of_week( $start );
-        $enddayofweek = $this->calc_day_of_week( $end );
-        return array(
+        $enddayofweek = $this->calc_day_of_week( $end ); return array(
             'name' => $name,
             'start' => "$startdayofweek $start",
             'end' => "$enddayofweek $end",
@@ -71,24 +70,45 @@ class calendarfuncs{
     }
 
     /*
+    * take a start date and end date and return a list of datetime objects, one for each day from start to end
+    * @param mixed $start
+    * @param mixed $end
+    * @return array of datetime
+    */
+    public function calc_daylist( $start, $end ){
+        $dt_start = new DateTime( $start );
+        $dt_end = new DateTime( $end );
+        $daylist = array();
+        $tmp = clone( $dt_start );
+        while( $tmp->getTimestamp() <= $dt_end->getTimestamp() ){
+            $daylist[] = $tmp;
+            $tmp = clone( $tmp->modify( '+1 day' ) );
+        }
+        return $daylist;
+    }
+
+    /*
     * @param mixed $start
     * @param mixed $end
     * @return array of arrays
     */
-    protected function calc_sub_week_limits( $start, $end ){
+    public function calc_sub_week_limits( $start, $end, $date_format=null ){
+        if( !$date_format ){
+            $date_format = $this->readabledateformat;
+        }
         $dt_start = new DateTime( $start );
         $dt_end = new DateTime( $end );
         $weekslist = array();
 
         $tmp = clone( $dt_start );
-	        $weekstart = clone( $tmp );
-	        while( $tmp->format( 'N' ) != $this->firstdayofweek ){
+        $weekstart = clone( $tmp );
+        while( $tmp->format( 'N' ) != $this->firstdayofweek ){
 	            $tmp = $tmp->modify( '+1 day' );
-	        }
-	        $next_weekstart = clone( $tmp );
-	        $weekend = $tmp->modify( '-1 day' );
-	        $weekslist[] = array( $weekstart->format( $this->readabledateformat ), $weekend->format( $this->readabledateformat ) );
-            $tmp = clone( $next_weekstart );
+        }
+        $next_weekstart = clone( $tmp );
+        $weekend = $tmp->modify( '-1 day' );
+        $weekslist[] = array( $weekstart->format( $date_format ), $weekend->format( $date_format ) );
+        $tmp = clone( $next_weekstart );
         
             //now add complete weeks until we hit $end
         $counter = 0;
@@ -101,7 +121,7 @@ class calendarfuncs{
             else{
                 $next_weekend = clone( $tmp );
             }
-            $weekslist[] = array( $next_weekstart->format( $this->readabledateformat ) , $next_weekend->format( $this->readabledateformat ) );
+            $weekslist[] = array( $next_weekstart->format( $date_format ) , $next_weekend->format( $date_format ) );
             $next_weekstart = $tmp->modify( '+1 day' );
         }
         return $weekslist;
@@ -185,12 +205,25 @@ class calendarfuncs{
         return $utime;
     }
 
+    public function get_time( $timestamp ){
+        return date( 'H:i', $this->getutime( $timestamp ) );
+    }
+    
     public function getreadabletime( $utime, $format='Y-m-d H:i:s' ){
         return date( $format, $utime );
     }
 
-    protected function calc_day_of_week( $date ){
-        $weekdaynum = date( 'N', $this->getutime( $date ) );
+    public function calc_day_of_week( $date, $date_format='N' ){
+        $weekdaynum = date( $date_format, $this->getutime( $date ) );
+        return $weekdaynum;
+    }
+
+    public function calc_weekno( $date1, $date2, $format='%d' ){
+        $dt_date1 = $this->getutime( $date1 );
+        $dt_date2 = $this->getutime( $date2 );
+        $interval = $dt_date2 - $dt_date1;
+        $days = $interval / ( 3600 * 24 );
+        return intval( ceil( $days / 7 ) );
     }
     
     public function split_mysql_date( $date, $sep="-" ){

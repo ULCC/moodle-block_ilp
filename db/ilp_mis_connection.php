@@ -81,17 +81,21 @@ class ilp_mis_connection{
             'timetable_table',                  //table containing info about the date of each lecture (will be set same as lecture_table if not given)
             'lecture_time_field',               //name of field giving the date/time of each lecture, for time-limiting reports
             'start_date',                       //start date to be applied generically to queries
-            'end_date',                          //end date to be applied generically to queries
+            'end_date',                         //end date to be applied generically to queries
+            'week1',                            //date of the first day of week 1 in the particular institution's calendar
 
             'attendance_view',                  //view or table containing all the relevant attendance data
-            'studentlecture_attendance_id',      //primary key of attendance view - unique identifier for a single student-lecture attendance event
+            'studentlecture_attendance_id',     //primary key of attendance view - unique identifier for a single student-lecture attendance event
             'student_id_field',                 //fieldname in attendance_view identifying a student
-            'student_name_field',                 //fieldname in attendance_view giving a student name for display
+            'student_name_field',               //fieldname in attendance_view giving a student name for display
             'course_id_field',                  //fieldname in attendance_view identifying a course
             'course_label_field',               //fieldname in attendance_view giving a course display name
-            'lecture_id_field',               //fieldname in attendance_view giving a lecture id
+            'lecture_id_field',                 //fieldname in attendance_view giving a lecture id
             'timefield',                        //fieldname in attendance_view giving the date of a lecture
-            'code_field'                        //fieldname in attendance_veiw containing the attendance code
+            'code_field',                        //fieldname in attendance_veiw containing the attendance code
+            'extra_fieldlist',                   //array of fieldname=>label which can be added to data retrieved to show on a page
+
+            'termdatelist'                      //array of term dates - each member is an array containing start date and end date
         );
         foreach( $this->settable_params as $var ){
                 $this->params[ $var ] = false;
@@ -140,9 +144,10 @@ class ilp_mis_connection{
     }
 
 
-    public function get_student_list(){
-    }
-
+    /*
+    * test the db connection configured from the settings and produce a helpful message
+    * @return boolean
+    */
     public function test_mis_connection(){
         $msglist = array();
         $valid = false;
@@ -242,7 +247,7 @@ class ilp_mis_connection{
     }
 
     public function get_attendance_summary_by_term( $student_id ){
-        $cal = new calendarfuncs();
+        $cal = new calendarfuncs( $this->params[ 'termdatelist' ] );
         $reportlist = array();
         $termlist = array( 'Overall'=>null, 'Autumn'=>0, 'Spring'=>1, 'Summer'=>2 );
         //foreach( $cal->termdatelist as $startend ){
@@ -396,7 +401,7 @@ class ilp_mis_connection{
     * @return array of arrays
     */
     public function get_attendance_report_by_term( $course_id, $student_id, $course_name ){
-        $cal = new calendarfuncs();
+        $cal = new calendarfuncs( $this->params[ 'termdatelist' ] );
         $reportlist = array();
         foreach( $cal->termdatelist as $startend ){
             $start = $startend[ 0 ];
@@ -416,7 +421,7 @@ class ilp_mis_connection{
     * @return array of arrays
     */
     public function get_attendance_report_by_month( $course_id, $student_id, $course_name ){
-        $cal = new calendarfuncs();
+        $cal = new calendarfuncs( $this->params[ 'termdatelist' ] );
         $datesinfo = $cal->generate_dates();
         $months = $datesinfo[1][ 'months' ];
         foreach($months as $startend ){
@@ -437,7 +442,7 @@ class ilp_mis_connection{
     * @return array of strings
     */
     protected function get_percentage_by_month( $student_id, $course_id ){
-        $cal = new calendarfuncs();
+        $cal = new calendarfuncs( $this->params[ 'termdatelist' ] );
         $start = $this->params[ 'start_date' ];
         $end = $this->params[ 'end_date' ];
 
@@ -463,7 +468,7 @@ class ilp_mis_connection{
     * @return array of arrays
     */
     public function get_attendance_report_by_week( $course_id, $student_id, $course_name ){
-        $cal = new calendarfuncs();
+        $cal = new calendarfuncs( $this->params[ 'termdatelist' ] );
         $datesinfo = $cal->generate_dates();
         $weeks = $datesinfo[1][ 'weeks' ];
         $reportlist = array();
@@ -594,6 +599,32 @@ class ilp_mis_connection{
         return $this->get_top_item( $res, 'n' );
     }
 
+    public function test_entable( $list ){
+        //construct an html table and return it
+        $rowlist = array();
+        $celltag = 'th';
+        foreach( $list as $row ){
+            $row_items = array();
+            foreach( $row as $item ){
+                $row_items[] = $this->entag( $celltag, $item, array( 'align'=>'LEFT' ) );
+            }
+            $rowlist[] = $this->entag( 'tr' , implode( '' , $row_items ) );
+            $celltag = 'td';
+        }
+        return $this->entag( 'table' , implode( "\n", $rowlist ) , $params=array( 'border'=>1 ) );
+    }
+    public function entag( $tag, $meat=false , $params=false ){
+        $pstring = '';
+        if( $params ){
+            foreach( $params as $key=>$value ){
+                $pstring .= " $key=\"$value\"";
+            }
+        }
+        if( false !== $meat ){
+            return "<$tag$pstring>$meat</$tag>";
+        }
+        return "<$tag$pstring />";
+    }
     /*
     * @param int student_id
     * @return array of arrays
@@ -610,6 +641,136 @@ class ilp_mis_connection{
             GROUP BY $course_id_field
 EOQ;
         return $this->execute( $sql )->getRows();
+    }
+
+    public function get_register_entries( $student_id , $term_id=false ){
+        $blankcell = '&nbsp;';
+        //$data = array();
+        $tablerowlist = array();    //this will build into a list of lists of display values - top row for table headers etc
+        $cal = new calendarfuncs( $this->params[ 'termdatelist' ] );
+        if( false === $term_id ){
+            $report_start = $this->params[ 'start_date' ];
+            $report_end = $this->params[ 'end_date' ];
+        }
+        else{
+            list( $report_start, $report_end ) = $this->params[ 'termdatelist' ][ $term_id ];
+        }
+        $weeklist = $cal->calc_sub_week_limits( $report_start, $report_end );
+        $toprow = array(
+            'Class',
+            'Late',
+            'Att',
+            'Day',
+            'Time'
+        );       
+        $weekrow = array_fill( 0, count( $toprow ) - 1 , '&nbsp;' );
+        $weekrow[] = 'Week';
+        foreach( $weeklist as $week ){
+            $toprow[] = $cal->calc_weekno( $this->params[ 'week1' ], $week[ 0 ] );
+            $weekrow[] = $cal->getreadabletime( $cal->getutime( $week[ 0 ] ), 'd/m' );
+        }
+        $weeknolist = $toprow;
+
+        $tablerowlist[ 'headers' ] = $toprow;
+        $tablerowlist[ 'weeks' ] = $weekrow;
+
+        $courselist = $this->get_courselist( $student_id );
+        $timefield = $this->params[ 'timefield' ];
+/*
+        foreach( $courselist as $course ){
+            $label = $course[ 'course_id' ] . " " . $course[ 'course_title' ];
+            $data[ $course[ 'course_id' ] ] = array();
+            $data[ $course[ 'course_id' ] ][ 'label' ] = $label;
+        }
+*/
+            //var_crap( $cal->calc_daylist( $week[ 0 ], $week[ 1 ] ) );
+        $attendance_data = array();     //will build into a list of stats for each course-weekday
+        foreach( $courselist as $course ){
+            foreach( $weeklist as $week ){
+                if( $rowlist = $this->get_attendance_details( $student_id, $course[ 'course_id' ], array(), false, $week[ 0 ], $week[ 1 ] ) ){
+                    //var_crap( $cal->calc_day_of_week( $row[ $timefield ] ) );
+                    foreach( $rowlist as $row ){
+                        $weekno = $cal->calc_weekno( $this->params[ 'week1' ], $week[ 0 ] );
+	                    $row_id = $course[ 'course_id' ] . " " . $course[ 'course_title' ] . " " . $row[ 'dayname' ];
+                        if( !in_array( $row_id, array_keys( $tablerowlist ) ) ){
+                            //new row
+	                        $row_visible_id = $course[ 'course_id' ] . " " . $course[ 'course_title' ] . " " . $weekno; 
+                            $tablerowlist[ $row_id ] = array( $row_visible_id ); 
+		                    $tablerowlist[ $row_id ][] = false;     //late
+		                    $tablerowlist[ $row_id ][] = false;     //att
+		                    $tablerowlist[ $row_id ][] = $row[ 'dayname' ]; 
+		                    $tablerowlist[ $row_id ][] = $row[ 'clocktime' ]; 
+
+                            $attendance_data[ $row_id ] = array(
+                                'possible' => 0,
+                                'present' => 0,
+                                'late' => 0,
+                                'absent' => 0
+                            );
+                        }
+                        else{
+                        }
+                        $col = count( $tablerowlist[ $row_id ] );
+                        //match table column to week no
+                        while( $weeknolist[ $col ] < $weekno ){
+                            $col++;
+                            $tablerowlist[ $row_id ][] = $blankcell;
+                        }
+                        $tablerowlist[ $row_id ][] = $this->decide_attendance_symbol( $row[ 'attendance_code' ] );
+                        $attendance_data[ $row_id ] = $this->modify_attendance_data( $attendance_data[ $row_id ], $row[ 'attendance_code' ] );
+
+/*
+                        $row[ 'day' ] = $cal->calc_day_of_week( $row[ $timefield ], 'D' );
+                        $row[ 'week' ] = $cal->calc_day_of_week( $week[ 0 ], 'd/m' );
+                        $row[ 'weekno' ] = $cal->calc_weekno( $this->params[ 'week1' ], $week[ 0 ] );
+                        $row[ 'symbol' ] = $this->decide_attendance_symbol( $row[ 'attendance_code' ] );
+                        $row[ 'time' ] = $cal->calc_day_of_week( $row[ $timefield ] , 'h:i' );
+                        $data[ $course[ 'course_id' ] ][] = $row;
+*/
+                    }
+                }
+    //public function get_attendance_details( $student_id, $course_id=null, $attendancecode_list=array(), $countonly=false, $start=null, $end=null ){
+            }
+        }
+        foreach( $tablerowlist as $row_id=>$row ){
+            //calc late and attendence percentages for each row
+            if( in_array( $row_id, array_keys( $attendance_data ) ) ){
+                $attendance = $attendance_data[ $row_id ];
+                $tablerowlist[ $row_id ][ 1 ] = $this->format_percentage( $attendance[ 'late' ] / $attendance[ 'present' ] );
+                $tablerowlist[ $row_id ][ 2 ] = $this->format_percentage( $attendance[ 'present' ] / $attendance[ 'possible' ] );
+            }
+        }
+        return $tablerowlist;
+        //return $data;
+    }
+
+    protected function modify_attendance_data( $attendance_data, $code ){
+        $attendance_data[ 'possible' ]++;
+        if( in_array( $code, $this->params[ 'late_code_list' ] ) ){
+            $attendance_data[ 'late' ]++;
+        }
+        if( in_array( $code, $this->params[ 'present_code_list' ] ) ){
+            $attendance_data[ 'present' ]++;
+        }
+        if( in_array( $code, $this->params[ 'absent_code_list' ] ) ){
+            $attendance_data[ 'absent' ]++;
+        }
+        return $attendance_data;
+    }
+
+    function decide_attendance_symbol( $code ){
+        if( in_array( $code, $this->params[ 'late_code_list' ] ) ){
+            return 'L';
+        }
+        elseif( in_array( $code, $this->params[ 'present_code_list' ] ) ){
+            return '/';
+        }
+        elseif( in_array( $code, $this->params[ 'absent_code_list' ] ) ){
+            return '#';
+        }
+        else{
+            return $code;
+        }
     }
 
     /*
@@ -631,10 +792,15 @@ EOQ;
         $timefield = $this->params[ 'timefield' ];
         
         if( $countonly ){
-            $selectclause = "COUNT(*) n";
+            $selectclause = "COUNT( $slid_field ) n";
         }
         else{
-            $selectclause = "$slid_field id, $acode_field";
+            $selectclause = "$slid_field id, $acode_field, $timefield, CONCAT( date_format( $timefield , '%I' ), ':' , DATE_FORMAT( $timefield , '%i' ) ) clocktime, date_format( $timefield , '%a' ) dayname";
+            if( $this->params[ 'extra_fieldlist' ] ){
+                foreach( $this->params[ 'extra_fieldlist' ] as $field=>$alias ){
+                    $selectclause .= ", $field $alias";
+                }
+            }
         }
         $whereandlist = array(
             "$student_id_field= '$student_id'",

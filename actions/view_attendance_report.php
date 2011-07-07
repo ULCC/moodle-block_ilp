@@ -8,6 +8,7 @@ require_once($CFG->dirroot.'/blocks/ilp/db/ilp_mis_connection.php');
 require_once($CFG->dirroot.'/blocks/ilp/db/mis_constants.php');
 
 $student_id 	= $PARSER->optional_param('student_id', 0, PARAM_INT);
+$term_id 	= $PARSER->optional_param('term_id', 0, PARAM_INT);
 $display_style  = $PARSER->optional_param( 'display_style', 'simple', PARAM_CLEAN );
 
 $params = array(
@@ -17,8 +18,9 @@ $params = array(
             'present_code_list' => $PRESENT_CODE,
             'absent_code_list' => $ABSENT_CODE,
             'late_code_list' => $LATE_CODE,
-            'start_date' => '2010-10-01',
-            'end_date' => '2011-06-30',
+            'start_date' => '2011-01-01',
+            'end_date' => '2011-02-28',
+            'week1' => '2010-08-09',
             'lecture_time_field' => 'start',
 
             'attendance_view' => 'attendance_overview',
@@ -29,8 +31,22 @@ $params = array(
             'course_label_field' => 'course_title',
             'lecture_id_field' => 'lecture_id',
             'timefield' => 'start',
-            'code_field' => 'attendance_code'
+            'code_field' => 'attendance_code',
+            'extra_fieldlist' => array( 'attendance_cat' => 'cat' ),
+
+            'termdatelist' => array(
+                array(),                                //just here to force 1-based indexing
+                array( '2010-10-01', '2010-12-17' ),
+                array( '2011-01-04', '2011-03-25' ),
+                array( '2011-04-13', '2011-06-30' )
+            )
 );
+
+/*
+$cal = new calendarfuncs();
+var_crap(  $cal->calc_weekno( '2010-08-09' , '2010-08-27 10:00:00' ) );
+*/
+
 $db = new ilp_mis_connection( $params );
 //var_crap( $db->get_report( $student_id ) );
 switch( $display_style ){
@@ -46,5 +62,8 @@ switch( $display_style ){
     case 'monthly-course-breakdown':
         $data = $db->get_monthly_course_breakdown( $student_id );
         break;
+    case 'register':
+        $data = $db->get_register_entries( $student_id , $term_id );
+        break;
 }
-var_crap($data);
+echo( $db->test_entable( $data ) );
