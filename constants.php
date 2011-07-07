@@ -69,7 +69,7 @@ define('ILP_DEFAULT_PASS_PERCENTAGE',75);
 define('ILP_MAXFILE_SIZE',1048576 );
 
 //the type of files that may be uploaded as icons
-define('ILP_ICON_TYPES','*.jpg,*.png, *.jpeg');
+define('ILP_ICON_TYPES','jpg,png, jpeg, gif');
 
 //The default number of reports displayed in a list
 define('ILP_DEFAULT_LIST_REPORTS',10 );

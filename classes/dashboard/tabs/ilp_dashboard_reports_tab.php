@@ -145,8 +145,11 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      * Simple function to return the header for this tab
      * @param unknown_type $headertext
      */
-    function get_header($headertext)	{
-    	return "<div><h2>{$headertext}<h2></div>";
+    function get_header($headertext,$icon)	{
+		//setup the icon				
+		$icon 	=	 "<img id='reporticon' class='icon_med' alt='$headertext ".get_string('reports','block_ilp')."' src='$icon' />";
+    	
+    	return "<div><h2>{$icon}{$headertext}<h2></div>";
     }
 	
 	
@@ -171,14 +174,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			//get the tabitem param if has been set
 			$this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_INT);
 			
-			
-			
-	
 			//start buffering output
 				ob_start();
-					
-					
-					
 				
 					//split the selected tab id on up 3 ':'
 					$seltab	=	explode(':',$selectedtab);
@@ -191,7 +188,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 					
 					if ($report	=	$this->dbc->get_report_by_id($report_id)) {
 
-						echo $this->get_header($report->name);
+						$icon				=	(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
+						
+						echo $this->get_header($report->name,$icon);
 						
 						//output the print icon
 						echo "<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon'></a></div>

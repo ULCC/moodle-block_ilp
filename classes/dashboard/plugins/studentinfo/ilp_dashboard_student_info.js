@@ -99,8 +99,6 @@ M.ilp_dashboard_student_info.init = function(Y,statusval) {
     M.ilp_dashboard_student_info.hideelement(statusform);
     
 	YAHOO.util.Event.addListener("edit_userstatus_icon", "click", M.ilp_dashboard_student_info.addselect);
-	//YAHOO.util.Event.addListener("select_userstatus", "change", alert('tesdt'));
-
 	
 	//add the onchange event to the select button
 	document.getElementById('select_userstatus').addEventListener(

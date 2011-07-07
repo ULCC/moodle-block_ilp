@@ -61,11 +61,16 @@ class ilp_db {
             // skip the flexible_table
             if(!is_a($data, 'flexible_table')) {
                 foreach($data as $index => &$datum) {
-                    $datum = ilp_db::encode($datum);
+                	//we will skip any index with the prefix binary
+                	if (substr($index, 0,7) != 'binary_') {
+		                $datum = ilp_db::encode($datum);
+                	} 
                 }
+
             }
             return $data;
         } else {
+
             // decode any special characters prevent malicious code slipping through
             $data = ilp_db::decode_htmlchars($data, ENT_QUOTES);
 
@@ -89,7 +94,10 @@ class ilp_db {
     static function decode(&$data) {
         if(is_object($data) || is_array($data)) {
             foreach($data as $index => &$datum) {
-                $datum = ilp_db::decode($datum);
+            	//skip any fields with prefix binary_ 
+            	if (substr($index, 0,7) != 'binary_') {
+                	$datum = ilp_db::decode($datum);
+            	}
             }
             return $data;
         } else {
@@ -106,7 +114,10 @@ class ilp_db {
     static function decode_htmlchars(&$data) {
         if(is_object($data) || is_array($data)) {
             foreach($data as $index => &$datum) {
-                $datum = ilp_db::decode_htmlchars($datum);
+            	//skip any fields with prefix binary_ 
+            	if (substr($index, 0,7) != 'binary_') {
+                	$datum = ilp_db::decode_htmlchars($datum);
+            	}
             }
             return $data;
         } else {
@@ -528,6 +539,9 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false depending on result of query
      */
     function update_report($report) {
+    	
+    	
+    	
     	return $this->update_record('block_ilp_report',$report);
     }
     

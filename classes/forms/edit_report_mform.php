@@ -81,9 +81,9 @@ class edit_report_mform extends ilp_moodleform {
         	
 	        //TODO add the elements to implement the frequency functionlaity
 			if (stripos($CFG->release,"2.") !== false) {
-				$mform->addElement('filepicker', 'iconfile',get_string('iconfile', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
+				$mform->addElement('filepicker', 'binary_icon',get_string('binary_icon', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
 			} else {
-        		$mform->addElement('file', 'iconfile', get_string('iconfile', 'block_ilp'));				
+        		$mform->addElement('file', 'binary_icon', get_string('binary_icon', 'block_ilp'));				
 			}
 	        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
 	        $buttonarray[] = &$mform->createElement('cancel');
@@ -145,6 +145,8 @@ class edit_report_mform extends ilp_moodleform {
             		}
             	}
         	} else {
+
+        		
             	$this->dbc->update_report($data);
         	}
 	

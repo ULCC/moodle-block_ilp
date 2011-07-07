@@ -72,12 +72,12 @@ if (!empty($reports)) {
 		
 		//set the edit report prompts link
 		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_prompt.php?report_id={$row->id}'>
-									<img class='prompt' src='' alt='".get_string('editfields','block_ilp')."' title='".get_string('editfields','block_ilp')."' />
+									<img class='prompt' src='".$OUTPUT->pix_url('i/questions')."' alt='".get_string('editfields','block_ilp')."' title='".get_string('editfields','block_ilp')."' />
 								 </a>";
 		
 		//set the edit report permissions link
 		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_permissions.php?report_id={$row->id}'>
-									<img class='permissions' src='' alt='".get_string('editpermissions','block_ilp')."' title='".get_string('editpermissions','block_ilp')."' />
+									<img class='permissions' src='".$OUTPUT->pix_url('i/roles')."' alt='".get_string('editpermissions','block_ilp')."' title='".get_string('editpermissions','block_ilp')."' />
 								 </a>";
 
 		//decide whether the report is enabled or disabled and set the image and link accordingly

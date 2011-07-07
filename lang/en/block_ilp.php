@@ -77,7 +77,7 @@
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
 	
 	
-	$string['iconfile']				=	'Icon File';
+	$string['binary_icon']			=	'Icon File';
 	$string['ilpname']				=	'ILP';
 	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	

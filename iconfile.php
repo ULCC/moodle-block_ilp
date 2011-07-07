@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Returns the icon file to be used with a repo
+ * Returns the icon file to be used with a report
  *
  * @copyright &copy; 2011 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -17,7 +17,7 @@ while (($collapsed = preg_replace('|/[^/]+/\.\./|','/',$path_to_config,1)) !== $
 
 require_once($path_to_config);
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER,$DB;
 
 //include any neccessary files
 
@@ -34,12 +34,22 @@ $dbc = new ilp_db();
 $report		=	$dbc->get_report_by_id($report_id);
 
 if (!empty($report))	{	
-			if (!empty($report->iconfile)) {
+			if (!empty($report->binary_icon)) {
+				
 				header("Content-Type: image/jpeg");
-				//header("Content-Length: ");
-				header("Content-Disposition: attachment; filename=iconfile.jpeg");				
+				//header("Content-Length: 90000");
+				header("Content-Disposition: attachment; filename=icon.jpeg");				
                 // Print data
-                echo $report->iconfile;
-                exit;
+                
+				//we have to use the raw moodle functions at this point and avoid the extra validation carried out by the sql classes 
+				//as this breaks the export of reports
+				if (stripos($CFG->release,"2.") !== false) {
+					$generic_report	=	$DB->get_record('block_ilp_report',array('id'=>$report_id));
+				}
+				else {
+					$generic_report	=	get_record('block_ilp_report','id',$report_id);
+				}
+                echo $generic_report->binary_icon;
+	            exit;
 	}
 } 

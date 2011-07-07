@@ -77,15 +77,9 @@ class ilp_logging {
          $success = $this->dbc->delete_records($table, $params);
 
          if (!empty($deleteobject)) {
-
              foreach ($deleteobject as $delobj) {
-             	
-                //$logging_extraparams = array( 'audit_type');
                 foreach( $extraparams as $key=>$value ){
-                    //if( in_array( $key, array_keys( $extraparams ) ) ){
-                        //$delobj->$key = $extraparams[ $key ];
                         $delobj->$key = $value;
-                    //}
                 }
                 $this->add_to_audit($table,LOG_DELETE,$delobj);
              }
@@ -143,10 +137,6 @@ class ilp_logging {
                     $attributes[] = 'minimumlength';
                     $attributes[] = 'maximumlength';
                     $newobject->entity = get_string( 'ilp_report_field' , 'block_ilp' );
-                    /*
-                    $attributes[] = 'table';
-                    $newobject->table = $table;
-                    */
                 }
             }
         }
@@ -173,7 +163,7 @@ class ilp_logging {
             'block_ilp_plu_tex_ent'
         ) ) ){
                     $newobject->entry_table = $table;
-                    //$newobject->audit_type = 'audittype';
+
 
                     $attributes = array( 'id', 'entry_id', 'parent_id', 'value' , 'entry_table', 'audit_type' );
 
@@ -182,10 +172,7 @@ class ilp_logging {
 	                $log->user_id = $USER->id;
 	                $log->candidate_id = $USER->id;
 	                $log->course_id = false;
-/*
-                    $log->type = get_string( 'user_data', 'block_ilp' );
-                    $log->type .= " " . $oplist[ $action ];
-*/
+
                     $log->type = " " . $oplist[ $action ];
                     $log->entity = get_string( 'ilp_report' , 'block_ilp' );
                     $log->entity .= " " . get_string( 'user_data', 'block_ilp' );
@@ -202,7 +189,6 @@ class ilp_logging {
                             if( !empty( $currobject ) ){
                                 $log->oldvalue = $currobject->value;
                             }
-                            //$log->oldvalue = $this->get_old_value($table,$newobject,$currobject,$value,$action);
                              
                         }
                             //do not log the event if it is an update and this field is unchanged
@@ -244,14 +230,11 @@ class ilp_logging {
 		        	else{
 	                     	$log->record_id = $this->log_record_id($table,$newobject);
         			}
-			
-	
-	                //$log->attribute = $this->attribute_type($table,$newobject,$key);
+
                     $log->attribute = $key;
 	
 	                $log->course_id = $this->log_course($table,$newobject);
 	                if ( $action != LOG_ADD ) {
-	                    //$log->oldvalue = ($action != LOG_DELETE ) ? $this->interpret_value($table,$currobject,$key,$this->get_old_value($table,$newobject,$currobject,$key,$action)) : $this->interpret_value($table,$newobject,$key,$val);
                         if( isset( $currobject->$key ) ){
                             $log->oldvalue = $currobject->$key;
                         }
@@ -259,12 +242,10 @@ class ilp_logging {
                             $log->oldvalue = $newobject->$key;
                         }
 	                }
-	                //$log->newvalue = ($action != LOG_DELETE ) ? $this->interpret_value($table,$newobject,$key,$val) : NULL;
+
 	                $log->newvalue = ($action != LOG_DELETE ) ? $newobject->$key : NULL;
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
-	
-//var_crap(__LINE__);if( 'req' == $key ){var_crap($currobject);var_crap($newobject);var_crap($log);exit;}
 	
 	                $id = $this->dbc->insert_record('block_ilp_log',$log);
 	
@@ -298,72 +279,6 @@ class ilp_logging {
      }
 
 
-     /**
-     * returns the id of the course that the given obj was made in
-     *
-     * @param string $table The name of the table that will hold the object
-     * @param object $obj the object that contains the data that will be logged
-     * @return mixed The success of the action
-     */
-     private function log_course($table,$obj) {
-
-        $logtables = array('block_assmgr','block_assmgr_claim','block_assmgr_portfolio','block_assmgr_sub_evid_type'
-                            ,'submission_comment','submission_outcome_grade','portfolio_outcome_grade','portfolio_grade');
-
-          if (in_array($table,$logtables)) {
-
-              switch ($table) {
-                  case 'submission_outcome_grade':
-
-                  case 'portfolio_outcome_grade':
-
-                  case 'portfolio_grade':
-
-                  case 'block_assmgr_portfolio':
-
-                  case 'submission_comment':
-
-                  case 'assessment_date':
-                      return $obj->course_id;
-                      break;
-
-                  case 'block_assmgr_sub_evid_type':
-
-                  case 'block_assmgr_claim':
-                      $subobj = $this->get_submission_by_id($obj->submission_id);
-                      if (!empty($subobj)) $portfolio_id = $subobj->portfolio_id;
-
-                      //note no break as the course id will be retrived below
-                  case 'block_assmgr':
-                      if (empty($portfolio_id)) $portfolio_id = $obj->portfolio_id;
-                      $portobj = $this->get_portfolio_by_id($portfolio_id);
-                      if (!empty($portobj)) return $portobj->course_id;
-                      break;
-
-                  case 'block_assmgr_verify_form':
-                      if (!empty($obj->portfolio_id)) {
-                          $portobj = $this->get_portfolio_by_id($obj->portfolio_id);
-                          if (!empty($portobj)) return $portobj->course_id;
-                      }
-                      if (!empty($obj->submission_id)) {
-                          $subobj = $this->get_submission_by_id($obj->submission_id);
-
-                          $portobj = (!empty($subobj)) ? $this->get_portfolio_by_id($subobj->portfolio_id) : NULL;
-                          if (!empty($portobj)) return $portobj->course_id;
-                      }
-
-
-                      break;
-
-
-
-
-                }
-          }
-
-          return NULL;
-     }
-
     /**
      * Interprets the value of the attribute given
      * so that it can be read in human form
@@ -391,61 +306,6 @@ class ilp_logging {
 
      }
 
-    /**
-     * Private member function to intrepret the value of a given portfolio
-     * attribute
-     *
-     * @param string $attrib the name of the attribute that will be interpreted
-     * @param int $value the actual value that will be interpreted
-     * @return mixed The attribute's interpreted value
-     */
-     private function interpret_portfolio_value($attrib,$value) {
-           if ($attrib == 'course_id' && !empty($value)) {
-               $course = $this->get_course($value);
-               if (!empty($course)) return $course->shortname;
-           }
-           return (!empty($value)) ? $value : NULL;
-     }
-
-
-     /**
-     * Private member function to interpret the value
-     * of a given evidence value
-     *
-     * @param string $attrib the name of the attribute that will be interpreted
-     * @param int $value the actual value that will be interpreted
-     * @return mixed The attribute's interpreted value
-     */
-
-     function interpret_verification_value($attrib,$value) {
-         if ($attrib == 'accurate' || $attrib == 'constructive' || $attrib == 'needs_amending') {
-               if ($value == 1) {
-                   return "Yes";
-               } else if ($value == 0) {
-                   return "No";
-               }
-         }
-         return (!empty($value)) ? $value : NULL;
-
-
-     }
-
-
-     /**
-     * Private member function to interpret the value
-     * of a given evidence value
-     *
-     * @param string $attrib the name of the attribute that will be interpreted
-     * @param int $value the actual value that will be interpreted
-     * @return mixed The attribute's interpreted value
-     */
-     private function interpret_evidence_value($attrib,$value) {
-         if ($attrib == 'id') {
-               $evidence = $this->get_evidence($value);
-               return (!empty($evidence)) ? $evidence->name : $value;
-         }
-         return (!empty($value)) ? $value : NULL;
-     }
 
 
      /**
@@ -478,29 +338,7 @@ class ilp_logging {
      }
 
 
-     /**
-     * Private member function to return the previous value of the specified attribute
-     *
-     * @param string $table The name of the table where the record will be created
-     * @param object $obj the object that contains the data that will be used to create the record
-     * @param object $currobj the object containing the data that is currently in the DB
-     * @param string $attrib the name of the attribute of the objects to be compared
-     * @param string $action the name of the database operation about to be performed
-     * @return mixed The value or NULL
-     */
-/*
-     private function get_old_value($table,$obj,$currobj,$attrib,$action) {
-            return $obj->$attrib;
-          if ($table == 'block_assmgr_resource' && !empty($currobj)) {
 
-            $resource_type = $this->get_resource_type($currobj->resource_type_id);
-            $resource_fields = new $resource_type->name;
-            $resource_fields->load($currobj->record_id);
-            return $resource_fields->get_link();
-          }
-          return (!empty($currobj->$attrib)) ? $currobj->$attrib : NULL;
-     }
-*/
 
      /**
      * function to return the action type of given action
@@ -535,92 +373,6 @@ class ilp_logging {
      }
 
 
-     /**
-     * function to return the attribute type of given key in the data object
-     *
-     *
-     * @param string $table the table the attribute was taken from
-     * @param object $obj The object holding the data
-     * @param string $key the attribute name
-     * @return string the attribute type
-     */
-/*
-     private function attribute_type($table,$obj,$key) {
-         switch($table) {
-           case 'block_assmgr_resource':
-               $resource_type = $this->get_resource_type($obj->resource_type_id);
-                $resource = new $resource_type->name;
-                return $resource->audit_type();
-               break;
-
-            case 'block_assmgr_evidence':
-                return  ($key == 'id') ? get_string('evidencename', 'block_assmgr') : get_string('evidence', 'block_assmgr').' '.$key;
-                break;
-
-            case 'block_assmgr_confirmation':
-                return get_string('confirmationstatus', 'block_assmgr');
-                break;
-
-            case 'block_assmgr_sub_evid_type':
-                return get_string('submissionevidencetype', 'block_assmgr');
-                break;
-
-            case 'block_assmgr':
-                if ($key == 'evidence_id') return get_string('submittedevidence', 'block_assmgr');
-                if ($key == 'assess_ready') return get_string('submissionhiddenstatus', 'block_assmgr');
-                break;
-
-            case 'block_assmgr_claim':
-                if ($key == 'outcome_id') return get_string('claim', 'block_assmgr');
-                break;
-
-            case 'block_assmgr_portfolio':
-                if ($key == 'course_id') return get_string('course', 'block_assmgr');
-                break;
-
-            case 'block_assmgr_grade':
-
-            case 'portfolio_outcome_grade':
-                if ($key == 'str_grade') {
-                    if (!empty($obj->outcome_id)) {
-                        $record = $this->get_outcome($obj->outcome_id);
-                        if (!empty($record)) return get_string('outcome', 'block_assmgr').': '.$record->shortname.' '.get_string('grade', 'block_assmgr').':';
-                    }
-                }
-                return $key;
-
-            case 'portfolio_grade':
-                if ($key == 'str_grade') return get_string('grade', 'block_assmgr');
-                break;
-
-            case 'assessment date':
-                if ($key == 'date') return get_string('assessmentdate', 'block_assmgr');
-                if ($key == 'comment') return get_string('assessmentdatecomment', 'block_assmgr');
-                break;
-
-            case 'block_assmgr_verification':
-                if ($key == 'category_id') return get_string('verificationcategory', 'block_assmgr');
-                if ($key == 'course_id') return get_string('verificationcourse', 'block_assmgr');
-                if ($key == 'assessor_id') return get_string('verificationassessor', 'block_assmgr');
-                if ($key == 'complete') return get_string('verificationcomplete', 'block_assmgr');
-                break;
-
-            case 'block_assmgr_verify_form':
-                if ($key == 'accurate') return get_string('verificationaccurate', 'block_assmgr');
-                if ($key == 'accurate_comment') return get_string('verificationaccuratecom', 'block_assmgr');
-                if ($key == 'constructive') return get_string('verificationconstructive', 'block_assmgr');
-                if ($key == 'constructive_comment') return get_string('verificationconstructivecom', 'block_assmgr');
-                if ($key == 'needs_amending') return get_string('verificationamendment', 'block_assmgr');
-                if ($key == 'amendment_comment') return get_string('verificationamendmentcom', 'block_assmgr');
-               if ($key == 'actions') return get_string('verificationactions', 'block_assmgr');
-
-               break;
-        }
-        return $key;
-
-
-     }
-*/
 
 
      /**
@@ -665,8 +417,7 @@ class ilp_logging {
                 return get_string( 'ilp_user_status_item', 'block_ilp' );
                 
             default:
-                return 'unknown';
-                //return get_string('unknown', 'block_assmgr');
+                return get_string('unknown', 'block_ilp');
         }
 
      }

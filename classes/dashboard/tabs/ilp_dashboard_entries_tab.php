@@ -82,9 +82,9 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 							$detail->report_id		=	$r->id;
 							$detail->name			=	$r->name;
 							
-							$iconfile				=	(!empty($r->iconfile)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$r->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif"; 
+							$binary_icon				=	(!empty($r->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$r->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif"; 
 							
-							$detail->icon 	=	 "<img id='reportimage' alt='$r->name ".get_string('reports','block_ilp')."' src='$iconfile' />";
+							$detail->icon 	=	 "<img id='reporticon' class='icon_small' alt='$r->name ".get_string('reports','block_ilp')."' src='$binary_icon' />";
 							
 							//does this report have a state field
 							
