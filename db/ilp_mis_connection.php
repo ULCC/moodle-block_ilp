@@ -247,30 +247,6 @@ class ilp_mis_connection{
         return $rtn;
     }
 
-    public function get_attendance_summary_by_term( $student_id ){
-        $cal = new calendarfuncs( $this->params[ 'termdatelist' ] );
-        $reportlist = array();
-        $termlist = array( 'Overall'=>null, 'Autumn'=>0, 'Spring'=>1, 'Summer'=>2 );
-        //foreach( $cal->termdatelist as $startend ){
-        foreach( $termlist as $termname=>$termindex ){
-            if( $termindex ){
-                $startend = $cal->termdatelist[ $termindex ];
-	            $start = $startend[ 0 ];
-	            $end = $startend[ 1 ];
-                $suffix = "from $start to $end";
-	            $this->params[ 'start_date' ] = $start;
-	            $this->params[ 'end_date' ] = $end;
-            }
-            else{
-                $suffix = '';
-	            $this->params[ 'start_date' ] = null;
-	            $this->params[ 'end_date' ] = null;
-            }
-            $reportlist[ $termname ] = $this->get_attendance_summary( $student_id );
-        }
-        return $reportlist;
-    }
-
     /*
     * get student's attendance percentages broken down by course
     * @param int $student_id
@@ -320,8 +296,8 @@ class ilp_mis_connection{
         //return $reportlist;
     }
 
-    public function get_attendance_summary( $student_id ){
-        return $this->get_attendance_report( $student_id );
+    public function get_attendance_summary( $student_id , $start=null, $end=null ){
+        return $this->get_attendance_report( $student_id, null, 'unnamed', $start, $end );
     }
     /*
     * the main function for returning data back to the controller for display
@@ -624,45 +600,6 @@ class ilp_mis_connection{
         return $this->get_top_item( $res, 'n' );
     }
 
-    /*
-    * for test only - take an array of arrays and render as an html table
-    * @param array of arrays $list
-    * @return string of arrays
-    */
-    public function test_entable( $list ){
-        //construct an html table and return it
-        $rowlist = array();
-        $celltag = 'th';
-        foreach( $list as $row ){
-            $row_items = array();
-            foreach( $row as $item ){
-                $row_items[] = $this->entag( $celltag, $item, array( 'align'=>'LEFT' ) );
-            }
-            $rowlist[] = $this->entag( 'tr' , implode( '' , $row_items ) );
-            $celltag = 'td';
-        }
-        return $this->entag( 'table' , implode( "\n", $rowlist ) , $params=array( 'border'=>1 ) );
-    }
-
-    /*
-    * for test only - enclose a value in html tags
-    * @param string $tag
-    * @param string  or boolean $meat
-    * @param $params array of $key=>$value
-    * @return string
-    */
-    public function entag( $tag, $meat=false , $params=false ){
-        $pstring = '';
-        if( $params ){
-            foreach( $params as $key=>$value ){
-                $pstring .= " $key=\"$value\"";
-            }
-        }
-        if( false !== $meat ){
-            return "<$tag$pstring>$meat</$tag>";
-        }
-        return "<$tag$pstring />";
-    }
     /*
     * @param int student_id
     * @return array of arrays

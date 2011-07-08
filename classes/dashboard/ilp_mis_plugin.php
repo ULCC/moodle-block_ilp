@@ -17,6 +17,9 @@
 //require the ilp_plugin.php class 
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_plugin.php');
 
+//require the data connection class
+require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
+
 abstract class ilp_mis_plugin extends ilp_plugin {
 	
 	public 		$templatefile;
@@ -24,12 +27,16 @@ abstract class ilp_mis_plugin extends ilp_plugin {
 	/*
 	 * This var should hold the connection to the mis database
 	 */
-	public		$mis; 
+	public		$db; 
+
+    protected $params;  //initialisation params set at invocation time
+    protected $data=array();    //array of arrays for displaying as table rows
+    protected $blank="&nbsp;";    //filler for blank table cells - test only
 	
 	/**
      * Constructor
      */
-    function __construct() {
+    function __construct( $params ) {
     	global	$CFG;
     	
 		//set the directory where plugin files of type ilp_dashboard_tab are stored  
@@ -43,6 +50,11 @@ abstract class ilp_mis_plugin extends ilp_plugin {
     	
     	//set the name of the template file should be a html file with the same name as the class
     	$this->templatefile		=	$this->plugin_class_directory.'/'.$this->name.'.html';
+
+        $this->set_params( $params );
+        $this->db = new ilp_mis_connection( $params );
+        $this->set_params( $params );
+        $this->db = new ilp_mis_connection( $params );
     }
 	
    	 /**
@@ -56,7 +68,53 @@ abstract class ilp_mis_plugin extends ilp_plugin {
      abstract function plugin_type();
      
      
+
+    protected function set_params( $params ){
+        $this->params = $params;
+    }
+
+    public function set_data(){}
 	
+
+    /*
+    * for test only - take an array of arrays and render as an html table
+    * @param array of arrays $list
+    * @return string of arrays
+    */
+    public static function test_entable( $list ){
+        //construct an html table and return it
+        $rowlist = array();
+        $celltag = 'th';
+        foreach( $list as $row ){
+            $row_items = array();
+            foreach( $row as $item ){
+                $row_items[] = self::entag( $celltag, $item, array( 'align'=>'LEFT' ) );
+            }
+            $rowlist[] = self::entag( 'tr' , implode( '' , $row_items ) );
+            $celltag = 'td';
+        }
+        return self::entag( 'table' , implode( "\n", $rowlist ) , $params=array( 'border'=>1 ) );
+    }
+
+    /*
+    * for test only - enclose a value in html tags
+    * @param string $tag
+    * @param string  or boolean $meat
+    * @param $params array of $key=>$value
+    * @return string
+    */
+    public static function entag( $tag, $meat=false , $params=false ){
+        $pstring = '';
+        if( $params ){
+            foreach( $params as $key=>$value ){
+                $pstring .= " $key=\"$value\"";
+            }
+        }
+        if( false !== $meat ){
+            return "<$tag$pstring>$meat</$tag>";
+        }
+        return "<$tag$pstring />";
+    }
 	
 	
 }

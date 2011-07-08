@@ -32,9 +32,9 @@ define("COURSE_NAME_FIELD", 'COURSENAME');
 define("SESSION_DATE_FIELD", 'DATE');
 define("SESSION_TIME_FIELD", 'REGISTERNAME');
 
-$PRESENT_CODE = array('4','6','1','#','V','E','P','A','C','/','L','X');
+$PRESENT_CODE = array('4','6','1','#','V','E','P','A','C','/','L', 'X');
 $ABSENT_CODE =  array('Z','R','S','O','@','H','5','0');
-$LATE_CODE =  array('L','X');
+$LATE_CODE =  array('L','X');   //shouold be a subset of $PRESENT_CODE
 $NO_CLASS_CODE = array('N','-','Y',NULL);
 
 $total = array();

@@ -9,11 +9,14 @@ require_once($CFG->dirroot.'/blocks/ilp/db/mis_constants.php');
 
 //refactor exotic mis functions to plugin
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
-require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_plugin.php');
+//require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_detail_plugin_simple.php');
 
 $student_id 	= $PARSER->optional_param('student_id', 0, PARAM_INT);
 $term_id 	= $PARSER->optional_param('term_id', 0, PARAM_INT);
 $display_style  = $PARSER->optional_param( 'display_style', 'simple', PARAM_CLEAN );
+
+$plugin_name = "ilp_mis_attendance_detail_plugin_$display_style";
+require_once( $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis/$plugin_name.php" );
 
 $params = array(
             'prefix' => '',
@@ -22,8 +25,8 @@ $params = array(
             'present_code_list' => $PRESENT_CODE,
             'absent_code_list' => $ABSENT_CODE,
             'late_code_list' => $LATE_CODE,
-            'start_date' => '2011-08-10',
-            'end_date' => '2010-07-30',
+            'start_date' => '2010-08-10',
+            'end_date' => '2011-07-30',
             'week1' => '2010-08-09',
             'lecture_time_field' => 'start',
 
@@ -45,6 +48,13 @@ $params = array(
                 array( '2011-04-13', '2011-06-30' )
             )
 );
+
+$mis = new $plugin_name( $params );
+$mis->set_data( $student_id, $term_id );
+$mis->display();
+exit;
+
+/////////just test stuff below here ////////////////////////////////
 
 /*
 $cal = new calendarfuncs();
