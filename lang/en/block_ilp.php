@@ -91,6 +91,8 @@
 	$string['midcsscolour']			=	'Mid range CSS colour';
 	$string['midcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in the mid range';
 	$string['miscoptions']		 	= 	'Misc Options';
+	$string['mis_pluginsettings']	= 	'MIS plugin settings';
+	
 	$string['move']		 			= 	'Move';
 	$string['movedown'] 			= 	'Move down';
 	$string['moveleft'] 			= 	'Move left';

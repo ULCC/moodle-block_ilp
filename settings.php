@@ -102,7 +102,30 @@ $settings->add($miscsettings);
 $maxreports			=	new admin_setting_configtext('block_ilp/maxreports',get_string('maxreports','block_ilp'),get_string('maxreportsconfig','block_ilp'),ILP_DEFAULT_LIST_REPORTS,PARAM_INT);
 $settings->add($maxreports);
 
+$misplugin_settings 	= new admin_setting_heading('block_ilp/mis_plugins', get_string('mis_pluginsettings', 'block_ilp'), '');
+// -----------------------------------------------------------------------------
+// Get MIS plugin settings
+// -----------------------------------------------------------------------------
+$settings->add($misplugin_settings);
+global $CFG;
 
+$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+
+$mis_plugins = assmgr_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
+
+foreach ($mis_plugins as $plugin_file) {
+
+    require_once($plugins.'/'.$plugin_file.".php");
+    // instantiate the object
+    $class = basename($plugin_file, ".php");
+    $pluginobj = new $class();
+    $method = array($pluginobj, 'config_settings');
+
+    //check whether the config_settings method has been defined
+    if (is_callable($method,true)) {
+        $settings = $pluginobj->config_settings($settings);
+    }
+}
 
 
 ?>

@@ -1859,6 +1859,16 @@ class ilp_db_functions	extends ilp_logging {
     
     
     
+    /**
+     * Returns all currently installed mis plugins
+     * 
+     * @return array of recordset objects or bool false
+     */
+    function get_mis_plugins() 	{
+    	return	$this->dbc->get_records('block_ilp_mis_plugin');
+    }
+    
+    
     
     
     

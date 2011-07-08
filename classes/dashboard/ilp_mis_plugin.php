@@ -45,8 +45,17 @@ abstract class ilp_mis_plugin extends ilp_plugin {
     	$this->templatefile		=	$this->plugin_class_directory.'/'.$this->name.'.html';
     }
 	
-	public function display(){
-    }
+   	 /**
+     * Force extending class to implement a display function
+     */
+     abstract function display();
+     
+     /**
+     * Force extending class to implement the plugin type function
+     */
+     abstract function plugin_type();
+     
+     
 	
 	
 	
