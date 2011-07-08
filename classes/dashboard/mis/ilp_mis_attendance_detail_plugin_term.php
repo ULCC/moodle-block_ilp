@@ -56,8 +56,9 @@ class ilp_mis_attendance_detail_plugin_term extends ilp_mis_plugin{
                 $start = $this->params[ 'start_date' ];
                 $end = $this->params[ 'end_date' ];
             }
-            $reportlist[ $termname ] = $this->db->get_attendance_summary( $student_id, $start, $end );
+            $reportlist[ $termname ] = $this->get_attendance_summary( $student_id, $start, $end );
         }
         return $reportlist;
     }
+    public function plugin_type(){}
 }

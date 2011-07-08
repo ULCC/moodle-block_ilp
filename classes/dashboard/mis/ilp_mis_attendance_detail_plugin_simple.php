@@ -22,7 +22,7 @@ class ilp_mis_attendance_detail_plugin_simple extends ilp_mis_plugin{
 	        $this->data = $this->get_simple_summary( $student_id );
     }
     protected function get_simple_summary( $student_id ){
-        $data = $this->db->get_attendance_summary( $student_id );
+        $data = $this->get_attendance_summary( $student_id );
         return array(
             $this->get_local_student_header_row( $student_id ),
             array( 'attendance' , $data[ 'attendance' ] ),
@@ -32,4 +32,5 @@ class ilp_mis_attendance_detail_plugin_simple extends ilp_mis_plugin{
     protected function get_local_student_header_row( $student_id ){
         return array( 'student id' , $student_id );
     }
+    public function plugin_type(){}
 }

@@ -49,6 +49,22 @@ $params = array(
             )
 );
 
+foreach( array(
+            'simple',
+            'term',
+            'course',
+            'monthlycoursebreakdown',
+            'register'
+        ) as $display_style ){
+            $plugin_name = "ilp_mis_attendance_detail_plugin_$display_style";
+            require_once( $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis/$plugin_name.php" );
+			$mis = new $plugin_name( $params );
+			$mis->set_data( $student_id, $term_id );
+            echo "<h3>$plugin_name</h3>";
+			$mis->display();
+}
+exit;
+
 $mis = new $plugin_name( $params );
 $mis->set_data( $student_id, $term_id );
 $mis->display();

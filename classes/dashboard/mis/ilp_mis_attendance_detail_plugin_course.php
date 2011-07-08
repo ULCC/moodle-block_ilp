@@ -19,24 +19,23 @@ class ilp_mis_attendance_detail_plugin_course extends ilp_mis_plugin{
     }
 
     public function set_data( $student_id ){
-        $this->data = $this->get_attendance_summary_by_course( $student_id );
+        $this->data = $this->format_for_display( $this->get_attendance_summary_by_course( $student_id ) );
     }
 
-    protected function get_attendance_summary_by_course( $student_id ){
-        $data = $this->db->get_attendance_summary_by_course( $student_id );
+    private function format_for_display( $data ){
         $tablerowlist = array();
         $tablerowlist[] = array(
             'Subject',
             'Attendance',
             'Punctuality'
         );
-        foreach( $data as $subject=>$row ){
+        foreach( $data as $subject => $row ){
             $tablerowlist[] = array(
-                $subject,
-                $row[ 'attendance' ],
-                $row[ 'punctuality' ]
+                $subject, $row[ 'attendance' ], $row[ 'punctuality' ]
             );
         }
         return $tablerowlist;
     }
+
+    public function plugin_type(){}
 }
