@@ -32,5 +32,7 @@ class ilp_mis_attendance_detail_plugin_simple extends ilp_mis_plugin{
     protected function get_local_student_header_row( $student_id ){
         return array( 'student id' , $student_id );
     }
-    public function plugin_type(){}
+    public function plugin_type(){
+        return 'detail';
+    }
 }

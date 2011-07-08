@@ -21,7 +21,9 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_plugin{
     public function set_data( $student_id, $term_id ){
         $this->data = $this->get_register_entries( $student_id , $term_id );
     }
-    public function plugin_type(){}
+    public function plugin_type(){
+        return 'detail';
+    }
 
     /*
     * get the weekly attendance data for a user and return an array for display in a table

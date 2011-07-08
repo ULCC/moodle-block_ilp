@@ -37,5 +37,7 @@ class ilp_mis_attendance_detail_plugin_course extends ilp_mis_plugin{
         return $tablerowlist;
     }
 
-    public function plugin_type(){}
+    public function plugin_type(){
+        return 'detail';
+    }
 }

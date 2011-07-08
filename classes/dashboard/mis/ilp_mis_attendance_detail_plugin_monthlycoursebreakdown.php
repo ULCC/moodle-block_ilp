@@ -21,7 +21,9 @@ class ilp_mis_attendance_detail_plugin_monthlycoursebreakdown extends ilp_mis_pl
     public function set_data( $student_id, $display_style ){
 	        $this->data = $this->get_monthly_course_breakdown( $student_id );
     }
-    public function plugin_type(){}
+    public function plugin_type(){
+        return 'detail';
+    }
 
     /*
     * step through a student's courses, and for each course return attendance percentage for each month

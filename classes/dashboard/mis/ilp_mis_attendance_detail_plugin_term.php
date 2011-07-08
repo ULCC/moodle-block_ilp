@@ -60,5 +60,7 @@ class ilp_mis_attendance_detail_plugin_term extends ilp_mis_plugin{
         }
         return $reportlist;
     }
-    public function plugin_type(){}
+    public function plugin_type(){
+        return 'detail';
+    }
 }

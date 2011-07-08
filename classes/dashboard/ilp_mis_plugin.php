@@ -75,6 +75,10 @@ abstract class ilp_mis_plugin extends ilp_plugin {
 
     public function set_data(){}
 	
+    function config_settings(&$settings) {
+        return $this->params;
+    }
+
     protected function get_attendance_summary( $student_id , $start=null, $end=null ){
         return $this->get_attendance_report( $student_id, null, 'unnamed', $start, $end );
     }
