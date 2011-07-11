@@ -22,7 +22,7 @@ class ilp_mis_attendance_detail_plugin_monthlycoursebreakdown extends ilp_mis_pl
 	        $this->data = $this->get_monthly_course_breakdown( $student_id );
     }
     public function plugin_type(){
-        return 'detail';
+        return 'overview';
     }
 
     /*

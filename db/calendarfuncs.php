@@ -107,7 +107,7 @@ class calendarfuncs{
         }
         $next_weekstart = clone( $tmp );
         $weekend = $tmp->modify( '-1 day' );
-        $weekslist[] = array( $weekstart->format( $date_format ), $weekend->format( $date_format ) );
+        //$weekslist[] = array( $weekstart->format( $date_format ), $weekend->format( $date_format ) );
         $tmp = clone( $next_weekstart );
         
             //now add complete weeks until we hit $end

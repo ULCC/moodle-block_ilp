@@ -139,12 +139,12 @@ abstract class ilp_mis_plugin extends ilp_plugin {
         $course_label_field = $this->params[ 'course_label_field' ];
         $student_id_field = $this->params[ 'student_id_field' ];
         $table = $this->params[ 'attendance_view' ];
-        $sql = <<<EOQ
+        $sql = "
             SELECT $course_id_field, $course_label_field 
             FROM $table 
-            WHERE $student_id_field = "$student_id"
+            WHERE $student_id_field = '$student_id'
             GROUP BY $course_id_field
-EOQ;
+        ";
         return $this->db->execute( $sql )->getRows();
     }
 
@@ -259,15 +259,23 @@ EOQ;
         $acode_field = $this->params[ 'code_field' ];
         $student_id_field = $this->params[ 'student_id_field' ];
         $course_id_field = $this->params[ 'course_id_field' ];
-        $timefield = $this->params[ 'timefield' ];
+        $timefield = $this->params[ 'timefield_start' ];
+        $timefield_end = $this->params[ 'timefield_end' ];
         
         if( $countonly ){
             $selectclause = "COUNT( $slid_field ) n";
         }
         else{
-            $selectclause = "$slid_field id, $acode_field, $timefield, CONCAT( date_format( $timefield , '%I' ), ':' , DATE_FORMAT( $timefield , '%i' ) ) clocktime, date_format( $timefield , '%a' ) dayname";
+            $selectclause = "$slid_field id, $acode_field, $timefield, date_format( $timefield , '%I:%i' ) clocktime, DATE_FORMAT( $timefield_end, '%I:%i' ) clocktime_end, date_format( $timefield , '%a' ) dayname,
+            room, tutor
+            ";
             if( $this->params[ 'extra_fieldlist' ] ){
                 foreach( $this->params[ 'extra_fieldlist' ] as $field=>$alias ){
+                    $selectclause .= ", $field $alias";
+                }
+            }
+            if( $this->params[ 'extra_numeric_fieldlist' ] ){
+                foreach( $this->params[ 'extra_numeric_fieldlist' ] as $field=>$alias ){
                     $selectclause .= ", $field $alias";
                 }
             }
@@ -283,11 +291,11 @@ EOQ;
             $whereandlist[] = "$acode_field IN  ('" . implode( "','" , $attendancecode_list ) . "')";
         }
         $whereclause = implode( ' AND ' , $whereandlist );
-        $sql = <<<EOQ
+        $sql = "
             SELECT $selectclause
             FROM $table
             WHERE $whereclause
-EOQ;
+        ";
         $res = $this->db->execute( $sql )->getRows();
         if( $countonly ){
             return ilp_mis_connection::get_top_item( $res, 'n' );
@@ -308,7 +316,7 @@ EOQ;
         $rtn = array();
         if( !$fieldalias ){
             $timetable_table = $this->params[ 'attendance_view' ];
-            $timefield = $this->params[ 'timefield' ];
+            $timefield = $this->params[ 'timefield_start' ];
             $fieldalias = "$timetable_table.$timefield";
         }
         //$fieldalias = "`$fieldalias`";  //backtick the fieldname
@@ -344,7 +352,7 @@ EOQ;
         $lecture_id_field = $this->params[ 'lecture_id_field' ];
         $student_id_field = $this->params[ 'student_id_field' ];
         $course_id_field = $this->params[ 'course_id_field' ];
-        $timefield = $this->params[ 'timefield' ];
+        $timefield = $this->params[ 'timefield_start' ];
         if( $student_id ){
             $whereandlist = array( "$student_id_field = '$student_id'" );
         }
@@ -354,7 +362,7 @@ EOQ;
         if( $course_id ){
             $whereandlist[] = "$course_id_field = '$course_id'";
         }
-        $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( $this->params[ 'timefield' ], false, $start, $end ) );
+        $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( $this->params[ 'timefield_start' ], false, $start, $end ) );
         $whereclause = implode( ' AND ' , $whereandlist );
         $sql = "SELECT COUNT( DISTINCT( $lecture_id_field ) ) n
                 FROM $table

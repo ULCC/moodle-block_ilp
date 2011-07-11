@@ -25,7 +25,7 @@ $params = array(
             'present_code_list' => $PRESENT_CODE,
             'absent_code_list' => $ABSENT_CODE,
             'late_code_list' => $LATE_CODE,
-            'start_date' => '2010-08-10',
+            'start_date' => '2010-08-09',
             'end_date' => '2011-07-30',
             'week1' => '2010-08-09',
             'lecture_time_field' => 'start',
@@ -37,9 +37,17 @@ $params = array(
             'course_id_field' => 'course_id',
             'course_label_field' => 'course_title',
             'lecture_id_field' => 'lecture_id',
-            'timefield' => 'start',
+            'timefield_start' => 'start',
+            'timefield_end' => 'end',
+            'room' => 'room',
+            'tutor' => 'tutor',
             'code_field' => 'attendance_code',
             'extra_fieldlist' => array( 'attendance_cat' => 'cat' ),
+            'extra_numeric_fieldlist' => array( 'marksPresent' => 'P' ,
+                                     			 'marksAbsent' => 'A' ,
+                                        	     'marksAuthAbsent' => 'U' ,
+                                        		'marksLate' => 'L' ),
+			
 
             'termdatelist' => array(
                 array(),                                //just here to force 1-based indexing
@@ -50,17 +58,18 @@ $params = array(
 );
 
 foreach( array(
-            'simple',
-            'term',
-            'course',
-            'monthlycoursebreakdown',
-            'register'
-        ) as $display_style ){
+            '8.1' => 'simple',
+            '8.3' => 'term',
+            '8.4' => 'course',
+            '8.5' => 'monthlycoursebreakdown',
+            '9.1' => 'class',
+            '9.2' => 'register'
+        ) as $ref => $display_style ){
             $plugin_name = "ilp_mis_attendance_detail_plugin_$display_style";
             require_once( $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis/$plugin_name.php" );
 			$mis = new $plugin_name( $params );
 			$mis->set_data( $student_id, $term_id );
-            echo "<h3>$plugin_name</h3>";
+            echo "<h3>$ref $plugin_name</h3>";
 			$mis->display();
 }
 exit;

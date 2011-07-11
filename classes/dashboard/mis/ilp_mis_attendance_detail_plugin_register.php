@@ -65,7 +65,7 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_plugin{
         $tablerowlist[ 'weeks' ] = $weekrow;
 
         $courselist = $this->get_courselist( $student_id );
-        $timefield = $this->params[ 'timefield' ];
+        $timefield = $this->params[ 'timefield_start' ];
         $attendance_data = array();     //will build into a list of stats for each course-weekday
         foreach( $courselist as $course ){
             foreach( $weeklist as $week ){

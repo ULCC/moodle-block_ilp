@@ -83,6 +83,8 @@ class ilp_mis_connection{
             'start_date',                       //start date to be applied generically to queries
             'end_date',                         //end date to be applied generically to queries
             'week1',                            //date of the first day of week 1 in the particular institution's calendar
+            'room',                            //room id of lecture venue
+            'tutor',                            //lecturor name
 
             'attendance_view',                  //view or table containing all the relevant attendance data
             'studentlecture_attendance_id',     //primary key of attendance view - unique identifier for a single student-lecture attendance event
@@ -91,9 +93,11 @@ class ilp_mis_connection{
             'course_id_field',                  //fieldname in attendance_view identifying a course
             'course_label_field',               //fieldname in attendance_view giving a course display name
             'lecture_id_field',                 //fieldname in attendance_view giving a lecture id
-            'timefield',                        //fieldname in attendance_view giving the date of a lecture
-            'code_field',                        //fieldname in attendance_veiw containing the attendance code
-            'extra_fieldlist',                   //array of fieldname=>label which can be added to data retrieved to show on a page
+            'timefield_start',                  //fieldname in attendance_view giving the date of a lecture
+            'timefield_end',                    //fieldname in attendance_view giving the date of a lecture
+            'code_field',                       //fieldname in attendance_veiw containing the attendance code
+            'extra_fieldlist',                  //array of fieldname=>label which can be added to data retrieved to show on a page
+            'extra_numeric_fieldlist',          //array of fieldname for numeric type fields which can be summed
 
             'termdatelist'                      //array of term dates - each member is an array containing start date and end date
         );
@@ -208,7 +212,10 @@ class ilp_mis_connection{
                         'course_id_field',
                         'course_label_field',
                         'lecture_id_field',
-                        'timefield',
+                        'timefield_start',
+                        'timefield_end',
+                        'room',
+                        'tutor',
                         'code_field'
                     );
                     $missinglist = array();
