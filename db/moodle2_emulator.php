@@ -300,7 +300,26 @@ class moodle2_renderer_emulator {
     function set_heading() {
         // do nothing :-)
     }
-
+    
+    
+     /**
+     *
+     * @param string $heading the main heading that should be displayed at the top of the <body>.
+     */
+    function set_pagelayout() {
+    	   // do nothing :-)
+    }
+    
+    /**
+     *
+     * @param string $heading the main heading that should be displayed at the top of the <body>.
+     */
+    function set_pagetype() {
+    	   // do nothing :-)
+    }
+    
+    
+    
     /**
      * Return the moodle_url for an image.
      * The exact image location and extension is determined

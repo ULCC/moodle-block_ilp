@@ -155,10 +155,17 @@ $PAGE->navbar->add(get_string('dashboard','block_ilp'),$CFG->wwwroot."/blocks/il
 
 $title	=	(empty($comment_id))?	get_string('addcomment','block_ilp')	:	get_string('editcomment','block_ilp');
 
+// setup the page specific variables
+$SITE	=	$this->dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." ".get_string('ilpname', 'block_ilp')." ".fullname($plpuser));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagetype('ilp-entry');
+$PAGE->set_pagelayout('ilp');
+$PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
+
 //section name
 $PAGE->navbar->add($title);
 
-$PAGE->set_title($title);
 //require edit_reportentry html
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_entrycomment.html');
 

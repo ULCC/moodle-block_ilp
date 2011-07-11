@@ -164,13 +164,13 @@ class ilp_plugin {
                     // instantiate the object
                     $class = basename($file, ".php");
                     
-                    $dashpluginobj = new $class();
+                    $pluginobj = new $class();
                     
                     // update the resource_types table
-                    $id	=	$dbc->create_plugin($dashpluginobj->get_plugin_table(),$dashpluginobj->get_name());
+                    $id	=	$dbc->create_plugin($pluginobj->get_plugin_table(),$pluginobj->get_name());
                     
                     // any additional functions that must be carried that are specific to a child class can be carried out in the install function
-                    $dashpluginobj->install($id);
+                    $pluginobj->install($id);
                 }
             }
         }

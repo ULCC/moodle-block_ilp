@@ -58,9 +58,14 @@ $PAGE->navbar->add(get_string('reportpermissions', 'block_ilp'),null,'title');
 
 
 // setup the page title and heading
-$PAGE->set_title(get_string('blockname','block_ilp'));
-$PAGE->set_heading(get_string('reportconfiguration', 'block_ilp'));
+$SITE	=	$this->dbc->course_id(SITEID);
+
+$PAGE->set_title($SITE->fullname);
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagetype('ilp-configuration-field');
+$PAGE->set_pagelayout('ilp');
 $PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
+
 
 $blockcapabilities	=	$dbc->get_block_capabilities();
 

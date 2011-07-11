@@ -1869,7 +1869,30 @@ class ilp_db_functions	extends ilp_logging {
     }
     
     
-    
+  	/**
+     * Returns the mis plugin with the id given 
+     * 
+     * @param int $plugin_id
+     * 
+     * @return mixed object containing the plugin record selected 
+     */
+  	function get_mis_plugin_by_id($plugin_id)	{
+  		return $this->dbc->get_record('block_ilp_mis_plugin',array('id'=>$plugin_id));
+  	}
+  	
+  	
+  	/**
+  	 * Updates the given mis plugin record
+  	 * 
+  	 * @param object $misrecord
+  	 * 
+  	 * @return bool true or false
+  	 */
+  	function update_mis_plugin($misrecord) {
+  		return $this->update_record('block_ilp_mis_plugin',$misrecord);
+  	}
+  	
+  	
     
     
     

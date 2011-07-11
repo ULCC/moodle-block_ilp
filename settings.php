@@ -20,6 +20,30 @@ require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 // instantiate the assmgr db
 $dbc = new ilp_db();
 
+require_once ($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
+
+//install new plugins
+ilp_element_plugin::install_new_plugins();
+
+
+require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_template.php');
+//install new templates
+ilp_dashboard_template::install_new_plugins();
+
+require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_plugin.php');
+//install new dashboard plugins
+ilp_dashboard_plugin::install_new_plugins();
+
+require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_tab.php');
+//install new tabs
+ilp_dashboard_tab::install_new_plugins();
+
+require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
+//install new tabs
+ilp_mis_plugin::install_new_plugins();
+
+
+
 $globalsettings 	= new admin_setting_heading('block_ilp/userstatus', get_string('userstatus', 'block_ilp'), '');
 
 $settings->add($globalsettings);
@@ -111,7 +135,7 @@ global $CFG;
 
 $plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
 
-$mis_plugins = assmgr_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
+$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
 
 foreach ($mis_plugins as $plugin_file) {
 

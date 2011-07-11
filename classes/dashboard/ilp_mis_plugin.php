@@ -17,8 +17,9 @@
 //require the ilp_plugin.php class 
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_plugin.php');
 
-//require the data connection class
-require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
+//require the ilp_mis_connection.php file 
+require_once($CFG->dirroot.'/blocks/ilp/db/ilp_mis_connection.php');
+
 
 abstract class ilp_mis_plugin extends ilp_plugin {
 	
@@ -53,10 +54,39 @@ abstract class ilp_mis_plugin extends ilp_plugin {
 
         $this->set_params( $params );
         $this->db = new ilp_mis_connection( $params );
-        $this->set_params( $params );
-        $this->db = new ilp_mis_connection( $params );
     }
 	
+    /**
+     * Installs any new plugins
+     */
+    public function install_new_plugins() {
+    	global $CFG;
+    	
+        // include the ilp db
+        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+
+        // instantiate the ilp db class needed as this function will be called 
+        //when not in object context
+        $dbc = new ilp_db();
+    	
+    	//call the install new plugins function from the parent class
+    	//pass the list of plugins currently installed to it
+        parent::install_new_plugins($dbc->get_mis_plugins(),$CFG->dirroot."/blocks/ilp/classes/dashboard/mis");
+
+    }
+    
+    
+    /**
+     * This fucntion updates the install plugin record it sets the plugin type (overview or detail)
+     */
+    function install($plugin_id) {
+    	$misplugin	=	$this->dbc->get_mis_plugin_by_id($plugin_id);
+    	
+    	$misplugin->type	=	$this->plugin_type();
+    	
+    	$this->dbc->update_mis_plugin($misplugin);
+    }
+    
    	 /**
      * Force extending class to implement a display function
      */

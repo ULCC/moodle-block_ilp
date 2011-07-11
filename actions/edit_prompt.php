@@ -61,11 +61,14 @@ $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot.
 //get string for create report
 $PAGE->navbar->add(get_string('reportfields', 'block_ilp'),null,'title');
 
-
-// setup the page title and heading
-$PAGE->set_title(get_string('blockname','block_ilp'));
-$PAGE->set_heading(get_string('reportconfiguration','block_ilp'));
+// setup the page specific variables
+$SITE	=	$this->dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." ".get_string('ilpname', 'block_ilp')." ".get_string('reportconfiguration', 'block_ilp'));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagetype('ilp-configuration');
+$PAGE->set_pagelayout('ilp');
 $PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
+
 
 $promptmform	= new	add_prompt_mform($report_id);
 

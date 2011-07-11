@@ -2,7 +2,7 @@
 
 require_once( $CFG->dirroot . '/blocks/ilp/classes/form_elements/ilp_element_plugin_mform.php' );
 
-class ilp_element_plugin_mform_itemlist extends ilp_element_plugin_mform {
+class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 
 	public $tablename;
 	public $items_tablename;
