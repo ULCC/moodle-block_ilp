@@ -40,85 +40,49 @@ class ilp_mis_connection{
     * @param array $params
     * @param boolean $debug
     */
-    public function __construct( $params=array(), $debug=false ){
+    public function __construct( $cparams=array(), $debug=false ){
         global $CFG;
         $this->db = false;
         $this->errorlist = array();
-        //$this->prefix = $CFG->prefix;
-        $this->params = array(
+
+        //set default conenction settings        
+        $this->connectionparams = array(
 		    'dbconnectiontype' => get_config( 'block_ilp', 'dbconnectiontype' ),
 		    'host' => get_config( 'block_ilp', 'dbhost' ),
 		    'user' => get_config( 'block_ilp', 'dbuser' ),
 		    'pass'=> get_config( 'block_ilp', 'dbpass' ),
 		    'dbname' => get_config( 'block_ilp', 'dbname' )
         );
-        //also allow other class variables to be set optionally from input params
-        $this->settable_params = array(
-            'prefix',                           //table prefix (yet unused)
-            'student_table',                    //student tablename
-            'student_unique_key',               //student table primary key
-            'attendance_table',                 //attendance-at-lectures tablename
-            'attendance_table_unique_key',      //attendance table primary key
-            'attendance_studentid',             //fk field in attendance table matching student id
-            'attendance_lectureid',             //fk field in attendance table matching lecture id
-            'lecture_table',                    //lecture tablename
-            'lecture_unique_key',               //lecture table primary key
-            'lecture_courseid',                 //fk field in lecture table matching a course id
-            'lecture_attendance_id',            //fk field in lecture table matching an attendance code id
-            'attendancecode_table',             //attendance code tablename
-            'attendancecode_unique_key',        //attendance code table primary key
-            'attendancecode_id_field',          //attendance code table code field
-            'course_table',                     //course tablename
-            'course_table_unique_key',          //course table primary key
-            'course_table_namefield',           //course title field 
-            'student_course_table',             //link table linking student_ids with course_ids
-            'student_course_table_unique_key',  //student-course link table primary key
-            'student_course_student_key',       //fk field in student-course link table matching student id
-            'student_course_course_key',        //fk firld in student_course link table matching course id
-            'present_code_list',                //array of attendance codes classified as present
-            'absent_code_list',                 //array of attendance codes classified as absent
-            'late_code_list',                   //array of attendance codes classified as late (should be subset of present_code_list)
-            'timetable_table',                  //table containing info about the date of each lecture (will be set same as lecture_table if not given)
-            'lecture_time_field',               //name of field giving the date/time of each lecture, for time-limiting reports
-            'start_date',                       //start date to be applied generically to queries
-            'end_date',                         //end date to be applied generically to queries
-            'week1',                            //date of the first day of week 1 in the particular institution's calendar
-            'room',                            //room id of lecture venue
-            'tutor',                            //lecturor name
-
-            'attendance_view',                  //view or table containing all the relevant attendance data
-            'studentlecture_attendance_id',     //primary key of attendance view - unique identifier for a single student-lecture attendance event
-            'student_id_field',                 //fieldname in attendance_view identifying a student
-            'student_name_field',               //fieldname in attendance_view giving a student name for display
-            'course_id_field',                  //fieldname in attendance_view identifying a course
-            'course_label_field',               //fieldname in attendance_view giving a course display name
-            'lecture_id_field',                 //fieldname in attendance_view giving a lecture id
-            'timefield_start',                  //fieldname in attendance_view giving the date of a lecture
-            'timefield_end',                    //fieldname in attendance_view giving the date of a lecture
-            'code_field',                       //fieldname in attendance_veiw containing the attendance code
-            'extra_fieldlist',                  //array of fieldname=>label which can be added to data retrieved to show on a page
-            'extra_numeric_fieldlist',          //array of fieldname for numeric type fields which can be summed
-
-            'termdatelist'                      //array of term dates - each member is an array containing start date and end date
-        );
+       
         foreach( $this->settable_params as $var ){
                 $this->params[ $var ] = false;
         }
-        $this->set_params( $params );
+        
+        // take the params given and override the default settings if necessary 
+        $this->set_params( $this->connectionparams, $cparams );
+        
+        //build the connection
         $connectioninfo = $this->get_mis_connection( 
-            $this->params[ 'dbconnectiontype' ],  
-            $this->params[ 'host' ], 
-            $this->params[ 'user' ], $this->params[ 'pass' ], 
-            $this->params[ 'dbname' ] 
+            $this->connectionparams[ 'dbconnectiontype' ],  
+            $this->connectionparams[ 'host' ], 
+            $this->connectionparams[ 'user' ], 
+            $this->connectionparams[ 'pass' ], 
+            $this->connectionparams[ 'dbname' ] 
         );
+        
+        //check if there was an error when connecting
         if( $errorlist = $connectioninfo[ 'errorlist' ] ){
             //var_crap( $errorlist );exit;
         }
+        
+        //merge errors from ? and the connection then return false (we can display errors if wanted)
         $this->errorlist = array_merge( $this->errorlist, $connectioninfo[ 'errorlist' ] );
         if( $this->errorlist ){
             //var_crap( $this->errorlist );
             return false;
         }
+        
+        //give the connection to the db var
         $this->db = $connectioninfo[ 'db' ];
         return $this->db;
     }
@@ -161,6 +125,76 @@ class ilp_mis_connection{
         return $rtn;
     }
 
+    function arraytostring($paramarray)	{
+    	$str	=	'';
+    	
+    	if (!empty($paramarray) && is_array($paramarray)) 
+    	foreach ($paramarray as $k => $v) {
+    		$str	=	"{$str} {$and} ";
+    		$str	.=	(is_array($v)) ?	$k." ".$this->arraytostring($v) :	" $k $v";
+    		$and	=	' AND ';
+    	}
+    	
+    	return $str;
+    }
+    
+    
+    
+    /**
+     * builds an sql query using the given parameter and returns the results of the query 
+     * 
+     * @param string $table the name of the table or view that will be queried
+     * @param array  $whereparams array holding params that should be used in the where statement
+     * 				 format should be $k = field => array( $k= operand $v = field value) 
+     * 				 e.g array('id'=>array('='=>'1')) produces id = 1  
+     * @param array $fields 
+     * @param  $addionalargs
+     */
+    
+    
+    function return_table_values($table,$whereparams=null,$fields='*',$addionalargs=null) {
+    	
+    	//check if the fields param is an array if it is implode  
+    	$fields 	=	(is_array($fields))		?	implode(',',$fields)	:	$fields;		
+    	   	
+    	//create the select statement
+    	$select		=	"SELECT		{$fields} ";
+    	
+    	//create the from 
+    	$from		=	"FROM		{$table} ";
+    	
+    	//get the 
+    	$wheresql		=	$this->arraytostring($whereparams);
+    	
+    	$where			=	(!empty($wheresql)) ? $wheresql	: 	"";
+    	
+    	$sort		=	'';
+    	if (isset($addionalargs['sort']))	$sort		=	(!empty($addionalargs['sort']))	? "SORT BY {$addionalargs['sort']} "	: "";
+
+    	$group		=	'';
+    	if (isset($addionalargs['group']))	$group		=	(!empty($addionalargs['group']))	? "GROUP BY {$addionalargs['group']} "	: "";
+    	
+    	$limit		=	'';
+    	if (isset($addionalargs['lowerlimt']))	$limit		=	(!empty($addionalargs['lowerlimit']))	? "LIMIT {$addionalargs['lowerlimit']} "	: "";
+    	
+    	if (isset($addionalargs['upperlimt']))	{
+    		if (empty($limit)) {
+    			$limit		=	(!empty($addionalargs['upperlimt']))	? "LIMIT {$addionalargs['upperlimt']} "	: "";		
+    		} else {
+    			$limit		.=	(!empty($addionalargs['upperlimt']))	? ", {$addionalargs['upperlimt']} "	: "";
+    		}
+   		}
+   	
+    	$sql		=	$select.$from.$where.$sort.$group.$limit;
+    }
+    
+    
+    function return_stored_values($table,$args=null) {
+
+    	
+    	
+    }
+    
     /*
     * @param int $student_id
     * @return associative array
@@ -212,10 +246,7 @@ class ilp_mis_connection{
                         'course_id_field',
                         'course_label_field',
                         'lecture_id_field',
-                        'timefield_start',
-                        'timefield_end',
-                        'room',
-                        'tutor',
+                        'timefield',
                         'code_field'
                     );
                     $missinglist = array();
@@ -251,18 +282,16 @@ class ilp_mis_connection{
         }
     }
 
-    /*
-    * step through an array of $key=>$value and assign them to the class $params array
-    * @param associative array $params
+    /**
+    * step through an array of $key=>$value and assign them 
+    * to the class $params array
+    * @param array $arrayvar the array that will hold the params 
+    * @param array $params the params that will be passed to $arrayvar
+    * @return 
     */
-    protected function set_params( $params ){
+    protected function set_params( &$arrayvar,$params ){
         foreach( $params as $key=>$value ){
-            if( in_array( $key, $this->settable_params ) ){
-                $this->params[ $key ] = $value;  
-            }
-        }
-        if( !( $this->params[ 'timetable_table' ] ) ){
-            $this->params[ 'timetable_table' ] = $this->params[ 'lecture_table' ];
+            $arrayvar[ $key ] = $value;  
         }
     }
 
