@@ -57,16 +57,15 @@ $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot.
 //get string for create report
 $PAGE->navbar->add(get_string('previewreport', 'block_ilp'),null,'title');
 
-
 // setup the page title and heading
-$PAGE->set_title(get_string('blockname','block_ilp'));
-$PAGE->set_heading(get_string('reportconfiguration', 'block_ilp'));
-$PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
-
+$SITE	=	$dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp'));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagetype('ilp-configuration');
+$PAGE->set_pagelayout('ilp');
+$PAGE->set_url('/blocks/ilp/actions/report_entry_preview.php', $PARSER->get_params());
 
 $reportfields		=	$dbc->get_report_fields_by_position($report_id);
-
-
 
 //we will only attempt to display the preview form if there are elements in the 
 //form. if not we will send the user back to the edit_prompt page

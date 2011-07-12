@@ -238,32 +238,30 @@ class ilp_element_plugin {
 
     }
 
-        /*
-        * only necessary in listitem types
-        * just here for completeness
-        */
-        public function return_data( &$reportfield ){
-        }
+     /**
+     * only necessary in listitem types
+     * just here for completeness
+     */
+     public function return_data( &$reportfield ){
+     	
+     }
         
-    /*
+    /**
     * take an associative array returned from parsing an ini file
     * and return a string formatted for displaying in a text area on a management form
     */
     public static function itemlist_flatten( $configarray, $linesep="\n", $keysep=":" ){
-	$outlist = array();
-	foreach( $configarray as $key=>$value ){
-		$outlist[] = "$key$keysep$value";
-	}
-	return implode( $linesep , $outlist );
+		$outlist = array();
+		foreach( $configarray as $key=>$value ){
+			$outlist[] = "$key$keysep$value";
+		}
+		return implode( $linesep , $outlist );
     }
 
     /**
      * Delete the form entry
      */
     public final function delete($reportfield_id) {
-    	
-    	
-    	
         return false;
     }
 
@@ -386,7 +384,7 @@ class ilp_element_plugin {
 
 
 
-    /*
+    /**
     * make descendents of this function return false on occasions when
     * the element should not be added to a form
     * eg adding a category selector when there is already a

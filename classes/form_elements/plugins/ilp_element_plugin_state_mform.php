@@ -16,7 +16,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 	}
 
     /*
-    * the manager has entered the states in the fail and pass textareas on the mform
+    * the admin has entered the states in the fail and pass textareas on the mform
     * the values in those textareas have been made into arrays and sent to this function, to be categorised as fail, pass or unset 
     * @param array $statelist - list of values - should be a key and value from the state selector, so that if either of them matches, we can return a pass or fail value
     * @param array $fail_list - list of values to be classified as fail
@@ -37,8 +37,8 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
     }
 	
 		/**
-		textarea element to contain the options the manager wishes to add to the user form
-		manager will be instructed to insert value/label pairs in the following plaintext format:
+		textarea element to contain the options the admin wishes to add to the user form
+		admin will be instructed to insert value/label pairs in the following plaintext format:
 		value1:label1\nvalue2:label2\nvalue3:label3
 		or some such
 		*/
@@ -65,7 +65,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 			array('class' => 'form_input')
 	    );
 
-		//manager must specify at least 1 option, with at least 1 character
+		//admin must specify at least 1 option, with at least 1 character
         $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 	}
@@ -128,7 +128,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
        		         $entry = trim( $entry );
        		         $entryparts = explode( $keysep , $entry );
        		         if( 1 < count( $entryparts ) ){
-       		             //manager has copied a whole key:value string into the pass or fail textarea
+       		             //admin has copied a whole key:value string into the pass or fail textarea
        		             //so throw away the key 
        		             $entry = $entryparts[1];
        		         }

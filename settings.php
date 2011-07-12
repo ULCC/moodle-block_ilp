@@ -130,6 +130,7 @@ $misplugin_settings 	= new admin_setting_heading('block_ilp/mis_plugins', get_st
 // -----------------------------------------------------------------------------
 // Get MIS plugin settings
 // -----------------------------------------------------------------------------
+/*
 $settings->add($misplugin_settings);
 global $CFG;
 
@@ -151,5 +152,5 @@ foreach ($mis_plugins as $plugin_file) {
     }
 }
 
-
+*/
 ?>

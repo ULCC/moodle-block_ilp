@@ -133,7 +133,7 @@ class edit_status_item_mform extends ilp_moodleform {
 	       		         $entry = trim( $entry );
 	       		         $entryparts = explode( $keysep , $entry );
 	       		         if( 1 < count( $entryparts ) ){
-	       		             //manager has copied a whole key:value string into the pass or fail textarea
+	       		             //admin has copied a whole key:value string into the pass or fail textarea
 	       		             //so throw away the key 
 	       		             $entry = $entryparts[1];
 	       		         }
@@ -273,7 +273,7 @@ var_crap( $submitted_item );var_crap( $optionlist );
 		
     /*
     * copied from ilp_element_plugin_state_mform
-    * the manager has entered the states in the fail and pass textareas on the mform
+    * the admin has entered the states in the fail and pass textareas on the mform
     * the values in those textareas have been made into arrays and sent to this function, to be categorised as fail, pass or unset 
     * @param array $statelist - list of values - should be a key and value from the state selector, so that if either of them matches, we can return a pass or fail value
     * @param array $fail_list - list of values to be classified as fail

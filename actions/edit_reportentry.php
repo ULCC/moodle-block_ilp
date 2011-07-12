@@ -35,7 +35,6 @@ $entry_id	= $PARSER->optional_param('entry_id',NULL,PARAM_INT);
 //get the id of the course that is currently being used
 $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
 
-$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php",array('report_id'=>$report_id,'user_id'=>$user_id,'course_id'=>$course_id,'entry_id'=>$entry_id));
 
 // instantiate the db
 $dbc = new ilp_db();
@@ -192,8 +191,14 @@ $PAGE->navbar->add($report->name,null,'title');
 
 $titleprefix	=	 (!empty($entry_id)) ? get_string('edit') : get_string('add');	
 
+// setup the page title and heading
+$SITE	=	$dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp')." : ".fullname($plpuser));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagetype('ilp-entry');
+//$PAGE->set_pagelayout('ilp');
+$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php",$PARSER->get_params());
 
-$PAGE->set_title($titleprefix." ".$report->name);
 //require edit_reportentry html
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_reportentry.html');
 ?>

@@ -17,7 +17,7 @@ function __autoload($classname) {
 //include the moodle library
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 
-//include the assessment manager parser class
+//include the ilp parser class
 require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_parser.class.php');
 
 //include ilp db class

@@ -17,7 +17,7 @@
 	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
-	
+	$string['binary_icon']			=	'Icon File';
 	$string['changecourse']			=	'Change Course';
 	$string['creator']				=	'Creator';
 	$string['createreport']			=	'Create Report';
@@ -59,6 +59,7 @@
 	$string['editreport']			=	'Edit Report';
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['edit_status_items']	=	'Edit Status Items';
+	$string['editstatusitems']					=	'Edit Status Items';	
 	$string['enablereport'] 		= 	'Enable Report';
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';
@@ -75,9 +76,7 @@
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
-	
-	
-	$string['binary_icon']			=	'Icon File';
+		
 	$string['ilpname']				=	'ILP';
 	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	
@@ -154,26 +153,16 @@
 	$string['status']							= 	'Status';
 	$string['studentstatus']					= 	'Student Status';
 	$string['students']							= 	'Students';
-	
 	$string['studentnotfound']					= 	'Student not found';
-	$string['editstatusitems']					=	'Edit Status Items';
-	
 	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 				= 	'Submit and display';
-	
 	$string['studentslist'] 					= 	'Student list description';
-
-	
-	
 	
 	$string['type'] 							= 	'Type';
 	$string['viewreportpreview'] 				= 	'View Report Preview';
 	$string['viewplp'] 							= 	'View';
 	$string['userpicture'] 						= 	'Student Picture';
-	
-	
-	
-	
+
 	$string['unknown'] 							= 	'Unknown';
 
     //Config Form DB Connection Section
@@ -207,6 +196,8 @@
 	$string['statuschangeerror'] 			= 	'A error occurred whilst changing the report status. The status was not changed';
 	$string['fieldreqerror']				=	'A error occurred the required status was not updated';
 	$string['statusitemupdateerror']			=	'A error occurred whilst updating status items';
+	$string['labelexistserror']				=	"field label already exists in this report";
+	
 	
 	
 	//LOGGING
@@ -215,29 +206,12 @@
 	$string[ 'ilp_element_plugin_delete' ]		=	"ILP Form Plugin DELETE";
 	$string[ 'ilp_report' ]						=	"ILP Report";
 	$string[ 'ilp_report_field' ]				=	"ILP Report Field";
-	$string[ 'ilp_report_field_textarea' ]		=	"ILP textarea element";
-	$string[ 'ilp_report_field_category' ]		=	"ILP category element";
-	$string[ 'ilp_report_field_course' ]		=	"ILP course element";
-	$string[ 'ilp_report_field_date' ]			=	"ILP date element";
-	$string[ 'ilp_report_field_dropdown' ]		=	"ILP dropdown element";
-	$string[ 'ilp_report_field_datedeadline' ]	=	"ILP deadline element";
-	$string[ 'ilp_report_field_html' ]			=	"ILP html element";
-	$string[ 'ilp_report_field_radio' ]			=	"ILP radio element";
-	$string[ 'ilp_report_field_state' ]			=	"ILP state element";
-	$string[ 'ilp_report_field_status' ]		=	"ILP status element";
-	$string[ 'ilp_report_field_text' ]		    =	"ILP text element";
-	$string[ 'block_ilp_plu_tex' ]				=	"ILP text element";
-
-
 	$string[ 'ilp_plugin_element_data' ]		=	"Data";
 	$string[ 'ilp_user_status_item' ]		    =	"ilp user status item";
-	$string[ 'user_data' ]						=	"User Data";
+	$string[ 'entrydata' ]						=	"Entry Data";
 	$string[ 'userstatus' ]						=	"User Status";
 
-	$string[ 'maxeditexceed' ]					=	"Max Edit Exceed";	//just put this here to stop an error on edit_report_entry
-	$string[ 'course' ]							=	"Course";	//just put this here to stop an error on edit_report_entry
-
-//ATENDENCE REPORT
+	//ATENDENCE REPORT
 	$string[ 'attendenceconfiguration' ]		=	"MIS Report Configuration";	
 
 	$string[ 'mis_configuration_settings' ]		=	"MIS Configuration Settings";	

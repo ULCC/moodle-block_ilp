@@ -363,7 +363,8 @@ class flexible_table {
      * columns are sorted then column names must correspond to a field in sql.
      */
     function define_columns($columns) {
-        $this->columns = array();
+   	
+    	$this->columns = array();
         $this->column_style = array();
         $this->column_class = array();
         $colnum = 0;
@@ -374,6 +375,7 @@ class flexible_table {
             $this->column_class[$column]    = '';
             $this->column_suppress[$column] = false;
         }
+
     }
 
     /**

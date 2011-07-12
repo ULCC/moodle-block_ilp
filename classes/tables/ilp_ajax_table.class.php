@@ -62,6 +62,7 @@ class ilp_ajax_table extends flexible_table {
     function __construct($uniqueid, $displayperpage=true) {
         global $CFG, $SESSION;
 
+
         $this->uniqueid = $uniqueid;
         $this->displayperpage = $displayperpage;
         $hozsize = get_config('block_ilp', 'defaulthozsize');
@@ -99,8 +100,11 @@ class ilp_ajax_table extends flexible_table {
             $SESSION->flextable[$this->uniqueid]->filters  = $this->filters;
         }
 
+        
         $this->sess = &$SESSION->flextable[$this->uniqueid];
 
+
+        
         if(isset($_POST[$this->uniqueid][$this->request[TABLE_VAR_PAGESIZE]])) {
             $this->sess->pagesize = $_POST[$this->uniqueid][$this->request[TABLE_VAR_PAGESIZE]];
 
@@ -124,18 +128,6 @@ class ilp_ajax_table extends flexible_table {
 
         if(isset($_GET[$this->uniqueid][$this->request[TABLE_VAR_PAGE]])) {
             $this->sess->currpage = $_GET[$this->uniqueid][$this->request[TABLE_VAR_PAGE]];
-        }
-
-        if(!empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]])) {
-            // Show this column
-            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]] = false;
-        }
-        else if(!empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]])) {
-            // Hide this column
-            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]] = true;
-            if(array_key_exists($_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]], $this->sess->sortby)) {
-                unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]]);
-            }
         }
 
         // set the optional filters
@@ -195,6 +187,18 @@ class ilp_ajax_table extends flexible_table {
             return false;
         }
 
+        if(!empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]])) {
+            // Show this column
+            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]] = false;
+        }
+        else if(!empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]])) {
+         	// Hide this column
+            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]] = true;
+            if(array_key_exists($_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]], $this->sess->sortby)) {
+                unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]]);
+            }
+        }
+        
         // Now, update the column attributes for collapsed columns
         foreach(array_keys($this->columns) as $column) {
             if(!empty($this->sess->collapse[$column])) {
@@ -202,6 +206,8 @@ class ilp_ajax_table extends flexible_table {
             }
         }
 
+        
+        
         if(
             !empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]) && $this->is_sortable($_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]) &&
             (isset($this->columns[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]]) ||
@@ -299,6 +305,9 @@ class ilp_ajax_table extends flexible_table {
         } else if (!in_array('flexible', explode(' ', $this->attributes['class']))) {
             $this->attributes['class'] = trim('flexible ' . $this->attributes['class']);
         }
+        
+
+        
     }
 
     /**
@@ -806,7 +815,7 @@ class ilp_ajax_table extends flexible_table {
                 \"{$this->uniqueid}_perpage_select\",
                 \"change\",
                 function() {
-                    ajax_submit('{$this->uniqueid}_perpage', '{$this->uniqueid}_container', '{$this->ajaxurl}');
+                    M.ilp_standard_functions.ajax_submit('{$this->uniqueid}_perpage', '{$this->uniqueid}_container', '{$this->ajaxurl}');
                 }
             );
             //]]>
@@ -850,7 +859,7 @@ class ilp_ajax_table extends flexible_table {
                     if($hozleftdouble !== false) {
                         $title = ($hozleftdouble == 0) ? get_string('movetoend', 'block_ilp') : get_string('moveleft', 'block_ilp').' '.abs($this->currhoz - $hozleftdouble);
                         $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_HOZOFFSET].']='.$hozleftdouble; ?>
-                        <a href="<?php echo $this->baseurl.$suffix.$this->fragment; ?>" onclick="return ajax_request('<?php echo $this->uniqueid; ?>_container', '<?php echo $this->ajaxurl.$suffix; ?>');">
+                        <a href="<?php echo $this->baseurl.$suffix.$this->fragment; ?>" onclick="return M.ilp_standard_functions.ajax_request('<?php echo $this->uniqueid; ?>_container', '<?php echo $this->ajaxurl.$suffix; ?>');">
                             <img alt="&lt;&lt;" title="<?php echo $title; ?>" src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/icons/moveleft2.gif" />
                         </a>
                         <?php

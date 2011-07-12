@@ -166,7 +166,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
     */
     function language_strings(&$string) {
         $string['ilp_element_plugin_text_area'] 		= 'Textarea';
-        $string['ilp_element_plugin_text_area_type'] = 'Textarea';
+        $string['ilp_element_plugin_text_area_type'] 	= 'Textarea';
         $string['ilp_element_plugin_text_area_description'] = 'A textarea field';
         $string['ilp_element_plugin_text_area_minimumlength'] = 'Minimum Length';
         $string['ilp_element_plugin_text_area_maximumlength'] = 'Maximum Length';

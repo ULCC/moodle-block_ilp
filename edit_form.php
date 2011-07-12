@@ -40,7 +40,7 @@ class block_ilp_edit_form extends block_edit_form {
         // get the global config, which we'll use to set the defaults
         $globalconfig = get_config('block_ilp');
 
-        // include assessment manager db class
+        // include ilp db class
         require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 
         // instantiate the db class

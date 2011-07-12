@@ -49,7 +49,7 @@ class ilp_element_plugin_status_mform  extends ilp_element_plugin_itemlist_mform
 	//for settings configuration only
 	
     /*
-    * the manager has entered the states in the unset, fail and pass textareas on the mform
+    * the admin has entered the states in the unset, fail and pass textareas on the mform
     * the values in those textareas have been made into arrays and sent to this function, to be categorised as fail, pass or unset 
     * @param array $statelist - list of values - should be a key and value from the state selector, so that if either of them matches, we can return a pass or fail value
     * @param array $fail_list - list of values to be classified as fail

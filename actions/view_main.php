@@ -44,9 +44,14 @@ $PAGE->navbar->add(fullname($plpuser),null,'title');
 //section name
 $PAGE->navbar->add(get_string('dashboard','block_ilp'),null,'title');
 
-$PAGE->set_title(fullname($plpuser).': '.get_string('ilpname','block_ilp'));
 
-$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_main.php",array('user_id'=>$user_id,'course_id'=>$course_id));
+// setup the page title and heading
+$SITE	=	$dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp')." : ".fullname($plpuser));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagetype('ilp-dashboard');
+$PAGE->set_pagelayout('ilp');
+$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_main.php",$PARSER->get_params());
 
 //get the enabled template
 $temp	=	$dbc->get_enabled_template();

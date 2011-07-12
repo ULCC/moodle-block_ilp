@@ -30,7 +30,7 @@ class ilp_db {
         // include the static constants
         require_once($CFG->dirroot.'/blocks/ilp/lib.php');
 
-        // instantiate the Assessment manager database
+        // instantiate the Assessment admin database
         $this->dbc = new ilp_db_functions();
     }
 
@@ -425,18 +425,7 @@ class ilp_db_functions	extends ilp_logging {
     function get_plugin_by_id($plugin_id) {
     	return $this->dbc->get_record('block_ilp_plugin',array('id'=>$plugin_id));
     }
-/*
- TODO: remove this unused duplicate
-    /*
-    * get plugin data from the plugin name
-    * @param string $plugin_name
-     * @return mixed object containing the plugin record or false
-    */
-    /*
-    function get_plugin_by_name($plugin_name) {
-    	return $this->dbc->get_record('block_ilp_plugin',array('name'=>$plugin_name));
-    }
-  */  
+
    	/**
      * Sets the new position of a field 
      *
@@ -539,9 +528,6 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false depending on result of query
      */
     function update_report($report) {
-    	
-    	
-    	
     	return $this->update_record('block_ilp_report',$report);
     }
     
@@ -887,9 +873,9 @@ class ilp_db_functions	extends ilp_logging {
 		return 		$this->dbc->get_record_sql($sql);
 	}
     
-    /*
+    /**
     * check if any user data has been uploaded to a particular list-type reportfield
-    * if it has then manager should not be allowed to delete any existing
+    * if it has then admin should not be allowed to delete any existing
     * options
     * @param string tablename
     * @param int reportfield_id
@@ -1022,7 +1008,7 @@ class ilp_db_functions	extends ilp_logging {
 	return false;
     }
 
-    /*
+    /**
     * supply a reportfield id for a dropdown type element
     * dropdown options are returned
     * @param int
@@ -1108,23 +1094,6 @@ class ilp_db_functions	extends ilp_logging {
     	$tables		=	"";
     	$where		=	"";
 
-    	/*
-       			$sql	=	"SELECT		r.*,
-    					 FROM 		{$CFG->prefix}block_ilp_entry as e,	
-   									{$CFG->prefix}block_ilp_report_field as rf,
-    					 			{$CFG->prefix}block_ilp_plugin as p,
-    					 			{$CFG->prefix}block_ilp_pu_sts as s,
-    					 			{$CFG->prefix}block_ilp_pu_sts_items as si,
-    					 			{$CFG->prefix}block_ilp_pu_sts_ent as se
-    					 WHERE		e.report_id		=	$rf.report_id
-    					 AND		p.id			=	rf.plugin_id
-    					 AND		s.reportfield_id	=	rf.id    					 
-				 		 AND		rf.id			=	{$report_id}
-				 		 AND		s.id			=	si.parent_id
-				 		 AND		si.id			=	se.parent_id
-    					 AND		p.name			=	'{$pluginname}'
-    					 AND		e.user_id		=	{$user_id}";
-    	*/
     	//if the the id of a status has been given then we need to add mroe contitions to
     	//find the reports in this state
     	if (!empty($status_id)) {
@@ -1180,7 +1149,7 @@ class ilp_db_functions	extends ilp_logging {
     	 return		$this->dbc->get_records_sql($sql);			
     }
 
-    /*
+    /**
     * see if an element of a particular type already exists in a report
     * @param int $report_id 
     * @param string $tablename
@@ -1245,7 +1214,7 @@ class ilp_db_functions	extends ilp_logging {
     }
     
     
-    /*
+    /**
     * gets max position for a report and returns 1 more
     * if no entries yet, returns 1
     * @param int $report_id
@@ -1389,12 +1358,7 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->dbc->get_record($tablename,array('name'=>$pluginname));
     }
     
-    
 
-
-    
-    
-    
     /**
      * Get all state items for the given report
      * 
@@ -1892,7 +1856,18 @@ class ilp_db_functions	extends ilp_logging {
   		return $this->update_record('block_ilp_mis_plugin',$misrecord);
   	}
   	
-  	
+  	/**
+  	 * Used to check if a report field with the given label already exists in the report
+  	 * with the given report_id
+  	 * 
+  	 * @param	string $label	the label that is being test to see if it exists
+  	 * @param	int $report_id the id of the report that will be checked
+  	 * 
+  	 * @return	mixed array of recordsets or bool false
+  	 */
+  	function label_exists($label,$report_id)	{
+  		return $this->dbc->get_records('block_ilp_report_field',array('label'=>$label,'report_id'=>$report_id));
+  	}
     
     
     

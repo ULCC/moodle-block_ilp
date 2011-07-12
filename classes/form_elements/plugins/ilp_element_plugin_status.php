@@ -33,8 +33,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
     }
 	
 	/**
-	textarea element to contain the options the manager wishes to add to the user form
-	manager will be instructed to insert value/label pairs in the following plaintext format:
+	textarea element to contain the options the admin wishes to add to the user form
+	admin will be instructed to insert value/label pairs in the following plaintext format:
 	value1:label1\nvalue2:label2\nvalue3:label3
 	or some such
 	*/
@@ -156,7 +156,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                 $entry = trim( $entry );
                 $entryparts = explode( $keysep , $entry );
                 if( 1 < count( $entryparts ) ){
-                    //manager has copied a whole key:value string into the pass or fail textarea
+                    //admin has copied a whole key:value string into the pass or fail textarea
                     //so throw away the key 
                     $entry = $entryparts[1];
                 }

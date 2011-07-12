@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class to enable the logging of user actions in the ilp manager
+ * Class to enable the logging of user actions in the ilp admin
  *
  * @copyright &copy; 2009-2010 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -123,9 +123,8 @@ class ilp_logging {
                 return;
 
             case 'block_ilp_plu_sts_items':
-		        $newobject->audit_type = 'ilp status item';
         		$newobject->record_id = $newobject->id;
-                $attributes =    array( 'id', 'key', 'value', 'audit_type' );
+                $attributes =    array( 'id', 'key', 'value');
                 break;
 
             default:
@@ -147,24 +146,20 @@ class ilp_logging {
                 LOG_DELETE => 'DELETE',
          );
 
-        //log data entry
-        if( in_array( $table, array(
-            'block_ilp_plu_are_ent',
-            'block_ilp_plu_cat_ent',
-            'block_ilp_plu_crs_ent',
-            'block_ilp_plu_dat_ent',
-            'block_ilp_plu_dd_ent',
-            'block_ilp_plu_dat_ent',
-            'block_ilp_plu_ddl_ent',
-            'block_ilp_plu_hte_ent',
-            'block_ilp_plu_rdo_ent',
-            'block_ilp_plu_ste_ent',
-            'block_ilp_plu_sts_ent',
-            'block_ilp_plu_tex_ent'
-        ) ) ){
+         
+         
+        $ferecords 	=	$this->formelement_plugins();
+        
+        if (!empty($ferecords)) {
+        	foreach($ferecords as $fe)	{
+				$fetables[]	=	$fe->tablename."_ent";        		
+        	}
+        }
+         
+        //if the data is from an entry then 
+        if( in_array( $table, $fetables ) )	{
+        	
                     $newobject->entry_table = $table;
-
-
                     $attributes = array( 'id', 'entry_id', 'parent_id', 'value' , 'entry_table', 'audit_type' );
 
 	                $log = new object();
@@ -174,24 +169,25 @@ class ilp_logging {
 	                $log->course_id = false;
 
                     $log->type = " " . $oplist[ $action ];
-                    $log->entity = get_string( 'ilp_report' , 'block_ilp' );
-                    $log->entity .= " " . get_string( 'user_data', 'block_ilp' );
-                    $log->record_id = $newobject->id;
+                    $log->entity = get_string( 'entrydata', 'block_ilp' );
+                    
+                    //we want all data fromt he same entry to be retrievable together so take entry id
+                    $log->record_id = $newobject->entry_id;
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
 
                     foreach( $attributes as $value ){
                         $log->attribute = $value;
-                        $log->newvalue = isset( $newobject->$value ) ? $newobject->$value : 'unknown' ;
+                        $log->newvalue = isset( $newobject->$value ) ? $newobject->$value : get_string('notapplicable','block_ilp');
 
                         $log->oldvalue = '';
 	                    if ($action != LOG_ADD && 'value' == $value ) {
                             if( !empty( $currobject ) ){
                                 $log->oldvalue = $currobject->value;
                             }
-                             
                         }
-                            //do not log the event if it is an update and this field is unchanged
+                        
+                        //do not log the event if it is an update and this field is unchanged
                         if( trim( $log->oldvalue ) != trim( $log->newvalue ) ){
 	                        $this->dbc->insert_record('block_ilp_log',$log);
                         }
@@ -220,9 +216,7 @@ class ilp_logging {
                     }
 	
 	                $log->entity = $this->entity_type($table,$newobject);
-                    if( !empty( $newobject->audit_type ) ){
-                        $log->entity .= " " . $newobject->audit_type;
-                    }
+                    
 	                //record id pertain to the actual submission or
         			if( isset( $newobject->record_id ) ){
 	             			$log->record_id = $newobject->record_id;
@@ -232,8 +226,7 @@ class ilp_logging {
         			}
 
                     $log->attribute = $key;
-	
-	                $log->course_id = $this->log_course($table,$newobject);
+
 	                if ( $action != LOG_ADD ) {
                         if( isset( $currobject->$key ) ){
                             $log->oldvalue = $currobject->$key;
@@ -290,9 +283,7 @@ class ilp_logging {
      * @return mixed The success of the action
      */
     private function interpret_value($table,$obj,$attrib,$value) {
-        //TODO change name of secondobj
-
-        $new_value = NULL;
+	    $new_value = NULL;
 
         switch($table) {
             case 'block_ilp_report':
@@ -321,10 +312,8 @@ class ilp_logging {
      */
      private function diff_object($table,$newobj,$currobj,$attrib,$action) {
          if ($action == LOG_UPDATE || $action == LOG_DELETE || $action == LOG_ASSESSMENT) {
-             //if ( 0 != $newobj->$attrib && empty($newobj->$attrib)) return false;
-                //empty is too generous a criterion: if 0 is the value, we should capture it
              if( !isset( $currobj->$attrib ) ) {
-                if( isset( $newobj->$attrib ) ){
+                if( isset( $newobj->$attrib ) )	{
                     //one is set and the other isn't - they must be different
                     return true;
                 }
@@ -337,7 +326,16 @@ class ilp_logging {
          return true;
      }
 
-
+     
+    /**
+     * function to return an array of the form element plugins that
+     * are currently installed in ilp  
+     *
+     * @return mixed array a list of plugin tablenames or bool false
+     */
+	function formelement_plugins()	{
+		return $this->dbc->get_records('block_ilp_plugin');
+	}
 
 
      /**
@@ -349,7 +347,7 @@ class ilp_logging {
      * @param int $candidate_id the user id of the creator
      * @return string the attribute type
      */
-     private function action_type($table,$action,$candidate_id,$creator_id) {
+	private function action_type($table,$action,$candidate_id,$creator_id) {
             switch($action) {
                 case LOG_ADD:
                     if( $table == 'block_ilp_report' ) return get_string( 'ilp_report', 'block_ilp' );
@@ -384,41 +382,49 @@ class ilp_logging {
      */
      private function entity_type($table, $obj=NULL) {
 
-        switch($table) {
-            case 'block_ilp_report':
-                return get_string( 'ilp_report', 'block_ilp' );
-            case 'block_ilp_reportpermissions':
-                return get_string( 'ilp_report', 'block_ilp' );
-            case 'block_ilp_report_field':
-                return get_string( 'ilp_report_field', 'block_ilp' );
-            case 'block_ilp_plu_are':
-                return get_string( 'ilp_report_field_textarea', 'block_ilp' );
-            case 'block_ilp_plu_cat':
-                return get_string( 'ilp_report_field_category', 'block_ilp' );
-            case 'block_ilp_plu_crs':
-                return get_string( 'ilp_report_field_course', 'block_ilp' );
-            case 'block_ilp_plu_dat':
-                return get_string( 'ilp_report_field_date', 'block_ilp' );
-            case 'block_ilp_plu_dd':
-                return get_string( 'ilp_report_field_dropdown', 'block_ilp' );
-            case 'block_ilp_plu_ddl':
-                return get_string( 'ilp_report_field_datedeadline', 'block_ilp' );
-            case 'block_ilp_plu_hte':
-                return get_string( 'ilp_report_field_html', 'block_ilp' );
-            case 'block_ilp_plu_rdo':
-                return get_string( 'ilp_report_field_radio', 'block_ilp' );
-            case 'block_ilp_plu_ste':
-                return get_string( 'ilp_report_field_state', 'block_ilp' );
-            case 'block_ilp_plu_sts':
-                return get_string( 'ilp_report_field_status', 'block_ilp' );
-            case 'block_ilp_plu_tex':
-                return get_string( 'ilp_report_field_text', 'block_ilp' );
-            case 'block_ilp_plu_sts_items':
-                return get_string( 'ilp_user_status_item', 'block_ilp' );
-                
-            default:
-                return get_string('unknown', 'block_ilp');
+     	//get all currently installed plugins
+        $ferecords 	=	$this->formelement_plugins();
+        
+        if (!empty($ferecords)) {
+        	foreach($ferecords as $fe)	{
+				$fetables[]	=	$fe->tablename;        		
+        	}
         }
+     	
+
+        //check if the tabkle is a form element plugin 
+     	if (in_array($table,$fetables)) {
+      		//get the form element by its tablename
+     		$formelement	=	$this->dbc->get_plugin_by_tablename($table);
+
+     		if (!empty($formelement)) {
+     			//the path to the class file
+     			$classfile = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/{$formelement}.php';
+     			
+     			require_once($classfile);
+     			
+     			//instantiate the elements course
+				$feclass	=	new $formelement->name;
+     			if (method_exists($feclass, 'audit_type'))	{
+	     			//return the audit type
+    	 			return $feclass->audit_type();
+     			} else {
+     				return get_string('unknown', 'block_ilp');
+     			}
+     		}
+     		
+     	} else {
+	        switch($table) {
+	            case 'block_ilp_report':
+	                return get_string( 'ilp_report', 'block_ilp' );
+	            case 'block_ilp_reportpermissions':
+	                return get_string( 'ilp_report', 'block_ilp' );
+	            case 'block_ilp_report_field':
+	                return get_string( 'ilp_report_field', 'block_ilp' );
+	            default:
+	                return get_string('unknown', 'block_ilp');
+	        }
+     	}
 
      }
 

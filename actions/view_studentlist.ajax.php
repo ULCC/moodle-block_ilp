@@ -12,7 +12,10 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER, $PAGE, $OUTPUT;
+global $USER, $CFG, $SESSION, $PARSER,  $OUTPUT;
+
+// Meta includes
+require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
 //include the default class
 require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_ajax_table.class.php');
@@ -29,19 +32,11 @@ $status_id		=	$PARSER->optional_param('status_id', 0, PARAM_INT);
 // instantiate the db
 $dbc = new ilp_db();
 
-
-
-
 // set up the flexible table for displaying the portfolios
 $flextable = new ilp_ajax_table('student_list');
 
-
-
 $flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
 $flextable->define_ajaxurl($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.ajax.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
-
-
-
 
 // set the basic details to dispaly in the table
 $headers = array(
@@ -50,12 +45,10 @@ $headers = array(
     get_string('status', 'block_ilp')
 );
 
-$columns = array(
-	'picture',
-  	'fullname',
-	'u_status'
-);
+$columns = array('picture','fullname','u_status');
 
+$headers[]	=	'';
+$columns[]	=	'view';
 
 //we need to check if the mis plugin has been setup if it has we will get the attendance and punchuality figures
 
@@ -115,21 +108,20 @@ $flextable->hoz_string = 'displayingreports';
 $headers[]	=	get_string('lastupdated','block_ilp');
 $columns[]	=	'lastupdated';
 
-$headers[]	=	'';
-$columns[]	=	'view';
 
+$flextable->define_fragment('studentlist');
+$flextable->collapsible(true);
 //define the columns and the headers in the flextable
 $flextable->define_columns($columns);
 $flextable->define_headers($headers);
 
-
-
 $flextable->set_attribute('summary', get_string('studentslist', 'block_ilp'));
 $flextable->set_attribute('cellspacing', '0');
 $flextable->set_attribute('class', 'generaltable fit');
-$flextable->define_fragment('studentlist');
+
 
 $flextable->initialbars(true);
+
 $flextable->setup();
 
 if (!empty($course_id)) {
@@ -171,6 +163,8 @@ if(!empty($studentslist)) {
     	//thus there status is the default
     	$data['u_status'] =   (!empty($stu->u_status)) ? $stu->u_status : $status_item; 
 
+    	$data['view']	=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$stu->id}{$courseparam}' >".get_string('viewplp','block_ilp')."</a>";
+    	
     	if (!empty($misattendavailable)) {
     		$total 		=	$misclass->get_total_attendance();
     		$actual 	=	$misclass->get_student_attendance();
@@ -207,7 +201,7 @@ if(!empty($studentslist)) {
 		
     	$lastentry	=	$dbc->get_lastupdate($stu->id);
 		$data['lastupdated']	=	(!empty($lastentry->timemodified)) ?userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
-		$data['view']	=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$stu->id}{$courseparam}' >".get_string('viewplp','block_ilp')."</a>";
+		
     	 $flextable->add_data_keyed($data);
     }
 }    

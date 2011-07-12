@@ -132,7 +132,12 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
      */
     function validation($data) {
         $this->errors = array();
-
+        
+        //check that the field label does not already exist in this report
+        if ($this->dbc->label_exists($data['label'],$data['report_id']))	{
+        	$this->errors['label']	=	get_string('labelexistserror','block_ilp',$data);
+        } 
+                
         // now add fields specific to this type of evidence
         $this->specific_validation($data);
 

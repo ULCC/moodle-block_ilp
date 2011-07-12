@@ -158,7 +158,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
      *
      */
     public function audit_type() {
-        return get_string('ilp_element_plugin_text_area_type','block_ilp');
+        return get_string('ilp_element_plugin_html_editor_type','block_ilp');
     }
     
     /**

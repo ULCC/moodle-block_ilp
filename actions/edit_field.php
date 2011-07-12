@@ -67,13 +67,13 @@ $pagetitle	=	(!empty($reportfield_id)) ? get_string('editfield','block_ilp') : g
 //get string for page
 $PAGE->navbar->add($pagetitle,null,'title');
 
-// setup the page specific variables
-$SITE	=	$this->dbc->get_course_by_id(SITEID);
-$PAGE->set_title($SITE->fullname." ".get_string('ilpname', 'block_ilp')." ".get_string('reportconfiguration', 'block_ilp'));
+// setup the page title and heading
+$SITE	=	$dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp'));
 $PAGE->set_heading($SITE->fullname);
-$PAGE->set_pagetype('ilp-configuration-field');
+$PAGE->set_pagetype('ilp-configuration');
 $PAGE->set_pagelayout('ilp');
-$PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
+$PAGE->set_url('/blocks/ilp/actions/edit_field.php', $PARSER->get_params());
 
 //get the plugin record that for the plugin 
 $pluginrecord	=	$dbc->get_plugin_by_id($plugin_id);

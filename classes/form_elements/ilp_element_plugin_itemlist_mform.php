@@ -55,8 +55,8 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 	protected function specific_definition($mform) {
 		
 		/**
-		textarea element to contain the options the manager wishes to add to the user form
-		manager will be instructed to insert value/label pairs in the following plaintext format:
+		textarea element to contain the options the admin wishes to add to the user form
+		admin will be instructed to insert value/label pairs in the following plaintext format:
 		value1:label1\nvalue2:label2\nvalue3:label3
 		or some such
 		*/
@@ -68,7 +68,7 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 			array('class' => 'form_input')
 	        );
 
-		//manager must specify at least 1 option, with at least 1 character
+		//admin must specify at least 1 option, with at least 1 character
         	$mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 	}

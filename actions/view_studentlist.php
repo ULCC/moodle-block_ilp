@@ -11,6 +11,8 @@
 
 require_once('../configpath.php');
 
+
+
 global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
 //include any neccessary files
@@ -62,9 +64,13 @@ $PAGE->navbar->add($title,null,'title');
 //section name
 $PAGE->navbar->add(get_string('dashboard','block_ilp'),null,'title');
 
-$PAGE->set_title(get_string('ilpname','block_ilp')." : ".$title);
-
-$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php",array('tutor'=>$tutor,'course_id'=>$course_id));
+// setup the page title and heading
+$SITE	=	$dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp'));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagetype('ilp-reportlist');
+$PAGE->set_pagelayout('ilp');
+$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php",$PARSER->get_params());
 
 
 //we need to list all of the students in the course with the given id
@@ -96,7 +102,6 @@ if (!empty($course_id)) {
 }
 
 $status_items	=	$dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);	
-
 
 //require the view_studentlist.html page
 require_once($CFG->dirroot.'/blocks/ilp/views/view_studentlist.html');

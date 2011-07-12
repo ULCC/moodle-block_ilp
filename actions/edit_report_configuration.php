@@ -57,13 +57,12 @@ $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot.
 
 
 // setup the page title and heading
-$SITE	=	$this->dbc->course_id(SITEID);
-
-$PAGE->set_title($SITE->fullname);
+$SITE	=	$dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp'));
 $PAGE->set_heading($SITE->fullname);
-$PAGE->set_pagetype('ilp-configuration-field');
+$PAGE->set_pagetype('ilp-configuration');
 $PAGE->set_pagelayout('ilp');
-$PAGE->set_url('/blocks/ilp/', $PARSER->get_params());
+$PAGE->set_url('/blocks/ilp/actions/edit_report_configuration.php', $PARSER->get_params());
 
 
 
