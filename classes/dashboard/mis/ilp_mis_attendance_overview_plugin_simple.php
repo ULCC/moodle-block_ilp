@@ -1,6 +1,6 @@
 <?php
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
-class ilp_mis_attendance_detail_plugin_simple extends ilp_mis_plugin{
+class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_plugin{
 
     public function __construct( $params=array() ) {
         parent::__construct( $params );
@@ -9,13 +9,31 @@ class ilp_mis_attendance_detail_plugin_simple extends ilp_mis_plugin{
     /*
     * display the current state of $this->data
     */
-    public function display(){
+    public function display( $withlinks=false ){
         if( is_string( $this->data ) ){
-            echo $this->data;
+            $output = $this->data;
         }
         elseif( is_array( $this->data ) ){
-		    echo self::test_entable( $this->data );
+		    $output = self::test_entable( $this->data );
+            if( $withlinks ){
+                $output .= $this->get_links();
+            }
         }
+        echo $output;
+    }
+
+    protected function get_links(){
+        $output = '';
+        $link_list = array(
+            '?display_type=class' => 'by class',
+            '?display_type=register' => 'by week'
+        );
+        foreach( $link_list as $url => $label ){
+            $output .= "
+                <a href=\"$url\">$label</a>
+            ";
+        }
+        return $output;
     }
 
     public function set_data( $student_id ){
