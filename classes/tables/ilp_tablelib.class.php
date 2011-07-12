@@ -624,16 +624,25 @@ class flexible_table {
             return '';
         }
         
-        $LIKE = (method_exists($DB,'sql_ilike')) ? $DB->sql_ilike()  : $DB->sql_ilike();
+        //$LIKE = (method_exists($DB,'sql_ilike')) ? $DB->sql_ilike()  : $DB->sql_ilike();
         
         if(!empty($this->sess->i_first) && !empty($this->sess->i_last)) {
-            return 'firstname '.$LIKE.' \''.$this->sess->i_first.'%\' AND lastname '.$LIKE.' \''.$this->sess->i_last.'%\'';
+            //return 'firstname '.$LIKE.' \''.$this->sess->i_first.'%\' AND lastname '.$LIKE.' \''.$this->sess->i_last.'%\'';
+            
+            $firstname	=	$DB->sql_like('firstname',"'{$this->sess->i_first}%'");
+            $lastname	=	$DB->sql_like('lastname',"'{$this->sess->i_last}%'");
+
+            return  $firstname.' AND '.$lastname;
         }
         else if(!empty($this->sess->i_first)) {
-            return 'firstname '.$LIKE.' \''.$this->sess->i_first.'%\'';
+     	
+			return $DB->sql_like('firstname',"'{$this->sess->i_first}%'");
+        	//return 'firstname '.$LIKE.' \''.$this->sess->i_first.'%\'';
         }
         else if(!empty($this->sess->i_last)) {
-            return 'lastname '.$LIKE.' \''.$this->sess->i_last.'%\'';
+            return $DB->sql_like('lastname',"'{$this->sess->i_last}%'");
+        	
+        	//return 'lastname '.$LIKE.' \''.$this->sess->i_last.'%\'';
         }
 
         return '';

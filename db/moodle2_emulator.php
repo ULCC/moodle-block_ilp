@@ -111,6 +111,12 @@ class moodle2_db_emulator {
     public function get_manager() {
         return new moodle2_database_manager_emulator();
     }
+    
+    public function sql_like($fieldname,$param) {
+        $LIKE	= ($CFG->dbfamily == 'postgres') ? 'ILIKE'	:	'LIKE';
+        
+    	return $fieldname.' '.$LIKE.' \''.$param.'\'';
+    }
 }
 
 

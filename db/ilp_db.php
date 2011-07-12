@@ -1771,7 +1771,8 @@ class ilp_db_functions	extends ilp_logging {
         
         // tell the table how many pages it needs
         $flextable->totalrows($count);
-
+  
+        
         return $this->dbc->get_records_sql(
             $select.$from.$where.$sort,
             null,
