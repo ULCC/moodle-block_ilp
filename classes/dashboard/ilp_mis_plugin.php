@@ -48,12 +48,47 @@ abstract class ilp_mis_plugin extends ilp_plugin {
     	
     	//call the parent constructor
     	parent::__construct();
+
+        //name of function to call in db connection class 
+        $this->db_query_function = 'return_table_values';
+        if( $params[ 'stored_procedure' ] ){
+            $this->db_query_function = 'return_stored_values';
+        }
     	
     	//set the name of the template file should be a html file with the same name as the class
     	$this->templatefile		=	$this->plugin_class_directory.'/'.$this->name.'.html';
 
         $this->set_params( $params );
         $this->db = new ilp_mis_connection( $params );
+    }
+
+    /*
+    * read data from the MIS db connection
+    * @param string $table
+    * @param array $whereparams
+    * @param string $fields
+    * @param array $additionalargs
+    * @return array
+    */
+    protected function dbquery( $table, $whereparams=null, $fields='*', $addionalargs=null ){
+        if( $this->params[ 'stored_procedure' ] ){
+            $procname = $table;
+            $args = array_values( $whereparams );   //not yet sure how this is going to work
+            return $this->db->return_stored_values( $procname, $args );
+        }
+        return $this->db->return_table_values( $table, $whereparams, $fields, $addionalargs );
+    }
+
+    /*
+    * get all details for a particular student in a keyed array
+    * @param int $student_id
+    * @return array of $key=>$value
+    */
+    protected function get_student_data( $student_id ){
+        $table = $this->params[ 'student_table' ];
+        $idfield = $this->params[ 'student_unique_key' ];
+        $conditions = array( $idfield => $student_id );
+        return $this->dbquery( $table, $conditions );
     }
 	
     /**
@@ -101,6 +136,9 @@ abstract class ilp_mis_plugin extends ilp_plugin {
 
     protected function set_params( $params ){
         $this->params = $params;
+        if( !in_array( 'stored_procedure' , array_keys( $this->params ) ) ){
+            $this->params[ 'stored_procedure' ] = false;
+        }
     }
 
     public function set_data(){}
