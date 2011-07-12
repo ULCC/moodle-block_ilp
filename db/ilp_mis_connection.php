@@ -54,9 +54,11 @@ class ilp_mis_connection{
 		    'dbname' => get_config( 'block_ilp', 'dbname' )
         );
        
+/*
         foreach( $this->settable_params as $var ){
                 $this->params[ $var ] = false;
         }
+*/
         
         // take the params given and override the default settings if necessary 
         $this->set_params( $this->connectionparams, $cparams );
@@ -125,17 +127,37 @@ class ilp_mis_connection{
         return $rtn;
     }
 
+/*
     function arraytostring($paramarray)	{
     	$str	=	'';
-    	
-    	if (!empty($paramarray) && is_array($paramarray)) 
-    	foreach ($paramarray as $k => $v) {
-    		$str	=	"{$str} {$and} ";
-    		$str	.=	(is_array($v)) ?	$k." ".$this->arraytostring($v) :	" $k $v";
-    		$and	=	' AND ';
+        $and = ' AND ';
+    	if (!empty($paramarray) && is_array($paramarray)) {
+	    	foreach ($paramarray as $k => $v) {
+	    		$str	=	"{$str} {$and} ";
+	    		$str	.=	(is_array($v)) ?	$k." ".$this->arraytostring($v) :	" $k = $v";
+	    		//$and	=	' AND ';
+	    	}
     	}
     	
-    	return $str;
+    	return "WHERE $str";
+    }
+*/
+
+
+    protected function arraytostring( $paramarray, $and=' AND ' ){
+        $whereandlist = array();
+        foreach( $paramarray as $key=>$value ){
+            if( is_array( $value ) ){
+                //not sure what to do here
+            }
+            elseif( is_numeric( $value ) ){
+                $whereandlist[] = "$key = $value";
+            }
+            elseif( is_string( $value ) ){
+                $whereandlist[] = "$key = '$value'";
+            }
+        }
+        return implode( $and, $whereandlist );
     }
     
     
@@ -166,10 +188,10 @@ class ilp_mis_connection{
     	//get the 
     	$wheresql		=	$this->arraytostring($whereparams);
     	
-    	$where			=	(!empty($wheresql)) ? $wheresql	: 	"";
+    	$where			=	(!empty($wheresql)) ? "WHERE $wheresql "	: 	"";
     	
     	$sort		=	'';
-    	if (isset($addionalargs['sort']))	$sort		=	(!empty($addionalargs['sort']))	? "SORT BY {$addionalargs['sort']} "	: "";
+    	if (isset($addionalargs['sort']))	$sort		=	(!empty($addionalargs['sort']))	? "ORDER BY {$addionalargs['sort']} "	: "";
 
     	$group		=	'';
     	if (isset($addionalargs['group']))	$group		=	(!empty($addionalargs['group']))	? "GROUP BY {$addionalargs['group']} "	: "";
@@ -186,6 +208,7 @@ class ilp_mis_connection{
    		}
    	
     	$sql		=	$select.$from.$where.$sort.$group.$limit;
+        return $this->Execute( $sql )->getRows();
     }
     
     
