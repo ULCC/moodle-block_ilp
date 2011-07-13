@@ -1,6 +1,6 @@
 <?php
 
-define("START_DAY", 02);
+define("START_DAY", 01);
 define("START_MONTH", 8);
 define("START_YEAR", 2010);
 define("DATE_TERMSTART", START_DAY."-".START_MONTH."-".START_YEAR); //this must be the date the term started
@@ -33,7 +33,8 @@ define("SESSION_DATE_FIELD", 'DATE');
 define("SESSION_TIME_FIELD", 'REGISTERNAME');
 
 $PRESENT_CODE = array('4','6','1','#','V','E','P','A','C','/','L', 'X');
-$ABSENT_CODE =  array('Z','R','S','O','@','H','5','0');
+$ABSENT_CODE =  array('Z','R','S','O');
+$AUTH_ABSENT_CODE =  array('@','H','5','0');
 $LATE_CODE =  array('L','X');   //shouold be a subset of $PRESENT_CODE
 $NO_CLASS_CODE = array('N','-','Y',NULL);
 
