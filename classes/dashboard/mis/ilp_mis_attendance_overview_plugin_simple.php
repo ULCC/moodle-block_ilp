@@ -4,6 +4,9 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
 
     public function __construct( $params=array() ) {
         parent::__construct( $params );
+        
+        //find out whether a table or stored procedure is used in queries 
+        $this->tabletype	=	get_config('block_ilp','mis_plugin_simple_tabletype');
     }
 
     /*
@@ -108,17 +111,33 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
     	$settingsheader 	= new admin_setting_heading('block_ilp/mis_attendance_plugin_simple', get_string('ilp_mis_attendance_plugin_simple_pluginname', 'block_ilp'), '');
     	$settings->add($settingsheader);
     	
-    	$studenttable		=	new admin_setting_configtext('block_ilp/mis_plugin_studenttable',get_string( 'ilp_mis_attendance_plugin_simple_studenttable', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_studenttabledesc', 'block_ilp' ),'',PARAM_RAW);
+    	$studenttable		=	new admin_setting_configtext('block_ilp/mis_plugin_simple_studenttable',get_string( 'ilp_mis_attendance_plugin_simple_studenttable', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_studenttabledesc', 'block_ilp' ),'',PARAM_RAW);
 		$settings->add($studenttable);
 		
-		$keyfield			=	new admin_setting_configtext('block_ilp/mis_plugin_studentid',get_string( 'ilp_mis_attendance_plugin_simple_studentid', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_studentiddesc', 'block_ilp' ),'studentID',PARAM_RAW);
+		$keyfield			=	new admin_setting_configtext('block_ilp/mis_plugin_simple_studentid',get_string( 'ilp_mis_attendance_plugin_simple_studentid', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_studentiddesc', 'block_ilp' ),'studentID',PARAM_RAW);
 		$settings->add($keyfield);
 		
-		$punchfield			=	new admin_setting_configtext('block_ilp/mis_plugin_punchuality',get_string( 'ilp_mis_attendance_plugin_simple_punchuality', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_punchualitydesc', 'block_ilp' ),'punchuality',PARAM_RAW);
+		$punchfield			=	new admin_setting_configtext('block_ilp/mis_plugin_simple_punchuality',get_string( 'ilp_mis_attendance_plugin_simple_punchuality', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_punchualitydesc', 'block_ilp' ),'punchuality',PARAM_RAW);
 		$settings->add($punchfield);
 		
-		$attendfield			=	new admin_setting_configtext('block_ilp/mis_plugin_attendance',get_string( 'ilp_mis_attendance_plugin_simple_attendance', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_attendancedesc', 'block_ilp' ),'attendance',PARAM_RAW);
+		$attendfield			=	new admin_setting_configtext('block_ilp/mis_plugin_simple_attendance',get_string( 'ilp_mis_attendance_plugin_simple_attendance', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_attendancedesc', 'block_ilp' ),'attendance',PARAM_RAW);
 		$settings->add($attendfield);
+		
+		$options = array(
+    		get_string('table','block_ilp') => ILP_MIS_TABLE,
+    		get_string('storedprocedure','block_ilp') => ILP_MIS_STOREDPROCEDURE
+    	);
+    	
+		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_plugin_simple_tabletype',get_string('ilp_mis_attendance_plugin_simple_tabletype','block_ilp'),get_string('ilp_mis_attendance_plugin_simple_tabletypedesc','block_ilp'), 0, $options);
+		$settings->add( $pluginstatus );
+		
+		$options = array(
+    		get_string('enabled','block_ilp') => ILP_ENABLED,
+    		get_string('disabled','block_ilp') => ILP_DISABLED
+    	);
+    	
+		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_attendance_plugin_simple_pluginstatus',get_string('ilp_mis_attendance_plugin_simple_pluginstatus','block_ilp'),get_string('ilp_mis_attendance_plugin_simple_pluginstatusdesc','block_ilp'), 0, $options);
+		$settings->add( $pluginstatus );
  	 }
     
     
@@ -129,6 +148,7 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
 	 * just need to simply add the plugins entries on to it
 	 */
 	 function language_strings(&$string) {
+	 	
         $string['ilp_mis_attendance_plugin_simple_attendance']				= 'attendance';
         $string['ilp_mis_attendance_plugin_simple_punctuality']				= 'punctuality';
         $string['ilp_mis_attendance_plugin_simple_pluginname']				= 'Simple Overview';
@@ -144,6 +164,9 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
         
         $string['ilp_mis_attendance_plugin_simple_attendance']				= 'Attendance';
         $string['ilp_mis_attendance_plugin_simple_attendancedesc']			= 'The field that holds attendance data';
+        
+        $string['ilp_mis_attendance_plugin_simple_pluginstatus']			= 'Status';
+        $string['ilp_mis_attendance_plugin_simple_pluginstatusdesc']			= 'Is the block enabled or disabled';
         
         return $string;
     }
