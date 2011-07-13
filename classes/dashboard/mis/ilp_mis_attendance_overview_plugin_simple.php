@@ -2,7 +2,6 @@
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_attendance_plugin.php');
 class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugin{
 
-
     public function __construct( $params=array() ) {
         parent::__construct( $params );
     }
@@ -11,6 +10,39 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
     * display the current state of $this->data
     */
     public function display( $withlinks=false ){
+        global $CFG;
+        require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_ajax_table.class.php');
+
+
+
+
+
+        // set up the flexible table for displaying the portfolios
+        $flextable = new ilp_ajax_table( 'attendance_plugin_simple' );
+        $headers = array( '' , '' );
+        $columns = array( 'metric' , 'score' );
+        $flextable->define_columns($columns);
+        $flextable->define_headers($headers);
+        $flextable->initialbars(false);
+        $flextable->setup();
+        foreach( $this->data as $row ){
+            $data = array();
+            $data[ 'metric' ] = $row[ 0 ];
+            $data[ 'score' ] = $row[ 1 ];
+            $flextable->add_data_keyed( $data );
+        }
+		ob_start();
+        $flextable->print_html();
+		$pluginoutput = ob_get_contents();
+        ob_end_clean();
+        
+        echo $pluginoutput;
+        exit;
+
+
+
+
+
         if( is_string( $this->data ) ){
             $output = $this->data;
         }
@@ -48,7 +80,7 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
         $punctuality_field = $this->params[ 'student_punctuality_field' ];
         $data = array_shift( $this->dbquery( $tablename, array( $keyfield => $student_id ), "$attendance_field, $punctuality_field" ) );
         return array(
-            $this->get_local_student_header_row( $student_id ),
+            //$this->get_local_student_header_row( $student_id ),
             array( 'attendance' , $data[ 'attendance' ] ),
             array( 'punctuality' , $data[ 'punctuality' ] )
         );
