@@ -246,7 +246,7 @@
 	    }
 	}
 	
-
+	//import tab plugin language strings
 	$tabs	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs';
 	
 	// get all the currently installed tab plugins plugins
@@ -272,6 +272,29 @@
 	        
 	    }
 	}
+	
+	
+	//import mis plugin language strings
+	$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+
+	$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
+
+	foreach ($mis_plugins as $plugin_file) {
+	
+	    require_once($plugins.'/'.$plugin_file.".php");
+	    
+	    // instantiate the object
+	    $class = basename($plugin_file, ".php");
+	    $pluginobj = new $class();
+	    $method = array($pluginobj, 'language_strings');
+		
+	    //check whether the language_strings method has been defined
+
+	    if (is_callable($method,true)) {
+	        $pluginobj->language_strings($settings);
+	    }
+	}
+
 
 	
 	

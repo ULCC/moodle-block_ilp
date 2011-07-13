@@ -130,27 +130,34 @@ $misplugin_settings 	= new admin_setting_heading('block_ilp/mis_plugins', get_st
 // -----------------------------------------------------------------------------
 // Get MIS plugin settings
 // -----------------------------------------------------------------------------
-/*
+
 $settings->add($misplugin_settings);
 global $CFG;
 
 $plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
 
-$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
+if ($dbc->get_mis_plugins() !== false) {
+	$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
+	
+	
+	
+	foreach ($mis_plugins as $plugin_file) {
+	
+	    require_once($plugins.'/'.$plugin_file.".php");
+	    
+	    // instantiate the object
+	    $class = basename($plugin_file, ".php");
+	    $pluginobj = new $class();
+	    $method = array($pluginobj, 'config_settings');
+		
+	    //check whether the config_settings method has been defined
 
-foreach ($mis_plugins as $plugin_file) {
+	    if (is_callable($method,true)) {
+	        $pluginobj->config_settings($settings);
+	        
+	    }
 
-    require_once($plugins.'/'.$plugin_file.".php");
-    // instantiate the object
-    $class = basename($plugin_file, ".php");
-    $pluginobj = new $class();
-    $method = array($pluginobj, 'config_settings');
-
-    //check whether the config_settings method has been defined
-    if (is_callable($method,true)) {
-        $settings = $pluginobj->config_settings($settings);
-    }
+	}
 }
 
-*/
 ?>
