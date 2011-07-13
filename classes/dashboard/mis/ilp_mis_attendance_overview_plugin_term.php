@@ -1,6 +1,6 @@
 <?php
-require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
-class ilp_mis_attendance_overview_plugin_term extends ilp_mis_plugin{
+require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_attendance_plugin.php');
+class ilp_mis_attendance_overview_plugin_term extends ilp_mis_attendance_plugin{
 
     public function __construct( $params=array() ) {
         parent::__construct( $params );
@@ -19,10 +19,13 @@ class ilp_mis_attendance_overview_plugin_term extends ilp_mis_plugin{
         }
     }
 
+    /*
+    * take raw data from mis db connection and rearrange it into a sequence of rows for displaying in a table
+    * @param int $student_id
+    */
     public function set_data( $student_id ){
 	        $data = $this->get_summary_by_term( $student_id );
             //we now have the raw data for each term: now we have to calculate the scores, and make a readable table
-//var_crap($data);
             $tablerowlist = array();
             $blankcell = '&nbsp;';
             $toprow = array(
@@ -45,38 +48,7 @@ class ilp_mis_attendance_overview_plugin_term extends ilp_mis_plugin{
             }
             $this->data = $tablerowlist;
     }
-    protected function calcScore( $list, $metric ){
-        switch( $metric ){
-            case 'attendance':
-                $value = $this->calc_attendance( $list );
-                break;
-            case 'punctuality':
-                $value = $this->calc_punctuality( $list );
-                break;
-        }
-        return intval( 100 * $value ) . '%';
-    }
-    protected function calc_attendance( $list ){
-        $present = $list[ 'marksPresent' ];
-        $absent = $list[ 'marksAbsent' ];
-        $total = $list[ 'marksTotal' ];
-        $authabsent = $list[ 'marksAuthAbsent' ];
-        $late = $list[ 'marksLate' ];
-        
-        $totalpresent = $present + $late;
-        return $totalpresent / $total;
-    }
-    protected function calc_punctuality( $list ){
-        $present = $list[ 'marksPresent' ];
-        $absent = $list[ 'marksAbsent' ];
-        $total = $list[ 'marksTotal' ];
-        $authabsent = $list[ 'marksAuthAbsent' ];
-        $late = $list[ 'marksLate' ];
-        
-        $totallate = $late;
-        $totalpresent = $present + $late;
-        return 1 - ( $totallate / $totalpresent );
-    }
+
     protected function get_summary_by_term( $student_id, $term_id=null ){
         $table = $this->params[ 'termstudent_table' ];
         $student_idfield = $this->params[ 'termstudent_table_student_id_field' ];

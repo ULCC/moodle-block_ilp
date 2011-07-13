@@ -1,6 +1,6 @@
 <?php
-require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
-class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_plugin{
+require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_attendance_plugin.php');
+class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugin{
 
 
     public function __construct( $params=array() ) {

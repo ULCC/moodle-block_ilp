@@ -1,6 +1,6 @@
 <?php
-require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
-class ilp_mis_attendance_overview_plugin_course extends ilp_mis_plugin{
+require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_attendance_plugin.php');
+class ilp_mis_attendance_overview_plugin_course extends ilp_mis_attendance_plugin{
 
     public function __construct( $params=array() ) {
         parent::__construct( $params );
@@ -22,6 +22,15 @@ class ilp_mis_attendance_overview_plugin_course extends ilp_mis_plugin{
         $this->data = $this->format_for_display( $this->get_attendance_summary_by_course( $student_id ) );
     }
 
+    protected function get_attendance_summary_by_course( $student_id ){
+        $table = $this->params[ 'coursestudent_table' ];
+        $studentid_field = $this->params[ 'coursestudent_table_student_id_field' ];
+        $whereparams = array(
+            $studentid_field => $student_id
+        );
+        return $this->dbquery( $table, $whereparams );
+    }
+
     private function format_for_display( $data ){
         $tablerowlist = array();
         $tablerowlist[] = array(
@@ -30,8 +39,11 @@ class ilp_mis_attendance_overview_plugin_course extends ilp_mis_plugin{
             'Punctuality'
         );
         foreach( $data as $subject => $row ){
+            $subject = $row[ 'courseName' ];
+            $attendance = $this->calcScore( $row, 'attendance' );
+            $punctuality = $this->calcScore( $row, 'punctuality' );
             $tablerowlist[] = array(
-                $subject, $row[ 'attendance' ], $row[ 'punctuality' ]
+                $subject, $attendance, $punctuality
             );
         }
         return $tablerowlist;

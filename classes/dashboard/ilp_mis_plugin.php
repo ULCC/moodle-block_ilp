@@ -135,50 +135,6 @@ abstract class ilp_mis_plugin extends ilp_plugin {
         return number_format( round( $r * 100 ) ) . '%';
     }
 
-//////////////////////////////////////////////////////////////////////////////
-/////////   please leave these functions here for the moment:    /////////////
-/////////         they are useful for testing                    /////////////
-//////////////////////////////////////////////////////////////////////////////
-    /*
-    * for test only - take an array of arrays and render as an html table
-    * @param array of arrays $list
-    * @return string of arrays
-    */
-    public static function test_entable( $list ){
-        //construct an html table and return it
-        $rowlist = array();
-        $celltag = 'th';
-        foreach( $list as $row ){
-            $row_items = array();
-            foreach( $row as $item ){
-                $row_items[] = self::entag( $celltag, $item, array( 'align'=>'LEFT' ) );
-            }
-            $rowlist[] = self::entag( 'tr' , implode( '' , $row_items ) );
-            $celltag = 'td';
-        }
-        return self::entag( 'table' , implode( "\n", $rowlist ) , $params=array( 'border'=>1 ) );
-    }
-
-    /*
-    * for test only - enclose a value in html tags
-    * @param string $tag
-    * @param string  or boolean $meat
-    * @param $params array of $key=>$value
-    * @return string
-    */
-    public static function entag( $tag, $meat=false , $params=false ){
-        $pstring = '';
-        if( $params ){
-            foreach( $params as $key=>$value ){
-                $pstring .= " $key=\"$value\"";
-            }
-        }
-        if( false !== $meat ){
-            return "<$tag$pstring>$meat</$tag>";
-        }
-        return "<$tag$pstring />";
-    }
-	
 
 
 }
