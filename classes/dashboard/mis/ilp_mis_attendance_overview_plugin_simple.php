@@ -37,12 +37,11 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
         ob_end_clean();
         
         echo $pluginoutput;
-        exit;
 
 
 
 
-
+/*
         if( is_string( $this->data ) ){
             $output = $this->data;
         }
@@ -53,6 +52,7 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
             }
         }
         echo $output;
+*/
     }
 
     protected function get_links(){

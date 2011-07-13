@@ -11,12 +11,50 @@ class ilp_mis_attendance_overview_plugin_term extends ilp_mis_attendance_plugin{
     * display the current state of $this->data
     */
     public function display(){
+        global $CFG;
+        require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_ajax_table.class.php');
+
+
+        // set up the flexible table for displaying the portfolios
+        $flextable = new ilp_ajax_table( 'attendance_plugin_simple' );
+        $headers = array(
+                '',
+                'Overall',
+                'Autumn',
+                'Spring',
+                'Summer'
+         );
+        $columns = array(
+            'label', 'overall', 'autumn', 'spring', 'summer'
+        );
+        $flextable->define_columns($columns);
+        $flextable->define_headers($headers);
+        $flextable->initialbars(false);
+        $flextable->setup();
+        foreach( $this->data as $row ){
+            $data = array();
+            $data[ 'label' ] = $row[ 0 ];
+            $data[ 'overall' ] = $row[ 1 ];
+            $data[ 'autumn' ] = $row[ 2 ];
+            $data[ 'spring' ] = $row[ 3 ];
+            $data[ 'summer' ] = $row[ 4 ];
+            $flextable->add_data_keyed( $data );
+        }
+		ob_start();
+        $flextable->print_html();
+		$pluginoutput = ob_get_contents();
+        ob_end_clean();
+        
+        echo $pluginoutput;
+
+/*
         if( is_string( $this->data ) ){
             echo $this->data;
         }
         elseif( is_array( $this->data ) ){
 		    echo self::test_entable( $this->data );
         }
+*/
     }
 
     /*
@@ -35,7 +73,7 @@ class ilp_mis_attendance_overview_plugin_term extends ilp_mis_attendance_plugin{
                 'Spring'=>1,
                 'Summer'=>2
             );
-            $tablerowlist[] = array_keys( $toprow );
+            //$tablerowlist[] = array_keys( $toprow );
             foreach( array( 'attendance' , 'punctuality' ) as $metric ){
                 $outrow = array( $metric );
                 foreach( $toprow as $termname=>$key ){
