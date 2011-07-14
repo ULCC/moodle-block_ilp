@@ -158,7 +158,7 @@ class ilp_mis_connection{
     	$where			=	(!empty($wheresql)) ? "WHERE {$wheresql} "	: 	"";
     	
     	$sort		=	'';
-    	if (isset($addionalargs['sort']))	$sort		=	(!empty($addionalargs['sort']))	? "SORT BY {$addionalargs['sort']} "	: "";
+    	if (isset($addionalargs['sort']))	$sort		=	(!empty($addionalargs['sort']))	? "ORDER BY {$addionalargs['sort']} "	: "";
 
     	$group		=	'';
     	if (isset($addionalargs['group']))	$group		=	(!empty($addionalargs['group']))	? "GROUP BY {$addionalargs['group']} "	: "";
@@ -177,7 +177,7 @@ class ilp_mis_connection{
     	$sql		=	$select.$from.$where.$sort.$group.$limit;
   	
     	$result		= $this->execute($sql);
-    	return		(!empty($result->fields))	?	$result->fields :	false;
+    	return		(!empty($result->fields))	?	$result->getRows() :	false;
     }
 
     /**
