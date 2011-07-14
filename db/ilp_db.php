@@ -1866,11 +1866,31 @@ class ilp_db_functions	extends ilp_logging {
   	 * 
   	 * @return	mixed array of recordsets or bool false
   	 */
-  	function label_exists($label,$report_id)	{
-  		return $this->dbc->get_records('block_ilp_report_field',array('label'=>$label,'report_id'=>$report_id));
+  	function label_exists($label,$report_id,$field_id)	{
+  		
+  		$currentfieldsql	=	(!empty($field_id)) 	?	"AND id != {$field_id}" : ""; 
+  		
+  		$sql	=	"SELECT		*	
+  					 FROM		{block_ilp_report_field}
+  					 WHERE		label		=	'{$label}'
+  					 AND		report_id	=	{$report_id} 
+  					 $currentfieldsql";	
+  		
+  		return $this->dbc->get_records_sql($sql);
   	}
     
     
+  	
+  	 /**
+  	 * Returns the record with a tablename matching the one given
+  	 * 
+  	 * @param	string $tablename	the tablename that will be used to match
+  	 * 
+  	 * @return	mixed object recordset or bool false 
+  	 */
+  	function get_plugin_by_tablename($tablename)	{
+  		return $this->dbc->get_record('block_ilp_plugin',array('tablename'=>$tablename));
+  	}
     
     
     

@@ -30,9 +30,19 @@ abstract class ilp_mis_plugin extends ilp_plugin {
 	 */
 	public		$db; 
 
+	/*
+	 * This var should hold the tabletype used by the plugin in queries 
+	 */
+	public		$tabletype;
+	
+	/*
+	 * This var should hold the data retrieved from the dbquery function  
+	 */
+	public		$data;
+	
     protected $params;  //initialisation params set at invocation time
-    protected $data=array();    //array of arrays for displaying as table rows
-    protected $blank="&nbsp;";    //filler for blank table cells - test only
+
+
 	
 	/**
      * Constructor
@@ -65,7 +75,7 @@ abstract class ilp_mis_plugin extends ilp_plugin {
     * @return array
     */
     protected function dbquery( $table, $params=null, $fields='*', $addionalargs=null ){
-        return	( $this->params[ 'stored_procedure' ] ) 	
+        return	( $this->tabletype == ILP_MIS_STOREDPROCEDURE ) 	
         		? 	$this->db->return_stored_values( $table, $params )
            		:	$this->db->return_table_values( $table, $params, $fields, $addionalargs )	;
     }
@@ -110,15 +120,10 @@ abstract class ilp_mis_plugin extends ilp_plugin {
      /**
      * Force extending class to implement the plugin type function
      */
-     abstract function plugin_type();
-     
-     
+     abstract function plugin_type();  
 
     protected function set_params( $params ){
         $this->params = $params;
-        if( !in_array( 'stored_procedure' , array_keys( $this->params ) ) ){
-            $this->params[ 'stored_procedure' ] = false;
-        }
     }
 
     public function set_data(){}
@@ -127,13 +132,7 @@ abstract class ilp_mis_plugin extends ilp_plugin {
         return $settings;
     }
 
-    /**
-    * @param float $r
-    * @return string
-    */
-    public static function format_percentage( $r ){
-        return number_format( round( $r * 100 ) ) . '%';
-    }
+
 
 
 

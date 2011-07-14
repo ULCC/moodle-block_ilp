@@ -134,7 +134,7 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         $this->errors = array();
         
         //check that the field label does not already exist in this report
-        if ($this->dbc->label_exists($data['label'],$data['report_id']))	{
+        if ($this->dbc->label_exists($data['label'],$data['report_id'],$data['id']))	{
         	$this->errors['label']	=	get_string('labelexistserror','block_ilp',$data);
         } 
                 

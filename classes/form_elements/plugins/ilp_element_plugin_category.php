@@ -47,21 +47,27 @@ class ilp_element_plugin_category extends ilp_element_plugin_itemlist{
 		
 		//create the fieldname
     	$fieldname	=	"{$this->reportfield_id}_field";
-		
+
+    	if (!empty($this->description)) {
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
+    		$this->label = '';
+    	} 
+    	
 		//definition for user form
 		$optionlist = $this->get_option_list( $this->reportfield_id );
-       	$select = &$mform->addElement(
+       	$select = $mform->addElement(
 				       			'select',
 				     			$fieldname,
 				       			$this->label,
 								$optionlist,
 				        		array('class' => 'form_input')
 				       	 	);
+				       	 	
+       	 	
+				       	 	
+				       	 	
         
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
-        
-        //the description for the field
-    	$mform->addElement('static', "{$fieldname}_desc", '', $this->description);
 	}
 }

@@ -381,7 +381,8 @@ class ilp_logging {
      * @return string the entity type 'evidence', 'submission' or 'portfolio'
      */
      private function entity_type($table, $obj=NULL) {
-
+		global $CFG;
+     	
      	//get all currently installed plugins
         $ferecords 	=	$this->formelement_plugins();
         
@@ -395,11 +396,11 @@ class ilp_logging {
         //check if the tabkle is a form element plugin 
      	if (in_array($table,$fetables)) {
       		//get the form element by its tablename
-     		$formelement	=	$this->dbc->get_plugin_by_tablename($table);
+     		$formelement	=	$this->get_plugin_by_tablename($table);
 
      		if (!empty($formelement)) {
      			//the path to the class file
-     			$classfile = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/{$formelement}.php';
+     			$classfile = $CFG->dirroot."/blocks/ilp/classes/form_elements/plugins/{$formelement->name}.php";
      			
      			require_once($classfile);
      			

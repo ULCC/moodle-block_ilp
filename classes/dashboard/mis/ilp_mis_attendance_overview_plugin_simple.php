@@ -7,12 +7,13 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
         
         //find out whether a table or stored procedure is used in queries 
         $this->tabletype	=	get_config('block_ilp','mis_plugin_simple_tabletype');
+        $this->data			=	false;
     }
 
     /*
     * display the current state of $this->data
     */
-    public function display( $withlinks=false ){
+    public function display(){
         global $CFG;
         require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_ajax_table.class.php');
 
@@ -74,27 +75,25 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
     }
 
     public function set_data( $student_id ){
-	        $this->data = $this->get_simple_summary( $student_id );
+    	//get the plugins configuration and pass to variables 
+        $tablename 			= get_config('block_ilp','mis_plugin_studenttable'); //$this->params[ 'student_table' ];
+        if (!empty($tablename)) {
+	        $keyfield 			= get_config('block_ilp','mis_plugin_studentid');
+	        $attendance_field 	= get_config('block_ilp','mis_plugin_punchuality');
+	        $punctuality_field 	= get_config('block_ilp','mis_plugin_attendance');
+	        
+	        $data = array_shift( $this->dbquery( $tablename, array( $keyfield => $student_id ), "$attendance_field, $punctuality_field" ) );
+	        if (!empty($data)) {
+	        	$this->data	=	 array(
+		        	    			array( get_string('ilp_mis_attendance_plugin_simple_attendance','block_ilp') , $data[ 'attendance' ] ),
+		            				array( get_string('ilp_mis_attendance_plugin_simple_punctuality','block_ilp') , $data[ 'punctuality' ] )
+		        				 );
+	        } 
+        }
     }
     
     protected function get_simple_summary( $student_id ){
     	
-    	//get the plugins configuration and pass to variables 
-        $tablename 			= get_config('block_ilp','mis_plugin_studenttable'); //$this->params[ 'student_table' ];
-        $keyfield 			= get_config('block_ilp','mis_plugin_studentid');
-        $attendance_field 	= get_config('block_ilp','mis_plugin_punchuality');
-        $punctuality_field 	= get_config('block_ilp','mis_plugin_attendance');
-        
-        $data = array_shift( $this->dbquery( $tablename, array( $keyfield => $student_id ), "$attendance_field, $punctuality_field" ) );
-        
-        if (!empty($data)) { 
-        	return array(
-	            			array( get_string('ilp_mis_attendance_plugin_simple_attendance','block_ilp') , $data[ 'attendance' ] ),
-	            			array( get_string('ilp_mis_attendance_plugin_simple_punctuality','block_ilp') , $data[ 'punctuality' ] )
-	        			 );
-        } else {
-        	return false;
-        }
     }
     
     
@@ -124,16 +123,16 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
 		$settings->add($attendfield);
 		
 		$options = array(
-    		get_string('table','block_ilp') => ILP_MIS_TABLE,
-    		get_string('storedprocedure','block_ilp') => ILP_MIS_STOREDPROCEDURE
+    		 ILP_MIS_TABLE => get_string('table','block_ilp'),
+    		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
     	
 		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_plugin_simple_tabletype',get_string('ilp_mis_attendance_plugin_simple_tabletype','block_ilp'),get_string('ilp_mis_attendance_plugin_simple_tabletypedesc','block_ilp'), 0, $options);
 		$settings->add( $pluginstatus );
 		
 		$options = array(
-    		get_string('enabled','block_ilp') => ILP_ENABLED,
-    		get_string('disabled','block_ilp') => ILP_DISABLED
+    		ILP_ENABLED => get_string('enabled','block_ilp'),
+    		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
     	
 		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_attendance_plugin_simple_pluginstatus',get_string('ilp_mis_attendance_plugin_simple_pluginstatus','block_ilp'),get_string('ilp_mis_attendance_plugin_simple_pluginstatusdesc','block_ilp'), 0, $options);
@@ -164,6 +163,9 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
         
         $string['ilp_mis_attendance_plugin_simple_attendance']				= 'Attendance';
         $string['ilp_mis_attendance_plugin_simple_attendancedesc']			= 'The field that holds attendance data';
+        
+        $string['ilp_mis_attendance_plugin_simple_tabletype']				= 'Table type';
+        $string['ilp_mis_attendance_plugin_simple_tabletypedesc']			= 'Does this plugin connect to a table or stored procedure';        
         
         $string['ilp_mis_attendance_plugin_simple_pluginstatus']			= 'Status';
         $string['ilp_mis_attendance_plugin_simple_pluginstatusdesc']			= 'Is the block enabled or disabled';

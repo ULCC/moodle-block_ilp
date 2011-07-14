@@ -168,6 +168,11 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
     	//create the fieldname
     	$fieldname	=	"{$this->reportfield_id}_field";
     	
+    	if (!empty($this->description)) {
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
+    		$this->label = '';
+    	} 
+    	
     	//text field for element label
         $mform->addElement(
             'date_selector',
@@ -176,13 +181,11 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
             array('class' => 'form_input', 'optional' => false )
         );
         
+        
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
 		
         //@todo decide correct PARAM type for date element
         $mform->setType($fieldname, PARAM_RAW);
-        
-        //the description for the field
-    	$mform->addElement('static', "{$fieldname}_desc", '', $this->description);
     }
 
     /**

@@ -144,7 +144,7 @@ class ilp_mis_connection{
     function return_table_values($table,$whereparams=null,$fields='*',$addionalargs=null) {
     	
     	//check if the fields param is an array if it is implode  
-    	$fields 	=	(is_array($fields))		?	implode(',',$fields)	:	$fields;		
+    	$fields 	=	(is_array($fields))		?	implode(', ',$fields)	:	$fields;		
     	   	
     	//create the select statement
     	$select		=	"SELECT		{$fields} ";
@@ -176,7 +176,9 @@ class ilp_mis_connection{
    	
     	$sql		=	$select.$from.$where.$sort.$group.$limit;
     	
-    	$result		= $this->execute($sql);
+    	var_dump($sql);
+    	
+    	//$result		= $this->execute($sql);
     	return		(!empty($result->fields))	?	$result->fields :	false;
     }
 

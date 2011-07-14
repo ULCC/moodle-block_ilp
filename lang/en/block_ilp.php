@@ -51,6 +51,7 @@
 	
 	
 	$string['disablereport']		= 	'Disable Report';
+	$string['disabled'] 			= 	'Disabled';
 	$string['editcomment']			= 	'Edit Comment';
 	$string['editfield']			=	'Edit Field';
 	$string['editfields']			=	'Edit Fields';
@@ -59,8 +60,12 @@
 	$string['editreport']			=	'Edit Report';
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['edit_status_items']	=	'Edit Status Items';
-	$string['editstatusitems']					=	'Edit Status Items';	
+	$string['editstatusitems']		=	'Edit Status Items';	
 	$string['enablereport'] 		= 	'Enable Report';
+	$string['enabled'] 				= 	'Enabled';
+	
+	
+	
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';
 	$string['failcsscolour']		=	'Fail CSS colour';
@@ -151,6 +156,7 @@
 	$string['selectedreports']					= 	'Selected Reports';
 	$string['selectedreportlist']				= 	'Select report list options';
 	$string['status']							= 	'Status';
+	$string['storedprocedure']					= 	'Stored Procedure';
 	$string['studentstatus']					= 	'Student Status';
 	$string['students']							= 	'Students';
 	$string['studentnotfound']					= 	'Student not found';
@@ -159,6 +165,8 @@
 	$string['studentslist'] 					= 	'Student list description';
 	
 	$string['type'] 							= 	'Type';
+	$string['table'] 							= 	'Table';
+	
 	$string['viewreportpreview'] 				= 	'View Report Preview';
 	$string['viewplp'] 							= 	'View';
 	$string['userpicture'] 						= 	'Student Picture';
@@ -251,7 +259,7 @@
 	
 	// get all the currently installed tab plugins plugins
 	$tab_plugins = ilp_records_to_menu($dbc->get_dashboard_tabs(), 'id', 'name');
-	//echo count($tab_plugins);
+
 	//this section gets language strings for all tab plugins 
 	
 	foreach ($tab_plugins as $plugin_file) {
@@ -276,9 +284,9 @@
 	
 	//import mis plugin language strings
 	$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
-
+	
 	$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
-
+	
 	foreach ($mis_plugins as $plugin_file) {
 	
 	    require_once($plugins.'/'.$plugin_file.".php");
@@ -291,7 +299,7 @@
 	    //check whether the language_strings method has been defined
 
 	    if (is_callable($method,true)) {
-	        $pluginobj->language_strings($settings);
+	        $pluginobj->language_strings($string);
 	    }
 	}
 

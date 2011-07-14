@@ -192,21 +192,24 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
     	//create the fieldname
     	$fieldname	=	"{$this->reportfield_id}_field";
     	
-    	$mform->addElement(
+    	if (!empty($this->description)) {
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
+    		$this->label = '';
+    	} 
+    	//text field for element label
+   		$mform->addElement(
 	           'htmleditor',
 	            $fieldname,
 	            "$this->label",
 	            array('class' => 'form_input', 'canUseHtmlEditor'=>'detect', 'rows'=> '10', 'cols'=>'65')
-	        );
-        
-        
+	    );
+    	
+
         if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
         if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
-        
-        //the description for the field
-    	$mform->addElement('static', "{$fieldname}_desc", '', $this->description);
+
     }
 	/**
 	* handle user input

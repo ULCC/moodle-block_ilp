@@ -74,6 +74,9 @@ define('ILP_ICON_TYPES','jpg,png, jpeg, gif');
 //The default number of reports displayed in a list
 define('ILP_DEFAULT_LIST_REPORTS',10 );
 
+//the types that the data for mis plugins may be retrieved from
+define('ILP_MIS_TABLE','1');
+define('ILP_MIS_STOREDPROCEDURE','0');
 
 
 

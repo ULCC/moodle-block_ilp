@@ -14,20 +14,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
         $this->external_items_keyfield = 'value';
 	    
    }
-		
-        /* just for test purposes
-        * not to be called on a production site
-        */
-    	public function test(){
-			$msg = $this->tablename;
-			$reportfield_id = 1;
-			$entry_id = false;
-		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
-		 	$entry 	=	$this->dbc->get_data_entry_record( $this->tablename, $entry_id );
-			$data = new stdClass();
-			$data->$reportfield_id = array( 'groucho' , 'harpo' );
-			return $this->entry_process_data( $reportfield_id, $entry_id, $data );
-		}
+
 		
 		/**
 	    * this function saves the data entered on a entry form to the plugins _entry table
@@ -262,8 +249,10 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		//definition for user form
 		$optionlist = $this->get_option_list( $this->reportfield_id );
 
-		//the description for the field
-    	$mform->addElement('static', "{$fieldname}_desc", '', $this->description);
+    	if (!empty($this->description)) {
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
+    		$this->label = '';
+    	} 
 		
     	//text field for element label
         $select = &$mform->addElement(

@@ -82,7 +82,7 @@ $mform	= new	report_entry_mform($report_id,$user_id,$entry_id,$course_id);
 //was the form cancelled?
 if ($mform->is_cancelled()) {
 	//send the user back to dashboard
-	//$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_reportentry.php&course_id='.$course_id;
+	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?course_id='.$course_id.'&user_id='.$user_id;
     redirect($return_url, '', REDIRECT_DELAY);
 }
 
