@@ -1,6 +1,6 @@
 <?php
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
-class ilp_mis_attendance_detail_plugin_register extends ilp_mis_plugin{
+class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugin{
 
     public function __construct( $params=array() ) {
         parent::__construct( $params );
@@ -14,7 +14,8 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_plugin{
             echo $this->data;
         }
         elseif( is_array( $this->data ) ){
-		    echo self::test_entable( $this->data );
+		    //echo self::test_entable( $this->data );
+		    echo $this->flexentable( $this->data );
         }
     }
 
@@ -25,6 +26,34 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_plugin{
         return 'detail';
     }
 
+    protected function flexentable( $data ){
+        // set up the flexible table for displaying the portfolios
+        $flextable = new ilp_ajax_table( 'attendance_plugin_simple' );
+        $headers = array_shift( $data );
+        $columns = $headers;
+        $flextable->define_columns($columns);
+        $flextable->define_headers($headers);
+        $flextable->initialbars(false);
+        $flextable->setup();
+
+        foreach( $data as $row ){
+            $tablerow = array();
+            $i = 0;
+            foreach( $columns as $col ){
+                if( $i < count( $row ) ){
+                    $tablerow[ $col ] = $row[ $i++ ];
+                }
+            }
+            $flextable->add_data_keyed( $tablerow );
+        }
+
+		ob_start();
+        $flextable->print_html();
+		$pluginoutput = ob_get_contents();
+        ob_end_clean();
+        
+        return $pluginoutput;
+    }
     /*
     * get the weekly attendance data for a user and return an array for display in a table
     * $term_id would be 1 for autumn term, 2 for spring term or 3 for summer term
