@@ -79,7 +79,7 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
         $tablename 			= get_config('block_ilp','mis_plugin_simple_studenttable'); //$this->params[ 'student_table' ];
         if (!empty($tablename)) {
 	        $keyfield 			= get_config('block_ilp','mis_plugin_simple_studentid');
-	        $punctuality_field  = get_config('block_ilp','mis_plugin_simple_punchuality');
+	        $punctuality_field  = get_config('block_ilp','mis_plugin_simple_punctuality');
 	        $attendance_field 	= get_config('block_ilp','mis_plugin_simple_attendance');
 	        
 	        $data = array_shift( $this->dbquery( $tablename, array( $keyfield => array( '=' => $student_id ) ), "$attendance_field, $punctuality_field" ) ); 
@@ -117,7 +117,7 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
 		$keyfield			=	new admin_setting_configtext('block_ilp/mis_plugin_simple_studentid',get_string( 'ilp_mis_attendance_plugin_simple_studentid', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_studentiddesc', 'block_ilp' ),'studentID',PARAM_RAW);
 		$settings->add($keyfield);
 		
-		$punchfield			=	new admin_setting_configtext('block_ilp/mis_plugin_simple_punchuality',get_string( 'ilp_mis_attendance_plugin_simple_punchuality', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_punchualitydesc', 'block_ilp' ),'punchuality',PARAM_RAW);
+		$punchfield			=	new admin_setting_configtext('block_ilp/mis_plugin_simple_punctuality',get_string( 'ilp_mis_attendance_plugin_simple_punctuality', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_punctualitydesc', 'block_ilp' ),'punctuality',PARAM_RAW);
 		$settings->add($punchfield);
 		
 		$attendfield			=	new admin_setting_configtext('block_ilp/mis_plugin_simple_attendance',get_string( 'ilp_mis_attendance_plugin_simple_attendance', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_simple_attendancedesc', 'block_ilp' ),'attendance',PARAM_RAW);
@@ -159,8 +159,8 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
         $string['ilp_mis_attendance_plugin_simple_studentid']				= 'Student ID field';
         $string['ilp_mis_attendance_plugin_simple_studentiddesc']				= 'The field that will be used to find the student';
         
-        $string['ilp_mis_attendance_plugin_simple_punchuality']				= 'Punchuality';
-        $string['ilp_mis_attendance_plugin_simple_punchualitydesc']			= 'The field that holds punchuality data';
+        $string['ilp_mis_attendance_plugin_simple_punctuality']				= 'Punctuality';
+        $string['ilp_mis_attendance_plugin_simple_punctualitydesc']			= 'The field that holds punctuality data';
         
         $string['ilp_mis_attendance_plugin_simple_attendance']				= 'Attendance';
         $string['ilp_mis_attendance_plugin_simple_attendancedesc']			= 'The field that holds attendance data';
