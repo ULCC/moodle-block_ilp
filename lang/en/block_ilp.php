@@ -223,6 +223,8 @@
 	$string[ 'attendenceconfiguration' ]		=	"MIS Report Configuration";	
 
 	$string[ 'mis_configuration_settings' ]		=	"MIS Configuration Settings";	
+
+	$string[ 'not_applicable' ]		            =	"n/a";	
 	
 	global $CFG;
 
