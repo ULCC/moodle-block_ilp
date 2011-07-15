@@ -118,7 +118,11 @@ class ilp_mis_connection{
     	if (!empty($paramarray) && is_array($paramarray)) 
     	foreach ($paramarray as $k => $v) {
     		$str	=	"{$str} {$and} ";
-    		$str	.=	(is_array($v)) ?	$k." ".$this->arraytostring($v) :	" $k $v";
+    		//$str	.=	(is_array($v)) ?	$k." ".$this->arraytostring($v) :	" $k $v";
+			//remove all ~ from fieldname - this is so that when a field is used twice in a query, 
+			//you can use the ~ to make a unique array key, but still generate sql with the simple fieldname
+			//this will cause problems if the underlying database table has a fieldname with a ~ in it
+    		$str	.=	(is_array($v)) ?	str_replace( '~' , '', $k ) ." ".$this->arraytostring($v) :	" $k $v";
     		$and	=	' AND ';
     	}
     	
@@ -175,6 +179,7 @@ class ilp_mis_connection{
    		}
    	
     	$sql		=	$select.$from.$where.$sort.$group.$limit;
+var_crap($sql);exit;
   	
     	$result		= $this->execute($sql);
     	return		(!empty($result->fields))	?	$result->getRows() :	false;
