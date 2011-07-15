@@ -8,13 +8,6 @@ class ilp_mis_attendance_overview_plugin_term extends ilp_mis_attendance_plugin{
         $this->tabletype	=	get_config('block_ilp','mis_plugin_term_studenttable');
     }
 
-    
-    protected function set_params( $params ){
-        parent::set_params( $params );
-        $this->params[ 'termstudent_table' ] = get_config('block_ilp','mis_attendance_plugin_term_studenttable');
-        $this->params[ 'termstudent_table_student_id_field' ] = get_config('block_ilp', 'mis_attendance_plugin_term_studentid' );
-        $this->params[ 'termstudent_table_term_id_field' ] = get_config('block_ilp', 'mis_plugin_term_termid' );
-    }
 
     /*
     * display the current state of $this->data
@@ -139,6 +132,13 @@ class ilp_mis_attendance_overview_plugin_term extends ilp_mis_attendance_plugin{
 	
     public function plugin_type(){
         return 'detail';
+    }
+    
+    protected function set_params( $params ){
+        parent::set_params( $params );
+        $this->params[ 'termstudent_table' ] = get_config('block_ilp','mis_attendance_plugin_term_studenttable');
+        $this->params[ 'termstudent_table_student_id_field' ] = get_config('block_ilp', 'mis_attendance_plugin_term_studentid' );
+        $this->params[ 'termstudent_table_term_id_field' ] = get_config('block_ilp', 'mis_plugin_term_termid' );
     }
     /**
      * Adds settings for this plugin to the admin settings

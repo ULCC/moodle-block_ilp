@@ -231,5 +231,74 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
             return $code;
         }
     }
+    
+    protected function set_params( $params ){
+        parent::set_params( $params );
+		//$this->params[ 'extra_numeric_fieldlist' ] = get_config('block_ilp','mis_extra_numeric_fieldlist');
+		//$this->params[ 'termdatelist' ] = get_config('block_ilp','mis_termdatelist');
+		//$this->params[ 'start_date' ] = get_config('block_ilp','mis_start_date');
+		//$this->params[ 'end_date' ] = get_config('block_ilp','mis_end_date');
+/*
+		$this->params[ 'late_code_list' ] = get_config('block_ilp','mis_late_code_list');
+		$this->params[ 'present_code_list' ] = get_config('block_ilp','mis_present_code_list');
+		$this->params[ 'absent_code_list' ] = get_config('block_ilp','mis_absent_code_list');
+		$this->params[ 'auth_absent_code_list' ] = get_config('block_ilp','mis_auth_absent_code_list');
+*/
+		$this->params[ 'timefield_start' ] = get_config('block_ilp','mis_attendance_plugin_class_starttime');
+		$this->params[ 'timefield_end' ] = get_config('block_ilp','mis_attendance_plugin_class_endtime');
+		$this->params[ 'week1' ] = get_config('block_ilp','mis_plugin_class_firstday');
+    }
+    /**
+     * Adds settings for this plugin to the admin settings
+     * @see ilp_mis_plugin::config_settings()
+     */
+    public function config_settings(&$settings)	{
+    	$settingsheader 	= new admin_setting_heading('block_ilp/mis_attendance_plugin_class', get_string('ilp_mis_attendance_plugin_class_pluginname', 'block_ilp'), '');
+    	$settings->add($settingsheader);
+    	
+    	$classstudenttable		=	new admin_setting_configtext('block_ilp/mis_attendance_plugin_class_studenttable',get_string( 'ilp_mis_attendance_plugin_class_table', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_tabledesc', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($classstudenttable);
+		
+		$starttimefield			=	new admin_setting_configtext('block_ilp/mis_attendance_plugin_class_starttime',get_string( 'ilp_mis_attendance_plugin_class_timefield_start', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_timefield_startdesc', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($starttimefield);
+		
+		$endtimefield			=	new admin_setting_configtext('block_ilp/mis_attendance_plugin_class_endtime',get_string( 'ilp_mis_attendance_plugin_class_timefield_end', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_timefield_enddesc', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($endtimefield);
+
+		$firstdayfield			=	new admin_setting_configtext('block_ilp/mis_plugin_class_firstday',get_string( 'ilp_mis_attendance_plugin_class_week1', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_week1', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($firstdayfield);
+
+		$options = array(
+    		 ILP_MIS_TABLE => get_string('table','block_ilp'),
+    		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
+    	);
+		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_plugin_class_tabletype',get_string('ilp_mis_attendance_plugin_class_tabletype','block_ilp'),get_string('ilp_mis_attendance_plugin_class_tabletypedesc','block_ilp'), 0, $options);
+		$settings->add( $pluginstatus );
+		
+    }
+
+	/**
+	 * Adds the string values from the tab to the language file
+	 *
+	 * @param	array &$string the language strings array passed by reference so we  
+	 * just need to simply add the plugins entries on to it
+	 */
+	function language_strings(&$string) {
+        $string['ilp_mis_attendance_plugin_class_pluginname']		  = 'Class Overview';
+
+        $string[ 'ilp_mis_attendance_plugin_class_table' ]            = 'register table';
+        $string[ 'ilp_mis_attendance_plugin_class_tabledesc' ]        = 'table containing register entries for every every lecture';
+
+        $string['ilp_mis_attendance_plugin_class_timefield_start']    = 'start time field';
+        $string['ilp_mis_attendance_plugin_class_timefield_startdesc']= 'field containing the start time of a lecture';
+        $string['ilp_mis_attendance_plugin_class_timefield_end']	  = 'end time field';
+        $string['ilp_mis_attendance_plugin_class_timefield_enddesc']  = 'field containing the end time of a lecture';
+
+        $string['ilp_mis_attendance_plugin_class_week1']			  = 'date of first day of week 1 (yyyy-mm-dd)';
+        $string['ilp_mis_attendance_plugin_class_']			    = '';
+        
+        $string['ilp_mis_attendance_plugin_class_tabletype']				= 'Table type';
+        $string['ilp_mis_attendance_plugin_class_tabletypedesc']			= 'Does this plugin connect to a table or stored procedure';        
+    }
 
 }
