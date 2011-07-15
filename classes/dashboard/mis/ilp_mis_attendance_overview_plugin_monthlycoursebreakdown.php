@@ -75,6 +75,70 @@ class ilp_mis_attendance_overview_plugin_monthlycoursebreakdown extends ilp_mis_
     public function plugin_type(){
         return 'overview';
     }
+	function language_strings(&$string) {
+        $string['ilp_mis_attendance_plugin_mcb_pluginname']		  = 'Monthly Course Breakdown Overview';
+        $string['ilp_mis_attendance_plugin_mcb_table']		  = 'Month-course table';
+        $string['ilp_mis_attendance_plugin_mcb_tabledesc']		  = 'table containing overview of student attendence by course by month';
+        $string[ 'ilp_mis_attendance_plugin_mcb_studentidfield' ]   = 'Student id field';
+        $string[ 'ilp_mis_attendance_plugin_mcb_course_idfield' ]   = 'Course id field';
+        $string[ 'ilp_mis_attendance_plugin_mcb_course_namefield' ]   = 'Course title field';
+        $string[ 'ilp_mis_attendance_plugin_mcb_monthidfield' ]   = 'Numerical month field';
+        $string[ 'ilp_mis_attendance_plugin_mcb_markstotal' ]   = 'marks total field';
+        $string[ 'ilp_mis_attendance_plugin_mcb_markspresent' ]   = 'marks present field';
+        $string[ 'ilp_mis_attendance_plugin_mcb_marksabsent' ]   = 'marks absent field';
+        $string[ 'ilp_mis_attendance_plugin_mcb_marksauthabsent' ]   = 'marks authabsent field';
+        $string[ 'ilp_mis_attendance_plugin_mcb_markslate' ]   = 'marks late field';
+    }
+    public function config_settings(&$settings)	{
+    	$settingsheader 	= new admin_setting_heading('block_ilp/mis_attendance_plugin_mcb', get_string('ilp_mis_attendance_plugin_mcb_pluginname', 'block_ilp'), '');
+    	$settings->add($settingsheader);
+    	
+    	$mcbtable		=	new admin_setting_configtext('block_ilp/mis_attendance_plugin_mcb_table',get_string( 'ilp_mis_attendance_plugin_mcb_table', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_tabledesc', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($mcbtable);
+    	
+    	$mcbtable		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_studentidfield',get_string( 'ilp_mis_attendance_plugin_mcb_studentidfield', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_studentidfield', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($mcbtable);
+    	
+    	$mcbstudentid		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_studentidfield',get_string( 'ilp_mis_attendance_plugin_mcb_studentidfield', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_studentidfield', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($mcbstudentid);
+    	
+    	$mcbcourseid		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_courseidfield',get_string( 'ilp_mis_attendance_plugin_mcb_course_idfield', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_course_idfield', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($mcbcourseid);
+    	
+    	$mcbcoursename		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_coursenamefield',get_string( 'ilp_mis_attendance_plugin_mcb_course_namefield', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_course_namefield', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($mcbcoursename);
+    	
+    	$mcbmonthid		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_monthidfield',get_string( 'ilp_mis_attendance_plugin_mcb_monthidfield', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_monthidfield', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($mcbmonthid);
+    	
+    	$markstotal		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_markstotalfield',get_string( 'ilp_mis_attendance_plugin_mcb_markstotal', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_markstotal', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($markstotal);
+    	
+    	$markspresent		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_markspresentfield',get_string( 'ilp_mis_attendance_plugin_mcb_markspresent', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_markspresent', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($markspresent);
+    	
+    	$marksabsent		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_marksabsentfield',get_string( 'ilp_mis_attendance_plugin_mcb_marksabsent', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_marksabsent', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($marksabsent);
+    	
+    	$marksauthabsent		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_marksauthabsentfield',get_string( 'ilp_mis_attendance_plugin_mcb_marksauthabsent', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_marksauthabsent', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($marksauthabsent);
+    	
+    	$markslate		=	new admin_setting_configtext('block_ilp/mis_plugin_mcb_markslatefield',get_string( 'ilp_mis_attendance_plugin_mcb_markslate', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_mcb_markslate', 'block_ilp' ),'',PARAM_RAW);
+		$settings->add($markslate);
+    }
+    protected function set_params( $params ){
+        parent::set_params( $params );
+		$this->params[ 'coursestudentmonth_table' ] = get_config( 'block_ilp', 'mis_attendance_plugin_mcb_table'  );
+		$this->params[ 'coursestudentmonth_table_student_id_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_studentidfield'  );
+		$this->params[ 'coursestudentmonth_table_course_id_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_courseidfield'  );
+		$this->params[ 'coursestudentmonth_table_month_coursename_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_coursenamefield'  ); 
+		$this->params[ 'coursestudentmonth_table_month_id_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_monthidfield'  );
+		$this->params[ 'coursestudentmonth_table_month_marksTotal_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_markstotalfield'  );
+		$this->params[ 'coursestudentmonth_table_month_marksPresent_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_markspresentfield'  );
+		$this->params[ 'coursestudentmonth_table_month_marksAbsent_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_marksabsentfield'  );
+		$this->params[ 'coursestudentmonth_table_month_marksAuthAbsent_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_marksauthabsentfield'  );
+		$this->params[ 'coursestudentmonth_table_month_marksLate_field' ] = get_config( 'block_ilp', 'mis_plugin_mcb_markslatefield'  );
+    }
 
     public function get_monthly_course_breakdown( $student_id ){
         $table = $this->params[ 'coursestudentmonth_table' ];
@@ -82,12 +146,12 @@ class ilp_mis_attendance_overview_plugin_monthlycoursebreakdown extends ilp_mis_
         $courseid_field = $this->params[ 'coursestudentmonth_table_course_id_field' ];
         $coursename_field = $this->params[ 'coursestudentmonth_table_month_coursename_field' ]; 
         $monthid_field = $this->params[ 'coursestudentmonth_table_month_id_field' ];
-        $markstotal_field = $this->params[ 'coursestudentmonth_table_term_marksTotal_field' ];
+        $markstotal_field = $this->params[ 'coursestudentmonth_table_month_marksTotal_field' ];
         $markspresent_field = $this->params[ 'coursestudentmonth_table_month_marksPresent_field' ];
         $marksabsent_field = $this->params[ 'coursestudentmonth_table_month_marksAbsent_field' ];
         $marksauthabsent_field = $this->params[ 'coursestudentmonth_table_month_marksAuthAbsent_field' ];
         $markslate_field = $this->params[ 'coursestudentmonth_table_month_marksLate_field' ];
-        $where = array( $studentid_field => $student_id );
+        $where = array( $studentid_field => array( '=' => $student_id ) );
         $fieldstr = "$studentid_field studentid, $courseid_field courseid, $coursename_field coursename, $monthid_field monthid, $markstotal_field marksTotal, $markspresent_field marksPresent, $marksabsent_field marksAbsent, $markslate_field marksLate, $marksauthabsent_field marksAuthAbsent";
         $data = $this->dbquery( $table, $where, $fieldstr, array( 'sort' => "{$courseid_field}, {$monthid_field} " ) );
 

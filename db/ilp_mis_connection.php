@@ -179,7 +179,6 @@ class ilp_mis_connection{
    		}
    	
     	$sql		=	$select.$from.$where.$sort.$group.$limit;
-var_crap($sql);exit;
   	
     	$result		= $this->execute($sql);
     	return		(!empty($result->fields))	?	$result->getRows() :	false;

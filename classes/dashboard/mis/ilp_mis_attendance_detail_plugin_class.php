@@ -117,9 +117,10 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
         $timefield_end = $this->params[ 'timefield_end' ];
         $attendance_data = array();     //will build into a list of stats for each course-weekday
         $aggregate_list = array();
+        $table = $this->params[ 'table' ];
         foreach( $courselist as $course ){
             foreach( $weeklist as $week ){
-                if( $rowlist = $this->get_attendance_details( $student_id, $course[ 'course_id' ], array(), false, $week[ 0 ], $week[ 1 ] ) ){
+                if( $rowlist = $this->get_attendance_details( $table, $student_id, $course[ 'course_id' ], array(), false, $week[ 0 ], $week[ 1 ] ) ){
                     //var_crap( $cal->calc_day_of_week( $row[ $timefield ] ) );
                     foreach( $rowlist as $row ){
                         $weekno = $cal->calc_weekno( $this->params[ 'week1' ], $week[ 0 ] );
@@ -244,6 +245,7 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
 		$this->params[ 'absent_code_list' ] = get_config('block_ilp','mis_absent_code_list');
 		$this->params[ 'auth_absent_code_list' ] = get_config('block_ilp','mis_auth_absent_code_list');
 */
+        $this->params[ 'table' ] = get_config( 'block_ilp' , 'mis_attendance_plugin_class_studenttable' );
 		$this->params[ 'timefield_start' ] = get_config('block_ilp','mis_attendance_plugin_class_starttime');
 		$this->params[ 'timefield_end' ] = get_config('block_ilp','mis_attendance_plugin_class_endtime');
 		$this->params[ 'week1' ] = get_config('block_ilp','mis_plugin_class_firstday');

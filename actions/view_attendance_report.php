@@ -15,15 +15,66 @@ $student_id 	= $PARSER->optional_param('student_id', 0, PARAM_INT);
 $term_id 	= $PARSER->optional_param('term_id', 0, PARAM_INT);
 $display_style  = $PARSER->optional_param( 'display_style', 'simple', PARAM_CLEAN );
 
+$overview_list = array(
+    'simple',
+    'term',
+    'course',
+    'monthlycoursebreakdown'
+);
+$detail_list = array(
+    'class',
+    'register'
+);
+/*
 $plugin_name = "ilp_mis_attendance_detail_plugin_$display_style";
 require_once( $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis/$plugin_name.php" );
+*/
 
+/*
+keys are referred to within the plugin
+values are fieldnames in the db table or view
+*/
 $params = array(
             'prefix' => '',
             'student_table' => 'student',
             'student_unique_key' => 'id',
+            'student_attendance_field' => 'attendance',
+            'student_punctuality_field' => 'punctuality',
+
+            'termstudent_table' => 'student_term',
+            'termstudent_table_student_id_field' => 'studentID',
+            'termstudent_table_term_id_field' => 'term',
+            'termstudent_table_term_marksTotal_field' => 'term',
+            'termstudent_table_term_marksPresent_field' => 'marksPresent',
+            'termstudent_table_term_marksAbsent_field' => 'marksAbsent',
+            'termstudent_table_term_marksAuthAbsent_field' => 'marksAuthAbsent',
+            'termstudent_table_term_marksLate_field' => 'marksLate',
+
+            'coursestudent_table' => 'student_course',
+            'coursestudent_table_student_id_field' => 'student_id',
+            'coursestudent_table_course_id_field' => 'course_id',
+            'coursestudent_table_term_marksTotal_field' => 'term',
+            'coursestudent_table_term_marksPresent_field' => 'marksPresent',
+            'coursestudent_table_term_marksAbsent_field' => 'marksAbsent',
+            'coursestudent_table_term_marksAuthAbsent_field' => 'marksAuthAbsent',
+            'coursestudent_table_term_marksLate_field' => 'marksLate',
+            'coursestudent_table_term_grade_field' => 'Grade',
+            'coursestudent_table_term_performance_field' => 'Performance',
+
+            'coursestudentmonth_table' => 'student_course_month',
+            'coursestudentmonth_table_student_id_field' => 'studentID',
+            'coursestudentmonth_table_course_id_field' => 'courseID',
+            'coursestudentmonth_table_month_id_field' => 'month',
+            'coursestudentmonth_table_month_marksTotal_field' => 'marksTotal',
+            'coursestudentmonth_table_month_marksPresent_field' => 'marksPresent',
+            'coursestudentmonth_table_month_marksAbsent_field' => 'marksAbsent',
+            'coursestudentmonth_table_month_marksAuthAbsent_field' => 'marksAuthAbsent',
+            'coursestudentmonth_table_month_marksLate_field' => 'marksLate',
+            'coursestudentmonth_table_month_coursename_field' => 'courseName',
+
             'present_code_list' => $PRESENT_CODE,
             'absent_code_list' => $ABSENT_CODE,
+            'auth_absent_code_list' => $AUTH_ABSENT_CODE,
             'late_code_list' => $LATE_CODE,
             'start_date' => '2010-08-09',
             'end_date' => '2011-07-30',
@@ -54,23 +105,31 @@ $params = array(
                 array( '2010-10-01', '2010-12-17' ),
                 array( '2011-01-04', '2011-03-25' ),
                 array( '2011-04-13', '2011-06-30' )
-            )
+            ),
+            'stored_procedure' => false
 );
 
 foreach( array(
-            '8.1' => 'simple',
+/*
+            '8.1/8.2' => 'simple',
             '8.3' => 'term',
-            '8.4' => 'course',
-            '8.5' => 'monthlycoursebreakdown',
+            '8.4/8.6' => 'course',
             '9.1' => 'class',
+            '8.5' => 'monthlycoursebreakdown',
+*/
             '9.2' => 'register'
         ) as $ref => $display_style ){
-            $plugin_name = "ilp_mis_attendance_detail_plugin_$display_style";
+            if( in_array( $display_style, $overview_list ) ){
+                $plugin_name = "ilp_mis_attendance_overview_plugin_$display_style";
+            }
+            else{
+                $plugin_name = "ilp_mis_attendance_detail_plugin_$display_style";
+            }
+            echo "<h3>$ref $plugin_name</h3>";
             require_once( $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis/$plugin_name.php" );
 			$mis = new $plugin_name( $params );
-			$mis->set_data( $student_id, $term_id );
-            echo "<h3>$ref $plugin_name</h3>";
-			$mis->display();
+			$mis->set_data( $student_id, $term_id , true );     //3rd arg turns performance on or off in plugin_course
+			$mis->display( true );                              //argument turns links on or off in plugin_simple
 }
 exit;
 

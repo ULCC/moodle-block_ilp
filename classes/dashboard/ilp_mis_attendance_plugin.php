@@ -43,7 +43,10 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
                 $value = $this->calc_punctuality( $list );
                 break;
         }
-        return intval( 100 * $value ) . '%';
+        if( $value ){
+            return intval( 100 * $value ) . '%';
+        }
+        return get_string( 'not_applicable' , 'block_ilp' );
     }
 
     /*
@@ -60,7 +63,10 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
         $late = $list[ 'marksLate' ];
         
         $totalpresent = $present + $late;
-        return $totalpresent / $total;
+        if( $total ){
+            return $totalpresent / $total;
+        }
+        return false;
     }
 
     /*
@@ -78,7 +84,10 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
         
         $totallate = $late;
         $totalpresent = $present + $late;
-        return 1 - ( $totallate / $totalpresent );
+        if( $totalpresent ){
+            return 1 - ( $totallate / $totalpresent );
+        }
+        return false;
     }
     
     /**
@@ -158,8 +167,7 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
     * @param boolean $countonly
     * @return int if $countonly, array of arrays otherwise
     */
-    public function get_attendance_details( $student_id, $course_id=null, $attendancecode_list=array(), $countonly=false, $start=null, $end=null ){
-        $table = $this->params[ 'attendance_view' ];
+    public function get_attendance_details( $table, $student_id, $course_id=null, $attendancecode_list=array(), $countonly=false, $start=null, $end=null ){
         $slid_field = $this->params[ 'studentlecture_attendance_id' ];
         $acode_field = $this->params[ 'code_field' ];
         $student_id_field = $this->params[ 'student_id_field' ];
@@ -186,14 +194,22 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
             }
         }
         $whereandlist = array(
-            "$student_id_field= '$student_id'",
+            "$student_id_field= '$student_id'"
+        );
+        $whereparams = array(
+            $student_id_field => array( '=' => $student_id )
         );
         if( $course_id ){
             $whereandlist[] = "$course_id_field = '$course_id'";
+            $whereparams[$course_id_field] = array( '=' => $course_id );
         }
+
         $whereandlist = array_merge( $whereandlist, $this->generate_time_conditions( $timefield, false, $start, $end ) );
+        $whereparams[ $timefield ] = array( '>=' => "'$start'" );
+        $whereparams[ "$timefield~" ] = array( '<' => "'$end'" );   //using ~ to make a unique array key - will be removed by ilp_mis_connection::arraytostring
         if( count( $attendancecode_list ) ){
             $whereandlist[] = "$acode_field IN  ('" . implode( "','" , $attendancecode_list ) . "')";
+            $whereparams[ $acode_field ] = array( 'IN' => "('" . implode( "','" , $attendancecode_list ) . "')" );
         }
         $whereclause = implode( ' AND ' , $whereandlist );
         $sql = "
@@ -201,7 +217,9 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
             FROM $table
             WHERE $whereclause
         ";
-        $res = $this->db->execute( $sql )->getRows();
+var_crap($sql);
+        //$res = $this->db->execute( $sql )->getRows();
+        $res = $this->dbquery( $table, $whereparams, $selectclause );
         if( $countonly ){
             return ilp_mis_connection::get_top_item( $res, 'n' );
         }
