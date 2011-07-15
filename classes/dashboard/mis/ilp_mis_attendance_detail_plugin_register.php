@@ -113,8 +113,8 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugi
                             $tablerowlist[ $row_id ] = array( $row_visible_id ); 
 		                    $tablerowlist[ $row_id ][] = false;     //late
 		                    $tablerowlist[ $row_id ][] = false;     //att
-		                    $tablerowlist[ $row_id ][] = $row[ 'dayname' ]; 
-		                    $tablerowlist[ $row_id ][] = $row[ 'clocktime' ]; 
+		                    $tablerowlist[ $row_id ][] = $cal->getreadabletime( $cal->getutime( $row[ 'dayname' ] ) , 'D' ); 
+		                    $tablerowlist[ $row_id ][] = $cal->get_time( $cal->getutime( $row[ 'clocktime' ] ) ); 
 
                             $attendance_data[ $row_id ] = array(
                                 'possible' => 0,

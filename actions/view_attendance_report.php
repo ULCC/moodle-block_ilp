@@ -110,13 +110,11 @@ $params = array(
 );
 
 foreach( array(
-/*
             '8.1/8.2' => 'simple',
             '8.3' => 'term',
             '8.4/8.6' => 'course',
-            '9.1' => 'class',
             '8.5' => 'monthlycoursebreakdown',
-*/
+            '9.1' => 'class',
             '9.2' => 'register'
         ) as $ref => $display_style ){
             if( in_array( $display_style, $overview_list ) ){

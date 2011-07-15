@@ -129,10 +129,10 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
                             //new row
 	                        $row_visible_id = $course[ 'course_id' ] . " " . $course[ 'course_title' ]; 
                             $tablerowlist[ $row_id ] = array( $row_visible_id );    //class
-		                    $tablerowlist[ $row_id ][] = $row[ 'dayname' ]; 
+		                    $tablerowlist[ $row_id ][] = $cal->getreadabletime( $cal->getutime( $row[ 'dayname' ] ) , 'D' ); 
                             $tablerowlist[ $row_id ][] = $row[ 'room' ];            //room
-		                    $tablerowlist[ $row_id ][] = $row[ 'clocktime' ];       //start
-                            $tablerowlist[ $row_id ][] = $row[ 'clocktime_end' ];    //end
+		                    $tablerowlist[ $row_id ][] = $cal->get_time( $row[ 'clocktime' ] );       //start
+                            $tablerowlist[ $row_id ][] = $cal->get_time( $row[ 'clocktime_end' ] );    //end
                             $tablerowlist[ $row_id ][] = $row[ 'tutor' ];            //tutor
 		                    $tablerowlist[ $row_id ][] = false;                     //att
 

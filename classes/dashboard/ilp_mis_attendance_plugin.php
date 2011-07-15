@@ -179,9 +179,9 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
             $selectclause = "COUNT( $slid_field ) n";
         }
         else{
-            $selectclause = "$slid_field id, $acode_field, $timefield, date_format( $timefield , '%I:%i' ) clocktime, DATE_FORMAT( $timefield_end, '%I:%i' ) clocktime_end, date_format( $timefield , '%a' ) dayname,
-            room, tutor
-            ";
+            //$selectclause = "$slid_field id, $acode_field, $timefield, date_format( $timefield , '%I:%i' ) clocktime, DATE_FORMAT( $timefield_end, '%I:%i' ) clocktime_end, date_format( $timefield , '%a' ) dayname, room, tutor ";
+            $selectclause = "$slid_field id, $acode_field, $timefield,  $timefield clocktime, $timefield_end clocktime_end,  $timefield dayname, room, tutor ";
+            //$selectclause = "$slid_field id, $acode_field, $timefield,  $timefield clocktime, $timefield_end clocktime_end,  $timefield dayname, room, tutor ";
             if( $this->params[ 'extra_fieldlist' ] ){
                 foreach( $this->params[ 'extra_fieldlist' ] as $field=>$alias ){
                     $selectclause .= ", $field $alias";
@@ -217,7 +217,6 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
             FROM $table
             WHERE $whereclause
         ";
-var_crap($sql);
         //$res = $this->db->execute( $sql )->getRows();
         $res = $this->dbquery( $table, $whereparams, $selectclause );
         if( $countonly ){

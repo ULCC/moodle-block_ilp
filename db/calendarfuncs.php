@@ -187,6 +187,15 @@ class calendarfuncs{
         return $monthdatelist;
     }
 
+    public function get_clocktime( $dtime ){
+        $utime = $this->getutime( $dtime );
+        return date( 'H:i', $utime );
+    }
+
+    public function get_dayname( $dtime ){
+        return $dtime;
+    }
+
     /*
     * take date in varying formats, and return consistent unix time
     * @param mixed $date
@@ -198,9 +207,18 @@ class calendarfuncs{
             $utime = $date;
         }
         else{
-            //assume 'year-month-date'
-            list( $year, $month, $date ) = $this->split_mysql_date( $date );
-            $utime = mktime( 0, 0, 0, $month, $date, $year );
+            //mysql format
+            $dateparts = explode( ' ', $date );
+            list( $year, $month, $date ) = $this->split_mysql_date( $dateparts[ 0 ] );
+            if( count( $dateparts ) > 1 ){
+                //time as well
+                list( $hours, $minutes, $seconds ) = $this->split_mysql_date( $dateparts[ 1 ] , ':' );
+            }
+            else{
+                //assume 'year-month-date'
+                list( $hours, $minutes, $seconds ) = array( 0,0,0 );
+            }
+            $utime = mktime( $hours, $minutes, $seconds, $month, $date, $year );
         }
         return $utime;
     }
