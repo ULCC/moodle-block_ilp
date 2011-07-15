@@ -1891,8 +1891,7 @@ class ilp_db_functions	extends ilp_logging {
   	function get_plugin_by_tablename($tablename)	{
   		return $this->dbc->get_record('block_ilp_plugin',array('tablename'=>$tablename));
   	}
-    
-    
+
     
     
     

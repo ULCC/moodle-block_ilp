@@ -3,6 +3,10 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
 
 class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
 
+	protected 	$fields;
+	protected 	$mis_user_id;
+	protected 	$user_id;
+	
 	/**
 	 * 
 	 * Constructor for the class
@@ -15,6 +19,7 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  		parent::__construct($params);
  		
  		$this->tabletype	=	get_config('block_ilp','mis_learner_contact_tabletype');
+ 		$this->fields		=	array();
  	}
  	
  	/**
@@ -22,9 +27,25 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  	 * @see ilp_mis_plugin::display()
  	 */
  	function display()	{
+ 		global $CFG;
  		
  		if (!empty($this->data)) {
-
+			
+ 			//get the moodle user record of the user
+ 			$user	=	$this->dbc->get_user_by_id($this->user_id);
+ 			
+ 			//buffer output  
+			ob_start();
+			
+			//call the html file 
+			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_learner_profile_contact.html');
+			
+			$pluginoutput = ob_get_contents();
+			
+	        ob_end_clean();
+ 			
+ 			return $pluginoutput;
+ 			
  			
  		} else {
  			//print configuration needed message 
@@ -32,40 +53,51 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  		
  	} 
  	
-    public function set_data( $student_id ){
-    	
+ 	/**
+ 	 * Retrieves data from the mis 
+ 	 * 
+ 	 * @param	$mis_user_id	the id of the user in the mis used to retrieve the data of the user
+ 	 * @param	$user_id		the id of the user in moodle
+ 	 *
+ 	 * @return	null
+ 	 */
+ 	
+ 	
+    public function set_data( $mis_user_id, $user_id ){
+    		
+    		$this->mis_user_id	=	$mis_user_id;
+    		$this->user_id		=	$user_id;
+    		
     		$table	=	get_config('block_ilp','mis_learner_contact_table');
     		
 			if (!empty($table)) {
 
  				$sidfield	=	get_config('block_ilp','mis_learner_contact_studentid');
  			
- 				$keyfields	=	array($sidfield	=> array('=' => $student_id));
+ 				$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
  				
- 				$fields		=	array();
+ 				$this->fields		=	array();
  				
- 				if 	(get_config('block_ilp','mis_learner_contact_studentid')) 	$fields[]	=	get_config('block_ilp','mis_learner_contact_studentid');
- 				if 	(get_config('block_ilp','mis_learner_contact_enrolmentdate')) $fields[]	=	get_config('block_ilp','mis_learner_contact_enrolmentdate');
- 				if 	(get_config('block_ilp','mis_learner_contact_dob')) 		$fields[]	=	get_config('block_ilp','mis_learner_contact_dob');
- 				if 	(get_config('block_ilp','mis_learner_contact_email')) 		$fields[]	=	get_config('block_ilp','mis_learner_contact_email');
- 				if 	(get_config('block_ilp','mis_learner_contact_phone')) 		$fields[]	=	get_config('block_ilp','mis_learner_contact_phone');
- 				if 	(get_config('block_ilp','mis_learner_contact_mobile')) 		$fields[]	=	get_config('block_ilp','mis_learner_contact_mobile');
- 				if 	(get_config('block_ilp','mis_learner_contact_emercontact')) $fields[]	=	get_config('block_ilp','mis_learner_contact_emercontact');
- 				if 	(get_config('block_ilp','mis_learner_contact_emernumber'))	 $fields[]	=	get_config('block_ilp','mis_learner_contact_emernumber');
- 				if 	(get_config('block_ilp','mis_learner_contact_addressone')) 	$fields[]	=	get_config('block_ilp','mis_learner_contact_addressone');
- 				if 	(get_config('block_ilp','mis_learner_contact_addresstwo')) 	$fields[]	=	get_config('block_ilp','mis_learner_contact_addresstwo');
- 				if 	(get_config('block_ilp','mis_learner_contact_addressthree')) $fields[]	=	get_config('block_ilp','mis_learner_contact_addressthree');
- 				if 	(get_config('block_ilp','mis_learner_contact_addressfour')) $fields[]	=	get_config('block_ilp','mis_learner_contact_addressfour');
- 				if 	(get_config('block_ilp','mis_learner_contact_postcode')) 	$fields[]	=	get_config('block_ilp','mis_learner_contact_postcode');
+ 				if 	(get_config('block_ilp','mis_learner_contact_studentid')) 	$this->fields['studentid']	=	get_config('block_ilp','mis_learner_contact_studentid');
+ 				if 	(get_config('block_ilp','mis_learner_contact_enrolmentdate')) $this->fields['enrolmentdate']	=	get_config('block_ilp','mis_learner_contact_enrolmentdate');
+ 				if 	(get_config('block_ilp','mis_learner_contact_dob')) 		$this->fields['dob']	=	get_config('block_ilp','mis_learner_contact_dob');
+ 				if 	(get_config('block_ilp','mis_learner_contact_email')) 		$this->fields['email']	=	get_config('block_ilp','mis_learner_contact_email');
+ 				if 	(get_config('block_ilp','mis_learner_contact_phone')) 		$this->fields['phone']	=	get_config('block_ilp','mis_learner_contact_phone');
+ 				if 	(get_config('block_ilp','mis_learner_contact_mobile')) 		$this->fields['mobile']	=	get_config('block_ilp','mis_learner_contact_mobile');
+ 				if 	(get_config('block_ilp','mis_learner_contact_emercontact')) $this->fields['emercontact']	=	get_config('block_ilp','mis_learner_contact_emercontact');
+ 				if 	(get_config('block_ilp','mis_learner_contact_emernumber'))	 $this->fields['emernumber']	=	get_config('block_ilp','mis_learner_contact_emernumber');
+ 				if 	(get_config('block_ilp','mis_learner_contact_addressone')) 	$this->fields['addressone']	=	get_config('block_ilp','mis_learner_contact_addressone');
+ 				if 	(get_config('block_ilp','mis_learner_contact_addresstwo')) 	$this->fields['addresstwo']	=	get_config('block_ilp','mis_learner_contact_addresstwo');
+ 				if 	(get_config('block_ilp','mis_learner_contact_addressthree')) $this->fields['addressthree']	=	get_config('block_ilp','mis_learner_contact_addressthree');
+ 				if 	(get_config('block_ilp','mis_learner_contact_addressfour')) $this->fields['addressfour']	=	get_config('block_ilp','mis_learner_contact_addressfour');
+ 				if 	(get_config('block_ilp','mis_learner_contact_postcode')) 	$this->fields['postcode']	=	get_config('block_ilp','mis_learner_contact_postcode');
 				
  				
- 				$this->data	=	$this->dbquery( $table, $keyfields, $fields);
+ 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
  				
- 				var_dump($this->data);
  				
- 			} else {
- 				var_dump('table not set');
- 			}
+ 				
+ 			} 
     }
  	
  	
@@ -198,6 +230,19 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
         
         $string['ilp_mis_learner_profile_contact_pluginstatus']				= 'Status';
         $string['ilp_mis_learner_profile_contact_pluginstatusdesc']			= 'Is the block enabled or disabled';
+        
+        
+        $string['ilp_mis_learner_profile_contact_disp_personal']				= 'Personal';
+        $string['ilp_mis_learner_profile_contact_disp_contact']					= 'Contact';
+        $string['ilp_mis_learner_profile_contact_disp_address']					= 'Address';
+        $string['ilp_mis_learner_profile_contact_disp_studentid']				= 'Student ID';
+        $string['ilp_mis_learner_profile_contact_disp_enrolmentdate']			= 'Enrolment Date';
+        $string['ilp_mis_learner_profile_contact_disp_dob']						= 'Date of birth';
+        $string['ilp_mis_learner_profile_contact_disp_phone']					= 'Phone';
+        $string['ilp_mis_learner_profile_contact_disp_mobile']					= 'Mobile';
+        $string['ilp_mis_learner_profile_contact_disp_emercontact']				= 'Emergency Contact';
+        $string['ilp_mis_learner_profile_contact_disp_emernumber']				= 'Emergency Number';
+        
         
         return $string;
     }

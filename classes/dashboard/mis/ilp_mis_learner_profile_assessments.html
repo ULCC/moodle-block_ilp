@@ -1,0 +1,24 @@
+<div id="ilp_mis_learner_profile_assessments">
+	<div class="assessmentsboxes">
+		<div class="assessmentsheader"><?php echo get_string('ilp_mis_learner_profile_assessments_disp_assessments','block_ilp') ?></div>
+		<?php if (!empty($this->data[$this->fields['maths']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_assessments_disp_maths','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['maths']]; ?><br />
+		<?php } ?>
+		<?php if (!empty($this->data[$this->fields['english']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_assessments_disp_english','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['english']]; ?><br />
+		<?php } ?>
+		<?php if (!empty($this->data[$this->fields['ict']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_assessments_disp_ict','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['ict']];?><br />
+		<?php } ?>
+		<?php if (!empty($this->data[$this->fields['study']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_assessments_disp_study','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['study']];?><br />
+		<?php } ?>
+	
+	</div>
+	<div class="clearer"></div>
+</div>
+<div class="clearer"></div>

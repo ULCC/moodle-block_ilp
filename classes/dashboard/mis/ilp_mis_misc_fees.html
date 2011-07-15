@@ -1,0 +1,27 @@
+<div id="ilp_mis_misc_fees_fees">
+	<div class="feesboxes">
+		<div class="feesheader"><?php echo get_string('ilp_mis_misc_fees_disp_debtor','block_ilp') ?></div>
+		<?php if (!empty($this->data[$this->fields['totalfees']])) {?>
+			<label ><?php echo get_string('ilp_mis_misc_fees_disp_totalfees','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields[totalfees']]; ?><br />
+		<?php } ?>
+		<?php if (!empty($this->data[$this->fields['feesdue']])) {?>
+			<label ><?php echo get_string('ilp_mis_misc_fees_disp_feesdue','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['feesdue']]; ?><br />
+		<?php } ?>
+		<?php if (!empty($this->data[$this->fields['totalpaid']])) {?>
+			<label ><?php echo get_string('ilp_mis_misc_fees_disp_totalpaid','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['totalpaid']];?><br />
+		<?php } ?>
+		<?php if (!empty($this->data[$this->fields['outstanding']])) {?>
+			<label ><?php echo get_string('ilp_mis_misc_fees_disp_outstanding','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['outstanding']];?><br />
+		<?php } ?>
+		<?php if (!empty($this->data[$this->fields['overdue']])) {?>
+			<label ><?php echo get_string('ilp_mis_misc_fees_disp_overdue','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['overdue']];?><br />
+		<?php } ?>
+	</div>
+	<div class="clearer"></div>
+</div>
+<div class="clearer"></div>

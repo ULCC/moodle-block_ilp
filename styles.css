@@ -304,6 +304,75 @@ ilp .hiddencontainer	{
 	display				:inline;
 }
 
+
+
+/*
+*	MIS plugin css   
+*	@todo this should ideally be included in the plugins however moodle 2.0 uses pure css files so we have to come up with a way
+*	to include it until that time its in this css file
+*/
+
+/** ilp_mis_learner_profile_contact */
+
+.ilp #ilp_mis_learner_profile_contact	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: 70%;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
+
+.ilp #ilp_mis_learner_profile_contact .contactboxes	{
+	width					:	30%;
+	display					:	inline;
+	padding					:	5px;
+	float					:	left;
+	
+}
+
+.ilp #ilp_mis_learner_profile_contact .contactheader	{
+	width					:	100%;
+	border					: thin solid black;
+}
+
+/** ilp_mis_learner_profile_assessment */
+
+.ilp #ilp_mis_learner_profile_assessments	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: 20%;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
+
+.ilp #ilp_mis_learner_profile_assessments .assessmentsboxes	{
+	width					:	95%;
+	display					:	inline;
+	padding					:	5px;
+	float					:	left;
+	
+}
+
+.ilp #ilp_mis_learner_profile_assessments .assessmentsheader	{
+	width					:	100%;
+	border					: thin solid black;
+}
+
+/** ilp_mis_learner_profile_qualifications */
+
+.ilp #ilp_mis_learner_profile_qualifications	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: 25%;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
+
+
+
+
+
+
 /* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific
 *  css class for the table this is BAD BAD BAD and should be sorted out.
 */
