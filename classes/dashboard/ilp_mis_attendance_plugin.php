@@ -114,6 +114,7 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
             GROUP BY $course_id_field
         ";
         return $this->db->execute( $sql )->getRows();
+        //return $this->dbquery( $table,
     }
 
 	
@@ -212,11 +213,13 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
             $whereparams[ $acode_field ] = array( 'IN' => "('" . implode( "','" , $attendancecode_list ) . "')" );
         }
         $whereclause = implode( ' AND ' , $whereandlist );
+/*
         $sql = "
             SELECT $selectclause
             FROM $table
             WHERE $whereclause
         ";
+*/
         //$res = $this->db->execute( $sql )->getRows();
         $res = $this->dbquery( $table, $whereparams, $selectclause );
         if( $countonly ){

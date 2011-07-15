@@ -245,10 +245,64 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
 		$this->params[ 'absent_code_list' ] = get_config('block_ilp','mis_absent_code_list');
 		$this->params[ 'auth_absent_code_list' ] = get_config('block_ilp','mis_auth_absent_code_list');
 */
+
         $this->params[ 'table' ] = get_config( 'block_ilp' , 'mis_attendance_plugin_class_studenttable' );
+        $this->params[ 'attendance_view' ] = get_config( 'block_ilp' , 'mis_attendance_plugin_class_studenttable' );
 		$this->params[ 'timefield_start' ] = get_config('block_ilp','mis_attendance_plugin_class_starttime');
 		$this->params[ 'timefield_end' ] = get_config('block_ilp','mis_attendance_plugin_class_endtime');
 		$this->params[ 'week1' ] = get_config('block_ilp','mis_plugin_class_firstday');
+
+		$this->params[ 'mis_plugin_class_term1name' ] = get_config('block_ilp','mis_plugin_class_term1name');
+		$this->params[ 'mis_plugin_class_term2name' ] = get_config('block_ilp','mis_plugin_class_term2name');
+		$this->params[ 'mis_plugin_class_term3name' ] = get_config('block_ilp','mis_plugin_class_term3name');
+		$this->params[ 'mis_plugin_class_term4name' ] = get_config('block_ilp','mis_plugin_class_term4name');
+		$this->params[ 'mis_plugin_class_term5name' ] = get_config('block_ilp','mis_plugin_class_term5name');
+		$this->params[ 'mis_plugin_class_term6name' ] = get_config('block_ilp','mis_plugin_class_term6name');
+        $this->params[ 'termdatelist' ] = array(
+			explode( ',', get_config('block_ilp','mis_plugin_class_term1startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term2startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term3startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term4startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term5startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term6startend') )
+        );
+        $this->params[ 'start_date' ] = $this->get_extreme_date( $this->params[ 'termdatelist' ] , 'first' );
+        $this->params[ 'end_date' ] = $this->get_extreme_date( $this->params[ 'termdatelist' ] , 'last' );
+        $this->params[ 'extra_numeric_fieldlist' ] = array( 'P', 'A', 'U', 'L' );
+        $this->params[ 'course_id_field' ] = get_config( 'block_ilp' , 'mis_plugin_class_courseid_field' );
+        $this->params[ 'course_label_field' ] = get_config( 'block_ilp' , 'mis_plugin_class_coursename_field' );
+        $this->params[ 'student_id_field' ] = get_config( 'block_ilp' , 'mis_plugin_class_studentid_field' );
+        $this->params[ 'studentlecture_attendance_id' ] = get_config( 'block_ilp' , 'mis_plugin_class_lectureid_field' );
+        $this->params[ 'code_field' ] = get_config( 'block_ilp' , 'mis_plugin_class_codefield_name' );
+        $this->params[ 'extra_fieldlist' ] = array();
+
+		$this->params[ 'late_code_list' ] = explode( ',' , get_config( 'block_ilp', 'mis_plugin_class_late_codes' ) );
+		$this->params[ 'present_code_list' ] = explode( ',' , get_config( 'block_ilp', 'mis_plugin_class_presentcodes'  ) );
+		$this->params[ 'absent_code_list' ] = explode( ',' , get_config( 'block_ilp', 'mis_plugin_class_absentcodes'  ) );
+		$this->params[ 'auth_absent_code_list' ] = array();
+    }
+
+    protected function get_extreme_date( $list, $firstlast ){
+        global $CFG;
+        require_once($CFG->dirroot.'/blocks/ilp/db/calendarfuncs.php');
+        if( 'first' == $firstlast ){
+            return $list[ 0 ][ 0 ];
+        }
+        elseif( 'last' == $firstlast ){
+            $cal = new calendarfuncs();
+            $max = 0;
+            foreach( $list as $row ){
+                foreach( $row as $date ){
+                    if( trim( $date ) ){
+                        $date = $cal->getutime( $date );
+                        if( $date > $max ){
+                            $max = $date;
+                        }
+                    }
+                }
+            }
+            return $cal->getreadabletime( $max );
+        }
     }
     /**
      * Adds settings for this plugin to the admin settings
@@ -260,6 +314,21 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
     	
     	$classstudenttable		=	new admin_setting_configtext('block_ilp/mis_attendance_plugin_class_studenttable',get_string( 'ilp_mis_attendance_plugin_class_table', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_tabledesc', 'block_ilp' ),'',PARAM_RAW);
 		$settings->add($classstudenttable);
+
+        $lectureidfield = new admin_setting_configtext( 'block_ilp/mis_plugin_class_lectureid_field', get_string( 'ilp_mis_attendance_plugin_class_lectureid_field' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_class_lectureid_field' , 'block_ilp' ), '' , PARAM_RAW );
+		$settings->add($lectureidfield);
+		
+        $courseidfield = new admin_setting_configtext( 'block_ilp/mis_plugin_class_courseid_field', get_string( 'ilp_mis_attendance_plugin_class_courseid_field' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_class_courseid_field' , 'block_ilp' ), '' , PARAM_RAW );
+		$settings->add($courseidfield);
+		
+        $coursenamefield = new admin_setting_configtext( 'block_ilp/mis_plugin_class_coursename_field', get_string( 'ilp_mis_attendance_plugin_class_coursename_field' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_class_coursename_field' , 'block_ilp' ), '' , PARAM_RAW );
+		$settings->add($coursenamefield);
+		
+        $codefieldname = new admin_setting_configtext( 'block_ilp/mis_plugin_class_codefield_name', get_string( 'ilp_mis_attendance_plugin_class_code_field' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_class_code_field' , 'block_ilp' ), '' , PARAM_RAW );
+		$settings->add($codefieldname);
+		
+        $studentidfield = new admin_setting_configtext( 'block_ilp/mis_plugin_class_studentid_field', get_string( 'ilp_mis_attendance_plugin_class_studentid_field' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_class_studentid_field' , 'block_ilp' ), '' , PARAM_RAW );
+		$settings->add($studentidfield);
 		
 		$starttimefield			=	new admin_setting_configtext('block_ilp/mis_attendance_plugin_class_starttime',get_string( 'ilp_mis_attendance_plugin_class_timefield_start', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_timefield_startdesc', 'block_ilp' ),'studentID',PARAM_RAW);
 		$settings->add($starttimefield);
@@ -277,6 +346,44 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
 		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_plugin_class_tabletype',get_string('ilp_mis_attendance_plugin_class_tabletype','block_ilp'),get_string('ilp_mis_attendance_plugin_class_tabletypedesc','block_ilp'), 0, $options);
 		$settings->add( $pluginstatus );
 		
+		$term1name			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term1name',get_string( 'ilp_mis_attendance_plugin_class_term1_name', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term1_name', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term1name);
+		$term1startend			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term1startend',get_string( 'ilp_mis_attendance_plugin_class_term1_startend', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term1_startend', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term1startend);
+		
+		$term2name			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term2name',get_string( 'ilp_mis_attendance_plugin_class_term2_name', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term2_name', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term2name);
+		$term2startend			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term2startend',get_string( 'ilp_mis_attendance_plugin_class_term2_startend', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term2_startend', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term2startend);
+		
+		$term3name			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term3name',get_string( 'ilp_mis_attendance_plugin_class_term3_name', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term3_name', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term3name);
+		$term3startend			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term3startend',get_string( 'ilp_mis_attendance_plugin_class_term3_startend', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term3_startend', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term3startend);
+		
+		$term4name			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term4name',get_string( 'ilp_mis_attendance_plugin_class_term4_name', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term4_name', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term4name);
+		$term4startend			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term4startend',get_string( 'ilp_mis_attendance_plugin_class_term4_startend', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term4_startend', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term4startend);
+		
+		$term5name			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term5name',get_string( 'ilp_mis_attendance_plugin_class_term5_name', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term5_name', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term5name);
+		$term5startend			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term5startend',get_string( 'ilp_mis_attendance_plugin_class_term5_startend', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term5_startend', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term5startend);
+		
+		$term6name			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term6name',get_string( 'ilp_mis_attendance_plugin_class_term6_name', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term6_name', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term6name);
+		$term6startend			=	new admin_setting_configtext('block_ilp/mis_plugin_class_term6startend',get_string( 'ilp_mis_attendance_plugin_class_term6_startend', 'block_ilp' ),get_string( 'ilp_mis_attendance_plugin_class_term6_startend', 'block_ilp' ),'studentID',PARAM_RAW);
+		$settings->add($term6startend);
+
+        $latecodes  =   new admin_setting_configtext( 'block_ilp/mis_plugin_class_latecodes' , get_string( 'ilp_mis_attendance_plugin_class_latecodes' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_class_latecodes' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($latecodes);
+
+        $presentcodes  =   new admin_setting_configtext( 'block_ilp/mis_plugin_class_presentcodes' , get_string( 'ilp_mis_attendance_plugin_class_presentcodes' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_class_presentcodes' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($presentcodes);
+
+        $absentcodes  =   new admin_setting_configtext( 'block_ilp/mis_plugin_class_absentcodes' , get_string( 'ilp_mis_attendance_plugin_class_absentcodes' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_class_absentcodes' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($absentcodes);
     }
 
 	/**
@@ -301,6 +408,30 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
         
         $string['ilp_mis_attendance_plugin_class_tabletype']				= 'Table type';
         $string['ilp_mis_attendance_plugin_class_tabletypedesc']			= 'Does this plugin connect to a table or stored procedure';        
+
+        $string[ 'ilp_mis_attendance_plugin_class_lectureid_field' ]    =   'Lecture id field (PK)';
+        $string[ 'ilp_mis_attendance_plugin_class_courseid_field' ]     = 'Course id field';
+        $string[ 'ilp_mis_attendance_plugin_class_studentid_field' ]     = 'Student id field';
+        $string[ 'ilp_mis_attendance_plugin_class_coursename_field' ]     = 'Course name field';
+        $string[ 'ilp_mis_attendance_plugin_class_code_field' ]         =   'Attendance code field';
+
+        $string[ 'ilp_mis_attendance_plugin_class_latecodes' ]         =   'List of register marks indicating late attendance (comma separated)';
+        $string[ 'ilp_mis_attendance_plugin_class_presentcodes' ]         =   'List of register marks indicating presence (comma separated)';
+        $string[ 'ilp_mis_attendance_plugin_class_absentcodes' ]         =   'List of register marks indicating absence (comma separated)';
+
+        $string['ilp_mis_attendance_plugin_class_term1_name']			= 'Term 1 name';        
+        $string['ilp_mis_attendance_plugin_class_term2_name']			= 'Term 2 name';        
+        $string['ilp_mis_attendance_plugin_class_term3_name']			= 'Term 3 name';        
+        $string['ilp_mis_attendance_plugin_class_term4_name']			= 'Term 4 name';        
+        $string['ilp_mis_attendance_plugin_class_term5_name']			= 'Term 5 name';        
+        $string['ilp_mis_attendance_plugin_class_term6_name']			= 'Term 6 name';        
+
+        $string[ 'ilp_mis_attendance_plugin_class_term1_startend' ]     = 'Term 1 start and end dates (yyyy-mm-dd,yyyy-mm-dd)';
+        $string[ 'ilp_mis_attendance_plugin_class_term2_startend' ]     = 'Term 2 start and end dates (yyyy-mm-dd,yyyy-mm-dd)';
+        $string[ 'ilp_mis_attendance_plugin_class_term3_startend' ]     = 'Term 3 start and end dates (yyyy-mm-dd,yyyy-mm-dd)';
+        $string[ 'ilp_mis_attendance_plugin_class_term4_startend' ]     = 'Term 4 start and end dates (yyyy-mm-dd,yyyy-mm-dd)';
+        $string[ 'ilp_mis_attendance_plugin_class_term5_startend' ]     = 'Term 5 start and end dates (yyyy-mm-dd,yyyy-mm-dd)';
+        $string[ 'ilp_mis_attendance_plugin_class_term6_startend' ]     = 'Term 6 start and end dates (yyyy-mm-dd,yyyy-mm-dd)';
     }
 
 }

@@ -115,7 +115,7 @@ foreach( array(
             '8.4/8.6' => 'course',
             '8.5' => 'monthlycoursebreakdown',
             '9.1' => 'class',
-            '9.2' => 'register'
+            //'9.2' => 'register'
         ) as $ref => $display_style ){
             if( in_array( $display_style, $overview_list ) ){
                 $plugin_name = "ilp_mis_attendance_overview_plugin_$display_style";
@@ -125,7 +125,8 @@ foreach( array(
             }
             echo "<h3>$ref $plugin_name</h3>";
             require_once( $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis/$plugin_name.php" );
-			$mis = new $plugin_name( $params );
+			//$mis = new $plugin_name( $params );
+			$mis = new $plugin_name();
 			$mis->set_data( $student_id, $term_id , true );     //3rd arg turns performance on or off in plugin_course
 			$mis->display( true );                              //argument turns links on or off in plugin_simple
 }

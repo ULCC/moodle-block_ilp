@@ -210,6 +210,14 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugi
         $string[ 'ilp_mis_attendance_plugin_register_absentcodes' ]=       'Attendance codes absent (comma separated)';
         $string[ 'ilp_mis_attendance_plugin_register_startdate' ]  =       'First date of academic year (yyyy-mm-dd)';
         $string[ 'ilp_mis_attendance_plugin_register_enddate' ]    =       'Last date of academic year (yyyy-mm-dd)';
+
+        $string[ 'ilp_mis_plugin_register_studentid_field' ]        =       'Student id field';
+        $string[ 'ilp_mis_plugin_register_courseid_field' ]        =       'Course id field';
+        $string[ 'ilp_mis_plugin_register_courselabel_field' ]        =       'Course label field';
+        $string[ 'ilp_mis_plugin_register_attendancecode_field' ]   =       'Attendance code field';
+        $string[ 'ilp_mis_plugin_register_lectureid' ]              =       'Lecture id field';
+        $string[ 'ilp_mis_plugin_register_timefieldstart' ]              =       'Field with lecture start time';
+        $string[ 'ilp_mis_plugin_register_timefieldend' ]              =       'Field with lecture end time';
     }
     public function config_settings(&$settings)	{
     	$settingsheader 	= new admin_setting_heading('block_ilp/mis_attendance_plugin_register', get_string('ilp_mis_attendance_plugin_register_pluginname', 'block_ilp'), '');
@@ -238,6 +246,39 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugi
 
         $absentcodes  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_absentcodes' , get_string( 'ilp_mis_attendance_plugin_register_absentcodes' , 'block_ilp' ), get_string( 'ilp_mis_attendance_plugin_register_absentcodes' , 'block_ilp' ), PARAM_RAW );
 		$settings->add($absentcodes);
+///////////////////////////////////////////////////////////////
+        $lectureid  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_lectureid' , get_string( 'ilp_mis_plugin_register_lectureid' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_lectureid' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($lectureid);
+
+        $studentid  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_studentid_field' , get_string( 'ilp_mis_plugin_register_studentid_field' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_studentid_field' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($studentid);
+
+        $courseid  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_courseid_field' , get_string( 'ilp_mis_plugin_register_courseid_field' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_courseid_field' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($courseid);
+
+        $courselabel  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_courselabel_field' , get_string( 'ilp_mis_plugin_register_courselabel_field' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_courselabel_field' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($courselabel);
+
+        $attendancecode  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_attendancecode_field' , get_string( 'ilp_mis_plugin_register_attendancecode_field' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_attendancecode_field' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($attendancecode);
+
+        $timefieldstart  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_timefieldstart' , get_string( 'ilp_mis_plugin_register_timefieldstart' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_timefieldstart' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($timefieldstart);
+
+        $timefieldend  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_timefieldend' , get_string( 'ilp_mis_plugin_register_timefieldend' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_timefieldend' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($timefieldend);
+
+
+/*
+        $codefield  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_attendancecode_field' , get_string( 'ilp_mis_plugin_register_attendancecode_field' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_attendancecode_field' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($codefield);
+
+        $studentid  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_studentid_field' , get_string( 'ilp_mis_plugin_register_studentid_field' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_studentid_field' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($studentid);
+
+        $courseid  =   new admin_setting_configtext( 'block_ilp/mis_plugin_register_courseid_field' , get_string( 'ilp_mis_plugin_register_courseid_field' , 'block_ilp' ), get_string( 'ilp_mis_plugin_register_courseid_field' , 'block_ilp' ), PARAM_RAW );
+		$settings->add($courseid);
+*/
     }
 
     protected function set_params( $params ){
@@ -255,5 +296,24 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugi
         $this->params[ 'attendance_view' ] = get_config( 'block_ilp' , 'mis_plugin_register_table' );
 		$this->params[ 'week1' ] = get_config( 'block_ilp', 'mis_plugin_register_week1' );
 		$this->params[ 'timefield_start' ] = get_config( 'block_ilp', 'mis_plugin_register_timefield' );
+
+
+        $this->params[ 'studentlecture_attendance_id' ] = get_config( 'block_ilp', 'mis_plugin_register_lectureid' );
+        $this->params[ 'student_id_field' ] = get_config( 'block_ilp', 'mis_plugin_register_studentid_field' );
+        $this->params[ 'course_id_field' ] = get_config( 'block_ilp', 'mis_plugin_register_courseid_field' );
+        $this->params[ 'course_label_field' ] = get_config( 'block_ilp', 'mis_plugin_register_courselabel_field' );
+        $this->params[ 'code_field' ] = get_config( 'block_ilp', 'mis_plugin_register_attendancecode_field' );
+        $this->params[ 'timefield_start' ] = get_config( 'block_ilp', 'mis_plugin_register_timefieldstart' );
+        $this->params[ 'timefield_end' ] = get_config( 'block_ilp', 'mis_plugin_register_timefieldend' );
+        $this->params[ 'extra_numeric_fieldlist' ] = array( 'P', 'A', 'U', 'L' );
+        $this->params[ 'extra_fieldlist' ] = array();
+/*
+        $this->params[ 'studentlecture_attendance_id' ] = get_config( 'block_ilp', 'mis_plugin_register_table' );
+        $this->params[ 'code_field' ] = get_config( 'block_ilp', 'mis_plugin_register_attendancecode_field' );
+        $this->params[ 'student_id_field' ] = get_config( 'block_ilp', 'mis_plugin_register_studentid_field' );
+        $this->params[ 'course_id_field' ] = get_config( 'block_ilp', 'mis_plugin_register_courseid_field' );
+        $this->params[ 'timefield_start' ] = get_config( 'block_ilp', 'mis_plugin_register_timeield_start' );
+        $this->params[ 'timefield_end' ] = get_config( 'block_ilp', 'mis_plugin_register_timefield_end' );
+*/
     }
 }
