@@ -16,7 +16,7 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugi
             echo $this->data;
         }
         elseif( is_array( $this->data ) ){
-		    //echo self::test_entable( $this->data );
+		    echo self::test_entable( $this->data );
 		    echo $this->flexentable( $this->data );
         }
     }
@@ -44,6 +44,9 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugi
             foreach( $columns as $col ){
                 if( $i < count( $row ) ){
                     $tablerow[ $col ] = $row[ $i++ ];
+                }
+                else{
+                    $tablerow[ $col ] = '';
                 }
             }
             $flextable->add_data_keyed( $tablerow );
@@ -147,6 +150,11 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugi
                 //$tablerowlist[ $row_id ][ 2 ] = $this->format_percentage( $attendance[ 'present' ] / $attendance[ 'possible' ] );
                 $tablerowlist[ $row_id ][ 1 ] = $this->calc_attendance_metric( $attendance , 'late' );
                 $tablerowlist[ $row_id ][ 2 ] =  $this->calc_attendance_metric( $attendance , 'attendance' );
+
+                //pad the row
+                while( count( $tablerowlist[ $row_id ] ) < count( $toprow ) ){
+                    $tablerowlist[ $row_id ][] = $blankcell;
+                } 
             }
         }
         return $tablerowlist;
