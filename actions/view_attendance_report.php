@@ -115,7 +115,7 @@ foreach( array(
             '8.4/8.6' => 'course',
             '8.5' => 'monthlycoursebreakdown',
             '9.1' => 'class',
-            //'9.2' => 'register'
+            '9.2' => 'register'
         ) as $ref => $display_style ){
             if( in_array( $display_style, $overview_list ) ){
                 $plugin_name = "ilp_mis_attendance_overview_plugin_$display_style";

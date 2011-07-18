@@ -307,6 +307,14 @@ class ilp_mis_attendance_detail_plugin_register extends ilp_mis_attendance_plugi
         $this->params[ 'timefield_end' ] = get_config( 'block_ilp', 'mis_plugin_register_timefieldend' );
         $this->params[ 'extra_numeric_fieldlist' ] = array( 'P', 'A', 'U', 'L' );
         $this->params[ 'extra_fieldlist' ] = array();
+        $this->params[ 'termdatelist' ] = array(
+			explode( ',', get_config('block_ilp','mis_plugin_class_term1startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term2startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term3startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term4startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term5startend') ),
+			explode( ',', get_config('block_ilp','mis_plugin_class_term6startend') )
+        );
 /*
         $this->params[ 'studentlecture_attendance_id' ] = get_config( 'block_ilp', 'mis_plugin_register_table' );
         $this->params[ 'code_field' ] = get_config( 'block_ilp', 'mis_plugin_register_attendancecode_field' );

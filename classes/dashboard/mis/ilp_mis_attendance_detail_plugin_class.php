@@ -156,7 +156,7 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
                         }
                         else{
                             foreach( $this->params[ 'extra_numeric_fieldlist' ] as $fieldname ){
-                                $aggregate_list[ $row_id ][ $fieldname ] += $row[ $fieldname ];
+                                $aggregate_list[ $row_id ][ $fieldname ] += 1;
                             }
                         }
 
@@ -269,12 +269,12 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
         $this->params[ 'start_date' ] = $this->get_extreme_date( $this->params[ 'termdatelist' ] , 'first' );
         $this->params[ 'end_date' ] = $this->get_extreme_date( $this->params[ 'termdatelist' ] , 'last' );
         $this->params[ 'extra_numeric_fieldlist' ] = array( 'P', 'A', 'U', 'L' );
+        $this->params[ 'extra_fieldlist' ] = array();
         $this->params[ 'course_id_field' ] = get_config( 'block_ilp' , 'mis_plugin_class_courseid_field' );
         $this->params[ 'course_label_field' ] = get_config( 'block_ilp' , 'mis_plugin_class_coursename_field' );
         $this->params[ 'student_id_field' ] = get_config( 'block_ilp' , 'mis_plugin_class_studentid_field' );
         $this->params[ 'studentlecture_attendance_id' ] = get_config( 'block_ilp' , 'mis_plugin_class_lectureid_field' );
         $this->params[ 'code_field' ] = get_config( 'block_ilp' , 'mis_plugin_class_codefield_name' );
-        $this->params[ 'extra_fieldlist' ] = array();
 
 		$this->params[ 'late_code_list' ] = explode( ',' , get_config( 'block_ilp', 'mis_plugin_class_late_codes' ) );
 		$this->params[ 'present_code_list' ] = explode( ',' , get_config( 'block_ilp', 'mis_plugin_class_presentcodes'  ) );
@@ -282,28 +282,6 @@ class ilp_mis_attendance_detail_plugin_class extends ilp_mis_attendance_plugin{
 		$this->params[ 'auth_absent_code_list' ] = array();
     }
 
-    protected function get_extreme_date( $list, $firstlast ){
-        global $CFG;
-        require_once($CFG->dirroot.'/blocks/ilp/db/calendarfuncs.php');
-        if( 'first' == $firstlast ){
-            return $list[ 0 ][ 0 ];
-        }
-        elseif( 'last' == $firstlast ){
-            $cal = new calendarfuncs();
-            $max = 0;
-            foreach( $list as $row ){
-                foreach( $row as $date ){
-                    if( trim( $date ) ){
-                        $date = $cal->getutime( $date );
-                        if( $date > $max ){
-                            $max = $date;
-                        }
-                    }
-                }
-            }
-            return $cal->getreadabletime( $max );
-        }
-    }
     /**
      * Adds settings for this plugin to the admin settings
      * @see ilp_mis_plugin::config_settings()

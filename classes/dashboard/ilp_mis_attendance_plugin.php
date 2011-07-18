@@ -272,5 +272,31 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
         }
         return "<$tag$pstring />";
     }
+
+    /*
+    * shared by detail_plugin_class and detail_plugin_register
+    */
+    protected function get_extreme_date( $list, $firstlast ){
+        global $CFG;
+        require_once($CFG->dirroot.'/blocks/ilp/db/calendarfuncs.php');
+        if( 'first' == $firstlast ){
+            return $list[ 0 ][ 0 ];
+        }
+        elseif( 'last' == $firstlast ){
+            $cal = new calendarfuncs();
+            $max = 0;
+            foreach( $list as $row ){
+                foreach( $row as $date ){
+                    if( trim( $date ) ){
+                        $date = $cal->getutime( $date );
+                        if( $date > $max ){
+                            $max = $date;
+                        }
+                    }
+                }
+            }
+            return $cal->getreadabletime( $max );
+        }
+    }
 	
 }
