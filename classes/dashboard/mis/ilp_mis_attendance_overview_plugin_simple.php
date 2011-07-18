@@ -76,11 +76,11 @@ class ilp_mis_attendance_overview_plugin_simple extends ilp_mis_attendance_plugi
 
     public function set_data( $student_id ){
     	//get the plugins configuration and pass to variables 
-        $tablename 			= get_config('block_ilp','mis_plugin_studenttable'); //$this->params[ 'student_table' ];
+        $tablename 			= get_config('block_ilp','mis_plugin_simple_studenttable'); //$this->params[ 'student_table' ];
         if (!empty($tablename)) {
-	        $keyfield 			= get_config('block_ilp','mis_plugin_studentid');
-	        $attendance_field 	= get_config('block_ilp','mis_plugin_punchuality');
-	        $punctuality_field 	= get_config('block_ilp','mis_plugin_attendance');
+	        $keyfield 			= get_config('block_ilp','mis_plugin_simple_studentid');
+	        $attendance_field 	= get_config('block_ilp','mis_plugin_simple_punchuality');
+	        $punctuality_field 	= get_config('block_ilp','mis_plugin_simple_attendance');
 	        
 	        $data = array_shift( $this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), "$attendance_field, $punctuality_field" ) );
 	        if (!empty($data)) {
