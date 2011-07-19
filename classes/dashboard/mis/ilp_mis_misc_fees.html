@@ -1,24 +1,25 @@
-<div id="ilp_mis_misc_fees_fees">
+<div id="ilp_mis_misc_fees">
 	<div class="feesboxes">
-		<div class="feesheader"><?php echo get_string('ilp_mis_misc_fees_disp_debtor','block_ilp') ?></div>
-		<?php if (!empty($this->data[$this->fields['totalfees']])) {?>
-			<label ><?php echo get_string('ilp_mis_misc_fees_disp_totalfees','block_ilp') ?></label>
-			<?php echo $this->data[$this->fields[totalfees']]; ?><br />
+		<div class="feesheader"><?php echo get_string('ilp_mis_misc_fees_debtor_disp','block_ilp')." ".$this->userfullname; ?></div>
+		<?php if (!empty($this->data[$this->fields['totalfees']])) { ?>
+			<label ><?php echo get_string('ilp_mis_misc_fees_totalfees_disp','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['totalfees']]; ?><br />
 		<?php } ?>
-		<?php if (!empty($this->data[$this->fields['feesdue']])) {?>
-			<label ><?php echo get_string('ilp_mis_misc_fees_disp_feesdue','block_ilp') ?></label>
+		<?php 
+		if (!empty($this->data[$this->fields['feesdue']])) {?>
+			<label ><?php echo get_string('ilp_mis_misc_fees_feesdue_disp','block_ilp') ?></label>
 			<?php echo $this->data[$this->fields['feesdue']]; ?><br />
 		<?php } ?>
 		<?php if (!empty($this->data[$this->fields['totalpaid']])) {?>
-			<label ><?php echo get_string('ilp_mis_misc_fees_disp_totalpaid','block_ilp') ?></label>
+			<label ><?php echo get_string('ilp_mis_misc_fees_totalpaid_disp','block_ilp') ?></label>
 			<?php echo $this->data[$this->fields['totalpaid']];?><br />
 		<?php } ?>
 		<?php if (!empty($this->data[$this->fields['outstanding']])) {?>
-			<label ><?php echo get_string('ilp_mis_misc_fees_disp_outstanding','block_ilp') ?></label>
+			<label ><?php echo get_string('ilp_mis_misc_fees_outstanding_disp','block_ilp') ?></label>
 			<?php echo $this->data[$this->fields['outstanding']];?><br />
 		<?php } ?>
 		<?php if (!empty($this->data[$this->fields['overdue']])) {?>
-			<label ><?php echo get_string('ilp_mis_misc_fees_disp_overdue','block_ilp') ?></label>
+			<label ><?php echo get_string('ilp_mis_misc_fees_overdue_disp','block_ilp') ?></label>
 			<?php echo $this->data[$this->fields['overdue']];?><br />
 		<?php } ?>
 	</div>

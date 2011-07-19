@@ -155,20 +155,11 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	    	        }
 	    	        
 	        	}
-
-	        	
-	        	
-	        	
-	        	
-				
-				
 			}
-			
-			
 				        	
-	        	require_once $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_misc_fees.php';
+	        	//require_once $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_misc_performance_ind.php';
 	        	
-	        	$learnercontact	=	new ilp_mis_misc_fees();
+	        	//$learnercontact	=	new ilp_mis_misc_performance_ind();
 			
 			//if the user has the capability to view others ilp and this ilp is not there own 
 			//then they may change the students status otherwise they can only view 
@@ -216,9 +207,9 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			
 			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/plugins/'.$this->directory.'/ilp_dashboard_student_info.html');
 			
-			$learnercontact->set_data(1);
+			//$learnercontact->set_data(1);
 			
-			echo $learnercontact->display();
+			//echo $learnercontact->display();
 			
 			//pass the output instead to the output var
 			$pluginoutput = ob_get_contents();

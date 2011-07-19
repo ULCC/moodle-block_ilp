@@ -10,6 +10,7 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
 
 	protected 	$fields;
 	protected 	$mis_user_id;
+	protected 	$userfullname;
 	
 	/**
 	 * 
@@ -24,6 +25,7 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  		
  		$this->tabletype	=	get_config('block_ilp','mis_misc_fees_tabletype');
  		$this->fields		=	array();
+ 		$this->userfullname =	false;
  	}
  	
  	/**
@@ -45,8 +47,6 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
 			//call the html file for the plugin 
 			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_misc_fees.html');
 			
-			$flextable->print_html();
-			
 			$pluginoutput = ob_get_contents();
 			
 	        ob_end_clean();
@@ -67,9 +67,13 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  	 */
  	
  	
-    public function set_data( $mis_user_id ){
+    public function set_data( $mis_user_id, $user_id=null ){
     		
     		$this->mis_user_id	=	$mis_user_id;
+    		if (!empty($user_id))	{ 
+    			$user	=	$this->dbc->get_user_by_id($user_id);
+    			$this->userfullname	=	fullname($user);
+    		}
     		
     		$table	=	get_config('block_ilp','mis_misc_fees_table');
     		
@@ -137,7 +141,7 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
     		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
     	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_learner_profile_qualifications_pluginstatus',get_string('ilp_mis_learner_profile_qualifications_pluginstatus','block_ilp'),get_string('ilp_mis_learner_profile_qualifications_pluginstatusdesc','block_ilp'), 0, $options);
+		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_misc_fees_pluginstatus',get_string('ilp_mis_misc_fees_pluginstatus','block_ilp'),get_string('ilp_mis_misc_fees_pluginstatusdesc','block_ilp'), 0, $options);
 		$settings->add( $pluginstatus );
  	 }
     
@@ -181,7 +185,7 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
         $string['ilp_mis_learner_profile_qualifications_pluginstatus']					= 'Status';
         $string['ilp_mis_learner_profile_qualifications_pluginstatusdesc']				= 'Is the block enabled or disabled';
         
-        $string['ilp_mis_misc_fees_disp_debtor']						= 'Debtor';
+        $string['ilp_mis_misc_fees_debtor_disp']						= 'Debtor';
         $string['ilp_mis_misc_fees_totalfees_disp']						= 'Total Fees';
         $string['ilp_mis_misc_fees_feesdue_disp']						= 'Due to Date';
         $string['ilp_mis_misc_fees_totalpaid_disp']						= 'Total Paid';

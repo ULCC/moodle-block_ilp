@@ -368,8 +368,54 @@ ilp .hiddencontainer	{
 	margin-bottom			: 10px;
 }
 
+.ilp #ilp_mis_learner_profile_qualifications_average 	{
+	text-align				:	right;
+}
+
+.ilp #ilp_mis_learner_profile_qualifications_average label	{
+	margin-right			:	10px;
+}
+
+/** ilp_mis_misc_fees **/
+
+.ilp #ilp_mis_misc_fees {
+	
+	border					: thin solid black;
+	padding					: 10px;
+	width					: 25%;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
+
+.ilp #ilp_mis_misc_fees .feesheader	{
+	width					:	100%;
+	border					: thin solid black;
+}
+
+.ilp #ilp_mis_misc_fees label	{
+	margin-right					:	10px;
+}
+
+/** ilp_mis_misc_exam_timetable **/
+
+.ilp #ilp_mis_misc_exam_timetable	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: 30%;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
 
 
+/** ilp_mis_misc_performance_ind **/
+
+.ilp #ilp_mis_misc_performance_ind	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: 20%;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
 
 
 

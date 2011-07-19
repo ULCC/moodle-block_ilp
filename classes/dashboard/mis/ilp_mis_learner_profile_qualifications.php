@@ -1,29 +1,7 @@
 <?php 
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
 
-require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_ajax_table.class.php');
-
-
-/****
- * ilp_mis_ajax_table class
- * 
- * extending the ilp_ajax_table class so a div may be put
- * around it using the wrap_html_start and wrap_start_finish
- * 
- */
-class ilp_mis_ajax_table extends ilp_ajax_table {
-	
-	function wrap_html_start() {
-		echo "<div id='ilp_mis_learner_profile_qualifications' >";		
-	}
-	
-	
-	function wrap_html_finish() {
-		echo "</div>";
-	}
-	
-	
-}
+require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_mis_ajax_table.class.php');
 
 
 class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
@@ -63,10 +41,11 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  			   // set up the flexible table for displaying the portfolios
 
 	        //instantiate the ilp_ajax_table class
-	        $flextable = new ilp_mis_ajax_table( 'attendance_plugin_simple' );
+	        $flextable = new ilp_mis_ajax_table( 'learner_profile_qualifications',true,'ilp_mis_learner_profile_qualifications' );
 	
 	        //create headers
-	        
+	        $headers	=	array();
+	        $columns	=	array();
 	        //setup the headers and columns with the fields that have been requested 
 
 	        foreach ($this->fields as $k => $v) {
@@ -120,14 +99,17 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
 	            }
 	        }
 	        
-			
+	        //calculate the average of the students qualification points
+			$average	=	(!empty($total)) ? $total	/$i : 0;
 	        
 	        //buffer out as flextable sends its data straight to the screen we dont want this  
 			ob_start();
 			
+			$flextable->wrap_finish_extra	=	"<div id='ilp_mis_learner_profile_qualifications_average'><label>".get_string( 'ilp_mis_learner_qualifications_average', 'block_ilp' )."</label>".number_format($average,0)."</div>";
+						
 			//call the html file for the plugin which has the flextable print statement
 			//require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_learner_profile_qualifications.html');
-			
+ 
 			$flextable->print_html();
 			
 			$pluginoutput = ob_get_contents();
@@ -267,6 +249,10 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
         $string['ilp_mis_learner_qualifications_grade_disp']					= 'Grade';
         $string['ilp_mis_learner_qualifications_points_disp']					= 'Points';
         $string['ilp_mis_learner_qualifications_year_disp']						= 'Year';
+        
+        $string['ilp_mis_learner_qualifications_average']							= 'Average Points:';
+        
+        
         			 
         
         return $string;
