@@ -182,8 +182,8 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
         $string['ilp_mis_misc_fees_tabletype']								= 'Table type';
         $string['ilp_mis_misc_fees_tabletypedesc']							= 'Does this plugin connect to a table or stored procedure';        
         
-        $string['ilp_mis_learner_profile_qualifications_pluginstatus']					= 'Status';
-        $string['ilp_mis_learner_profile_qualifications_pluginstatusdesc']				= 'Is the block enabled or disabled';
+        $string['ilp_mis_misc_fees_pluginstatus']						= 'Status';
+        $string['ilp_mis_misc_fees_pluginstatusdesc']					= 'Is the block enabled or disabled';
         
         $string['ilp_mis_misc_fees_debtor_disp']						= 'Debtor';
         $string['ilp_mis_misc_fees_totalfees_disp']						= 'Total Fees';

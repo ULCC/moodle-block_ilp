@@ -205,7 +205,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
         $string['ilp_mis_misc_performance_ind_gradedesc']						= 'The field that holds current grade data';
         
 		$string['ilp_mis_misc_performance_ind_performancescore']				= 'Performance Score field';
-        $string['ilp_mis_misc_performance_ind_performanceScoredesc']			= 'The field that holds performance score data';
+        $string['ilp_mis_misc_performance_ind_performancescoredesc']			= 'The field that holds performance score data';
         
         $string['ilp_mis_misc_performance_ind_endtime']							= 'Exam end time field';
         $string['ilp_mis_misc_performance_ind_endtimedesc']						= 'The field that holds exam end data';
