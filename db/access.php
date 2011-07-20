@@ -26,8 +26,6 @@ $block_ilp_capabilities = array(
 		'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'legacy' => array(
-            'student' => CAP_PREVENT,
-            'editingteacher' => CAP_PREVENT,
             'admin' => CAP_ALLOW
         )
 	),
@@ -39,7 +37,7 @@ $block_ilp_capabilities = array(
 		'captype' => 'write',
 		'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
-            'student' => CAP_PREVENT,
+            'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW
         )
@@ -52,7 +50,7 @@ $block_ilp_capabilities = array(
 		'captype' => 'write',
 		'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
-            'student' => CAP_PREVENT,
+            'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW
         )
@@ -65,8 +63,6 @@ $block_ilp_capabilities = array(
 		'captype' => 'write',
 		'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
-            'student' => CAP_PREVENT,
-            'editingteacher' => CAP_PREVENT,
             'admin' => CAP_ALLOW
         )
 	
@@ -102,7 +98,6 @@ $block_ilp_capabilities = array(
 		'captype' => 'read',
 		'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
-            'student' => CAP_PREVENT,
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW
         )
