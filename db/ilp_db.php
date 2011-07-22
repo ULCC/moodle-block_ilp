@@ -1830,8 +1830,10 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_mis_plugins() 	{
+    	global	$CFG;
+    	
     	        // check for the presence of a table to determine which query to run
-        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_mis_plugin}'");
+        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{$CFG->prefix}block_ilp_mis_plugin'");
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_mis_plugin', array()) : false;
