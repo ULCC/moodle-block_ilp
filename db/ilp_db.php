@@ -1830,7 +1830,11 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_mis_plugins() 	{
-    	return	$this->dbc->get_records('block_ilp_mis_plugin');
+    	        // check for the presence of a table to determine which query to run
+        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_mis_plugin}'");
+
+        // return resource types or false
+        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_mis_plugin', array()) : false;
     }
     
     
@@ -1893,7 +1897,34 @@ class ilp_db_functions	extends ilp_logging {
   	}
 
     
+  	 /**
+  	 * Returns the record with a class name matching the one given in the given table
+  	 * 
+  	 * @param	string 	$name the name of the plugin that we want to match
+  	 * @param	string 	$tablename the name of the table that will be queried
+  	 * 
+  	 * @return	mixed object recordset or bool false 
+  	 */
+  	function get_plugin_record_by_classname($tablename,$classname) {
+  		return $this->dbc->get_record($tablename,array('name'=>$classname));
+  	}
     
+    function setting_exists($name)	{
+    	return $this->dbc->get_record('config_plugins',array('name'=>$name,'plugin'=>'block_ilp'));
+    }
+
+    function insert_config_setting($name,$value) {
+    	$setting	=	new stdClass();
+    	$setting->plugin	=	'block_ilp';
+    	$setting->name		=	$name;
+    	$setting->value		=	$value;
+    	
+    	return $this->dbc->insert_record('config_plugins',$setting);
+    }
+    
+    function update_config_setting($setting) {
+		return $this->dbc->update_record('config_plugins',$setting);
+    }
     
 }
 
