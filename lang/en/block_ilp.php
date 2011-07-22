@@ -125,6 +125,7 @@
 	$string['passcsscolour']		=	'Pass CSS colour';
 	$string['passcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in a pass state';
 	$string['perpage'] 				=	'per page';
+	$string['pluginconfig'] 		= 	'Plugin Config';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['plugintype'] 			= 	'Plugin Type';
 	$string['print'] 				= 	'Print';
@@ -206,6 +207,20 @@
 	$string['statusitemupdateerror']			=	'A error occurred whilst updating status items';
 	$string['labelexistserror']				=	"field label already exists in this report";
 	
+	//month strings
+	$string['jan']								=	'Jan';
+	$string['feb']								=	'Feb';
+	$string['mar']								=	'Mar';
+	$string['apr']								=	'Apr';
+	$string['may']								=	'May';
+	$string['jun']								=	'Jun';
+	$string['jul']								=	'Jul';
+	$string['aug']								=	'Aug';
+	$string['sep']								=	'Sep';
+	$string['oct']								=	'Oct';
+	$string['nov']								=	'Nov';
+	$string['dec']								=	'Dec';
+		
 	
 	
 	//LOGGING
@@ -291,17 +306,19 @@
 	
 	foreach ($mis_plugins as $plugin_file) {
 	
-	    require_once($plugins.'/'.$plugin_file.".php");
-	    
-	    // instantiate the object
-	    $class = basename($plugin_file, ".php");
-	    $pluginobj = new $class();
-	    $method = array($pluginobj, 'language_strings');
-		
-	    //check whether the language_strings method has been defined
-
-	    if (is_callable($method,true)) {
-	        $pluginobj->language_strings($string);
+		if (file_exists($tabs.'/'.$plugin_file.".php"))  {
+		    require_once($plugins.'/'.$plugin_file.".php");
+		    
+		    // instantiate the object
+		    $class = basename($plugin_file, ".php");
+		    $pluginobj = new $class();
+		    $method = array($pluginobj, 'language_strings');
+			
+		    //check whether the language_strings method has been defined
+	
+		    if (is_callable($method,true)) {
+		        $pluginobj->language_strings($string);
+		    }
 	    }
 	}
 
