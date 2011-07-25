@@ -96,55 +96,53 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  				$this->data	=	(!empty($this->data)) ? array_shift($this->data)	:	$this->data;
  			} 
     }
- 	
- 	
+
 	/**
      * Adds settings for this plugin to the admin settings
      * @see ilp_mis_plugin::config_settings()
      */
     public function config_settings(&$settings)	{
+    	global $CFG;
     	
-    	$settingsheader 	= new admin_setting_heading('block_ilp/mis_misc_fees', get_string('ilp_mis_misc_fees', 'block_ilp'), '');
-    	$settings->add($settingsheader);
-    	
-    	$table		=	new admin_setting_configtext('block_ilp/mis_misc_fees_table',get_string( 'ilp_mis_misc_fees_table', 'block_ilp' ),get_string( 'ilp_mis_misc_fees_tabledesc', 'block_ilp' ),'',PARAM_RAW);
-		$settings->add($table);
-		
-		$keyfield			=	new admin_setting_configtext('block_ilp/mis_misc_fees_studentid',get_string( 'ilp_mis_misc_fees_studentid', 'block_ilp' ),get_string( 'ilp_mis_misc_fees_studentiddesc', 'block_ilp' ),'studentID',PARAM_RAW);
-		$settings->add($keyfield);
-		
-		$totalfeesfield			=	new admin_setting_configtext('block_ilp/mis_misc_fees_totalfees',get_string( 'ilp_mis_misc_fees_totalfees', 'block_ilp' ),get_string( 'ilp_mis_misc_fees_totalfeesdesc', 'block_ilp' ),'totalFees',PARAM_RAW);
-		$settings->add($totalfeesfield);
-		
-		$feesduefield			=	new admin_setting_configtext('block_ilp/mis_misc_fees_feesdue',get_string( 'ilp_mis_misc_fees_feesdue', 'block_ilp' ),get_string( 'ilp_mis_misc_fees_feesduedesc', 'block_ilp' ),'feesDue',PARAM_RAW);
-		$settings->add($feesduefield);
-		
-		$totalpaidfield			=	new admin_setting_configtext('block_ilp/mis_misc_fees_totalpaid',get_string( 'ilp_mis_misc_fees_totalpaid', 'block_ilp' ),get_string( 'ilp_mis_misc_fees_totalpaiddesc', 'block_ilp' ),'totalPaid',PARAM_RAW);
-		$settings->add($totalpaidfield);
-		
-		$outstandingfield			=	new admin_setting_configtext('block_ilp/mis_misc_fees_outstanding',get_string( 'ilp_mis_misc_fees_outstanding', 'block_ilp' ),get_string( 'ilp_mis_misc_fees_outstandingdesc', 'block_ilp' ),'outstanding',PARAM_RAW);
-		$settings->add($outstandingfield);
-		
-		$overduefield			=	new admin_setting_configtext('block_ilp/mis_misc_fees_overdue',get_string( 'ilp_mis_misc_fees_overdue', 'block_ilp' ),get_string( 'ilp_mis_misc_fees_overduedesc', 'block_ilp' ),'overdue',PARAM_RAW);
-		$settings->add($overduefield);
-		
-		$options = array(
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_misc_fees&plugintype=mis">'.get_string('ilp_mis_misc_fees_pluginnamesettings', 'block_ilp').'</a>';
+		$settings->add(new admin_setting_heading('block_ilp_mis_misc_fees', '', $link));
+ 	 }
+    
+ 	  	 /**
+ 	  * Adds config settings for the plugin to the given mform
+ 	  * @see ilp_plugin::config_form()
+ 	  */
+ 	 function config_form(&$mform)	{
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_fees_table',get_string('ilp_mis_misc_fees_table', 'block_ilp'),get_string('ilp_mis_misc_fees_tabledesc', 'block_ilp'),'');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_fees_studentid',get_string('ilp_mis_misc_fees_studentid', 'block_ilp'),get_string('ilp_mis_misc_fees_studentiddesc', 'block_ilp'),'studentID');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_fees_totalfees',get_string('ilp_mis_misc_fees_totalfees', 'block_ilp'),get_string('ilp_mis_misc_fees_totalfeesdesc', 'block_ilp'),'totalFees');
+
+ 	 	$this->config_text_element($mform,'mis_misc_fees_feesdue',get_string('ilp_mis_misc_fees_feesdue', 'block_ilp'),get_string('ilp_mis_misc_fees_feesduedesc', 'block_ilp'),'feesDue');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_fees_totalpaid',get_string('ilp_mis_misc_fees_totalpaid', 'block_ilp'),get_string('ilp_mis_misc_fees_totalpaiddesc', 'block_ilp'),'totalPaid');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_fees_outstanding',get_string('ilp_mis_misc_fees_outstanding', 'block_ilp'),get_string('ilp_mis_misc_fees_outstandingdesc', 'block_ilp'),'outstanding');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_fees_overdue',get_string('ilp_mis_misc_fees_overdue', 'block_ilp'),get_string('ilp_mis_misc_fees_overduedesc', 'block_ilp'),'overdue');
+ 	 	
+  	 	$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),
     		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_misc_fees_tabletype',get_string('ilp_mis_misc_fees_tabletype','block_ilp'),get_string('ilp_mis_misc_fees_tabletypedesc','block_ilp'), 1, $options);
-		$settings->add( $pluginstatus );
-		
-		$options = array(
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_misc_fees_tabletype',$options,get_string('ilp_mis_misc_fees_tabletype', 'block_ilp'),get_string('ilp_mis_misc_fees_tabletypedesc', 'block_ilp'),1);
+ 	 	
+ 	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
     		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_misc_fees_pluginstatus',get_string('ilp_mis_misc_fees_pluginstatus','block_ilp'),get_string('ilp_mis_misc_fees_pluginstatusdesc','block_ilp'), 0, $options);
-		$settings->add( $pluginstatus );
+ 	
+ 	 	$this->config_select_element($mform,'ilp_mis_misc_fees_pluginstatus',$options,get_string('ilp_mis_misc_fees_pluginstatus', 'block_ilp'),get_string('ilp_mis_misc_fees_pluginstatusdesc', 'block_ilp'),0);
+ 	 	
  	 }
-    
     
 	/**
 	 * Adds the string values from the tab to the language file
@@ -154,7 +152,8 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
 	 */
 	 function language_strings(&$string) {
 
-        $string['ilp_mis_misc_fees_pluginname']						= 'Learner Profile Qualifications On Entry';
+        $string['ilp_mis_misc_fees_pluginname']						= 'Fees';
+        $string['ilp_mis_misc_fees_pluginnamesettings']						= 'Fees Payment Configuration';
         
         $string['ilp_mis_misc_fees_table']								= 'MIS table';
         $string['ilp_mis_misc_fees_tabledesc']							= 'The table in the MIS where the data for this plugin will be retrieved from';

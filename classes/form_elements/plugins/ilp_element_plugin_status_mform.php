@@ -6,7 +6,9 @@ class ilp_element_plugin_status_mform  extends ilp_element_plugin_itemlist_mform
 
 	public 	$tablename;
 	public 	$items_tablename;
-	public	$reporfield_link_table;
+	public	$reportfield_link_table;
+
+	
 	
 	function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
 		parent::__construct($report_id,$plugin_id,$creator_id,$reportfield_id);
@@ -41,6 +43,7 @@ class ilp_element_plugin_status_mform  extends ilp_element_plugin_itemlist_mform
 			$statusfield->status_id					=	$data->status_id;
 			$statusfield->reportfield_id			=	$data->reportfield_id;
 			$statusfield->creator_id				=	$USER->id;
+
 			$this->dbc->create_statusfield($statusfield);
 		}
 	}

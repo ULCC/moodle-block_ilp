@@ -107,7 +107,7 @@ class ilp_mis_connection{
     }
 
     /**
-     * Takes an array in the format array($a=>array($b=> $c) and returns 
+     * Takes an array in the format array($a=>array($b=> $c)) and returns 
      * a string in the format $a $b $c  
      * @param array $paramarray the params that need to be converted to 
      * a string
@@ -219,6 +219,7 @@ class ilp_mis_connection{
     * @return array of arrays      
     */
     public function execute( $sql){
+  	
         $res = $this->db->Execute( $sql ) or die( $this->db->ErrorMsg() );
         return $res;
     }

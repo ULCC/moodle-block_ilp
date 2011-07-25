@@ -137,9 +137,9 @@ global $CFG;
 $plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
 
 if ($dbc->get_mis_plugins() !== false) {
+	
+	
 	$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
-	
-	
 	
 	foreach ($mis_plugins as $plugin_file) {
 	

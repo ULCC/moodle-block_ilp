@@ -334,7 +334,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 	    $table->addField($table_textfieldid);
 	        
 	    $table_itemvalue = new $this->xmldb_field('value');
-	    $table_itemvalue->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
+	    $table_itemvalue->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);
 	    $table->addField($table_itemvalue);
 	        
 	    $table_itemname = new $this->xmldb_field('name');

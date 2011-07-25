@@ -10,7 +10,21 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_mis_ajax_table.class.
 class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 
 	protected 	$fields;
+
+	/*
+	 * will hold the mis id of the user we want data on 
+	 */
 	protected 	$mis_user_id;
+	
+	/*
+	 * Will hold the current term week
+	 */
+	protected 	$termweek;
+	
+	/*
+	 * Will hold the week that will be retrieved
+	 */
+	protected 	$timetableweek;
 	
 	
 	/**
@@ -26,6 +40,26 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  		
  		$this->tabletype	=	get_config('block_ilp','mis_misc_timetable_tabletype');
  		$this->fields		=	array();
+ 		
+ 	 	//get the current week in the year
+ 		$realweek	=	date('W',time());
+ 			
+ 		//get the term start week from config
+ 		$termstart		=   get_config('block_ilp','mis_misc_timetable_termstart');
+			 			
+ 		//get the week in the year of termstart
+ 		$termstartweek	=	(!empty($termstart)) ? date('W',strtotime($termstart)) : 40; 
+ 		$this->termweek		=	0;
+ 			
+ 		if ($realweek < $termstartweek) {
+ 				//if the termstartweek is less than the term week should be 
+ 				$offset	=	56 - $termstartweek;
+				$this->termweek	=	$realweek + $offset;
+ 				
+ 		} else {
+ 			$this->termweek	=	$realweek - $termstartweek;
+ 		}
+ 		
  	}
  	
  	/**
@@ -33,30 +67,13 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  	 * @see ilp_mis_plugin::display()
  	 */
  	function display()	{
- 		global $CFG;
+ 		global $CFG, $PARSER;
         
         // set up the flexible table for displaying the data
  		
- 		if (!empty($this->data)) {
+
      		
- 			//get the current week in the year
- 			$currentweek	=	date('W',time());
- 			
- 			//get the term start week from config
- 			$termstart		=   get_config('block_ilp','mis_misc_timetable_termstart');
-			 			
- 			//get the week in the year of termstart
- 			$termstartweek	=	date('W',$termstart); 
- 			$termweek		=	0;
- 			
- 			if ($currentweek < $termstartweek) {
- 				//if the termstartweek is less than the term week should be 
- 				$offset	=	56 - $termstartweek;
-				$termweek	=	$currentweek + $offset;
- 				
- 			} else {
- 				$termweek	=	56 - $termstartweek;
- 			}
+
  			
  			
  			
@@ -99,53 +116,65 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 	        $flextable->set_attribute('class', 'flexible generaltable');
 	        
 	        
-	        $flextable->wrap_start_extra	=	"<span id='ilp_mis_misc_timetable_header'>".get_string('ilp_mis_misc_timetable_timetable_disp','block_ilp')
-	        									." ".get_string('ilp_mis_misc_timetable_week_disp','block_ilp')." {$termweek} </span>";
+	        $flextable->wrap_start_extra	=	"<span id='ilp_mis_misc_timetable_header'>".get_string('ilp_mis_misc_timetable_timetable_disp','block_ilp')." ".get_string('ilp_mis_misc_timetable_week_disp','block_ilp')." {$this->timetableweek} </span>";
+	        
+			$params		=	$PARSER->get_params();
+			$urlparams	=	"";
+			
+			foreach ($params as $k => $v) {
+				if ($k	!= 'timetableweek') {
+					$urlparams	.= "{$k}={$v}&";
+				}
+			}	        									
 	        									
-
-	        $currentweeklink				=	"<a href=''>Current</a>";
-	        $nextweeklink					=	"<a href=''>Next &#62;&#62;</a>";
-	        $previousweeklink				=	"<a href=''>&#60;&#60; Previous</a>"; 									
+	        $url	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?$urlparams";						
+				        
+	        $previous						=	$this->timetableweek	-	1;
+			$next							=	$this->timetableweek	+	1;
+				        
+	        $currentweeklink				=	"<a href='{$url}&timetableweek={$this->termweek}'>Current</a>" ;
+	        $nextweeklink					=	"<a href='{$url}&timetableweek={$next}'>".get_string('ilp_mis_misc_timetable_next_disp','block_ilp')." &#62;&#62;</a>";
+	        $previousweeklink				=	($previous > 1) ?  "<a href='{$url}&timetableweek={$previous}'>&#60;&#60; ".get_string('ilp_mis_misc_timetable_previous_disp','block_ilp'). "</a>" : 
+	        									get_string('ilp_mis_misc_timetable_previous_disp','block_ilp'); 									
 	        									
-			$flextable->wrap_finish_extra	=	"<span id='ilp_mis_misc_timetable_header'>".get_string('ilp_mis_misc_timetable_timetable_disp','block_ilp')
-	        									." ".get_string('ilp_mis_misc_timetable_week_disp','block_ilp')." {$termweek} </span>";	        									
+			$flextable->wrap_finish_extra	=	"<span id='ilp_mis_misc_timetable_footer'> {$previousweeklink} | {$currentweeklink} | {$nextweeklink}</span>";	        									
 	        									
 	        //setup the flextable
 	        $flextable->setup();
 	        
 	        $i	=	0;
 	        $total	=	0;
-	        
-	        //add the row to table
-	        foreach( $this->data as $row ){
-	        	
-	        	if (get_config('block_ilp','mis_misc_timetable_date'))	{
-	        		$date				=	$row[get_config('block_ilp','mis_misc_timetable_date')];
-	        	   	$datetimestamp		=	strtotime($date);
-	        	
-	        		$data['day']		=	date('D',$datetimestamp);
-	        		$data['date']		=	date('d/m',$datetimestamp);
-	        	}
-	        	
-	        	if (get_config('block_ilp','mis_misc_timetable_register'))	$data['register']	=	$row[get_config('block_ilp','mis_misc_timetable_register')];
-	        	
-	        	if (get_config('block_ilp','mis_misc_timetable_room'))		$data['room']		=	$row[get_config('block_ilp','mis_misc_timetable_room')];
-	        	
-	        	if (get_config('block_ilp','mis_misc_timetable_starttime')) {
-	        		$start				=	strtotime($row[get_config('block_ilp','mis_misc_timetable_starttime')]);
-	        		$data['starttime']	=	date('G:i',$start);
-	        	}
-	        	
-	        	if (get_config('block_ilp','mis_misc_timetable_endtime'))	{
-	        		$end				=	strtotime($row[get_config('block_ilp','mis_misc_timetable_endtime')]);
-	        		$data['endtime']	=	date('G:i',$end);
-	        	}
-	        	
-	        	if (get_config('block_ilp','mis_misc_timetable_tutor'))		$data['tutor']		=	$row[get_config('block_ilp','mis_misc_timetable_tutor')];
-	        	
-	            $flextable->add_data_keyed( $data );
+	        if (!empty($this->data)) {
+		        //add the row to table
+		        foreach( $this->data as $row ){
+		        	
+		        	if (get_config('block_ilp','mis_misc_timetable_date'))	{
+		        		$date				=	$row[get_config('block_ilp','mis_misc_timetable_date')];
+		        	   	$datetimestamp		=	strtotime($date);
+		        	
+		        		$data['day']		=	date('D',$datetimestamp);
+		        		$data['date']		=	date('d/m',$datetimestamp);
+		        	}
+		        	
+		        	if (get_config('block_ilp','mis_misc_timetable_register'))	$data['register']	=	$row[get_config('block_ilp','mis_misc_timetable_register')];
+		        	
+		        	if (get_config('block_ilp','mis_misc_timetable_room'))		$data['room']		=	$row[get_config('block_ilp','mis_misc_timetable_room')];
+		        	
+		        	if (get_config('block_ilp','mis_misc_timetable_starttime')) {
+		        		$start				=	strtotime($row[get_config('block_ilp','mis_misc_timetable_starttime')]);
+		        		$data['starttime']	=	date('G:i',$start);
+		        	}
+		        	
+		        	if (get_config('block_ilp','mis_misc_timetable_endtime'))	{
+		        		$end				=	strtotime($row[get_config('block_ilp','mis_misc_timetable_endtime')]);
+		        		$data['endtime']	=	date('G:i',$end);
+		        	}
+		        	
+		        	if (get_config('block_ilp','mis_misc_timetable_tutor'))		$data['tutor']		=	$row[get_config('block_ilp','mis_misc_timetable_tutor')];
+		        	
+		            $flextable->add_data_keyed( $data );
+		        }
 	        }
-	        
 	        //buffer out as flextable sends its data straight to the screen we dont want this  
 			ob_start();
 			
@@ -158,9 +187,6 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 	        ob_end_clean();
  			
  			return $pluginoutput;
- 			
- 			
- 		} 
  	} 
  	
  	/**
@@ -176,22 +202,21 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
     public function set_data( $mis_user_id ){
     		global $PARSER;
 
-    		
-    		$test =	$PARSER->optional_param('timetableweek',$currentweek,PARAM_INT);
-    	
+    		//get the week we want 
+    		$this->timetableweek 	=	$PARSER->optional_param('timetableweek',$this->termweek,PARAM_INT);
     	
     		$this->mis_user_id	=	$mis_user_id;
     		
     		$table	=	get_config('block_ilp','mis_misc_timetable_table');
     		
 			if (!empty($table)) {
+				$sidfield	=	get_config('block_ilp','mis_misc_timetable_studentid');
 				
- 				$sidfield	=	get_config('block_ilp','mis_misc_timetable_studentid');
+				$wkfield	=	get_config('block_ilp','mis_misc_timetable_week');
  			
- 				$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
+ 				$keyfields	=	array($sidfield	=> array('=' => $mis_user_id),$wkfield => array('=' => $this->timetableweek));
  				
  				$this->fields		=	array();
- 				
  				
  				if 	(get_config('block_ilp','mis_misc_timetable_registerid')) 	$this->fields['registerid']	=	get_config('block_ilp','mis_misc_timetable_registerid');
  				if 	(get_config('block_ilp','mis_misc_timetable_week')) 		$this->fields['week']	=	get_config('block_ilp','mis_misc_timetable_week');
@@ -204,7 +229,6 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_misc_timetable_endtime')) 		$this->fields['endtime']	=	get_config('block_ilp','mis_misc_timetable_endtime');
  				
  				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
- 				
  			} 
     }
  	
@@ -214,64 +238,59 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
      * @see ilp_mis_plugin::config_settings()
      */
     public function config_settings(&$settings)	{
+    	global $CFG;
     	
-    	$settingsheader 	= new admin_setting_heading('block_ilp/mis_misc_timetable', get_string('ilp_mis_misc_timetable_pluginname', 'block_ilp'), '');
-    	$settings->add($settingsheader);
-    	
-    	$table		=	new admin_setting_configtext('block_ilp/mis_misc_timetable_table',get_string( 'ilp_mis_misc_timetable_table', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_tabledesc', 'block_ilp' ),'',PARAM_RAW);
-		$settings->add($table);
-		
-		$keyfield			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_studentid',get_string( 'ilp_mis_misc_timetable_studentid', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_studentiddesc', 'block_ilp' ),'studentID',PARAM_RAW);
-		$settings->add($keyfield);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_registerid',get_string( 'ilp_mis_misc_timetable_registerid', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_registeriddesc', 'block_ilp' ),'registerID',PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_week',get_string( 'ilp_mis_misc_timetable_week', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_weekdesc', 'block_ilp' ),'week',PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_register',get_string( 'ilp_mis_misc_timetable_register', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_registerdesc', 'block_ilp' ),'registerName',PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_date',get_string( 'ilp_mis_misc_timetable_date', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_datedesc', 'block_ilp' ),'dateTime',PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_room',get_string( 'ilp_mis_misc_timetable_room', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_roomdesc', 'block_ilp' ),'room',PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_starttime',get_string( 'ilp_mis_misc_timetable_starttime', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_starttimedesc', 'block_ilp' ),'starttime',PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_endtime',get_string( 'ilp_mis_misc_timetable_endtime', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_endtimedesc', 'block_ilp' ),'endtime',PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_tutor',get_string( 'ilp_mis_misc_timetable_tutor', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_tutordesc', 'block_ilp' ),'tutor',PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_termstart',get_string( 'ilp_mis_misc_timetable_termstart', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_termstartdesc', 'block_ilp' ),null,PARAM_RAW);
-		$settings->add($field);
-		
-		$field			=	new admin_setting_configtext('block_ilp/mis_misc_timetable_termend',get_string( 'ilp_mis_misc_timetable_termend', 'block_ilp' ),get_string( 'ilp_mis_misc_timetable_termenddesc', 'block_ilp' ),null,PARAM_RAW);
-		$settings->add($field);
-		
-		$options = array(
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_misc_timetable&plugintype=mis">'.get_string('ilp_mis_misc_timetable_pluginnamesettings', 'block_ilp').'</a>';
+		$settings->add(new admin_setting_heading('block_ilp_mis_misc_timetable', '', $link));
+ 	 }
+    
+ 	  	 /**
+ 	  * Adds config settings for the plugin to the given mform
+ 	  * @see ilp_plugin::config_form()
+ 	  */
+ 	 function config_form(&$mform)	{
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_table',get_string('ilp_mis_misc_timetable_table', 'block_ilp'),get_string('ilp_mis_misc_timetable_tabledesc', 'block_ilp'),'');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_studentid',get_string('ilp_mis_misc_timetable_studentid', 'block_ilp'),get_string('ilp_mis_misc_timetable_studentiddesc', 'block_ilp'),'studentID');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_registerid',get_string('ilp_mis_misc_timetable_registerid', 'block_ilp'),get_string('ilp_mis_misc_timetable_registeriddesc', 'block_ilp'),'registerID');
+
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_week',get_string('ilp_mis_misc_timetable_week', 'block_ilp'),get_string('ilp_mis_misc_timetable_weekdesc', 'block_ilp'),'week');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_register',get_string('ilp_mis_misc_timetable_register', 'block_ilp'),get_string('ilp_mis_misc_timetable_registerdesc', 'block_ilp'),'registerName');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_date',get_string('ilp_mis_misc_timetable_date', 'block_ilp'),get_string('ilp_mis_misc_timetable_datedesc', 'block_ilp'),'dateTime');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_room',get_string('ilp_mis_misc_timetable_room', 'block_ilp'),get_string('ilp_mis_misc_timetable_roomdesc', 'block_ilp'),'room');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_starttime',get_string('ilp_mis_misc_timetable_starttime', 'block_ilp'),get_string('ilp_mis_misc_timetable_starttimedesc', 'block_ilp'),'starttime');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_endtime',get_string('ilp_mis_misc_timetable_endtime', 'block_ilp'),get_string('ilp_mis_misc_timetable_endtimedesc', 'block_ilp'),'endtime');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_tutor',get_string('ilp_mis_misc_timetable_tutor', 'block_ilp'),get_string('ilp_mis_misc_timetable_tutordesc', 'block_ilp'),'tutor');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_termstart',get_string('ilp_mis_misc_timetable_termstart', 'block_ilp'),get_string('ilp_mis_misc_timetable_termstartdesc', 'block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_misc_timetable_termend',get_string('ilp_mis_misc_timetable_termend', 'block_ilp'),get_string('ilp_mis_misc_timetable_termenddesc', 'block_ilp'));
+ 	 	
+ 	 	$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),
     		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_misc_timetable_tabletype',get_string('ilp_mis_misc_timetable_tabletype','block_ilp'),get_string('ilp_mis_misc_timetable_tabletypedesc','block_ilp'), 1, $options);
-		$settings->add( $pluginstatus );
-		
-		$options = array(
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_misc_timetable_tabletype',$options,get_string('ilp_mis_misc_timetable_tabletype', 'block_ilp'),get_string('ilp_mis_misc_timetable_tabletypedesc', 'block_ilp'),1);
+ 	 	
+ 	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
     		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_misc_timetable_pluginstatus',get_string('ilp_mis_misc_timetable_pluginstatus','block_ilp'),get_string('ilp_mis_misc_timetable_pluginstatusdesc','block_ilp'), 0, $options);
-		$settings->add( $pluginstatus );
+ 	
+ 	 	$this->config_select_element($mform,'ilp_mis_misc_timetable_pluginstatus',$options,get_string('ilp_mis_misc_timetable_pluginstatus', 'block_ilp'),get_string('ilp_mis_misc_timetable_pluginstatusdesc', 'block_ilp'),0);
+ 	 	
  	 }
-    
-    
+ 	 
+ 	 
 	/**
 	 * Adds the string values from the tab to the language file
 	 *
@@ -281,6 +300,8 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 	 function language_strings(&$string) {
 
         $string['ilp_mis_misc_timetable_pluginname']					= 'Lesson Timetable';
+        
+        $string['ilp_mis_misc_timetable_pluginnamesettings']			= 'Lesson Timetable Configuration';
         
         $string['ilp_mis_misc_timetable_table']							= 'MIS table';
         $string['ilp_mis_misc_timetable_tabledesc']						= 'The table in the MIS where the data for this plugin will be retrieved from';
@@ -330,9 +351,16 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
         $string['ilp_mis_misc_timetable_starttime_disp']				= 'Start';
         $string['ilp_mis_misc_timetable_endtime_disp']					= 'End';
         $string['ilp_mis_misc_timetable_tutor_disp']					= 'Tutor';
+        $string['ilp_mis_misc_timetable_register_disp']					= 'Register';
+        
+        
         
         $string['ilp_mis_misc_timetable_timetable_disp']				= 'Timetable';
         $string['ilp_mis_misc_timetable_week_disp']						= 'Week';
+        $string['ilp_mis_misc_timetable_next_disp']						= 'Next';
+        $string['ilp_mis_misc_timetable_current_disp']					= 'Current';
+        $string['ilp_mis_misc_timetable_previous_disp']					= 'Previous';
+        
         
         return $string;
     }

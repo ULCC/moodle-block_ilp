@@ -15,6 +15,7 @@ class ilp_mis_ajax_table extends ilp_ajax_table {
 	public 	$wrap_data;
 	public	$wrap_finish_extra;
 	public	$wrap_start_extra;
+	
 	function __construct($uniqueid, $displayperpage=true,$wrapid='') { 
 		$this->wrapid				=	$wrapid;
 		$this->wrap_start_extra		=	'';
@@ -33,6 +34,20 @@ class ilp_mis_ajax_table extends ilp_ajax_table {
 	function wrap_extra() {
 		return (!empty($this->wrap_label) && !empty($this->wrap_data)) ? "<div id='ilp_mis_learner_profile_qualifications_average'><label>{$this->wrap_label}</label>{$this->wrap_data}</div>" : '';
 	}
+	
+    /**
+     * This function is not part of the public api.
+     */
+    function print_nothing_to_display(){
+        global $OUTPUT;
+        $this->print_initials_bar();
+
+        echo $this->wrap_html_start();
+        
+        echo $OUTPUT->heading(get_string('nothingtodisplay'));
+        
+        echo $this->wrap_html_finish();
+    }
 }
 
 ?>

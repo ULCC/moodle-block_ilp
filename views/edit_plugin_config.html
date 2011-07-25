@@ -1,0 +1,12 @@
+<?php
+echo $OUTPUT->header();
+?>
+<div class="ilp yui-skin-sam">
+<?php
+echo $OUTPUT->heading(get_string('pluginconfig', 'block_ilp')); 
+
+//render the form
+$mform->display();
+
+echo $OUTPUT->footer();
+?>

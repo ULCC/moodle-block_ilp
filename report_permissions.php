@@ -87,4 +87,15 @@ if ($access_viewotherilp) {
 	if (!empty($capability))	$access_report_viewotherilp		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
 } 
 
+//this is only in for debug and testing purposes 
+if ($USER->username == 'moodle-support') {
+	var_dump('moodle support');
+$access_report_createreports	=	1;
+$access_report_editreports		=	1;
+$access_report_deletereports	=	1;
+$access_report_viewreports		=	1;	
+$access_report_viewilp			=	1;
+$access_report_viewotherilp		=	1;	
+	
+}
 

@@ -37,12 +37,13 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG,$OUTPUT,$PAGE;
+		global	$CFG,$OUTPUT,$PAGE,$PARSER;
 
 		//set any variables needed by the display page	
 		
 		//get students full name
 		$student	=	$this->dbc->get_user_by_id($this->student_id);
+		
 		
 		if (!empty($student))	{ 
 			$studentname	=	fullname($student);
@@ -157,9 +158,9 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	        	}
 			}
 				        	
-	        	//require_once $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_misc_performance_ind.php';
+	        	require_once $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_plugin_simple.php';
 	        	
-	        	//$learnercontact	=	new ilp_mis_misc_performance_ind();
+	        	$learnercontact	=	new ilp_mis_attendance_plugin_simple();
 			
 			//if the user has the capability to view others ilp and this ilp is not there own 
 			//then they may change the students status otherwise they can only view 
@@ -207,9 +208,9 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			
 			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/plugins/'.$this->directory.'/ilp_dashboard_student_info.html');
 			
-			//$learnercontact->set_data(1);
+			$learnercontact->set_data(1);
 			
-			//echo $learnercontact->display();
+			echo $learnercontact->display();
 			
 			//pass the output instead to the output var
 			$pluginoutput = ob_get_contents();

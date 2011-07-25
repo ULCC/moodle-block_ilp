@@ -100,74 +100,67 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  			} 
     }
  	
- 	
 	/**
      * Adds settings for this plugin to the admin settings
      * @see ilp_mis_plugin::config_settings()
      */
     public function config_settings(&$settings)	{
+    	global $CFG;
     	
-    	$settingsheader 	= new admin_setting_heading('block_ilp/mis_learner_contact', get_string('ilp_mis_learner_contact_pluginname', 'block_ilp'), '');
-    	$settings->add($settingsheader);
-    	
-    	$table		=	new admin_setting_configtext('block_ilp/mis_learner_contact_table',get_string( 'ilp_mis_learner_contact_table', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_tabledesc', 'block_ilp' ),'',PARAM_RAW);
-		$settings->add($table);
-		
-		$keyfield			=	new admin_setting_configtext('block_ilp/mis_learner_contact_studentid',get_string( 'ilp_mis_learner_contact_studentid', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_studentiddesc', 'block_ilp' ),'studentID',PARAM_RAW);
-		$settings->add($keyfield);
-		
-		$enrolementfield			=	new admin_setting_configtext('block_ilp/mis_learner_contact_enrolmentdate',get_string( 'ilp_mis_learner_contact_enrolmentdate', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_enrolmentdatedesc', 'block_ilp' ),'enrolmentDate',PARAM_RAW);
-		$settings->add($enrolementfield);
-		
-		$dobfield			=	new admin_setting_configtext('block_ilp/mis_learner_contact_dob',get_string( 'ilp_mis_learner_contact_dob', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_dobdesc', 'block_ilp' ),'dob',PARAM_RAW);
-		$settings->add($dobfield);
-		
-		$emailfield			=	new admin_setting_configtext('block_ilp/mis_learner_contact_email',get_string( 'ilp_mis_learner_contact_email', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_emaildesc', 'block_ilp' ),'Email',PARAM_RAW);
-		$settings->add($emailfield);
-		
-		$phonefield			=	new admin_setting_configtext('block_ilp/mis_learner_contact_phone',get_string( 'ilp_mis_learner_contact_phone', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_phonedesc', 'block_ilp' ),'Phone',PARAM_RAW);
-		$settings->add($phonefield);
-		
-		$mobilefield			=	new admin_setting_configtext('block_ilp/mis_learner_contact_mobile',get_string( 'ilp_mis_learner_contact_mobile', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_mobiledesc', 'block_ilp' ),'Mobile',PARAM_RAW);
-		$settings->add($mobilefield);
-		
-		$emergencycfield			=	new admin_setting_configtext('block_ilp/mis_learner_contact_emercontact',get_string( 'ilp_mis_learner_contact_emercontact', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_emercontactdesc', 'block_ilp' ),'emergencyContact',PARAM_RAW);
-		$settings->add($emergencycfield);
-		
-		$emergencynfield			=	new admin_setting_configtext('block_ilp/mis_learner_contact_emernumber',get_string( 'ilp_mis_learner_contact_emernumber', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_emernumberdesc', 'block_ilp' ),'emergencyNumber',PARAM_RAW);
-		$settings->add($emergencynfield);
-		
-		$addressfield				=	new admin_setting_configtext('block_ilp/mis_learner_contact_addressone',get_string( 'ilp_mis_learner_contact_addressone', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_addressonedesc', 'block_ilp' ),'Address1',PARAM_RAW);
-		$settings->add($addressfield);
-		
-		$addressfield				=	new admin_setting_configtext('block_ilp/mis_learner_contact_addresstwo',get_string( 'ilp_mis_learner_contact_addresstwo', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_addresstwodesc', 'block_ilp' ),'Address2',PARAM_RAW);
-		$settings->add($addressfield);
-		
-		$addressfield				=	new admin_setting_configtext('block_ilp/mis_learner_contact_addressthree',get_string( 'ilp_mis_learner_contact_addressthree', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_addressthreedesc', 'block_ilp' ),'Address3',PARAM_RAW);
-		$settings->add($addressfield);
-		
-		$addressfield				=	new admin_setting_configtext('block_ilp/mis_learner_contact_addressfour',get_string( 'ilp_mis_learner_contact_addressfour', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_addressfourdesc', 'block_ilp' ),'Address4',PARAM_RAW);
-		$settings->add($addressfield);
-		
-		$postcodefield				=	new admin_setting_configtext('block_ilp/mis_learner_contact_postcode',get_string( 'ilp_mis_learner_contact_postcode', 'block_ilp' ),get_string( 'ilp_mis_learner_contact_postcodedesc', 'block_ilp' ),'postcode',PARAM_RAW);
-		$settings->add($postcodefield);
-		
-		$options = array(
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_learner_profile_contact&plugintype=mis">'.get_string('ilp_mis_learner_contact_pluginnamesettings', 'block_ilp').'</a>';
+		$settings->add(new admin_setting_heading('block_ilp_mis_learner_contact', '', $link));
+ 	 }
+    
+ 	  	 /**
+ 	  * Adds config settings for the plugin to the given mform
+ 	  * @see ilp_plugin::config_form()
+ 	  */
+ 	 function config_form(&$mform)	{
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_table',get_string('ilp_mis_learner_contact_table', 'block_ilp'),get_string('ilp_mis_learner_contact_tabledesc', 'block_ilp'),'');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_studentid',get_string('ilp_mis_learner_contact_studentid', 'block_ilp'),get_string('ilp_mis_learner_contact_studentiddesc', 'block_ilp'),'studentID');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_enrolmentdate',get_string('ilp_mis_learner_contact_enrolmentdate', 'block_ilp'),get_string('ilp_mis_learner_contact_enrolmentdatedesc', 'block_ilp'),'enrolmentDate');
+
+ 	 	$this->config_text_element($mform,'mis_learner_contact_dob',get_string('ilp_mis_learner_contact_dob', 'block_ilp'),get_string('ilp_mis_learner_contact_dobdesc', 'block_ilp'),'dob');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_email',get_string('ilp_mis_learner_contact_email', 'block_ilp'),get_string('ilp_mis_learner_contact_emaildesc', 'block_ilp'),'Email');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_phone',get_string('ilp_mis_learner_contact_phone', 'block_ilp'),get_string('ilp_mis_learner_contact_phonedesc', 'block_ilp'),'Phone');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_mobile',get_string('ilp_mis_learner_contact_mobile', 'block_ilp'),get_string('ilp_mis_learner_contact_mobiledesc', 'block_ilp'),'Mobile');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_emercontact',get_string('ilp_mis_learner_contact_emercontact', 'block_ilp'),get_string('ilp_mis_learner_contact_emercontactdesc', 'block_ilp'),'emergencyContact');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_emernumber',get_string('ilp_mis_learner_contact_emernumber', 'block_ilp'),get_string('ilp_mis_learner_contact_emernumberdesc', 'block_ilp'),'emergencyNumber');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_addressone',get_string('ilp_mis_learner_contact_addressone', 'block_ilp'),get_string('ilp_mis_learner_contact_addressonedesc', 'block_ilp'),'Address1');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_addresstwo',get_string('ilp_mis_learner_contact_addresstwo', 'block_ilp'),get_string('ilp_mis_learner_contact_addresstwodesc', 'block_ilp'),'Address2');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_addressthree',get_string('ilp_mis_learner_contact_addressthree', 'block_ilp'),get_string('ilp_mis_learner_contact_addressthreedesc', 'block_ilp'),'Address3');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_addressfour',get_string('ilp_mis_learner_contact_addressfour', 'block_ilp'),get_string('ilp_mis_learner_contact_addressfourdesc', 'block_ilp'),'Address4');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_contact_postcode',get_string('ilp_mis_learner_contact_postcode', 'block_ilp'),get_string('ilp_mis_learner_contact_postcodedesc', 'block_ilp'),'postcode');
+ 	 	
+ 	 	$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),
     		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_learner_contact_tabletype',get_string('ilp_mis_learner_contact_tabletype','block_ilp'),get_string('ilp_mis_learner_contact_tabletypedesc','block_ilp'), 1, $options);
-		$settings->add( $pluginstatus );
-		
-		$options = array(
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_learner_contact_tabletype',$options,get_string('ilp_mis_learner_contact_tabletype', 'block_ilp'),get_string('ilp_mis_learner_contact_tabletypedesc', 'block_ilp'),1);
+ 	 	
+ 	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
     		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_learner_profile_contact_pluginstatus',get_string('ilp_mis_learner_profile_contact_pluginstatus','block_ilp'),get_string('ilp_mis_learner_profile_contact_pluginstatusdesc','block_ilp'), 0, $options);
-		$settings->add( $pluginstatus );
+ 	
+ 	 	$this->config_select_element($mform,'ilp_mis_learner_profile_contact_pluginstatus',$options,get_string('ilp_mis_learner_profile_contact_pluginstatus', 'block_ilp'),get_string('ilp_mis_learner_profile_contact_pluginstatusdesc', 'block_ilp'),0);
+ 	 	
  	 }
+
     
     
 	/**
@@ -178,7 +171,9 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
 	 */
 	 function language_strings(&$string) {
 
-        $string['ilp_mis_learner_contact_pluginname']						= 'Learner Profile Contact Details';
+        $string['ilp_mis_learner_contact_pluginname']						= 'Contact Details';
+        
+        $string['ilp_mis_learner_contact_pluginnamesettings']				= 'Contact Details Configuration';
         
         $string['ilp_mis_learner_contact_table']							= 'MIS table';
         $string['ilp_mis_learner_contact_tabledesc']						= 'The table in the MIS where the data for this plugin will be retrieved from';

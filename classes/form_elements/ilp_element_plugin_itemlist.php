@@ -162,7 +162,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		}
 		return false;	
     }	
-
+	 
 	/*
 	* get the list options with which to populate the edit element for this list element
 	*/
@@ -253,7 +253,8 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
     		$this->label = '';
     	} 
-		
+
+    	
     	//text field for element label
         $select = &$mform->addElement(
             'select',

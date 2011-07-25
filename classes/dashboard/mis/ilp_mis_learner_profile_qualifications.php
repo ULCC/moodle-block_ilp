@@ -157,53 +157,53 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  			} 
     }
  	
- 	
 	/**
      * Adds settings for this plugin to the admin settings
      * @see ilp_mis_plugin::config_settings()
      */
     public function config_settings(&$settings)	{
+    	global $CFG;
     	
-    	$settingsheader 	= new admin_setting_heading('block_ilp/mis_learner_qualifications', get_string('ilp_mis_learner_qualifications_pluginname', 'block_ilp'), '');
-    	$settings->add($settingsheader);
-    	
-    	$table		=	new admin_setting_configtext('block_ilp/mis_learner_qualifications_table',get_string( 'ilp_mis_learner_qualifications_table', 'block_ilp' ),get_string( 'ilp_mis_learner_qualifications_tabledesc', 'block_ilp' ),'',PARAM_RAW);
-		$settings->add($table);
-		
-		$keyfield			=	new admin_setting_configtext('block_ilp/mis_learner_qualifications_studentid',get_string( 'ilp_mis_learner_qualifications_studentid', 'block_ilp' ),get_string( 'ilp_mis_learner_qualifications_studentiddesc', 'block_ilp' ),'studentID',PARAM_RAW);
-		$settings->add($keyfield);
-		
-		$qualfield			=	new admin_setting_configtext('block_ilp/mis_learner_qualifications_qual',get_string( 'ilp_mis_learner_qualifications_qual', 'block_ilp' ),get_string( 'ilp_mis_learner_qualifications_qualdesc', 'block_ilp' ),'qualTitle',PARAM_RAW);
-		$settings->add($qualfield);
-		
-		$gradefield			=	new admin_setting_configtext('block_ilp/mis_learner_qualifications_grade',get_string( 'ilp_mis_learner_qualifications_grade', 'block_ilp' ),get_string( 'ilp_mis_learner_qualifications_gradedesc', 'block_ilp' ),'grade',PARAM_RAW);
-		$settings->add($gradefield);
-		
-		$pointsfield			=	new admin_setting_configtext('block_ilp/mis_learner_qualifications_points',get_string( 'ilp_mis_learner_qualifications_points', 'block_ilp' ),get_string( 'ilp_mis_learner_qualifications_pointsdesc', 'block_ilp' ),'points',PARAM_RAW);
-		$settings->add($pointsfield);
-		
-		$yearfield			=	new admin_setting_configtext('block_ilp/mis_learner_qualifications_year',get_string( 'ilp_mis_learner_qualifications_year', 'block_ilp' ),get_string( 'ilp_mis_learner_qualifications_yeardesc', 'block_ilp' ),'year',PARAM_RAW);
-		$settings->add($yearfield);
-		
-		$weightfield			=	new admin_setting_configtext('block_ilp/mis_learner_qualifications_weight',get_string( 'ilp_mis_learner_qualifications_weight', 'block_ilp' ),get_string( 'ilp_mis_learner_qualifications_weightdesc', 'block_ilp' ),'weight',PARAM_RAW);
-		$settings->add($weightfield);
-		
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_learner_qualifications&plugintype=mis">'.get_string('ilp_mis_learner_qualifications_pluginnamesettings', 'block_ilp').'</a>';
+		$settings->add(new admin_setting_heading('block_ilp_mis_learner_qualifications', '', $link));
+ 	 }
+    
+ 	  	 /**
+ 	  * Adds config settings for the plugin to the given mform
+ 	  * @see ilp_plugin::config_form()
+ 	  */
+ 	 function config_form(&$mform)	{
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_qualifications_table',get_string('ilp_mis_learner_qualifications_table', 'block_ilp'),get_string('ilp_mis_learner_qualifications_tabledesc', 'block_ilp'),'');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_qualifications_studentid',get_string('ilp_mis_learner_qualifications_studentid', 'block_ilp'),get_string('ilp_mis_learner_qualifications_studentiddesc', 'block_ilp'),'studentID');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_qualifications_qual',get_string('ilp_mis_learner_qualifications_qual', 'block_ilp'),get_string('ilp_mis_learner_qualifications_qualdesc', 'block_ilp'),'qualTitle');
+
+ 	 	$this->config_text_element($mform,'mis_learner_qualifications_grade',get_string('ilp_mis_learner_qualifications_grade', 'block_ilp'),get_string('ilp_mis_learner_qualifications_gradedesc', 'block_ilp'),'grade');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_qualifications_points',get_string('ilp_mis_learner_qualifications_points', 'block_ilp'),get_string('ilp_mis_learner_qualifications_pointsdesc', 'block_ilp'),'points');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_qualifications_year',get_string('ilp_mis_learner_qualifications_year', 'block_ilp'),get_string('ilp_mis_learner_qualifications_yeardesc', 'block_ilp'),'year');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_qualifications_weight',get_string('ilp_mis_learner_qualifications_weight', 'block_ilp'),get_string('ilp_mis_learner_qualifications_weightdesc', 'block_ilp'),'weight');
+ 	 	
 		$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),
     		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_learner_qualifications_tabletype',get_string('ilp_mis_learner_qualifications_tabletype','block_ilp'),get_string('ilp_mis_learner_qualifications_tabletypedesc','block_ilp'), 1, $options);
-		$settings->add( $pluginstatus );
-		
-		$options = array(
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_learner_qualifications_tabletype',$options,get_string('ilp_mis_learner_qualifications_tabletype', 'block_ilp'),get_string('ilp_mis_learner_qualifications_tabletypedesc', 'block_ilp'),1);
+ 	 	
+ 	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
     		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_learner_profile_qualifications_pluginstatus',get_string('ilp_mis_learner_profile_qualifications_pluginstatus','block_ilp'),get_string('ilp_mis_learner_profile_qualifications_pluginstatusdesc','block_ilp'), 0, $options);
-		$settings->add( $pluginstatus );
+ 	
+ 	 	$this->config_select_element($mform,'ilp_mis_learner_qualifications_pluginstatus',$options,get_string('ilp_mis_learner_qualifications_pluginstatus', 'block_ilp'),get_string('ilp_mis_learner_qualifications_pluginstatusdesc', 'block_ilp'),0);
+ 	 	
  	 }
+
     
     
 	/**
@@ -215,6 +215,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
 	 function language_strings(&$string) {
 
         $string['ilp_mis_learner_qualifications_pluginname']						= 'Learner Profile Qualifications On Entry';
+        $string['ilp_mis_learner_qualifications_pluginnamesettings']				= 'Qualifications On Entry Configuration';
         
         $string['ilp_mis_learner_qualifications_table']								= 'MIS table';
         $string['ilp_mis_learner_qualifications_tabledesc']							= 'The table in the MIS where the data for this plugin will be retrieved from';
@@ -251,9 +252,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
         $string['ilp_mis_learner_qualifications_year_disp']						= 'Year';
         
         $string['ilp_mis_learner_qualifications_average']							= 'Average Points:';
-        
-        
-        			 
+	 
         
         return $string;
     }

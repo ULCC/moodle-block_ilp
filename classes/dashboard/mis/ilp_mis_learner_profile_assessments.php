@@ -86,51 +86,50 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  			}
     }
  	
- 	
 	/**
      * Adds settings for this plugin to the admin settings
      * @see ilp_mis_plugin::config_settings()
      */
     public function config_settings(&$settings)	{
+    	global $CFG;
     	
-    	$settingsheader 	= new admin_setting_heading('block_ilp/mis_learner_assessments', get_string('ilp_mis_learner_assessments_pluginname', 'block_ilp'), '');
-    	$settings->add($settingsheader);
-    	
-    	$table		=	new admin_setting_configtext('block_ilp/mis_learner_assessments_table',get_string( 'ilp_mis_learner_assessments_table', 'block_ilp' ),get_string( 'ilp_mis_learner_assessments_tabledesc', 'block_ilp' ),'',PARAM_RAW);
-		$settings->add($table);
-		
-		$keyfield			=	new admin_setting_configtext('block_ilp/mis_learner_assessments_studentid',get_string( 'ilp_mis_learner_assessments_studentid', 'block_ilp' ),get_string( 'ilp_mis_learner_assessments_studentiddesc', 'block_ilp' ),'studentID',PARAM_RAW);
-		$settings->add($keyfield);
-		
-		$mathsfield			=	new admin_setting_configtext('block_ilp/mis_learner_assessments_maths',get_string( 'ilp_mis_learner_assessments_maths', 'block_ilp' ),get_string( 'ilp_mis_learner_assessments_mathsdesc', 'block_ilp' ),'mathsResult',PARAM_RAW);
-		$settings->add($mathsfield);
-		
-		$englishfield			=	new admin_setting_configtext('block_ilp/mis_learner_assessments_english',get_string( 'ilp_mis_learner_assessments_english', 'block_ilp' ),get_string( 'ilp_mis_learner_assessments_englishdesc', 'block_ilp' ),'englishResult',PARAM_RAW);
-		$settings->add($englishfield);
-		
-		$ictfield			=	new admin_setting_configtext('block_ilp/mis_learner_assessments_ict',get_string( 'ilp_mis_learner_assessments_ict', 'block_ilp' ),get_string( 'ilp_mis_learner_assessments_ictdesc', 'block_ilp' ),'ictResult',PARAM_RAW);
-		$settings->add($ictfield);
-		
-		$studyfield			=	new admin_setting_configtext('block_ilp/mis_learner_assessments_study',get_string( 'ilp_mis_learner_assessments_study', 'block_ilp' ),get_string( 'ilp_mis_learner_assessments_studydesc', 'block_ilp' ),'studySupport',PARAM_RAW);
-		$settings->add($studyfield);
-		
-		$options = array(
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_learner_assessments&plugintype=mis">'.get_string('ilp_mis_learner_assessments_pluginnamesettings', 'block_ilp').'</a>';
+		$settings->add(new admin_setting_heading('block_ilp_mis_learner_assessments', '', $link));
+ 	 }
+    
+ 	  	 /**
+ 	  * Adds config settings for the plugin to the given mform
+ 	  * @see ilp_plugin::config_form()
+ 	  */
+ 	 function config_form(&$mform)	{
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_assessments_table',get_string('ilp_mis_learner_assessments_table', 'block_ilp'),get_string('ilp_mis_learner_assessments_tabledesc', 'block_ilp'),'');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_assessments_studentid',get_string('ilp_mis_learner_assessments_studentid', 'block_ilp'),get_string('ilp_mis_learner_assessments_studentiddesc', 'block_ilp'),'studentID');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_assessments_maths',get_string('ilp_mis_learner_assessments_maths', 'block_ilp'),get_string('ilp_mis_learner_assessments_mathsdesc', 'block_ilp'),'mathsResult');
+
+ 	 	$this->config_text_element($mform,'mis_learner_assessments_english',get_string('ilp_mis_learner_assessments_english', 'block_ilp'),get_string('ilp_mis_learner_assessments_englishdesc', 'block_ilp'),'englishResult');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_assessments_ict',get_string('ilp_mis_learner_assessments_ict', 'block_ilp'),get_string('ilp_mis_learner_assessments_ictdesc', 'block_ilp'),'ictResult');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_assessments_study',get_string('ilp_mis_learner_assessments_study', 'block_ilp'),get_string('ilp_mis_learner_assessments_studydesc', 'block_ilp'),'studySupport');
+ 	 	
+ 	 	$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),
     		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/mis_learner_assessments_tabletype',get_string('ilp_mis_learner_assessments_tabletype','block_ilp'),get_string('ilp_mis_learner_assessments_tabletypedesc','block_ilp'), 1, $options);
-		$settings->add( $pluginstatus );
-		
-		$options = array(
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_learner_assessments_tabletype',$options,get_string('ilp_mis_learner_assessments_tabletype', 'block_ilp'),get_string('ilp_mis_learner_assessments_tabletypedesc', 'block_ilp'),1);
+ 	 	
+ 	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
     		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
-    	
-		$pluginstatus			= 	new admin_setting_configselect('block_ilp/ilp_mis_learner_profile_assessments_pluginstatus',get_string('ilp_mis_learner_profile_assessments_pluginstatus','block_ilp'),get_string('ilp_mis_learner_profile_assessments_pluginstatusdesc','block_ilp'), 0, $options);
-		$settings->add( $pluginstatus );
+ 	
+ 	 	$this->config_select_element($mform,'ilp_mis_learner_profile_assessments_pluginstatus',$options,get_string('ilp_mis_learner_profile_assessments_pluginstatus', 'block_ilp'),get_string('ilp_mis_learner_profile_assessments_pluginstatusdesc', 'block_ilp'),0);
+ 	 	
  	 }
-    
     
 	/**
 	 * Adds the string values from the tab to the language file
@@ -141,6 +140,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
 	 function language_strings(&$string) {
 
         $string['ilp_mis_learner_assessments_pluginname']						= 'Learner Profile Iniital Assessment';
+        $string['ilp_mis_learner_assessments_pluginnamesettings']				= 'Iniital Assessment Configuration';
         
         $string['ilp_mis_learner_assessments_table']							= 'MIS table';
         $string['ilp_mis_learner_assessments_tabledesc']						= 'The table in the MIS where the data for this plugin will be retrieved from';
