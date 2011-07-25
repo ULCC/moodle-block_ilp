@@ -297,30 +297,33 @@
 	        
 	    }
 	}
+
+$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+
+if ($dbc->get_mis_plugins() !== false) {
 	
-	
-	//import mis plugin language strings
-	$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
 	
 	$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
 	
 	foreach ($mis_plugins as $plugin_file) {
 	
-		if (file_exists($tabs.'/'.$plugin_file.".php"))  {
-		    require_once($plugins.'/'.$plugin_file.".php");
-		    
-		    // instantiate the object
-		    $class = basename($plugin_file, ".php");
-		    $pluginobj = new $class();
-		    $method = array($pluginobj, 'language_strings');
-			
-		    //check whether the language_strings method has been defined
-	
-		    if (is_callable($method,true)) {
-		        $pluginobj->language_strings($string);
-		    }
+	    require_once($plugins.'/'.$plugin_file.".php");
+	    
+	    // instantiate the object
+	    $class = basename($plugin_file, ".php");
+	    $pluginobj = new $class();
+	    $method = array($pluginobj, 'language_strings');
+		
+	    //check whether the config_settings method has been defined
+
+	    if (is_callable($method,true)) {
+	        $pluginobj->language_strings($string);
 	    }
+
 	}
+}
+	
+
 
 
 	
