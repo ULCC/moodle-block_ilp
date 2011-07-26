@@ -7,8 +7,59 @@
  * @package ILP
  * @version 2.0
  */
+ 
+ /* Head info section */
 
+#ilp-container { padding:0; margin: 0; width: 100%; }
 
+.ilp #studentinfo-container{ width: 100%; }
+.ilp #left-studentinfo { float:left; width:10%; padding:2% 0; background:white; }
+.ilp #middle-studentinfo { float:left; width:40%;padding:2%; background:white; border-right: 1px solid #ccc; }
+.ilp #right-studentinfo { float:left; width:40%;padding:2%; background:white; }
+.ilp #studentinfo-container p{ padding: 0; margin: 3px 0; }
+
+.clearfix:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; } /* slightly enhanced, universal clearfix hack - http://perishablepress.com/press/2008/02/05/lessons-learned-concerning-the-clearfix-css-hack/ */
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/ * html .clearfix { height: 1%; }
+.clearfix { display: block; } /* close commented backslash hack */
+
+/* Entries section */
+
+.ilp .entries-container{width: 100%; border-bottom: 1px dotted #333333;}
+.ilp  #left-entries { float:left; width:6%; padding:2%; background:white; }
+.ilp  #middle-entries { float:left; width:40%;padding:2%; background:white; }
+.ilp  #right-entries { float:left; width:10%;padding:2% 0; background:white; }
+
+.ilp  #middle-entries h2{font-size: 1.1em;font-weight: bold;margin: 0; padding: 0;}
+.ilp  #middle-entries p{padding:0; margin: 3px 0;}
+.ilp  #right-entries .add a{ background: #333; color: #fff; padding: 5px; text-decoration:none;}
+.ilp  #right-entries .add a:hover{ background: red; color: #fff; padding: 5px; }
+.ilp .entries-container .icon_small img{height:75px;width: 75px;	}
+
+/* Reports section */
+
+.ilp .reports-container{width:100%;border-bottom: 1px dotted #333333; background: #efefef; }
+.ilp .reports-head{width:100%;border-bottom: 3px solid #333333;margin: 0; }
+.ilp .left-reports { float:left; width:40%; padding:2%;  }
+.ilp .right-reports { float:left; width:40%;padding:2%; }
+.ilp .reports-comments{ padding: 0;margin: 0 0 0 2%; width: 96%; }
+
+.ilp .reports-head h2{padding: 0 0 15px 0; margin: 0; font-size: 2em;}
+.ilp .reports-head img{padding: 0 10px 0 10px;}
+.ilp .reports-container p{padding: 0; margin: 3px 10px;}
+.ilp .view-comments{background: #333333; color: #ffffff; padding: 5px 10px; margin: 0 0 10px 0;height: 20px;}
+.ilp .view-comments h3{font-size: 1em; margin: 0; padding: 0; float: left;}
+.ilp .view-comments .comment p{padding: 0; margin: 5px 0;}
+.ilp .view-comments .add a{ background: #ffffff; color: #333333; padding: 2px; text-decoration:none; }
+.ilp .view-comments .add a:hover{ background: red; color: #fff; padding: 2px; }
+.ilp .comment {padding: 10px 2%;}
+.ilp .comment .info{font-size: .9em; text-align: right; border-top: 1px solid #ccc;padding: 5px 10px 10px 10px; color: #999999;}
+ 
+ 
+ 
+ 
+
+.ilp .view-report{background: #ccc;}
 .ilp .desciptivetext 	{
 	margin-left				:20%;
 	margin-right			:20%;
@@ -175,14 +226,6 @@ ilppercentagebarborder-large {
 .ilp .view_comments h3	{
 	display					:	inline;
 	margin-right			:	80%
-}
-
-
-
-.ilp  .comment	{
-	margin					: 	0pt 20px 10px 20px;
-	border-bottom-style		:	dotted;
-	border-width			:	0.5px;
 }
 
 
@@ -416,38 +459,6 @@ ilp .hiddencontainer	{
 	margin-top				: 10px;
 	margin-bottom			: 10px;
 }
-
-
-/** ilp_mis_misc_timetable **/
-
-.ilp #ilp_mis_misc_timetable	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: 35%;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-
-
-/** ilp_mis_attendance_overview_plugin_mcb **/
-
-.ilp #ilp_mis_attendance_plugin_mcb	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: 55%;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-.ilp #ilp_mis_attendance_plugin_simple	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: 12%;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
 
 
 

@@ -147,9 +147,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      */
     function get_header($headertext,$icon)	{
 		//setup the icon				
-		$icon 	=	 "<img id='reporticon' class='icon_med' alt='$headertext ".get_string('reports','block_ilp')."' src='$icon' />";
+		$icon 	=	 "<div class='reports-head'><img id='reporticon' class='icon_med' alt='$headertext ".get_string('reports','block_ilp')."' src='$icon' />";
     	
-    	return "<div><h2>{$icon}{$headertext}<h2></div>";
+    	return "<h2>{$icon}{$headertext}</h2></div>";
     }
 	
 	
@@ -193,7 +193,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 						echo $this->get_header($report->name,$icon);
 						
 						//output the print icon
-						echo "<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon'></a></div>
+						echo "<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
 							 <div class='clearer'></div>";
 						
 						$reportname	=	$report->name;	

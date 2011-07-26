@@ -190,6 +190,8 @@ class report_entry_mform extends ilp_moodleform {
 				
 				$pluginclass->load($field->id);
 				
+				var_dump("$classname");
+				
 				//call the plugins entry_form function which will add an instance of the plugin
 				//to the form
 				if (!$pluginclass->entry_process_data($field->id,$entry_id,$data)) $result = false;
