@@ -1247,7 +1247,7 @@ class ilp_flexible_table {
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class table_sql extends ilp_flexible_table{
+class ilp_table_sql extends ilp_flexible_table{
 
     public $countsql = NULL;
     public $countparams = NULL;
@@ -1274,7 +1274,7 @@ class table_sql extends ilp_flexible_table{
      * @param string $uniqueid a string identifying this table.Used as a key in
      *                          session  vars.
      */
-    function table_sql($uniqueid){
+    function ilp_table_sql($uniqueid){
         parent::ilp_flexible_table($uniqueid);
         // some sensible defaults
         $this->set_attribute('cellspacing', '0');
