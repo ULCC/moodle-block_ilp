@@ -1392,7 +1392,7 @@ class ilp_table_sql extends ilp_flexible_table{
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class table_default_export_format_parent{
+class ilp_table_default_export_format_parent{
     /**
      * @var ilp_flexible_table or child class reference pointing to table class
      * object from which to export data.
@@ -1404,7 +1404,7 @@ class table_default_export_format_parent{
      * started yet.
      */
     var $documentstarted = false;
-    function table_default_export_format_parent(&$table){
+    function ilp_table_default_export_format_parent(&$table){
         $this->table =& $table;
     }
 
@@ -1438,7 +1438,7 @@ class table_default_export_format_parent{
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class table_spreadsheet_export_format_parent extends table_default_export_format_parent{
+class table_spreadsheet_export_format_parent extends ilp_table_default_export_format_parent{
     var $rownum;
     var $workbook;
     var $worksheet;
@@ -1545,7 +1545,7 @@ class table_ods_export_format extends table_spreadsheet_export_format_parent{
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class table_text_export_format_parent extends table_default_export_format_parent{
+class table_text_export_format_parent extends ilp_table_default_export_format_parent{
     var $seperator = "\t";
     function start_document($filename){
         $this->filename = $filename.".txt";
@@ -1599,7 +1599,7 @@ class table_csv_export_format extends table_text_export_format_parent{
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class table_xhtml_export_format extends table_default_export_format_parent{
+class table_xhtml_export_format extends ilp_table_default_export_format_parent{
     function start_document($filename){
         header("Content-Type: application/download\n");
         header("Content-Disposition: attachment; filename=\"$filename.html\"");
