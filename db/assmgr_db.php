@@ -57,8 +57,8 @@ class assmgr_db {
      */
     static function encode(&$data) {
         if(is_object($data) || is_array($data)) {
-            // skip the flexible_table
-            if(!is_a($data, 'flexible_table')) {
+            // skip the ilp_flexible_table
+            if(!is_a($data, 'ilp_flexible_table')) {
                 foreach($data as $index => &$datum) {
                     $datum = assmgr_db::encode($datum);
                 }

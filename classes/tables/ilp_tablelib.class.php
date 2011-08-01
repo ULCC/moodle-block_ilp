@@ -44,7 +44,7 @@ define('TABLE_P_BOTTOM',  2);
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class flexible_table {
+class ilp_flexible_table {
 
     var $uniqueid        = NULL;
     var $attributes      = array();
@@ -114,7 +114,7 @@ class flexible_table {
      * @param int $uniqueid
      * @todo Document properly
      */
-    function flexible_table($uniqueid) {
+    function ilp_flexible_table($uniqueid) {
         $this->uniqueid = $uniqueid;
         $this->request  = array(
             TABLE_VAR_SORT    => 'tsort',
@@ -1247,7 +1247,7 @@ class flexible_table {
  * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class table_sql extends flexible_table{
+class table_sql extends ilp_flexible_table{
 
     public $countsql = NULL;
     public $countparams = NULL;
@@ -1275,7 +1275,7 @@ class table_sql extends flexible_table{
      *                          session  vars.
      */
     function table_sql($uniqueid){
-        parent::flexible_table($uniqueid);
+        parent::ilp_flexible_table($uniqueid);
         // some sensible defaults
         $this->set_attribute('cellspacing', '0');
         $this->set_attribute('class', 'generaltable generalbox');
@@ -1394,7 +1394,7 @@ class table_sql extends flexible_table{
  */
 class table_default_export_format_parent{
     /**
-     * @var flexible_table or child class reference pointing to table class
+     * @var ilp_flexible_table or child class reference pointing to table class
      * object from which to export data.
      */
     var $table;

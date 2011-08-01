@@ -11,7 +11,7 @@ require_once ($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_tablelib.class.php')
 //create the field table
 
 //instantiate the flextable table class
-$flextable = new flexible_table("report_id{$report_id}user_id".$USER->id);
+$flextable = new ilp_flexible_table("report_id{$report_id}user_id".$USER->id);
 
 //define the base url that the table will return to
 $flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}");

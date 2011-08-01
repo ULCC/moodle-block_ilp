@@ -4,7 +4,7 @@
  * It contains the basic definition to properly work with Ajax and
  * Horizontal/Vertical pagination
  *
- * @uses flexible_table()
+ * @uses ilp_flexible_table()
  *
  * @copyright &copy; 2011 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -20,7 +20,7 @@ define('TABLE_VAR_PAGESIZE',   7);
 define('TABLE_VAR_HOZOFFSET',  8);
 define('TABLE_VAR_FILTERS',    9);
 
-class ilp_ajax_table extends flexible_table {
+class ilp_ajax_table extends ilp_flexible_table {
 
     // urls for the table's links
     var $baseurl        = NULL;

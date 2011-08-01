@@ -58,8 +58,8 @@ class ilp_db {
      */
     static function encode(&$data) {
         if(is_object($data) || is_array($data)) {
-            // skip the flexible_table
-            if(!is_a($data, 'flexible_table')) {
+            // skip the ilp_flexible_table
+            if(!is_a($data, 'ilp_flexible_table')) {
                 foreach($data as $index => &$datum) {
                 	//we will skip any index with the prefix binary
                 	if (substr($index, 0,7) != 'binary_') {
@@ -589,7 +589,7 @@ class ilp_db_functions	extends ilp_logging {
     
     
     /**
-     * returns data that can be used with a pagable flexible_table
+     * returns data that can be used with a pagable ilp_flexible_table
      *
      * @param object $flextable an object of type flextable
      * @return mixed object containing report records or false
