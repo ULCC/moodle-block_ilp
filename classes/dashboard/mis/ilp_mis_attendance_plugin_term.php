@@ -83,15 +83,15 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
 	        foreach( $this->termdata as $metric )	{
 
 	        	$data['metric']		=	$metric['name'];
-	        	$data['overall']	=	$metric['overallpercent'];
-	        	$data['one']		=	$metric['termone'];
-	        	$data['two']		=	$metric['termtwo'];
-	        	$data['three']		=	$metric['termthree'];
+	        	$data['overall']	=	$metric['overall'].'%';
+	        	$data['one']		=	$metric[1].'%';
+	        	$data['two']		=	$metric[2].'%';
+	        	$data['three']		=	$metric[3].'%';
 
 	            if (!empty($sixtermformat)) {
-					$data['four']	=	$metric['termfour'];
-	        		$data['five']	=	$metric['termfive'];
-	        		$data['six']	=	$metric['termsix'];
+					$data['four']	=	$metric[4].'%';
+	        		$data['five']	=	$metric[5].'%';
+	        		$data['six']	=	$metric[6].'%';
 				}
 	        	$flextable->add_data_keyed( $data );
 	        }
@@ -102,7 +102,9 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
 	        ob_end_clean();
 	        
 	        return $pluginoutput;
-    	} 
+    	} else {
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
     }
 
     
@@ -114,7 +116,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
     	global $CFG;
     	
     	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_attendance_plugin_term&plugintype=mis">'.get_string('ilp_mis_attendance_plugin_term_pluginnamesettings', 'block_ilp').'</a>';
-		$settings->add(new admin_setting_heading('block_ilp_mis_misc_timetable', '', $link));
+		$settings->add(new admin_setting_heading('block_ilp_mis_attendance_plugin_term', '', $link));
  	 }
     
  	  	 /**
@@ -141,8 +143,8 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
  	 	
  	 	
  	 	$options = array(
-    		 0 => get_string('threeterms','block_ilp'),
-    		 1 => get_string('sixterms','block_ilp'),
+    		 0 => get_string('ilp_mis_attendance_plugin_term_threeterms','block_ilp'),
+    		 1 => get_string('ilp_mis_attendance_plugin_term_sixterms','block_ilp'),
     	);
  	 	
  	 	$this->config_select_element($mform,'mis_plugin_term_termformat',$options,get_string('ilp_mis_attendance_plugin_term_termformat', 'block_ilp'),get_string('ilp_mis_attendance_plugin_term_termformatdesc', 'block_ilp'),9);
@@ -180,12 +182,12 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
     }
     
 	function language_strings(&$string) {
-        $string['ilp_mis_attendance_plugin_term_pluginname']		  						= 'Monthly Course Breakdown Overview';
-        $string['ilp_mis_attendance_plugin_term_pluginnamesettings']		  	= 'Monthly Course Breakdown Configuration';
+        $string['ilp_mis_attendance_plugin_term_pluginname']		  			= 'Term attendance overview';
+        $string['ilp_mis_attendance_plugin_term_pluginnamesettings']		  	= 'Term attendance configuration';
         
         
-        $string['ilp_mis_attendance_plugin_term_table']		  		= 'Month-course table';
-        $string['ilp_mis_attendance_plugin_term_tabledesc']		  		= 'table containing overview of student attendence by course by month';
+        $string['ilp_mis_attendance_plugin_term_table']		  			= 'Term table';
+        $string['ilp_mis_attendance_plugin_term_tabledesc']		  		= 'table containing overview of student attendence by course by term';
         
         $string[ 'ilp_mis_attendance_plugin_term_studentidfield']   		= 'Student id field';
         $string[ 'ilp_mis_attendance_plugin_term_studentidfielddesc']  	= 'The field containing the mis user id';
@@ -229,6 +231,16 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
         $string[ 'ilp_mis_attendance_plugin_term_termfour' ]   				= 'Term 4';
         $string[ 'ilp_mis_attendance_plugin_term_termfive' ]   				= 'Term 5';
         $string[ 'ilp_mis_attendance_plugin_term_termsix' ]   				= 'Term 6';
+        
+        $string[ 'ilp_mis_attendance_plugin_term_threeterms' ]   				= '3 Terms';
+        $string[ 'ilp_mis_attendance_plugin_term_sixterms' ]   					= '6 Terms';
+        
+        $string[ 'ilp_mis_attendance_plugin_term_termformat' ]   					= 'Term Format';
+        $string[ 'ilp_mis_attendance_plugin_term_termformatdesc' ]   				= 'How many terms are there';
+        
+        
+        
+        
     }
 
     
@@ -253,7 +265,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
     		$this->fields		=	array();
     		
     		//get all of the fields that will be returned
-    		if 	(get_config('block_ilp','mis_plugin_term_term')) 				$this->fields['term']		=	get_config('block_ilp','mis_plugin_term_monthidfield');
+    		if 	(get_config('block_ilp','mis_plugin_term_term')) 				$this->fields['term']		=	get_config('block_ilp','mis_plugin_term_term');
     		if 	(get_config('block_ilp','mis_plugin_term_markstotalfield')) 	$this->fields['markstotal']	=	get_config('block_ilp','mis_plugin_term_markstotalfield');
     		if 	(get_config('block_ilp','mis_plugin_term_markspresentfield')) 	$this->fields['markspresent']	=	get_config('block_ilp','mis_plugin_term_markspresentfield');
     		if 	(get_config('block_ilp','mis_plugin_term_marksabsentfield')) 	$this->fields['marksabsent']	=	get_config('block_ilp','mis_plugin_term_marksabsentfield');
@@ -291,6 +303,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
     		
     		//caculate the months attendance percentage 
     		$punctpercent 	=	($d[$this->fields['markslate']] / $present) * 100;
+    		$punctpercent	=	 100 - $punctpercent;
     		
     		//fill the couse month array position with percentage for the month
     		$termdata[$termid]			=	array(
@@ -308,30 +321,44 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
     	$authabsents		=	0;
     	$lates				=	0;
     	
-    	
     	//now we have all course data nicely in an array we can work the overall totals
     	foreach ($termdata as &$term)	{
     		$presents		+=	$term['markspresent'];
     		$absents		+=	$term['marksabsent'];
     		$authabsents	+=	$term['marksauthabsent'];
     		$lates			+=	$term['markslate'];
-    			
-    		$present	=	$this->presents_cal($presents,$authabsents);
-    		
-    		
     	}
-    	
-    	$termdata['overallattend']			=	($absents	/	$present) * 100;
-    	$termdata['overallpunct']			=	($lates	/	$present) * 100;
-    	$termdata['overallabsents']			=	$absents;
-    	$termdata['overallauthabsents']		=	$authabsents;
-    	$termdata['overallpresents']		=	$present;
-    	
-    	$this->termdata		=	$termdata;
-    	
-    	//var_dump();
 
+    	
+    	$present		=	$this->presents_cal($presents,$authabsents);
+    	$presentpercent =	($absents	/	$present) * 100;
+    	$presentpercent		=	100 - $presentpercent;
+    	
+    	//overall late percentage is calculated by geting the percentage of lates and taking 
+    	//it away from 100 
+    	$latepercent	=	($lates	/	$present) * 100;
+    	$latepercent	=	100 - $latepercent;
+    	
+    	$termdata['overall']['attendance']			=	$presentpercent;
+    	$termdata['overall']['punctuality']			=	$latepercent;
+    	$termdata['overall']['marksabsent']			=	$absents;
+    	$termdata['overall']['marksauthabsent']		=	$authabsents;
+    	$termdata['overall']['markspresent']			=	$present;
+    	
 
+		//in this piece of code the data is made ready to bne placed in the term table   	
+    	$keynames		=	array('attendance','punctuality');
+    	$newtermdata	=	array();
+    	foreach ($keynames as $key) {
+	   		$newdata = array();
+	   		$newdata['name']	=	$key;
+	    	foreach ($termdata as $k => $v)	{ 
+	    		$newdata[$k]	=	number_format($v[$key],0);	
+	    	}
+	    	$newtermdata[] = $newdata;
+    	}
+   	
+    	$this->termdata		=	$newtermdata;
     } 
     
     private function presents_cal($markspresent,$authabesent) {
@@ -350,6 +377,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
     			default:
     				$present	=	$markspresent;
     		}
+
     		
     	return $present;
   	} 

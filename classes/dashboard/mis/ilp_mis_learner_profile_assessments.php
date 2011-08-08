@@ -41,8 +41,8 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  			return $pluginoutput;
  			
  		} else {
- 			//print configuration needed message 
- 		}
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
  		
  	} 
  	
@@ -93,7 +93,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
     public function config_settings(&$settings)	{
     	global $CFG;
     	
-    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_learner_assessments&plugintype=mis">'.get_string('ilp_mis_learner_assessments_pluginnamesettings', 'block_ilp').'</a>';
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_learner_profile_assessments&plugintype=mis">'.get_string('ilp_mis_learner_assessments_pluginnamesettings', 'block_ilp').'</a>';
 		$settings->add(new admin_setting_heading('block_ilp_mis_learner_assessments', '', $link));
  	 }
     
@@ -184,7 +184,14 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
     	return 'learnerprofile';
     }
  	
-
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors 
+     * 
+     */
+    function tab_name() {
+    	return 'Iniital Assessment';
+    }
 
 
 }

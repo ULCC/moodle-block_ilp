@@ -46,7 +46,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        foreach( $this->data as $row ){
 	            $data = array();
 	            $data[ 'metric' ] = $row[ 0 ];
-	            $data[ 'score' ] = $row[ 1 ];
+	            $data[ 'score' ] = $row[ 1 ].'%';
 	            $flextable->add_data_keyed( $data );
 	        }
 	        
@@ -61,7 +61,9 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        
 	        //echo the output
 	        return $pluginoutput;
-        }
+        } else {
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
     }
 
     public function set_data( $student_id ){
@@ -95,7 +97,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     	global $CFG;
     	
     	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_attendance_plugin_simple&plugintype=mis">'.get_string('ilp_mis_attendance_plugin_simple_pluginnamesettings', 'block_ilp').'</a>';
-		$settings->add(new admin_setting_heading('block_ilp_mis_attendance_plugin_simple', '', $link));
+		$settings->add(new admin_setting_heading('block_ilp_mis_plugin_simple', '', $link));
  	 }
     
  	  	 /**
@@ -162,4 +164,14 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
         
         return $string;
     }
+    
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors 
+     * 
+     */
+    function tab_name() {
+    	return 'Simple Overview';
+    }
+    
 }

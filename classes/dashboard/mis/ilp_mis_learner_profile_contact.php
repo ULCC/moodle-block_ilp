@@ -48,8 +48,8 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  			
  			
  		} else {
- 			//print configuration needed message 
- 		}
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
  		
  	} 
  	
@@ -92,11 +92,10 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_learner_contact_addressfour')) $this->fields['addressfour']	=	get_config('block_ilp','mis_learner_contact_addressfour');
  				if 	(get_config('block_ilp','mis_learner_contact_postcode')) 	$this->fields['postcode']	=	get_config('block_ilp','mis_learner_contact_postcode');
 				
+ 				$data	=	$this->dbquery( $table, $keyfields, $this->fields);
  				
- 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
- 				
- 				
- 				
+ 				$this->data	=	(!empty($data)) ? array_shift($data) : false;
+				
  			} 
     }
  	
@@ -247,7 +246,14 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
     	return 'learnerprofile';
     }
  	
-
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors 
+     * 
+     */
+    function tab_name() {
+    	return 'Contact Details';
+    }
 
 
 }

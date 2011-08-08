@@ -30,15 +30,13 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  	 */
  	function display()	{
  		global $CFG;
-        
+
 
         // set up the flexible table for displaying the data
  		
  		if (!empty($this->data)) {
  			
-
- 			
- 			   // set up the flexible table for displaying the portfolios
+		   // set up the flexible table for displaying the portfolios
 
 	        //instantiate the ilp_ajax_table class
 	        $flextable = new ilp_mis_ajax_table( 'learner_profile_qualifications',true,'ilp_mis_learner_profile_qualifications' );
@@ -119,7 +117,9 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  			return $pluginoutput;
  			
  			
- 		} 
+ 		} else {
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
  	} 
  	
  	/**
@@ -137,6 +137,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
     		$this->mis_user_id	=	$mis_user_id;
     		
     		$table	=	get_config('block_ilp','mis_learner_qualifications_table');
+
     		
 			if (!empty($table)) {
 
@@ -164,7 +165,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
     public function config_settings(&$settings)	{
     	global $CFG;
     	
-    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_learner_qualifications&plugintype=mis">'.get_string('ilp_mis_learner_qualifications_pluginnamesettings', 'block_ilp').'</a>';
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_learner_profile_qualifications&plugintype=mis">'.get_string('ilp_mis_learner_qualifications_pluginnamesettings', 'block_ilp').'</a>';
 		$settings->add(new admin_setting_heading('block_ilp_mis_learner_qualifications', '', $link));
  	 }
     
@@ -200,7 +201,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
     		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
  	
- 	 	$this->config_select_element($mform,'ilp_mis_learner_qualifications_pluginstatus',$options,get_string('ilp_mis_learner_qualifications_pluginstatus', 'block_ilp'),get_string('ilp_mis_learner_qualifications_pluginstatusdesc', 'block_ilp'),0);
+ 	 	$this->config_select_element($mform,'ilp_mis_learner_profile_qualifications_pluginstatus',$options,get_string('ilp_mis_learner_profile_qualifications_pluginstatus', 'block_ilp'),get_string('ilp_mis_learner_profile_qualifications_pluginstatusdesc', 'block_ilp'),0);
  	 	
  	 }
 
@@ -262,7 +263,14 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
     	return 'learnerprofile';
     }
  	
-
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors 
+     * 
+     */
+    function tab_name() {
+    	return 'Qualifications On Entry';
+    }
 
 
 }

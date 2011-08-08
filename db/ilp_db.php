@@ -1853,6 +1853,17 @@ class ilp_db_functions	extends ilp_logging {
   	
   	
   	/**
+     * Returns the mis plugin with the name given 
+     * 
+     * @param int $pluginname
+     * 
+     * @return mixed object containing the plugin record selected 
+     */
+  	function get_mis_plugin_by_name($pluginname)	{
+  		return $this->dbc->get_record('block_ilp_mis_plugin',array('name'=>$pluginname));
+  	}
+  	
+  	/**
   	 * Updates the given mis plugin record
   	 * 
   	 * @param object $misrecord

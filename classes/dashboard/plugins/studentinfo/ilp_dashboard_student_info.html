@@ -15,7 +15,7 @@
 					<strong><?php echo get_string('studentstatus','block_ilp');?></strong>
 					
 					<?php  if (!empty($can_editstatus)) { ?>
-						editable user status
+						<span id="user_status"  ><?php echo $statusitem->name; ?></span>
 					<?php } else {?>
 						<span id="user_status" class="hidden" ><?php echo $statusitem->name; ?></span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" class="hidden editicon" id="edit_userstatus_icon" />
 						<?php echo $this->userstatus_select($statusitem->id); ?>
@@ -26,15 +26,25 @@
 		
 				 if (!empty($percentagebars)) {  
 							foreach($percentagebars	as $p) {
+
+								echo $pbar->display_bar($p->percentage,$p->name);
 							?>
-					</p><p><strong><?php echo $p->name; ?></strong><div class='percentagebar'  ><div style='width: <?php echo $p->percentage; ?>%; height: 10px; background-color: <?php echo $p->csscolor; ?>' ></div></div><br />
+					
 					<?php } 
 						  }?>		
 			
 	</div>
 	
 	<div id="right-studentinfo">
-      <p>Add content here</p>
+      <p><?php 
+		if (!empty($misoverviewplugins)) {
+			foreach ($misoverviewplugins as $mp)	{
+				$mp->set_data(1);
+				echo $mp->display();
+			}
+		}
+
+		?></p>
     </div>
 	
 	</div>

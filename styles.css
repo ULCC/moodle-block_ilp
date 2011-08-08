@@ -360,7 +360,7 @@ ilp .hiddencontainer	{
 .ilp #ilp_mis_learner_profile_contact	{
 	border					: thin solid black;
 	padding					: 10px;
-	width					: 70%;
+	width					: auto;
 	margin-top				: 10px;
 	margin-bottom			: 10px;
 }
@@ -444,7 +444,7 @@ ilp .hiddencontainer	{
 .ilp #ilp_mis_misc_exam_timetable	{
 	border					: thin solid black;
 	padding					: 10px;
-	width					: 30%;
+	width					: auto;
 	margin-top				: 10px;
 	margin-bottom			: 10px;
 }
@@ -460,6 +460,48 @@ ilp .hiddencontainer	{
 	margin-bottom			: 10px;
 }
 
+
+/** ilp_mis_misc_timetable **/
+
+.ilp #ilp_mis_misc_timetable	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: 35%;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
+
+
+
+/** ilp_mis_attendance_overview_plugin_mcb **/
+
+.ilp #ilp_mis_attendance_plugin_mcb	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: auto;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
+
+/** ilp_mis_attendance_plugin_simple **/
+
+.ilp #ilp_mis_attendance_plugin_simple	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: auto;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
+
+/** ilp_mis_attendance_plugin_term **/
+
+.ilp #ilp_mis_attendance_plugin_term	{
+	border					: thin solid black;
+	padding					: 10px;
+	width					: auto;
+	margin-top				: 10px;
+	margin-bottom			: 10px;
+}
 
 
 /* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific

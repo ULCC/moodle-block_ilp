@@ -29,7 +29,7 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     		//set up the flexible table for displaying
 
 	        //instantiate the ilp_ajax_table class
-	        $flextable = new ilp_mis_ajax_table( 'monthly_breakdown',true ,'ilp_mis_attendance_overview_plugin_mcb');
+	        $flextable = new ilp_mis_ajax_table( 'monthly_breakdown',true ,'ilp_mis_attendance_plugin_mcb');
 	
 	        //setup the headers and columns with the fields that have been requested 
 
@@ -39,14 +39,11 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_course_course','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_course_attendance','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_course_punchuality','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_course_grade','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_course_performance','block_ilp');
 	        
 	        $columns[]		=	'course';
 	        $columns[]		=	'attendance';
-			$columns[]		=	'punchuality';
-	        $columns[]		=	'grade';
-	        $columns[]		=	'performance';
+			$columns[]		=	'punctuality';
+
 	        
 	        
 	        //define the columns in the tables
@@ -67,10 +64,8 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
 				//we start the month counter from the first month
 	        	$month				=	$startmonth;
 	        	$data['course']		=	$cname;
-	        	$data['attendance']	=	$this->mcbdata[$cid]['attendance'];
-	        	$data['punchuality'] =	$this->mcbdata[$cid]['punchuality'];
-	        	$data['grade']		 =	$this->mcbdata[$cid]['grade'];
-	        	$data['performance'] =	$this->mcbdata[$cid]['performance'];
+	        	$data['attendance']	=	$this->mcbdata[$cid]['attendance'].'%';
+	        	$data['punctuality'] =	$this->mcbdata[$cid]['punctuality'].'%';
 	        	$flextable->add_data_keyed( $data );
 	        }
 			ob_start();
@@ -83,7 +78,9 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     		
     		
     		
-    	} 
+    	} else {
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
     	
     	
  
@@ -99,8 +96,8 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     public function config_settings(&$settings)	{
     	global $CFG;
     	
-    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_attendance_overview_plugin_mcb&plugintype=mis">'.get_string('ilp_mis_attendance_overview_plugin_mcb_pluginnamesettings', 'block_ilp').'</a>';
-		$settings->add(new admin_setting_heading('block_ilp_mis_misc_timetable', '', $link));
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_attendance_plugin_course&plugintype=mis">'.get_string('ilp_mis_attendance_overview_plugin_course_pluginnamesettings', 'block_ilp').'</a>';
+		$settings->add(new admin_setting_heading('block_ilp_mis_plugin_course', '', $link));
  	 }
     
  	  	 /**
@@ -109,30 +106,23 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
  	  */
  	 function config_form(&$mform)	{
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_table',get_string('ilp_mis_attendance_plugin_course_table', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_tabledesc', 'block_ilp'),'');
+ 	 	$this->config_text_element($mform,'mis_plugin_course_table',get_string('ilp_mis_attendance_plugin_course_table', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_tabledesc', 'block_ilp'),'');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_studentidfield',get_string('ilp_mis_attendance_plugin_course_studentidfield', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_studentidfielddesc', 'block_ilp'),'studentID');
+ 	 	$this->config_text_element($mform,'mis_plugin_course_studentidfield',get_string('ilp_mis_attendance_plugin_course_studentidfield', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_studentidfielddesc', 'block_ilp'),'studentID');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_courseidfield',get_string('ilp_mis_attendance_plugin_course_course_idfield', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_course_idfielddesc', 'block_ilp'),'courseID');
+ 	 	$this->config_text_element($mform,'mis_plugin_course_courseidfield',get_string('ilp_mis_attendance_plugin_course_course_idfield', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_course_idfielddesc', 'block_ilp'),'courseID');
 
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_coursenamefield',get_string('ilp_mis_attendance_plugin_course_course_namefield', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_course_namefielddesc', 'block_ilp'),'courseName');
+ 	 	$this->config_text_element($mform,'mis_plugin_course_coursenamefield',get_string('ilp_mis_attendance_plugin_course_course_namefield', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_course_namefielddesc', 'block_ilp'),'courseName');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_markstotalfield',get_string('ilp_mis_attendance_plugin_course_markstotal', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_markstotaldesc', 'block_ilp'),'marksTotal');
+ 	 	$this->config_text_element($mform,'mis_plugin_course_markstotalfield',get_string('ilp_mis_attendance_plugin_course_markstotal', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_markstotaldesc', 'block_ilp'),'marksTotal');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_markspresentfield',get_string('ilp_mis_attendance_plugin_course_markspresent', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_markspresentdesc', 'block_ilp'),'marksPresent');
+ 	 	$this->config_text_element($mform,'mis_plugin_course_markspresentfield',get_string('ilp_mis_attendance_plugin_course_markspresent', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_markspresentdesc', 'block_ilp'),'marksPresent');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_marksabsentfield',get_string('ilp_mis_attendance_plugin_course_marksabsent', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_marksabsentdesc', 'block_ilp'),'marksAbsent');
+ 	 	$this->config_text_element($mform,'mis_plugin_course_marksabsentfield',get_string('ilp_mis_attendance_plugin_course_marksabsent', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_marksabsentdesc', 'block_ilp'),'marksAbsent');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_marksauthabsentfield',get_string('ilp_mis_attendance_plugin_course_marksauthabsent', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_marksauthabsentdesc', 'block_ilp'),'marksAuthAbsent');
+ 	 	$this->config_text_element($mform,'mis_plugin_course_marksauthabsentfield',get_string('ilp_mis_attendance_plugin_course_marksauthabsent', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_marksauthabsentdesc', 'block_ilp'),'marksAuthAbsent');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_markslatefield',get_string('ilp_mis_attendance_plugin_course_markslate', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_markslatedesc', 'block_ilp'),'marksLate');
- 	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_grade',get_string('ilp_mis_attendance_plugin_course_grade', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_gradedesc', 'block_ilp'),'Grade');
- 	 	
- 	 	$this->config_text_element($mform,'mis_plugin_mcb_performance',get_string('ilp_mis_attendance_plugin_course_performance', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_performancedesc', 'block_ilp'),'perforamnce');
-
- 	 	
- 	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_course_markslatefield',get_string('ilp_mis_attendance_plugin_course_markslate', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_markslatedesc', 'block_ilp'),'marksLate');
  	 	
     	$options = array(
     		 0 => get_string('ilp_mis_attendance_plugin_course_ignore','block_ilp'),
@@ -140,14 +130,14 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     		 2 => get_string('ilp_mis_attendance_plugin_course_negative','block_ilp'), 
     	);
     	
- 	 	$this->config_select_element($mform,'mis_plugin_mcb_authorised',$options,get_string('ilp_mis_attendance_plugin_course_table', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_tabledesc', 'block_ilp'),1);
+ 	 	$this->config_select_element($mform,'mis_plugin_course_authorised',$options,get_string('ilp_mis_attendance_plugin_course_table', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_tabledesc', 'block_ilp'),1);
  	 	
  	 	$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),
     		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
  	 	
- 	 	$this->config_select_element($mform,'mis_plugin_mcb_tabletype',$options,get_string('ilp_mis_attendance_plugin_course_table', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_tabledesc', 'block_ilp'),1);
+ 	 	$this->config_select_element($mform,'mis_plugin_course_tabletype',$options,get_string('ilp_mis_attendance_plugin_course_authorised', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_authoriseddesc', 'block_ilp'),1);
  	 	
  	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
@@ -165,11 +155,11 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     }
     
 	function language_strings(&$string) {
-        $string['ilp_mis_attendance_plugin_course_pluginname']		  						= 'Monthly Course Breakdown Overview';
-        $string['ilp_mis_attendance_overview_plugin_mcb_pluginnamesettings']		  	= 'Monthly Course Breakdown Configuration';
+        $string['ilp_mis_attendance_plugin_course_pluginname']		  						= 'Course Based Attendance Overview';
+        $string['ilp_mis_attendance_overview_plugin_course_pluginnamesettings']		  		= 'Course Based Attendance Configuration';
         
         
-        $string['ilp_mis_attendance_plugin_course_table']		  		= 'Month-course table';
+        $string['ilp_mis_attendance_plugin_course_table']		  			= 'Course attendance table';
         $string['ilp_mis_attendance_plugin_course_tabledesc']		  		= 'table containing overview of student attendence by course by month';
         
         $string[ 'ilp_mis_attendance_plugin_course_studentidfield']   		= 'Student id field';
@@ -180,13 +170,6 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
         
         $string[ 'ilp_mis_attendance_plugin_course_course_namefield']  	= 'Course title field';
         $string[ 'ilp_mis_attendance_plugin_course_course_namefielddesc']  = 'The field containing course name data';
-        
-        $string[ 'ilp_mis_attendance_plugin_course_gradeidfield' ]   		= 'Grade field';
-        $string[ 'ilp_mis_attendance_plugin_course_gradeidfielddesc' ]   	= 'The field containing the grade data';
-        
-        $string[ 'ilp_mis_attendance_plugin_course_performance' ]   		= 'Performance field';
-        $string[ 'ilp_mis_attendance_plugin_course_performancedesc' ]   	= 'The field containing the performance data';        
-
         
         $string[ 'ilp_mis_attendance_plugin_course_markstotal' ]   		= 'Marks total field';
         $string[ 'ilp_mis_attendance_plugin_course_markstotaldesc' ]   	= 'The field containing marks total data';
@@ -206,16 +189,10 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
         
         $string[ 'ilp_mis_attendance_plugin_course_authorised' ]   			= 'Authorised Absents';
         $string[ 'ilp_mis_attendance_plugin_course_authoriseddesc' ]   		= 'What should be done with authorised absents? Positive - to add to present marks, Negative - to add to absents and ignore to not count';
-        
-        $string[ 'ilp_mis_attendance_plugin_course_endmonth' ]   			= 'End month';
-        $string[ 'ilp_mis_attendance_plugin_course_endmonthdesc' ]   		= 'The last month to be displayed on the monthly course breakdown table';
-        
-        $string[ 'ilp_mis_attendance_plugin_course_startmonth' ]   		= 'Start Month';
-        $string[ 'ilp_mis_attendance_plugin_course_startmonthdesc' ]   	= 'The first month to be displayed on the monthly course breakdown table';
-        
-        $string[ 'ilp_mis_attendance_plugin_mcb_ignore' ]  				= 'Ignore';
-        $string[ 'ilp_mis_attendance_plugin_mcb_positive' ]   			= 'Positive';
-        $string[ 'ilp_mis_attendance_plugin_mcb_negative' ]   			= 'Negative';
+ 
+        $string[ 'ilp_mis_attendance_plugin_course_ignore' ]  				= 'Ignore';
+        $string[ 'ilp_mis_attendance_plugin_course_positive' ]   			= 'Positive';
+        $string[ 'ilp_mis_attendance_plugin_course_negative' ]   			= 'Negative';
         
         $string[ 'ilp_mis_attendance_plugin_course_pluginstatus' ]   			= 'Status';
         $string[ 'ilp_mis_attendance_plugin_course_pluginstatusdesc' ]   		= 'is the plugin enabled or disabled';
@@ -223,7 +200,7 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
         $string[ 'ilp_mis_attendance_plugin_course_course' ] 		  	= 'Course';
         $string[ 'ilp_mis_attendance_plugin_course_attendance' ]   		= 'Attendance';
         $string[ 'ilp_mis_attendance_plugin_course_punchuality' ]   	= 'Punchuality';
-        $string[ 'ilp_mis_attendance_plugin_course_attendance' ]   		= 'Grade';
+        $string[ 'ilp_mis_attendance_plugin_course_grade' ]   		= 'Grade';
         $string[ 'ilp_mis_attendance_plugin_course_performance' ]   		= 'Performance';
         
     }
@@ -235,14 +212,14 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
      * @param $mis_user_id the mis id of the user whose data will be retireved.
      */
     function set_data( $mis_user_id ) {
-    	$table 		=		get_config( 'block_ilp', 'mis_plugin_mcb_table'  );
+    	$table 		=		get_config( 'block_ilp', 'mis_plugin_course_table'  );
     	
     	$this->mis_user_id	=	$mis_user_id;
 
     	
     	if (!empty($table)) {
     		
-    		$sidfield	=	get_config('block_ilp','mis_plugin_mcb_studentidfield');
+    		$sidfield	=	get_config('block_ilp','mis_plugin_course_studentidfield');
     		
     		//create the key that will be used in sql query
     		$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
@@ -250,16 +227,13 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     		$this->fields		=	array();
     		
     		//get all of the fields that will be returned
-    		if 	(get_config('block_ilp','mis_plugin_mcb_courseidfield')) 	$this->fields['courseid']		=	get_config('block_ilp','mis_plugin_mcb_courseidfield');
-    		if 	(get_config('block_ilp','mis_plugin_mcb_coursenamefield')) 	$this->fields['coursename']		=	get_config('block_ilp','mis_plugin_mcb_coursenamefield');
-    		if 	(get_config('block_ilp','mis_plugin_mcb_gradeidfield')) 	$this->fields['grade']			=	get_config('block_ilp','mis_plugin_mcb_gradeidfield');
-    		if 	(get_config('block_ilp','mis_plugin_mcb_performance')) 		$this->fields['performance']	=	get_config('block_ilp','mis_plugin_mcb_performance');
-     		
-    		if 	(get_config('block_ilp','mis_plugin_mcb_markstotalfield')) 	$this->fields['markstotal']			=	get_config('block_ilp','mis_plugin_mcb_markstotalfield');
-    		if 	(get_config('block_ilp','mis_plugin_mcb_markspresentfield')) 	$this->fields['markspresent']	=	get_config('block_ilp','mis_plugin_mcb_markspresentfield');
-    		if 	(get_config('block_ilp','mis_plugin_mcb_marksabsentfield')) 	$this->fields['marksabsent']	=	get_config('block_ilp','mis_plugin_mcb_marksabsentfield');
-    		if 	(get_config('block_ilp','mis_plugin_mcb_marksauthabsentfield')) 	$this->fields['marksauthabsent']	=	get_config('block_ilp','mis_plugin_mcb_marksauthabsentfield');
-    		if 	(get_config('block_ilp','mis_plugin_mcb_markslatefield')) 	$this->fields['markslate']	=	get_config('block_ilp','mis_plugin_mcb_markslatefield');
+    		if 	(get_config('block_ilp','mis_plugin_course_courseidfield')) 	$this->fields['courseid']		=	get_config('block_ilp','mis_plugin_course_courseidfield');
+    		if 	(get_config('block_ilp','mis_plugin_course_coursenamefield')) 	$this->fields['coursename']		=	get_config('block_ilp','mis_plugin_course_coursenamefield');
+    		if 	(get_config('block_ilp','mis_plugin_course_markstotalfield')) 	$this->fields['markstotal']			=	get_config('block_ilp','mis_plugin_course_markstotalfield');
+    		if 	(get_config('block_ilp','mis_plugin_course_markspresentfield')) 	$this->fields['markspresent']	=	get_config('block_ilp','mis_plugin_course_markspresentfield');
+    		if 	(get_config('block_ilp','mis_plugin_course_marksabsentfield')) 	$this->fields['marksabsent']	=	get_config('block_ilp','mis_plugin_course_marksabsentfield');
+    		if 	(get_config('block_ilp','mis_plugin_course_marksauthabsentfield')) 	$this->fields['marksauthabsent']	=	get_config('block_ilp','mis_plugin_course_marksauthabsentfield');
+    		if 	(get_config('block_ilp','mis_plugin_course_markslatefield')) 	$this->fields['markslate']	=	get_config('block_ilp','mis_plugin_course_markslatefield');
     		
     		//get the users monthly attendance data
     		$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
@@ -290,19 +264,23 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     		}
     		
     		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
-			$present	=	$this->presents_cal($presents,$authabsents);
+			$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
     		
     		//calculate the months attendance percentage 
     		$monthpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
     		
+    		//remove any decimal places
+    		$monthpercent	=	number_format($monthpercent,0);
+    		
     		$latepercent	=	($d[$this->fields['markslate']]/$present) * 100;
+    		
+    		$latepercent	=	number_format($latepercent,0);
     		
     		//fill the couse month array position with percentage for the month
     		$mcbdata[$courseid]	=	array(
     											  'attendance'		=>  $monthpercent,
     											  'latepercent'		=>	$latepercent,
-    											  'grade'			=>	$d[$this->fields['grade']],
-    											  'performance'		=>	$d[$this->fields['performance']],	
+    											  'punctuality'		=>	$latepercent,
     											  'markstotal'		=>	$d[$this->fields['markstotal']],
     											  'markspresent'	=>	$d[$this->fields['markspresent']],
     											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
@@ -326,7 +304,7 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     
     private function presents_cal($markspresent,$authabesent) {
   		
- 	 		switch (get_config('block_ilp','mis_plugin_mcb_authorised')) {
+ 	 		switch (get_config('block_ilp','mis_plugin_course_authorised')) {
     			
     			case 1 : 
     				//positive

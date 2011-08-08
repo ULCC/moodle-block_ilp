@@ -251,14 +251,8 @@ class ilp_plugin {
 	 			//removes the s_ from the front of the element name
 				$name	=	substr_replace($name,'',0,2);	 		
 			
-		 		if ($setting	=	$this->dbc->setting_exists($name)) {
-		 			$setting->value	=	$value;
-		 			$this->dbc->update_config_setting($setting);		
-		 		}  else {
-		 		
-		 			
-		 			$this->dbc->insert_config_setting($name,$value);
-		 		}
+				//use moodles set_config function to save the configuration setting
+				set_config($name,$value,'block_ilp');
 	 		}
 	 	}
 	 	

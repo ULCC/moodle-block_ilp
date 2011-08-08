@@ -13,6 +13,9 @@
 //require the ilp_plugin.php class 
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_plugin.php');
 
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_percentage_bar.class.php');
+
+
 
 class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	
@@ -75,99 +78,106 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			//can the current user change the users status
 			$can_editstatus	=	(!empty($access_viewotherilp) && $USER->id != $user_id) ? true : false;
 			
-			$passpercentage	=	get_config('block_ilp', 'passpercent');
-			
-			//just in case the pass percentage has not been set 
-			$passpercentage	=	(empty($passpercentage)) ? ILP_DEFAULT_PASS_PERCENTAGE : $passpercentage;
-			
-			$failpercentage	=	get_config('block_ilp', 'failpercent');
-			
-			//just in case the fail percentage has not been set 
-			$failpercentage	=	(empty($failpercentage)) ? ILP_DEFAULT_FAIL_PERCENTAGE : $failpercentage;
 			
 			//include the attendance 
-			$misclassfile	=	$CFG->docroot."/blocks/ilp/classes/mis.class.php";
+			$misclassfile	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_percentbar_plugin.php';
 			
 			if (file_exists($misclassfile)) {
 				
 				//create an instance of the MIS class
-				$misclass	=	new mis();
+				$misclass	=	new ilp_mis_attendance_percentbar_plugin();
 				
-				//set the student in question
-				$misclass->get_student_data($this->student_id);
+				//set the data for the student in question
+				$misclass->set_data($this->student_id);
 				
-				$punch_method1 = array($misclass, 'get_total_punchuality');
-				$punch_method2 = array($misclass, 'get_student_punchuality');
-				$attend_method1 = array($misclass, 'get_total_attendance');
-				$attend_method2 = array($misclass, 'get_student_attendance');
+				
+				$punch_method1 = array($misclass, 'get_student_punchuality');
+				$attend_method1 = array($misclass, 'get_student_attendance');
+
         
 					        //check whether the necessary functions have been defined
-		        if (is_callable($punch_method1,true) && is_callable($punch_method2,true)) {
+		        if (is_callable($punch_method1,true)) {
 		        	$misinfo	=	new stdClass();
-		        	//call the get_total_punchuality function to get the total number of times the student could have been on time
-		  	        $misinfo->total	=	$misclass->get_total_punchuality();
-		  	        //call the get_student_punchuality fucntion to get the total number of times the student was on time
-	    	        $misinfo->actual	=	$misclass->get_student_punchuality();
 	    	        
-	    	        	    	        //if total_possible is empty then there will be nothing to report
-	    	        if (!empty($misinfo->total)) {
+
+	    	        if ($misclass->get_student_punctuality() != false) {
 		    	        //calculate the percentage
 		    	        
-		    	        $misinfo->percentage	=	$misinfo->actual/$misinfo->total	* 100;	
+		    	        $misinfo->percentage	=	$misclass->get_student_punctuality();	
 	    	        
-	    		        $misinfo->name	=	get_string('punchuality','block_ilp');
-	    	        
-	    		        //sets the colour of the percentage bar
-	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','failcolour');	
-	    	       	
-	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','midcolour');	
-	    	        	
-	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->csscolor	=	get_config('block_ilp','passcolour');	
-	    	       
+	    		        $misinfo->name	=	get_string('punctuality','block_ilp');
 	    	        	
 	    		        //pass the object to the percentage bars array
 	    	    	    $percentagebars[]	=	$misinfo;
 	    	        }
 	        	}
-	        	
+
 				//check whether the necessary functions have been defined
-		        if (is_callable($attend_method1,true) && is_callable($attend_method2,true)) {
+		        if (is_callable($attend_method1,true) ) {
 		        	$misinfo	=	new stdClass();
-		        	//call the get_total_punchuality function to get the total number of times the student could have been on time
-		  	        $misinfo->total	=	$misclass->get_total_attendance();
-		  	        //call the get_student_punchuality fucntion to get the total number of times the student was on time
-	    	        $misinfo->actual	=	$misclass->get_student_attendance();
 	    	        
 	    	        //if total_possible is empty then there will be nothing to report
-	    	        if (!empty($misinfo->total)) {
+		        	if ($misclass->get_student_attendance() != false) {
 	    	        	//calculate the percentage
-	    	        	$misinfo->percentage	=	$misinfo->actual/$misinfo->total	* 100;
+	    	        	$misinfo->percentage	=	$misclass->get_student_attendance();
 	    	        
 	    	        	$misinfo->name	=	get_string('attendance','block_ilp');
-	    	        		
-   	    		        //sets the colour of the percentage bar
-	    	        	if ($misinfo->percentage	<= $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','failcolour');	
-	    	       	
-	    	        	if ($misinfo->percentage	> $failpercentage && $misinfo->percentage < $passpercentage) $misinfo->csscolor	=	 get_config('block_ilp','midcolour');	
-	    	        	
-	    	        	if ($misinfo->percentage	>= $passpercentage) $misinfo->csscolor	=	get_config('block_ilp','passcolour');	
-	    	       	
+
 	    	        	$percentagebars[]	=	$misinfo;
 	    	        }
 	    	        
 	        	}
+
 			}
-				        	
-	        	require_once $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_plugin_simple.php';
-	        	
-	        	$learnercontact	=	new ilp_mis_attendance_plugin_simple();
+
 			
+			$misoverviewplugins	=	false;
+
+			if ($this->dbc->get_mis_plugins() !== false) {
+				
+				$misoverviewplugins	=	array();
+				
+				//get all plugins that mis plugins
+				$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+				
+				$mis_plugins = ilp_records_to_menu($this->dbc->get_mis_plugins(), 'id', 'name');
+				
+				foreach ($mis_plugins as $plugin_file) {
+					
+				    require_once($plugins.'/'.$plugin_file.".php");
+				    
+				    // instantiate the object
+				    $class = basename($plugin_file, ".php");
+				    $pluginobj = new $class();
+				    $method = array($pluginobj, 'plugin_type');
+					
+				    if (is_callable($method,true)) {
+				    	//we only want mis plugins that are of type overview 
+				        if ($pluginobj->plugin_type() == 'overview') {
+				        	
+				        	//get the actual overview plugin
+				        	$misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
+				        	
+				        	//if the admin of the moodle has done there job properly then only one overview mis plugin will be enabled 
+				        	//otherwise there may be more and they will all be displayed 
+				        	
+				        	$status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
+				        	
+				        	$status	=	(!empty($status)) ?  $status: ILP_DISABLED;
+				        	
+				        	if (!empty($misplug) & $status == ILP_ENABLED ) {
+								$misoverviewplugins[]	=	$pluginobj;
+				        	}
+				        }
+				    }
+			
+				}
+			}
+			
+			
+	
 			//if the user has the capability to view others ilp and this ilp is not there own 
 			//then they may change the students status otherwise they can only view 
-			
-			
-			
-			
 			
 			//get all enabled reports in this ilp
 			$reports		=	$this->dbc->get_reports(ILP_ENABLED);
@@ -181,25 +191,22 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 					$reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
 					$reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
 					
-					    	        //if total_possible is empty then there will be nothing to report
+					 //if total_possible is empty then there will be nothing to report
 	    	        if (!empty($reportinfo->total)) {
 	    	        	//calculate the percentage
 	    	        	$reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
 	    	        
 	    	        	$reportinfo->name	=	$r->name;
-	    	        	
-	    	        	     //sets the colour of the percentage bar
-	    	        	if ($reportinfo->percentage	<= $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','failcolour');	
-	    	       	
-	    	        	if ($reportinfo->percentage	> $failpercentage && $reportinfo->percentage < $passpercentage) $reportinfo->csscolor	=	 get_config('block_ilp','midcolour');	
-	    	        	
-	    	        	if ($reportinfo->percentage	>= $passpercentage) $reportinfo->csscolor	=	get_config('block_ilp','passcolour');	
-	    	        	
+
 	    	        	$percentagebars[]	=	$reportinfo;
 	    	        }
 					
 				}
 			}
+			
+			//instantiate the percentage bar class in case there are any percentage bars
+			$pbar	=	new ilp_percentage_bar();
+			
 			
 			//we need to buffer output to prevent it being sent straight to screen
 			ob_start();
@@ -208,9 +215,9 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			
 			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/plugins/'.$this->directory.'/ilp_dashboard_student_info.html');
 			
-			$learnercontact->set_data(1);
+			//$learnercontact->set_data(1);
 			
-			echo $learnercontact->display();
+			//echo $learnercontact->display();
 			
 			//pass the output instead to the output var
 			$pluginoutput = ob_get_contents();

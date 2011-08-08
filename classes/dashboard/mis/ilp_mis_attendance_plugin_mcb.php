@@ -81,7 +81,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
 				//we start the month counter from the first month
 	        	$month				=	$startmonth;
 	        	$data['course']		=	$cname;
-	        	$data['overall']	=	$this->mcbdata[$cid]['overallpercent'];
+	        	$data['overall']	=	$this->mcbdata[$cid]['overallpercent'].'%';
 	        		        	
 	       		do {
 					$data["{$month}month"]	=	(!empty($this->mcbdata[$cid][$month])) ? $this->mcbdata[$cid][$month]['percent']."%" : "0%";
@@ -102,7 +102,9 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
     		
     		
     		
-    	} 
+    	} else {
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
     	
     	
  
@@ -117,9 +119,8 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
      */
     public function config_settings(&$settings)	{
     	global $CFG;
-    	
     	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname=ilp_mis_attendance_plugin_mcb&plugintype=mis">'.get_string('ilp_mis_attendance_plugin_mcb_pluginnamesettings', 'block_ilp').'</a>';
-		$settings->add(new admin_setting_heading('block_ilp_mis_misc_timetable', '', $link));
+		$settings->add(new admin_setting_heading('mis_plugin_mcb', '', $link));
  	 }
     
  	  	 /**
@@ -380,8 +381,9 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
     		}
     		
     		$present	=	$this->presents_cal($presents,$authabsents);
+    		$percent	=	($absents	/	$present) * 100;
     		
-    		$course['overallpercent']	=	($absents	/	$present) * 100;
+    		$course['overallpercent']		=	number_format($percent,0);
     		$course['overallabsents']		=	$absents;
     		$course['overallauthabsents']	=	$authabsents;
     		$course['overallpresents']		=	$present;
@@ -415,7 +417,14 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
     	return $present;
   	} 
     
-    
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors 
+     * 
+     */
+    function tab_name() {
+    	return 'Monthly Course Breakdown';
+    }
     
     
     

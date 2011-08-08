@@ -68,15 +68,11 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  	 */
  	function display()	{
  		global $CFG, $PARSER;
+ 		
+ 		if (!empty($this->data)) {
         
         // set up the flexible table for displaying the data
- 		
 
-     		
-
- 			
- 			
- 			
  			// set up the flexible table for displaying the portfolios
 			
 	        //instantiate the ilp_ajax_table class
@@ -187,6 +183,9 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 	        ob_end_clean();
  			
  			return $pluginoutput;
+ 		} else {
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
  	} 
  	
  	/**
@@ -370,6 +369,14 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
     	return 'learnerprofile';
     }
  	
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors 
+     * 
+     */
+    function tab_name() {
+    	return 'Lesson Timetable';
+    }
 
 
 

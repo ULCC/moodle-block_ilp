@@ -94,7 +94,9 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  			return $pluginoutput;
  			
  			
- 		} 
+ 		} else {
+    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    	}
  	} 
  	
  	/**
@@ -230,7 +232,14 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
     	return 'learnerprofile';
     }
  	
-
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors 
+     * 
+     */
+    function tab_name() {
+    	return 'Performance Indicators';
+    }
 
 
 }

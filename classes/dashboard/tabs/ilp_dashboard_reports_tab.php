@@ -147,7 +147,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      */
     function get_header($headertext,$icon)	{
 		//setup the icon				
-		$icon 	=	 "<div class='reports-head'><img id='reporticon' class='icon_med' alt='$headertext ".get_string('reports','block_ilp')."' src='$icon' />";
+		$icon 	=	 "<div class='reports-head'><img id='reporticon' class='icon_med' alt='$headertext ".get_string('reports','block_ilp')."' src='$icon' /></div>";
     	
     	return "<h2>{$icon}{$headertext}</h2></div>";
     }

@@ -104,7 +104,7 @@ if($mform->is_submitted()) {
         //decide whether the user has chosen to save and exit or save or display
         if (isset($formdata->saveanddisplaybutton)) { 
         	$return_url = $CFG->wwwroot."/admin/settings.php?section=blocksettingilp";
-        	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
+        	redirect($return_url, get_string("configsuc", 'block_ilp'), REDIRECT_DELAY);
         }
     }
 }

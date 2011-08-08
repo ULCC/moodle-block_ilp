@@ -13,6 +13,8 @@
 	$string['anystatus']			= 	'Any Status';
 	$string['apply'] 				= 	'Apply';
 	$string['applyfilter'] 				= 	'Apply Filter';
+	$string['attendance']			= 	'Attendance';
+	
 	
 	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';
@@ -30,6 +32,7 @@
 	$string['contextcourse']		=	'Context Course';
 	$string['contextuser']			=	'Continue User';
 	$string['contextself']			=	'Context Self';
+	$string['configsuc']			=	'Configuration change saved';
 	
 	
 	
@@ -112,12 +115,16 @@
 	$string['mycoursegroups']			=	'My Course Groups';
 	
 	$string['name']					=	'Name';
+	$string['nodataornoconfig']		=	'No data has been found for the current student. If you believe there should be data for the current student then the plugin may not been configured correctly';
+	
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';
 	$string['nocomments']			=	'No Comments';
 	$string['notapplicable']		=	'N/A';
 	$string['nothingtodisplay']		=	'Nothing to display';
+	
+	
 	
 	
 	$string['passpercent']			=	'Pass Percentage';
@@ -132,6 +139,7 @@
 	$string['preview'] 				= 	'Preview';
 	$string['previewreport'] 		= 	'Preview Report';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
+	$string['punctuality']			= 	'Punctuality';
 	$string['removesel']			= 	'Remove selected';
 	$string['removeall']			= 	'Remove all';
 	$string['req'] 					= 	'Required';
