@@ -89,7 +89,6 @@ if ($access_viewotherilp) {
 
 //this is only in for debug and testing purposes 
 if ($USER->username == 'moodle-support') {
-	var_dump('moodle support');
 $access_report_createreports	=	1;
 $access_report_editreports		=	1;
 $access_report_deletereports	=	1;

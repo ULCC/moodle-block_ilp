@@ -164,6 +164,8 @@
 	$string['selecttype'] 						= 	'Select Field Type';
 	$string['selectedreports']					= 	'Selected Reports';
 	$string['selectedreportlist']				= 	'Select report list options';
+	$string['settings']							= 	'Settings';
+	
 	$string['status']							= 	'Status';
 	$string['storedprocedure']					= 	'Stored Procedure';
 	$string['studentstatus']					= 	'Student Status';
@@ -172,9 +174,13 @@
 	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 				= 	'Submit and display';
 	$string['studentslist'] 					= 	'Student list description';
+	$string['tabsettings']						= 	'Tab Settings';
+	$string['tab_pluginsettings']				= 	'Tab Plugin Settings';
 	
 	$string['type'] 							= 	'Type';
 	$string['table'] 							= 	'Table';
+	$string['tabstatusdesc'] 					= 	'Select whether the tab is enabled or disabled';
+	
 	
 	$string['viewreportpreview'] 				= 	'View Report Preview';
 	$string['viewplp'] 							= 	'View';

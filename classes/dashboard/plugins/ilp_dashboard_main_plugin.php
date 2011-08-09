@@ -75,32 +75,40 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			foreach	($dashboardtabs	as $dt)	{
 				
 				$classname	=	$dt->name;
-    				
-    			//include the dashboard_tab class file
-    	        include_once("{$CFG->dirroot}/blocks/ilp/classes/dashboard/tabs/{$classname}.php");
 
-		        if(!class_exists($classname)) {
-		            print_error('pluginclassnotfound', 'block_ilp', '', $classname);
-		        }
-		        
-				$dasttab	=	new $classname($this->student_id,$this->course_id);
+				//find out if the tab is enabled
+				$status	=	get_config('block_ilp',$classname.'_pluginstatus');
 				
-				$tabrows[]	=	new tabobject($dt->id,$linkurl."&selectedtab={$dt->id}&tabitem={$dt->id}",$dasttab->display_name());
-
-				if ($dasttab->is_selected($selectedtab)) {
-
-					//this gets the display information from the tab plugin
-					$tabcontent		=	$dasttab->display($tabitem);
-
-					//returns tabs to be placed on second row
-					$tabsecondrow	=	$dasttab->second_row();
+				$status	=	(!empty($status)) ? $status	:	0;
+				
+				if ($status	== ILP_ENABLED) {
+	    			//include the dashboard_tab class file
+	    	        include_once("{$CFG->dirroot}/blocks/ilp/classes/dashboard/tabs/{$classname}.php");
+	
+			        if(!class_exists($classname)) {
+			            print_error('pluginclassnotfound', 'block_ilp', '', $classname);
+			        }
+			        
+					$dasttab	=	new $classname($this->student_id,$this->course_id);
 					
-					//returns tabs to be placed on third row
-					$tabthirdrow	=	$dasttab->third_row();
-					
-					//get the list of tabs that should be deactivated 		
-					$deactivatedtabs		=	$dasttab->deactivated_tabs($tabitem);
-				} 
+					$tabrows[]	=	new tabobject($dt->id,$linkurl."&selectedtab={$dt->id}&tabitem={$dt->id}",$dasttab->display_name());
+	
+					if ($dasttab->is_selected($selectedtab)) {
+	
+						//this gets the display information from the tab plugin
+						$tabcontent		=	$dasttab->display($tabitem);
+	
+						//returns tabs to be placed on second row
+						$tabsecondrow	=	$dasttab->second_row();
+						
+						//returns tabs to be placed on third row
+						$tabthirdrow	=	$dasttab->third_row();
+						
+						//get the list of tabs that should be deactivated 		
+						$deactivatedtabs		=	$dasttab->deactivated_tabs($tabitem);
+					} 
+				
+				}
 			}
 			
 			$tabs[] = $tabrows;

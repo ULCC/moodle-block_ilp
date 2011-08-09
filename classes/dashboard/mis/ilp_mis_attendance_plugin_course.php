@@ -100,7 +100,7 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
 		$settings->add(new admin_setting_heading('block_ilp_mis_plugin_course', '', $link));
  	 }
     
- 	  	 /**
+/**
  	  * Adds config settings for the plugin to the given mform
  	  * @see ilp_plugin::config_form()
  	  */
@@ -147,7 +147,7 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
  	 	$this->config_select_element($mform,'ilp_mis_attendance_plugin_course_pluginstatus',$options,get_string('ilp_mis_attendance_plugin_course_pluginstatus', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_pluginstatusdesc', 'block_ilp'),0);
  	 	
  	 }
-    
+ 	 
 
         
     public function plugin_type(){

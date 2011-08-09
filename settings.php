@@ -160,4 +160,39 @@ if ($dbc->get_mis_plugins() !== false) {
 	}
 }
 
+$tabplugin_settings 	= new admin_setting_heading('block_ilp/tab_plugins', get_string('tab_pluginsettings', 'block_ilp'), '');
+
+// -----------------------------------------------------------------------------
+// Get Dashboard Tab plugin settings
+// -----------------------------------------------------------------------------
+
+$settings->add($tabplugin_settings);
+global $CFG;
+
+$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs';
+
+if ($dbc->get_tab_plugins() !== false) {
+	
+	
+	$tab_plugins = ilp_records_to_menu($dbc->get_tab_plugins(), 'id', 'name');
+	
+	foreach ($tab_plugins as $plugin_file) {
+	
+	    require_once($plugins.'/'.$plugin_file.".php");
+	    
+	    // instantiate the object
+	    $class = basename($plugin_file, ".php");
+	    $pluginobj = new $class();
+	    $method = array($pluginobj, 'config_settings');
+		
+	    //check whether the config_settings method has been defined
+
+	    if (is_callable($method,true)) {
+	        $pluginobj->config_settings($settings);
+	        
+	    }
+
+	}
+}
+
 ?>

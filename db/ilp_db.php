@@ -1863,6 +1863,47 @@ class ilp_db_functions	extends ilp_logging {
   		return $this->dbc->get_record('block_ilp_mis_plugin',array('name'=>$pluginname));
   	}
   	
+  	
+    /**
+     * Returns all currently installed tab plugins
+     * 
+     * @return array of recordset objects or bool false
+     */
+    function get_tab_plugins() 	{
+    	global	$CFG;
+    	
+    	        // check for the presence of a table to determine which query to run
+        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{$CFG->prefix}block_ilp_dash_tab'");
+
+        // return resource types or false
+        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
+    }
+    
+    
+  	/**
+     * Returns the tab plugin with the id given 
+     * 
+     * @param int $plugin_id
+     * 
+     * @return mixed object containing the plugin record selected 
+     */
+  	function get_tab_plugin_by_id($plugin_id)	{
+  		return $this->dbc->get_record('block_ilp_dash_tab',array('id'=>$plugin_id));
+  	}
+  	
+  	
+  	/**
+     * Returns the tab plugin with the name given 
+     * 
+     * @param int $pluginname
+     * 
+     * @return mixed object containing the plugin record selected 
+     */
+  	function get_tab_plugin_by_name($pluginname)	{
+  		return $this->dbc->get_record('block_ilp_dash_tab',array('name'=>$pluginname));
+  	}
+  	
+  	
   	/**
   	 * Updates the given mis plugin record
   	 * 

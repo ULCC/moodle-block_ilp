@@ -235,5 +235,41 @@ class ilp_dashboard_tab extends ilp_plugin {
 		}
 		return $deactivate;
 	}
+	
+	/**
+     * Adds settings for this plugin to the admin settings
+     * @see ilp_mis_plugin::config_settings()
+     */
+    public function config_settings(&$settings)	{
+    	global $CFG;
+    	    	
+    	$classname	=	get_class($this);
+    	
+    	$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_plugin_config.php?pluginname='.$classname.'&plugintype=tab">'.get_string($classname.'_name', 'block_ilp').' '.get_string('tabsettings', 'block_ilp').'</a>';
+		$settings->add(new admin_setting_heading('mis_'.$classname, '', $link));
+ 	 }
+	
+	
+	/**
+ 	  * Adds config settings for the plugin to the given mform
+ 	  * by default this allows config option allows a tab to be enabled or dispabled
+ 	  * override the function if you want more config options REMEMBER TO PUT 
+ 	  * 
+ 	  */
+ 	 function config_form(&$mform)	{
+ 	 	
+ 	 	//get the name of the current class
+ 	 	$classname	=	get_class($this);
+ 	 	
+ 	 	$options = array(
+    		ILP_ENABLED => get_string('enabled','block_ilp'),
+    		ILP_DISABLED => get_string('disabled','block_ilp')
+    	);
+ 	
+ 	 	$this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
+ 	 	
+ 	 }
+	
+	
 }
 ?>
