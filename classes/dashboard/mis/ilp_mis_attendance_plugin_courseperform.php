@@ -133,7 +133,13 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin	
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_courseperform_performance',get_string('ilp_mis_attendance_plugin_courseperform_performance', 'block_ilp'),get_string('ilp_mis_attendance_plugin_courseperform_performancedesc', 'block_ilp'),'performance');
 
+ 	 	$options = array(
+    		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
+    		 ILP_IDTYPE_INT		=> get_string('intid','block_ilp') 
+    	);
  	 	
+ 	 	$this->config_select_element($mform,'mis_plugin_courseperform_idtype',$options,get_string('idtype', 'block_ilp'),get_string('idtypedesc', 'block_ilp'),1);
+ 	 	 	 	
  	 	
  	 	
     	$options = array(
@@ -239,6 +245,10 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin	
     	if (!empty($table)) {
     		
     		$sidfield	=	get_config('block_ilp','mis_plugin_courseperform_studentidfield');
+    		
+    		//is the id a string or a int
+    		$idtype	=	get_config('block_ilp','mis_plugin_courseperform_idtype');
+    		$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id;
     		
     		//create the key that will be used in sql query
     		$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));

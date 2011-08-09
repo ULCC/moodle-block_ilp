@@ -219,8 +219,11 @@ class ilp_mis_connection{
     * @return array of arrays      
     */
     public function execute( $sql){
-
-        $res = $this->db->Execute( $sql ) or die( $this->db->ErrorMsg() );
+		try {
+        	$res = $this->db->Execute( $sql ) or die( $this->db->ErrorMsg() );
+		} catch (exception $e) {
+			return false;	
+		}
         return $res;
     }
 

@@ -142,6 +142,10 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
 			if (!empty($table)) {
 
  				$sidfield	=	get_config('block_ilp','mis_learner_qualifications_studentid');
+ 				
+	    		//is the id a string or a int
+    			$idtype	=	get_config('block_ilp','mis_learner_qualifications_idtype');
+    			$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id; 				
  			
  				$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
  				
@@ -188,6 +192,14 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  	 	$this->config_text_element($mform,'mis_learner_qualifications_year',get_string('ilp_mis_learner_qualifications_year', 'block_ilp'),get_string('ilp_mis_learner_qualifications_yeardesc', 'block_ilp'),'year');
  	 	
  	 	$this->config_text_element($mform,'mis_learner_qualifications_weight',get_string('ilp_mis_learner_qualifications_weight', 'block_ilp'),get_string('ilp_mis_learner_qualifications_weightdesc', 'block_ilp'),'weight');
+
+ 	 	$options = array(
+    		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
+    		 ILP_IDTYPE_INT		=> get_string('intid','block_ilp') 
+    	);
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_learner_qualifications_idtype',$options,get_string('idtype', 'block_ilp'),get_string('idtypedesc', 'block_ilp'),1);
+ 	 	 	 	
  	 	
 		$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),

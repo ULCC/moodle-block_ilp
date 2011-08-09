@@ -84,6 +84,8 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			
 			if (file_exists($misclassfile)) {
 				
+				include_once $misclassfile;
+				
 				//create an instance of the MIS class
 				$misclass	=	new ilp_mis_attendance_percentbar_plugin();
 				

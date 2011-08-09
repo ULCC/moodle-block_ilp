@@ -204,6 +204,10 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
     		//get the week we want 
     		$this->timetableweek 	=	$PARSER->optional_param('timetableweek',$this->termweek,PARAM_INT);
     	
+    		//is the id a string or a int
+    		$idtype	=	get_config('block_ilp','mis_plugin_course_idtype');
+    		$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id;
+    		
     		$this->mis_user_id	=	$mis_user_id;
     		
     		$table	=	get_config('block_ilp','mis_misc_timetable_table');
@@ -272,6 +276,14 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  	 	$this->config_text_element($mform,'mis_misc_timetable_termstart',get_string('ilp_mis_misc_timetable_termstart', 'block_ilp'),get_string('ilp_mis_misc_timetable_termstartdesc', 'block_ilp'));
  	 	
  	 	$this->config_text_element($mform,'mis_misc_timetable_termend',get_string('ilp_mis_misc_timetable_termend', 'block_ilp'),get_string('ilp_mis_misc_timetable_termenddesc', 'block_ilp'));
+
+ 	 	$options = array(
+    		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
+    		 ILP_IDTYPE_INT		=> get_string('intid','block_ilp') 
+    	);
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_misc_timetable_idtype',$options,get_string('idtype', 'block_ilp'),get_string('idtypedesc', 'block_ilp'),1);
+ 	 	 	 	
  	 	
  	 	$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),

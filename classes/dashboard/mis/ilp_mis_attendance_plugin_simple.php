@@ -74,6 +74,11 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        $attendance_field 	= get_config('block_ilp','mis_plugin_simple_punchuality');
 	        $punctuality_field 	= get_config('block_ilp','mis_plugin_simple_attendance');
 	        
+	        //is the id a string or a int
+    		$idtype	=	get_config('block_ilp','mis_plugin_course_idtype');
+    		$student_id	=	(empty($idtype)) ? "'{$student_id}'" : $student_id;
+	        
+	        
 	        $data = array_shift( $this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field) ) );
 	        if (!empty($data)) {
 	        	$this->data	=	 array(

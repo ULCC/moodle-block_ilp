@@ -106,7 +106,7 @@ if($mform->is_submitted()) {
         }
 
         if (!isset($formdata->saveanddisplaybutton)) { 
-            $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id;
+            $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
         	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
         }
     }
@@ -130,7 +130,7 @@ if (!empty($entry_id)) {
 			//if the entry is older than the max editing time 
 			//then return the user to the 
 			if ($entryage > $CFG->maxeditingtime)	{
-				 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id;
+				 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
         		redirect($return_url, get_string("maxeditexceed", 'block_ilp'), REDIRECT_DELAY);
 			}
 			

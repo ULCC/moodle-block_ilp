@@ -78,6 +78,10 @@ define('ILP_DEFAULT_LIST_REPORTS',10 );
 define('ILP_MIS_TABLE','1');
 define('ILP_MIS_STOREDPROCEDURE','0');
 
+//the types that the id may be string or int. strings have commas appended to them
+define('ILP_IDTYPE_STRING','0');
+define('ILP_IDTYPE_INT','1');
+
 
 
 

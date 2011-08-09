@@ -33,9 +33,7 @@
 	$string['contextuser']			=	'Continue User';
 	$string['contextself']			=	'Context Self';
 	$string['configsuc']			=	'Configuration change saved';
-	
-	
-	
+	$string['course']				=	'Course';
 	$string['coursereports']		=	'Course Reports';
 	$string['dashboard']	 		= 	'Dashboard';
 	
@@ -84,9 +82,13 @@
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
-		
+	$string['idtype']				=	'ID type';
+	$string['idtypedesc']			=	'Is the id a string or a int, if it is a string it will have commas appended to it in the query';
+	
+	
 	$string['ilpname']				=	'ILP';
 	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
+	$string['intid']				=	'Int ID';
 	
 	$string['label']				=	'Label';
 	$string['lastupdated']			=	'Last Updated';
@@ -167,6 +169,7 @@
 	$string['settings']							= 	'Settings';
 	
 	$string['status']							= 	'Status';
+	$string['stringid']							=	'String ID';
 	$string['storedprocedure']					= 	'Stored Procedure';
 	$string['studentstatus']					= 	'Student Status';
 	$string['students']							= 	'Students';

@@ -171,6 +171,12 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     	
  	 	$this->config_select_element($mform,'mis_plugin_course_byclass_timeperiod',$options,get_string('ilp_mis_attendance_plugin_byclass_timeperiod', 'block_ilp'),get_string('ilp_mis_attendance_plugin_byclass_timeperioddesc', 'block_ilp'),1);
  	 	
+ 	 	$options = array(
+    		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
+    		 ILP_IDTYPE_INT		=> get_string('intid','block_ilp') 
+    	);
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_plugin_course_byclass_idtype',$options,get_string('idtype', 'block_ilp'),get_string('idtypedesc', 'block_ilp'),1);
  	 	
  	 	$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),
@@ -300,11 +306,11 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     		$mis_period_id			=	$PARSER->optional_param('mis_period_id',NULL,PARAM_INT);;
     		$mis_course_id			=	$PARSER->optional_param('mis_course_id',NULL,PARAM_INT);;
     		
-    		
-    		
-    		
     		$sidfield	=	get_config('block_ilp','mis_plugin_course_byclass_studentidfield');
     		
+    		//is the id a string or a int
+    		$idtype	=	get_config('block_ilp','mis_plugin_course_byclass_idtype');
+    		$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id;
     		
     		//create the key that will be used in sql query
     		$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
