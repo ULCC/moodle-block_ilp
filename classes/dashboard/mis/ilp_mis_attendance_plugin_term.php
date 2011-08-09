@@ -17,7 +17,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
         
         $this->termdata		=	false;
         $this->courselist	= 	false;
-        $this->tabletype	=	get_string('block_ilp','mis_plugin_term_tabletype');
+        $this->tabletype	=	get_config('block_ilp','mis_plugin_term_tabletype');
        
     }
 
