@@ -17,6 +17,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
         
         $this->mcbdata		=	false;
         $this->courselist	= 	false;
+        $this->tabletype	=	get_string('block_ilp','mis_plugin_mcb_tabletype');
        
     }
 

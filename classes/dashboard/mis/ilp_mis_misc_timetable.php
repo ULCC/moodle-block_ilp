@@ -68,8 +68,6 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  	 */
  	function display()	{
  		global $CFG, $PARSER;
- 		
- 		if (!empty($this->data)) {
         
         // set up the flexible table for displaying the data
 
@@ -114,14 +112,15 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 	        
 	        $flextable->wrap_start_extra	=	"<span id='ilp_mis_misc_timetable_header'>".get_string('ilp_mis_misc_timetable_timetable_disp','block_ilp')." ".get_string('ilp_mis_misc_timetable_week_disp','block_ilp')." {$this->timetableweek} </span>";
 	        
-			$params		=	$PARSER->get_params();
+			$params		=	explode('&',$_SERVER['QUERY_STRING']);
+
 			$urlparams	=	"";
 			
-			foreach ($params as $k => $v) {
-				if ($k	!= 'timetableweek') {
-					$urlparams	.= "{$k}={$v}&";
+			foreach ($params as $v) {
+				if (strpos($v,'timetableweek') === FALSE) {
+					$urlparams	.= "{$v}&";
 				}
-			}	        									
+			}	       
 	        									
 	        $url	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?$urlparams";						
 				        
@@ -183,9 +182,7 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 	        ob_end_clean();
  			
  			return $pluginoutput;
- 		} else {
-    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
-    	}
+
  	} 
  	
  	/**

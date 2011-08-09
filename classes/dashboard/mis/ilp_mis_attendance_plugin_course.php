@@ -16,6 +16,7 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
         
         $this->mcbdata		=	false;
         $this->courselist	= 	false;
+        $this->tabletype	=	get_string('block_ilp','mis_plugin_course_tabletype');
        
     }
 
@@ -62,7 +63,6 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
 	        
 	        foreach( $this->courselist as $cid => $cname )	{
 				//we start the month counter from the first month
-	        	$month				=	$startmonth;
 	        	$data['course']		=	$cname;
 	        	$data['attendance']	=	$this->mcbdata[$cid]['attendance'].'%';
 	        	$data['punctuality'] =	$this->mcbdata[$cid]['punctuality'].'%';
@@ -260,58 +260,49 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin	{
     	$mcbdata		=	array();
     	$courselist		=	array();
     	
-    	foreach ($data as $d) {
-    		
-    		//get the id of the current course
-    		$courseid	=	$d[$this->fields['courseid']];
-    		
-    		
-    		//check if an array position for the course exists 
-    		if (!isset($mcbdata[$courseid])) {
-    			$mcbdata[$courseid]	=	array();
-    		}
-    		
-    		//check if an array position for the month exists in the course 
-    		if (!isset($mcbdata[$courseid][$month])) {
-    			$mcbdata[$courseid][$month]	=	array();
-    		}
-    		
-    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
-			$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
-    		
-    		//calculate the months attendance percentage 
-    		$monthpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
-    		
-    		//remove any decimal places
-    		$monthpercent	=	number_format($monthpercent,0);
-    		
-    		$latepercent	=	($d[$this->fields['markslate']]/$present) * 100;
-    		
-    		$latepercent	=	number_format($latepercent,0);
-    		
-    		//fill the couse month array position with percentage for the month
-    		$mcbdata[$courseid]	=	array(
-    											  'attendance'		=>  $monthpercent,
-    											  'latepercent'		=>	$latepercent,
-    											  'punctuality'		=>	$latepercent,
-    											  'markstotal'		=>	$d[$this->fields['markstotal']],
-    											  'markspresent'	=>	$d[$this->fields['markspresent']],
-    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
-    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
-    											  'markslate'		=>	$d[$this->fields['markslate']]);
-    		
-    		//check if the course has been added to the courselist array
-    		if (!isset($courselist[$courseid])) {
-    			$courselist[$courseid]	=	$d[$this->fields['coursename']];
-    		}
+    	if (!empty($data)) {
+    	
+	    	foreach ($data as $d) {
+	    		
+	    		//get the id of the current course
+	    		$courseid	=	$d[$this->fields['courseid']];
+
+	    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
+				$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
+	    		
+	    		//calculate the months attendance percentage 
+	    		$monthpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
+	    		
+	    		//remove any decimal places
+	    		$monthpercent	=	number_format($monthpercent,0);
+	    		
+	    		$latepercent	=	($d[$this->fields['markslate']]/$present) * 100;
+	    		
+	    		$latepercent	=	number_format($latepercent,0);
+	    		
+	    		//fill the couse month array position with percentage for the month
+	    		$mcbdata[$courseid]	=	array(
+	    											  'attendance'		=>  $monthpercent,
+	    											  'latepercent'		=>	$latepercent,
+	    											  'punctuality'		=>	$latepercent,
+	    											  'markstotal'		=>	$d[$this->fields['markstotal']],
+	    											  'markspresent'	=>	$d[$this->fields['markspresent']],
+	    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
+	    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
+	    											  'markslate'		=>	$d[$this->fields['markslate']]);
+	    		
+	    		//check if the course has been added to the courselist array
+	    		if (!isset($courselist[$courseid])) {
+	    			$courselist[$courseid]	=	$d[$this->fields['coursename']];
+	    		}
+	    	}
+	    	
+	    	$this->mcbdata		=	$mcbdata;
+	
+	    	asort($courselist);
+	    	
+	    	$this->courselist	=	$courselist;
     	}
-    	
-    	$this->mcbdata		=	$mcbdata;
-
-    	asort($courselist);
-    	
-    	$this->courselist	=	$courselist;
-
     } 
     
     
