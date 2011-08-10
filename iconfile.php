@@ -22,7 +22,7 @@ global $USER, $CFG, $SESSION, $PARSER,$DB;
 //include any neccessary files
 
 // Meta includes
-require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
+require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
 //if set get the id of the report to be edited
 $report_id	= $PARSER->required_param('report_id',PARAM_INT);	
@@ -33,6 +33,8 @@ $dbc = new ilp_db();
 
 $report		=	$dbc->get_report_by_id($report_id);
 
+
+
 if (!empty($report))	{	
 			if (!empty($report->binary_icon)) {
 				
@@ -40,7 +42,7 @@ if (!empty($report))	{
 				//header("Content-Length: 90000");
 				header("Content-Disposition: attachment; filename=icon.jpeg");				
                 // Print data
-                
+				                
 				//we have to use the raw moodle functions at this point and avoid the extra validation carried out by the sql classes 
 				//as this breaks the export of reports
 				if (stripos($CFG->release,"2.") !== false) {
@@ -49,6 +51,7 @@ if (!empty($report))	{
 				else {
 					$generic_report	=	get_record('block_ilp_report','id',$report_id);
 				}
+				
                 echo $generic_report->binary_icon;
 	            exit;
 	}

@@ -286,7 +286,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 								
 								if ($has_courserelated) {
 									$course	=	$this->dbc->get_course_by_id($courserelatedfield_id);
-									$entry_data->coursename		=	$course->shortname;
+									$entry_data->coursename = (!empty($course)) ? $course->shortname : '';
 								}
 								
 								foreach ($reportfields as $field) {

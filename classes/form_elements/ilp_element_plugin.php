@@ -451,7 +451,7 @@ class ilp_element_plugin {
 	 	
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
 	 	if (!empty($entry)) {
-	 		$entryobj->$fieldname	=	$entry->value;
+	 		$entryobj->$fieldname	=	html_entity_decode($entry->value);
 	 	}
 	 }
 	 

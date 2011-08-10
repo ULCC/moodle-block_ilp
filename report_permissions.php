@@ -46,13 +46,13 @@ $dbc	=	new ilp_db();
 //if the user has the capability in the current context 
 
 
-if ($access_createreports) { 
+if (!empty($access_createreports)) { 
 	
 	//moodle 2.0 throws an error whena comparison is carried out for the context name in
     //pure sql. This could have something to do with the /: in the context name. So I am
     //having to get the capability record id first and then pass it to the 
     $capability	=	$dbc->get_capability_by_name('block/ilp:addreport');
-	
+   
 	$access_report_createreports	=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
 }	
 

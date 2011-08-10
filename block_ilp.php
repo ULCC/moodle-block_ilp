@@ -132,49 +132,53 @@ class block_ilp extends block_list {
 			
 			if (file_exists($misclassfile)) {
 				
-				//create an instance of the MIS class
-				$misclass	=	new ilp_mis_attendance_percentbar_plugin();
+				$pbstatus	=	get_config('block_ilp','ilp_mis_attendance_percentbar_plugin_pluginstatus');
 				
-				//set the data for the student in question
-				$misclass->set_data($USER->idnumber);
-				
-				
-				$punch_method1 = array($misclass, 'get_student_punchuality');
-				$attend_method1 = array($misclass, 'get_student_attendance');
-
-        
-					        //check whether the necessary functions have been defined
-		        if (is_callable($punch_method1,true)) {
-		        	$misinfo	=	new stdClass();
-	    	        
-
-	    	        if ($misclass->get_student_punctuality() != false) {
-		    	        //calculate the percentage
-		    	        
-		    	        $misinfo->percentage	=	$misclass->get_student_punctuality();	
-	    	        
-	    		        $misinfo->name	=	get_string('punctuality','block_ilp');
-	    	        	
-	    		        //pass the object to the percentage bars array
-	    	    	    $percentagebars[]	=	$misinfo;
-	    	        }
-	        	}
-
-				//check whether the necessary functions have been defined
-		        if (is_callable($attend_method1,true) ) {
-		        	$misinfo	=	new stdClass();
-	    	        
-	    	        //if total_possible is empty then there will be nothing to report
-		        	if ($misclass->get_student_attendance() != false) {
-	    	        	//calculate the percentage
-	    	        	$misinfo->percentage	=	$misclass->get_student_attendance();
-	    	        
-	    	        	$misinfo->name	=	get_string('attendance','block_ilp');
-
-	    	        	$percentagebars[]	=	$misinfo;
-	    	        }
-	    	        
-	        	}
+				if ($pbstatus == ILP_ENABLED) {
+						//create an instance of the MIS class
+						$misclass	=	new ilp_mis_attendance_percentbar_plugin();
+						
+						//set the data for the student in question
+						$misclass->set_data($USER->idnumber);
+						
+						
+						$punch_method1 = array($misclass, 'get_student_punchuality');
+						$attend_method1 = array($misclass, 'get_student_attendance');
+		
+		        
+							        //check whether the necessary functions have been defined
+				        if (is_callable($punch_method1,true)) {
+				        	$misinfo	=	new stdClass();
+			    	        
+		
+			    	        if ($misclass->get_student_punctuality() != false) {
+				    	        //calculate the percentage
+				    	        
+				    	        $misinfo->percentage	=	$misclass->get_student_punctuality();	
+			    	        
+			    		        $misinfo->name	=	get_string('punctuality','block_ilp');
+			    	        	
+			    		        //pass the object to the percentage bars array
+			    	    	    $percentagebars[]	=	$misinfo;
+			    	        }
+			        	}
+		
+						//check whether the necessary functions have been defined
+				        if (is_callable($attend_method1,true) ) {
+				        	$misinfo	=	new stdClass();
+			    	        
+			    	        //if total_possible is empty then there will be nothing to report
+				        	if ($misclass->get_student_attendance() != false) {
+			    	        	//calculate the percentage
+			    	        	$misinfo->percentage	=	$misclass->get_student_attendance();
+			    	        
+			    	        	$misinfo->name	=	get_string('attendance','block_ilp');
+		
+			    	        	$percentagebars[]	=	$misinfo;
+			    	        }
+			    	        
+			        	}
+				}
 
 			}
 
@@ -254,11 +258,13 @@ class block_ilp extends block_list {
 			require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_percentage_bar.class.php');
 			
 			$pbar	=	new ilp_percentage_bar();
+			
+			$courseurl	=	(!empty($course_id)) ? "&course_id={$course_id}" : '';
         	
         	$this->content->text	= "";
 	         
 			$label = get_string('mypersonallearningplan', 'block_ilp');
-	        $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}";
+	        $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}$courseurl";
 	        $this->content->items[] = "<p><a href='{$url}'>{$label}</a><p/>";
 	        $this->content->icons[] = "";	
         	
