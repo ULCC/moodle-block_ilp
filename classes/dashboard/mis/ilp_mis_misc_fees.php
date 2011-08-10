@@ -85,7 +85,7 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
     			$idtype	=	get_config('block_ilp','mis_misc_fees_idtype');
     			$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id; 				
  			
- 				$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
+ 				$keyfields	=	($this->tabletype == ILP_MIS_STOREDPROCEDURE) ? array($mis_user_id) : array($sidfield	=> array('=' => $mis_user_id));
  				
  				$this->fields		=	array();
  				
@@ -97,7 +97,9 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  				
  				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
  				
- 				$this->data	=	(!empty($this->data)) ? array_shift($this->data)	:	$this->data;
+ 				if (!empty($this->data)) {
+ 					$this->data	=	(is_array($this->data)) ? array_shift($this->data)	:	$this->data;
+ 				}
  			} 
     }
 

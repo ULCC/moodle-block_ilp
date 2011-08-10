@@ -126,8 +126,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  	 	
  	 			$this->config_select_element($mform,'mis_misc_performance_ind_idtype',$options,get_string('idtype', 'block_ilp'),get_string('idtypedesc', 'block_ilp'),1);
  	 	
- 			
- 				$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
+ 				$keyfields	=	($this->tabletype == ILP_MIS_STOREDPROCEDURE) ? array($mis_user_id) : array($sidfield	=> array('=' => $mis_user_id));
  				
  				$this->fields		=	array();
  				

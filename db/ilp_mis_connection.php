@@ -196,7 +196,7 @@ class ilp_mis_connection{
     	$args	=	(is_array($procedureargs))	?	implode(',',$procedureargs)	:	$procedureargs;	
 		$sql	=	"EXECUTE {$procedurename} {$args}";
 		$result		= $this->execute($sql);
-		return		(!empty($result->fields))	?	$result->fields :	false;
+		return		(!empty($result->fields))	?	$result->getRows() :	false;
     }
 
 
