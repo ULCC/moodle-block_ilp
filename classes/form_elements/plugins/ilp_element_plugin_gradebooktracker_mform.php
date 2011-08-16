@@ -18,7 +18,6 @@ class ilp_element_plugin_gradebooktracker_mform  extends ilp_element_plugin_mfor
 	 }
 
 	protected function specific_process_data($data) {
-var_dump($data);exit;
 	 		$element_id = $this->dbc->create_plugin_record($this->tablename,$data);
     }
 }
