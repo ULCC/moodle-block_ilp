@@ -43,6 +43,15 @@ require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
 ilp_mis_plugin::install_new_plugins();
 
 
+$globalsettings 	= new admin_setting_heading('block_ilp/reportconfig', get_string('reports', 'block_ilp'), '');
+
+$settings->add($globalsettings);
+
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php">'.get_string('reportconfigurationsection', 'block_ilp').'</a>';
+$settings->add(new admin_setting_heading('block_ilp_report_configuration', '', $link));
+
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
+$settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
 
 $globalsettings 	= new admin_setting_heading('block_ilp/userstatus', get_string('userstatus', 'block_ilp'), '');
 
@@ -57,10 +66,11 @@ if (!empty($items)) {
 	}
 }
 
+
+
 $userstatus			= 	new admin_setting_configselect('block_ilp/defaultstatusitem',get_string('defaultstatusitem','block_ilp'),get_string('defaultstatusitemconfig','block_ilp'), 'simulationassignment',$options);
 
-$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php">'.get_string('reportconfigurationsection', 'block_ilp').'</a>';
-$settings->add(new admin_setting_heading('block_ilp_report_configuration', '', $link));
+
 
 
 $settings->add($userstatus);
@@ -84,10 +94,6 @@ $settings->add($failpercentage);
 //the fail percentage
 $passpercentage			=	new admin_setting_configtext('block_ilp/passpercent',get_string('passpercent','block_ilp'),get_string('passpercentconfig','block_ilp'),ILP_DEFAULT_PASS_PERCENTAGE,PARAM_INT);
 $settings->add($passpercentage);
-
-$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
-$settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
-
 
 $mis_settings 	= new admin_setting_heading('block_ilp/mis_connection', get_string('mis_connection', 'block_ilp'), '');
 $settings->add($mis_settings);
@@ -189,10 +195,20 @@ if ($dbc->get_tab_plugins() !== false) {
 
 	    if (is_callable($method,true)) {
 	        $pluginobj->config_settings($settings);
-	        
 	    }
 
 	}
 }
+
+/********************************
+ * Misc config
+ */
+
+$globalsettings 	= new admin_setting_heading('block_ilp/miscconfig', get_string('miscconfig', 'block_ilp'), '');
+
+$settings->add($globalsettings);
+
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/add_predefined_reports.php">'.get_string('predefinedreports', 'block_ilp').'</a>';
+$settings->add(new admin_setting_heading('block_ilp_report_predefinedreports', '', $link));
 
 ?>

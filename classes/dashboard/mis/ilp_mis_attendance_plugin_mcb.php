@@ -208,7 +208,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
     		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
  	 	
- 	 	$this->config_select_element($mform,'mis_plugin_mcb_tabletype',$options,get_string('ilp_mis_attendance_plugin_mcb_table', 'block_ilp'),get_string('ilp_mis_attendance_plugin_mcb_tabledesc', 'block_ilp'),1);
+ 	 	$this->config_select_element($mform,'mis_plugin_mcb_tabletype',$options,get_string('ilp_mis_attendance_plugin_mcb_tabletype', 'block_ilp'),get_string('ilp_mis_attendance_plugin_mcb_tabledesc', 'block_ilp'),1);
  	 	
  	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
@@ -283,6 +283,16 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
         
         $string[ 'ilp_mis_attendance_plugin_mcb_course' ] 		  		= 'Course';
         $string[ 'ilp_mis_attendance_plugin_mcb_attendance' ]   		= 'Attendance';
+        
+        $string[ 'ilp_mis_attendance_plugin_mcb_course' ] 		  		= 'Course';
+        $string[ 'ilp_mis_attendance_plugin_mcb_attendance' ]   		= 'Attendance';
+        
+        $string[ 'ilp_mis_attendance_plugin_mcb_course' ] 		  		= 'Course';
+        $string[ 'ilp_mis_attendance_plugin_mcb_attendance' ]   		= 'Attendance';
+        
+        $string[ 'ilp_mis_attendance_plugin_mcb_tabletype' ] 		  	= 'Table type';
+        $string[ 'ilp_mis_attendance_plugin_mcb_tabletypedesc' ]   		= 'what is the table type';
+        
     }
 
     

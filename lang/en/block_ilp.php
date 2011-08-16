@@ -75,6 +75,9 @@
 	$string['failpercentconfig']	=	'The percentage that should be considered a fail (all percentages equal to and below this)';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['fieldmaximum']			=	'The mamximum number of {$a} fields has been added you can not add anymore';
+	$string['filter']				=	'Filter';
+	
+	
 	
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
@@ -90,6 +93,12 @@
 	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	$string['intid']				=	'Int ID';
 	
+	$string['installedreports']		=	'Installed Reports';
+	$string['installedelements']	=	'Installed Elements';
+	$string['warininglist']			=	'Warining List';
+	
+	
+	
 	$string['label']				=	'Label';
 	$string['lastupdated']			=	'Last Updated';
 	
@@ -100,8 +109,9 @@
 	$string['midcsscolour']			=	'Mid range CSS colour';
 	$string['midcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in the mid range';
 	$string['miscoptions']		 	= 	'Misc Options';
+	$string['miscconfig']		 	= 	'Misc Configuration';
 	$string['mis_pluginsettings']	= 	'MIS plugin settings';
-	
+	$string['month']		 		= 	'Month';
 	$string['move']		 			= 	'Move';
 	$string['movedown'] 			= 	'Move down';
 	$string['moveleft'] 			= 	'Move left';
@@ -140,6 +150,7 @@
 	$string['print'] 				= 	'Print';
 	$string['preview'] 				= 	'Preview';
 	$string['previewreport'] 		= 	'Preview Report';
+	$string['predefinedreports'] 	= 	'Predefined Reports';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
 	$string['punctuality']			= 	'Punctuality';
 	$string['removesel']			= 	'Remove selected';

@@ -1,0 +1,39 @@
+<?php
+echo $OUTPUT->header();
+?>
+<div class="ilp yui-skin-sam">
+<?php
+echo get_string('predefinedreports','block_ilp'); 
+?>
+
+<br /><?php echo get_string('installedreports','block_ilp');?>
+<p>
+<?php
+foreach ($opresult['reportlist']	as $repres) {
+	echo $repres.'<br />';
+}
+?>
+</p>
+
+<br /><?php echo get_string('installedelements','block_ilp');?>
+<p>
+<?php
+foreach ($opresult['elementlist']	as $repres) {
+	echo $repres.'<br />';
+}
+?>
+</p>
+<br /><?php echo get_string('warininglist','block_ilp');?>
+<p>
+<?php
+foreach ($opresult['warninglist']	as $repres) {
+	echo $repres.'<br />';
+}
+?>
+</p>
+
+
+<?php
+echo $OUTPUT->footer();
+?>
+</div>

@@ -238,6 +238,30 @@ class ilp_plugin {
  	 	$mform->setDefault("s_{$elementname}",$value);
 	 }
 	 
+ 	  /**
+     * Creates a select element with a description on the config page for the plugin
+     * 
+     * @param ilp_moodleform $mform the form that the select element will be added to
+     * @param string $elementname the name of the element this will be saved to the s
+     * 							  block_config table with the value
+     * @param string $label the label to be put on the select element
+     * @param array $options options to be placed in the select
+     * @param strnig $description a description of what should be in the config element
+     * @param mixed $defaultvalue the default contents of the text element 
+     */
+	 function config_date_element(&$mform,$elementname,$label,$description,$defaultvalue='') {
+	 	
+	 	$configsetting	=	get_config('block_ilp',$elementname);
+	 	
+	 	$value	= (!empty($configsetting)) ? $configsetting : $defaultvalue;
+	 	
+	 	$mform->addElement('date_selector',"s_{$elementname}",$label,array('class' => 'form_input'));
+ 	 	$mform->addElement('static', "{$elementname}_desc", NULL, $description);
+ 	 	$mform->setDefault("s_{$elementname}",$value);
+	 }
+	 
+	 
+	 
 	 function config_form(&$mform)	{
 	 	
 	 }

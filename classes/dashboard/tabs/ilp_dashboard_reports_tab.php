@@ -24,8 +24,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 		
 		$this->selectedtab	=	false;
 		
+		$defaulttab			=	get_config('block_ilp','ilp_dashboard_reports_tab_default');
+		
 		//set the id of the tab that will be displayed first as default
-		$this->default_tab_id	=	'1';
+		$this->default_tab_id	=	(empty($defaulttab)) ? '1' : get_config('block_ilp','ilp_dashboard_reports_tab_default');
 		
 		//call the parent constructor
 		parent::__construct();
@@ -187,143 +189,148 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 					$state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 					
 					if ($report	=	$this->dbc->get_report_by_id($report_id)) {
+						
+						if ($report->status == ILP_ENABLED) {
 
-						$icon				=	(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
-						
-						echo $this->get_header($report->name,$icon);
-						
-						//output the print icon
-						echo "<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
-							 <div class='clearer'></div>";
-						
-						$reportname	=	$report->name;	
-						//get all of the fields in the current report, they will be returned in order as
-						//no position has been specified
-						$reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
-						
-						$reporticon	= (!empty($report->iconfile)) ? '' : '';
+							$icon				=	(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
 							
-						 
-						
-						
-						//does this report give user the ability to add comments 
-						$has_comments	=	(!empty($report->comments)) ? true	:	false;
-
-						//this will hold the ids of fields that we dont want to display
-						$dontdisplay	=	 array();
-						
-						//does this report allow users to say it is related to a particular course
-						$has_courserelated	=	(!$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? false : true;
-					
-						if (!empty($has_courserelated))	{
-							$courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
-							//the should not be anymore than one of these fields in a report	
-							foreach ($courserelated as $cr) {
-									$dontdisplay[] 	=	$cr->id;
-									$courserelatedfield_id	=	$cr->id;	
-							}
-						} 
-
-						$has_datedeadline	=	(!$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline')) ? false : true;
-						
-						if (!empty($has_datedeadline))	{
-							$deadline	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline');
-							//the should not be anymore than one of these fields in a report	
-							foreach ($deadline as $d) {
-									$dontdisplay[] 	=	$d->id;	
-							}
-						} 
-						
-						//get all of the users roles in the current context and save the id of the roles into
-						//an array 
-						$role_ids	=	 array();
-						if ($roles = get_user_roles($PAGE->context, $USER->id)) {
-						 	foreach ($roles as $role) {
-						 		$role_ids[]	= $role->roleid;
-						 	}
-						}
-						
-						//find out if the current user has the edit report capability for the report 
-						$access_report_editreports	= false;
-						$capability	=	$this->dbc->get_capability_by_name('block/ilp:editreport');
-						if (!empty($capability)) $access_report_editreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);	
-
-						//find out if the current user has the delete report capability for the report
-						$access_report_deletereports	=	false;
-						$capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
-						if (!empty($capability))	$access_report_deletereports	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-						//get all of the entries for this report
-						$reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
-
-						//create the entries list var that will hold the entry information 
-						$entrieslist	=	array();
-					
-						
-						if (!empty($reportentries)) {
-							foreach ($reportentries as $entry)	{
-
-								//TODO: is there a better way of doing this?
-								//I am currently looping through each of the fields in the report and get the data for it 
-								//by using the plugin class. I do this for two reasons it may lock the database for less time then
-								//making a large sql query and 2 it will also allow for plugins which return multiple values. However
-								//I am not naive enough to think there is not a better way!
+							echo $this->get_header($report->name,$icon);
+							
+							//output the print icon
+							echo "<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
+								 <div class='clearer'></div>";
+							
+							$reportname	=	$report->name;	
+							//get all of the fields in the current report, they will be returned in order as
+							//no position has been specified
+							$reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+							
+							$reporticon	= (!empty($report->iconfile)) ? '' : '';
 								
-								$entry_data	=	new stdClass();
-								
-								//get the creator of the entry
-								$creator				=	$this->dbc->get_user_by_id($entry->creator_id);
-
-								//get comments for this entry
-								$comments				=	$this->dbc->get_entry_comments($entry->id);
-								
-								//
-								$entry_data->creator		=	(!empty($creator)) ? fullname($creator)	: get_string('notfound','block_ilp');
-								$entry_data->created		=	userdate($entry->timecreated);
-								$entry_data->modified		=	userdate($entry->timemodified);
-								$entry_data->user_id		=	$entry->user_id;
-								$entry_data->entry_id		=	$entry->id;
-								
-								if ($has_courserelated) {
-									$course	=	$this->dbc->get_course_by_id($courserelatedfield_id);
-									$entry_data->coursename = (!empty($course)) ? $course->shortname : '';
+							 
+							
+							
+							//does this report give user the ability to add comments 
+							$has_comments	=	(!empty($report->comments)) ? true	:	false;
+	
+							//this will hold the ids of fields that we dont want to display
+							$dontdisplay	=	 array();
+							
+							//does this report allow users to say it is related to a particular course
+							$has_courserelated	=	(!$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? false : true;
+						
+							if (!empty($has_courserelated))	{
+								$courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
+								//the should not be anymore than one of these fields in a report	
+								foreach ($courserelated as $cr) {
+										$dontdisplay[] 	=	$cr->id;
+										$courserelatedfield_id	=	$cr->id;	
 								}
-								
-								foreach ($reportfields as $field) {
+							} 
+	
+							$has_datedeadline	=	(!$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline')) ? false : true;
+							
+							if (!empty($has_datedeadline))	{
+								$deadline	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline');
+								//the should not be anymore than one of these fields in a report	
+								foreach ($deadline as $d) {
+										$dontdisplay[] 	=	$d->id;	
+								}
+							} 
+							
+							//get all of the users roles in the current context and save the id of the roles into
+							//an array 
+							$role_ids	=	 array();
+							if ($roles = get_user_roles($PAGE->context, $USER->id)) {
+							 	foreach ($roles as $role) {
+							 		$role_ids[]	= $role->roleid;
+							 	}
+							}
+							
+							//find out if the current user has the edit report capability for the report 
+							$access_report_editreports	= false;
+							$capability	=	$this->dbc->get_capability_by_name('block/ilp:editreport');
+							if (!empty($capability)) $access_report_editreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);	
+	
+							//find out if the current user has the delete report capability for the report
+							$access_report_deletereports	=	false;
+							$capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
+							if (!empty($capability))	$access_report_deletereports	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+	
+							//get all of the entries for this report
+							$reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
+	
+							//create the entries list var that will hold the entry information 
+							$entrieslist	=	array();
+						
+							
+							if (!empty($reportentries)) {
+								foreach ($reportentries as $entry)	{
+	
+									//TODO: is there a better way of doing this?
+									//I am currently looping through each of the fields in the report and get the data for it 
+									//by using the plugin class. I do this for two reasons it may lock the database for less time then
+									//making a large sql query and 2 it will also allow for plugins which return multiple values. However
+									//I am not naive enough to think there is not a better way!
 									
+									$entry_data	=	new stdClass();
 									
+									//get the creator of the entry
+									$creator				=	$this->dbc->get_user_by_id($entry->creator_id);
+	
+									//get comments for this entry
+									$comments				=	$this->dbc->get_entry_comments($entry->id);
 									
-									//get the plugin record that for the plugin 
-									$pluginrecord	=	$this->dbc->get_plugin_by_id($field->plugin_id);
-								
-									//take the name field from the plugin as it will be used to call the instantiate the plugin class
-									$classname = $pluginrecord->name;
-								
-									// include the class for the plugin
-									include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
-								
-									if(!class_exists($classname)) {
-									 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+									//
+									$entry_data->creator		=	(!empty($creator)) ? fullname($creator)	: get_string('notfound','block_ilp');
+									$entry_data->created		=	userdate($entry->timecreated);
+									$entry_data->modified		=	userdate($entry->timemodified);
+									$entry_data->user_id		=	$entry->user_id;
+									$entry_data->entry_id		=	$entry->id;
+									
+									if ($has_courserelated) {
+										$course	=	$this->dbc->get_course_by_id($courserelatedfield_id);
+										$entry_data->coursename = (!empty($course)) ? $course->shortname : '';
 									}
 									
-									//instantiate the plugin class
-									$pluginclass	=	new $classname();
-
-									$pluginclass->load($field->id);
-								
-									//call the plugin class entry data method
-									$pluginclass->view_data($field->id,$entry->id,$entry_data);
-
+									foreach ($reportfields as $field) {
+										
+										
+										
+										//get the plugin record that for the plugin 
+										$pluginrecord	=	$this->dbc->get_plugin_by_id($field->plugin_id);
+									
+										//take the name field from the plugin as it will be used to call the instantiate the plugin class
+										$classname = $pluginrecord->name;
+									
+										// include the class for the plugin
+										include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
+									
+										if(!class_exists($classname)) {
+										 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+										}
+										
+										//instantiate the plugin class
+										$pluginclass	=	new $classname();
+	
+										$pluginclass->load($field->id);
+									
+										//call the plugin class entry data method
+										$pluginclass->view_data($field->id,$entry->id,$entry_data);
+	
+									}
+									
+									include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.html');							
+									
 								}
+							} else {
 								
-								include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.html');							
+								echo get_string('nothingtodisplay');
 								
 							}
-						} else {
 							
-							echo get_string('nothingtodisplay');
-							
-						}
+						}//end new if	
+						
 					}	
 
 							// load custom javascript
@@ -371,12 +378,44 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         $string['ilp_dashboard_reports_tab_name'] 				= 'Reports';
         $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
         $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
+        $string['ilp_dashboard_reports_tab_default'] 			= 'Default report';
 	        
         return $string;
     }
 	
 	
-	
+	/**
+ 	  * Adds config settings for the plugin to the given mform
+ 	  * by default this allows config option allows a tab to be enabled or dispabled
+ 	  * override the function if you want more config options REMEMBER TO PUT 
+ 	  * 
+ 	  */
+ 	 function config_form(&$mform)	{
+ 	 	
+ 	 	$reports	=	$this->dbc->get_reports(ILP_ENABLED);
+ 	 	
+ 	 	$options = array();
+ 	 	
+ 	 	if (!empty($reports)) {
+ 	 		foreach ($reports as $r) {
+ 	 			$options[$r->id]	=	$r->name;
+ 	 		}
+ 	 	}
+ 	
+ 	 	$this->config_select_element($mform,'ilp_dashboard_reports_tab_default',$options,get_string('ilp_dashboard_reports_tab_default_tab', 'block_ilp'),'',0);
+ 	 	
+ 	 	
+ 	 	//get the name of the current class
+ 	 	$classname	=	get_class($this);
+ 	 	
+ 	 	$options = array(
+    		ILP_ENABLED => get_string('enabled','block_ilp'),
+    		ILP_DISABLED => get_string('disabled','block_ilp')
+    	);
+ 	
+ 	 	$this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
+ 	 	
+ 	 }
 	
 	
 }

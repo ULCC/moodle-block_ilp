@@ -5,7 +5,7 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_attendance_plu
 class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 
 	public 	$fields;
-	public	$mcbdata;
+	public	$normdata;
 	public	$courselist;
 	
 	
@@ -14,7 +14,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     public function __construct( $params=array() ) {
         parent::__construct( $params );
         
-        $this->mcbdata		=	false;
+        $this->normdata		=	false;
         $this->courselist	= 	false;
         $this->tabletype	=	get_config('block_ilp','mis_plugin_course_byclass_tabletype');
        
@@ -24,6 +24,21 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     * display the current state of $this->data
     */
     public function display(){
+       global $CFG, $PARSER, $PAGE;
+       
+       $mis_period_id			=	$PARSER->optional_param('mis_period_id',NULL,PARAM_INT);
+       $mis_course_id			=	$PARSER->optional_param('mis_course_id',NULL,PARAM_INT);
+
+       $params		=	explode('&',$_SERVER['QUERY_STRING']);
+	   $hiddenparams	=	"";
+			
+		foreach ($params as $v) {
+			if (strpos($v,'mis_course_id') === FALSE && strpos($v,'mis_period_id') === FALSE) {
+				$p	=	explode('=',$v);
+				$hiddenparams	.= "<input type='hidden' name='{$p[0]}' value='{$p[1]}' />";
+			}
+		}
+       
        
     	if (!empty($this->normdata)) {
     		
@@ -99,10 +114,24 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 			$pluginoutput = ob_get_contents();
 	        ob_end_clean();
 	        
-	        return $pluginoutput;
+	        ob_start();
+	        require_once $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_plugin_byclass.html';
+	        $output = ob_get_contents();
+	        ob_end_clean();
+	        
+	        
+
     	} else {
-    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    		
+    		$pluginoutput = '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    		
+    		ob_start();
+	        require_once $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_plugin_byclass.html';
+	        $output = ob_get_contents();
+	        ob_end_clean();
     	}
+    	
+    	return $output;
   	
     }
 
@@ -184,7 +213,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     		 ILP_MIS_STOREDPROCEDURE	=> get_string('storedprocedure','block_ilp') 
     	);
  	 	
- 	 	$this->config_select_element($mform,'mis_plugin_course_byclass_tabletype',$options,get_string('ilp_mis_attendance_plugin_byclass_authorised', 'block_ilp'),get_string('ilp_mis_attendance_plugin_byclass_authoriseddesc', 'block_ilp'),1);
+ 	 	$this->config_select_element($mform,'mis_plugin_course_byclass_tabletype',$options,get_string('ilp_mis_attendance_plugin_byclass_tabletype', 'block_ilp'),get_string('ilp_mis_attendance_plugin_byclass_tabletypedesc', 'block_ilp'),1);
  	 	
  	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
@@ -198,7 +227,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 
         
     public function plugin_type(){
-        return 'overview';
+        return 'attendance';
     }
     
 	function language_strings(&$string) {
@@ -304,8 +333,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     	
     	if (!empty($table)) {
 
-    		$mis_period_id			=	$PARSER->optional_param('mis_period_id',NULL,PARAM_INT);;
-    		$mis_course_id			=	$PARSER->optional_param('mis_course_id',NULL,PARAM_INT);;
+    		$mis_period_id			=	$PARSER->optional_param('mis_period_id',NULL,PARAM_INT);
+    		$mis_course_id			=	$PARSER->optional_param('mis_course_id',NULL,PARAM_INT);
     		
     		$sidfield	=	get_config('block_ilp','mis_plugin_course_byclass_studentidfield');
     		
@@ -360,65 +389,66 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     	$normdata		=	array();
     	$daylist		=	array();
     	
-    	foreach ($data as $d) {
-    		
-    		//convert the given date to a timestamp
-			$datetime		=	$d[$this->fields['datetime']];
-			
-    		$datetime		=	strtotime($datetime);
-			
-			//convert thge timestamp to a 3 letter day representation
-    		$day			=	date('D',$datetime);
-    		
-    		//convert the day to a number 1-7 1- monday 7-sunday
-    		//the id will be used to sort the results 
-    		$dayid			=	date('N',$datetime);
-    		
-    		
-    		//check if an array position for the course exists 
-    		if (!isset($normdata[$dayid])) {
-    			$normdata[$dayid]	=	array();
-    		}
-    		
-    		
-    		
-    		
-    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
-			$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
-    		
-    		//calculate the months attendance percentage 
-    		$attendpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
-    		
-    		//remove any decimal places
-    		$attendpercent	=	number_format($attendpercent,0);
-    		
-    		$timestamp		=	strtotime($d[$this->fields['starttime']]);
-    		
-    		$start			=	date('G:i',$timestamp);
-    		
-    		$timestamp		=	strtotime($d[$this->fields['endtime']]);
-    		$end			=	date('G:i',$timestamp);
-    		
-    		
-    		//fill the couse month array position with percentage for the month
-    		$normdata[$dayid][]	=	array(		  'day'				=>  $day,
-    											  'room'			=>  $d[$this->fields['room']],
-    											  'attendance'		=>  $attendpercent,
-												  'starttime'		=>  $start,
-    											  'endtime'			=>  $end,
-    											  'tutor'			=>  $d[$this->fields['tutor']],    																		
-    											  'markstotal'		=>	$d[$this->fields['markstotal']],
-    											  'markspresent'	=>	$d[$this->fields['markspresent']],
-    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
-    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
-    											  'markslate'		=>	$d[$this->fields['markslate']]);
-    		
+    	if (!empty($data)) {
+	    	foreach ($data as $d) {
+	    		
+	    		//convert the given date to a timestamp
+				$datetime		=	$d[$this->fields['datetime']];
+				
+	    		$datetime		=	strtotime($datetime);
+				
+				//convert thge timestamp to a 3 letter day representation
+	    		$day			=	date('D',$datetime);
+	    		
+	    		//convert the day to a number 1-7 1- monday 7-sunday
+	    		//the id will be used to sort the results 
+	    		$dayid			=	date('N',$datetime);
+	    		
+	    		
+	    		//check if an array position for the course exists 
+	    		if (!isset($normdata[$dayid])) {
+	    			$normdata[$dayid]	=	array();
+	    		}
+	    		
+	    		
+	    		
+	    		
+	    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
+				$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
+	    		
+	    		//calculate the months attendance percentage 
+	    		$attendpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
+	    		
+	    		//remove any decimal places
+	    		$attendpercent	=	number_format($attendpercent,0);
+	    		
+	    		$timestamp		=	strtotime($d[$this->fields['starttime']]);
+	    		
+	    		$start			=	date('G:i',$timestamp);
+	    		
+	    		$timestamp		=	strtotime($d[$this->fields['endtime']]);
+	    		$end			=	date('G:i',$timestamp);
+	    		
+	    		
+	    		//fill the couse month array position with percentage for the month
+	    		$normdata[$dayid][]	=	array(		  'day'				=>  $day,
+	    											  'room'			=>  $d[$this->fields['room']],
+	    											  'attendance'		=>  $attendpercent,
+													  'starttime'		=>  $start,
+	    											  'endtime'			=>  $end,
+	    											  'tutor'			=>  $d[$this->fields['tutor']],    																		
+	    											  'markstotal'		=>	$d[$this->fields['markstotal']],
+	    											  'markspresent'	=>	$d[$this->fields['markspresent']],
+	    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
+	    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
+	    											  'markslate'		=>	$d[$this->fields['markslate']]);
+	    		
+	    	}
+    	
+    		asort($normdata);
+    	
+    		$this->normdata		=	$normdata;
     	}
-    	
-    	asort($normdata);
-    	
-    	$this->normdata		=	$normdata;
-
     	
     } 
     
@@ -443,7 +473,14 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     	return $present;
   	} 
     
-    
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors 
+     * 
+     */
+    function tab_name() {
+    	return 'Register By Class';
+    }
     
     
 }
