@@ -747,5 +747,4 @@ if (!$PAGE || !($PAGE->type == 'course-view')) {
         $PAGE =& $OUTPUT;
     }
 }
-
 ?>

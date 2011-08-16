@@ -79,7 +79,10 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     		$student_id	=	(empty($idtype)) ? "'{$student_id}'" : $student_id;
 	        
 	        
-	        $data = array_shift( $this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field) ) );
+	        $querydata = $this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field) );
+	        
+	        $data = (is_array($querydata)) ? array_shift( $querydata ) : $querydata;
+	        
 	        if (!empty($data)) {
 	        	$this->data	=	 array(
 		        	    			array( get_string('ilp_mis_attendance_plugin_simple_attendance','block_ilp') , $data[ $attendance_field ] ),

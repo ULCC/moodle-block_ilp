@@ -199,5 +199,28 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 		*/
 		return $this->entry_process_data($reportfield_id,$entry_id,$data); 	
 	 }
+	 
+	 
+	  /**
+	  * places entry data formated for viewing for the report field given  into the  
+	  * entryobj given by the user. By default the entry_data function is called to provide
+	  * the data. Any child class which needs to have its data formated should override this
+	  * function. 
+	  * 
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * @param int $entry_id the id of the entry
+	  * @param object $entryobj an object that will add parameters to
+	  */
+	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+	  	
+	  	$fieldname	=	$reportfield_id."_field";
+	 	
+	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
+	 	if (!empty($entry)) {
+	 		$entryobj->$fieldname	=	userdate(html_entity_decode($entry->value));
+	 	}
+	  	
+	 }
+	 
 }
 

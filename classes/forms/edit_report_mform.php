@@ -67,6 +67,8 @@ class edit_report_mform extends ilp_moodleform {
 	        
 	        $mform->addElement('checkbox', 'comments',get_String('allowcomments','block_ilp'),null);
 	        
+	       	$mform->addElement('checkbox', 'frequency', get_String('multipleentries','block_ilp'),null);
+	        
 	        // DESCRIPTION element
 	        $mform->addElement(
 	            'htmleditor',

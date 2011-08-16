@@ -293,83 +293,89 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
     function normalise_data($data)	{
     	
     	$termdata		=	array();
-    	
-    	foreach ($data as $d) {
-    		
-    		//get the id of the current course
-    		$termid	=	$d[$this->fields['term']];
-    		
-    		
-    		//check if an array position for the course exists 
-    		if (!isset($termdata[$termid])) {
-    			$termdata[$termid]	=	array();
-    		}
-    		
-    		
-    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
-    		$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
-    		
-    		//caculate the months attendance percentage 
-    		$attendpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
-    		
-    		//caculate the months attendance percentage 
-    		$punctpercent 	=	($d[$this->fields['markslate']] / $present) * 100;
-    		$punctpercent	=	 100 - $punctpercent;
-    		
-    		//fill the couse month array position with percentage for the month
-    		$termdata[$termid]			=	array(
-    											  'attendance'			=>  $attendpercent,
-    											  'punctuality'			=>  $punctpercent, 
-    											  'markstotal'		=>	$d[$this->fields['markstotal']],
-    											  'markspresent'	=>	$d[$this->fields['markspresent']],
-    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
-    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
-    											  'markslate'		=>	$d[$this->fields['markslate']]);
-    	}
-
-    	$presents			=	0;
-    	$absents			=	0;
-    	$authabsents		=	0;
-    	$lates				=	0;
-    	
-    	//now we have all course data nicely in an array we can work the overall totals
-    	foreach ($termdata as &$term)	{
-    		$presents		+=	$term['markspresent'];
-    		$absents		+=	$term['marksabsent'];
-    		$authabsents	+=	$term['marksauthabsent'];
-    		$lates			+=	$term['markslate'];
-    	}
-
-    	
-    	$present		=	$this->presents_cal($presents,$authabsents);
-    	$presentpercent =	($absents	/	$present) * 100;
-    	$presentpercent		=	100 - $presentpercent;
-    	
-    	//overall late percentage is calculated by geting the percentage of lates and taking 
-    	//it away from 100 
-    	$latepercent	=	($lates	/	$present) * 100;
-    	$latepercent	=	100 - $latepercent;
-    	
-    	$termdata['overall']['attendance']			=	$presentpercent;
-    	$termdata['overall']['punctuality']			=	$latepercent;
-    	$termdata['overall']['marksabsent']			=	$absents;
-    	$termdata['overall']['marksauthabsent']		=	$authabsents;
-    	$termdata['overall']['markspresent']			=	$present;
-    	
-
-		//in this piece of code the data is made ready to bne placed in the term table   	
-    	$keynames		=	array('attendance','punctuality');
-    	$newtermdata	=	array();
-    	foreach ($keynames as $key) {
-	   		$newdata = array();
-	   		$newdata['name']	=	$key;
-	    	foreach ($termdata as $k => $v)	{ 
-	    		$newdata[$k]	=	number_format($v[$key],0);	
+    	if (!empty($data)) {
+	    	foreach ($data as $d) {
+	    		
+	    		//get the id of the current course
+	    		$termid	=	$d[$this->fields['term']];
+	    		
+	    		
+	    		//check if an array position for the course exists 
+	    		if (!isset($termdata[$termid])) {
+	    			$termdata[$termid]	=	array();
+	    		}
+	    		
+	    		
+	    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
+	    		$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
+	    		
+	    		//caculate the months attendance percentage 
+	    		$attendpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
+	    		
+	    		//caculate the months attendance percentage 
+	    		$punctpercent 	=	($d[$this->fields['markslate']] / $present) * 100;
+	    		$punctpercent	=	 100 - $punctpercent;
+	    		
+	    		//fill the couse month array position with percentage for the month
+	    		$termdata[$termid]			=	array(
+	    											  'attendance'			=>  $attendpercent,
+	    											  'punctuality'			=>  $punctpercent, 
+	    											  'markstotal'		=>	$d[$this->fields['markstotal']],
+	    											  'markspresent'	=>	$d[$this->fields['markspresent']],
+	    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
+	    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
+	    											  'markslate'		=>	$d[$this->fields['markslate']]);
 	    	}
-	    	$newtermdata[] = $newdata;
-    	}
+	
+	    	$presents			=	0;
+	    	$absents			=	0;
+	    	$authabsents		=	0;
+	    	$lates				=	0;
+	    	
+	    	//now we have all course data nicely in an array we can work the overall totals
+	    	foreach ($termdata as &$term)	{
+	    		$presents		+=	$term['markspresent'];
+	    		$absents		+=	$term['marksabsent'];
+	    		$authabsents	+=	$term['marksauthabsent'];
+	    		$lates			+=	$term['markslate'];
+	    	}
+	
+	    	
+	    	$present		=	$this->presents_cal($presents,$authabsents);
+	    	$presentpercent =	($absents	/	$present) * 100;
+	    	$presentpercent		=	100 - $presentpercent;
+	    	
+	    	//overall late percentage is calculated by geting the percentage of lates and taking 
+	    	//it away from 100 
+	    	$latepercent	=	($lates	/	$present) * 100;
+	    	$latepercent	=	100 - $latepercent;
+	    	
+	    	$termdata['overall']['attendance']			=	$presentpercent;
+	    	$termdata['overall']['punctuality']			=	$latepercent;
+	    	$termdata['overall']['marksabsent']			=	$absents;
+	    	$termdata['overall']['marksauthabsent']		=	$authabsents;
+	    	$termdata['overall']['markspresent']			=	$present;
+	    	
+	
+			//in this piece of code the data is made ready to bne placed in the term table   	
+	    	$keynames		=	array('attendance','punctuality');
+	    	$newtermdata	=	array();
+	    	foreach ($keynames as $key) {
+		   		$newdata = array();
+		   		$newdata['name']	=	$key;
+		    	foreach ($termdata as $k => $v)	{ 
+		    		$newdata[$k]	=	number_format($v[$key],0);	
+		    	}
+		    	$newtermdata[] = $newdata;
+	    	}
+	    	
+	    	$this->termdata		=	$newtermdata;
+    	} else {
+    		$this->termdata		=	false;
+    	} 
+    	
    	
-    	$this->termdata		=	$newtermdata;
+    	
     } 
     
     private function presents_cal($markspresent,$authabesent) {

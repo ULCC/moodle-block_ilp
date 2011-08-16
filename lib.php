@@ -320,3 +320,4 @@ function limit_length($html, $maxlength, $tooltip = null) {
         return "<span id='{$id}' class='tooltip' title='{$tooltip}'>{$return}</span>{$script}";
     }
 }
+?>

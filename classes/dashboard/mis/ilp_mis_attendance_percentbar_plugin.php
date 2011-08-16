@@ -64,7 +64,10 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin	{
 	        $attendance_field 	= get_config('block_ilp','mis_plugin_attendance_percentbarpunchuality');
 	        $punctuality_field 	= get_config('block_ilp','mis_plugin_attendance_percentbarattendance');
 	        
-	        $data = array_shift( $this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field) ) );
+	        $querydata	=	$this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field) );
+	        
+	        $data = (is_array($querydata)) ? array_shift( $querydata ) : $querydata;
+	        
 	        if (!empty($data)) {
 	        	$this->data	=	  array('attendance' => $data[ $attendance_field ] , 'punctuality' => $data[ $punctuality_field  ]);
 	        } 

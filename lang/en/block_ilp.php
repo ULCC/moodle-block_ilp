@@ -122,6 +122,8 @@
 	$string['moveup']		 		= 	'Move up';
 	$string['mytutor']				=	'My Tutor:';
 	$string['mytutees']				=	'My Tutees';
+	$string['multipleentries']		=	'Multiple Entries';
+	
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';
 	$string['mycoursegroups']			=	'My Course Groups';

@@ -122,8 +122,9 @@ class block_ilp extends block_list {
 			
 			
         	
-        			//TODO place percentage bar code into a class 
-			
+        	//TODO all code for implementing percentage bars in the block is below it has been commented out so that it can be 
+        	//implemented correctly 
+			/*
 			$percentagebars	=	array();
 
 			
@@ -259,7 +260,18 @@ class block_ilp extends block_list {
 			
 			$pbar	=	new ilp_percentage_bar();
 			
-			$courseurl	=	(!empty($course_id)) ? "&course_id={$course_id}" : '';
+			
+        	
+        	if (!empty($percentagebars)) {  
+					foreach($percentagebars	as $p) {
+         				$this->content->items[]	=	$pbar->display_bar($p->percentage,$p->name);
+         			}
+        	}
+        	
+        	
+        	*/
+        	
+        	$courseurl	=	(!empty($course_id)) ? "&course_id={$course_id}" : '';
         	
         	$this->content->text	= "";
 	         
@@ -268,11 +280,7 @@ class block_ilp extends block_list {
 	        $this->content->items[] = "<p><a href='{$url}'>{$label}</a><p/>";
 	        $this->content->icons[] = "";	
         	
-        	if (!empty($percentagebars)) {  
-					foreach($percentagebars	as $p) {
-         				$this->content->items[]	=	$pbar->display_bar($p->percentage,$p->name);
-         			}
-        	}
+        	
 
         	
 

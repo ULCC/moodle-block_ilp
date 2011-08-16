@@ -10,6 +10,9 @@
  * @version 2.0
  */
 
+//NOTE if icons are not being displayed a likely cause is output in one of the included files (within action_includes.php) check this as
+//as well other factors
+
 $path_to_config = dirname($_SERVER['SCRIPT_FILENAME']).'/../../config.php';
 while (($collapsed = preg_replace('|/[^/]+/\.\./|','/',$path_to_config,1)) !== $path_to_config) {
     $path_to_config = $collapsed;
@@ -22,7 +25,7 @@ global $USER, $CFG, $SESSION, $PARSER,$DB;
 //include any neccessary files
 
 // Meta includes
-require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
+require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
 //if set get the id of the report to be edited
 $report_id	= $PARSER->required_param('report_id',PARAM_INT);	
@@ -32,6 +35,8 @@ $report_id	= $PARSER->required_param('report_id',PARAM_INT);
 $dbc = new ilp_db();
 
 $report		=	$dbc->get_report_by_id($report_id);
+
+
 
 if (!empty($report))	{	
 			if (!empty($report->binary_icon)) {
@@ -45,13 +50,19 @@ if (!empty($report))	{
 				//as this breaks the export of reports
 				if (stripos($CFG->release,"2.") !== false) {
 					$generic_report	=	$DB->get_record('block_ilp_report',array('id'=>$report_id));
+					
+
 				}
 				else {
 					$generic_report	=	get_record('block_ilp_report','id',$report_id);
+					
+					
 				}
                 echo $generic_report->binary_icon;
+                
+                
+                
 	            exit;
 	}
 } 
-
 ?>

@@ -69,13 +69,3 @@ $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $context);
 $PAGE->set_context($context);
 
 ?>
-
-
-
-
-
-
-
-
-
-
