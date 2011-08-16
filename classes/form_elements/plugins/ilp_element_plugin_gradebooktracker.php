@@ -1,7 +1,12 @@
 <?php
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
-require_once($CFG->dirroot.'/grade/report/tracker/gradetrackerfuncs.php');
+$gradebooktracker_file = $CFG->dirroot.'/grade/report/tracker/gradetrackerfuncs.php';
+$gradetracker_exists = false;
+if( file_exists( $gradebooktracker_file ) ){
+    $gradetracker_exists = true;
+    require_once($CFG->dirroot.'/grade/report/tracker/gradetrackerfuncs.php');
+}
 
 class ilp_element_plugin_gradebooktracker extends ilp_element_plugin {
 	
@@ -24,43 +29,49 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin {
         //echo 'loading gradebooktracker';exit;
     }
     public	function entry_form( &$mform ) {
-        $courselist = grade_tracker_funcs::collect_option_list( 'course' );
-        $courseselect = &$mform->addElement(
-            'select',
-            'courseid',
-            'Subject',
-	    	$courselist,
-            array('class' => 'form_input')
-        );
-
-        $fieldname = 'gradeitem_list';
-        $label =  'Grades';
-        $optionlist = $this->get_grade_item_list( 5 );
-        $select = &$mform->addElement(
-            'select',
-            $fieldname,
-            $label,
-	    	$optionlist,
-            array('class' => 'form_input')
-        );
-		$select->setMultiple(true);
-
-        $ta = &$mform->addElement(
-            'textarea',
-            'review',
-            'Review',
-            ''
-        );
+        global $gradetracker_exists;
+        if( $gradetracker_exists ){
+	        $courselist = grade_tracker_funcs::collect_option_list( 'course' );
+	        $courseselect = &$mform->addElement(
+	            'select',
+	            'courseid',
+	            'Subject',
+		    	$courselist,
+	            array('class' => 'form_input')
+	        );
+	
+	        $fieldname = 'gradeitem_list';
+	        $label =  'Grades';
+	        $optionlist = $this->get_grade_item_list( 5 );
+	        $select = &$mform->addElement(
+	            'select',
+	            $fieldname,
+	            $label,
+		    	$optionlist,
+	            array('class' => 'form_input')
+	        );
+			$select->setMultiple(true);
+	
+	        $ta = &$mform->addElement(
+	            'textarea',
+	            'review',
+	            'Review',
+	            ''
+	        );
+	    }
     }
 
 
     protected function get_grade_item_list( $courseid ){
-        $objlist = grade_tracker_funcs::get_grade_items_for_course( $courseid );
-        $optionlist = array();
-        foreach( $objlist as $row ){
-            $optionlist[ $row->id ] = $row->id . ':' . $row->itemname;
+        global $gradetracker_exists;
+        if( $gradetracker_exists ){
+	        $objlist = grade_tracker_funcs::get_grade_items_for_course( $courseid );
+	        $optionlist = array();
+	        foreach( $objlist as $row ){
+	            $optionlist[ $row->id ] = $row->id . ':' . $row->itemname;
+	        }
+	        return $optionlist;
         }
-        return $optionlist;
     }
     
     /**
