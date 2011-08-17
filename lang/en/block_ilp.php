@@ -103,7 +103,8 @@
 	$string['lastupdated']			=	'Last Updated';
 	
 	
-	$string['maxedit'] 				= 	'Use Maximum Edit';	
+	$string['maxedit'] 				= 	'Use Maximum Edit';
+	$string['maxeditexceed'] 		= 	'The length of time in which you may edit this entry has past. The entry may not be edited';	
 	$string['maxreports']			= 	'Maximum Reports In Lists';
 	$string['maxreportsconfig']			= 	'The maximum number of reports displayed in a list. Change this setting if you are having to scroll list due to a large number or reports.';
 	$string['midcsscolour']			=	'Mid range CSS colour';
@@ -122,7 +123,7 @@
 	$string['moveup']		 		= 	'Move up';
 	$string['mytutor']				=	'My Tutor:';
 	$string['mytutees']				=	'My Tutees';
-	$string['multipleentries']		=	'Multiple Entries';
+	$string['multipleentries']		=	'Allow Multiple Entries';
 	
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';

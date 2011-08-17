@@ -52,38 +52,36 @@ $columns[]	=	'view';
 
 //we need to check if the mis plugin has been setup if it has we will get the attendance and punchuality figures
 
+
 //include the attendance 
-$misclassfile	=	$CFG->docroot."/blocks/ilp/classes/mis.class.php";
-
-//we will assume the mis data is unavailable until proven otherwise
+$misclassfile	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_percentbar_plugin.php';
 $misavailable = false;
-
-//only proceed if a mis file has been created
+			
 if (file_exists($misclassfile)) {
-	
+				
+	include_once $misclassfile;
+				
 	//create an instance of the MIS class
-	$misclass	=	new mis();
-	
-	$punch_method1 = array($misclass, 'get_total_punchuality');
-	$punch_method2 = array($misclass, 'get_student_punchuality');
-	$attend_method1 = array($misclass, 'get_total_attendance');
-	$attend_method2 = array($misclass, 'get_student_attendance');
-        
+	$misclass	=	new ilp_mis_attendance_percentbar_plugin();
+				
+    $punch_method1 = array($misclass, 'get_student_punchuality');
+	$attend_method1 = array($misclass, 'get_student_attendance');
+
+       //check whether the necessary functions have been defined
+	if (is_callable($punch_method1,true)) {
+            $headers[] = get_string('attendance','block_ilp');
+		 	$columns[] = 'u_attendcance';
+	 		$misattendavailable = true;
+    }
+
 	//check whether the necessary functions have been defined
-	 if (is_callable($attend_method1,true) && is_callable($attend_method2,true)) {
-	 	$headers[] = get_string('attendance','block_ilp');
-	 	$columns[] = 'u_attendcance';
-	 	$misattendavailable = true;
-	 }	
-	 
-	 //check whether the necessary functions have been defined
-	 if (is_callable($punch_method1,true) && is_callable($punch_method2,true)) {
-	 	$headers[] = get_string('punctulaity','block_ilp');
-		$columns[] = 'u_punctuality';
-		$mispunchavailable = true;
-	 }
-	 
+	if (is_callable($attend_method1,true) ) {
+	   		$headers[] = get_string('punctuality','block_ilp');
+			$columns[] = 'u_punctuality';
+			$mispunchavailable = true;
+	}
 }
+
 
 //get all enabled reports in this ilp
 $reports		=	$dbc->get_reports(ILP_ENABLED);
@@ -136,8 +134,20 @@ foreach ($users	as $u) {
 	$students[]	=	$u->id;
 }
 
+$notstatus_ids	=	false;
 
-$studentslist	=	$dbc->get_students_matrix($flextable,$students,$status_id);
+if (!empty($status_id)) {
+	
+	$defaultstatus_id	=	get_config('block_ilp','defaultstatusitem');
+	
+	if ($defaultstatus_id == $status_id) {
+		$notstatus_ids	=	 true;
+	} 
+	
+}
+
+
+$studentslist	=	$dbc->get_students_matrix($flextable,$students,$status_id,$notstatus_ids);
 
 //get the default status item which will be used as the status for students who
 //have not entered their ilp and have not had a status assigned
@@ -165,21 +175,29 @@ if(!empty($studentslist)) {
 
     	$data['view']	=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$stu->id}{$courseparam}' >".get_string('viewplp','block_ilp')."</a>";
     	
-    	if (!empty($misattendavailable)) {
-    		$total 		=	$misclass->get_total_attendance();
-    		$actual 	=	$misclass->get_student_attendance();
-    		//we only want to try to find the percentage if we can get the total possible
-    		// attendance else set it to 0;
-    		$data['u_attendcance'] =	(!empty($total)) ? $actual / $total	* 100 : 0 ;
-    	}
     	
-    	if (!empty($misattendavailable)) {
-    		$total 		=	$misclass->get_total_attendance();
-    		$actual 	=	$misclass->get_student_attendance();
-    		//we only want to try to find the percentage if we can get the total possible
-    		// attendance else set it to 0;
-    		$data['u_attendcance'] =	(!empty($total)) ? $actual / $total	* 100 : 0 ;
+    	//set the data for the student in question
+		
+    	
+    	
+    	if (!empty($misattendavailable) || !empty($mispunchavailable)) {
+    		$misclass->set_data($stu->id);
+    		
+    		if (!empty($misattendavailable)) {
+    			$actual 	=	$misclass->get_student_attendance();
+	    		//we only want to try to find the percentage if we can get the total possible
+	    		// attendance else set it to 0;
+	    		$data['u_attendcance'] =	(!empty($actual)) ? $actual : 0 ;
+    		}
+    		
+    		if (!empty($mispunchavailable)) {
+	    		$actual 	=	$misclass->get_student_punctuality();
+	    		//we only want to try to find the percentage if we can get the total possible
+	    		// punctuality else set it to 0;
+	    		$data['u_punctuality'] =	(!empty($actual)) ? $actual  : 0 ;
+    		}
     	}
+
 
       	foreach ($reports as $r) {
 

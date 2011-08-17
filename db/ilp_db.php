@@ -1712,10 +1712,12 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @param object $flextable the table where the matrix will be displayed
      * @param array  $student_ids an array contain the ids of studdents to be displayed
+     * @param int    $status_id the status id that should be matched
+     * @param bool   $includenull allows those without a status to be displayed
      * 
      * @return mixed array of object containing all students in a course or false
      */
-    function get_students_matrix($flextable,$student_ids,$status_id) {
+    function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false) {
     	
 
     	
@@ -1738,6 +1740,9 @@ class ilp_db_functions	extends ilp_logging {
         	    
         	    $studentssql	=	 (!empty($student_ids)) ? " u.id IN (".implode(",",$student_ids).")" : "" ;
     			$statussql		=	 (!empty($status_id)) ? " si.id = {$status_id} " : '';
+    			
+    			//if the 
+    			$statussql		=	 (!empty($includenull)) ? " ( si.id = {$status_id} OR si.id IS NULL)"  : $statussql;
         	    
         		if (!empty($student_ids)) {
         	    	$where .= " {$studentssql} ";
@@ -1771,7 +1776,6 @@ class ilp_db_functions	extends ilp_logging {
         
         // tell the table how many pages it needs
         $flextable->totalrows($count);
-  
         
         return $this->dbc->get_records_sql(
             $select.$from.$where.$sort,

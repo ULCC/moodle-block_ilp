@@ -102,6 +102,9 @@ class edit_report_mform extends ilp_moodleform {
 		function process_data($data) {
 			
 			if (empty($data->id)) {
+				
+
+				
             	$data->id = $this->dbc->create_report($data);
             	
             	//setup report default permissions. They will match the permissions
@@ -147,7 +150,11 @@ class edit_report_mform extends ilp_moodleform {
             		}
             	}
         	} else {
-
+			
+				//check to stop report icons from being overwritten
+				//if the binary_icon param is empty unset it that will stop 
+				//any data that is currently present from being overwritten
+				if (empty($data->binary_icon)) unset($data->binary_icon); 	 
         		
             	$this->dbc->update_report($data);
         	}

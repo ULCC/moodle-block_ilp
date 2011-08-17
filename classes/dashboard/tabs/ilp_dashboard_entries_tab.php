@@ -99,8 +99,16 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 								$detail->state_report	=	true;
 							}
 		
+							
+							
 							//get the last updated report entry
 							$lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
+
+							$detail->frequency		=	$r->frequency;
+							
+							//if the report does not allow mutiple entries (frequency is empty)
+							//then we need to find a report entry instance this will be editable
+							$detail->editentry	=	(empty($detail->frequency) && !empty($lastentry)) ?  $lastentry->id : false;
 							
 							$detail->lastmod	=	(!empty($lastentry->timemodified)) ?  userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');	
 							$reportslist[]			=	$detail;

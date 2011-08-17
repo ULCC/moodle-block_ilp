@@ -25,7 +25,7 @@ foreach ($reportslist as $rep) {
 		</div>
 		
 		<div id="middle-entries">
-			<h2><a href=''><?php echo $rep->name?></a></h2>
+			<h2><?php echo $rep->name?></h2>
 			<?php 
 				if (!empty($rep->state_report)) { echo $rep->achieved."/".$rep->entries." ".get_string('achieved','block_ilp'); } else { echo $rep->entries." ".get_string('reports','block_ilp');} ?><br />
 				<?php echo get_string('ilp_dashboard_entries_tab_lastupdate','block_ilp');?>: <?php echo $rep->lastmod; ?><br />
@@ -33,7 +33,14 @@ foreach ($reportslist as $rep) {
 		
 		<div id="right-entries">
 			<div class='add'>
-				<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}&course_id={$this->course_id}"; ?>' ><?php echo get_string('addnew','block_ilp'); ?></a>
+				<?php 
+					//edit entry will empty except when the report does not allow multiple entries and a entry already exits
+  
+					if (empty($rep->editentry)) { ?>
+					<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}&course_id={$this->course_id}"; ?>' ><?php echo get_string('addnew','block_ilp'); ?></a>
+				<?php }  else { ?>
+					<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}&course_id={$this->course_id}&entry_id={$rep->editentry}"; ?>' ><?php echo get_string('edit'); ?></a>			
+				<?php } ?>
 			</div>
 		</div>
 		
