@@ -155,6 +155,9 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
      * @param object $data The data to be saved
      */
     function process_data($data) {
+    	
+    	$data->label	=	str_replace('?','.',$data->label);
+    	
         if (empty($data->id)) {
             //create the ilp_report_field record
         	$data->id	=	$this->dbc->create_report_field($data);

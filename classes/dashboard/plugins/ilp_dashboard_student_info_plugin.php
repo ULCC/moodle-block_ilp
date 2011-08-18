@@ -40,7 +40,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG,$OUTPUT,$PAGE,$PARSER;
+		global	$CFG,$OUTPUT,$PAGE,$PARSER,$USER;
 
 		//set any variables needed by the display page	
 		
@@ -75,9 +75,37 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			//set the display attendance flag to false
 			$displayattendance	= false;
 			
+			/****
+			 * This code is in place as moodle insists on calling the settings functions on normal pages
+			 * 
+			 */
+			//check if the set_context method exists
+			if (!isset($PAGE->context) === false) {
+				
+				$course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
+				$user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
+				
+				if ($course_id != SITEID && !empty($course_id))	{ 
+					if (method_exists($PAGE,'set_context')) {
+						//check if the siteid has been set if not 
+						$PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
+					}	else {
+						$PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);		
+					}
+				} else {
+					if (method_exists($PAGE,'set_context')) {
+						//check if the siteid has been set if not 
+						$PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
+					}	else {
+						$PAGE->context = get_context_instance(CONTEXT_USER,$user_id);		
+					}
+				}
+			} 
+		
+			$access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $PAGE->context);
+
 			//can the current user change the users status
-			$can_editstatus	=	(!empty($access_viewotherilp) && $USER->id != $user_id) ? true : false;
-			
+			$can_editstatus	=	(!empty($access_viewotherilp) && $USER->id != $student->id) ? true : false;
 			
 			//include the attendance 
 			$misclassfile	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_percentbar_plugin.php';

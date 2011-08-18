@@ -14,7 +14,7 @@
 				<p>
 					<strong><?php echo get_string('studentstatus','block_ilp');?></strong>
 					
-					<?php  if (!empty($can_editstatus)) { ?>
+					<?php  if (empty($can_editstatus)) { ?>
 						<span id="user_status"  ><?php echo $statusitem->name; ?></span>
 					<?php } else {?>
 						<span id="user_status" class="hidden" ><?php echo $statusitem->name; ?></span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" class="hidden editicon" id="edit_userstatus_icon" />

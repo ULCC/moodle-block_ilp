@@ -1930,14 +1930,22 @@ class ilp_db_functions	extends ilp_logging {
   	 */
   	function label_exists($label,$report_id,$field_id)	{
   		
+  		$label	=	mysql_real_escape_string($label);
+
+  		//thsi code is needed due to a substr_count in the 
+  		//moodle_database.php file (line 666 :-( ) it causes 
+  		//an error whenever a label has an ? in it
+		$label = str_replace('?', '.', $label);
+  		
+  		
   		$currentfieldsql	=	(!empty($field_id)) 	?	"AND id != {$field_id}" : ""; 
   		
-  		$sql	=	"SELECT		*	
-  					 FROM		{block_ilp_report_field}
-  					 WHERE		label		=	'{$label}'
-  					 AND		report_id	=	{$report_id} 
-  					 $currentfieldsql";	
-  		
+  		$sql	=	'SELECT		*	
+  					 FROM		mdl_block_ilp_report_field
+  					 WHERE		label		=	"'.$label.'"
+  					 AND		report_id	=	'.$report_id 
+  					 .' '.$currentfieldsql;
+
   		return $this->dbc->get_records_sql($sql);
   	}
     

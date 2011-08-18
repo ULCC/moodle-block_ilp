@@ -47,10 +47,31 @@ if (!empty($reportfield)) {
 	
 	$pluginclass	=	new $classname();
 
+	$deletedposition	=	$reportfield->position;
 	
 	
 	if ($pluginclass->delete_form_element($reportfield_id)) {
 		$resulttext	=	get_string('formelementdeletesuc','block_ilp');
+		
+		//we now need to change the positions of all fields in the report move everything under the deleted position up
+		$reportfields 	= 	$dbc->get_report_fields_by_position($report_id);
+
+		//loop through fields returned
+		if (!empty($reportfields)) {
+			foreach($reportfields as $field) {
+				
+				if ($field->position > $deletedposition) { 
+					
+					//if the field is being moved up all other fields have postion value increased
+					//if the field is being moved down all other fields have postion value decreased 
+					//move up = 1 move down = 0
+					if (!$dbc->set_new_position($field->id,$field->position-1));
+					
+				}
+			}
+		} 
+
+		
 	}	else {
 		$resulttext	=	get_string('formelementdeleteerror','block_ilp');
 	}
