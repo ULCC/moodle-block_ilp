@@ -41,7 +41,15 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
         
-        $mform->addElement('static', 'plugintypestatic',get_string('plugintype','block_ilp'),get_string($currentplugin->name.'_type','block_ilp'));
+        try{
+            $mform->addElement('static', 'plugintypestatic',get_string('plugintype','block_ilp'),get_string($currentplugin->name.'_type','block_ilp'));
+        }
+        catch( exception $e ){
+/*
+            echo __FILE__;echo ':';echo __LINE__;
+            var_dump( 'current plugin name ' . $currentplugin->name);var_dump($e->getMessage());exit;
+*/
+        }
         
         //button to state whether the element is required
         $mform->addElement('checkbox', 
