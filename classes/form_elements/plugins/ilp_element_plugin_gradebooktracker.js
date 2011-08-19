@@ -1,4 +1,4 @@
-M.construct_url = function( location, inparam, invalue ){
+M.ilp_element_plugin_gradebooktracker_construct_url = function( location, inparam, invalue ){
     var url = new String( location );
     var qstring = new String();
     var urlparts = url.split( '?' );
