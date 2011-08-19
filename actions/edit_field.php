@@ -80,7 +80,6 @@ $pluginrecord	=	$dbc->get_plugin_by_id($plugin_id);
 
 //take the name field from the plugin as it will be used to call the instantiate the plugin class
 $classname = $pluginrecord->name;
-
 // include the class for the plugin
 include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
 
@@ -98,7 +97,6 @@ if (!$pluginclass->can_add($report_id))	{
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
     redirect($return_url, get_string("fieldmaximum", 'block_ilp',$pluginclass->audit_type()), REDIRECT_DELAY);
 }
-
 
 //call the plugin edit function inside of which the plugin configuration mform
 $pluginclass->edit($report_id,$plugin_id,$reportfield_id);

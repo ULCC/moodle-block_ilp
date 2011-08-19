@@ -162,8 +162,9 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin {
     * query the data for a particular student on a particular course
     * if $attendancecode_list is defined, the query will be restricted to those codes
     * if $countonly=true, a simple integer willb be returned instead of a nested array
-    * @param int $course_id
+    * @param string $table
     * @param int $student_id
+    * @param int $course_id
     * @param array of strings $attendancecode_list
     * @param boolean $countonly
     * @return int if $countonly, array of arrays otherwise

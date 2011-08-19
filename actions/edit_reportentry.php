@@ -175,6 +175,15 @@ if (!empty($entry_id)) {
 		$mform->set_data($entry_data);
 	}	
 } 
+else{
+    if( $course_id ){
+        $entry_data = array(
+            'courseid' => $course_id,
+            'review' => 'dummy text ' . date( 'H:i:s' )
+        );
+        $mform->set_data( $entry_data );
+    }
+}
 
 
 $plpuser	=	$dbc->get_user_by_id($user_id);
@@ -198,6 +207,15 @@ $PAGE->set_heading($SITE->fullname);
 $PAGE->set_pagetype('ilp-entry');
 //$PAGE->set_pagelayout('ilp');
 $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php",$PARSER->get_params());
+
+//js function for entry form
+$localdir = '/blocks/ilp/actions/';
+$module = array(
+    'name' => 'ilp',
+    'fullpath' => $localdir . 'ilp.js',
+    'requires' => array()
+);
+$PAGE->requires->js_init_call( 'M.construct_url', array(), true, $module );
 
 //require edit_reportentry html
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_reportentry.html');
