@@ -77,7 +77,6 @@ if($promptmform->is_submitted()) {
 	//get the form data submitted
 	$formdata = $promptmform->get_data();
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_field.php?report_id='.$report_id.'&plugin_id='.$formdata->plugin_id;
-//var_dump($return_url);exit;
     redirect($return_url, get_string("addfield", 'block_ilp'), REDIRECT_DELAY);
 }
 

@@ -7,16 +7,18 @@
 <tr><td><?php echo (!empty($summarydata['att_prec'][0])) ? $summarydata['att_prec'][0] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_attendance','block_ilp');?></td><td><?php echo (!empty($summarydata['pun_perc'][0])) ? $summarydata['pun_perc'][0] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_punctuality','block_ilp');?></td></tr>
 </table>
 </span>
-<?php if (!empty($term)) {?>
-
+<?php if (!empty($displayterms)) {
+	foreach ($displayterms as $t) { 
+?>
 <span style="float:right">
 <table>
-<th><td>Term <?php echo $term;?> Attendance<td><th>
-<tr><td><?php echo (!empty($summarydata['total'][$term])) ? $summarydata['total'][$term]: 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_possible','block_ilp');?></td><td><?php echo (!empty($summarydata['present'][$term])) ? $summarydata['present'][$term] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_present','block_ilp');?></td><td><?php echo (!empty($summarydata['absent'][$term])) ? $summarydata['absent'][$term] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_absent','block_ilp');?></td></tr>
-<tr><td><?php echo (!empty($summarydata['att_prec'][$term])) ? $summarydata['att_prec'][$term] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_attendance','block_ilp');?></td><td><?php echo (!empty($summarydata['pun_perc'][$term])) ? $summarydata['pun_perc'][$term] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_punctuality','block_ilp');?></td></tr>
+<th><td>Term <?php echo $t;?> Attendance<td><th>
+<tr><td><?php echo (!empty($summarydata['total'][$t])) ? $summarydata['total'][$t]: 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_possible','block_ilp');?></td><td><?php echo (!empty($summarydata['present'][$t])) ? $summarydata['present'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_present','block_ilp');?></td><td><?php echo (!empty($summarydata['absent'][$t])) ? $summarydata['absent'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_absent','block_ilp');?></td></tr>
+<tr><td><?php echo (!empty($summarydata['att_prec'][$t])) ? $summarydata['att_prec'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_attendance','block_ilp');?></td><td><?php echo (!empty($summarydata['pun_perc'][$t])) ? $summarydata['pun_perc'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_punctuality','block_ilp');?></td></tr>
 </table>
 </span>
-<?php } ?>
+<?php } 
+}?>
 </div>
 
 <div>

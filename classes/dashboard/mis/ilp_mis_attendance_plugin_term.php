@@ -42,14 +42,14 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
 
 	        $headers[]		=	'';
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_term_overall','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_term_termone','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_term_termtwo','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_term_termthree','block_ilp');
+			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termone','block_ilp'), array('mis_term_id'=>1));
+			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termtwo','block_ilp'), array('mis_term_id'=>2));
+			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termthree','block_ilp'), array('mis_term_id'=>3));
 			
     		if (!empty($sixtermformat)) {
-				$headers[]		=	get_string('ilp_mis_attendance_plugin_term_termfour','block_ilp');
-				$headers[]		=	get_string('ilp_mis_attendance_plugin_term_termfive','block_ilp');
-				$headers[]		=	get_string('ilp_mis_attendance_plugin_term_termsix','block_ilp');
+				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termfour','block_ilp'), array('mis_term_id'=>4));
+				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termfive','block_ilp'), array('mis_term_id'=>5));
+				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termsix','block_ilp'), array('mis_term_id'=>6));
 			}
 					
 	        $columns[]		=	'metric';
@@ -108,6 +108,76 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
     	}
     }
 
+    /** 
+     * This function determines whether links should be added to the content if yes then it adds the link 
+     * pointing to any mis plugin that can link to this plugin
+     * 
+     * @param string $content the content that will be displayed
+     * @param array  $param	any additional paramaters that should be added   
+     */
+     public function addlinks($content,$params=false) {
+     	global $CFG;
+     	
+     	$plugin_id	=	get_config('block_ilp','mis_plugin_term_linkedplugin');
+     	
+     	if (!empty($plugin_id)) {
+     		
+     		//get the 
+     		$plugin_id	=	get_config('block_ilp','mis_plugin_term_linkedplugin');
+     		
+     		if (!empty($plugin_id)) {
+     			$plugin	=	$this->dbc->get_mis_plugin_by_id($plugin_id);
+     			
+     			//links will only be made if the plugin being linked to is enabled
+     			if ($plugin->status == ILP_ENABLED) {
+     				$urlparams		=	explode('&',$_SERVER['QUERY_STRING']);
+					$newurlparams	=	array();
+					if (!empty($urlparams)) {
+	     				foreach ($urlparams as $v) {
+							if (strpos($v,'mis_term_id') === FALSE 
+								&& strpos($v,'tabitem') === FALSE && strpos($v,'selectedtab') === FALSE) {
+								array_push($newurlparams,$v); 
+							}
+						}
+					}
+
+					//add the params given by the user to the newurlparams var
+					if (!empty($params)) {
+						foreach ($params as $k => $v) {
+							array_push($newurlparams,"{$k}={$v}"); 
+						}
+					}
+					
+					//TODO work out a way to do this dynamically
+					//get the id of the attendance tab
+					$atttab	=	$this->dbc->get_plugin_by_name('block_ilp_dash_tab','ilp_dashboard_mis_attendance_tab');
+					
+					if (!empty($atttab)) {
+						//set the selected tab url param
+     					array_push($newurlparams,"selectedtab={$atttab->id}");
+     					
+     					//set the tabitem url param
+     					array_push($newurlparams,"tabitem={$atttab->id}:$plugin_id");
+     				
+     					$querystring	=	implode('&',$newurlparams);	
+     					$url	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?{$querystring}";
+     				
+     					$content = "<a href='$url' >{$content}</a>";
+					}
+     			}
+     		}
+     		
+     		return $content;
+     	} 
+     	
+     	
+     	//check if plugin is enabled
+     	
+     	
+     	
+     	
+     	
+     }
     
 	/**
      * Adds settings for this plugin to the admin settings
@@ -125,6 +195,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
  	  * @see ilp_plugin::config_form()
  	  */
  	 function config_form(&$mform)	{
+ 	 	global $CFG;
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_term_table',get_string('ilp_mis_attendance_plugin_term_table', 'block_ilp'),get_string('ilp_mis_attendance_plugin_term_tabledesc', 'block_ilp'),'');
  	 	
@@ -141,6 +212,37 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
  	 	$this->config_text_element($mform,'mis_plugin_term_marksauthabsentfield',get_string('ilp_mis_attendance_plugin_term_marksauthabsent', 'block_ilp'),get_string('ilp_mis_attendance_plugin_term_marksauthabsentdesc', 'block_ilp'),'marksAuthAbsent');
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_term_markslatefield',get_string('ilp_mis_attendance_plugin_term_markslate', 'block_ilp'),get_string('ilp_mis_attendance_plugin_term_markslatedesc', 'block_ilp'),'marksLate');
+ 	 	
+ 	 	//set the plugin that term will link to if any
+ 	 	$options = array(
+    		 0 => get_string('notapplicable','block_ilp'),
+    	);
+    	
+
+    	//get all mis_plugins
+    	$mis_plugins = ilp_records_to_menu($this->dbc->get_mis_plugins(), 'id', 'name');
+    	$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+    			
+    	foreach ($mis_plugins as $plugin_file) {
+					
+			require_once($plugins.'/'.$plugin_file.".php");
+			// instantiate the object
+			$class = basename($plugin_file, ".php");
+			$pluginobj = new $class();
+			$method = array($pluginobj, 'plugin_type');
+					
+			//check whether the config_settings method has been defined
+			
+			if (is_callable($method,true)) {
+			     if ($pluginobj->plugin_type() == 'attendance') {
+			     	$mismisc	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
+			     	$options[$mismisc->id]	=	$pluginobj->tab_name(); 	
+			     }
+			}
+    	}
+    	
+ 	 	$this->config_select_element($mform,'mis_plugin_term_linkedplugin',$options,get_string('linkedplugin', 'block_ilp'),get_string('linkedplugindesc', 'block_ilp'),'');
+ 	 	
  	 	
  	 	
  	 	$options = array(

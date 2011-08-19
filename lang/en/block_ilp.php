@@ -101,6 +101,9 @@
 	
 	$string['label']				=	'Label';
 	$string['lastupdated']			=	'Last Updated';
+	$string['linkedplugin']			=	'Linked Plugin';
+	$string['linkedplugindesc']		=	'Choose the plugin that this plugin will link too. Note that if the plugin being linked too is not enabled now link will be available';
+	
 	
 	
 	$string['maxedit'] 				= 	'Use Maximum Edit';

@@ -16,7 +16,7 @@ global $CFG, $PARSER,$USER;
 $user_id   = $PARSER->optional_param('user_id',$USER->id,PARAM_INT);
 
 // get the id of the course
-$course_id = $PARSER->optional_param('course_id', SITEID,PARAM_INT);
+$course_id = $PARSER->optional_param('course_id', 0,PARAM_INT);
 
 
 // the user must be logged in
@@ -25,7 +25,8 @@ require_login(0, false);
 $sitecontext	=	get_context_instance(CONTEXT_SYSTEM);
 
 //get the user context
-$usercontext	=	get_context_instance(CONTEXT_USER,$USER->id);
+$usercontext	=	get_context_instance(CONTEXT_USER,$user_id);
+
 
 //if there is no user context then we must throw an error as the user context is the 
 //least that is needed in order to display the ilp
@@ -39,6 +40,10 @@ if (!empty($course_id)) {
 	// get the current course context
 	$coursecontext = get_context_instance(CONTEXT_COURSE, $course_id);
 
+	if ($course_id == SITEID)	{
+		$coursecontext =	$sitecontext;
+	}
+
 	// bail if we couldn't find the course context
 	if(!$coursecontext) {
 	    print_error('incorrectcourseid', 'block_ilp');
@@ -51,11 +56,13 @@ $context	=	$sitecontext;
 //if we are in the coursecontext
 if(isset($coursecontext)){
 	$context		=	$coursecontext;
-} else  if (has_capability('block/ilp:viewotherilp', $usercontext,$user_id)) {
+} else  if (has_capability('block/ilp:viewotherilp', $usercontext)) {
 	$context		=	$usercontext;	
 } else if ($user_id == $USER->id) {
+		
 	$context		=	$sitecontext;
 } 
+
 
 //CAPABILITIES
 $access_createreports	=	has_capability('block/ilp:addreport', $context);
@@ -65,7 +72,7 @@ $access_viewreports		=	has_capability('block/ilp:viewreport', $context);
 $access_viewilp			=	has_capability('block/ilp:viewilp', $context);
 $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $context);
 
-//TODO: we will should not be in the course context change to another context
+//TODO: we should not be in the course context change to another context
 $PAGE->set_context($context);
 
 ?>

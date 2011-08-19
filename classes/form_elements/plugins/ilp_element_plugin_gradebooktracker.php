@@ -36,7 +36,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         //echo 'loading gradebooktracker';exit;
     }
     public	function entry_form( &$mform ) {
-        global $CFG;
+        global $CFG,$PAGE;
         $gradebooktracker_file = $CFG->dirroot.'/grade/report/tracker/gradetrackerfuncs.php';
         if( file_exists( $gradebooktracker_file ) ){
             $gradetracker_exists = true;
@@ -79,6 +79,15 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 	            ''
 	        );
 	    }
+	    
+	    //js function for entry form
+		$localdir = '/blocks/ilp/classes/form_elements/plugins/';
+		$module = array(
+    		'name' => 'ilp_element_plugin_gradebooktracker',
+    		'fullpath' => $localdir . 'ilp_element_plugin_gradebooktracker.js',
+    		'requires' => array()
+		);
+		$PAGE->requires->js_init_call( 'M.ilp_element_plugin_gradebooktracker_construct_url', array(), true, $module );
     }
 
 

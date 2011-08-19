@@ -109,18 +109,26 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin	{
     	global $CFG, $PARSER;
     	
     	//if set get the id of the report to be edited
-		$term	= $PARSER->optional_param('term',0,PARAM_INT);
+		$term	= $PARSER->optional_param('mis_term_id',0,PARAM_INT);
     	
     	if (!empty($this->data) ) {
     		
     		$summarydata = $this->summary_data($this->data,$term);
     		
+    		if (!empty($term)) {
+    			$displayterms =  array($term);	
+    		}  else {
+	    		for($i = 0;$i < $this->numterms;$i++) {
+    				$displayterms[]	=	$i+1;
+    			}
+    		}
+    		
     		ob_start();
-    		$this->term_attendance($this->data);
+    		$this->term_attendance($this->data,$term);
     		$grid = ob_get_contents();
 	        ob_end_clean();
 	        
-	            		ob_start();
+	        ob_start();
 			require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_plugin_register.html');
     		$output = ob_get_contents();
 	        ob_end_clean();
@@ -243,6 +251,8 @@ function summary_data($data,$term=0) {
 		$termend	=	$this->terms[$this->numterms-1]['end'];
 	}
 	
+
+	
 	$total	=	array(0,0,0,0,0,0);
 	$absent	=	array(0,0,0,0,0,0);
 	$present	=	array(0,0,0,0,0,0);
@@ -266,9 +276,15 @@ function summary_data($data,$term=0) {
 		}
 
 		$mark['Week_No'] = $this->weekno($mark[$cdatefield]);
-						
-		for($i = 0; $i <= $this->numterms; $i++) {
-			if($mark['Week_No'] >= $termstart && $mark['Week_No'] <=$termend)	{
+		
+		for($i = 1; $i <= $this->numterms; $i++) {
+			
+			//these variables define the academic weeks of $termstart and $termend  
+			$academicstart	=	$this->academic_week($this->terms[$i-1]['start'],$yearstart);
+			$academicend	=	$this->academic_week($this->terms[$i-1]['end'],$yearstart); 		
+			
+			if($mark['Week_No'] >= $academicstart && $mark['Week_No'] <=$academicend)	{
+				
 					if(!in_array($mark[$markfield],$this->noclasscodes)){
 						$total[$i]++;
 					}
@@ -339,7 +355,7 @@ function summary_data($data,$term=0) {
 			$cidfield	=	get_config('block_ilp','mis_plugin_register_courseid');
 			$cdatefield	=	get_config('block_ilp','mis_plugin_register_datetime');
 			$markfield	=	get_config('block_ilp','mis_plugin_register_mark');
-			$timefield	=	get_config('block_ilp','mis_plugin_register_datetime');
+			$timefield	=	get_config('block_ilp','mis_plugin_register_starttime');
 			$cnamefield	=	get_config('block_ilp','mis_plugin_register_coursename');
 	
 			$startdate 		= $this->terms[0]['startts'];
@@ -554,8 +570,19 @@ function summary_data($data,$term=0) {
     		$idtype	=	get_config('block_ilp','mis_plugin_register_idtype');
     		$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id;
     		
+    		$keyfields		=	array();
+    		
+    		$useyearfilter	= get_config('block_ilp','mis_plugin_register_yearfilter');	
+    		if (!empty($useyearfilter)) {
+    			
+    			$yearfilterfield	=	get_config('block_ilp','mis_plugin_register_yearfilter_field');
+    			$yearfilteryear	=	get_config('block_ilp','mis_plugin_register_yearfilter_year');
+    			
+    			$keyfields[$yearfilterfield]	=	array('=' => $yearfilteryear);
+    		} 
+    		
     		//create the key that will be used in sql query
-    		$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
+    		$keyfields[$sidfield]	= array('=' => $mis_user_id);
     		
     		$this->fields		=	array();
     		
@@ -565,6 +592,8 @@ function summary_data($data,$term=0) {
     		if 	(get_config('block_ilp','mis_plugin_register_registerid')) 	$this->fields['registerid']		=	get_config('block_ilp','mis_plugin_register_registerid');
     		if 	(get_config('block_ilp','mis_plugin_register_registername')) 	$this->fields['registername']		=	get_config('block_ilp','mis_plugin_register_registername');
     		if 	(get_config('block_ilp','mis_plugin_register_datetime')) 		$this->fields['datetime']			=	get_config('block_ilp','mis_plugin_register_datetime');
+    		if 	(get_config('block_ilp','mis_plugin_register_starttime')) 		$this->fields['starttime']			=	get_config('block_ilp','mis_plugin_register_starttime');
+    		if 	(get_config('block_ilp','mis_plugin_register_endtime')) 		$this->fields['endtime']			=	get_config('block_ilp','mis_plugin_register_endtime');
     		if 	(get_config('block_ilp','mis_plugin_register_mark')) 			$this->fields['mark']				=	get_config('block_ilp','mis_plugin_register_mark');
 
     		//get the users monthly attendance data
@@ -604,6 +633,10 @@ function summary_data($data,$term=0) {
  	 	$this->config_text_element($mform,'mis_plugin_register_registerName',get_string('ilp_mis_attendance_plugin_register_registername', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_registernamedesc', 'block_ilp'),'registerName');
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_register_datetime',get_string('ilp_mis_attendance_plugin_register_datetime', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_datetimedesc', 'block_ilp'),'datetime');
+ 	 	
+	 	$this->config_text_element($mform,'mis_plugin_register_starttime',get_string('ilp_mis_attendance_plugin_register_starttime', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_starttimedesc', 'block_ilp'),'starttime');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_endtime',get_string('ilp_mis_attendance_plugin_register_endtime', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_endtimedesc', 'block_ilp'),'endtime');
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_register_coursename',get_string('ilp_mis_attendance_plugin_register_coursename', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_coursenamedesc', 'block_ilp'),'coursename');
  	 	
@@ -674,6 +707,19 @@ function summary_data($data,$term=0) {
  	 	$this->config_select_element($mform,'mis_plugin_register_tabletype',$options,get_string('ilp_mis_attendance_plugin_register_tabletype', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_tabletypedesc', 'block_ilp'),1);
  	 	
  	 	$options = array(
+    		 ILP_DISABLED 	=> get_string('disabled','block_ilp'),
+    		 ILP_ENABLED	=> get_string('enabled','block_ilp') 
+    	);
+ 	 	
+ 	 	$this->config_select_element($mform,'mis_plugin_register_yearfilter',$options,get_string('ilp_mis_attendance_plugin_register_yearfilter', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_yearfilterdesc', 'block_ilp'),0);
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_yearfilter_field',get_string('ilp_mis_attendance_plugin_register_yearfilter_field', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_yearfilter_fielddesc', 'block_ilp'),'year');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_yearfilter_year',get_string('ilp_mis_attendance_plugin_register_yearfilter_year', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_yearfilter_yeardesc', 'block_ilp'),date('Y')); 	 	
+ 	 	
+ 	 	
+ 	 	
+ 	 	$options = array(
     		ILP_ENABLED => get_string('enabled','block_ilp'),
     		ILP_DISABLED => get_string('disabled','block_ilp')
     	);
@@ -710,6 +756,12 @@ function summary_data($data,$term=0) {
 
         $string[ 'ilp_mis_attendance_plugin_register_datetime']		   		= 'Date time field';
         $string[ 'ilp_mis_attendance_plugin_register_datetimedesc']	   		= 'The field containing date time data';
+        
+        $string[ 'ilp_mis_attendance_plugin_register_starttime']	   		= 'Course start time field';
+        $string[ 'ilp_mis_attendance_plugin_register_starttimedesc']	   	= 'The field containing course start time data';
+        
+        $string[ 'ilp_mis_attendance_plugin_register_endtime']	   			= 'Course end time field';
+        $string[ 'ilp_mis_attendance_plugin_register_endtimedesc']	   		= 'The field containing course end time data';        
         
         $string[ 'ilp_mis_attendance_plugin_register_coursename']   		= 'Course Name field';
         $string[ 'ilp_mis_attendance_plugin_register_coursenamedesc']   	= 'The field containing course name data';
@@ -767,6 +819,15 @@ function summary_data($data,$term=0) {
 
         $string[ 'ilp_mis_attendance_plugin_register_tabletype' ] 		  	= 'Table type';
         $string[ 'ilp_mis_attendance_plugin_register_tabletypedesc' ]  		= 'what is the table type';
+        
+        $string[ 'ilp_mis_attendance_plugin_register_yearfilter' ] 		  	= 'Year filter';
+        $string[ 'ilp_mis_attendance_plugin_register_yearfilterdesc' ]  	= 'Is a year filter used when selecting data from the MIS';
+        
+        $string[ 'ilp_mis_attendance_plugin_register_yearfilter_field' ]	  	= 'Year filter field';
+        $string[ 'ilp_mis_attendance_plugin_register_yearfilter_fielddesc' ]  	= 'If a MIS year filter is being used enter the field that will be filter on. (if stored procedure and field not needed leave field as year)';
+
+        $string[ 'ilp_mis_attendance_plugin_register_yearfilter_year' ]	  		= 'Year filter date';
+        $string[ 'ilp_mis_attendance_plugin_register_yearfilter_yeardesc' ]  	= 'The date that will be filtered on';
         
         $string[ 'ilp_mis_attendance_plugin_register_ignore' ]  				= 'Ignore';
         $string[ 'ilp_mis_attendance_plugin_register_positive' ]   			= 'Positive';

@@ -22,14 +22,24 @@ if (!isset($context)) {
 	print_error('contextnotset');
 } 
 
+$dbc	=	new ilp_db();
+
 //get all of the users roles in the current context and save the id of the roles into
 //an array 
 $role_ids	=	 array();
+
+
+$authuserrole	=	$dbc->get_role_by_name(AUTH_USER_ROLE);
+if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
+
 if ($roles = get_user_roles($context, $USER->id)) {
  	foreach ($roles as $role) {
  		$role_ids[]	= $role->roleid;
  	}
 }
+
+
+
 
 //REPORT CAPABILITIES
 
@@ -40,19 +50,19 @@ $access_report_viewreports		=	0;
 $access_report_viewilp			=	0;
 $access_report_viewotherilp		=	0;
 
-$dbc	=	new ilp_db();
+
 
 //we only need to check if a report permission has been assigned 
 //if the user has the capability in the current context 
 
 
 if (!empty($access_createreports)) { 
-	
+
 	//moodle 2.0 throws an error whena comparison is carried out for the context name in
     //pure sql. This could have something to do with the /: in the context name. So I am
     //having to get the capability record id first and then pass it to the 
     $capability	=	$dbc->get_capability_by_name('block/ilp:addreport');
-   
+
 	$access_report_createreports	=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
 }	
 
@@ -85,7 +95,8 @@ if ($access_viewotherilp) {
 
 	$capability	=	$dbc->get_capability_by_name('block/ilp:viewotherilp');
 	if (!empty($capability))	$access_report_viewotherilp		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
-} 
+}
+
 
 //this is only in for debug and testing purposes 
 if ($USER->username == 'moodle-support') {
@@ -98,3 +109,10 @@ $access_report_viewotherilp		=	1;
 	
 }
 
+
+if (empty($access_report_viewotherilp) && $USER->id != $user_id) {
+	//the user doesnt have the capability to create this type of report entry
+	print_error('accessnotallowed','block_ilp');	
+
+}
+ 

@@ -184,6 +184,19 @@ class ilp_mis_connection{
     	return		(!empty($result->fields))	?	$result->getRows() :	false;
     }
 
+    function arraytovar($val) {
+    	if (is_array($val)) {
+    		if (!is_array(current($val))) {
+    			return current($val);
+    		} else {
+    			return $this->arraytovar(current($val));
+    		}
+    	}
+    	
+    	return $val;
+    }
+    
+    
     /**
      * 
      * builds a stored procedure query using the arguments given and returns the result
@@ -193,8 +206,21 @@ class ilp_mis_connection{
      * @return mixed 
      */
     function return_stored_values($procedurename,$procedureargs='') {
-    	$args	=	(is_array($procedureargs))	?	implode(',',$procedureargs)	:	$procedureargs;	
+    	
+    	if (is_array($procedureargs)) {
+			$temp	=	array();
+    		foreach ($procedureargs as $p) {
+    			$temp[]	=	$this->arraytovar($p);
+    		} 
+    		
+    		$args	=	implode(', ',$temp);
+    	} else {
+    		$args	=	$procedureargs;
+    	}
 		$sql	=	"EXECUTE {$procedurename} {$args}";
+		
+		var_dump($sql);
+		
 		$result		= $this->execute($sql);
 		return		(!empty($result->fields))	?	$result->getRows() :	false;
     }

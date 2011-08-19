@@ -82,4 +82,6 @@ define('ILP_MIS_STOREDPROCEDURE','0');
 define('ILP_IDTYPE_STRING','0');
 define('ILP_IDTYPE_INT','1');
 
+define('AUTH_USER_ROLE','Authenticated user');
+
 ?>

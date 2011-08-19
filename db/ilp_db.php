@@ -631,12 +631,22 @@ class ilp_db_functions	extends ilp_logging {
 	 /**
      * Returns all roles
      *
-     * @return mixed object containing all course records or false
+     * @return mixed object containing all role records or false
      */
     function get_roles()	{
     	return $this->dbc->get_records("role");
     }
     
+    /**
+     * Returns the role that matches the name given
+     * 
+     * @param string $rolename the name of the role that will be retrieved
+     * 
+     * @return mixed object containing role record or false
+     */
+    function get_role_by_name($rolename)	{
+    	return $this->dbc->get_record("role",array('name'=>$rolename));
+    }
     
 	/**
      * Create a plugin entry in the table given 
@@ -744,8 +754,8 @@ class ilp_db_functions	extends ilp_logging {
     		$role_id	=	array($role_id);	
     	}
     	
-    	$sql	=	"SELECT 	* 
-					 FROM 		{$CFG->prefix}block_ilp_reportpermissions AS rp, 
+    	$sql	=	"SELECT 	c.id, r.*, rp.*
+  					 FROM 		{$CFG->prefix}block_ilp_reportpermissions AS rp, 
 					 			{$CFG->prefix}role AS r,
 								{$CFG->prefix}capabilities AS c
 					 WHERE		rp.capability_id	=	c.id

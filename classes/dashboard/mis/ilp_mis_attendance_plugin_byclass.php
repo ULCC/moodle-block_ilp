@@ -159,6 +159,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_course_byclass_courseid',get_string('ilp_mis_attendance_plugin_byclass_courseid', 'block_ilp'),get_string('ilp_mis_attendance_plugin_byclass_courseiddesc', 'block_ilp'),'courseID');
  	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_course_byclass_coursename',get_string('ilp_mis_attendance_plugin_byclass_coursename', 'block_ilp'),get_string('ilp_mis_attendance_plugin_byclass_coursenamedesc', 'block_ilp'),'courseName');
+ 	 	
  	 	$this->config_text_element($mform,'mis_plugin_course_byclass_registerid',get_string('ilp_mis_attendance_plugin_byclass_registerid', 'block_ilp'),get_string('ilp_mis_attendance_plugin_byclass_registeriddesc', 'block_ilp'),'registerID');
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_course_byclass_period',get_string('ilp_mis_attendance_plugin_byclass_period', 'block_ilp'),get_string('ilp_mis_attendance_plugin_byclass_perioddesc', 'block_ilp'),'period');
@@ -246,6 +248,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
         $string[ 'ilp_mis_attendance_plugin_byclass_courseid']   		= 'Course id field';
         $string[ 'ilp_mis_attendance_plugin_byclass_courseiddesc']   	= 'The field containing course id data';
         
+        $string[ 'ilp_mis_attendance_plugin_byclass_coursename']   		= 'Course Name field';
+        $string[ 'ilp_mis_attendance_plugin_byclass_coursenamedesc']   	= 'The field containing course name data';
+        
         $string[ 'ilp_mis_attendance_plugin_byclass_registerid']  			= 'Register ID field';
         $string[ 'ilp_mis_attendance_plugin_byclass_registeriddesc']  		= 'The field containing register id data';
         
@@ -301,6 +306,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
         
         $string[ 'ilp_mis_attendance_plugin_byclass_pluginstatus' ]   			= 'Status';
         $string[ 'ilp_mis_attendance_plugin_byclass_pluginstatusdesc' ]   		= 'is the plugin enabled or disabled';
+        
+        $string[ 'ilp_mis_attendance_plugin_byclass_tabletype' ]   			= 'Table type';
+        $string[ 'ilp_mis_attendance_plugin_byclass_tabletypedesc' ]   		= 'Is a table or a stored procedure being used';
         
         $string[ 'ilp_mis_attendance_plugin_byclass_disp_day' ] 	  	= 'Day';
         $string[ 'ilp_mis_attendance_plugin_byclass_disp_room' ]   		= 'Room';
@@ -359,7 +367,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     		$this->fields		=	array();
     		
     		//get all of the fields that will be returned
-    		if 	(get_config('block_ilp','mis_plugin_course_byclass_courseid')) 	$this->fields['courseid']		=	get_config('block_ilp','mis_plugin_course_byclass_courseid');
+    		if 	(get_config('block_ilp','mis_plugin_course_byclass_courseid')) 		$this->fields['courseid']		=	get_config('block_ilp','mis_plugin_course_byclass_courseid');
+    		if 	(get_config('block_ilp','mis_plugin_course_byclass_coursename')) 	$this->fields['coursename']		=	get_config('block_ilp','mis_plugin_course_byclass_coursename');
     		
     		
     		if 	(get_config('block_ilp','mis_plugin_course_byclass_registerid')) 	$this->fields['registerid']		=	get_config('block_ilp','mis_plugin_course_byclass_registerid');
@@ -409,6 +418,12 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 	    		if (!isset($normdata[$dayid])) {
 	    			$normdata[$dayid]	=	array();
 	    		}
+	    		
+	    		if (!isset($this->courselist[$d[$this->fields['courseid']]]) && isset($d[$this->fields['coursename']])) {
+	    			$this->courselist[$d[$this->fields['courseid']]] = $d[$this->fields['coursename']];
+	    		}  
+	    		
+	    		
 	    		
 	    		
 	    		

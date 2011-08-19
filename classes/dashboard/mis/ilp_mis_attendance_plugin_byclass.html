@@ -4,9 +4,9 @@
 			<label><?php echo get_string('course','block_ilp');?></label>
 			<select id="ilp_mis_attendance_plugin_byclass_course" name="mis_course_id">
 				<?php 
-				for($i =1; $i < 13;$i++) { 
-					$selected = ($i == $mis_course_id) ?  "selected='selected'": '';?> 
-					<option value="<?php echo date('m',strtotime("1-$i-2011")); ?>" <?php echo $selected; ?> ><?php echo date('F',strtotime("1-$i-2011")); ?></option>
+				foreach($this->courselist as $courseid => $coursename) { 
+					$selected = ($courseid == $mis_course_id) ?  "selected='selected'": '';?> 
+					<option value="<?php echo $courseid; ?>" <?php echo $selected; ?> ><?php echo $coursename; ?></option>
 				<?php } ?>
 			</select>
 		</p>
