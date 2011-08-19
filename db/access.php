@@ -39,7 +39,8 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW
+            'admin' => CAP_ALLOW,
+			'user' => CAP_ALLOW
         )
 	
 	),
@@ -75,7 +76,8 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW
+            'admin' => CAP_ALLOW,
+			'user' => CAP_ALLOW
         )
 	
 	),
@@ -88,7 +90,8 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW
+            'admin' => CAP_ALLOW,
+			'user' => CAP_ALLOW
         )
 	
 	),
