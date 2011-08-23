@@ -54,6 +54,8 @@ if($mform->is_submitted()) {
     	//only try to change the icon if a file was submitted
     	if ($mform->get_file_content('binary_icon') != false) {
     	  		$formdata->binary_icon	=	$mform->get_file_content('binary_icon');
+    	} else {
+    		$formdata->binary_icon	=	'';
     	}
    	
     	$formdata->maxedit	=	(empty($formdata->maxedit)) ? 0 : $formdata->maxedit;

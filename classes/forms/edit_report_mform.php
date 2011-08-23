@@ -101,6 +101,7 @@ class edit_report_mform extends ilp_moodleform {
      	 * TODO comment this
      	 */		
 		function process_data($data) {
+			global $CFG;
 			
 			if (empty($data->id)) {
 				
@@ -112,9 +113,6 @@ class edit_report_mform extends ilp_moodleform {
             	//that the block has for each role
             	
             	$report_id	=	$data->id;
-            	
-            	var_dump($report_id);
-            	
             	
             	//get all roles in moodle 
             	$roles		=	$this->dbc->get_roles();
@@ -160,7 +158,12 @@ class edit_report_mform extends ilp_moodleform {
 				//any data that is currently present from being overwritten
 				if (empty($data->binary_icon)) unset($data->binary_icon); 
 
-				if (!empty($data->binary_icon)) $data->binary_icon = addslashes($data->binary_icon);
+				if (!empty($data->binary_icon)) {
+					//moodle 1.9 doesnt add slashes so we need to do this
+					if (stripos($CFG->release,"2.") == false) {
+						$data->binary_icon = addslashes($data->binary_icon);
+					}
+				}
         		
             	$this->dbc->update_report($data);
         	}
