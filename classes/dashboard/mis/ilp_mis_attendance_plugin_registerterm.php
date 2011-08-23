@@ -125,15 +125,15 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin	{
 	        $columns		=	array();
 
 	        $headers[]		=	'';
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_term_overall','block_ilp');
-			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termone','block_ilp'), array('mis_term_id'=>1));
-			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termtwo','block_ilp'), array('mis_term_id'=>2));
-			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termthree','block_ilp'), array('mis_term_id'=>3));
+			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_registerterm_overall','block_ilp'), array('mis_term_id'=>0));
+			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_registerterm_termone','block_ilp'), array('mis_term_id'=>1));
+			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_registerterm_termtwo','block_ilp'), array('mis_term_id'=>2));
+			$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_registerterm_termthree','block_ilp'), array('mis_term_id'=>3));
 			
     		if (!empty($sixtermformat)) {
-				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termfour','block_ilp'), array('mis_term_id'=>4));
-				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termfive','block_ilp'), array('mis_term_id'=>5));
-				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_term_termsix','block_ilp'), array('mis_term_id'=>6));
+				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_registerterm_termfour','block_ilp'), array('mis_term_id'=>4));
+				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_registerterm_termfive','block_ilp'), array('mis_term_id'=>5));
+				$headers[]		=	$this->addlinks(get_string('ilp_mis_attendance_plugin_registerterm_termsix','block_ilp'), array('mis_term_id'=>6));
 			}
 					
 	        $columns[]		=	'metric';
@@ -166,29 +166,29 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin	{
     		$terms	=	(empty($sixtermformat)) ? 4 : 7;
 
         	$data['metric']		=	get_string('ilp_mis_attendance_plugin_registerterm_disp_attendance','block_ilp');
-        	$data['overall']	=	$this->percentage($summarydata['present'][0],$summarydata['total'][0]).'%';
-        	$data['one']		=	$this->percentage($summarydata['present'][1],$summarydata['total'][1]).'%';
-        	$data['two']		=	$this->percentage($summarydata['present'][2],$summarydata['total'][2]).'%';
-        	$data['three']		=	$this->percentage($summarydata['present'][3],$summarydata['total'][3]).'%';
+        	$data['overall']	=	$summarydata['att_prec'][0];
+        	$data['one']		=	$summarydata['att_prec'][1];
+        	$data['two']		=	$summarydata['att_prec'][2];
+        	$data['three']		=	$summarydata['att_prec'][3];
 
             if (!empty($sixtermformat)) {
-				$data['four']	=	$this->percentage($summarydata['present'][4],$summarydata['total'][4]).'%';
-        		$data['five']	=	$this->percentage($summarydata['present'][5],$summarydata['total'][5]).'%';
-        		$data['six']	=	$this->percentage($summarydata['present'][6],$summarydata['total'][6]).'%';
+				$data['four']	=	$summarydata['att_prec'][4];
+        		$data['five']	=	$summarydata['att_prec'][5];
+        		$data['six']	=	$summarydata['att_prec'][6];
 			}
 						
         	$flextable->add_data_keyed( $data );
 
     	    $data['metric']		=	get_string('ilp_mis_attendance_plugin_registerterm_disp_punctuality','block_ilp');
-        	$data['overall']	=	$this->percentage($summarydata['late'][0],$summarydata['present'][0]).'%';
-        	$data['one']		=	$this->percentage($summarydata['late'][1],$summarydata['present'][1]).'%';
-        	$data['two']		=	$this->percentage($summarydata['late'][2],$summarydata['present'][2]).'%';
-        	$data['three']		=	$this->percentage($summarydata['late'][3],$summarydata['present'][3]).'%';
+        	$data['overall']	=	$summarydata['pun_perc'][0];
+        	$data['one']		=	$summarydata['pun_perc'][1];
+        	$data['two']		=	$summarydata['pun_perc'][2];
+        	$data['three']		=	$summarydata['pun_perc'][3];
 
             if (!empty($sixtermformat)) {
-				$data['four']	=	$this->percentage($summarydata['late'][4],$summarydata['present'][4]).'%';
-        		$data['five']	=	$this->percentage($summarydata['late'][5],$summarydata['present'][5]).'%';
-        		$data['six']	=	$this->percentage($summarydata['late'][6],$summarydata['present'][6]).'%';
+				$data['four']	=	$summarydata['pun_perc'][4];
+        		$data['five']	=	$summarydata['pun_perc'][5];
+        		$data['six']	=	$summarydata['pun_perc'][6];
 			}	        
         	
         	$flextable->add_data_keyed( $data );
@@ -222,12 +222,12 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin	{
      public function addlinks($content,$params=false) {
      	global $CFG;
      	
-     	$plugin_id	=	get_config('block_ilp','mis_plugin_term_linkedplugin');
+     	$plugin_id	=	get_config('block_ilp','mis_plugin_registerterm_linkedplugin');
      	
      	if (!empty($plugin_id)) {
      		
      		//get the 
-     		$plugin_id	=	get_config('block_ilp','mis_plugin_term_linkedplugin');
+     		$plugin_id	=	get_config('block_ilp','mis_plugin_registerterm_linkedplugin');
      		
      		if (!empty($plugin_id)) {
      			$plugin	=	$this->dbc->get_mis_plugin_by_id($plugin_id);
@@ -285,7 +285,10 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin	{
     
     
     
-    
+function normalise_date($date)    {
+	$date	=	str_replace('/','-',$date);
+	return	$date;
+}     
     
     
     
@@ -333,8 +336,10 @@ function summary_data($data,$term=0) {
 		if(in_array($mark[$markfield],$this->latecodes)){
 			$late[0]++;
 		}
-
-		$mark['Week_No'] = $this->weekno($mark[$cdatefield]);
+		
+		$marktimestamp	=	strtotime($this->normalise_date($mark[$cdatefield]));
+			
+		$mark['Week_No'] = $this->academic_week(date('W',$marktimestamp),$yearstart);
 		
 		for($i = 1; $i <= $this->numterms; $i++) {
 			
@@ -732,7 +737,22 @@ function summary_data($data,$term=0) {
         $string[ 'ilp_mis_attendance_plugin_registerterm_disp_attendance' ] 	= 'Attendance';
         $string[ 'ilp_mis_attendance_plugin_registerterm_disp_absent' ]  	= 'Absent';
         $string[ 'ilp_mis_attendance_plugin_registerterm_disp_present' ]		= 'Present';
-        $string[ 'ilp_mis_attendance_plugin_registerterm_disp_punctuality' ]	= 'Punctuality';		
+        $string[ 'ilp_mis_attendance_plugin_registerterm_disp_punctuality' ]	= 'Punctuality';
+
+        
+        $string[ 'ilp_mis_attendance_plugin_registerterm_overall' ]				= 'All';
+        $string[ 'ilp_mis_attendance_plugin_registerterm_termone' ]				= 'Autumn';
+        $string[ 'ilp_mis_attendance_plugin_registerterm_termtwo' ]				= 'Spring';
+        $string[ 'ilp_mis_attendance_plugin_registerterm_termthree' ]			= 'Summer';
+        $string[ 'ilp_mis_attendance_plugin_registerterm_termfour' ]			= 'Term 4';
+        $string[ 'ilp_mis_attendance_plugin_registerterm_termfive' ]			= 'Term 5';
+        $string[ 'ilp_mis_attendance_plugin_registerterm_termsix' ]				= 'Term 6';
+        
+
+        
+        
+        
+        
 	}
 	
 	

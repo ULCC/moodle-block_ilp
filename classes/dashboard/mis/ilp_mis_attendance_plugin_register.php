@@ -225,7 +225,10 @@ echo'       </div>
 }
     
     
-    
+function normalise_date($date)    {
+	$date	=	str_replace('/','-',$date);
+	return	$date;
+}    
     
     
     
@@ -275,7 +278,9 @@ function summary_data($data,$term=0) {
 			$late[0]++;
 		}
 
-		$mark['Week_No'] = $this->weekno($mark[$cdatefield]);
+		$marktimestamp	=	strtotime($this->normalise_date($mark[$cdatefield]));
+			
+		$mark['Week_No'] = $this->academic_week(date('W',$marktimestamp),$yearstart);
 		
 		for($i = 1; $i <= $this->numterms; $i++) {
 			

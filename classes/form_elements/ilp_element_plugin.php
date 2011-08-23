@@ -112,8 +112,8 @@ class ilp_element_plugin {
         $this->xmldb_field = class_exists('xmldb_field') ? 'xmldb_field' : 'XMLDBField';
         $this->xmldb_key   = class_exists('xmldb_key')   ? 'xmldb_key'   : 'XMLDBKey';
 
-	$local_config_filename = get_class( $this ) . '_pre_items.conf';
-	$this->local_config_file = realpath( __DIR__ . '/plugins/' . $local_config_filename );
+		$local_config_filename = get_class( $this ) . '_pre_items.conf';
+		$this->local_config_file = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/'.$local_config_filename;
     }
 
     /**

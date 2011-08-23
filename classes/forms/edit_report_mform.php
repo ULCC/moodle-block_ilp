@@ -85,6 +85,7 @@ class edit_report_mform extends ilp_moodleform {
 			if (stripos($CFG->release,"2.") !== false) {
 				$mform->addElement('filepicker', 'binary_icon',get_string('binary_icon', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
 			} else {
+				$this->set_upload_manager(new upload_manager('binary_icon', false, false, 0, false, ILP_MAXFILE_SIZE, true, true, false));
         		$mform->addElement('file', 'binary_icon', get_string('binary_icon', 'block_ilp'));				
 			}
 	        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
@@ -103,7 +104,7 @@ class edit_report_mform extends ilp_moodleform {
 			
 			if (empty($data->id)) {
 				
-
+				if (!empty($data->binary_icon)) $data->binary_icon = addslashes($data->binary_icon); 	
 				
             	$data->id = $this->dbc->create_report($data);
             	
@@ -111,6 +112,9 @@ class edit_report_mform extends ilp_moodleform {
             	//that the block has for each role
             	
             	$report_id	=	$data->id;
+            	
+            	var_dump($report_id);
+            	
             	
             	//get all roles in moodle 
             	$roles		=	$this->dbc->get_roles();
@@ -154,7 +158,9 @@ class edit_report_mform extends ilp_moodleform {
 				//check to stop report icons from being overwritten
 				//if the binary_icon param is empty unset it that will stop 
 				//any data that is currently present from being overwritten
-				if (empty($data->binary_icon)) unset($data->binary_icon); 	 
+				if (empty($data->binary_icon)) unset($data->binary_icon); 
+
+				if (!empty($data->binary_icon)) $data->binary_icon = addslashes($data->binary_icon);
         		
             	$this->dbc->update_report($data);
         	}

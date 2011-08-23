@@ -87,29 +87,32 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			$authuserrole	=	$this->dbc->get_role_by_name(AUTH_USER_ROLE);
 			if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
 			
-			if ($roles = get_user_roles($PAGE->context, $USER->id)) {
-			 	foreach ($roles as $role) {
-			 		$role_ids[]	= $role->roleid;
-			 	}
-			}
+			if (isset($PAGE->context))	{
 			
-			$capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
-			
-			$this->secondrow	=	array();
-			
-			//get all reports
-			$reports	=	$this->dbc->get_reports(ILP_ENABLED);
-			if (!empty($reports)) {
-				//create a tab for each enabled report
-				foreach($reports as $r)	{
-					if ($this->dbc->has_report_permission($r->id,$role_ids,$capability->id)) {
-	
-						//the tabitem and selectedtab query string params are added to the linkurl in the 
-						//second_row() function  
-						$this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
+					if ($roles = get_user_roles($PAGE->context, $USER->id)) {
+					 	foreach ($roles as $role) {
+					 		$role_ids[]	= $role->roleid;
+					 	}
 					}
 					
-				}
+					$capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
+					
+					$this->secondrow	=	array();
+					
+					//get all reports
+					$reports	=	$this->dbc->get_reports(ILP_ENABLED);
+					if (!empty($reports)) {
+						//create a tab for each enabled report
+						foreach($reports as $r)	{
+							if ($this->dbc->has_report_permission($r->id,$role_ids,$capability->id)) {
+			
+								//the tabitem and selectedtab query string params are added to the linkurl in the 
+								//second_row() function  
+								$this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
+							}
+							
+						}
+					}
 			}
 		}
     }

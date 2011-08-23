@@ -61,6 +61,7 @@ class ilp_db {
             // skip the ilp_flexible_table
             if(!is_a($data, 'ilp_flexible_table')) {
                 foreach($data as $index => &$datum) {
+           	
                 	//we will skip any index with the prefix binary
                 	if (substr($index, 0,7) != 'binary_') {
 		                $datum = ilp_db::encode($datum);
@@ -75,7 +76,10 @@ class ilp_db {
             $data = ilp_db::decode_htmlchars($data, ENT_QUOTES);
 
             // purify all data (e.g. validate html, remove js and other bad stuff)
-            $data = purify_html($data);
+            
+            //I have had to remove the purify call as it was causing pages to timeout in 1.9
+            //this should be put back in once the ilp is moodle 2.0 only 
+           	$data = purify_html($data);
 
             // encode the purified string
             $data = trim(preg_replace('/\\\/', '&#92;', htmlentities($data, ENT_QUOTES, 'utf-8', false)));

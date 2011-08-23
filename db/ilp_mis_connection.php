@@ -210,16 +210,18 @@ class ilp_mis_connection{
     	if (is_array($procedureargs)) {
 			$temp	=	array();
     		foreach ($procedureargs as $p) {
-    			$temp[]	=	$this->arraytovar($p);
-    		} 
+				$val	=	$this->arraytovar($p);
+			
+    			if (!empty($val)) {
+					$temp[]	=	$val;
+				}
+    		}
     		
     		$args	=	implode(', ',$temp);
     	} else {
     		$args	=	$procedureargs;
     	}
 		$sql	=	"EXECUTE {$procedurename} {$args}";
-		
-		var_dump($sql);
 		
 		$result		= $this->execute($sql);
 		return		(!empty($result->fields))	?	$result->getRows() :	false;
@@ -246,7 +248,7 @@ class ilp_mis_connection{
     */
     public function execute( $sql){
 		try {
-        	$res = $this->db->Execute( $sql ) or die( $this->db->ErrorMsg() );
+        	$res = $this->db->Execute( $sql );
 		} catch (exception $e) {
 			return false;	
 		}

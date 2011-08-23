@@ -382,18 +382,17 @@ class ilp_logging {
      */
      private function entity_type($table, $obj=NULL) {
 		global $CFG;
-     	
+		
      	//get all currently installed plugins
-        $ferecords 	=	$this->formelement_plugins();
+        $ferecords 	=	$this->dbc->get_records('block_ilp_plugin');
         
         if (!empty($ferecords)) {
         	foreach($ferecords as $fe)	{
 				$fetables[]	=	$fe->tablename;        		
         	}
         }
-     	
 
-        //check if the tabkle is a form element plugin 
+        //check if the table is a form element plugin 
      	if (in_array($table,$fetables)) {
       		//get the form element by its tablename
      		$formelement	=	$this->get_plugin_by_tablename($table);

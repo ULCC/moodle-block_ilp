@@ -1,0 +1,6 @@
+1. add the following to the config page of the theme in use this will allow th ilp to display with out side bars:
+
+	'ilp' => array(
+        'file' => 'standard.php',
+        'regions' => array(),
+    ), 
