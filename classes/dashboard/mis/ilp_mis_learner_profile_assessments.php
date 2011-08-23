@@ -86,7 +86,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  				$this->data	= (!empty($this->data)) ?  array_shift($this->data)	:	$this->data; 	
  				
  			} else {
- 				var_dump('table not set');
+
  			}
     }
  	
