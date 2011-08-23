@@ -183,9 +183,6 @@ class ilp_element_plugin {
 	else{
 		//new element - check for config file
 		if(!empty($this->local_config_file)) {
-			
-			var_dump($this->local_config_file);
-			
 			$reportfield->optionlist = self::itemlist_flatten( parse_ini_file( $this->local_config_file ) );
 		}
 	}
