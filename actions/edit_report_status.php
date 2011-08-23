@@ -34,10 +34,14 @@ if (empty($report)) {
 }
 
 //if the report satatus is currently disabled (0) set it to enabled (1)
-$report->status	= (empty($report->status)) ? 1 : 0; 
+if (empty($report->status)) {
+	$res = $dbc->set_report_status($report_id,1); 
+} else {
+	$res = $dbc->set_report_status($report_id,0);
+}
 
 //save the changes to the report
-if ($dbc->update_report($report)) {
+if (!empty($res)) {
 	$resulttext	=	get_string('statuschangesuc','block_ilp');	
 } else {
 	$resulttext	=	get_string('statuschangeerror','block_ilp');

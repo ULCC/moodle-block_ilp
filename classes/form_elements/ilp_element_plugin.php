@@ -112,8 +112,7 @@ class ilp_element_plugin {
         $this->xmldb_field = class_exists('xmldb_field') ? 'xmldb_field' : 'XMLDBField';
         $this->xmldb_key   = class_exists('xmldb_key')   ? 'xmldb_key'   : 'XMLDBKey';
 
-		$local_config_filename = get_class( $this ) . '_pre_items.conf';
-		$this->local_config_file = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/'.$local_config_filename;
+		
     }
 
     /**
@@ -183,7 +182,10 @@ class ilp_element_plugin {
         }
 	else{
 		//new element - check for config file
-		if($this->local_config_file){
+		if(!empty($this->local_config_file)) {
+			
+			var_dump($this->local_config_file);
+			
 			$reportfield->optionlist = self::itemlist_flatten( parse_ini_file( $this->local_config_file ) );
 		}
 	}

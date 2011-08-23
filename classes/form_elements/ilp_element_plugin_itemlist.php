@@ -8,8 +8,13 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 
 
     public function __construct(){
+		global $CFG; 
 		
     	parent::__construct();
+    	
+    	$local_config_filename = get_class( $this ) . '_pre_items.conf';
+		$this->local_config_file = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/'.$local_config_filename;
+    	
         $this->external_items_table = false;
         $this->external_items_keyfield = 'value';
 	    

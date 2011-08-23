@@ -3,4 +3,8 @@
 	'ilp' => array(
         'file' => 'standard.php',
         'regions' => array(),
-    ), 
+    ),
+    
+2. I have encountered a problem when creationg reports in sites with low max execution times this is being caused by 
+the permissions for reports being created for all roles if the problem occurs raise the max execution time. I changed mine 
+from 30 to 90 and it solved the problem 

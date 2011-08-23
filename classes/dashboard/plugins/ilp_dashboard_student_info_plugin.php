@@ -214,23 +214,25 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			
 			
 			//we are going to output the add any reports that have state fields to the percentagebar array 
-			foreach ($reports as $r) {
-				if ($this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
-
-					$reportinfo				=	new stdClass();
-					$reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
-					$reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
-					
-					 //if total_possible is empty then there will be nothing to report
-	    	        if (!empty($reportinfo->total)) {
-	    	        	//calculate the percentage
-	    	        	$reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
-	    	        
-	    	        	$reportinfo->name	=	$r->name;
-
-	    	        	$percentagebars[]	=	$reportinfo;
-	    	        }
-					
+			if (!empty($reports) ) {
+				foreach ($reports as $r) {
+					if ($this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
+	
+						$reportinfo				=	new stdClass();
+						$reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
+						$reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
+						
+						 //if total_possible is empty then there will be nothing to report
+		    	        if (!empty($reportinfo->total)) {
+		    	        	//calculate the percentage
+		    	        	$reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
+		    	        
+		    	        	$reportinfo->name	=	$r->name;
+	
+		    	        	$percentagebars[]	=	$reportinfo;
+		    	        }
+						
+					}
 				}
 			}
 			

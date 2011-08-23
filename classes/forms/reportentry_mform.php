@@ -86,7 +86,9 @@ class report_entry_mform extends ilp_moodleform {
         	
         	$mform->addElement('hidden', 'course_id',$this->course_id);
         	$mform->setType('course_id', PARAM_INT);
-                        
+
+        	if (!empty($reportfields)) {
+        	
 			foreach ($reportfields as $field) {
 				
 				//get the plugin record that for the plugin 
@@ -111,6 +113,8 @@ class report_entry_mform extends ilp_moodleform {
 				//to the form
 				$pluginclass->entry_form($mform);
 			}
+			
+        	}
        		        
 	        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('submit'));
 	        $buttonarray[] = &$mform->createElement('cancel');

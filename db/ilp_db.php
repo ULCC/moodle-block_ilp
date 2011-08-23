@@ -1534,6 +1534,17 @@ class ilp_db_functions	extends ilp_logging {
   		return ($this->dbc->get_records_sql($sql)) ? true: false; 
   	}
   	
+  	
+  	/**
+    * This function sets the status of a report enabled or disabled   
+    * 
+    * @return	mixed  object containing the record or bool false  
+    */
+  	function set_report_status ($report_id,$status)	{	
+  		return $this->dbc->set_field('block_ilp_report',array('status'=>$status),array('id'=>$report_id));
+  	}
+  	
+  	
   	function create_statusfield($statusfield)	{
   		$this->insert_record('block_ilp_plu_rf_sts', $statusfield);
   	}
