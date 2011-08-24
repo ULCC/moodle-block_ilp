@@ -36,13 +36,108 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     /*
     * record data for an actual report
     */
-    public function entry_process_data( $field_id, $entry_id, $data ){
+    public function entry_process_data( $reportfield_id, $entry_id, $data ){
+        $expected_gradelist_label = "{$reportfield_id}_gradeitem_list"; 'reportfield_id';
+        $valuefieldname = "{$reportfield_id}_field";
+        $courseidfieldname = "{$reportfield_id}_subjectid";
+        //@todo
+        //list type data is not captured in $data object, so I am having to get it from global $_POST which is very bad
+        //must find better way
+        $data->$valuefieldname = $_POST[ $expected_gradelist_label ];
+
+
+	  		$result	=	true;
+	  		
+		 	//get the plugin table record that has the reportfield_id 
+		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+		 	if (empty($pluginrecord)) {
+		 		print_error('pluginrecordnotfound');
+		 	}
+		 	
+		 	//check to see if a entry record already exists for the reportfield in this plugin
+            $multiple = !empty( $this->items_tablename );
+		 	$entrydata 	=	$this->dbc->get_pluginentry($this->tablename, $entry_id,$reportfield_id,$multiple);
+		 	
+		 	//if there are records connected to this entry in this reportfield_id 
+			if (!empty($entrydata)) {
+                /***********************************************************************/
+                //maybe this should never happen
+                /***********************************************************************/
+                if(0){
+				//delete all of the entries
+                $extraparams = array( 'audit_type' => $this->audit_type() );
+				foreach ($entrydata as $e)	{
+					$this->dbc->delete_element_record_by_id( $this->data_entry_tablename, $e->id, $extraparams );
+				}
+				}
+			}  
+		 	
+			//create new entries
+			$pluginentry			=	new stdClass();
+            $pluginentry->audit_type = $this->audit_type();
+			$pluginentry->entry_id  = 	$entry_id;
+	 		$pluginentry->value		=	$data->$valuefieldname;
+	 		$pluginentry->user_id	=	$data->user_id;
+	 		$pluginentry->parent_id	=	$reportfield_id;
+	 		$pluginentry->course_id	=	$data->$courseidfieldname;
+	 		$pluginentry->review	=	$data->review;
+
+		    $pluginentry->parent_id	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+
+			if( is_string( $pluginentry->value ))	{
+                //this should never happen for this plugin type: $pluginentry->value should always be array
+	 		    $state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$valuefieldname, $this->external_items_keyfield, $this->external_items_table );
+	 		    $pluginentry->parent_id	=	$state_item->id;	
+	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+			} else if (is_array( $pluginentry->value ))	{
+                //THIS should happen
+				$result	=	$this->write_multiple( $this->data_entry_tablename, $pluginentry );
+			}
+ 
+	 	
+			return	$result;
+    }
+
+	/*
+	* called by entry_process_data
+	* allows multi-select values to be written as multiple rows in entry table
+	* @param string $tablename
+	* @param object $multi_pluginentry ($multi_pluginentry->value is array of strings)
+	* @return boolean
+	*/
+	 protected function write_multiple( $tablename, $multi_pluginentry ){
+		//if we're here, assume $pluginentry->value is array
+		$pluginentry = $multi_pluginentry;
+		$result		=	true;
+		foreach( $multi_pluginentry->value as $value ){
+			$pluginentry->gradeitem_id = $value;
+			$pluginentry->value = grade_tracker_funcs::get_fgrade( $pluginentry->user_id, $pluginentry->gradeitem_id );
+			$pluginentry->name = grade_tracker_funcs::get_gradeitem_name( $value );//$value;///sould be the title of the grade item
+			if (!$this->dbc->create_plugin_entry( $this->items_tablename, $pluginentry )) $result = false;
+		}
+		//if any of the didn't work $result will be false
+		return $result;
+	 }
+
+
+/*
+    public function old_entry_process_data( $reportfield_id, $entry_id, $data ){
+        $expected_gradelist_label = "{$reportfield_id}_gradeitem_list"; 'reportfield_id';
+        
+        $fieldname = "{$reportfield_id}_field";
+        $data->$fieldname = $_POST[ $expected_gradelist_label ];
+        $data->user_id = 999;
+        return parent::entry_process_data( $reportfield_id, $entry_id, $data );
         global $DB;
         //prepare entry
+		  	//create the fieldname
+			$fieldname =	$reportfield_id."_field";
+		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+var_dump($pluginrecord);exit;
 
-		//$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+		$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+var_dump($result);exit;
         
-        echo __LINE__;
         //prepare item list
         if( empty( $data->id ) ){
             //new record
@@ -60,6 +155,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
             //maybe this will never happen
         }
     }
+*/
 
     protected function get_gradeitem_name( $gradeitem_id ){
         return grade_tracker_funcs::get_gradeitem_name( $gradeitem_id );
@@ -70,41 +166,69 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     }
 
     public function load($reportfield_id) {
-        //echo 'loading gradebooktracker';exit;
+        		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
+		if (!empty($reportfield)) {
+			//set the reportfield_id var
+			$this->reportfield_id	=	$reportfield_id;
+			
+			//get the record of the plugin used for the field 
+			$plugin		=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
+						
+			$this->plugin_id	=	$reportfield->plugin_id;
+			
+			//get the form element record for the reportfield 
+			$pluginrecord	=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
+			
+			if (!empty($pluginrecord)) {
+				$this->label			=	$reportfield->label;
+				$this->description		=	$reportfield->description;
+				$this->req				=	$reportfield->req;
+				$this->position			=	$reportfield->position;
+                $this->audit_type       =   $this->audit_type();
+				return true;	
+			}
+		}
     }
     public	function entry_form( &$mform ) {
-        global $CFG,$PAGE,$PARSER,$DB;
-        $entry_id = $PARSER->optional_param( 'entry_id' , 0 , PARAM_INT );
-        $pluginentry = $DB->get_record( $this->tablename, array( 'id' => $entry_id ) );
-        $parentid = $pluginentry->reportfield_id;
-        $subject = $PARSER->optional_param( 'course_id', 0 , PARAM_INT );
+        global $CFG,$PAGE,$PARSER,$DB,$USER;
+        
+        //$pluginentry = $DB->get_record( $this->tablename, array( 'id' => $entry_id ) );
+
+        $parentid = $this->reportfield_id;
+
         $gradebooktracker_file = $CFG->dirroot.'/grade/report/tracker/gradetrackerfuncs.php';
         if( file_exists( $gradebooktracker_file ) ){
-            $gradetracker_exists = true;
-        }
-        if( $gradetracker_exists ){
+			
+			$user_id	=	optional_param('user_id', NULL, PARAM_INT);
+            if( !$user_id ){
+                $user_id = $USER->id;
+            }
+			
             $mform->addElement( 'hidden', 'parent_id', $parentid );
-	        $courselist = grade_tracker_funcs::collect_option_list( 'course' );
+	        //$courselist = grade_tracker_funcs::collect_option_list( 'course' );
+            $course_selector_name = "{$this->reportfield_id}_subjectid";
+            $courselist = grade_tracker_funcs::build_option_array( enrol_get_users_courses( $user_id, true ) , 'id' , 'fullname' );
 	        $courseselect = &$mform->addElement(
 	            'select',
-	            'subjectid',
+	            $course_selector_name,
 	            'Subject',
 		    	$courselist,
 	            array(
                     'class' => 'form_input',
-                    'onchange' => 'javascript:document.location=M.ilp_element_plugin_gradebooktracker_construct_url( document.location, \'course_id\', this.value )'
+                    'onchange' => 'javascript:document.location=M.gradebooktracker_construct_url( document.location, \'' . $course_selector_name . '\', this.value )'
                 )
 	        );
-            $mform->setDefault( 'subjectid', $subject );
+
+			$subject_id	=	optional_param( $course_selector_name , NULL, PARAM_INT );
+            if (!empty($subject_id)) $mform->setDefault( $course_selector_name , $subject_id );
+			
             $mform->setDefault( 'review', 'random comment ' . date( 'Y-m-d H:i:s' ) );
 	
-	        $fieldname = 'gradeitem_list';
+	        $fieldname = "{$this->reportfield_id}_gradeitem_list";
+	        
 	        $label =  'Grades';
 
-            //nasty call to environment - would be better if we could find some way of sending the courseid in as an argument or instance property
-            $course_id = optional_param('course_id', NULL, PARAM_INT);
-
-	        $optionlist = $this->get_grade_item_list( $course_id, $gradetracker_exists );
+	        $optionlist = $this->get_grade_item_list( $subject_id, true );
 	        $select = &$mform->addElement(
 	            'select',
 	            $fieldname,
@@ -228,6 +352,11 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         $table_id = new $this->xmldb_field('id');
         $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
         $table->addField($table_id);
+        
+        //entryid only seems necessary to make the logging happy - this seems a bit wag-the-dog
+        $table_entryid = new $this->xmldb_field('entry_id');
+        $table_entryid->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);
+        $table->addField($table_entryid);
         
         $table_title = new $this->xmldb_field('course_id');
         $table_title->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);

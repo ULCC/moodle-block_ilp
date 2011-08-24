@@ -1,4 +1,4 @@
-M.ilp_element_plugin_gradebooktracker_construct_url = function( location, inparam, invalue ){
+M.gradebooktracker_construct_url = function( location, inparam, invalue ){
     var url = new String( location );
     var qstring = new String();
     var urlparts = url.split( '?' );
@@ -27,4 +27,14 @@ M.ilp_element_plugin_gradebooktracker_construct_url = function( location, inpara
     }
     var outqstring = outqargs.join( "&" );
     return urlparts[ 0 ] + '?' + outqstring;
+}
+M.gradebook_tracker_construct_url_exclusive = function( clocation, argname, value ){
+    var clocationparts = new String( clocation ).split( '?' );
+    var baseurl = clocationparts[ 0 ];
+    if( '' != value ){
+        return baseurl + '?' + argname + '=' + value;
+    }
+    else{
+        return baseurl;
+    }
 }
