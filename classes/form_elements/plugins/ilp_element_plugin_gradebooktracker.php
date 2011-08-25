@@ -220,6 +220,7 @@ var_dump($result);exit;
 	        );
 
 			$subject_id	=	optional_param( $course_selector_name , NULL, PARAM_INT );
+            if( empty( $subject_id ) ) $subject_id = optional_param( 'course_id', NULL, PARAM_INT );
             if (!empty($subject_id)) $mform->setDefault( $course_selector_name , $subject_id );
 			
             $mform->setDefault( 'review', 'random comment ' . date( 'Y-m-d H:i:s' ) );
@@ -240,12 +241,14 @@ var_dump($result);exit;
 	        );
 			$select->setMultiple(true);
 	
+/*
 	        $ta = &$mform->addElement(
 	            'textarea',
 	            'review',
 	            'Review',
 	            ''
 	        );
+*/
 	    }
 	    
 	    //js function for entry form
@@ -370,9 +373,11 @@ var_dump($result);exit;
         $table_userid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_userid);
         
+/*
         $table_review = new $this->xmldb_field('review');
         $table_review->$set_attributes(XMLDB_TYPE_CHAR, 255);
         $table->addField($table_review);
+*/
         
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
