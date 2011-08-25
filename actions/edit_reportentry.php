@@ -27,7 +27,10 @@ $report_id	= $PARSER->required_param('report_id',PARAM_INT);
 
 
 //get the id of the course that is currently being used
-$user_id = $PARSER->required_param('user_id', PARAM_INT);
+$user_id = $PARSER->optional_param('user_id', NULL, PARAM_INT);
+if( empty( $user_id ) ){
+    $user_id = $USER->id;
+}
 
 //if set get the id of the report entry to be edited
 $entry_id	= $PARSER->optional_param('entry_id',NULL,PARAM_INT);
@@ -53,14 +56,16 @@ if (empty($report) || empty($report->status)) {
 
 if (empty($access_report_createreports))	{
 	//the user doesnt have the capability to create this type of report entry
-	print_error('userdoesnothavecreatecapability','block_ilp');	
+//jfp
+//	print_error('userdoesnothavecreatecapability','block_ilp');	
 }
 
 
 if (!empty($entry_id))	{
 	if (empty($access_report_editreports))	{
 		//the user doesnt have the capability to edit this type of report entry
-		print_error('userdoesnothaveeditcapability','block_ilp');	
+//jfp
+//		print_error('userdoesnothaveeditcapability','block_ilp');	
 	}	
 } 
 
