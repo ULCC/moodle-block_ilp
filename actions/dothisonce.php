@@ -1,0 +1,30 @@
+<pre>
+<?php
+require_once('../configpath.php');
+require_once( $CFG->dirroot . '/lib/xmldb/xmldb_object.php' );
+require_once( $CFG->dirroot . '/lib/xmldb/xmldb_table.php' );
+
+$dbman = $DB->get_manager();
+$table = new xmldb_table( 'block_ilp_plu_gradebooktracker_ent' );
+
+$dropfield = new xmldb_field( 'review' );
+
+if($dbman->field_exists( $table, $dropfield ) ){
+    echo "Found 'review': dropping 'review' from block_ilp_plu_gradebooktracker_ent\n";
+    $dbman->drop_field( $table, $dropfield );
+}
+else{
+    echo "Didn't find 'review' in block_ilp_plu_gradebooktracker_ent\n";
+}
+
+$addfield = new xmldb_field( 'entry_id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED ) ;
+if( !$dbman->field_exists( $table, $addfield ) ){
+    echo "adding 'entry_id' to block_ilp_plu_gradebooktracker_ent\n";
+    $dbman->add_field( $table, $addfield );
+}
+else{
+    echo "block_ilp_plu_gradebooktracker_ent.entry_id already exists.\n";
+}
+echo "Finished\n";
+?>
+</pre>
