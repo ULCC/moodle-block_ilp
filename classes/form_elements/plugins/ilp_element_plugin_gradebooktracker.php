@@ -22,9 +22,9 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 	public $data_entry_tablename;
 	public $items_tablename;
 	
-	    /**
-     * Constructor
-     */
+    /**
+    * Constructor
+    */
     function __construct() {
     	$this->tablename = "block_ilp_plu_gradebooktracker";
     	$this->data_entry_tablename = "block_ilp_plu_gradebooktracker_ent";
@@ -34,7 +34,12 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     }
 	
     /*
-    * record data for an actual report
+    * write data for an actual report
+    * take the current grades for a student and write them to the items table for this report
+    * @param int $reportfield_id
+    * @param int $entry_id
+    * @param instance $data
+    * return mixed
     */
     public function entry_process_data( $reportfield_id, $entry_id, $data ){
         $expected_gradelist_label = "{$reportfield_id}_gradeitem_list"; 'reportfield_id';
@@ -93,8 +98,6 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
                 //THIS should happen
 				$result	=	$this->write_multiple( $this->data_entry_tablename, $pluginentry );
 			}
- 
-	 	
 			return	$result;
     }
 
@@ -120,47 +123,21 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 	 }
 
 
-/*
-    public function old_entry_process_data( $reportfield_id, $entry_id, $data ){
-        $expected_gradelist_label = "{$reportfield_id}_gradeitem_list"; 'reportfield_id';
-        
-        $fieldname = "{$reportfield_id}_field";
-        $data->$fieldname = $_POST[ $expected_gradelist_label ];
-        $data->user_id = 999;
-        return parent::entry_process_data( $reportfield_id, $entry_id, $data );
-        global $DB;
-        //prepare entry
-		  	//create the fieldname
-			$fieldname =	$reportfield_id."_field";
-		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
-var_dump($pluginrecord);exit;
-
-		$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
-var_dump($result);exit;
-        
-        //prepare item list
-        if( empty( $data->id ) ){
-            //new record
- 			$entry_id	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$data);
-            //write a row in items for each grade item
-            foreach( $data->gradeitem_list as $gradeitem ){
-                $data->gradeitem_id = $gradeitem;
-                $data->name = $this->get_gradeitem_name( $gradeitem );
-                $data->value = $this->get_gradevalue( $data->user_id, $gradeitem );
-                $this->dbc->create_plugin_entry( $this->items_tablename, $data );
-            }
-        }
-        else{
-            //update existing record
-            //maybe this will never happen
-        }
-    }
-*/
-
+    /*
+    * get a name for a gradeitem
+    * @param int gradeitem_id
+    * @return string
+    */
     protected function get_gradeitem_name( $gradeitem_id ){
         return grade_tracker_funcs::get_gradeitem_name( $gradeitem_id );
     }
     
+    /*
+    * get the final grade for a given student on a given grade item
+    * @param int $student_id
+    * @param int $gradeitem_id
+    * @return string
+    */
     protected function get_gradevalue( $student_id, $gradeitem_id ){
         return grade_tracker_funcs::get_fgrade( $student_id, $gradeitem_id );
     }
@@ -189,6 +166,12 @@ var_dump($result);exit;
 			}
 		}
     }
+
+    /*
+    * create the admin form to create a grade tracker report
+    * allows the tutor to choose the grade items to be recorded
+    * @param moodle_form $mform
+    */
     public	function entry_form( &$mform ) {
         global $CFG,$PAGE,$PARSER,$DB,$USER;
         
@@ -262,6 +245,12 @@ var_dump($result);exit;
     }
 
 
+    /*
+    * get a list of grade items pertaining to a given course
+    * @param int $courseid
+    * @param boolean $gradetracker_exists
+    * @return array
+    */
     protected function get_grade_item_list( $courseid , $gradetracker_exists ){
         if( $gradetracker_exists ){
 	        $objlist = grade_tracker_funcs::get_grade_items_for_course( $courseid );
