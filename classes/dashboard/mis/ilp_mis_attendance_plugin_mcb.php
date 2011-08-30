@@ -128,7 +128,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
      	if (!empty($plugin_id)) {
      		
      		//get the 
-     		$plugin_id	=	get_config('block_ilp','mis_plugin_term_linkedplugin');
+     		$plugin_id	=	get_config('block_ilp','mis_plugin_mcb_linkedplugin');
      		
      		if (!empty($plugin_id)) {
      			$plugin	=	$this->dbc->get_mis_plugin_by_id($plugin_id);
@@ -139,7 +139,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
 					$newurlparams	=	array();
 					if (!empty($urlparams)) {
 	     				foreach ($urlparams as $v) {
-							if (strpos($v,'mis_term_id') === FALSE 
+							if (strpos($v,'mis_period_id') === FALSE && strpos($v,'mis_course_id') === FALSE
 								&& strpos($v,'tabitem') === FALSE && strpos($v,'selectedtab') === FALSE) {
 								array_push($newurlparams,$v); 
 							}
