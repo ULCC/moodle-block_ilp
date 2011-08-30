@@ -134,7 +134,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
 					$newurlparams	=	array();
 					if (!empty($urlparams)) {
 	     				foreach ($urlparams as $v) {
-							if (strpos($v,'mis_term_id') === FALSE 
+							if (strpos($v,'mis_period_id') === FALSE && strpos($v,'mis_course_id') === FALSE
 								&& strpos($v,'tabitem') === FALSE && strpos($v,'selectedtab') === FALSE) {
 								array_push($newurlparams,$v); 
 							}
