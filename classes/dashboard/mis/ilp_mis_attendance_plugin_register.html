@@ -11,11 +11,15 @@
 $i	=	1;
 	foreach ($displayterms as $t) {
 	$mar	=	25 * $i; 
+
+	$header	=	get_config('block_ilp','mis_plugin_register_term'.$t.'header');
+
+	$header	= (!empty($header))	?	$header	:	"Term {$t}";
  
 ?>
 <div style="float:left; width:40%; margin-left: <?php echo $mar;?>;padding-left: 20px; ">
 <table>
-<th><td>Term <?php echo $t;?> Attendance<td><th>
+<th><td><?php echo $header;?> Attendance<td><th>
 <tr><td><?php echo (!empty($summarydata['total'][$t])) ? $summarydata['total'][$t]: 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_possible','block_ilp');?></td><td><?php echo (!empty($summarydata['present'][$t])) ? $summarydata['present'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_present','block_ilp');?></td><td><?php echo (!empty($summarydata['absent'][$t])) ? $summarydata['absent'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_absent','block_ilp');?></td></tr>
 <tr><td><?php echo (!empty($summarydata['att_prec'][$t])) ? $summarydata['att_prec'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_attendance','block_ilp');?></td><td><?php echo (!empty($summarydata['pun_perc'][$t])) ? $summarydata['pun_perc'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_punctuality','block_ilp');?></td></tr>
 </table>

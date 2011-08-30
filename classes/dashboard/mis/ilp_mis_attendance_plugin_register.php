@@ -696,6 +696,21 @@ function summary_data($data,$term=0) {
  	 	
  	 	$this->config_date_element($mform,'mis_plugin_register_term6end',get_string('ilp_mis_attendance_plugin_register_termsixend', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termenddesc', 'block_ilp'),''); 	 	
  	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_term1header',get_string('ilp_mis_attendance_plugin_register_term1header', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termheader', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termone','block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_term2header',get_string('ilp_mis_attendance_plugin_register_term2header', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termheader', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termtwo','block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_term3header',get_string('ilp_mis_attendance_plugin_register_term3header', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termheader', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termthree','block_ilp')); 	 	
+
+ 	 	$this->config_text_element($mform,'mis_plugin_register_term4header',get_string('ilp_mis_attendance_plugin_register_term4header', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termheader', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termfour','block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_term5header',get_string('ilp_mis_attendance_plugin_register_term5header', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termheader', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termfive','block_ilp')); 	 	
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_term6header',get_string('ilp_mis_attendance_plugin_register_term6header', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termheader', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termsix','block_ilp'));
+	
+ 	 	$this->config_text_element($mform,'mis_plugin_register_overallheader',get_string('ilp_mis_attendance_plugin_register_overallheader', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_termheader', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_overall','block_ilp')); 	 	
+ 	 	
+ 	 	
  	 	
  	 	$options = array(
     		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
@@ -857,7 +872,26 @@ function summary_data($data,$term=0) {
         $string[ 'ilp_mis_attendance_plugin_register_disp_attendance' ] 	= 'Attendance';
         $string[ 'ilp_mis_attendance_plugin_register_disp_absent' ]  	= 'Absent';
         $string[ 'ilp_mis_attendance_plugin_register_disp_present' ]		= 'Present';
-        $string[ 'ilp_mis_attendance_plugin_register_disp_punctuality' ]	= 'Punctuality';		
+        $string[ 'ilp_mis_attendance_plugin_register_disp_punctuality' ]	= 'Punctuality';
+
+        $string[ 'ilp_mis_attendance_plugin_register_overall' ]				= 'All';
+        $string[ 'ilp_mis_attendance_plugin_register_termone' ]				= 'Autumn';
+        $string[ 'ilp_mis_attendance_plugin_register_termtwo' ]				= 'Spring';
+        $string[ 'ilp_mis_attendance_plugin_register_termthree' ]			= 'Summer';
+        $string[ 'ilp_mis_attendance_plugin_register_termfour' ]			= 'Term 4';
+        $string[ 'ilp_mis_attendance_plugin_register_termfive' ]			= 'Term 5';
+        $string[ 'ilp_mis_attendance_plugin_register_termsix' ]				= 'Term 6';
+        
+        
+        $string[ 'ilp_mis_attendance_plugin_register_overallheader' ]			= 'Overall header';
+		$string[ 'ilp_mis_attendance_plugin_register_term1header' ]				= 'Term 1 header';
+		$string[ 'ilp_mis_attendance_plugin_register_term2header' ]				= 'Term 2 header';
+		$string[ 'ilp_mis_attendance_plugin_register_term3header' ]				= 'Term 3 header';
+		$string[ 'ilp_mis_attendance_plugin_register_term4header' ]				= 'Term 4 header';
+        $string[ 'ilp_mis_attendance_plugin_register_term5header' ]				= 'Term 5 header';
+        $string[ 'ilp_mis_attendance_plugin_register_term6header' ]				= 'Term 6 header';
+        $string[ 'ilp_mis_attendance_plugin_register_termheader' ]				= 'The header that will be used to when displaying data from this term';
+  
 	}
 	
 	
