@@ -76,7 +76,6 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
 	        //add the row to table
 	        foreach( $this->data as $row ){
 
-
 	            foreach($this->fields as $k => $v) {
 	            	$string		=	"mis_learner_qualifications_{$k}";
 	            	$configvar	=	get_config('block_ilp',$string);
@@ -103,7 +102,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
 	        //buffer out as flextable sends its data straight to the screen we dont want this  
 			ob_start();
 			
-			$flextable->wrap_finish_extra	=	"<div id='ilp_mis_learner_profile_qualifications_average'><label>".get_string( 'ilp_mis_learner_qualifications_average', 'block_ilp' )."</label>".number_format($average,0)."</div>";
+			$flextable->wrap_finish_extra	=	(!empty($row[get_config('block_ilp','mis_learner_qualifications_points')])) ? "<div id='ilp_mis_learner_profile_qualifications_average'><label>".get_string( 'ilp_mis_learner_qualifications_average', 'block_ilp' )."</label>".number_format($average,0)."</div>" : "";
 						
 			//call the html file for the plugin which has the flextable print statement
 			//require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_learner_profile_qualifications.html');
@@ -151,7 +150,8 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  				
  				$this->fields		=	array();
  				
- 				if 	(get_config('block_ilp','mis_learner_qualifications_qual')) 	$this->fields['qual']	=	get_config('block_ilp','mis_learner_qualifications_qual');
+ 				if 	(get_config('block_ilp','mis_learner_qualifications_qual')) 		$this->fields['qual']	=	get_config('block_ilp','mis_learner_qualifications_qual');
+ 				if 	(get_config('block_ilp','mis_learner_qualifications_subject')) 		$this->fields['subject']	=	get_config('block_ilp','mis_learner_qualifications_subject');
  				if 	(get_config('block_ilp','mis_learner_qualifications_grade')) 		$this->fields['grade']	=	get_config('block_ilp','mis_learner_qualifications_grade');
  				if 	(get_config('block_ilp','mis_learner_qualifications_points')) 		$this->fields['points']	=	get_config('block_ilp','mis_learner_qualifications_points');
  				if 	(get_config('block_ilp','mis_learner_qualifications_year')) 		$this->fields['year']	=	get_config('block_ilp','mis_learner_qualifications_year');
@@ -185,6 +185,8 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  	 	
  	 	$this->config_text_element($mform,'mis_learner_qualifications_qual',get_string('ilp_mis_learner_qualifications_qual', 'block_ilp'),get_string('ilp_mis_learner_qualifications_qualdesc', 'block_ilp'),'qualTitle');
 
+ 	 	$this->config_text_element($mform,'mis_learner_qualifications_subject',get_string('ilp_mis_learner_qualifications_subject', 'block_ilp'),get_string('ilp_mis_learner_qualifications_subjectdesc', 'block_ilp'),'subject');
+ 	 	
  	 	$this->config_text_element($mform,'mis_learner_qualifications_grade',get_string('ilp_mis_learner_qualifications_grade', 'block_ilp'),get_string('ilp_mis_learner_qualifications_gradedesc', 'block_ilp'),'grade');
  	 	
  	 	$this->config_text_element($mform,'mis_learner_qualifications_points',get_string('ilp_mis_learner_qualifications_points', 'block_ilp'),get_string('ilp_mis_learner_qualifications_pointsdesc', 'block_ilp'),'points');
@@ -239,6 +241,9 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
         $string['ilp_mis_learner_qualifications_qual']								= 'Qualification data field';
         $string['ilp_mis_learner_qualifications_qualdesc']							= 'The field that holds qualification data';
         
+        $string['ilp_mis_learner_qualifications_subject']								= 'Subject data field';
+        $string['ilp_mis_learner_qualifications_subjectdesc']							= 'The field that holds subject data';
+        
         $string['ilp_mis_learner_qualifications_grade']							= 'Grade data field';
         $string['ilp_mis_learner_qualifications_gradedesc']						= 'Grade data';
         
@@ -260,6 +265,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
         $string['ilp_mis_learner_profile_qualifications_pluginstatusdesc']				= 'Is the block enabled or disabled';
 
         $string['ilp_mis_learner_qualifications_qual_disp']						= 'Qualification';
+        $string['ilp_mis_learner_qualifications_subject_disp']					= 'Subject';
         $string['ilp_mis_learner_qualifications_grade_disp']					= 'Grade';
         $string['ilp_mis_learner_qualifications_points_disp']					= 'Points';
         $string['ilp_mis_learner_qualifications_year_disp']						= 'Year';
