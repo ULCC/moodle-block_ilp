@@ -57,9 +57,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_day','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_room','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_start','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_end','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_tutor','block_ilp');
+			if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_start','block_ilp');
+			if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_end','block_ilp');
+			if(get_config('block_ilp','mis_plugin_course_byclass_tutor')) $headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_tutor','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_overall','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_punct','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_attend','block_ilp');
@@ -68,9 +68,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 	        
 	        $columns[]		=	'day';
 	        $columns[]		=	'room';
-			$columns[]		=	'start';
-			$columns[]		=	'end';
-			$columns[]		=	'tutor';
+			if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $columns[]		=	'start';
+			if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $columns[]		=	'end';
+			if(get_config('block_ilp','mis_plugin_course_byclass_tutor')) $columns[]		=	'tutor';
 	        $columns[]		=	'overall';
 			$columns[]		=	'present';
 			$columns[]		=	'absent';
@@ -97,9 +97,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 	        	foreach ($data as $d) {
 	        		$data['day']	=	$d['day'];
 	        		$data['room'] 	=	$d['room'];
-	        		$data['start']	=	$d['starttime'];
-	        		$data['end'] 	=	$d['endtime'];
-	        		$data['tutor']	=	$d['tutor'];
+    				if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $data['start']	=	$d['starttime'];
+    				if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $data['end'] 	=	$d['endtime'];
+    				if(get_config('block_ilp','mis_plugin_course_byclass_tutor')) $data['tutor']	=	$d['tutor'];
 	        		$data['overall'] =	$d['attendance'];
 	        		$data['present'] =	$d['markspresent'];
 	        		$data['absent']	=	$d['marksabsent'];
@@ -437,15 +437,21 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 	    		//remove any decimal places
 	    		$attendpercent	=	number_format($attendpercent,0);
 	    		
+		$start = false; $end = false;
+    		if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')){
 	    		$timestamp		=	strtotime($d[$this->fields['starttime']]);
-	    		
 	    		$start			=	date('G:i',$timestamp);
-	    		
+		} 	
+    		if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')){
 	    		$timestamp		=	strtotime($d[$this->fields['endtime']]);
 	    		$end			=	date('G:i',$timestamp);
+		} 		
+	    		
+	    		
 	    		
 	    		
 	    		//fill the couse month array position with percentage for the month
+/*
 	    		$normdata[$dayid][]	=	array(		  'day'				=>  $day,
 	    											  'room'			=>  $d[$this->fields['room']],
 	    											  'attendance'		=>  $attendpercent,
@@ -457,6 +463,20 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 	    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
 	    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
 	    											  'markslate'		=>	$d[$this->fields['markslate']]);
+*/
+			$freshrow = array();
+			$freshrow[ 'day' ] = $day; 
+			$freshrow[ 'room' ] = $d[ $this->fields[ 'room' ] ];
+			$freshrow[ 'attendance' ] = $attendpercent;
+    			if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $freshrow[ 'starttime' ] =  $start;
+    			if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $freshrow[ 'endtime' ] =  $end;
+    			if(get_config('block_ilp','mis_plugin_course_byclass_tutor')) $freshrow[ 'tutor' ] = $d[ $this->fields['tutor'] ]; 
+			$freshrow[ 'markstotal' ] =	$d[$this->fields['markstotal']];
+			$freshrow[ 'markspresent' ]	= $d[ $this->fields['markspresent'] ];
+			$freshrow[ 'marksabsent' ]	= $d[$this->fields['marksabsent']];
+			$freshrow[ 'marksauthabsent' ] = $d[$this->fields['marksauthabsent']];
+			$freshrow[ 'markslate' ] = $d[ $this->fields['markslate'] ];
+			$normdata[ $dayid ][] = $freshrow;
 	    		
 	    	}
     	
