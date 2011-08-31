@@ -1541,7 +1541,8 @@ class ilp_db_functions	extends ilp_logging {
     * @return	mixed  object containing the record or bool false  
     */
   	function set_report_status ($report_id,$status)	{	
-  		return $this->dbc->set_field('block_ilp_report',array('status'=>$status),array('id'=>$report_id));
+  		//return $this->dbc->set_field('block_ilp_report',array('status'=>$status),array('id'=>$report_id));
+  		return $this->dbc->set_field('block_ilp_report','status', $status, array('id'=>$report_id));
   	}
   	
   	
