@@ -91,8 +91,6 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 		            				array( get_string('ilp_mis_attendance_plugin_simple_punctuality','block_ilp') , $data[ $punctuality_field  ] )
 		        				 );
 	        } 
-	        
-	        	        var_dump($data[ $attendance_field ]);
         }
     }
     
