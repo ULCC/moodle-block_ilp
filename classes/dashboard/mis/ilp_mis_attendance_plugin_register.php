@@ -361,6 +361,7 @@ function summary_data($data,$term=0) {
 			$cdatefield	=	get_config('block_ilp','mis_plugin_register_datetime');
 			$markfield	=	get_config('block_ilp','mis_plugin_register_mark');
 			$timefield	=	get_config('block_ilp','mis_plugin_register_starttime');
+			$timefield	=	(!empty($timefield))	?	$timefield	:	0;	
 			$cnamefield	=	get_config('block_ilp','mis_plugin_register_coursename');
 	
 			$startdate 		= $this->terms[0]['startts'];
@@ -435,8 +436,8 @@ function summary_data($data,$term=0) {
 			//we will now take the attendance data and construct an array separating class on day and time basis
 			foreach ($data as $att) {
 				$tempday	=	$this->courseday($att[$cdatefield]);
-				$temptime	=	$this->coursetime($att[$timefield]);
-				
+				$temptime	=	(isset($att[$timefield])) ?	$this->coursetime($att[$timefield])	:	'N/A';
+					
 				$registers[$att[$cidfield]][$tempday][$temptime][] = $att;
 			}
 			

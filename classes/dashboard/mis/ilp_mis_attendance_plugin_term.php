@@ -433,9 +433,12 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
 	    			$termdata[$termid]	=	array();
 	    		}
 	    		
+	    		//auth absent data is not required so we make must set it to 0 if not field given
+	    		$authab	=	(isset($this->fields['marksauthabsent'])) ? $d[$this->fields['marksauthabsent']] : 0;
+	    		
 	    		
 	    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
-	    		$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
+	    		$present	=	$this->presents_cal($d[$this->fields['markspresent']],$authab);
 	    		
 	    		//caculate the months attendance percentage 
 	    		$attendpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
@@ -451,7 +454,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin{
 	    											  'markstotal'		=>	$d[$this->fields['markstotal']],
 	    											  'markspresent'	=>	$d[$this->fields['markspresent']],
 	    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
-	    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
+	    											  'marksauthabsent'	=>	$authab,
 	    											  'markslate'		=>	$d[$this->fields['markslate']]);
 	    	}
 	

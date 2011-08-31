@@ -160,7 +160,7 @@ class edit_report_mform extends ilp_moodleform {
 
 				if (!empty($data->binary_icon)) {
 					//moodle 1.9 doesnt add slashes so we need to do this
-					if (stripos($CFG->release,"2.") == false) {
+					if (stripos($CFG->release,"2.") === false) {
 						$data->binary_icon = addslashes($data->binary_icon);
 					}
 				}
