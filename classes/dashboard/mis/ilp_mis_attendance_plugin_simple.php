@@ -42,6 +42,8 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        //setup the flextable
 	        $flextable->setup();
 	        
+
+	        
 	        //add the row to table
 	        foreach( $this->data as $row ){
 	            $data = array();
@@ -71,8 +73,8 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
         $tablename 			= get_config('block_ilp','mis_plugin_simple_studenttable'); //$this->params[ 'student_table' ];
         if (!empty($tablename)) {
 	        $keyfield 			= get_config('block_ilp','mis_plugin_simple_studentid');
-	        $attendance_field 	= get_config('block_ilp','mis_plugin_simple_punchuality');
-	        $punctuality_field 	= get_config('block_ilp','mis_plugin_simple_attendance');
+	        $attendance_field 	= get_config('block_ilp','mis_plugin_simple_attendance');
+	        $punctuality_field 	= get_config('block_ilp','mis_plugin_simple_punchuality');
 	        
 	        //is the id a string or a int
     		$idtype	=	get_config('block_ilp','mis_plugin_course_idtype');
@@ -89,6 +91,8 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 		            				array( get_string('ilp_mis_attendance_plugin_simple_punctuality','block_ilp') , $data[ $punctuality_field  ] )
 		        				 );
 	        } 
+	        
+	        	        var_dump($data[ $attendance_field ]);
         }
     }
     
