@@ -55,8 +55,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 	        $headers		=	array();
 	        $columns		=	array();
 
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_day','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_room','block_ilp');
+		if 	(get_config('block_ilp','mis_plugin_course_byclass_datetime'))	$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_day','block_ilp');
+    				if 	(get_config('block_ilp','mis_plugin_course_byclass_room')) $headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_room','block_ilp');
 			if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_start','block_ilp');
 			if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_end','block_ilp');
 			if(get_config('block_ilp','mis_plugin_course_byclass_tutor')) $headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_tutor','block_ilp');
@@ -65,9 +65,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_attend','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_unauth','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_byclass_disp_late','block_ilp');
-	        
-	        $columns[]		=	'day';
-	        $columns[]		=	'room';
+	        	
+		if 	(get_config('block_ilp','mis_plugin_course_byclass_datetime'))	$columns[]		=	'day';
+		if 	(get_config('block_ilp','mis_plugin_course_byclass_room')) $columns[]		=	'room';
 			if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $columns[]		=	'start';
 			if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $columns[]		=	'end';
 			if(get_config('block_ilp','mis_plugin_course_byclass_tutor')) $columns[]		=	'tutor';
@@ -95,8 +95,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 	        
 	        foreach( $this->normdata as $dayid => $data )	{
 	        	foreach ($data as $d) {
-	        		$data['day']	=	$d['day'];
-	        		$data['room'] 	=	$d['room'];
+	    			if 	(get_config('block_ilp','mis_plugin_course_byclass_datetime'))	$data['day']	=	$d['day'];
+    				if 	(get_config('block_ilp','mis_plugin_course_byclass_room'))	$data['room'] 	=	$d['room'];
     				if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $data['start']	=	$d['starttime'];
     				if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $data['end'] 	=	$d['endtime'];
     				if(get_config('block_ilp','mis_plugin_course_byclass_tutor')) $data['tutor']	=	$d['tutor'];
@@ -354,8 +354,10 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     		$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
     		
     		if (!empty($mis_period_id)) {
-    			$pidfield	=	get_config('block_ilp','mis_plugin_course_byclass_period');
-    			$keyfields[$pidfield]	= array('=' => $mis_period_id);	
+			if( get_config( 'block_ilp', 'mis_plugin_course_byclass_period' ) ){
+    				$pidfield	=	get_config('block_ilp','mis_plugin_course_byclass_period');
+    				$keyfields[$pidfield]	= array('=' => $mis_period_id);	
+			}
     		}
     		
     	    if (!empty($mis_course_id)) {
@@ -401,23 +403,28 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     	if (!empty($data)) {
 	    	foreach ($data as $d) {
 	    		
-	    		//convert the given date to a timestamp
+	    		if 	(get_config('block_ilp','mis_plugin_course_byclass_datetime')) {		
+				//convert the given date to a timestamp
 				$datetime		=	$d[$this->fields['datetime']];
-				
-	    		$datetime		=	strtotime($datetime);
+	    			$datetime		=	strtotime($datetime);
 				
 				//convert thge timestamp to a 3 letter day representation
-	    		$day			=	date('D',$datetime);
+	    			$day			=	date('D',$datetime);
 	    		
-	    		//convert the day to a number 1-7 1- monday 7-sunday
-	    		//the id will be used to sort the results 
-	    		$dayid			=	date('N',$datetime);
+	    			//convert the day to a number 1-7 1- monday 7-sunday
+	    			//the id will be used to sort the results 
+	    			$dayid			=	date('N',$datetime);
 	    		
 	    		
-	    		//check if an array position for the course exists 
-	    		if (!isset($normdata[$dayid])) {
-	    			$normdata[$dayid]	=	array();
-	    		}
+		    		//check if an array position for the course exists 
+		    		if (!isset($normdata[$dayid])) {
+	    				$normdata[$dayid]	=	array();
+	    			}
+			}
+			else{
+				$day = '';
+				$dayid = 'a';
+			}
 	    		
 	    		if (!isset($this->courselist[$d[$this->fields['courseid']]]) && isset($d[$this->fields['coursename']])) {
 	    			$this->courselist[$d[$this->fields['courseid']]] = $d[$this->fields['coursename']];
@@ -465,11 +472,11 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
 	    											  'markslate'		=>	$d[$this->fields['markslate']]);
 */
 			$freshrow = array();
-			$freshrow[ 'day' ] = $day; 
-			$freshrow[ 'room' ] = $d[ $this->fields[ 'room' ] ];
+	    		if 	(get_config('block_ilp','mis_plugin_course_byclass_datetime'))	$freshrow[ 'day' ] = $day; 
+    			if 	(get_config('block_ilp','mis_plugin_course_byclass_room'))	$freshrow[ 'room' ] = $d[ $this->fields[ 'room' ] ];
 			$freshrow[ 'attendance' ] = $attendpercent;
-    			if 	(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $freshrow[ 'starttime' ] =  $start;
-    			if 	(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $freshrow[ 'endtime' ] =  $end;
+    			if(get_config('block_ilp','mis_plugin_course_byclass_starttime')) $freshrow[ 'starttime' ] =  $start;
+    			if(get_config('block_ilp','mis_plugin_course_byclass_endtime')) $freshrow[ 'endtime' ] =  $end;
     			if(get_config('block_ilp','mis_plugin_course_byclass_tutor')) $freshrow[ 'tutor' ] = $d[ $this->fields['tutor'] ]; 
 			$freshrow[ 'markstotal' ] =	$d[$this->fields['markstotal']];
 			$freshrow[ 'markspresent' ]	= $d[ $this->fields['markspresent'] ];
