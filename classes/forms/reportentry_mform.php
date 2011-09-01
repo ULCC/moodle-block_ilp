@@ -101,7 +101,10 @@ class report_entry_mform extends ilp_moodleform {
 				include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
 				
 				if(!class_exists($classname)) {
-				 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+					//this should only happen on a non-existant plugin_id (which, ideally, will never arise).
+					//if it does, continue silently.
+					continue;
+				 	//print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
 				}
 				
 				//instantiate the plugin class
