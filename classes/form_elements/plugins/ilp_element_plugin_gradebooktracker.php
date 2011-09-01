@@ -48,20 +48,28 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         //@todo
         //list type data is not captured in $data object, so I am having to get it from global $_POST which is very bad
         //must find better way
-        if( isset( $_POST[ $expected_gradelist_label ] ) ){ $data->$valuefieldname = $_POST[ $expected_gradelist_label ];}
-	else{ $data->$valuefieldname = false; }
+        if( isset( $_POST[ $expected_gradelist_label ] ) ){ 
+		$data->$valuefieldname = $_POST[ $expected_gradelist_label ];
+	}
+	else{ 
+		$data->$valuefieldname = false; 
+	}
 
 
 	  		$result	=	true;
 	  		
 		 	//get the plugin table record that has the reportfield_id 
+//var_dump($reportfield_id);exit;
 		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
 		 	if (empty($pluginrecord)) {
-		 		print_error('pluginrecordnotfound');
+				//no gradebook tracker exists for the given reportfield_id, so make one
+	 			$pluginrecord	=	new stdClass();
+				$pluginrecord->reportfield_id = $reportfield_id;
+		 		$pluginrecord->id = $this->dbc->create_plugin_entry($this->tablename,$pluginrecord);
 		 	}
 		 	
 		 	//check to see if a entry record already exists for the reportfield in this plugin
-            $multiple = !empty( $this->items_tablename );
+            		$multiple = !empty( $this->items_tablename );
 		 	$entrydata 	=	$this->dbc->get_pluginentry($this->tablename, $entry_id,$reportfield_id,$multiple);
 		 	
 		 	//if there are records connected to this entry in this reportfield_id 
