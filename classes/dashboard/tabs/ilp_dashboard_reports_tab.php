@@ -16,7 +16,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 	function __construct($student_id=null,$course_id=null)	{
 		global 	$CFG,$USER,$PAGE;
 				
-		$this->linkurl				=	$CFG->wwwroot.$_SERVER["SCRIPT_NAME"]."?user_id=".$student_id."&course_id={$course_id}";
+		//$this->linkurl				=	$CFG->wwwroot.$_SERVER["SCRIPT_NAME"]."?user_id=".$student_id."&course_id={$course_id}";
+		
+		$this->linkurl					=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id=".$student_id."&course_id={$course_id}";
 		
 		$this->student_id	=	$student_id;
 		
