@@ -48,7 +48,8 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         //@todo
         //list type data is not captured in $data object, so I am having to get it from global $_POST which is very bad
         //must find better way
-        $data->$valuefieldname = $_POST[ $expected_gradelist_label ];
+        if( isset( $_POST[ $expected_gradelist_label ] ) ){ $data->$valuefieldname = $_POST[ $expected_gradelist_label ];}
+	else{ $data->$valuefieldname = false; }
 
 
 	  		$result	=	true;
@@ -68,24 +69,34 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
                 /***********************************************************************/
                 //maybe this should never happen
                 /***********************************************************************/
-                if(0){
-				//delete all of the entries
-                $extraparams = array( 'audit_type' => $this->audit_type() );
-				foreach ($entrydata as $e)	{
-					$this->dbc->delete_element_record_by_id( $this->data_entry_tablename, $e->id, $extraparams );
-				}
+                		if(0){
+					//delete all of the entries
+				        $extraparams = array( 'audit_type' => $this->audit_type() );
+					foreach ($entrydata as $e)	{
+						$this->dbc->delete_element_record_by_id( $this->data_entry_tablename, $e->id, $extraparams );
+					}
 				}
 			}  
 		 	
 			//create new entries
-			$pluginentry			=	new stdClass();
-            $pluginentry->audit_type = $this->audit_type();
+			$pluginentry		=	new stdClass();
+            		$pluginentry->audit_type = 	$this->audit_type();
 			$pluginentry->entry_id  = 	$entry_id;
-	 		$pluginentry->value		=	$data->$valuefieldname;
+	 		$pluginentry->value	=	$data->$valuefieldname;
 	 		$pluginentry->user_id	=	$data->user_id;
 	 		$pluginentry->parent_id	=	$reportfield_id;
-	 		$pluginentry->course_id	=	$data->$courseidfieldname;
-	 		$pluginentry->review	=	$data->review;
+			if( isset( $data->$courseidfieldname ) ){
+	 			$pluginentry->course_id	=	$data->$courseidfieldname;
+			}
+			else{
+	 			$pluginentry->course_id	=	$data->course_id;
+			}
+			if( isset( $data->review ) ){
+				/*****************************************/
+				//I think this should also never happen
+				/*****************************************/
+	 			$pluginentry->review	=	$data->review;
+			}
 
 		    $pluginentry->parent_id	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
 
@@ -278,14 +289,15 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
      * Delete a form element
      */
     public function delete_form_element($reportfield_id) {
-		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
+	$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
         $extraparams = array(
             'audit_type' => $this->audit_type(),
             'label' => $reportfield->label,
             'description' => $reportfield->description,
             'id' => $reportfield_id
         );
-    	return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
+    	//return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
+    	return parent::delete_form_element( $reportfield_id, $extraparams );	//$extraparams seeme to be irrelevant at the moment
     }
 	 
     public function audit_type(){
