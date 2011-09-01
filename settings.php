@@ -101,7 +101,7 @@ $options = array(
     'mssql' => 'Mssql',
     'mysql' => 'Mysql',
     'odbc' => 'Odbc',
-    'oracle' => 'Oracle',
+    'oci8' => 'Oracle',
     'postgres' => 'Postgres',
     'sybase' => 'Sybase'
 );
