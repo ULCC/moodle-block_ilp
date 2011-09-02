@@ -490,14 +490,15 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
 	  */
-	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+    public function view_data( $reportfield_id,$entry_id,&$entryobj ){
         global $CFG, $DB;
+	$fieldname	=	$reportfield_id."_field";
         //find grade tracker entries for this user
         $trackerfile = $CFG->dirroot . '/grade/report/tracker/student_grade_tracker.php';
         if( file_exists( $trackerfile ) ){
             require_once( $trackerfile );
             $tracker = new student_grade_tracker( $entryobj->user_id );
-            $tracker->display_saved_reports( $this->data_entry_tablename, $this->items_tablename );
+            $entryobj->$fieldname = $tracker->display_saved_reports( $this->data_entry_tablename, $this->items_tablename, $reportfield_id );
            
             //$tracker->display();
         }
@@ -505,6 +506,6 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
             echo "missing module: grade/report/tracker";
         }
 		//$this->entry_data( $reportfield_id,$entry_id, $entryobj );
-	 }
+     }
 
 }
