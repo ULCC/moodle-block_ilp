@@ -52,7 +52,7 @@
 						$comment_creator	=	$this->dbc->get_user_by_id($c->creator_id);
 					?>
 					<div class="comment">
-								<p><?php  echo strip_tags($c->value); ?></p>
+								<p><?php  echo $c->value; ?></p>
 								<div class="info">
 								<?php echo get_string('creator','block_ilp').": ".fullname($comment_creator);?> |
 								<?php echo get_string('date').": ".userdate($c->timemodified, get_string('strftimedate'));?> |

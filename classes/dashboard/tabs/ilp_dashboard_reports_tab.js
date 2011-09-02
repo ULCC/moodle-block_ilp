@@ -165,6 +165,21 @@ M.ilp_dashboard_reports_tab = {
 
 		// allow the accordions to be seen now that rendering is complete
 		Dom.removeClass('content', 'hideaccordion');
+		
+		if (document.getElementById('reportstateselect') != 'null') {
+			//add the onchange event to the select button
+			document.getElementById('reportstateselect').addEventListener(
+				     'change',
+				     function() {console.log('test')},
+				     false
+				  );			
+			
+			
+		}
+		
+
+		
+		
 	}
 
 }

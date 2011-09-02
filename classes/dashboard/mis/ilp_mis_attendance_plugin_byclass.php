@@ -397,6 +397,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     	$normdata		=	array();
     	$daylist		=	array();
     	
+    	
+    	
     	if (!empty($data)) {
 	    	foreach ($data as $d) {
 	    		

@@ -145,23 +145,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
     	if (!empty($this->plugin_id) && !empty($this->selectedtab)) {	
     	
-    		//explode the $selectedtab id on '-' which will return an array with up to 3 values
-			$seltab	=	explode(':',$this->selectedtab,-2);
-			
-			//if a second row tab has been selected 
-			if (!empty($seltab[1])) {
-				
-				//find out if the report has state fields
-				if ($this->dbc->has_plugin_field('block_ilp_plu_ste',$seltab[1]))	{
-					
-					//get all state items for the table and create a tab for each.
-					$states	=	$this->dbc->get_report_state_items($seltab[1],'ilp_element_plugin_state');
-					//create a tab for each enabled state item
-					foreach($states as $s)	{
-						$this->thirdrow[]	=	array('id'=>$seltab[1].'-'.$s->id,'link'=>$this->linkurl,'name'=>$s->name);
-					}		
-				} 
-			}
     		
     	}
     	    	
@@ -199,7 +182,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			$this->selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
 
 			//get the tabitem param if has been set
-			$this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_INT);
+			$this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_CLEAN);
 			
 			//start buffering output
 				ob_start();
@@ -212,7 +195,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 									
 					$report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
 					$state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
-					
+										
 					if ($report	=	$this->dbc->get_report_by_id($report_id)) {
 						
 						if ($report->status == ILP_ENABLED) {
@@ -221,8 +204,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							
 							echo $this->get_header($report->name,$icon);
 							
+							$stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
+							
 							//output the print icon
-							echo "<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
+							echo "<div>{$stateselector}</div><div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
 								 <div class='clearer'></div>";
 							
 							$reportname	=	$report->name;	
@@ -393,6 +378,28 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			return $pluginoutput;
 	}
 
+	function stateselector($report_id)	{
+			$stateselector		=	"";
+		
+			//find out if the report has state fields
+			if ($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
+					$states		=	$this->dbc->get_report_state_items($report_id,'ilp_element_plugin_state');
+					$stateselector	=	"<form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
+											<label>Report State</label>
+											<input type='hidden' name='course' value='{$this->course_id}' />
+											<input type='hidden' name='user_id' value='{$this->student_id}' />
+											<input type='hidden' name='selectedtab' value='{$this->plugin_id}' />
+											<select name='tabitem' id='reportstateselect'>
+											<option value='{$this->plugin_id}:{$report_id}' >Any State</option>";
+											if (!empty($states)) {
+												foreach($states as $s)	{
+													$stateselector .= "<option value='{$this->plugin_id}:{$report_id}:{$s->id}'>{$s->name}</option>";
+												}
+											}
+					$stateselector	.=	"</select><input type='submit' value='Apply Filter' id='stateselectorsubmit' /></form>";
+			}
+			return $stateselector;
+	}
 
 	
 	
