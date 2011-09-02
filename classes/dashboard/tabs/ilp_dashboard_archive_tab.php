@@ -45,6 +45,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {	
+			$this->secondrow	=	array();
 			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('overview','block_ilp'));
 			$this->secondrow[]	=	array('id'=>3,'link'=>$this->linkurl,'name'=>get_string('target','block_ilp'));
 			$this->secondrow[]	=	array('id'=>4,'link'=>$this->linkurl,'name'=>get_string('report1','block_ilp'));
