@@ -347,7 +347,11 @@ ilp .hiddencontainer	{
 	display				:inline;
 }
 
-
+ #student_list_container {
+	
+	overflow	: auto;
+	
+}
 
 /*
 *	MIS plugin css   
@@ -502,6 +506,8 @@ ilp .hiddencontainer	{
 	margin-top				: 10px;
 	margin-bottom			: 10px;
 }
+
+
 
 
 /* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific

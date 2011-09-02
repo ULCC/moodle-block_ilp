@@ -91,7 +91,7 @@ if(!class_exists($classname)) {
 $pluginclass	=	new $classname();
 
 //has the maximum number of this field type in this report been reached? 
-if (!$pluginclass->can_add($report_id))	{
+if (!$pluginclass->can_add($report_id) && empty($reportfield_id))	{
 		
 	
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;

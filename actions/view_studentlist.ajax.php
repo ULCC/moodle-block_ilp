@@ -115,7 +115,7 @@ $flextable->define_headers($headers);
 
 $flextable->set_attribute('summary', get_string('studentslist', 'block_ilp'));
 $flextable->set_attribute('cellspacing', '0');
-$flextable->set_attribute('class', 'generaltable fit');
+$flextable->set_attribute('class', 'generaltable fit overflowtable');
 
 
 $flextable->initialbars(true);

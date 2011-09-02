@@ -1697,7 +1697,8 @@ class ilp_db_functions	extends ilp_logging {
                       WHERE 	ra.userid = {$user_id}
                         AND 	ra.contextid = c.id
                         AND 	c.instanceid = u.id
-                        AND 	c.contextlevel = ".CONTEXT_USER;
+                        AND 	c.contextlevel = ".CONTEXT_USER
+  						." GROUP BY u.id";
   		
   		return	$this->dbc->get_records_sql($sql);
  	}
