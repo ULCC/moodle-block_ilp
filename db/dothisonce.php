@@ -5,6 +5,11 @@ require_once( $CFG->dirroot . '/lib/xmldb/xmldb_object.php' );
 require_once( $CFG->dirroot . '/lib/xmldb/xmldb_table.php' );
 
 $dbman = $DB->get_manager();
+$table = new xmldb_table( 'block_ilp_plu_hte_ent' );
+$field = new xmldb_field( 'value' );
+$field->setType( XMLDB_TYPE_TEXT );
+$dbman->change_field_type( $table, $field );
+/*
 $table = new xmldb_table( 'block_ilp_plu_gradebooktracker_ent' );
 
 $dropfield = new xmldb_field( 'review' );
@@ -25,6 +30,7 @@ if( !$dbman->field_exists( $table, $addfield ) ){
 else{
     echo "block_ilp_plu_gradebooktracker_ent.entry_id already exists.\n";
 }
+*/
 echo "Finished\n";
 ?>
 </pre>
