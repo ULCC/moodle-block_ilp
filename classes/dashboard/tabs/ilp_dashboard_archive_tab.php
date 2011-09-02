@@ -46,7 +46,6 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {	
 			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>'archive report name');
-			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>'archive report name 2');
 		}
     }
     
