@@ -45,7 +45,14 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {	
-			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>'archive report name');
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('overview','block_ilp'));
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('target','block_ilp'));
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('report1','block_ilp'));
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('report2','block_ilp'));
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('report3','block_ilp'));
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('report4','block_ilp'));
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('subject_report','block_ilp'));
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>get_string('personal_report','block_ilp'));
 		}
     }
     
@@ -95,7 +102,8 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 
 		if ($this->dbc->get_user_by_id($this->student_id)) {
 	
-			//called by script to display	
+			//called by script to display
+			echo 'Hello';	
 			
 			
 			
