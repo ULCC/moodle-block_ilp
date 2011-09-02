@@ -32,6 +32,20 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     	
     	parent::__construct();
     }
+	/*
+	* get the list options with which to populate the edit element for this list element
+	* this is a bit different from other list item types, so needs special treatment
+	*/
+	public function return_data( &$reportfield ){
+		$data_exists = $this->dbc->plugin_data_item_exists_gradebooktracker( $this->tablename, $reportfield->id );
+		if( empty( $data_exists ) ){
+			//if no, get options list
+			$reportfield->optionlist = $this->get_option_list_text( $reportfield->id );
+		}
+		else{
+			$reportfield->existing_options = $this->get_option_list_text( $reportfield->id , '<br />' );
+		}
+	}
 	
     /*
     * write data for an actual report

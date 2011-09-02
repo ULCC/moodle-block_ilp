@@ -930,6 +930,22 @@ class ilp_db_functions	extends ilp_logging {
 		return	$this->dbc->get_records_sql( $sql ); 
 	}  
 	
+	/*
+	* special version of plugin_data_item_exists for gradebook tracker
+	* @param string $tablename
+	* @param int $reportfield_id
+	*/
+    function plugin_data_item_exists_gradebooktracker( $tablename, $reportfield_id ){
+	$sql = "
+		SELECT *
+		FROM $tablename ele
+		JOIN {$tablename}_ent entry ON entry.parent_id = ele.reportfield_id
+		JOIN {$tablename}_items item ON item.parent_id = entry.id
+		WHERE ele.reportfield_id = $reportfield_id
+	";
+	return	$this->dbc->get_records_sql( $sql ); 
+    }
+	
 	
 	
 
