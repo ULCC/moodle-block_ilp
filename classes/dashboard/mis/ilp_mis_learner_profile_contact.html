@@ -1,9 +1,9 @@
 <div id="ilp_mis_learner_profile_contact">
+
 	<div class="contactboxes">
-		<div class="contactheader"><?php echo get_string('ilp_mis_learner_profile_contact_disp_personal','block_ilp') ?></div>
+		<h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_personal','block_ilp') ?></h3>
 		<label ><?php echo get_string('name') ?></label>
-		<?php echo fullname($user); ?><br />
-		
+		<?php echo fullname($user); ?><br />		
 		<?php if ( isset($this->fields['studentid']) && !empty($this->data[$this->fields['studentid']])) {?>
 			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_studentid','block_ilp') ?></label>
 			<?php echo $this->data[$this->fields['studentid']]; ?><br />
@@ -17,8 +17,9 @@
 			<?php echo userdate($this->data[$this->fields['dob']]);?><br />
 		<?php } ?>
 	</div>
+	
 	<div class="contactboxes">
-		<div class="contactheader"><?php echo get_string('ilp_mis_learner_profile_contact_disp_contact','block_ilp') ?></div>
+		<h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_contact','block_ilp') ?></h3>
 		<?php if (isset($this->fields['email']) && !empty($this->data[$this->fields['email']])) {?>
 			<?php echo $this->data[$this->fields['email']]; ?><br />
 		<?php } ?>
@@ -37,12 +38,11 @@
 		<?php if (isset($this->fields['emernumber']) && !empty($this->data[$this->fields['emernumber']])) {?>
 			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_emernumber','block_ilp') ?></label>
 			<?php echo $this->data[$this->fields['emernumber']];?><br />
-		<?php } ?>
-		
+		<?php } ?>		
 	</div>
 	
 	<div class="contactboxes">
-		<div class="contactheader"><?php echo get_string('ilp_mis_learner_profile_contact_disp_address','block_ilp') ?></div>
+		<h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_address','block_ilp') ?></h3>
 		<?php if (isset($this->fields['addressone']) && !empty($this->data[$this->fields['addressone']])) {?>
 			<?php echo $this->data[$this->fields['addressone']]; ?><br />
 		<?php } ?>
@@ -59,7 +59,6 @@
 			<?php echo $this->data[$this->fields['postcode']]; ?><br />
 		<?php } ?>
 	</div>
-	<div class="clearer"></div>
-	
+
 </div>
 <div class="clearer"></div>
