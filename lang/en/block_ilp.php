@@ -212,6 +212,17 @@
 
 	$string['unknown'] 							= 	'Unknown';
 
+	//Archive Titles
+	$string['overview'] 						= 	'Overview';
+	$string['personal_report'] 					= 	'Personal Reports';	
+	$string['report1'] 							= 	'Progress Review';
+	$string['report2'] 							= 	'Concern';
+	$string['report3'] 							= 	'Comment';
+	$string['report4'] 							= 	'Contribution';
+	$string['subject_report'] 					= 	'Subject Reports';	
+	$string['student_info'] 					= 	'Student Info';
+	$string['target']							=	'Targets';
+
     //Config Form DB Connection Section
     $string[ 'mis_connection' ]                  =   'MIS Connection';
     $string[ 'db_connection' ]                  =   'DB Connection';
