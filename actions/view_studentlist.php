@@ -47,8 +47,15 @@ if (empty($access_viewotherilp)  && !empty($course_id))	{
 //check if any tutess exist
 
 // setup the navigation breadcrumbs
-//block name
-$PAGE->navbar->add(get_string('ilpname', 'block_ilp'),null,'title');
+
+if (!empty($course_id)) {
+	$listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$course_id}";
+} else {
+	$listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
+}
+
+//add the page title
+$PAGE->navbar->add(get_string('ilps','block_ilp'),$listurl,'title');
 
 //title
 if (!empty($course_id)) {
@@ -58,11 +65,9 @@ if (!empty($course_id)) {
 	$title		=	get_string('mytutees','block_ilp');
 }
 
-//add the page title
+//block name
 $PAGE->navbar->add($title,null,'title');
 
-//section name
-$PAGE->navbar->add(get_string('dashboard','block_ilp'),null,'title');
 
 // setup the page title and heading
 $SITE	=	$dbc->get_course_by_id(SITEID);

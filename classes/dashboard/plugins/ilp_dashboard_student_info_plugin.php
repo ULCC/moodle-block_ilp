@@ -59,7 +59,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 					$tutorslist[]	=	fullname($t);
 				}					
 			} else {
-				$tutorslist[]	=	get_string('unknown','block_ilp');
+				$tutorslist		=	"";
 			}
 			
 			//get the students current status

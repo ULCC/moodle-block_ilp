@@ -10,6 +10,7 @@
 	$string['addsel'] 				= 	'Add selected';
 	
 	$string['allowcomments']		= 	'Allow comments';
+	$string['allcourses']			= 	'All Courses';
 	$string['anystatus']			= 	'Any Status';
 	$string['apply'] 				= 	'Apply';
 	$string['applyfilter'] 				= 	'Apply Filter';
@@ -90,6 +91,7 @@
 	
 	
 	$string['ilpname']				=	'ILP';
+	$string['ilps']					=	'ILPs';
 	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	$string['intid']				=	'Int ID';
 	
@@ -126,6 +128,7 @@
 	$string['moveup']		 		= 	'Move up';
 	$string['mytutor']				=	'My Tutor:';
 	$string['mytutees']				=	'My Tutees';
+	$string['myilp']				=	'My ILP';
 	$string['multipleentries']		=	'Allow Multiple Entries';
 	
 	
@@ -150,6 +153,7 @@
 	$string['passcsscolour']		=	'Pass CSS colour';
 	$string['passcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in a pass state';
 	$string['perpage'] 				=	'per page';
+	$string['personal'] 			=	'Personal (non course related)';
 	$string['pluginconfig'] 		= 	'Plugin Config';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['plugintype'] 			= 	'Plugin Type';

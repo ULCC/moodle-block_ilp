@@ -36,20 +36,19 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
         return $string;
     }
 	
-	protected function get_option_list( $reportfield_id ){
-		//return $this->optlist2Array( $this->get_optionlist() );   	
-		$outlist = array();
-		if( $reportfield_id ){
-			//$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename );
-			$objlist = $this->dbc->get_courses();
-			foreach( $objlist as $obj ){
-				$outlist[ $obj->id ] = $obj->shortname;
-			}
+	function get_option_list( $reportfield_id,$user_id=false ){
+		$courseoptions = array();
+		
+		$courseoptions['-1']	=	get_string('personal','block_ilp');
+		$courseoptions[0]		=	get_string('allcourses','block_ilp');
+		//check if the user_id has been set 
+		$courselist = (!empty($user_id)) ? $this->dbc->get_user_courses($user_id) : $this->dbc->get_courses();
+		
+		foreach( $courselist as $c ){
+			$courseoptions[ $c->id ] = $c->shortname;
 		}
-		if( !count( $outlist ) ){
-			echo "no items in {$this->items_tablename}";
-		}
-		return $outlist;
+		
+		return $courseoptions;
 	}
     
 	
@@ -91,12 +90,10 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 	  		$fieldname	=	$reportfield_id."_field";
 	 		
 	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,false);
-			
  	
 			if (!empty($entry)) {
 		 		$fielddata	=	array();
 		 		$comma	= "";
-		 		
 		 		
 			 	//loop through all of the data for this entry in the particular entry		 	
 			 	foreach($entry as $e) {
@@ -130,10 +127,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 		 	$fielddata	=	array();
 
 		 	//loop through all of the data for this entry in the particular entry		 	
-		 	//foreach($entry as $e) {
 		 		$fielddata[]	=	$entry->value;
-		 		//$fielddata[]	=	$e;
-		 	//}
 		 	
 		 	//save the data to the objects field
 	 		$entryobj->$fieldname	=	$fielddata;
@@ -166,10 +160,9 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 		 	//if there are records connected to this entry in this reportfield_id 
 			if (!empty($entrydata)) {
 				//delete all of the entries
-				//foreach ($entrydata as $e)	{
                     $extraparams = array( 'audit_type' => $this->audit_type() );
 					$this->dbc->delete_element_record_by_id($this->data_entry_tablename,$entrydata->id,$extraparams);
-				//}
+
 			}  
 		 	
 			//create new entries
@@ -191,6 +184,56 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 			return	$result;
 	 }
 	
+   /**
+    * this function returns the mform elements that will be added to a report form
+	*
+    */
+	
+    public function entry_form( &$mform ) {
+    	
+    	global	$PARSER;
+    	
+    	
+    	//get the id of the course that is currently being used
+		$user_id = $PARSER->optional_param('user_id', NULL, PARAM_INT);
+
+		//get the id of the course that is currently being used
+		$course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
+    	
+    	//create the fieldname
+    	$fieldname	=	"{$this->reportfield_id}_field";
+    	
+		//definition for user form
+		$optionlist = $this->get_option_list( $this->reportfield_id, $user_id );
+
+    	if (!empty($this->description)) {
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
+    		$this->label = '';
+    	} 
+
+    	
+    	//text field for element label
+        $select = &$mform->addElement(
+            'select',
+            $fieldname,
+            $this->label,
+	    	$optionlist,
+            array('class' => 'form_input')
+        );
+		
+        if( OPTIONMULTI == $this->selecttype ){
+			$select->setMultiple(true);
+		}
+        
+		if (!empty($course_id)) $select->setValue($course_id);
+		
+		
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        $mform->setType('label', PARAM_RAW);
+
+    }
+	 
+	 
     /**
     * this function returns the mform elements taht will be added to a report form
 	*

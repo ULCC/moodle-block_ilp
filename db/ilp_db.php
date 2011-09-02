@@ -1126,21 +1126,12 @@ class ilp_db_functions	extends ilp_logging {
 
     	//if the the id of a status has been given then we need to add mroe contitions to
     	//find the reports in this state
-    	if (!empty($status_id)) {
-    		$tables		=	", {$CFG->prefix}block_ilp_report as r,
-    						   {$CFG->prefix}block_ilp_report_field as rf,
-    						   {$CFG->prefix}block_ilp_plugin as p,
-    						   {$CFG->prefix}block_ilp_plu_ste as s,
-    						   {$CFG->prefix}block_ilp_plu_ste_items as si,
+    	if (!empty($state_id)) {
+    		$tables		=	", {$CFG->prefix}block_ilp_plu_ste_ent as se
     						   ";
     						   
-    		$where		=	" AND	r.id				=	e.report_id
-    						  AND	r.id				=	rf.report_id
-    						  AND 	rf.plugin_id		=	p.id
-    						  AND	p.name				=	'{$pluginname}'
-    						  AND	rf.id				=	s.reportfield_id
-    						  AND	si.parent_id		=	s.id
-    						  AND	si.id				=	{$state_id}";
+    		$where		=	" 	AND e.id	=	se.entry_id
+    							AND	se.parent_id	=	{$state_id}";
     						   		
     	}
     	
@@ -1150,8 +1141,7 @@ class ilp_db_functions	extends ilp_logging {
     				 WHERE		e.report_id		=	{$report_id}
     				 AND 		e.user_id	=	{$user_id}
     				 {$where}";
-    	
-    	
+    				 
     	return $this->dbc->get_records_sql($sql);
     }
     
@@ -1401,17 +1391,20 @@ class ilp_db_functions	extends ilp_logging {
     public	function get_report_state_items($report_id,$pluginname)	{
 			global 		$CFG;
     	
-			$sql	=	"SELECT		s.name as name,
-    								s.value as value,
-    								s.id as id
+			$sql	=	"SELECT		i.name as name,
+    								i.value as value,
+    								i.id as id
     					 FROM 		{$CFG->prefix}block_ilp_report_field as rf,
     					 			{$CFG->prefix}block_ilp_plugin as p,
-    					 			{$CFG->prefix}block_ilp_pu_sts as s,
-    					 WHERE		p.id			=	rf.plugin_id
-    					 AND		s.reportfield_id	=	rf.id
-    					 AND		rf.id			=	{$report_id}
+    					 			{$CFG->prefix}block_ilp_plu_ste as s,
+    					 			{$CFG->prefix}block_ilp_plu_ste_items as i
+    					 			
+    					 WHERE		rf.id			=	s.reportfield_id
+    					 AND		p.id			=	rf.plugin_id
+    					 AND		s.id			=	i.parent_id	
+    					 AND		rf.report_id	=	{$report_id}
     					 AND		p.name			=	'{$pluginname}'";
-
+    					 			
     		return 		$this->dbc->get_records_sql($sql);
     }
     
@@ -2033,6 +2026,19 @@ class ilp_db_functions	extends ilp_logging {
     
     function update_config_setting($setting) {
 		return $this->dbc->update_record('config_plugins',$setting);
+    }
+    
+    
+    function get_report_coursefield($entry_id,$reportfield_id)	{
+    	
+    	$sql	=	"SELECT 	* 
+    				 FROM		{block_ilp_plu_crs} as c,
+    				 			{block_ilp_plu_crs_ent} as ce 
+    				 WHERE		c.id = ce.parent_id
+    				 AND		c.reportfield_id 	= 	{$reportfield_id}
+    				 AND		entry_id			=	{$entry_id}";
+    	
+    	return 	$this->dbc->get_record_sql($sql);
     }
     
 }

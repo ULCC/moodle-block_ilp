@@ -231,8 +231,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 						
 							if (!empty($has_courserelated))	{
 								$courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
-								//the should not be anymore than one of these fields in a report	
-								foreach ($courserelated as $cr) {
+								//the should not be anymore than one of these fields in a report
+							foreach ($courserelated as $cr) {
 										$dontdisplay[] 	=	$cr->id;
 										$courserelatedfield_id	=	$cr->id;	
 								}
@@ -303,8 +303,17 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 									$entry_data->entry_id		=	$entry->id;
 									
 									if ($has_courserelated) {
-										$course	=	$this->dbc->get_course_by_id($courserelatedfield_id);
-										$entry_data->coursename = (!empty($course)) ? $course->shortname : '';
+										$coursename	=	false;
+										$crfield	=	$this->dbc->get_report_coursefield($entry->id,$courserelatedfield_id);
+										if (empty($crfield)) {
+											$coursename	=	get_string('allcourses','block_ilp');
+										} else if ($crfield == '-1') {
+											$coursename	=	get_string('personal','block_ilp');
+										} else {
+											$crc	=	$this->dbc->get_course_by_id($crfield->value);
+											if (!empty($crc)) $coursename	=	$crc->shortname;
+										}
+										$entry_data->coursename = (!empty($coursename)) ? $coursename : '';
 									}
 									
 									foreach ($reportfields as $field) {

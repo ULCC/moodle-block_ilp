@@ -34,12 +34,28 @@ $dbc = new ilp_db();
 
 $plpuser	=	$dbc->get_user_by_id($user_id);
 
+$dashboardurl	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&course_id={$course_id}";
+$userprofileurl	=	$CFG->wwwroot."/user/profile.php?id={$user_id}";
+if ($user_id != $USER->id) {
+	if (!empty($access_viewotherilp)) {
+		$listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$course_id}";
+	} else {
+		$listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
+	}
+	
+	$PAGE->navbar->add(get_string('ilps', 'block_ilp'),$listurl,'title');
+	$PAGE->navbar->add(get_string('ilpname', 'block_ilp'),$dashboardurl,'title');
+} else {
+	$PAGE->navbar->add(get_string('myilp', 'block_ilp'),$dashboardurl,'title');
+}
+
+
+
 // setup the navigation breadcrumbs
-//block name
-$PAGE->navbar->add(get_string('ilpname', 'block_ilp'),null,'title');
+
 
 //user intials
-$PAGE->navbar->add(fullname($plpuser),null,'title');
+$PAGE->navbar->add(fullname($plpuser),$userprofileurl,'title');
 
 //section name
 $PAGE->navbar->add(get_string('dashboard','block_ilp'),null,'title');
