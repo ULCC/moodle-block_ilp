@@ -157,7 +157,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      */
     function get_header($headertext,$icon)	{
 		//setup the icon				
-		$icon 	=	 "<div class='reports-head'><img id='reporticon' class='icon_med' alt='$headertext ".get_string('reports','block_ilp')."' src='$icon' /></div>";
+		$icon 	=	 "<img id='reporticon' class='icon_med' alt='$headertext ".get_string('reports','block_ilp')."' src='$icon' />";
     	
     	return "<h2>{$icon}{$headertext}</h2></div>";
     }
@@ -207,8 +207,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							$stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
 							
 							//output the print icon
-							echo "<div>{$stateselector}</div><div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
-								 <div class='clearer'></div>";
+							echo "{$stateselector}<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
+								 ";
 							
 							$reportname	=	$report->name;	
 							//get all of the fields in the current report, they will be returned in order as
@@ -393,7 +393,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			//find out if the report has state fields
 			if ($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
 					$states		=	$this->dbc->get_report_state_items($report_id,'ilp_element_plugin_state');
-					$stateselector	=	"<form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
+					$stateselector	=	"<div class='report_state'><form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
 											<label>Report State</label>
 											<input type='hidden' name='course' value='{$this->course_id}' />
 											<input type='hidden' name='user_id' value='{$this->student_id}' />
@@ -405,7 +405,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 													$stateselector .= "<option value='{$this->plugin_id}:{$report_id}:{$s->id}'>{$s->name}</option>";
 												}
 											}
-					$stateselector	.=	"</select><input type='submit' value='Apply Filter' id='stateselectorsubmit' /></form>";
+					$stateselector	.=	"</select><input type='submit' value='Apply Filter' id='stateselectorsubmit' /></div></form>";
 			}
 			return $stateselector;
 	}
