@@ -110,7 +110,7 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 	        $flextable->set_attribute('class', 'flexible generaltable');
 	        
 	        
-	        $flextable->wrap_start_extra	=	"<span id='ilp_mis_misc_timetable_header'>".get_string('ilp_mis_misc_timetable_timetable_disp','block_ilp')." ".get_string('ilp_mis_misc_timetable_week_disp','block_ilp')." {$this->timetableweek} </span>";
+	        $flextable->wrap_start_extra	=	"<h3>".get_string('ilp_mis_misc_timetable_timetable_disp','block_ilp')." ".get_string('ilp_mis_misc_timetable_week_disp','block_ilp')." {$this->timetableweek} </h3>";
 	        
 			$params		=	explode('&',$_SERVER['QUERY_STRING']);
 
