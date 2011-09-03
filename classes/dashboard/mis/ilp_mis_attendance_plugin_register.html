@@ -7,6 +7,7 @@
 <tr><td><?php echo (!empty($summarydata['att_prec'][0])) ? $summarydata['att_prec'][0] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_attendance','block_ilp');?></td><td><?php echo (!empty($summarydata['pun_perc'][0])) ? $summarydata['pun_perc'][0] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_punctuality','block_ilp');?></td></tr>
 </table>
 </div>
+<div class="clearer"> </div>
 <?php if (!empty($displayterms)) {
 $i	=	1;
 	foreach ($displayterms as $t) {
