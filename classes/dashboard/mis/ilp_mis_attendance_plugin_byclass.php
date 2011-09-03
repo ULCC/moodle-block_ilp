@@ -45,7 +45,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin	{
     		//set up the flexible table for displaying
 
 	        //instantiate the ilp_ajax_table class
-	        $flextable = new ilp_mis_ajax_table( 'attendance_byclass',true ,'ilp_mis_attendance_plugin_byclass');
+	        $flextable = new ilp_mis_ajax_table( 'attendance_byclass',true ,'ilp_mis_attendance_plugin_byclass_container');
 	
 	        //setup the headers and columns with the fields that have been requested 
 

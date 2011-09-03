@@ -12,18 +12,45 @@
 
 #ilp-container { padding:0; margin: 0; width: 100%; }
 
-.ilp #studentinfo-container{ width: 100%; }
-.ilp #left-studentinfo { float:left; width:10%; padding:2% 0; background:white; }
-.ilp #middle-studentinfo { float:left; width:40%;padding:2%; background:white; border-right: 1px solid #ccc; }
-.ilp #right-studentinfo { float:left; width:40%;padding:2%; background:white; }
-.ilp #studentinfo-container p{ padding: 0; margin: 3px 0; }
+.ilp #studentinfo-container{ 
+	width: 100%;
+	display:block; 
+	margin: 0 0 20px 0;
+}
+.ilp #studentinfo-container:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.ilp #left-studentinfo { 
+	float:left; 
+	width:10%; 
+	padding:0 10px; 
+}
+.ilp #middle-studentinfo { 
+	float:left; 
+	width:20%;
+	padding:0 10px; 
+}
+.ilp #right-studentinfo { 
+	float:left; 
+	width:60%;
+	padding:0 10px;
+	border-left: 1px solid #ccc;
+}
+.ilp #studentinfo-container p{ 
+	padding: 0; 
+	margin: 3px 0;
+}
 
 .clearfix:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; } /* slightly enhanced, universal clearfix hack - http://perishablepress.com/press/2008/02/05/lessons-learned-concerning-the-clearfix-css-hack/ */
 .clearfix { display: inline-block; }
 /* start commented backslash hack \*/ * html .clearfix { height: 1%; }
 .clearfix { display: block; } /* close commented backslash hack */
 
-/* Entries section */
+/* ENTRIES */
 
 .ilp .entries-container{width: 100%; border-bottom: 1px dotted #333333;}
 .ilp  #left-entries { float:left; width:6%; padding:2%; background:white; }
@@ -35,6 +62,173 @@
 .ilp  #right-entries .add a{ background: #333; color: #fff; padding: 5px; text-decoration:none;}
 .ilp  #right-entries .add a:hover{ background: red; color: #fff; padding: 5px; }
 .ilp .entries-container .icon_small img{height:75px;width: 75px;	}
+
+/* ATTENDANCE */
+
+/* ATTENDANCE - Register by Class */
+
+.ilp #ilp_mis_attendance_plugin_byclass_container{
+	width: 80%;
+	display:block; 
+	margin: 0 auto;
+}
+.ilp #ilp_mis_attendance_plugin_byclass_container:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+/* ATTENDANCE - Register */
+
+.ilp #ilp_mis_attendance_plugin_register th{
+	text-align:left;
+}
+.ilp #ilp_mis_attendance_plugin_register .course-attendance{
+	width:33%;
+	float:left;
+	margin-right:20px;
+	display:inline;
+}
+.ilp #ilp_mis_attendance_plugin_register .attendance{
+	width:33%;
+	margin-right: 20px; 
+	float:left;
+}
+.ilp #ilp_mis_attendance_plugin_register{ 
+	width: 100%;
+	display:block; 
+	margin: 0;
+	padding: 0;
+}
+.ilp .attendance-grid{
+    overflow: auto;
+    overflow-y: hidden;
+	-ms-overflow-y: hidden;
+}
+#ilp-attendance-grid {
+	border:1px solid #ddd;
+}
+#ilp-attendance-grid .termweeks{	
+	font-weight: bold;
+}
+#ilp-attendance-grid th{
+	border:1px solid #ddd;
+	background: #666;
+	color: #fff;
+}
+#ilp-attendance-grid td{
+	border:1px solid #ddd;
+}
+/** LEARNER PROFILE - Initial Assessment */
+
+.ilp #ilp_mis_learner_profile_assessments{
+	width: 30%;
+	display:block; 
+	margin: 0 auto;
+}
+.ilp #ilp_mis_learner_profile_assessments:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.ilp #ilp_mis_learner_profile_assessments h3	{
+	border-bottom: 2px solid #000;
+}
+.ilp #ilp_mis_learner_profile_assessments th{
+	text-align:left;
+}
+
+/** LP - Contact */
+
+.ilp #ilp_mis_learner_profile_contact{
+	width: 80%;
+	display:block; 
+	margin: 0 auto;
+}
+.ilp #ilp_mis_learner_profile_contact:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.ilp #ilp_mis_learner_profile_contact h3{
+	border-bottom: 2px solid #000;
+}
+.ilp #ilp_mis_learner_profile_contact .contactboxes	{
+	width:30%;
+	display:inline;
+	padding:10px;
+	float:	left;	
+}
+
+/** LP - Qualifications */
+
+#ilp_mis_learner_profile_qualifications{
+	width: 50%;
+	display:block; 
+	margin: 0 auto;
+}
+#ilp_mis_learner_profile_qualifications:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+
+/** LP - Exam Timetable **/
+
+.ilp #ilp_mis_misc_exam_timetable{
+	width: 50%;
+	display:block; 
+	margin: 0 auto;
+}
+.ilp #ilp_mis_misc_exam_timetable:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+/** LP - Lesson Timetable **/
+
+.ilp #ilp_mis_misc_timetable{
+	width: 50%;
+	display:block; 
+	margin: 0 auto;
+}
+.ilp #ilp_mis_misc_timetable:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+
+/** MIS Plugins -  **/
+
+.ilp #ilp_mis_misc_fees{
+	width: 30%;
+	display:block; 
+	margin: 0 auto;
+}
+.ilp #ilp_mis_misc_fees:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.ilp #ilp_mis_misc_fees h3	{
+	border-bottom: 2px solid #000;
+}
+.ilp #ilp_mis_misc_fees th{
+	text-align:left;
+}
 
 /* Reports section */
 
@@ -55,9 +249,16 @@
 .ilp .comment {padding: 10px 2%;}
 .ilp .comment .info{font-size: .9em; text-align: right; border-top: 1px solid #ccc;padding: 5px 10px 10px 10px; color: #999999;}
  
+/* Tabs */ 
+.tabtree .tabrow0 .tabrow1 { padding: 10px; border-bottom: 2px solid #ddd;}
  
  
- 
+/* Tables */ 
+.ilp th{
+	font-weight: bold;
+}
+/* general */ 
+
 
 .ilp .view-report{background: #ccc;}
 .ilp .desciptivetext 	{
@@ -128,14 +329,6 @@
 .ilp .pagelinks #leftlinks	{
 	
 }
-
-.ilp #studentinfoimage	{
-	display					: inline;
-	padding					: 0 20px 0px 20px;
-	float					: left;	
-}
-
-
 .ilp #reportimage	{
 
 	padding					: 0 20px 0 0; 	
@@ -353,107 +546,6 @@ ilp .hiddencontainer	{
 	
 }
 
-/*
-*	MIS plugin css   
-*	@todo this should ideally be included in the plugins however moodle 2.0 uses pure css files so we have to come up with a way
-*	to include it until that time its in this css file
-*/
-
-/** ilp_mis_learner_profile_contact */
-
-.ilp #ilp_mis_learner_profile_contact	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: auto;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-.ilp #ilp_mis_learner_profile_contact .contactboxes	{
-	width					:	30%;
-	display					:	inline;
-	padding					:	5px;
-	float					:	left;
-	
-}
-
-.ilp #ilp_mis_learner_profile_contact .contactheader	{
-	width					:	100%;
-	border					: thin solid black;
-}
-
-/** ilp_mis_learner_profile_assessment */
-
-.ilp #ilp_mis_learner_profile_assessments	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: 20%;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-.ilp #ilp_mis_learner_profile_assessments .assessmentsboxes	{
-	width					:	95%;
-	display					:	inline;
-	padding					:	5px;
-	float					:	left;
-	
-}
-
-.ilp #ilp_mis_learner_profile_assessments .assessmentsheader	{
-	width					:	100%;
-	border					: thin solid black;
-}
-
-/** ilp_mis_learner_profile_qualifications */
-
-.ilp #ilp_mis_learner_profile_qualifications	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: 25%;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-.ilp #ilp_mis_learner_profile_qualifications_average 	{
-	text-align				:	right;
-}
-
-.ilp #ilp_mis_learner_profile_qualifications_average label	{
-	margin-right			:	10px;
-}
-
-/** ilp_mis_misc_fees **/
-
-.ilp #ilp_mis_misc_fees {
-	
-	border					: thin solid black;
-	padding					: 10px;
-	width					: 25%;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-.ilp #ilp_mis_misc_fees .feesheader	{
-	width					:	100%;
-	border					: thin solid black;
-}
-
-.ilp #ilp_mis_misc_fees label	{
-	margin-right					:	10px;
-}
-
-/** ilp_mis_misc_exam_timetable **/
-
-.ilp #ilp_mis_misc_exam_timetable	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: auto;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-
 /** ilp_mis_misc_performance_ind **/
 
 .ilp #ilp_mis_misc_performance_ind	{
@@ -464,16 +556,6 @@ ilp .hiddencontainer	{
 	margin-bottom			: 10px;
 }
 
-
-/** ilp_mis_misc_timetable **/
-
-.ilp #ilp_mis_misc_timetable	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: 35%;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
 
 
 
@@ -499,14 +581,8 @@ ilp .hiddencontainer	{
 
 /** ilp_mis_attendance_plugin_term **/
 
-.ilp #ilp_mis_attendance_plugin_term	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: auto;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
+.ilp #ilp_mis_attendance_plugin_term	{width: 100%; border:0;}
+.ilp #ilp_mis_attendance_plugin_term table{margin:0;}
 
 
 
