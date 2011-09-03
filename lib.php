@@ -84,6 +84,18 @@ function ilp_records_to_menu($records, $field1, $field2, $callback = null, $call
 }
 
 
+function ilp_get_user_role_ids($context,$user_id)	{
+	$role_ids	=	array();
+	
+	if ($roles = get_user_roles($context, $user_id)) {
+	 	foreach ($roles as $role) {
+	 		$role_ids[]	= $role->roleid;
+	 	}
+	}
+	
+	return $role_ids;
+}
+
 /**
  * Removes any resources from the given array that are disabled in either the global or instance config.
  *

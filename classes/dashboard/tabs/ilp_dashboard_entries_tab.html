@@ -36,9 +36,9 @@ foreach ($reportslist as $rep) {
 				<?php 
 					//edit entry will empty except when the report does not allow multiple entries and a entry already exits
   
-					if (empty($rep->editentry)) { ?>
+					if (empty($rep->editentry) && !empty($rep->canadd)) { ?>
 					<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}&course_id={$this->course_id}"; ?>' ><?php echo get_string('addnew','block_ilp'); ?></a>
-				<?php }  else { ?>
+				<?php }  else if (!empty($rep->canedit)) { ?>
 					<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}&course_id={$this->course_id}&entry_id={$rep->editentry}"; ?>' ><?php echo get_string('edit'); ?></a>			
 				<?php } ?>
 			</div>

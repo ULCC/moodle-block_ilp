@@ -60,7 +60,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 	 * @return none
 	  */
 	function display($selectedtab=null)	{
-		global 	$CFG;
+		global 	$CFG,$PAGE,$USER;
 		
 		
 		$pluginoutput	=	"";
@@ -75,6 +75,10 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 					$reports		=	$this->dbc->get_reports(ILP_ENABLED);
 					$reportslist	=	array();
 					if (!empty($reports)) {	
+						
+						$role_ids	=	ilp_get_user_role_ids($PAGE->context,$USER->id);
+						$authuserrole	=	$this->dbc->get_role_by_name(AUTH_USER_ROLE);
+						if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
 						
 						//cycle through all reports and save the relevant details
 						foreach ($reports	as $r) {
@@ -98,8 +102,6 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 								$detail->achieved	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
 								$detail->state_report	=	true;
 							}
-		
-							
 							
 							//get the last updated report entry
 							$lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
@@ -110,7 +112,16 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 							//then we need to find a report entry instance this will be editable
 							$detail->editentry	=	(empty($detail->frequency) && !empty($lastentry)) ?  $lastentry->id : false;
 							
-							$detail->lastmod	=	(!empty($lastentry->timemodified)) ?  userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');	
+							$detail->lastmod	=	(!empty($lastentry->timemodified)) ?  userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
+
+							$addcapability		=	$this->dbc->get_capability_by_name('block/ilp:addreport');
+														
+							$detail->canadd	= ($this->dbc->has_report_permission($r->id,$role_ids,$addcapability->id)) ? true : false;
+							
+							$editcapability		=	$this->dbc->get_capability_by_name('block/ilp:editreport');
+														
+							$detail->canedit	= ($this->dbc->has_report_permission($r->id,$role_ids,$editcapability->id)) ? true : false;
+							
 							$reportslist[]			=	$detail;
 						}
 					}

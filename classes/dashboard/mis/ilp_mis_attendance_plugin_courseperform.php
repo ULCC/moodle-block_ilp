@@ -39,7 +39,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin	
 
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_courseperform_course','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_courseperform_attendance','block_ilp');
-			$headers[]		=	get_string('ilp_mis_attendance_plugin_courseperform_punchuality','block_ilp');
+			$headers[]		=	get_string('ilp_mis_attendance_plugin_courseperform_punctuality','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_courseperform_grade','block_ilp');
 			$headers[]		=	get_string('ilp_mis_attendance_plugin_courseperform_performance','block_ilp');
 	        
@@ -225,7 +225,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin	
         
         $string[ 'ilp_mis_attendance_plugin_courseperform_course' ] 		  	= 'Course';
         $string[ 'ilp_mis_attendance_plugin_courseperform_attendance' ]   		= 'Attendance';
-        $string[ 'ilp_mis_attendance_plugin_courseperform_punchuality' ]   	= 'Punchuality';
+        $string[ 'ilp_mis_attendance_plugin_courseperform_punctuality' ]   	= 'Punctuality';
         $string[ 'ilp_mis_attendance_plugin_courseperform_grade' ]   		= 'Grade';
         $string[ 'ilp_mis_attendance_plugin_courseperform_performance' ]   		= 'Performance';
         

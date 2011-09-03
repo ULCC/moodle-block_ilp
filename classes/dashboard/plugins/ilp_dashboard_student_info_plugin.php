@@ -68,6 +68,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 				$statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->parent_id);
 			}   
 			
+			$userstatuscolor	=	get_config('block_ilp', 'passcolour');
+			 
+			if (!empty($statusitem))	{
+				if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
+			} 
+			
 			//TODO place percentage bar code into a class 
 			
 			$percentagebars	=	array();
@@ -290,7 +296,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			$form	.=	"<input type='hidden' name='user_modified_id' id='user_modified_id' value='{$USER->id}' >";
 			$form	.=	"<input type='hidden' name='ajax' id='ajax' value='false' >";
 			
-			$form .= "<select id='select_userstatus'  >";
+			$form .= "<select id='select_userstatus'  name='select_userstatus' >";
 
 			foreach ($statusitems	as  $s) {
 				

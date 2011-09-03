@@ -207,7 +207,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							$stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
 							
 							//output the print icon
-							echo "{$stateselector}<div class='entry_floatright'><a href=''><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
+							echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
 								 ";
 							
 							$reportname	=	$report->name;	

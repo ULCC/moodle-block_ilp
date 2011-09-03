@@ -104,8 +104,7 @@ M.ilp_dashboard_reports_tab = {
     closed_image : null,
 
     init : function(Y, open_image, closed_image) {
-    	console.log(open_image);
-    	console.log(closed_image);
+
     	this.open_image = open_image;
 		this.closed_image = closed_image;
 
@@ -134,8 +133,7 @@ M.ilp_dashboard_reports_tab = {
 				img = document.createElement('img');
 				img.setAttribute('id', headers[i].id+'_icon');
 				img.setAttribute('class', 'collapse');
-				console.log(img);
-				
+			
 				
 				headers[i].insertBefore(img, document.getElementById(headers[i].id).firstChild);
 	

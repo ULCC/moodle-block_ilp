@@ -61,7 +61,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin	{
         $tablename 			= get_config('block_ilp','mis_plugin_attendance_percentbarstudenttable'); //$this->params[ 'student_table' ];
         if (!empty($tablename)) {
 	        $keyfield 			= get_config('block_ilp','mis_plugin_attendance_percentbarstudentid');
-	        $attendance_field 	= get_config('block_ilp','mis_plugin_attendance_percentbarpunchuality');
+	        $attendance_field 	= get_config('block_ilp','mis_plugin_attendance_percentbarpunctuality');
 	        $punctuality_field 	= get_config('block_ilp','mis_plugin_attendance_percentbarattendance');
 	        
 	        $querydata	=	$this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field) );
@@ -100,7 +100,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin	{
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_attendance_percentbarstudentid',get_string('ilp_mis_attendance_percentbar_plugin_studentid', 'block_ilp'),get_string('ilp_mis_attendance_percentbar_plugin_studentiddesc', 'block_ilp'),'studentID');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_attendance_percentbarpunchuality',get_string('ilp_mis_attendance_percentbar_plugin_punchuality', 'block_ilp'),get_string('ilp_mis_attendance_percentbar_plugin_punchualitydesc', 'block_ilp'),'punctuality');
+ 	 	$this->config_text_element($mform,'mis_plugin_attendance_percentbarpunctuality',get_string('ilp_mis_attendance_percentbar_plugin_punchuality', 'block_ilp'),get_string('ilp_mis_attendance_percentbar_plugin_punchualitydesc', 'block_ilp'),'punctuality');
 
  	 	$this->config_text_element($mform,'mis_plugin_attendance_percentbarattendance',get_string('ilp_mis_attendance_percentbar_plugin_attendance', 'block_ilp'),get_string('ilp_mis_attendance_percentbar_plugin_attendancedesc', 'block_ilp'),'attendance');
  	 	
@@ -140,8 +140,8 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin	{
         $string['ilp_mis_attendance_percentbar_plugin_studentid']				= 'Student ID field';
         $string['ilp_mis_attendance_percentbar_plugin_studentiddesc']				= 'The field that will be used to find the student';
         
-        $string['ilp_mis_attendance_percentbar_plugin_punchuality']				= 'Punchuality';
-        $string['ilp_mis_attendance_percentbar_plugin_punchualitydesc']			= 'The field that holds punchuality data';
+        $string['ilp_mis_attendance_percentbar_plugin_punctuality']				= 'Punctuality';
+        $string['ilp_mis_attendance_percentbar_plugin_punctualitydesc']			= 'The field that holds punctuality data';
         
         $string['ilp_mis_attendance_percentbar_plugin_attendance']				= 'Attendance';
         $string['ilp_mis_attendance_percentbar_plugin_attendancedesc']			= 'The field that holds attendance data';

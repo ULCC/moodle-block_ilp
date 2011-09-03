@@ -63,13 +63,22 @@ $userstatus	=	$dbc->get_user_status($student_id);
 $userstatus->user_modified_id		=	$USER->id;
 $userstatus->parent_id			=	$status_id;
 
-
 if ($dbc->update_userstatus($userstatus)) {
 	
-	if (empty($ajax)) {
+	if ($ajax == 'false') {
 		 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$student_id.'&tabitem='.$tabitem.'&selectedtab='.$selecttedtab;
          redirect($return_url, get_string("stausupdated", 'block_ilp'), REDIRECT_DELAY); 
 	} else {
+		
+		$userstatuscolor	=	get_config('block_ilp', 'passcolour');
+			 
+		if (!empty($statusitem))	{
+			if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
+		} 
+		
+		
+		//echo "['{$stausitem->name}','{$userstatuscolor}']";
+		
 		echo $stausitem->name;
 	}
 

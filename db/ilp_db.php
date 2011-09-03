@@ -767,7 +767,7 @@ class ilp_db_functions	extends ilp_logging {
 					 AND		rp.report_id	=	{$report_id}	
 					 AND		r.id IN (".implode(',',$role_id).")
 					 AND		c.id = {$capability_id}";
-					
+								
     	return 	(!empty($role_id)) ? $this->dbc->get_records_sql($sql) : false;
     }
     

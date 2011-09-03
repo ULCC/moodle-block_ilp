@@ -3,10 +3,12 @@
 			<label><?php echo get_string('course','block_ilp');?></label>
 			<select id="ilp_mis_attendance_plugin_byclass_course" name="mis_course_id">
 				<?php 
-				foreach($this->courselist as $courseid => $coursename) { 
+				if (!empty($this->courselist)) {
+					foreach($this->courselist as $courseid => $coursename) { 
 					$selected = ($courseid == $mis_course_id) ?  "selected='selected'": '';?> 
-					<option value="<?php echo $courseid; ?>" <?php echo $selected; ?> ><?php echo $coursename; ?></option>
-				<?php } ?>
+					<option value="<?php echo $courseid;  ?>" <?php echo $selected; ?> ><?php echo $coursename; ?></option>
+				<?php } 
+				}?>
 			</select>
 			<label><?php echo get_string('month','block_ilp');?></label>
 			<select id="ilp_mis_attendance_plugin_byclass_month" name="mis_period_id">

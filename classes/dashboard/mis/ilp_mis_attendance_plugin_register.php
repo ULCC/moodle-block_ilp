@@ -530,7 +530,7 @@ function summary_data($data,$term=0) {
 							
 								//$class[($item['Week_No'] + $weekoffset)] = '<span class="attendance-'.$att_class.'" style="display:block; text-align:center" title="'.$mark_key[$item[$markfield]].'">'.$item[$markfield].'</span>';
 								
-								$class['week'.$item['Week_No']] = '<span class="attendance-'.$att_class.'" style="display:block; text-align:center" title="">'.$item[$markfield].'</span>';
+								$class['week'.$item['Week_No']] = '<span class="attendance-'.$att_class.'" style="display:block; text-align:center; background-color:'.$att_class.'" title="">'.$item[$markfield].'</span>';
 							}
 						} 
 					
