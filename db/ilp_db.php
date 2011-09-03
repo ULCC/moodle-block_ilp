@@ -2040,6 +2040,19 @@ class ilp_db_functions	extends ilp_logging {
     	
     	return 	$this->dbc->get_record_sql($sql);
     }
+
+    
+    function save_event($event)	{
+    	add_event($event);
+    }
+    
+    function update_event($event)	{
+    	update_event($event);
+    }
+    
+    function get_calendar_event($name,$entry_id,$user_id)	{
+    	return $this->dbc->get_record('event',array('name'=>$name,'instance'=>$entry_id,'userid'=>$user_id));
+    }
     
 }
 

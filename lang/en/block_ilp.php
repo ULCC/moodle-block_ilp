@@ -2,7 +2,7 @@
 	$string['achieved'] 			= 	'Achieved';
 	$string['addall'] 				= 	'Add all';
 	$string['addcomment']			= 	'Add Comment';
-	
+	$string['addedby']				= 	'Added By';
 	$string['addprompt'] 			= 	'Add Prompt';
 	$string['addfield'] 			= 	'Add Field';
 	$string['addpromptdots'] 		= 	'Select Field Type';
@@ -37,7 +37,7 @@
 	$string['course']				=	'Course';
 	$string['coursereports']		=	'Course Reports';
 	$string['dashboard']	 		= 	'Dashboard';
-	
+	$string['deadline']		 					= 	'deadline';
 	$string['defaulthozsize'] 					= 	'Default number of columns';
 	$string['defaulthozsizeconfig'] 			= 	'The default number of columns for all AJAX tables that do not override this setting.';
 	$string['defaultverticalperpage'] 			= 	'Default number of table rows';
@@ -176,6 +176,10 @@
 	$string['reportmustcontainfields'] 			= 	'The report must contain fields';
 	$string['reportname'] 						= 	'Report Name:';
 	$string['reportprompt']						= 	'Report Prompts';
+	$string['reportdeadline']					= 	'Report Deadline';
+	
+	
+	
 	$string['required']	 						= 	'Required';
 	$string['reportpermissions']				= 	'Report Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';

@@ -91,6 +91,8 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 	 		
 	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,false);
  	
+	 		
+	 		
 			if (!empty($entry)) {
 		 		$fielddata	=	array();
 		 		$comma	= "";

@@ -237,7 +237,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 										$courserelatedfield_id	=	$cr->id;	
 								}
 							} 
-	
+							/*
 							$has_datedeadline	=	(!$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline')) ? false : true;
 							
 							if (!empty($has_datedeadline))	{
@@ -247,7 +247,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 										$dontdisplay[] 	=	$d->id;	
 								}
 							} 
-							
+							*/
 							//get all of the users roles in the current context and save the id of the roles into
 							//an array 
 							$role_ids	=	 array();
@@ -305,9 +305,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 									if ($has_courserelated) {
 										$coursename	=	false;
 										$crfield	=	$this->dbc->get_report_coursefield($entry->id,$courserelatedfield_id);
-										if (empty($crfield)) {
+										if (empty($crfield) || empty($crfield->value)) {
 											$coursename	=	get_string('allcourses','block_ilp');
-										} else if ($crfield == '-1') {
+										} else if ($crfield->value == '-1') {
 											$coursename	=	get_string('personal','block_ilp');
 										} else {
 											$crc	=	$this->dbc->get_course_by_id($crfield->value);
@@ -337,7 +337,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 										$pluginclass	=	new $classname();
 	
 										$pluginclass->load($field->id);
-									
+										
 										//call the plugin class entry data method
 										$pluginclass->view_data($field->id,$entry->id,$entry_data);
 	

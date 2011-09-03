@@ -188,16 +188,84 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
         $mform->setType($fieldname, PARAM_RAW);
     }
 
+    
+    function entry_process_data($reportfield_id,$entry_id,$data)	{
+    	return $this->entry_specific_process_data($reportfield_id, $entry_id, $data);
+    }
+    
+    
+    
+    
     /**
 	* handle user input
 	**/
 	 public	function entry_specific_process_data($reportfield_id,$entry_id,$data) {
+		global $CFG;
+		
 		/*
 		* parent method is fine for simple form element types
 		* dd types will need something more elaborate to handle the intermediate
 		* items table and foreign key
 		*/
-		return $this->entry_process_data($reportfield_id,$entry_id,$data); 	
+	 	
+	 	$fieldname =	$reportfield_id."_field";
+	 	
+	 	$report		=	$this->dbc->get_report_by_id($data->report_id);
+	 	
+	 	$title		=	(!empty($report))	? $report->name." ".get_string('deadline','block_ilp') : get_string('deadline','block_ilp');
+	 	
+	 	//check if the entry_id has been set
+	 	$update 	=	(!empty($data->entry_id)) ? true : false; 
+	 	
+	 	
+	 	
+	 	
+	 	if (empty($update))		{
+	 		$event = new object();
+	        $event->name        = $title;
+	        $event->description = "<br/><a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$data->user_id}'>{$title}</a>";
+	        $event->format      = 0;
+	        $event->courseid    = 0;
+	        $event->groupid     = 0;
+	        $event->userid      = $data->user_id;
+	        $event->modulename  = '';
+	        $event->instance    = $entry_id;
+	        $event->eventtype   = 'due';
+	        $event->timestart   = $data->$fieldname;
+	        $event->timeduration = time();
+	      
+	        $this->dbc->save_event($event);
+	        
+	 	}   else	{
+	 		
+	 		$event	=	$this->dbc->get_calendar_event($title,$entry_id,$data->user_id);
+	 		
+	 		if (!empty($event))	{	
+	 			$event->timestart		=	$data->$fieldname;
+	 			$event->timemodified	=	time();	
+	 			$event->modulename  = '';
+
+	 			$this->dbc->update_event($event);
+	 		} 
+	 		
+	 	}
+	 	
+	 	//before saving save a event in the users calendar for this report
+	 	//Add Calendar event
+	 	
+	 	//if () {
+	        
+	 	//} 
+	 	
+	 	
+	 	//$data->user_id
+	 	//data->report_id - for report name
+	 	
+	 	//var_dump($data->$fieldname);
+	 	
+	 	//call the parent entry_process_data function to handle saving the field value	 	
+	 	return parent::entry_process_data($reportfield_id,$entry_id,$data);
+		 	
 	 }
 	 
 	 
@@ -216,6 +284,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	  	$fieldname	=	$reportfield_id."_field";
 	 	
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
+ 	
 	 	if (!empty($entry)) {
 	 		$entryobj->$fieldname	=	userdate(html_entity_decode($entry->value));
 	 	}

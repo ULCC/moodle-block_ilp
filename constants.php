@@ -84,4 +84,6 @@ define('ILP_IDTYPE_INT','1');
 
 define('AUTH_USER_ROLE','Authenticated user');
 
+define('ILP_EVENT',           0);
+
 ?>
