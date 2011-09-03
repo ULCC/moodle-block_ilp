@@ -35,7 +35,7 @@
 	padding:0 10px; 
 }
 .ilp #right-studentinfo { 
-	float:left; 
+	float:right; 
 	width:60%;
 	padding:0 10px;
 	border-left: 1px solid #ccc;
@@ -45,6 +45,17 @@
 	margin: 3px 0;
 }
 
+.ilp #ilp_mis_attendance_plugin_mcb	{
+    overflow: auto;
+    overflow-y: hidden;
+	-ms-overflow-y: hidden;
+}
+.ilp #ilp_mis_attendance_plugin_simple{
+	width: 100%;
+	display:block; 
+	margin: 0 0 10px 0;
+}
+
 .clearfix:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; } /* slightly enhanced, universal clearfix hack - http://perishablepress.com/press/2008/02/05/lessons-learned-concerning-the-clearfix-css-hack/ */
 .clearfix { display: inline-block; }
 /* start commented backslash hack \*/ * html .clearfix { height: 1%; }
@@ -52,16 +63,57 @@
 
 /* ENTRIES */
 
-.ilp .entries-container{width: 100%; border-bottom: 1px dotted #333333;}
-.ilp  #left-entries { float:left; width:6%; padding:2%; background:white; }
-.ilp  #middle-entries { float:left; width:40%;padding:2%; background:white; }
-.ilp  #right-entries { float:left; width:10%;padding:2% 0; background:white; }
-
-.ilp  #middle-entries h2{font-size: 1.1em;font-weight: bold;margin: 0; padding: 0;}
-.ilp  #middle-entries p{padding:0; margin: 3px 0;}
-.ilp  #right-entries .add a{ background: #333; color: #fff; padding: 5px; text-decoration:none;}
-.ilp  #right-entries .add a:hover{ background: red; color: #fff; padding: 5px; }
-.ilp .entries-container .icon_small img{height:75px;width: 75px;	}
+.ilp .entries-container{
+	width: 80%;
+	display:block; 
+	margin: 0 auto;
+	border-bottom: 1px solid #ddd;
+}
+.ilp .entries-container:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
+}
+.ilp  #left-entries { 
+	float:left; 
+	width:6%; 
+	padding:10px; 
+}
+.ilp  #middle-entries { 
+	float:left; 
+	width:70%;
+	padding:10px; 
+}
+.ilp  #right-entries { 
+	float:right; 
+	width:10%;
+	padding:20px;
+}
+.ilp  #middle-entries h2{
+	font-size: 1.1em;
+	font-weight: bold;
+	margin: 0 0 5px 0; 
+	padding: 0;
+}
+.ilp  #middle-entries p{
+	padding:0; 
+	margin: 3px 0;
+}
+.ilp  #right-entries .add a{ 
+	background: #333; 
+	color: #fff; 
+	padding: 5px; 
+	text-decoration:none;
+}
+.ilp  #right-entries .add a:hover{ 
+	text-decoration:underline;
+}
+.ilp .entries-container .icon_small img{
+	height:75px;
+	width: 75px;
+}
 
 /* ATTENDANCE */
 
@@ -83,6 +135,7 @@
 
 .ilp #ilp_mis_attendance_plugin_register th{
 	text-align:left;
+	background: #f3f3f3;
 }
 .ilp #ilp_mis_attendance_plugin_register .course-attendance{
 	width:33%;
@@ -101,23 +154,23 @@
 	margin: 0;
 	padding: 0;
 }
-.ilp .attendance-grid{
+.ilp #ilp_mis_attendance_plugin_register .attendance-grid{
     overflow: auto;
     overflow-y: hidden;
 	-ms-overflow-y: hidden;
 }
-#ilp-attendance-grid {
+.ilp #ilp-attendance-grid {
 	border:1px solid #ddd;
 }
-#ilp-attendance-grid .termweeks{	
+.ilp #ilp-attendance-grid .termweeks{	
 	font-weight: bold;
 }
-#ilp-attendance-grid th{
+.ilp #ilp-attendance-grid th{
 	border:1px solid #ddd;
 	background: #666;
 	color: #fff;
 }
-#ilp-attendance-grid td{
+.ilp #ilp-attendance-grid td{
 	border:1px solid #ddd;
 }
 /** LEARNER PROFILE - Initial Assessment */
@@ -232,395 +285,82 @@
 
 /* Reports section */
 
-.ilp .reports-container{width:100%;border-bottom: 1px dotted #333333; background: #efefef; }
-.ilp .reports-head{width:100%;border-bottom: 3px solid #333333;margin: 0; }
-.ilp .left-reports { float:left; width:40%; padding:2%;  }
-.ilp .right-reports { float:left; width:40%;padding:2%; }
-.ilp .reports-comments{ padding: 0;margin: 0 0 0 2%; width: 96%; }
-
-.ilp .reports-head h2{padding: 0 0 15px 0; margin: 0; font-size: 2em;}
-.ilp .reports-head img{padding: 0 10px 0 10px;}
-.ilp .reports-container p{padding: 0; margin: 3px 10px;}
-.ilp .view-comments{background: #333333; color: #ffffff; padding: 5px 10px; margin: 0 0 10px 0;height: 20px;}
-.ilp .view-comments h3{font-size: 1em; margin: 0; padding: 0; float: left;}
-.ilp .view-comments .comment p{padding: 0; margin: 5px 0;}
-.ilp .view-comments .add a{ background: #ffffff; color: #333333; padding: 2px; text-decoration:none; }
-.ilp .view-comments .add a:hover{ background: red; color: #fff; padding: 2px; }
-.ilp .comment {padding: 10px 2%;}
-.ilp .comment .info{font-size: .9em; text-align: right; border-top: 1px solid #ccc;padding: 5px 10px 10px 10px; color: #999999;}
+.ilp .report_state{
+	float:left;
+	width:80%;
+	margin: 20px auto;
+}
+.ilp .reports-container{
+	width:100%;
+	border-bottom: 1px solid #ccc; 
+	background: #f1f1f1;
+}
+.ilp .left-reports { 
+	float:left; 
+	width:70%; 
+	padding:10px;
+}
+.ilp .right-reports { 
+	float:left; 
+	width:20%;
+	padding:10px;
+}
+.ilp .reports-comments{ 
+	padding: 0;
+	margin: 0 0 0 2%; 
+	width: 96%;
+}
+.ilp .reports-container p{
+	padding: 0; 
+	margin: 3px 10px;
+}
+.ilp .view-comments{
+	background: #333333; 
+	color: #ffffff; 
+	padding: 5px 10px; 
+	margin: 0 0 10px 0;
+	height: 20px;
+}
+.ilp .view-comments h3{
+	font-size: 1.3em; 
+	margin: 0; 
+	padding: 0; float: left;
+}
+.ilp .view-comments .comment p{
+	padding: 0; 
+	margin: 5px 0;
+}
+.ilp .view-comments .add a{ 
+	background: #ffffff; 
+	color: #333333; 
+	padding: 2px; 
+	text-decoration:none;
+}
+.ilp .view-comments .add a:hover{ 
+	text-decoration:underline;
+}
+.ilp .comment {
+	padding: 10px 2%;
+}
+.ilp .comment .info{
+	font-size: .9em; 
+	text-align: right; 
+	border-top: 1px solid #ccc;
+	padding: 5px 10px 10px 10px; 
+}
  
 /* Tabs */ 
 .tabtree .tabrow0 .tabrow1 { padding: 10px; border-bottom: 2px solid #ddd;}
  
  
 /* Tables */ 
+
 .ilp th{
 	font-weight: bold;
+	text-align:left;
 }
-/* general */ 
+/* General */ 
 
+/* Buttons */ 
 
-.ilp .view-report{background: #ccc;}
-.ilp .desciptivetext 	{
-	margin-left				:20%;
-	margin-right			:20%;
-	text-align				:justify;	
-}
 
-.ilp .reportfieldstable {
-	width				: 80%;
-	background-color	: #FFF;
-}
-
-.ilp .reportfieldstable tr {
-	background-color: #eeeeee;
-}
-
-.ilp .reportfieldstable tr.odd {
-	background-color: #FFF;
-}
-.ilp #reportfields-table   {
-	width				: 80%;
-	background-color	: #999;
-}
-
-.ilp #reportfields-table tr {
-	background-color		: #999;
-}
-
-.ilp #reportfields-table td {
-	background-color		: #FFF;
-}
-
-.ilp #reportfields-table th {
-	background-color		: #FFF;
-	color					: #000;
-}
-
-
-.ilp #reportfieldset {
-	margin-top				:20px;
-	
-	margin-left				:20%;
-	margin-right			:20%;
-	width					:60%;
-	background-color		:#FFF;
-	border					:1px solid #DDDDDD;
-	
-}
-
-.ilp #reportfieldset .hidden{
-	padding-left			:50px;
-	width					:80%;
-}
-
-.ilp .ftoggler	{
-	border-style			:solid;	
-	border-width       		:1px;
-	padding					:5px;
-	margin-left				:10px;
-}
-
-
-.ilp  #ilppermissionstable {
-	margin-left					:50px;
-}
-
-.ilp .pagelinks #leftlinks	{
-	
-}
-.ilp #reportimage	{
-
-	padding					: 0 20px 0 0; 	
-	
-}
-
-.ilp #infoarea	label	{
-	display					:	block;
-	float					:	left;
-	margin					:	0 15px 0 0;
-	width					:	150px;
-	text-align				: 	right;
-}
-
-
-.ilp .percentagebar {
-	margin					:	2px;
-	border-style			:	solid;
-	border-color			:	black;
-	border-width			:	thin;
-	width					:	200px;
-	height					:	10px;
-	float					:	left;
-	display 				:	block;
-}
-
-
-.ilp .percentage-green		{
-	background-color		:	green;
-	height					:	10px;
-}
-
-.ilp .percentage-amber		{
-	background-color		:	orange;
-	height					:	10px;
-}
-
-
-ilppercentagebarborder-small		{
-	height					:	10px;
-}
-
-
-ilppercentagebarborder-large {
-	margin					:	2px;
-	border-style			:	solid;
-	border-color			:	black;
-	border-width			:	thin;
-	width					:	200px;
-	height					:	20px;
-	float					:	left;
-	display 				:	block
-}
-
-.ilp .view_report .view_report_fields {
-	/*width					:	60%;*/
-	display					:	inline;
-	float					:	left;					
-	
-}
-
-.ilp .view_report .view_report_details  {
-	/*width					: 	30%;*/
-	display					:	inline;
-	float					:	right; 
-	
-	
-}
-
-.ilp .view_report .view_report_fields label {
-	float					:	left;
-	margin					:	0 15px 0 0;
-	width					:	150px;
-	text-align				:	right;
-}
-
-
-
-
-
-.ilp .view_comments 	{
-	clear					:	both;
-	width					:	100%;
-	margin-left				:	20px;
-	padding-top				:	10px;
-}
-
-.ilp .view_comments h3	{
-	display					:	inline;
-	margin-right			:	80%
-}
-
-
-.ilp #infoarea p {
-    display             : inline;
-}
-
-.ilp form.hidden, .ilp img.hidden  .ilp input.hidden {
-    display             : none;
-    visibility			: hidden;
-}
-
-.ilp form.nothidden {
-    display             : inline;
-    visibility			: visible;
-    
-}
-
-.ilp #filter_form label {
-	display					:	block;
-	float					:	left;
-	margin					:	0 15px 0 0;
-	width					:	150px;
-	text-align				: 	right;
-		
-}
-
-
-
-
-
-.ilp .editicon {
-    cursor              : pointer;
-}
-
-ilp #studentstatussub .hidden {
-	visibility			: hidden;
-	display				: none;
-}
-
-
-ilp .hiddencontainer	{
-	height				:	0px;	
-}
-
-.ilp .commentheading .collapse {
-    padding-right   : 5px;	
-}
-
-
-.ilp .entries_reportentry	{
-	width				: 	80%;	
-}
-
-.ilp .entries_report	{
-	float				:	left; 
-	width				: 	50%;
-}
-
-.ilp .entries_report_img	{
-	float				:	left; 
-}
-
-.ilp .entries_report_add	{
-	float				:	right; 
-}
-
-.ilp .entries_entry {
-	width				:	70%;	
-}
-
-.ilp .entry_floatleft {
-	 float				:  left;	
-}
-
-.ilp .entry_floatright {
-	 float				:  right;	
-}
-
-.ilp .ilp_print_icon {
-	padding				:	5px;	
-}
-
-.ilp #infoarea	{
-	width				:	40%;
-	float				:	left;	
-}
-
-.ilp #mytutors	{
-	width				:	30%;
-	float				:	right;	
-}
-
-.ilp #mytutors	label{
-	padding				: 10px;	
-}
-
-.ilp .centable	{
-	width 				:80%;	
-	margin-left			:10%;
-}
-
-.ilp .centable .flexible	{
-	width 				:100%;	
-}
-
-
-.ilp .icon_small {
-	width				:50px;
-	height				:50px;
-	margin-right		:10px;	
-}
-
-
-.ilp .icon_med {
-	width				:70px;
-	height				:70px;
-	margin-right		:10px;	
-	display				:inline;
-}
-
- #student_list_container {
-	
-	overflow	: auto;
-	
-}
-
-/** ilp_mis_misc_performance_ind **/
-
-.ilp #ilp_mis_misc_performance_ind	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: 20%;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-
-
-
-/** ilp_mis_attendance_overview_plugin_mcb **/
-
-.ilp #ilp_mis_attendance_plugin_mcb	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: auto;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-/** ilp_mis_attendance_plugin_simple **/
-
-.ilp #ilp_mis_attendance_plugin_simple	{
-	border					: thin solid black;
-	padding					: 10px;
-	width					: auto;
-	margin-top				: 10px;
-	margin-bottom			: 10px;
-}
-
-/** ilp_mis_attendance_plugin_term **/
-
-.ilp #ilp_mis_attendance_plugin_term	{width: 100%; border:0;}
-.ilp #ilp_mis_attendance_plugin_term table{margin:0;}
-
-
-
-/* TODO: for some strange reason the table on edit_prompt.html jumps outside of the ilp div so I m using a specific
-*  css class for the table this is BAD BAD BAD and should be sorted out.
-*/
-#ilpreportfieldset	{
-	margin-left				:20%;
-	margin-right			:20%;
-	width					:60%;
-	background-color		:#FFF;
-	border					:1px solid #DDDDDD;
-}
-
-#ilpreportfieldset #reportfields-table {
-	width					: 90%;
-	background-color		: #FFF;
-	margin-top				:10px;
-	border-style			:none;
-	
-}
-
-#ilpreportfieldset #reportfields-table tr {
-	background-color		: #999;
-}
-
-#ilpreportfieldset #reportfields-table td {
-	background-color		: #FFF;
-}
-
-#ilpreportfieldset #reportfields-table th {
-	background-color		: #FFF;
-	color					: #000;
-}
-
-#ilpreportfieldset .ftoggler	{
-	border-style			:solid;	
-	border-width       		:1px;
-	padding					:5px;
-	margin-left				:10px;
-}
