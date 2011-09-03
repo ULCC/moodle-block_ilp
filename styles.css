@@ -56,6 +56,45 @@
 	margin: 0 0 10px 0;
 }
 
+.ilp .percentagebar {
+	margin					:	2px;
+	border-style			:	solid;
+	border-color			:	#ccc;
+	border-width			:	thin;
+	width					:	200px;
+	height					:	10px;
+	float					:	left;
+	display 				:	block;
+}
+
+
+.ilp .percentage-green		{
+	background-color		:	green;
+	height					:	10px;
+}
+
+.ilp .percentage-amber		{
+	background-color		:	orange;
+	height					:	10px;
+}
+
+
+ilppercentagebarborder-small		{
+	height					:	10px;
+}
+
+
+ilppercentagebarborder-large {
+	margin					:	2px;
+	border-style			:	solid;
+	border-color			:	#ccc;
+	border-width			:	thin;
+	width					:	200px;
+	height					:	20px;
+	float					:	left;
+	display 				:	block
+}
+
 .clearfix:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; } /* slightly enhanced, universal clearfix hack - http://perishablepress.com/press/2008/02/05/lessons-learned-concerning-the-clearfix-css-hack/ */
 .clearfix { display: inline-block; }
 /* start commented backslash hack \*/ * html .clearfix { height: 1%; }
