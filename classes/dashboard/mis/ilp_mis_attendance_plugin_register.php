@@ -422,11 +422,11 @@ function summary_data($data,$term=0) {
 			$table->setup();
 			
 			//set the row displaying the week dates 
-			$dates = array('','','','','Week:');
+			$dates = array('','','','','<div class="termweeks">Week:</div>');
 			
 			for ($z = $academicstart; $z < $academicend+1; $z++) {
 				$timestampweek = $weekofseconds * ($z-1);
-				$dates[] = date("d/m",$startdate + $timestampweek);
+				$dates[] = '<div class="termweeks">'.date("d/m",$startdate + $timestampweek).'</div>';
 			}
 			
 			$table->add_data($dates);
