@@ -272,13 +272,13 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin	{
      			}
      		}
      		
-     		return $content;
+     		
      	} 
      	
      	
      	//check if plugin is enabled
      	
-     	
+     	return $content;
      	
      	
      	

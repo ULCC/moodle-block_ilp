@@ -26,9 +26,9 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        $flextable = new ilp_mis_ajax_table( 'attendance_plugin_simple',true ,'ilp_mis_attendance_plugin_simple'); 
 	
 	        //create headers
-	        $headers = array( '' , '' );
+	        $headers = array( get_string('ilp_mis_attendance_plugin_simple_attendance','block_ilp') , get_string('ilp_mis_attendance_plugin_simple_punctuality','block_ilp') );
 	        //create columns
-	        $columns = array( 'metric' , 'score' );
+	        $columns = array( 'attendance' , 'punctuality' );
 	        
 	        //define the columns in the tables
 	        $flextable->define_columns($columns);
@@ -47,8 +47,8 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        //add the row to table
 	        foreach( $this->data as $row ){
 	            $data = array();
-	            $data[ 'metric' ] = $row[ 0 ];
-	            $data[ 'score' ] = $row[ 1 ].'%';
+	            $data[ 'attendance' ]  = $row[ 0 ];
+	            $data[ 'punctuality' ] = $row[ 1 ];
 	            $flextable->add_data_keyed( $data );
 	        }
 	        
@@ -86,10 +86,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        $data = (is_array($querydata)) ? array_shift( $querydata ) : $querydata;
 	        
 	        if (!empty($data)) {
-	        	$this->data	=	 array(
-		        	    			array( get_string('ilp_mis_attendance_plugin_simple_attendance','block_ilp') , $data[ $attendance_field ] ),
-		            				array( get_string('ilp_mis_attendance_plugin_simple_punctuality','block_ilp') , $data[ $punctuality_field  ] )
-		        				 );
+	        	$this->data	=	 array( $data[ $attendance_field ] , $data[ $punctuality_field  ] );
 	        } 
         }
     }
@@ -149,8 +146,8 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	 */
 	 function language_strings(&$string) {
 	 	
-        $string['ilp_mis_attendance_plugin_simple_attendance']				= 'attendance';
-        $string['ilp_mis_attendance_plugin_simple_punctuality']				= 'punctuality';
+        $string['ilp_mis_attendance_plugin_simple_attendance']				= 'Attendance';
+        $string['ilp_mis_attendance_plugin_simple_punctuality']				= 'Punctuality';
         $string['ilp_mis_attendance_plugin_simple_pluginname']				= 'Simple Overview';
         $string['ilp_mis_attendance_plugin_simple_pluginnamesettings']		= 'Simple Attendance Overview Configuration';
         
@@ -160,7 +157,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
         $string['ilp_mis_attendance_plugin_simple_studentid']				= 'Student ID field';
         $string['ilp_mis_attendance_plugin_simple_studentiddesc']				= 'The field that will be used to find the student';
         
-        $string['ilp_mis_attendance_plugin_simple_punctuality']				= 'Punchuality';
+        $string['ilp_mis_attendance_plugin_simple_punctuality']				= 'Punctuality';
         $string['ilp_mis_attendance_plugin_simple_punctualitydesc']			= 'The field that holds punctuality data';
         
         $string['ilp_mis_attendance_plugin_simple_attendance']				= 'Attendance';
