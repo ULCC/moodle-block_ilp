@@ -132,6 +132,13 @@
 	width: 75px;
 }
 
+
+.ilp #student_list_container {
+   overflow: auto;
+   overflow-y: hidden;
+   -ms-overflow-y: hidden;
+}
+
 /* ATTENDANCE */
 
 /* ATTENDANCE - Register by Class */
@@ -365,7 +372,8 @@
 	border-top: 1px solid #ccc;
 	padding: 5px 10px 10px 10px; 
 }
- 
+
+
 /* Tabs */ 
 .tabtree .tabrow0 .tabrow1 { padding: 10px; border-bottom: 2px solid #ddd;}
  

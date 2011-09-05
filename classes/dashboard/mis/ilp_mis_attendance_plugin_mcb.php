@@ -441,71 +441,72 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin{
     	
     	$mcbdata		=	array();
     	$courselist		=	array();
-    	
-    	foreach ($data as $d) {
-    		
-    		//get the id of the current course
-    		$courseid	=	$d[$this->fields['courseid']];
-    		
-    		
-    		//check if an array position for the course exists 
-    		if (!isset($mcbdata[$courseid])) {
-    			$mcbdata[$courseid]	=	array();
-    		}
-    		
-    		//get the current month
-    		$month	=	$d[$this->fields['month']];	
-    		
-    		//check if an array position for the month exists in the course 
-    		if (!isset($mcbdata[$courseid][$month])) {
-    			$mcbdata[$courseid][$month]	=	array();
-    		}
-    		
-    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
-    		$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
-    		
-    		//caculate the months attendance percentage 
-    		$monthpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
-    		
-    		//fill the couse month array position with percentage for the month
-    		$mcbdata[$courseid][$month]	=	array(
-    											  'percent'			=>  $monthpercent,
-    											  'markstotal'		=>	$d[$this->fields['markstotal']],
-    											  'markspresent'	=>	$d[$this->fields['markspresent']],
-    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
-    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
-    											  'markslate'		=>	$d[$this->fields['markslate']]);
-    		
-    		//check if the course has been added to the courselist array
-    		if (!isset($courselist[$courseid])) {
-    			$courselist[$courseid]	=	$d[$this->fields['coursename']];
-    		}
-
-    		//check if the month has been added  
-    		if (!isset($monthlist[$month]))	{
-    			$monthlist[$month]	=	$d[$this->fields['monthorder']];
-    		} 
-    	}
-    	
-    	//now we have all course data nicely in an array we can work the overall totals
-    	foreach ($mcbdata as &$course)	{
-    		$presents			=	0;
-    		$absents			=	0;
-    		$authabsents		=	0;
-    		
-    		foreach ($course as $monthdata) {
-    			$presents		+=	$monthdata['markspresent'];
-    			$absents		+=	$monthdata['marksabsent'];
-    			$authabsents	+=	$monthdata['marksauthabsent'];
-    		}
-    		
-    		$present	=	$this->presents_cal($presents,$authabsents);
-    		$percent	=	($absents	/	$present) * 100;
-    		
-    		$course['overallpercent']		=	number_format($percent,0);
-    		$course['overallabsents']		=	$absents;
-    		$course['overallauthabsents']	=	$authabsents;
-    		$course['overallpresents']		=	$present;
+    	if (!empty($data)) {
+	    	foreach ($data as $d) {
+	    		
+	    		//get the id of the current course
+	    		$courseid	=	$d[$this->fields['courseid']];
+	    		
+	    		
+	    		//check if an array position for the course exists 
+	    		if (!isset($mcbdata[$courseid])) {
+	    			$mcbdata[$courseid]	=	array();
+	    		}
+	    		
+	    		//get the current month
+	    		$month	=	$d[$this->fields['month']];	
+	    		
+	    		//check if an array position for the month exists in the course 
+	    		if (!isset($mcbdata[$courseid][$month])) {
+	    			$mcbdata[$courseid][$month]	=	array();
+	    		}
+	    		
+	    		//should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
+	    		$present	=	$this->presents_cal($d[$this->fields['markspresent']],$d[$this->fields['marksauthabsent']]);
+	    		
+	    		//caculate the months attendance percentage 
+	    		$monthpercent 	=	($present / $d[$this->fields['markstotal']]) * 100;
+	    		
+	    		//fill the couse month array position with percentage for the month
+	    		$mcbdata[$courseid][$month]	=	array(
+	    											  'percent'			=>  $monthpercent,
+	    											  'markstotal'		=>	$d[$this->fields['markstotal']],
+	    											  'markspresent'	=>	$d[$this->fields['markspresent']],
+	    											  'marksabsent'		=>	$d[$this->fields['marksabsent']],
+	    											  'marksauthabsent'	=>	$d[$this->fields['marksauthabsent']],
+	    											  'markslate'		=>	$d[$this->fields['markslate']]);
+	    		
+	    		//check if the course has been added to the courselist array
+	    		if (!isset($courselist[$courseid])) {
+	    			$courselist[$courseid]	=	$d[$this->fields['coursename']];
+	    		}
+	
+	    		//check if the month has been added  
+	    		if (!isset($monthlist[$month]))	{
+	    			$monthlist[$month]	=	$d[$this->fields['monthorder']];
+	    		} 
+	    	}
+	    	
+	    	//now we have all course data nicely in an array we can work the overall totals
+	    	foreach ($mcbdata as &$course)	{
+	    		$presents			=	0;
+	    		$absents			=	0;
+	    		$authabsents		=	0;
+	    		
+	    		foreach ($course as $monthdata) {
+	    			$presents		+=	$monthdata['markspresent'];
+	    			$absents		+=	$monthdata['marksabsent'];
+	    			$authabsents	+=	$monthdata['marksauthabsent'];
+	    		}
+	    		
+	    		$present	=	$this->presents_cal($presents,$authabsents);
+	    		$percent	=	($absents	/	$present) * 100;
+	    		
+	    		$course['overallpercent']		=	number_format($percent,0);
+	    		$course['overallabsents']		=	$absents;
+	    		$course['overallauthabsents']	=	$authabsents;
+	    		$course['overallpresents']		=	$present;
+	    	}
     	}
     	
     	$this->mcbdata		=	$mcbdata;

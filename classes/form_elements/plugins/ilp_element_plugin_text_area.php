@@ -200,7 +200,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
             'textarea',
             $fieldname,
             "$this->label",
-            array('class' => 'form_input')
+            array('class' => 'form_input','rows'=> '20', 'cols'=>'65')
         );
         
         if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');

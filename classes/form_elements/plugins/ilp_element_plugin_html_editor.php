@@ -201,7 +201,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
 	           'htmleditor',
 	            $fieldname,
 	            "$this->label",
-	            array('class' => 'form_input', 'canUseHtmlEditor'=>'detect', 'rows'=> '10', 'cols'=>'65')
+	            array('class' => 'form_input', 'canUseHtmlEditor'=>'detect', 'rows'=> '20', 'cols'=>'65')
 	    );
     	
 
