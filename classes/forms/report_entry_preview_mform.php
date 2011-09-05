@@ -59,7 +59,7 @@ class report_entry_preview_mform extends ilp_moodleform {
         	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
             $mform->addElement('html', '<legend class="ftoggler">'.$report->name.'</legend>');
             
-            $desc	=	strip_tags(html_entity_decode($report->description));
+            $desc	=	html_entity_decode($report->description);
 			
 			$mform->addElement('html', '<div class="descritivetext">'.$desc.'</div>');
                         
