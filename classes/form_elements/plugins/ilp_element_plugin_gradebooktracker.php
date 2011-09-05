@@ -56,6 +56,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     * return mixed
     */
     public function entry_process_data( $reportfield_id, $entry_id, $data ){
+//var_dump($data);exit;
         $expected_gradelist_label = "{$reportfield_id}_gradeitem_list"; 'reportfield_id';
         $valuefieldname = "{$reportfield_id}_field";
         $courseidfieldname = "{$reportfield_id}_subjectid";
@@ -106,7 +107,8 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 			$pluginentry->entry_id  = 	$entry_id;
 	 		$pluginentry->value	=	$data->$valuefieldname;
 	 		$pluginentry->user_id	=	$data->user_id;
-	 		$pluginentry->parent_id	=	$reportfield_id;
+	 		//$pluginentry->parent_id	=	$reportfield_id;    //I think this was always wrong
+	 		$pluginentry->parent_id	=	$pluginrecord->id;
 			if( isset( $data->$courseidfieldname ) ){
 	 			$pluginentry->course_id	=	$data->$courseidfieldname;
 			}
@@ -120,7 +122,8 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 	 			$pluginentry->review	=	$data->review;
 			}
 
-		    $pluginentry->parent_id	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+            //jfp I don't think the next line does anything useful
+		    //$pluginentry->parent_id	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
 
 			if( is_string( $pluginentry->value ))	{
                 //this should never happen for this plugin type: $pluginentry->value should always be array
