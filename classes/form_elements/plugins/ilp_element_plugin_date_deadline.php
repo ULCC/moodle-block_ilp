@@ -217,9 +217,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	 	//check if the entry_id has been set
 	 	$update 	=	(!empty($data->entry_id)) ? true : false; 
 	 	
-	 	
-	 	
-	 	
+	 	/*
 	 	if (empty($update))		{
 	 		$event = new object();
 	        $event->name        = $title;
@@ -229,7 +227,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	        $event->groupid     = 0;
 	        $event->userid      = $data->user_id;
 	        $event->modulename  = '';
-	        $event->instance    = $entry_id;
+	        $event->instance    = 0;
 	        $event->eventtype   = 'due';
 	        $event->timestart   = $data->$fieldname;
 	        $event->timeduration = time();
@@ -238,7 +236,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	        
 	 	}   else	{
 	 		
-	 		$event	=	$this->dbc->get_calendar_event($title,$entry_id,$data->user_id);
+	 		$event	=	$this->dbc->get_calendar_event($title,$data->user_id);
 	 		
 	 		if (!empty($event))	{	
 	 			$event->timestart		=	$data->$fieldname;
@@ -247,7 +245,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 
 	 			$this->dbc->update_event($event);
 	 		} 
-	 		
+	 	*/	
 	 	}
 	 	
 	 	//before saving save a event in the users calendar for this report
