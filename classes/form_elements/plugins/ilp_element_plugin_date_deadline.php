@@ -245,9 +245,10 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 
 	 			$this->dbc->update_event($event);
 	 		} 
-	 	*/	
-	 	}
 	 	
+	 		
+	 	}
+	 	*/
 	 	//before saving save a event in the users calendar for this report
 	 	//Add Calendar event
 	 	
