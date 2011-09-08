@@ -23,4 +23,9 @@ if (stripos($CFG->release,"2.") === false) require_once($CFG->dirroot.'/blocks/i
 
 //include the access checks file
 require_once($CFG->dirroot.'/blocks/ilp/db/accesscheck.php');
+
+if ($USER->id != $user_id ) {
+	require_capability('block/ilp:viewotherilp', $context);
+}
+
 ?>

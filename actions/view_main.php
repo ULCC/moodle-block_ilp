@@ -87,7 +87,9 @@ if (!$dbc->get_user_status($user_id)) {
 	$studentstatus	=	new stdClass();
 	$studentstatus->user_id					=	$user_id;
 	$studentstatus->user_modified_id		=	$user_modified_id;
-	$studentstatus->parent_id				=	ILP_DEFAULT_USERSTATUS_RECORD;
+	$defaultconfiguserstatus	=	get_config('block_ilp','defaultstatusitem');
+	
+	$studentstatus->parent_id				=	(!empty($defaultconfiguserstatus)) ? $defaultconfiguserstatus : ILP_DEFAULT_USERSTATUS_RECORD;//ILP_DEFAULT_USERSTATUS_RECORD;
 	
 	$dbc->create_userstatus($studentstatus);
 }  

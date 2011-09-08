@@ -62,7 +62,7 @@ M.ilp_dashboard_student_info = {
         		
         		M.ilp_dashboard_student_info.showelement(document.getElementById('user_status'));
         		M.ilp_dashboard_student_info.showelement(document.getElementById('edit_userstatus_icon'));
-        		
+
         		M.ilp_dashboard_student_info.hideelement(document.getElementById('studentstatusform'));
         		
         		//set value for the select to 

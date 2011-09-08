@@ -1808,6 +1808,7 @@ class ilp_db_functions	extends ilp_logging {
         // get a count of all the records for the pagination links
         $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
 
+        var_dump($select.$from.$where.$sort);
         
         
         // tell the table how many pages it needs

@@ -143,11 +143,10 @@ if (!empty($status_id)) {
 	if ($defaultstatus_id == $status_id) {
 		$notstatus_ids	=	 true;
 	} 
-	
 }
 
-
-$studentslist	=	$dbc->get_students_matrix($flextable,$students,$status_id,$notstatus_ids);
+//we only want to get the student matrix if students have been provided
+$studentslist	= (!empty($students)) ?	$dbc->get_students_matrix($flextable,$students,$status_id,$notstatus_ids) : false;
 
 //get the default status item which will be used as the status for students who
 //have not entered their ilp and have not had a status assigned

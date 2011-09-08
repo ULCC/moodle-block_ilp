@@ -37,12 +37,10 @@ $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
 $comment_id = $PARSER->optional_param('comment_id', NULL, PARAM_INT);
 
 //get the id the comment if one is being edited
-$selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
+$selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_RAW);
 
 //get the id the comment if one is being edited
-$tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_INT);
-
-
+$tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_RAW);
 
 $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php",array('report_id'=>$report_id,'user_id'=>$user_id,'course_id'=>$course_id,'entry_id'=>$entry_id,'comment_id'=>$comment_id,'selectedtab'=>$selectedtab,'tabitem'=>$tabitem));
 

@@ -86,7 +86,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        $data = (is_array($querydata)) ? array_shift( $querydata ) : $querydata;
 	        
 	        if (!empty($data)) {
-	        	$this->data	=	 array( $data[ $attendance_field ] , $data[ $punctuality_field  ] );
+	        	$this->data[]	=	 array( $data[ $attendance_field ] , $data[ $punctuality_field  ] );
 	        } 
         }
     }

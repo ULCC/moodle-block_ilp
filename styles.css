@@ -139,6 +139,20 @@
    -ms-overflow-y: hidden;
 }
 
+/* JAVASCRIPT CSS DO NOT REMOVE */
+
+.ilp form.hidden, .ilp img.hidden  .ilp input.hidden {
+    display             : none;
+    visibility			: hidden;
+}
+
+.ilp form.nothidden {
+    display             : inline;
+    visibility			: visible;
+    
+}
+
+
 /* ATTENDANCE */
 
 /* ATTENDANCE - Register by Class */

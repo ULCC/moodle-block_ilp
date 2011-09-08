@@ -218,7 +218,10 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	 	$update 	=	(!empty($data->entry_id)) ? true : false; 
 	 	
 	 	/*
-	 	if (empty($update))		{
+	 	 * The calendar event has been removed as it is not possible to create a calendar event that we can easily update without a
+	 	 *  way to refernce the calendar entry. This reference should be placed inside of the plugins entry table 
+	 	 *  
+ 	 	if (empty($update))		{
 	 		$event = new object();
 	        $event->name        = $title;
 	        $event->description = "<br/><a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$data->user_id}'>{$title}</a>";
