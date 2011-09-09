@@ -146,6 +146,7 @@ class ilp_ajax_table extends ilp_flexible_table {
      * Returns the current setting for a given filter
      *
      * @param string $filter the name of the filter that's required
+     * @return filter
      */
     function get_filter($filter) {
         global $SESSION;

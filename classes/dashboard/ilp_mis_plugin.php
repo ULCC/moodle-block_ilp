@@ -13,57 +13,57 @@
  */
 
 
-
-//require the ilp_plugin.php class 
-require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_plugin.php');
+//require the ilp_plugin.php class
+require_once($CFG->dirroot . '/blocks/ilp/classes/dashboard/ilp_plugin.php');
 
 //require the ilp_mis_connection.php file 
-require_once($CFG->dirroot.'/blocks/ilp/db/ilp_mis_connection.php');
+require_once($CFG->dirroot . '/blocks/ilp/db/ilp_mis_connection.php');
 
 
-abstract class ilp_mis_plugin extends ilp_plugin {
-	
-	public 		$templatefile;
-	
-	/*
-	 * This var should hold the connection to the mis database
-	 */
-	public		$db; 
+abstract class ilp_mis_plugin extends ilp_plugin
+{
 
-	/*
-	 * This var should hold the tabletype used by the plugin in queries 
-	 */
-	public		$tabletype;
-	
-	/*
-	 * This var should hold the data retrieved from the dbquery function  
-	 */
-	public		$data;
-	
-    protected $params;  //initialisation params set at invocation time
+    public $templatefile;
+
+    /*
+      * This var should hold the connection to the mis database
+      */
+    public $db;
+
+    /*
+      * This var should hold the tabletype used by the plugin in queries
+      */
+    public $tabletype;
+
+    /*
+      * This var should hold the data retrieved from the dbquery function
+      */
+    public $data;
+
+    protected $params; //initialisation params set at invocation time
 
 
-	
-	/**
+    /**
      * Constructor
      */
-    function __construct( $params ) {
-    	global	$CFG;
-    	
-		//set the directory where plugin files of type ilp_dashboard_tab are stored  
-    	$this->plugin_class_directory	=	$CFG->dirroot."/blocks/ilp/classes/dashboard/mis";
-    	
-    	//set the table that the details of these plugins are stored in
-    	$this->plugintable	=	"block_ilp_mis_plugin";
-    	
-    	//call the parent constructor
-    	parent::__construct();
-    	
-    	//set the name of the template file should be a html file with the same name as the class
-    	$this->templatefile		=	$this->plugin_class_directory.'/'.$this->name.'.html';
+    function __construct($params)
+    {
+        global $CFG;
 
-        $this->set_params( $params );
-        $this->db = new ilp_mis_connection( $params );
+        //set the directory where plugin files of type ilp_dashboard_tab are stored
+        $this->plugin_class_directory = $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis";
+
+        //set the table that the details of these plugins are stored in
+        $this->plugintable = "block_ilp_mis_plugin";
+
+        //call the parent constructor
+        parent::__construct();
+
+        //set the name of the template file should be a html file with the same name as the class
+        $this->templatefile = $this->plugin_class_directory . '/' . $this->name . '.html';
+
+        $this->set_params($params);
+        $this->db = new ilp_mis_connection($params);
     }
 
     /*
@@ -74,74 +74,80 @@ abstract class ilp_mis_plugin extends ilp_plugin {
     * @param array $additionalargs
     * @return array
     */
-    protected function dbquery( $table, $params=null, $fields='*', $addionalargs=null ){
-        return	( $this->tabletype == ILP_MIS_STOREDPROCEDURE ) 	
-        		? 	$this->db->return_stored_values( $table, $params )
-           		:	$this->db->return_table_values( $table, $params, $fields, $addionalargs )	;
+    protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null)
+    {
+        return ($this->tabletype == ILP_MIS_STOREDPROCEDURE)
+                ? $this->db->return_stored_values($table, $params)
+                : $this->db->return_table_values($table, $params, $fields, $addionalargs);
     }
 
-	
+
     /**
      * Installs any new plugins
      */
-    public function install_new_plugins() {
-    	global $CFG;
-    	
+    public function install_new_plugins()
+    {
+        global $CFG;
+
         // include the ilp db
-        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot . '/blocks/ilp/db/ilp_db.php');
 
         // instantiate the ilp db class needed as this function will be called 
         //when not in object context
         $dbc = new ilp_db();
-    	
-    	//call the install new plugins function from the parent class
-    	//pass the list of plugins currently installed to it
-        parent::install_new_plugins($dbc->get_mis_plugins(),$CFG->dirroot."/blocks/ilp/classes/dashboard/mis");
+
+        //call the install new plugins function from the parent class
+        //pass the list of plugins currently installed to it
+        parent::install_new_plugins($dbc->get_mis_plugins(), $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis");
 
     }
-    
-    
+
+
     /**
      * This fucntion updates the install plugin record it sets the plugin type (overview or detail)
      */
-    function install($plugin_id) {
-    	$misplugin	=	$this->dbc->get_mis_plugin_by_id($plugin_id);
-    	
-    	$misplugin->type	=	$this->plugin_type();
-    	
-    	$this->dbc->update_mis_plugin($misplugin);
+    function install($plugin_id)
+    {
+        $misplugin = $this->dbc->get_mis_plugin_by_id($plugin_id);
+
+        $misplugin->type = $this->plugin_type();
+
+        $this->dbc->update_mis_plugin($misplugin);
     }
-    
-   	 /**
+
+    /**
      * Force extending class to implement a display function
      */
-     abstract function display();
-     
-     /**
+    abstract function display();
+
+    /**
      * Force extending class to implement the plugin type function
      */
-     abstract function plugin_type();  
+    abstract function plugin_type();
 
-    protected function set_params( $params ){
+    protected function set_params($params)
+    {
         $this->params = $params;
     }
 
-    public function set_data(){}
-	
-    function config_settings(&$settings) {
+    public function set_data()
+    {
+    }
+
+    function config_settings(&$settings)
+    {
         return $settings;
     }
 
     /**
      * This function is used if the plugin is displayed in the tab menu.
-     * Do not use a menu string in this function as it will cause errors 
-     * 
+     * Do not use a menu string in this function as it will cause errors
+     *
      */
-    function tab_name() {
-    	return 'MIS Plugin';
+    function tab_name()
+    {
+        return 'MIS Plugin';
     }
-
-
 
 
 }

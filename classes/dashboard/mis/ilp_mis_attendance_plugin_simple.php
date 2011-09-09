@@ -180,5 +180,17 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     function tab_name() {
     	return 'Simple Overview';
     }
-    
+
+    function getAttendance()
+    {
+        return $this->data[0];
+
+    }
+
+    function getPunctuality()
+    {
+        return $this->data[1];
+    }
+
+
 }
