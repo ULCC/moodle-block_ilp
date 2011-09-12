@@ -100,7 +100,7 @@ if (!empty($course_id)) {
 	
 	
 } else {
-	//get the list of tutess for this user	
+	//get the list of tutees for this user
 	$student	=	$dbc->get_user_tutees($USER->id);
 	
 	$pagetitle	=	get_string('mytutees','block_ilp');

@@ -217,7 +217,7 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
     /**
      * Retrieves user data from the mis database
      *
-     * @param $mis_user_id the mis id of the user whose data will be retireved.
+     * @param $mis_user_id the mis id of the user whose data will be retrieved.
      */
     function set_data($mis_user_id)
     {
@@ -330,7 +330,7 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
 
     function getAttendance()
     {
-        // TODO: Implement getAttendance() method.
+        return 'test';
     }
 
     function getPunctuality()

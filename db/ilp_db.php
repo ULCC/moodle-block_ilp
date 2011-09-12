@@ -133,7 +133,7 @@ class ilp_db {
 
 
 /**
- * Databse class holding functions to actually perform the queries.
+ * Database class holding functions to actually perform the queries.
  *
  * This extends the logging class which intercepts all insert, update and delete
  * actions that are executed on the database and makes a record of what data was
@@ -1747,16 +1747,14 @@ class ilp_db_functions	extends ilp_logging {
      * Returns a paginated list of all students
      *
      * @param object $flextable the table where the matrix will be displayed
-     * @param array  $student_ids an array contain the ids of studdents to be displayed
+     * @param array  $student_ids an array contain the ids of students to be displayed
      * @param int    $status_id the status id that should be matched
      * @param bool   $includenull allows those without a status to be displayed
      * 
      * @return mixed array of object containing all students in a course or false
      */
     function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false) {
-    	
 
-    	
         $select = "SELECT 		u.id as id,
         						u.firstname as firstname,
         						u.lastname as lastname,
@@ -1808,7 +1806,7 @@ class ilp_db_functions	extends ilp_logging {
         // get a count of all the records for the pagination links
         $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
 
-        var_dump($select.$from.$where.$sort);
+        //var_dump($select.$from.$where.$sort);
         
         
         // tell the table how many pages it needs

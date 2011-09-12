@@ -26,7 +26,10 @@ echo $OUTPUT->header();
 if (isset($course_id)) { 
 	if	(!empty($user_courses) && count($user_courses) > 0) { 
 ?>
-	<label for='course_id'><?php echo get_string('changecourse','block_ilp'); ?></label>
+
+
+
+        <label for='select_course_id'><?php echo get_string('changecourse','block_ilp'); ?></label>
 	<select id='select_course_id' name='course_id'>
 		<?php foreach ($user_courses as $c) {?>
 			<option value='<?php echo $c->id; ?>'  <?php if ($course_id == $c->id) echo 'selected="selected"';?> ><?php echo $c->shortname?></option>
@@ -43,7 +46,7 @@ if (isset($tutor)) {
 ?>
 <input type='hidden' name='tutor' value='<?php if (isset($tutor)) echo $tutor?>' >
 <?php } ?>
-	<label for='status_id'><?php echo get_string('status','block_ilp'); ?></label>
+	<label for='select_status'><?php echo get_string('status','block_ilp'); ?></label>
 	<select id='select_status' name='status_id'>
 		<option value='0' <?php if ($status_id == 0) echo "selected='selected'"; ?> ><?php echo get_string('anystatus','block_ilp'); ?></option>
 		<?php foreach ($status_items as $s) {?>

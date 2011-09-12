@@ -19,6 +19,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
     /**
      *
      * return the punctuality
+     * @return int
      */
     public function get_student_punctuality()
     {
@@ -28,6 +29,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
     /**
      *
      * return the attendance
+     * @return int
      */
     public function get_student_attendance()
     {
@@ -36,16 +38,15 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
 
 
     /**
-     *
      * This function returns the percentage data for the given student for either
      * attendance or punctuality
-     *
-     * @param string $datatype expected to be attenance or punctuality
+     * @param $data_type expected to be attendance or punctuality
+     * @return bool
      */
-    public function return_percent_data($datatype)
+    public function return_percent_data($data_type)
     {
         if (!empty($this->data)) {
-            if (!empty($this->data[$datatype])) return $this->data[$datatype];
+            if (!empty($this->data[$data_type])) return $this->data[$data_type];
         }
         return false;
     }
@@ -65,13 +66,14 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
     public function set_data($student_id)
     {
         //get the plugins configuration and pass to variables
-        $tablename = get_config('block_ilp', 'mis_plugin_attendance_percentbarstudenttable'); //$this->params[ 'student_table' ];
-        if (!empty($tablename)) {
+        $table_name = get_config('block_ilp', 'mis_plugin_attendance_percentbarstudenttable'); //$this->params[ 'student_table' ];
+
+        if (!empty($table_name)) {
             $keyfield = get_config('block_ilp', 'mis_plugin_attendance_percentbarstudentid');
             $attendance_field = get_config('block_ilp', 'mis_plugin_attendance_percentbarpunctuality');
             $punctuality_field = get_config('block_ilp', 'mis_plugin_attendance_percentbarattendance');
 
-            $querydata = $this->dbquery($tablename, array($keyfield => array('=' => $student_id)), array($attendance_field, $punctuality_field));
+            $querydata = $this->dbquery($table_name, array($keyfield => array('=' => $student_id)), array($attendance_field, $punctuality_field));
 
             $data = (is_array($querydata)) ? array_shift($querydata) : $querydata;
 
@@ -110,7 +112,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_attendance_percentbarstudentid', get_string('ilp_mis_attendance_percentbar_plugin_studentid', 'block_ilp'), get_string('ilp_mis_attendance_percentbar_plugin_studentiddesc', 'block_ilp'), 'studentID');
 
-        $this->config_text_element($mform, 'mis_plugin_attendance_percentbarpunctuality', get_string('ilp_mis_attendance_percentbar_plugin_punchuality', 'block_ilp'), get_string('ilp_mis_attendance_percentbar_plugin_punchualitydesc', 'block_ilp'), 'punctuality');
+        $this->config_text_element($mform, 'mis_plugin_attendance_percentbarpunctuality', get_string('ilp_mis_attendance_percentbar_plugin_punctuality', 'block_ilp'), get_string('ilp_mis_attendance_percentbar_plugin_punctualitydesc', 'block_ilp'), 'punctuality');
 
         $this->config_text_element($mform, 'mis_plugin_attendance_percentbarattendance', get_string('ilp_mis_attendance_percentbar_plugin_attendance', 'block_ilp'), get_string('ilp_mis_attendance_percentbar_plugin_attendancedesc', 'block_ilp'), 'attendance');
 
@@ -168,12 +170,12 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
 
     function getAttendance()
     {
-        // TODO: Implement getAttendance() method.
+        return $this->return_percent_data('attendance');
     }
 
     function getPunctuality()
     {
-        // TODO: Implement getPunctuality() method.
+        return $this->return_percent_data('punctuality');
     }
 
 

@@ -498,7 +498,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
     /**
      * This function is used if the plugin is displayed in the tab menu.
      * Do not use a menu string in this function as it will cause errors
-     *
+     *@return string 
      */
     function tab_name()
     {
