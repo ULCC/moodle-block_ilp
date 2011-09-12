@@ -33,7 +33,7 @@ $status_id = $PARSER->optional_param('status_id', 0, PARAM_INT);
 $dbc = new ilp_db();
 
 // set up the flexible table for displaying the portfolios
-$flex_table = new ilp_ajax_table("student_listcourse_id={$course_id}tutor={$tutor}status_id={$status_id}");
+$flex_table = new ilp_ajax_table("student_list");//course_id={$course_id}tutor={$tutor}status_id={$status_id}");
 
 $flex_table->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
 $flex_table->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.ajax.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
@@ -109,6 +109,7 @@ $flex_table->define_headers($headers);
 $flex_table->set_attribute('summary', get_string('studentslist', 'block_ilp'));
 $flex_table->set_attribute('cellspacing', '0');
 $flex_table->set_attribute('class', 'generaltable fit overflowtable');
+$flex_table->set_attribute('id', "student_listcourse_id={$course_id}tutor={$tutor}status_id={$status_id}");
 
 
 $flex_table->initialbars(true);

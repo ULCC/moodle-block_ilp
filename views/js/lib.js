@@ -58,8 +58,8 @@ M.ilp_standard_functions = {
                 res = o.responseText;
                 console.log(res);
 
-                //console.log('empty');
-                document.getElementById(elem_id).innerHTML = "<span id='user_status' class='hidden' style='color:" + res[0] + "'>" + res[1] + "</span>";
+                console.log('elem_id '+elem_id);
+                document.getElementById(elem_id).innerHTML = res;//"<span id='user_status' class='hidden' style='color:" + res[0] + "'>" + res[1] + "</span>";
                 M.ilp_standard_functions.parse_scripts(elem_id);
             },
             // if it failed then do nothing
