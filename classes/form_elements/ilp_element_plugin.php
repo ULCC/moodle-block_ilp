@@ -8,7 +8,7 @@
  * @copyright &copy; 2009-2010 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package AssMgr
+ * @package ILP
  * @version 2.0
  */
 //abstract class assmgr_resource {
@@ -468,6 +468,25 @@ class ilp_element_plugin {
 		$this->entry_data( $reportfield_id,$entry_id, $entryobj );
 	 }
 	 
-	 
+	 /**
+	  * Function that determiones whether the class in question should have its data process in most cases 
+	  * this should be set to true (so the class willnot have to implement) however if the plugin class
+	  * does not process data (e.g free_html class) then the function should be implemented and should return
+	  * false 
+	  * 
+	  */
+	public function is_processable()	{
+    	return true;
+    }
+    
+	 /**
+	  * Function that determiones whether the class in question should have its data displayed in any view page
+	  * this should be set to true (so the class willnot have to implement) however if the plugin class
+	  * does not process data (e.g free_html class) then the function should be implemented and should return
+	  * false  
+	  */
+	public function is_viewable()	{
+    	return true;
+    }
 }
 ?>

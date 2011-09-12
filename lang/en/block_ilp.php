@@ -192,6 +192,9 @@
 	$string['selectedreports']					= 	'Selected Reports';
 	$string['selectedreportlist']				= 	'Select report list options';
 	$string['settings']							= 	'Settings';
+	$string['statenotchanged']					= 	'State has not been changed';
+	$string['statechanged']						= 	'State changed';
+	
 	$string['stausupdated'] 						= 	'User status updated';
 	$string['status']							= 	'Status';
 	$string['stringid']							=	'String ID';

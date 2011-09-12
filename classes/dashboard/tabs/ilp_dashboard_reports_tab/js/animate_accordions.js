@@ -1,13 +1,12 @@
 /**
- * Slider for the edit_portfolio page
  *
- * @version  1.0
+ * @version  2.0
  *
  * @copyright &copy; 2009-2010 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package AssMgr
- * @version 1.0
+ * @package ILP
+ * @version 2.0
  */
 
 // global variables

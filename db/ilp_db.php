@@ -133,7 +133,7 @@ class ilp_db {
 
 
 /**
- * Database class holding functions to actually perform the queries.
+ * Databse class holding functions to actually perform the queries.
  *
  * This extends the logging class which intercepts all insert, update and delete
  * actions that are executed on the database and makes a record of what data was
@@ -1010,7 +1010,7 @@ class ilp_db_functions	extends ilp_logging {
     * @param array for where clause
     * @return array of objects
     */    
-	 public function listelement_item_exists( $item_tablename, $conditionlist ){
+	public function listelement_item_exists( $item_tablename, $conditionlist ){
 		return $this->dbc->get_records( $item_tablename, $conditionlist );
     }
 
@@ -1061,10 +1061,10 @@ class ilp_db_functions	extends ilp_logging {
         );
 
 		$sql = "SELECT " . implode( ',' , $fieldlist ) . "
-				FROM  {$CFG->prefix}block_ilp_report_field rptf
-				JOIN $plugin_table ON $plugin_table.reportfield_id = rptf.id
-				JOIN $item_table ON $item_table.parent_id = $plugin_table.id
-				WHERE $plugin_table.reportfield_id = $reportfield_id
+				FROM  	{$CFG->prefix}block_ilp_report_field rptf
+				JOIN 	$plugin_table ON $plugin_table.reportfield_id = rptf.id
+				JOIN 	$item_table ON $item_table.parent_id = $plugin_table.id
+				WHERE 	$plugin_table.reportfield_id = $reportfield_id
 		";
     	return $this->dbc->get_records_sql( $sql );
     }
@@ -1161,10 +1161,10 @@ class ilp_db_functions	extends ilp_logging {
     	 						{$CFG->prefix}block_ilp_plu_ste as s,
     	 						{$CFG->prefix}block_ilp_plu_ste_items as si
     	 			WHERE		rf.plugin_id	=	p.id
-    	 			AND		rf.id			=	s.reportfield_id
-    	 			AND		s.id			=	si.parent_id
-    	 			AND		rf.report_id	=	{$report_id}
-    	 			AND		p.name			=	'ilp_element_plugin_state'";
+    	 			AND			rf.id			=	s.reportfield_id
+    	 			AND			s.id			=	si.parent_id
+    	 			AND			rf.report_id	=	{$report_id}
+    	 			AND			p.name			=	'ilp_element_plugin_state'";
     	 			
     	 return		$this->dbc->get_records_sql($sql);			
     }
@@ -1442,30 +1442,28 @@ class ilp_db_functions	extends ilp_logging {
     * @param	string $keyfield field from $itemtable to use as key
     * @param	string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
     * 
+    * In my opinion this is a flakey function as it bases the 
+    * 
     * @return	mixed object or false
     */
-   public function get_state_item_id($tablename,$parent_id,$itemvalue, $keyfield='value', $itemtable=false )	{
+   public function get_state_item_id($tablename,$parent_id,$itemvalue, $keyfield='id', $itemtable=false )	{
    		global 	$CFG;
 
-        if( $itemtable ){
-            $tablename = $itemtable;
-        }
-        else{
-   		    //add '_items' to the end of the tablename 
-   		    $tablename	= $tablename."_items";
-        }
-   		
+   		 $tablename =	( !empty($itemtable) ) ? $itemtable : $tablename."_items";
+   		   		
    		$sql	=	"SELECT		* 
    					 FROM 		{$CFG->prefix}{$tablename} 	as si
-        ";
-        $sql    .=  " WHERE		$keyfield		=	'{$itemvalue}'";
-        if( !$itemtable ){
+        		 	 WHERE		$keyfield		=	{$itemvalue}";
+   		
+        if( !$itemtable )	{
             //not an '_items' table - so comes from some other area eg course and has no parent id
    		    $sql    .=  " AND   	parent_id	=	{$parent_id}";
         }
-   		
+
    		return 		$this->dbc->get_record_sql($sql);
    }
+   
+   
    
    
    /**
@@ -1747,14 +1745,16 @@ class ilp_db_functions	extends ilp_logging {
      * Returns a paginated list of all students
      *
      * @param object $flextable the table where the matrix will be displayed
-     * @param array  $student_ids an array contain the ids of students to be displayed
+     * @param array  $student_ids an array contain the ids of studdents to be displayed
      * @param int    $status_id the status id that should be matched
      * @param bool   $includenull allows those without a status to be displayed
      * 
      * @return mixed array of object containing all students in a course or false
      */
     function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false) {
+    	
 
+    	
         $select = "SELECT 		u.id as id,
         						u.firstname as firstname,
         						u.lastname as lastname,
@@ -1806,9 +1806,6 @@ class ilp_db_functions	extends ilp_logging {
         // get a count of all the records for the pagination links
         $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
 
-        //var_dump($select.$from.$where.$sort);
-        
-        
         // tell the table how many pages it needs
         $flextable->totalrows($count);
         
@@ -2053,6 +2050,10 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->dbc->get_record('event',array('name'=>$name,'instance'=>$entry_id,'userid'=>$user_id));
     }
     
+    
+    function get_reportfield_by_id($reportfield_id)	{
+    	return $this->dbc->get_record('block_ilp_report_field',array('id'=>$reportfield_id));
+    }
 }
 
 

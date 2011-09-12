@@ -232,7 +232,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							if (!empty($has_courserelated))	{
 								$courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
 								//the should not be anymore than one of these fields in a report
-							foreach ($courserelated as $cr) {
+								foreach ($courserelated as $cr) {
 										$dontdisplay[] 	=	$cr->id;
 										$courserelatedfield_id	=	$cr->id;	
 								}
@@ -335,12 +335,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 										
 										//instantiate the plugin class
 										$pluginclass	=	new $classname();
-	
-										$pluginclass->load($field->id);
 										
-										//call the plugin class entry data method
-										$pluginclass->view_data($field->id,$entry->id,$entry_data);
-	
+										if ($pluginclass->is_viewable() != false)	{
+											$pluginclass->load($field->id);
+
+											//call the plugin class entry data method
+											$pluginclass->view_data($field->id,$entry->id,$entry_data);
+										} else	{
+											$dontdisplay[]	=	$field->id;
+										}
+										
 									}
 									
 									include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_reports_tab.html');							

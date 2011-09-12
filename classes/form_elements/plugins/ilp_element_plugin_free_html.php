@@ -38,7 +38,7 @@ class ilp_element_plugin_free_html extends ilp_element_plugin {
     	//html field for element label
         $mform->addElement(
             'html',
-            $this->description
+            strip_tags(html_entity_decode($this->description),STRIP_TAGS_DESCRIPTION)
         );
 
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
@@ -134,6 +134,15 @@ class ilp_element_plugin_free_html extends ilp_element_plugin {
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
         }
+    }
+
+    
+	public function is_processable()	{
+    	return false;
+    }
+    
+	public function is_viewable()	{
+    	return false;
     }
 
     public function uninstall() {

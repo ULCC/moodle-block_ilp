@@ -169,7 +169,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
     	$fieldname	=	"{$this->reportfield_id}_field";
     	
     	if (!empty($this->description)) {
-    		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),STRIP_TAGS_DESCRIPTION));
     		$this->label = '';
     	} 
     	
@@ -263,7 +263,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	 	//$data->user_id
 	 	//data->report_id - for report name
 	 	
-	 	//var_dump($data->$fieldname);
+
 	 	
 	 	//call the parent entry_process_data function to handle saving the field value	 	
 	 	return parent::entry_process_data($reportfield_id,$entry_id,$data);

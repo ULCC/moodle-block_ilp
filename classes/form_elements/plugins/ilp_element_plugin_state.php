@@ -86,7 +86,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 			
 			foreach( $objlist as $obj ){
 				//place the name into an array with value as key
-				$outlist[ $obj->value ] = $obj->name;
+				$outlist[ $obj->id ] = $obj->name;
 				
 				//if the the name of the extra field is passfail then 
                 if( 'passfail' == $field ){
@@ -133,6 +133,54 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 	}
 	
 
+	  /**
+	  * places entry data formated for viewing for the report field given  into the  
+	  * entryobj given by the user. By default the entry_data function is called to provide
+	  * the data. Any child class which needs to have its data formated should override this
+	  * function. 
+	  * 
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * @param int $entry_id the id of the entry
+	  * @param object $entryobj an object that will add parameters to
+	  */
+	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+	  		global $CFG,$OUTPUT,$USER;
+	  	
+	  		$fieldname	=	$reportfield_id."_field";
+	  		
+	 		$pluginentry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+	 		
+	 		$entry			=	$this->dbc->get_entry_by_id($entry_id);
+	 		
+			if (!empty($pluginentry)) {
+		 		$fielddata	=	array();
+		 		$comma	= "";
+		 		
+		 		$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename);
+		 		
+		 		$optionslist	=	array();
+		 		
+		 		if (!empty($objlist)) {
+		 			foreach( $objlist as $obj ){
+						//place the name into an array with value as key
+						$optionslist[ $obj->id ] = $obj->name;
+		 			}
+		 		}
+
+		 		
+		 		
+			 	//loop through all of the data for this entry in the particular entry	
+
+		 		$query_string	=	$_SERVER['QUERY_STRING'];
+		 		
+			 	foreach($pluginentry as $e) {
+			 		
+			 		$entryobj->$fieldname	.=	($entry->user_id == $USER->id) ? $OUTPUT->single_select($CFG->wwwroot."/blocks/ilp/actions/change_state.php?entry_id={$entry_id}&reportfield_id={$reportfield_id}&$query_string",'item_id',$optionslist,$e->parent_id,$nothing=array(''=>'choosedots'),'sc_rep{$reportfield_id}ent{$entry_id}') : $e->name;
+			 	}
+	 		}
+	  }
+	
+	
     public function audit_type() {
         return get_string('ilp_element_plugin_state_type','block_ilp');
     }

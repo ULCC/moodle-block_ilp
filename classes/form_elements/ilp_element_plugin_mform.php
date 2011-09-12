@@ -105,10 +105,10 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         
        	//text field for element description
         $mform->addElement(
-            'textarea',
+            'htmleditor',
             'description',
             get_string('description', 'block_ilp'),
-            array('class' => 'form_input')
+            array('class' => 'form_input','rows'=> '10', 'cols'=>'65')
         );
         
         $mform->addRule('description', null, 'maxlength', 1000, 'client');

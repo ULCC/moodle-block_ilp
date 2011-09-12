@@ -16,7 +16,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		$this->local_config_file = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins/'.$local_config_filename;
     	
         $this->external_items_table = false;
-        $this->external_items_keyfield = 'value';
+        $this->external_items_keyfield = 'id';
 	    
    }
 
@@ -59,16 +59,15 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
             $pluginentry->audit_type = $this->audit_type();
 			$pluginentry->entry_id  = 	$entry_id;
 	 		$pluginentry->value		=	$data->$fieldname;
-
-			if( is_string( $pluginentry->value ))	{
-	 		    $state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$fieldname, $this->external_items_keyfield, $this->external_items_table );
+	 		//pass the values given to $entryvalues as an array
+	 		$entryvalues	=	(!is_array($pluginentry->value)) ? array($pluginentry->value): $pluginentry->value;
+	 		
+	 		foreach ($entryvalues as $ev) {
+	 			$state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$ev, $this->external_items_keyfield, $this->external_items_table );
 	 		    $pluginentry->parent_id	=	$state_item->id;	
-	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
-			} else if (is_array( $pluginentry->value ))	{
-                $pluginentry->parent_id = $reportfield_id;
-				$result	=	$this->write_multiple( $this->data_entry_tablename, $pluginentry );
-			}
- 
+	 			$pluginentry->value 	= 	$state_item->value;
+				$result					= 	$this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+	 		}
 	 	
 			return	$result;
 	 }
@@ -116,39 +115,18 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	  */
 	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
 	  		$fieldname	=	$reportfield_id."_field";
-	  		
 	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
-	 		
 			if (!empty($entry)) {
 		 		$fielddata	=	array();
 		 		$comma	= "";
 			 	//loop through all of the data for this entry in the particular entry		 	
 			 	foreach($entry as $e) {
-			 		$entryobj->$fieldname	.=	$e->name.$comma;
+			 		$entryobj->$fieldname	.=	"{$comma}{$e->name}";
 			 		$comma	=	",";
 			 	}
 	 		}
 	  }
 
-	 
-	/*
-	* called by entry_process_data
-	* allows multi-select values to be written as multiple rows in entry table
-	* @param string $tablename
-	* @param object $multi_pluginentry ($multi_pluginentry->value is array of strings)
-	* @return boolean
-	*/
-	 protected function write_multiple( $tablename, $multi_pluginentry ){
-		//if we're here, assume $pluginentry->value is array
-		$pluginentry = $multi_pluginentry;
-		$result		=	true;
-		foreach( $multi_pluginentry->value as $value ){
-			$pluginentry->value = $value;
-			if (!$this->dbc->create_plugin_entry( $this->data_entry_tablename, $pluginentry )) $result = false;
-		}
-		//if any of the didn't work $result will be false
-		return $result;
-	 }
 	 
      public function load($reportfield_id) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
@@ -189,9 +167,10 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     * @param string $field - optional additional field to retrieve, along with value and name
     */
 	protected function get_option_list_text( $reportfield_id , $sep="\n", $field=false ){
-		$optionlist = $this->get_option_list( $reportfield_id, $field );
+		$optionlist = $this->get_option_list( $reportfield_id, $field, false);
 		$rtn = '';
-		if( !empty( $optionlist ) ){
+		
+		if	(!empty( $optionlist ) )	{
 			foreach( $optionlist as $key=>$value ){
 				$rtn .= "$key:$value$sep";
 			}
@@ -199,22 +178,24 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		return $rtn;
 	}
 
-    /*
+    /**
     * read rows from item table and return them as array of key=>value
     * @param int $reportfield_id
     * @param string $field - extra field to read from items table: used by ilp_element_plugin_state
+    * @param bool	$useid	should ids be returned as the value or should the actual value 
+    *
     */
-	protected function get_option_list( $reportfield_id, $field=false ){
-		//return $this->optlist2Array( $this->get_optionlist() );   	
+	protected function get_option_list( $reportfield_id, $field=false, $useid=true ){
 		$outlist = array();
-		if( $reportfield_id ){
+		if( $reportfield_id )	{
 			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, $field );
-			foreach( $objlist as $obj ){
-				$outlist[ $obj->value ] = $obj->name;
+			
+			foreach( $objlist as $obj )	{
+				//obj->value will only be returned if specifically requested (this should only befor value editing)
+				//in all other cases id should be returned
+				$value	=	(!empty($useid)) ? $obj->id : $obj->value;
+				$outlist[ $value ] = $obj->name;
 			}
-		}
-		if( !count( $outlist ) ){
-			//echo "no items in {$this->items_tablename}";
 		}
 		return $outlist;
 	}
@@ -255,7 +236,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		$optionlist = $this->get_option_list( $this->reportfield_id );
 
     	if (!empty($this->description)) {
-    		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),STRIP_TAGS_DESCRIPTION));
     		$this->label = '';
     	} 
 

@@ -14,9 +14,9 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
      * Constructor
      */
     function __construct() {
-    	$this->tablename = "block_ilp_plu_dd";
+    	$this->tablename 			= "block_ilp_plu_dd";
     	$this->data_entry_tablename = "block_ilp_plu_dd_ent";
-	$this->items_tablename = "block_ilp_plu_dd_items";
+		$this->items_tablename 		= "block_ilp_plu_dd_items";
 	parent::__construct();
     }
 	
@@ -34,10 +34,10 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
 			$plugin			=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
 			$pluginrecord		=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
 			if (!empty($pluginrecord)) {
-				$this->id			=	$pluginrecord->id;
+				$this->id				=	$pluginrecord->id;
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
-				$this->req			=	$reportfield->req;
+				$this->req				=	$reportfield->req;
 				$this->position			=	$reportfield->position;
 				$this->selecttype		=	$pluginrecord->selecttype;
 
@@ -56,16 +56,16 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
     * function used to return the language strings for the plugin
     */
     function language_strings(&$string) {
-        $string['ilp_element_plugin_dd'] 			= 'Select';
+        $string['ilp_element_plugin_dd'] 				= 'Select';
         $string['ilp_element_plugin_dd_type'] 			= 'select box';
-        $string['ilp_element_plugin_dd_description'] 		= 'A drop-down selector';
-		$string[ 'ilp_element_plugin_dd_optionlist' ] 		= 'Option List';
+        $string['ilp_element_plugin_dd_description'] 	= 'A drop-down selector';
+		$string[ 'ilp_element_plugin_dd_optionlist' ] 	= 'Option List';
 		$string[ 'ilp_element_plugin_dd_single' ] 		= 'Single select';
 		$string[ 'ilp_element_plugin_dd_multi' ] 		= 'Multi select';
-		$string[ 'ilp_element_plugin_dd_typelabel' ] 		= 'Select type (single/multi)';
+		$string[ 'ilp_element_plugin_dd_typelabel' ] 			= 'Select type (single/multi)';
 		$string[ 'ilp_element_plugin_dd_existing_options' ] 	= 'existing options';
-		$string[ 'ilp_element_plugin_error_item_key_exists' ]		= 'The following key already exists in this element';
-		$string[ 'ilp_element_plugin_error_duplicate_key' ]	= 'Duplicate key';
+		$string[ 'ilp_element_plugin_error_item_key_exists' ]	= 'The following key already exists in this element';
+		$string[ 'ilp_element_plugin_error_duplicate_key' ]		= 'Duplicate key';
 	        
         return $string;
     }

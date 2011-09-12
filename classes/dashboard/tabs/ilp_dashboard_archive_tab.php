@@ -88,8 +88,6 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 					
 		//if the seltab is empty then the highest level tab has been selected
 		if (empty($seltab))	$seltab	=	array($selectedtab); 
-									
-		//var_dump($this->tabitem);
 		
 		$pluginoutput	=	"";
 

@@ -421,7 +421,7 @@ class moodle2_renderer_emulator {
  * @copyright &copy; 2009-2010 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package AssMgr
+ * @package ILP
  * @version 2.0
  */
 class moodle2_database_manager_emulator {
@@ -450,7 +450,7 @@ class moodle2_database_manager_emulator {
  * @copyright &copy; 2009-2010 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package AssMgr
+ * @package ILP
  * @version 2.0
  */
 class moodle2_page_requires {

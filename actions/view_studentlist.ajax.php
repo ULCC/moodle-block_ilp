@@ -33,10 +33,11 @@ $status_id = $PARSER->optional_param('status_id', 0, PARAM_INT);
 $dbc = new ilp_db();
 
 // set up the flexible table for displaying the portfolios
-$flex_table = new ilp_ajax_table("student_list");//course_id={$course_id}tutor={$tutor}status_id={$status_id}");
+$flextable = new ilp_ajax_table("student_listcourse_id{$course_id}tutor{$tutor}status_id{$status_id}");
 
-$flex_table->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
-$flex_table->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.ajax.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
+
+$flextable->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
+$flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.ajax.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
 
 // set the basic details to dispaly in the table
 $headers = array(
@@ -54,24 +55,24 @@ $columns[] = 'view';
 
 
 //include the attendance 
-$mis_class_file = $CFG->dirroot . '/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_percentbar_plugin.php';
-$mis_available = false;
+$misclassfile = $CFG->dirroot . '/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_percentbar_plugin.php';
+$misavailable = false;
 
-if (file_exists($mis_class_file)) {
+if (file_exists($misclassfile)) {
 
-    include_once $mis_class_file;
+    include_once $misclassfile;
 
     //create an instance of the MIS class
-    $mis_class = new ilp_mis_attendance_percentbar_plugin();
+    $misclass = new ilp_mis_attendance_percentbar_plugin();
 
 
     $headers[] = get_string('attendance', 'block_ilp');
     $columns[] = 'u_attendcance';
-    $mis_attend_available = true;
+    $misattendavailable = true;
 
     $headers[] = get_string('punctuality', 'block_ilp');
     $columns[] = 'u_punctuality';
-    $mis_punctuality_available = true;
+    $mispunctualityavailable = true;
 
 }
 
@@ -80,13 +81,16 @@ if (file_exists($mis_class_file)) {
 $reports = $dbc->get_reports(ILP_ENABLED);
 
 //get the mamximum reports that can be displayed on the screen in the list
-$max_reports = get_config('block_ilp', 'ilp_max_reports');
+$maxreports = get_config('block_ilp', 'ilp_max_reports');
 
 //check if maxreports is empty if yes then set to 
-$max_reports = (!empty($max_reports)) ? $max_reports : ILP_DEFAULT_LIST_REPORTS;
+$maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 
 //set the number of report columns to display
-$reports = $flex_table->limitcols($reports, $max_reports);
+
+//removed as we no longer need the horizonatal scrolling
+//$reports	=	$flextable->limitcols($reports,$maxreports);
+
 
 //we are going to create headers and columns for all enabled reports 
 foreach ($reports as $r) {
@@ -94,27 +98,27 @@ foreach ($reports as $r) {
     $columns[] = $r->id;
 }
 
-$flex_table->hoz_string = 'displayingreports';
+$flextable->hoz_string = 'displayingreports';
 
 $headers[] = get_string('lastupdated', 'block_ilp');
 $columns[] = 'lastupdated';
 
 
-$flex_table->define_fragment('studentlist');
-$flex_table->collapsible(true);
+$flextable->define_fragment('studentlist');
+$flextable->collapsible(true);
 //define the columns and the headers in the flextable
-$flex_table->define_columns($columns);
-$flex_table->define_headers($headers);
+$flextable->define_columns($columns);
+$flextable->define_headers($headers);
 
-$flex_table->set_attribute('summary', get_string('studentslist', 'block_ilp'));
-$flex_table->set_attribute('cellspacing', '0');
-$flex_table->set_attribute('class', 'generaltable fit overflowtable');
-$flex_table->set_attribute('id', "student_listcourse_id={$course_id}tutor={$tutor}status_id={$status_id}");
+$flextable->set_attribute('summary', get_string('studentslist', 'block_ilp'));
+$flextable->set_attribute('cellspacing', '0');
+$flextable->set_attribute('class', 'generaltable fit overflowtable');
+$flextable->set_attribute('id', "student_listcourse_id={$course_id}tutor={$tutor}status_id={$status_id}");
 
 
-$flex_table->initialbars(true);
+$flextable->initialbars(true);
 
-$flex_table->setup();
+$flextable->setup();
 
 if (!empty($course_id)) {
     $users = $dbc->get_course_users($course_id);
@@ -128,37 +132,37 @@ foreach ($users as $u) {
     $students[] = $u->id;
 }
 
-$not_status_ids = false;
+$notstatus_ids = false;
 
 if (!empty($status_id)) {
 
-    $default_status_id = get_config('block_ilp', 'defaultstatusitem');
+    $defaultstatusid = get_config('block_ilp', 'defaultstatusitem');
 
-    if ($default_status_id == $status_id) {
-        $not_status_ids = true;
+    if ($defaultstatusid == $status_id) {
+        $notstatus_ids = true;
     }
 }
 
 //we only want to get the student matrix if students have been provided
-$students_list = (!empty($students)) ? $dbc->get_students_matrix($flex_table, $students, $status_id, $not_status_ids)
+$studentslist = (!empty($students)) ? $dbc->get_students_matrix($flextable, $students, $status_id, $notstatus_ids)
         : false;
 
 //get the default status item which will be used as the status for students who
 //have not entered their ilp and have not had a status assigned
-$default_status_item_id = get_config('block_ilp', 'defaultstatusitem');
+$defaultstatusitem_id = get_config('block_ilp', 'defaultstatusitem');
 
 //get the status item record
-$default_status_item = $dbc->get_status_item_by_id($default_status_item_id);
+$defaultstatusitem = $dbc->get_status_item_by_id($defaultstatusitem_id);
 
 
-$status_item = (!empty($default_status_item)) ? $default_status_item->name : get_string('unknown', 'block_ilp');
+$status_item = (!empty($defaultstatusitem)) ? $defaultstatusitem->name : get_string('unknown', 'block_ilp');
 
 //this is needed if the current user has capabilities in the course context, it allows view_main page to view the user
 //in the course context
 $course_param = (!empty($course_id)) ? "&course_id={$course_id}" : '';
 
-if (!empty($students_list)) {
-    foreach ($students_list as $student) {
+if (!empty($studentslist)) {
+    foreach ($studentslist as $student) {
         $data = array();
 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
@@ -171,16 +175,16 @@ if (!empty($students_list)) {
 
 
         //set the data for the student in question
-        $mis_class->set_data($student->id);
-        if (!empty($mis_attend_available)) {
-            $actual = $mis_class->getAttendance();
+        $misclass->set_data($student->id);
+        if (!empty($misattendavailable)) {
+            $actual = $misclass->getAttendance();
             //we only want to try to find the percentage if we can get the total possible
             // attendance else set it to 0;
             $data['u_attendcance'] = (!empty($actual)) ? $actual : 0;
         }
 
-        if (!empty($mis_punctuality_available)) {
-            $actual = $mis_class->getPunctuality();
+        if (!empty($mispunctualityavailable)) {
+            $actual = $misclass->getPunctuality();
             //we only want to try to find the percentage if we can get the total possible
             // punctuality else set it to 0;
             $data['u_punctuality'] = (!empty($actual)) ? $actual : 0;
@@ -209,8 +213,8 @@ if (!empty($students_list)) {
                 ? userdate($lastentry->timemodified, get_string('strftimedate', 'langconfig'))
                 : get_string('notapplicable', 'block_ilp');
 
-        $flex_table->add_data_keyed($data);
+        $flextable->add_data_keyed($data);
     }
 }
 
-$flex_table->print_html();
+$flextable->print_html();

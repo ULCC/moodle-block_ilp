@@ -60,11 +60,11 @@ class edit_status_item_mform extends ilp_moodleform {
        		 	$mform->setType('creator_id', PARAM_INT);
 
 	        
-//instantiate status class
-			require_once( "{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_status.php" );
-			$status = new ilp_element_plugin_status();
-//call the definition
-			$status->config_specific_definition( $mform );
+				//instantiate status class
+				require_once( "{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_status.php" );
+				$status = new ilp_element_plugin_status();
+				//call the definition
+				$status->config_specific_definition( $mform );
 		
 			        
 		        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
@@ -84,7 +84,6 @@ class edit_status_item_mform extends ilp_moodleform {
 			if (empty($data->id)) {
 				//we shouldn't be here
 	        	} else {
-					//$status = new ilp_element_plugin_status();
 					$this->errors = array();
 					if( $this->specific_validation( $data ) ){
 						//valid input
@@ -92,7 +91,7 @@ class edit_status_item_mform extends ilp_moodleform {
 						$this->specific_process_data( $data );
 					}
 					else{
-						var_crap( $this->errors, 'Validation Errors' );
+
 					}
 	        	}
    	    		return $data->id;
@@ -147,23 +146,7 @@ class edit_status_item_mform extends ilp_moodleform {
 			$itemrecord = new stdClass();	
 			$itemrecord->parent_id = $element_id;
 
-			//if( empty( $data_exists ) ){
-			if( 0 ){
-				//no user data - go ahead and delete existing items for this element, to be replaced by the submitted ones in $data
-				$delstatus = $this->dbc->delete_element_listitems_by_parent_id( $this->tablename, $element_id );
-					//if $delstatus false, there has been an error - alert the user
-			} elseif( 0 ) {
-				//user data has been submitted already - don't delete existing items, but add new ones if they are in $data
-				//purge $optionlist of already existing item_keys
-				//then it will be safe to write the items to the items table
-				foreach( $optionlist as $key=>$itemname ){
-					if( $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => $element_id, 'value' => $key ) ) ){
-						//this should never happen, because it shouldn't have passed validation, but you never know
-						unset( $optionlist[ $key ] );
-						//alert the user
-					}
-				}
-			}
+			
 			//now write fresh options from $data
             //keep a list of ids to be protected from deletion later
             $active_id_list = array();
@@ -232,14 +215,14 @@ class edit_status_item_mform extends ilp_moodleform {
             //optionlist is now the options just submitted from the mform, but this is not complete:
             //we must merge it with the options from the items table
 			//$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) );
-            if( 1 ){
+        
 			    //$status = new ilp_element_plugin_status();
                 $existing_options = $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) ) ;
                 foreach( $existing_options as $obj ){
                     //$optionlist[ $obj->value ] = $obj->name;
                     $optionlist[ $obj->value ] = $obj->name;
                 }
-            }
+            
 
 		        //all contents of $data->fail and $data->pass must match valid keys or values in $optionlist
 		        $sep = "\n";
@@ -249,7 +232,7 @@ class edit_status_item_mform extends ilp_moodleform {
 		        foreach( array( $fail_item_list, $pass_item_list ) as $item_list ){
 		            foreach( $item_list as $submitted_item ){
 		                if( trim( $submitted_item ) && !$this->is_valid_item( $submitted_item , $optionlist, $keysep ) ){
-var_crap( $submitted_item );var_crap( $optionlist );
+
 		                    $this->errors[] = get_string( 'ilp_element_plugin_error_not_valid_item' , 'block_ilp' ) . ": <em>$submitted_item</em>";
         				    $valid = false;
 		                }

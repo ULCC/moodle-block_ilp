@@ -150,7 +150,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 				//one item row inserted here
 				$itemrecord->value = $key;
 				$itemrecord->name = $itemname;
-                		$itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
 	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	 	} else {
@@ -183,7 +183,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 				//one item row inserted here
 				$itemrecord->value = $key;
 				$itemrecord->name = $itemname;
-                		$itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
 		 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	

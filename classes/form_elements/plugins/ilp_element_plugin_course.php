@@ -101,7 +101,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 			 	foreach($entry as $e) {
 			 		if (!empty($e->value)) {
 			 			$course	=	$this->dbc->get_course($e->value);
-			 			$entryobj->$fieldname	.=	$course->shortname.$comma;
+			 			$entryobj->$fieldname	.=	"{$comma}{$course->shortname}";
 			 			$comma	=	",";
 			 		}
 			 	}
@@ -209,7 +209,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 		$optionlist = $this->get_option_list( $this->reportfield_id, $user_id );
 
     	if (!empty($this->description)) {
-    		$mform->addElement('static', "{$fieldname}_desc", $this->label, $this->description);
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),STRIP_TAGS_DESCRIPTION));
     		$this->label = '';
     	} 
 
