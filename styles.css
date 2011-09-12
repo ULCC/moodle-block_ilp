@@ -152,7 +152,7 @@
     
 }
 
-.ilp overflowtable {
+.ilp .overflowtable {
 	overflow: auto;
     overflow-y: hidden;
 	-ms-overflow-y: hidden;
