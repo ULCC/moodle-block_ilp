@@ -29,8 +29,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
     {
         global $CFG, $PARSER, $PAGE;
 
-        $mis_period_id = $PARSER->optional_param('mis_period_id', NULL, PARAM_INT);
-        $mis_course_id = $PARSER->optional_param('mis_course_id', NULL, PARAM_INT);
+        $misperiod_id = $PARSER->optional_param('mis_period_id', NULL, PARAM_INT);
+        $miscourse_id = $PARSER->optional_param('mis_course_id', NULL, PARAM_INT);
 
         $params = explode('&', $_SERVER['QUERY_STRING']);
         $hiddenparams = "";
@@ -329,38 +329,38 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
     /**
      * Retrieves user data from the mis database
      *
-     * @param $mis_user_id the mis id of the user whose data will be retireved.
+     * @param $misuser_id the mis id of the user whose data will be retireved.
      */
-    function set_data($mis_user_id)
+    function set_data($misuser_id)
     {
         global $PARSER;
 
         $table = get_config('block_ilp', 'mis_plugin_course_byclass_table');
 
-        $this->mis_user_id = $mis_user_id;
+        $this->mis_user_id = $misuser_id;
 
         if (!empty($table)) {
 
-            $mis_period_id = $PARSER->optional_param('mis_period_id', NULL, PARAM_INT);
-            $mis_course_id = $PARSER->optional_param('mis_course_id', NULL, PARAM_INT);
+            $misperiod_id = $PARSER->optional_param('mis_period_id', NULL, PARAM_INT);
+            $miscourse_id = $PARSER->optional_param('mis_course_id', NULL, PARAM_INT);
 
             $sidfield = get_config('block_ilp', 'mis_plugin_course_byclass_studentidfield');
 
             //is the id a string or a int
             $idtype = get_config('block_ilp', 'mis_plugin_course_byclass_idtype');
-            $mis_user_id = (empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id;
+            $misuser_id = (empty($idtype)) ? "'{$misuser_id}'" : $misuser_id;
 
             //create the key that will be used in sql query
-            $keyfields = array($sidfield => array('=' => $mis_user_id));
+            $keyfields = array($sidfield => array('=' => $misuser_id));
 
-            if (!empty($mis_period_id)) {
+            if (!empty($misperiod_id)) {
                 $pidfield = get_config('block_ilp', 'mis_plugin_course_byclass_period');
-                $keyfields[$pidfield] = array('=' => $mis_period_id);
+                $keyfields[$pidfield] = array('=' => $misperiod_id);
             }
 
-            if (!empty($mis_course_id)) {
+            if (!empty($miscourse_id)) {
                 $cidfield = get_config('block_ilp', 'mis_plugin_course_byclass_courseid');
-                $keyfields[$cidfield] = array('=' => $mis_course_id);
+                $keyfields[$cidfield] = array('=' => $miscourse_id);
             }
 
 

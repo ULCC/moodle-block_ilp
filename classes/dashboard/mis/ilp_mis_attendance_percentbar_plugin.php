@@ -43,10 +43,10 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
      * @param $data_type expected to be attendance or punctuality
      * @return bool
      */
-    public function return_percent_data($data_type)
+    public function return_percent_data($datatype)
     {
         if (!empty($this->data)) {
-            if (!empty($this->data[$data_type])) return $this->data[$data_type];
+            if (!empty($this->data[$datatype])) return $this->data[$datatype];
         }
         return false;
     }
@@ -66,14 +66,14 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
     public function set_data($student_id)
     {
         //get the plugins configuration and pass to variables
-        $table_name = get_config('block_ilp', 'mis_plugin_attendance_percentbarstudenttable'); //$this->params[ 'student_table' ];
+        $tablename = get_config('block_ilp', 'mis_plugin_attendance_percentbarstudenttable'); //$this->params[ 'student_table' ];
 
-        if (!empty($table_name)) {
+        if (!empty($tablename)) {
             $keyfield = get_config('block_ilp', 'mis_plugin_attendance_percentbarstudentid');
             $attendance_field = get_config('block_ilp', 'mis_plugin_attendance_percentbarpunctuality');
             $punctuality_field = get_config('block_ilp', 'mis_plugin_attendance_percentbarattendance');
 
-            $querydata = $this->dbquery($table_name, array($keyfield => array('=' => $student_id)), array($attendance_field, $punctuality_field));
+            $querydata = $this->dbquery($tablename, array($keyfield => array('=' => $student_id)), array($attendance_field, $punctuality_field));
 
             $data = (is_array($querydata)) ? array_shift($querydata) : $querydata;
 
