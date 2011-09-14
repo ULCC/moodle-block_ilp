@@ -49,6 +49,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {	
+			$this->secondrow[]	=	array('id'=>1,'link'=>$this->linkurl,'name'=>'Student Info');
 			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>'Target Reports');
 			$this->secondrow[]	=	array('id'=>3,'link'=>$this->linkurl,'name'=>'Report 1');
 			$this->secondrow[]	=	array('id'=>4,'link'=>$this->linkurl,'name'=>'Report 2');
@@ -106,6 +107,11 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 			ob_start();
 			
 			switch ($seltab[1]) {
+				
+				case 1:
+					$this->ilp_display_student_info($this->student_id);
+					break;
+				
 				case 2:
 					$this->ilp_display_targets($this->student_id);
 					break;
@@ -185,7 +191,12 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
         $string['ilp_dashboard_archive_tab_report3']	 				= 'Report3';
         $string['ilp_dashboard_archive_tab_report4']	 				= 'Report4';
         $string['ilp_dashboard_archive_tab_report5']	 				= 'Report5';
-        return $string;
+        
+        $string['ilp_dashboard_archive_tab_studentinfo_student']	 				= 'Student text';
+        $string['ilp_dashboard_archive_tab_studentinfo_teacher']	 				= 'Teacher text';
+        $string['ilp_dashboard_archive_tab_studentinfo_shared']	 					= 'Shared text';
+        
+	    return $string;
     }
 	
 	
@@ -206,6 +217,82 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
     	);
  	
  	 	$this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
+ 	 	
+ 	 }
+ 	 
+ 	 
+ 	 
+ 	 function ilp_display_student_info($student_id)	{
+ 	 		global	$CFG;
+ 	 	
+ 	 		$infotexts			=	array();
+ 	 		
+ 	 		$studentinfo		=	$this->dbc->get_per_student_info($student_id);
+ 	 		$teacherinfo		=	$this->dbc->get_per_teacher_info($student_id);
+ 	 		$tutorinfo			=	$this->dbc->get_per_tutor_info($student_id);
+
+ 	 		$this->return_texts($studentinfo,$infotexts);
+ 	 		$this->return_texts($teacherinfo,$infotexts);
+ 	 		$this->return_texts($tutorinfo,$infotexts);
+ 	 		
+ 	 		if (!empty($infotexts)) {
+	 	 		$this->get_archive_student_info($infotexts);
+ 	 		}
+ 	 }
+ 	 
+ 	 /**
+ 	  * 
+ 	  * Places the text record (teacher,shared & student) into the given array (if one exists)  
+ 	  * @param object $infoobj expected to be a record from containing the fields: teacher_textid,
+ 	  * shared_textid and student_textid
+ 	  * @param array $infotexts
+ 	  */
+ 	 
+ 	 function return_texts($infoobj,&$infotexts)	{
+ 	 		 	 		
+ 	  	 	if (!empty($infoobj) && !empty($infoobj->student_textid))	{
+ 	 			$text	=	$this->dbc->get_info_text($infoobj->student_textid);
+ 	 			if (!empty($text))  {
+ 	 				$text->type		=	'student';
+ 	 				$infotexts[]	=	$text;	
+ 	 			}
+ 	 		} 
+ 	 	
+ 	 		if (!empty($infoobj) && !empty($infoobj->teacher_textid))	{
+ 	 			$text	=	$this->dbc->get_info_text($infoobj->teacher_textid);
+ 	 			if (!empty($text))  {	
+ 	 				$text->type		=	'teacher';
+ 	 				$infotexts[]	=	$text;		
+ 	 			}
+ 	 		}
+ 	 		
+ 	 		if (!empty($infoobj) && !empty($infoobj->shared_textid))	{
+ 	 			$text	=	$this->dbc->get_info_text($infoobj->shared_textid);
+ 	 			if (!empty($text))  {
+ 	 				$text->type		=	'shared';
+ 	 				$infotexts[]	=	$text;		
+ 	 			}
+ 	 		}
+ 	 }
+ 	 
+ 	 function get_archive_student_info($studentinforeport)	{
+ 	 		global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+ 	 		
+	 	 	foreach ($studentinforeport as $sir) {
+		 				 	 			
+		 		$setby				=	$this->dbc->get_user_by_id($sir->lastchanged_userid);
+		 		$sir->setbyname		=	fullname($setby);
+		 	 			
+		 		$sir->creationtime	=	userdate($sir->lastchanged_datetime, get_string('strftimedate'));
+		 			
+		 		$comments			=	false;
+				
+		 		$post					=	$sir;
+		 		$post->displayfields	=	array();
+		 		$post->displayfields[]	=	array('label'=>get_string('ilp_dashboard_archive_tab_studentinfo_'.$sir->type, 'block_ilp'),'content'=>$post->text);
+		 		
+		 		include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_archive_tab.html');
+		 	}
  	 	
  	 }
  	 
@@ -256,7 +343,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 	 		$post->displayfields[]	=	array('label'=>get_string('ilp_dashboard_archive_tab_targetname', 'block_ilp'),'content'=>$post->name);
 	 		$post->displayfields[]	=	array('label'=>get_string('ilp_dashboard_archive_tab_targetagreed', 'block_ilp'),'content'=>$post->targetset);
 	 		
-	 		include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_archive_tab/ilp_dashboard_archive_tab_target.html');
+	 		include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_archive_tab.html');
 	 	}
 	 }
 	 
@@ -294,7 +381,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 	 		$post->displayfields	=	array();
 	 		$post->displayfields[]	=	array('label'=>get_string('ilp_dashboard_archive_tab_concername', 'block_ilp'),'content'=>$post->concernset);
 
-	 		include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_archive_tab/ilp_dashboard_archive_tab_target.html');
+	 		include($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_archive_tab.html');
  	 		
  	 	}	 	
 	 }
@@ -382,6 +469,25 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 	
 	function get_concern_comments($concern_id)	{
 		return $this->dbc->get_records('ilpconcern_comments',array('concernspost'=>$concern_id));
+	}
+	
+	
+	function get_per_student_info($student_id)	{
+		return $this->dbc->get_record('ilp_student_info_per_student',array('student_userid'=>$student_id));
+	}
+	
+	function get_per_teacher_info($student_id)	{
+		return $this->dbc->get_record('ilp_student_info_per_teacher',array('student_userid'=>$student_id));
+	}
+	
+	function get_per_tutor_info($student_id)	{
+		return $this->dbc->get_record('ilp_student_info_per_tutor',array('student_userid'=>$student_id));
+	}
+	
+	
+	
+	function get_info_text($text_id)	{
+	   	return  $this->dbc->get_record('ilp_student_info_text',array('id'=>$text_id)) ;
 	}
 	
 	

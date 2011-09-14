@@ -135,8 +135,7 @@
 
 .ilp #student_list_container {
    overflow: auto;
-   overflow-y: hidden;
-   -ms-overflow-y: hidden;
+
 }
 
 /* JAVASCRIPT CSS DO NOT REMOVE */
@@ -154,6 +153,7 @@
 
 .ilp .overflowtable {
 	overflow: auto;
+	overflow:scroll;
     overflow-y: hidden;
 	-ms-overflow-y: hidden;
 }
