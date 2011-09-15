@@ -26,6 +26,22 @@ require_once($CFG->dirroot.'/blocks/ilp/db/accesscheck.php');
 
 if ($USER->id != $user_id ) {
 	require_capability('block/ilp:viewotherilp', $context);
+	
+	if (!empty($course_id))	{
+
+		$currentcoursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
+		
+		if ($context ==	$currentcoursecontext)	{
+			//check that the user is enrolled on the current course if not then 
+			
+			$dbc	=	new ilp_db();
+			$userenrolled	=	$dbc->get_user_by_id($user_id);
+			
+			if (!is_enrolled($context,$userenrolled))	print_error('usernotenrolled','block_ilp');
+			
+		} 
+	}
+	
 }
 
 ?>

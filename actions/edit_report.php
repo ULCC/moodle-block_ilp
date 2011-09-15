@@ -58,9 +58,11 @@ if($mform->is_submitted()) {
     		$formdata->binary_icon	=	'';
     	}
    	
-    	$formdata->maxedit	=	(empty($formdata->maxedit)) ? 0 : $formdata->maxedit;
+    	$formdata->maxedit		=	(empty($formdata->maxedit)) ? 0 : $formdata->maxedit;
     	
-    	$formdata->comments	=	(empty($formdata->comments)) ? 0 : $formdata->comments;
+    	$formdata->comments		=	(empty($formdata->comments)) ? 0 : $formdata->comments;
+    	
+    	$formdata->frequency	=	(empty($formdata->frequency)) ? 0 : $formdata->frequency;
     	
         // process the data
     	$success = $mform->process_data($formdata);
