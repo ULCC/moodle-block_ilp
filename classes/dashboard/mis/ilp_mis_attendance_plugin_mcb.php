@@ -81,6 +81,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
             //setup the flextable
             $flextable->setup();
 
+
             foreach ($this->courselist as $cid => $cname) {
                 //we start the month counter from the first month
                 $month = $startmonth;
@@ -90,6 +91,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 do {
                     $data["{$month}month"] = (!empty($this->mcbdata[$cid][$month]))
                             ? $this->addlinks($this->mcbdata[$cid][$month]['percent'] . "%", array('mis_period_id' => $month))
+                            //? $this->addlinks($this->mcbdata[$cid][$month] . "%", array('mis_period_id' => $month))
                             : "0%";
 
                     $month++;
@@ -173,9 +175,8 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                     }
                 }
             }
-
-            return $content;
         }
+        return $content;
     }
 
 
@@ -431,6 +432,8 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_mcb_marksabsentfield')) $this->fields['marksabsent'] = get_config('block_ilp', 'mis_plugin_mcb_marksabsentfield');
             if (get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield');
             if (get_config('block_ilp', 'mis_plugin_mcb_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_mcb_markslatefield');
+
+
 
             //get the users monthly attendance data
             $this->data = $this->dbquery($table, $keyfields, $this->fields);
