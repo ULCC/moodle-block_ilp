@@ -238,7 +238,15 @@ class ilp_plugin {
 	 	
 	 	$configsetting	=	get_config('block_ilp',$elementname);
 	 	
-	 	$value	= (!empty($configsetting)) ? $configsetting : $defaultvalue;
+	 	if (empty($configsetting)) {
+	 		//we need to check if the value is empty because the user set it that way so 
+	 		//we will perform a query to see if the setting exists if it does then we will go 
+	 		//with the config setting, if not set $value to default
+	 		$settingexists	= $this->dbc->setting_exists($elementname);
+	 		$value	=	(!empty($settingexists)) ? $configsetting : $defaultvalue;
+	 	}	else	{
+	 		$value	=	$configsetting;
+	 	}
 	 	
 	 	$mform->addElement('select',"s_{$elementname}",$label,$options,array('class' => 'form_input'));
  	 	$mform->addElement('static', "{$elementname}_desc", NULL, $description);
