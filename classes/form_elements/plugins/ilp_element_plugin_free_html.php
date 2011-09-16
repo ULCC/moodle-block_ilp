@@ -38,7 +38,7 @@ class ilp_element_plugin_free_html extends ilp_element_plugin {
     	//html field for element label
         $mform->addElement(
             'html',
-            strip_tags(html_entity_decode($this->description),STRIP_TAGS_DESCRIPTION)
+            html_entity_decode($this->description)
         );
 
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
