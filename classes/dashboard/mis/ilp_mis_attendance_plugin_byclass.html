@@ -5,7 +5,7 @@
 				<?php 
 				if (!empty($this->courselist)) {
 					foreach($this->courselist as $courseid => $coursename) { 
-					$selected = ($courseid == $mis_course_id) ?  "selected='selected'": '';?> 
+					$selected = ($courseid == $miscourse_id) ?  "selected='selected'": '';?> 
 					<option value="<?php echo $courseid;  ?>" <?php echo $selected; ?> ><?php echo $coursename; ?></option>
 				<?php } 
 				}?>
@@ -14,7 +14,7 @@
 			<select id="ilp_mis_attendance_plugin_byclass_month" name="mis_period_id">
 				<?php 
 				for($i =1; $i < 13;$i++) { 
-					$selected = ($i == $mis_period_id) ?  "selected='selected'": '';  
+					$selected = ($i == $misperiod_id) ?  "selected='selected'": '';  
  			?> 
 					<option value="<?php echo date('m',strtotime("1-$i-2011")); ?>"  <?php echo $selected; ?> ><?php echo date('F',strtotime("1-$i-2011")); ?></option>
 			<?php } ?>
