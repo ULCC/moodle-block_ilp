@@ -151,8 +151,8 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
 	 */
 	 function language_strings(&$string) {
 
-        $string['ilp_mis_learner_assessments_pluginname']						= 'Learner Profile Iniital Assessment';
-        $string['ilp_mis_learner_assessments_pluginnamesettings']				= 'Iniital Assessment Configuration';
+        $string['ilp_mis_learner_assessments_pluginname']						= 'Learner Profile Initial Assessment';
+        $string['ilp_mis_learner_assessments_pluginnamesettings']				= 'Initial Assessment Configuration';
         
         $string['ilp_mis_learner_assessments_table']							= 'MIS table';
         $string['ilp_mis_learner_assessments_tabledesc']						= 'The table in the MIS where the data for this plugin will be retrieved from';
@@ -202,7 +202,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
      * 
      */
     function tab_name() {
-    	return 'Iniital Assessment';
+    	return 'Initial Assessment';
     }
 
 
