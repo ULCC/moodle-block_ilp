@@ -37,8 +37,8 @@ if ($USER->id != $user_id ) {
 			$dbc	=	new ilp_db();
 			$userenrolled	=	$dbc->get_user_by_id($user_id);
 			
-			if (!is_enrolled($context,$userenrolled))	print_error('usernotenrolled','block_ilp');
-			
+			//if (!is_enrolled($context,$userenrolled))	print_error('usernotenrolled','block_ilp');
+			if(!has_capability('moodle/course:view',$context))	print_error('usernotenrolled','block_ilp');
 		} 
 	}
 	
