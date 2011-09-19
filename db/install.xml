@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/ilp/db" VERSION="20110714" COMMENT="XMLDB file for Moodle blocks/ilp"
+<XMLDB PATH="blocks/ilp/db" VERSION="20110919" COMMENT="XMLDB file for Moodle blocks/ilp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -123,8 +123,8 @@
         <FIELD NAME="entity" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the entity that was being edited" PREVIOUS="type" NEXT="record_id"/>
         <FIELD NAME="record_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the id of the record action (that is being logged) in its respective table" PREVIOUS="entity" NEXT="attribute"/>
         <FIELD NAME="attribute" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="record_id" NEXT="oldvalue"/>
-        <FIELD NAME="oldvalue" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the old value of the action being logged if any (may be null if create log)" PREVIOUS="attribute" NEXT="newvalue"/>
-        <FIELD NAME="newvalue" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The new value of the action being logged (may be null if delete action)" PREVIOUS="oldvalue" NEXT="timecreated"/>
+        <FIELD NAME="oldvalue" TYPE="binary" LENGTH="medium" NOTNULL="false" SEQUENCE="false" COMMENT="the old value of the action being logged if any (may be null if create log)" PREVIOUS="attribute" NEXT="newvalue"/>
+        <FIELD NAME="newvalue" TYPE="binary" LENGTH="medium" NOTNULL="false" SEQUENCE="false" COMMENT="The new value of the action being logged (may be null if delete action)" PREVIOUS="oldvalue" NEXT="timecreated"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the log action was created" PREVIOUS="newvalue" NEXT="timemodified"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the log entry was last modified. In practice this field should never contain a value different to the timecreated field" PREVIOUS="timecreated"/>
       </FIELDS>
