@@ -53,6 +53,10 @@ class block_ilp extends block_list {
         // get the course id
         $course_id = optional_param('id', $SITE->id, PARAM_INT);
 
+        //this is to handle the /user/view.php page where id is reserved for the userid ...
+        //allow the current course to be course=XX
+        $current_course_id = optional_param('course', null, PARAM_INT);
+
         // get the course
         $course = $dbc->get_course($course_id);
 
@@ -72,6 +76,7 @@ class block_ilp extends block_list {
 		
 		//we are going to loop through all the courses the user is enrolled in so that we can 
 		//choose which display they will see 
+        $found_current_course = false;
 		foreach($my_courses	as $c) {
         			$coursecontext = get_context_instance(CONTEXT_COURSE, $c->id);
 			
@@ -80,10 +85,14 @@ class block_ilp extends block_list {
         				$access_viewilp		=	true;
         			}
         			
-        			if (has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false)) {
+        			if (has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) && !$found_current_course ) {
         				$intial_course_id	=	$c->id;
+                        if( $c->id == $current_course_id ){
+                            //current course is part of my_courses, so this should be the preselection for the linked page
+                            //so stop changing the value for the link
+                            $found_current_course = true;
+                        }
         				$access_viewotherilp	=	true;
-        								
         			}
         
 		}
