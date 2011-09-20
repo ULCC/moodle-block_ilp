@@ -56,6 +56,9 @@ class block_ilp extends block_list {
         //this is to handle the /user/view.php page where id is reserved for the userid ...
         //allow the current course to be course=XX
         $current_course_id = optional_param('course', null, PARAM_INT);
+        if( !$current_course_id ){
+            $current_course_id = optional_param('id', null, PARAM_INT); //if there's no explicit course id, id might be a course id
+        }
 
         // get the course
         $course = $dbc->get_course($course_id);
