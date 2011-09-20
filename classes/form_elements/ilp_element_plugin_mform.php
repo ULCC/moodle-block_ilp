@@ -157,7 +157,7 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
      */
     function process_data($data) {
     	
-    	$data->label	=	str_replace('?','.',$data->label);
+    	$data->label	=	htmlentities($data->label);
     	
         if (empty($data->id)) {
             //create the ilp_report_field record
