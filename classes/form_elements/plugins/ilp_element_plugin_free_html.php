@@ -26,6 +26,22 @@ class ilp_element_plugin_free_html extends ilp_element_plugin {
         }
 		return false;	
     }
+
+    /*
+    * essential delete method
+    * @param int $reportfield_id
+    * @return boolean
+    */
+    public function delete_form_element($reportfield_id) {
+		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
+        $extraparams = array(
+            'audit_type' => $this->audit_type(),
+            'label' => $reportfield->label,
+            'description' => $reportfield->description,
+            'id' => $reportfield_id
+        );
+    	return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
+    }
     /**
     * this function returns the mform elements taht will be added to a report form
 	*
