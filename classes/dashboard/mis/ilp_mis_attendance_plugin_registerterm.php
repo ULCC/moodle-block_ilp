@@ -48,8 +48,6 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
         //number of terms 
         $this->numterms = get_config('block_ilp', 'mis_plugin_registerterm_terms');
 
-        //add 1 to number of terms so that we can also hold overall data
-        $this->numterms += 1;
         
         $this->terms[] = array();
 
@@ -342,7 +340,7 @@ function summary_data($data, $term = 0)
         	
 
 	        
-        	//we need to make sure that the mar is within the academic year
+        	//we need to make sure that the mark is within the academic year
         	if ($mark['Week_No'] >= $academicstart && $mark['Week_No'] <= $academicend) {
 	            if (!in_array($mark[$markfield], $this->noclasscodes)) {
 	                $total[0]++;
@@ -420,7 +418,7 @@ function summary_data($data, $term = 0)
                 $pun_class[$i] = 'none';
             }
         }
-
+     
         return array('total' => $total, 'present' => $present, 'late' => $late, 'absent' => $absent, 'att_prec' => $att_perc, 'pun_perc' => $pun_perc, 'att_class' => $att_class, 'pun_class' => $pun_class);
     }
 
