@@ -161,12 +161,13 @@ $status_item = (!empty($defaultstatusitem)) ? $defaultstatusitem->name : get_str
 //in the course context
 $course_param = (!empty($course_id)) ? "&course_id={$course_id}" : '';
 
+$coursearg = ( $course_id ) ? "&course=$course_id" : '' ;
 if (!empty($studentslist)) {
     foreach ($studentslist as $student) {
         $data = array();
 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
-        $data['fullname'] = "<a href='{$CFG->wwwroot}/user/view.php?id={$student->id}' class=\"userlink\">" . fullname($student) . "</a>";
+        $data['fullname'] = "<a href='{$CFG->wwwroot}/user/view.php?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
         $data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
