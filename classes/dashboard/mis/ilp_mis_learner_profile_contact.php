@@ -64,7 +64,6 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  	
  	
     public function set_data( $mis_user_id, $user_id ){
-    		
     		$this->mis_user_id	=	$mis_user_id;
     		$this->user_id		=	$user_id;
     		
@@ -265,6 +264,23 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
      */
     function tab_name() {
     	return 'Contact Details';
+    }
+
+    /*
+    * different MIS systems will have different ways of representing dates
+    * @param mixed $value
+    * @return string
+    */
+    function interpret_date( $value , $format='d-m-Y' ){
+        if( is_string( $value ) ){
+            //use generic method for turning strings to numerical dates
+            $unixtime = strtotime( $value );
+        }
+        else{
+            //assume we have a unix time already
+            $unixtime = $value;
+        }
+        return date( $format, $unixtime );
     }
 
 

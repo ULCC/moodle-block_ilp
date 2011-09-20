@@ -10,11 +10,11 @@
 		<?php } ?>
 		<?php if (isset($this->fields['enrolmentdate']) && !empty($this->data[$this->fields['enrolmentdate']])) {?>
 			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_enrolmentdate','block_ilp') ?></label>
-			<?php echo userdate($this->data[$this->fields['enrolmentdate']],'d-m-Y'); ?><br />
+			<?php echo $this->interpret_date($this->data[$this->fields['enrolmentdate']],'d-m-Y'); ?><br />
 		<?php } ?>
 		<?php if (isset($this->fields['dob']) && !empty($this->data[$this->fields['dob']])) {?>
 			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_dob','block_ilp') ?></label>
-			<?php echo userdate($this->data[$this->fields['dob']]);?><br />
+			<?php echo $this->interpret_date($this->data[$this->fields['dob']]);?><br />
 		<?php } ?>
 	</div>
 	
