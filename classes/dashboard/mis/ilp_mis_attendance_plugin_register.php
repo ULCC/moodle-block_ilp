@@ -48,6 +48,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
         //number of terms 
         $this->numterms = get_config('block_ilp', 'mis_plugin_register_terms');
 
+		
         $this->terms[] = array();
 
         if (!empty($this->numterms)) {
@@ -81,16 +82,22 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
      * @param int $offset this should always be the week number of the school year start week
      */
 
-    function academic_week($week, $offset)
-    {
-        return ($week >= $offset) ? ($week - $offset) + 1 : $week + $offset;
+    function academic_week($week, $offset)	{
+		global $USER;
+		
+		if ($week >= $offset)  {
+			return ($week - $offset) + 1;
+		} else {
+			$yearrollover = 52 - $offset;
+			return $yearrollover + $week+1;
+		}
     }
 
 
-    function weekno($date)
-    {
+    function weekno($date)	{
         global $USER;
 
+		$date	=	str_replace('/','-',$date);
         $realweek = date("W", strtotime($date));
 
         return ($realweek >= $this->terms[0]['start']) ? ($realweek - $this->terms[0]['start']) + 1
@@ -98,21 +105,22 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
     }
 
 
-    function coursetime($timefield)
-    {
+    function coursetime($timefield)	{
         return date('G:i', strtotime($timefield));
     }
 
-    function courseday($date)
-    {
+    function courseday($date)	{
+		global $USER;
+		
+		$date	=	str_replace('/','-',$date);
+	
         return date("D", strtotime($date));
     }
 
     /*
     * display the current state of $this->data
     */
-    public function display()
-    {
+    public function display()	{
         global $CFG, $PARSER;
 
         //if set get the id of the report to be edited
@@ -144,97 +152,6 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
         }
 
         return $output;
-
-    }
-
-
-    function display_summary($summarydata, $term)
-    {
-
-        global $CFG;
-
-        include($CFG->dirroot . '/blocks/ilp/templates/custom/custom_consts.php');
-
-        if (!empty($summarydata['total'])) $total = $summarydata['total'];
-        if (!empty($summarydata['present'])) $present = $summarydata['present'];
-        if (!empty($summarydata['late'])) $late = $summarydata['late'];
-        if (!empty($summarydata['absent'])) $absent = $summarydata['absent'];
-        if (!empty($summarydata['att_prec'])) $att_perc = $summarydata['att_prec'];
-        if (!empty($summarydata['pun_perc'])) $pun_perc = $summarydata['pun_perc'];
-        if (!empty($summarydata['att_class'])) $att_class = $summarydata['att_class'];
-
-        $all_terms = ($term == 0) ? true : false;
-
-        if ($term == 0) {
-            $display_terms = array();
-            for ($i = 1; $i <= NUMBEROFTERMS; $i++) {
-                $display_terms[] = $i;
-            }
-        } else {
-            $display_terms = array($term);
-        }
-
-
-        echo '	<div class="generalbox">
-			<div id="doc3" class="yui-t7"> 
-			<div id="bd" role="main"> 
-				<div class="yui-g">';
-        if ($term == 0) {
-            echo '<div class="yui-g first">';
-        }
-        echo "<div class='yui-u first attendance-{$att_class[0]}'> ";
-        echo '<h3>';
-        if (!empty($all_terms)) {
-            echo "<a href='?id={$user->id}'>Course attendance</a>";
-        } else {
-            echo "Course attendance";
-        }
-        echo '<h3>';
-        $totaltext = $total[0] . ' Possible';
-        $presenttext = $present[0] . ' Present';
-        $absenttext = $absent[0] . ' Absent';
-        $attendancetext = 'Attendance: ' . $att_perc[0];
-        $punctualitytext = 'Punctuality: ' . $pun_perc[0];
-
-        echo "<p style='text-align:center'>$totaltext | $presenttext | $absenttext <br />	$attendancetext | $punctualitytext </p>";
-        echo '</div> ';
-
-        if ($all_terms) {
-            echo '</div>
-							<div class="yui-g">';
-        }
-
-        foreach ($display_terms as $termno) {
-            $first = (!empty($all_terms)) ? ' first' : '';
-
-            echo "<div class='yui-u {$first} attendance-{$att_class[$termno]}'>";
-            echo '<h3>';
-            if (!empty($all_terms)) {
-                echo "<a href='?id={$user->id}&amp;term={$t}'>Term {$termno} attendance</a>";
-            } else {
-                echo "Term {$termno} attendance";
-            }
-            echo '</h3>';
-
-            $totaltext = $total[$termno] . ' Possible';
-            $presenttext = $present[$termno] . ' Present';
-            $absenttext = $absent[$termno] . ' Absent';
-            $attendancetext = 'Attendance: ' . $att_perc[$termno];
-            $punctualitytext = 'Punctuality: ' . $pun_perc[$termno];
-
-            echo "<p style='text-align:center'>$totaltext | $presenttext | $absenttext <br />	$attendancetext | $punctualitytext </p>";
-            echo '</div> ';
-        }
-
-        if ($term == 0) {
-            echo '</div> ';
-        }
-        echo'       </div>
-         </div> 
-    </div> 
-</div>
-';
-
 
     }
 
@@ -272,53 +189,64 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
         $absent = array(0, 0, 0, 0, 0, 0);
         $present = array(0, 0, 0, 0, 0, 0);
         $late = array(0, 0, 0, 0, 0, 0);
+        
+        $academicstart = $this->academic_week($this->terms[0]['start'], $yearstart);
+	    $academicend = $this->academic_week($this->terms[$this->numterms - 1]['end'], $yearstart);
 
         foreach ($data as $mark) {
-            if (!in_array($mark[$markfield], $this->noclasscodes)) {
-                $total[0]++;
-            }
+        	
+        	$marktimestamp = strtotime($this->normalise_date($mark[$cdatefield]));
+				
+	        $mark['Week_No'] = $this->academic_week(date('W', $marktimestamp), $yearstart);
+        	
 
-            if (in_array($mark[$markfield], $this->presentcodes)) {
-                $present[0]++;
-            }
+	        
+        	//we need to make sure that the mar is within the academic year
+        	if ($mark['Week_No'] >= $academicstart && $mark['Week_No'] <= $academicend) {
+	            if (!in_array($mark[$markfield], $this->noclasscodes)) {
+	                $total[0]++;
+	            }
+	
+	            if (in_array($mark[$markfield], $this->presentcodes)) {
+	                $present[0]++;
+	            }
+	
+	            if (in_array($mark[$markfield], $this->absentcodes)) {
+	                $absent[0]++;
+	            }
+	
+	            if (in_array($mark[$markfield], $this->latecodes)) {
+	                $late[0]++;
+	            }
+	
 
-            if (in_array($mark[$markfield], $this->absentcodes)) {
-                $absent[0]++;
-            }
-
-            if (in_array($mark[$markfield], $this->latecodes)) {
-                $late[0]++;
-            }
-
-            $marktimestamp = strtotime($this->normalise_date($mark[$cdatefield]));
-
-            $mark['Week_No'] = $this->academic_week(date('W', $marktimestamp), $yearstart);
-
-            for ($i = 1; $i <= $this->numterms; $i++) {
-
-                //these variables define the academic weeks of $termstart and $termend
-                $academicstart = $this->academic_week($this->terms[$i - 1]['start'], $yearstart);
-                $academicend = $this->academic_week($this->terms[$i - 1]['end'], $yearstart);
-
-                if ($mark['Week_No'] >= $academicstart && $mark['Week_No'] <= $academicend) {
-
-                    if (!in_array($mark[$markfield], $this->noclasscodes)) {
-                        $total[$i]++;
-                    }
-
-                    if (in_array($mark[$markfield], $this->presentcodes)) {
-                        $present[$i]++;
-                    }
-
-                    if (in_array($mark[$markfield], $this->absentcodes)) {
-                        $absent[$i]++;
-                    }
-
-                    if (in_array($mark[$markfield], $this->latecodes)) {
-                        $late[$i]++;
-                    }
-                }
-            }
+	
+	            for ($i = 1; $i <= $this->numterms; $i++) {
+	
+	                //these variables define the academic weeks of $termstart and $termend
+	                $termstart = $this->academic_week($this->terms[$i - 1]['start'], $yearstart);
+	                $termend = $this->academic_week($this->terms[$i - 1]['end'], $yearstart);
+	
+	                if ($mark['Week_No'] >= $termstart && $mark['Week_No'] <= $termend) {
+	
+	                    if (!in_array($mark[$markfield], $this->noclasscodes)) {
+	                        $total[$i]++;
+	                    }
+	
+	                    if (in_array($mark[$markfield], $this->presentcodes)) {
+	                        $present[$i]++;
+	                    }
+	
+	                    if (in_array($mark[$markfield], $this->absentcodes)) {
+	                        $absent[$i]++;
+	                    }
+	
+	                    if (in_array($mark[$markfield], $this->latecodes)) {
+	                        $late[$i]++;
+	                    }
+	                }
+	            }
+        	}
         }
 
         for ($i = 0; $i <= $this->numterms; $i++) {
@@ -356,6 +284,14 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
     }
 
 
+	function getMonday($datets)	{
+		while (date('l', $datets) != 'Monday') {
+			$datets = strtotime('-1 day', $datets);
+		}
+		return date('d/m', $datets);
+	}
+	
+	
     /**
      *
      * This function creates the register grid that is displayed
@@ -382,9 +318,9 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
             $termstart = $this->terms[$term - 1]['start'];
             $termend = $this->terms[$term - 1]['end'];
         } else {
-            $yearstart = $this->terms[0]['start'];
-            $termstart = $this->terms[0]['start'];
-            $termend = $this->terms[$this->numterms - 1]['end'];
+            $yearstart 	= $this->terms[0]['start'];
+            $termstart 	= $this->terms[0]['start'];
+            $termend 	= $this->terms[$this->numterms - 1]['end'];
         }
 
         //these variables define the academic weeks of $termstart and $termend
@@ -405,9 +341,11 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
                               get_string('ilp_mis_attendance_plugin_register_disp_time', 'block_ilp')
         );
 
+        
         //assign the week column names and set the week display header
         for ($z = $academicstart; $z < $academicend + 1; $z++) {
-            $tablecolumns[] = ('week' . $z);
+            $tablecolumns[] = 'week' . $z;
+            
             $tableheaders[] = $z;
         }
 
@@ -436,8 +374,12 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
         $dates = array('', '', '', '', '<div class="termweeks">Week:</div>');
 
         for ($z = $academicstart; $z < $academicend + 1; $z++) {
-            $timestampweek = $weekofseconds * ($z - 1);
-            $dates[] = '<div class="termweeks">' . date("d/m", $startdate + $timestampweek) . '</div>';
+			$weekindays		=	  ($z - 1) * 7;
+			$timestampweek 	= strtotime("+{$weekindays} days",$startdate);
+			
+			//$timestampweek = $weekofseconds * ($z - 1);
+            //$dates[] = '<div class="termweeks">' . $this->getMonday($startdate + $timestampweek) . '</div>';
+			$dates[] = '<div class="termweeks">' . $this->getMonday($timestampweek) . '</div>';
         }
 
         $table->add_data($dates);
@@ -456,7 +398,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
 
 
         foreach (array_keys($registers) as $groupKey) {
-
+		
             $class = array('', '', '', '', '');
             $termsweeks = array();
             for ($z = $academicstart; $z < $academicend + 1; $z++) {
@@ -467,18 +409,20 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
             $class = $base_class;
             $termsweeks = $base_termsweeks;
 
-
             $total[$groupKey] = array();
             foreach ($registers[$groupKey] as $cday => $timeslot) {
 
                 foreach ($timeslot as $ctime => $classtime) {
-
+				
                     $total[$groupKey][$cday][$ctime] = array(array(0, 0, 0, 0), array(0, 0, 0, 0), array(0, 0, 0, 0), array(0, 0, 0, 0));
 
                     foreach ($classtime as $item) {
 
-                        $item['Week_No'] = $this->weekno($item[$cdatefield]);
+                       //$item['Week_No'] = $this->weekno($item[$cdatefield]);
+					   $marktimestamp = strtotime($this->normalise_date($item[$cdatefield]));
 
+					   $item['Week_No'] = $this->academic_week(date('W', $marktimestamp), $yearstart);
+						
                         if (in_array($item['Week_No'], $termsweeks)) {
 
                             if (!in_array($item[$markfield], $this->noclasscodes)) {
@@ -495,33 +439,10 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
                                 $total[$groupKey][$cday][$ctime][3][0]++;
                             }
 
-                            /*
-
-                                       for($i = 0;$i < $this->numterms; $i++) {
-
-                                           if($item['Week_No'] >= $termstart && $item['Week_No'] <= $termend){
-                                               if(!in_array($item[$markfield],$this->noclasscodes)){
-                                                   $total[$groupKey][$cday][$ctime][0][$i]++;
-                                               }
-                                               if(in_array($item[$markfield],$this->presentcodes)){
-                                                   $total[$groupKey][$cday][$ctime][1][$i]++;
-                                               }
-                                               if(in_array($item[$markfield],$this->absentcodes)){
-                                                   $total[$groupKey][$cday][$ctime][2][$i]++;
-                                               }
-                                               if(in_array($item[$markfield],$this->latecodes)){
-                                                   $total[$groupKey][$cday][$ctime][3][$i]++;
-                                               }
-                                           }
-                                       }
-
-                                       */
-
                             $class['class'] = $item[$cidfield] . ': ' . $item[$cnamefield];
 
                             $startdate = explode('-', $item[$cdatefield]);
-
-                            $class['date'] = date("D", strtotime($item[$cdatefield]));
+                            $class['date'] = $this->courseday($item[$cdatefield]);
                             $class['time'] = $ctime;
                             $att_class = 'amber';
 
@@ -538,10 +459,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
                                 $att_class = get_config('block_ilp', 'mis_plugin_register_latecolour');
                             }
 
-
-                            //$class[($item['Week_No'] + $weekoffset)] = '<span class="attendance-'.$att_class.'" style="display:block; text-align:center" title="'.$mark_key[$item[$markfield]].'">'.$item[$markfield].'</span>';
-
-                            $class['week' . $item['Week_No']] = '<span class="attendance-' . $att_class . '" style="display:block; text-align:center; background-color:' . $att_class . '" title="">' . $item[$markfield] . '</span>';
+                            $class['week' . $item['Week_No']] = '<span style="display:block; text-align:center; background-color:' . $att_class . '" title="">' . $item[$markfield] . '</span>';
                         }
                     }
 
@@ -558,8 +476,8 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
                     $termsweeks = $base_termsweeks;
                 }
             }
+			
         }
-        //$classdata = sortclass($classdata);
 
         foreach ($classdata as $class) {
             $table->add_data_keyed($class);

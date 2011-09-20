@@ -27,8 +27,6 @@ function get_height(elem) {
  */
 function toggle_container(elem, from, to) {
 	
-	console.log(elem);
-	
 	// disable the onclick so it can't be pressed twice
 	elem.onclick = null;
 

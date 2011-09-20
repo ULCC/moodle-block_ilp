@@ -60,10 +60,10 @@ if (empty($access_report_createreports))	{
 
 
 if (!empty($entry_id))	{
-	if (empty($access_report_editreports))	{
+	if (empty($access_report_deletereports))	{
 		//the user doesnt have the capability to edit this type of report entry
 
-		print_error('userdoesnothaveeditcapability','block_ilp');	
+		print_error('userdoesnothavedeletecapability','block_ilp');	
 	}	
 } 
 
@@ -73,8 +73,8 @@ $reportfields		=	$dbc->get_report_fields_by_position($report_id);
 //form. if not we will send the user back to the dashboard 
 if (empty($reportfields)) {
 	//send the user back to the dashboard page telling them that the report is not ready for display
-	//$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&course_id='.$course_id;
-    //redirect($return_url, get_string("reportmustcontainfields", 'block_ilp'), REDIRECT_DELAY);
+	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
+    redirect($return_url, get_string("reportnotready", 'block_ilp'), REDIRECT_DELAY);
 } 
 
 //require the reportentry_mform so we can display the report

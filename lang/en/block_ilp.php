@@ -65,8 +65,7 @@
 	$string['editstatusitems']		=	'Edit Status Items';	
 	$string['enablereport'] 		= 	'Enable Report';
 	$string['enabled'] 				= 	'Enabled';
-	
-	
+	$string['entrydeleted']			= 	'The entry has been deleted';
 	
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';

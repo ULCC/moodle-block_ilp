@@ -56,9 +56,7 @@ M.ilp_standard_functions = {
             success: function(o) {
 
                 res = o.responseText;
-                console.log(res);
 
-                console.log('elem_id '+elem_id);
                 document.getElementById(elem_id).innerHTML = res;//"<span id='user_status' class='hidden' style='color:" + res[0] + "'>" + res[1] + "</span>";
                 M.ilp_standard_functions.parse_scripts(elem_id);
             },

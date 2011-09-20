@@ -48,6 +48,9 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
         //number of terms 
         $this->numterms = get_config('block_ilp', 'mis_plugin_registerterm_terms');
 
+        //add 1 to number of terms so that we can also hold overall data
+        $this->numterms += 1;
+        
         $this->terms[] = array();
 
         if (!empty($this->numterms)) {
@@ -301,16 +304,16 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
     }
 
 
-    function summary_data($data, $term = 0)
+function summary_data($data, $term = 0)
     {
 
         global $CFG;
 
-        $cidfield = get_config('block_ilp', 'mis_plugin_registerterm_courseid');
-        $cdatefield = get_config('block_ilp', 'mis_plugin_registerterm_datetime');
-        $markfield = get_config('block_ilp', 'mis_plugin_registerterm_mark');
-        $timefield = get_config('block_ilp', 'mis_plugin_registerterm_datetime');
-        $cnamefield = get_config('block_ilp', 'mis_plugin_registerterm_coursename');
+        $cidfield = get_config('block_ilp', 'mis_plugin_register_courseid');
+        $cdatefield = get_config('block_ilp', 'mis_plugin_register_datetime');
+        $markfield = get_config('block_ilp', 'mis_plugin_register_mark');
+        $timefield = get_config('block_ilp', 'mis_plugin_register_datetime');
+        $cnamefield = get_config('block_ilp', 'mis_plugin_register_coursename');
 
         if (!empty($term)) {
             $yearstart = $this->terms[0]['start'];
@@ -327,53 +330,64 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
         $absent = array(0, 0, 0, 0, 0, 0);
         $present = array(0, 0, 0, 0, 0, 0);
         $late = array(0, 0, 0, 0, 0, 0);
+        
+        $academicstart = $this->academic_week($this->terms[0]['start'], $yearstart);
+	    $academicend = $this->academic_week($this->terms[$this->numterms - 1]['end'], $yearstart);
 
         foreach ($data as $mark) {
-            if (!in_array($mark[$markfield], $this->noclasscodes)) {
-                $total[0]++;
-            }
+        	
+        	$marktimestamp = strtotime($this->normalise_date($mark[$cdatefield]));
+				
+	        $mark['Week_No'] = $this->academic_week(date('W', $marktimestamp), $yearstart);
+        	
 
-            if (in_array($mark[$markfield], $this->presentcodes)) {
-                $present[0]++;
-            }
+	        
+        	//we need to make sure that the mar is within the academic year
+        	if ($mark['Week_No'] >= $academicstart && $mark['Week_No'] <= $academicend) {
+	            if (!in_array($mark[$markfield], $this->noclasscodes)) {
+	                $total[0]++;
+	            }
+	
+	            if (in_array($mark[$markfield], $this->presentcodes)) {
+	                $present[0]++;
+	            }
+	
+	            if (in_array($mark[$markfield], $this->absentcodes)) {
+	                $absent[0]++;
+	            }
+	
+	            if (in_array($mark[$markfield], $this->latecodes)) {
+	                $late[0]++;
+	            }
+	
 
-            if (in_array($mark[$markfield], $this->absentcodes)) {
-                $absent[0]++;
-            }
-
-            if (in_array($mark[$markfield], $this->latecodes)) {
-                $late[0]++;
-            }
-
-            $marktimestamp = strtotime($this->normalise_date($mark[$cdatefield]));
-
-            $mark['Week_No'] = $this->academic_week(date('W', $marktimestamp), $yearstart);
-
-            for ($i = 1; $i <= $this->numterms; $i++) {
-
-                //these variables define the academic weeks of $termstart and $termend
-                $academicstart = $this->academic_week($this->terms[$i - 1]['start'], $yearstart);
-                $academicend = $this->academic_week($this->terms[$i - 1]['end'], $yearstart);
-
-                if ($mark['Week_No'] >= $academicstart && $mark['Week_No'] <= $academicend) {
-
-                    if (!in_array($mark[$markfield], $this->noclasscodes)) {
-                        $total[$i]++;
-                    }
-
-                    if (in_array($mark[$markfield], $this->presentcodes)) {
-                        $present[$i]++;
-                    }
-
-                    if (in_array($mark[$markfield], $this->absentcodes)) {
-                        $absent[$i]++;
-                    }
-
-                    if (in_array($mark[$markfield], $this->latecodes)) {
-                        $late[$i]++;
-                    }
-                }
-            }
+	
+	            for ($i = 1; $i <= $this->numterms; $i++) {
+	
+	                //these variables define the academic weeks of $termstart and $termend
+	                $termstart = $this->academic_week($this->terms[$i - 1]['start'], $yearstart);
+	                $termend = $this->academic_week($this->terms[$i - 1]['end'], $yearstart);
+	
+	                if ($mark['Week_No'] >= $termstart && $mark['Week_No'] <= $termend) {
+	
+	                    if (!in_array($mark[$markfield], $this->noclasscodes)) {
+	                        $total[$i]++;
+	                    }
+	
+	                    if (in_array($mark[$markfield], $this->presentcodes)) {
+	                        $present[$i]++;
+	                    }
+	
+	                    if (in_array($mark[$markfield], $this->absentcodes)) {
+	                        $absent[$i]++;
+	                    }
+	
+	                    if (in_array($mark[$markfield], $this->latecodes)) {
+	                        $late[$i]++;
+	                    }
+	                }
+	            }
+        	}
         }
 
         for ($i = 0; $i <= $this->numterms; $i++) {

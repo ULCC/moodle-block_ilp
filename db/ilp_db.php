@@ -1109,7 +1109,28 @@ class ilp_db_functions	extends ilp_logging {
     function delete_element_record_by_id ( $tablename,$id, $extraparams=array() ) {
     	return $this->delete_records( $tablename, array('id'=>$id), $extraparams );
     }
+    
+    /**
+     * Deletes a record in the given table matching its id field
+     * 
+     * @param	int $entry_id the id of the record you will be deleting
+     * 
+     * @return mixed true or false
+     */
+    function delete_entryfield($tablename,$entry_id)	{
+    	return $this->delete_records( $tablename, array('id'=>$entry_id));
+    }
 
+    /**
+     * Deletes a record in the given table matching its id field
+     * 
+     * @param	int $entry_id the id of the record you will be deleting
+     * 
+     * @return mixed true or false
+     */
+    function delete_entry_by_id($entry_id)	{
+    	return $this->delete_records( 'block_ilp_entry', array('id'=>$entry_id));
+    }
     
      /**
      * Returns all user entries for the given report

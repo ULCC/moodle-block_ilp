@@ -23,7 +23,7 @@
 							<?php if (!empty($access_report_editreports)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}"?>'><?php echo get_string('edit');?>
 																			 <img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" /></a> |
 																	<?php } ?> 
-							<?php if (!empty($access_report_deletereports)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/delete_reportentry.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}"?>'><?php echo get_string('delete');?>
+							<?php if (!empty($candelete)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/delete_reportentry.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}&tabitem={$this->tabitem}&selectedtab={$this->selectedtab}"?>'><?php echo get_string('delete');?>
 																				<img src="<?php echo $OUTPUT->pix_url("/t/delete");?>" alt="<?php echo get_string('delete');?>" />
 																				</a>
 																	  <?php } ?>						

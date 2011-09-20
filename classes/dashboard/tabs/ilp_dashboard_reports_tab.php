@@ -271,6 +271,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							$capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
 							if (!empty($capability))	$access_report_deletereports	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 	
+							//check to see whether the user can delete the reports entry
+							$candelete =	(!empty($report->frequency) && !empty($access_report_deletereports))	?	true	: false;
+							
+							
 							//get all of the entries for this report
 							$reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
 	
