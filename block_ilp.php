@@ -85,15 +85,18 @@ class block_ilp extends block_list {
         				$access_viewilp		=	true;
         			}
         			
-        			if (has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) && !$found_current_course ) {
+        			if ( has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) ) {
+        				$access_viewotherilp	=	true;
+        			}
+
+                    if( !$found_current_course ){
         				$intial_course_id	=	$c->id;
                         if( $c->id == $current_course_id ){
                             //current course is part of my_courses, so this should be the preselection for the linked page
                             //so stop changing the value for the link
                             $found_current_course = true;
                         }
-        				$access_viewotherilp	=	true;
-        			}
+                    }
         
 		}
         
