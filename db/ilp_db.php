@@ -1129,7 +1129,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed true or false
      */
     function delete_entry_by_id($entry_id)	{
-    	return $this->delete_records( 'block_ilp_entry', array('id'=>$entry_id));
+    	return $this->delete_records( 'block_ilp_entry', array('id'=>$entry_id),array());
     }
     
      /**
