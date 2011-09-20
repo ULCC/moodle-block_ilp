@@ -32,13 +32,18 @@ if ($USER->id != $user_id ) {
 		$currentcoursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
 		
 		if ($context ==	$currentcoursecontext)	{
-			//check that the user is enrolled on the current course if not then 
+ 
 			
-			$dbc	=	new ilp_db();
+			$dbc			=	new ilp_db();
 			$userenrolled	=	$dbc->get_user_by_id($user_id);
-			
-			//if (!is_enrolled($context,$userenrolled))	print_error('usernotenrolled','block_ilp');
-			if(!has_capability('moodle/course:view',$context))	print_error('usernotenrolled','block_ilp');
+			//check that the user is enrolled on the current course if not then print error			
+			$viewilp = true;
+			if (stripos($CFG->release,"2.") === false) {
+				if(!has_capability('moodle/grade:view',$context,$userenrolled))	$viewilp = false;
+			} else {
+				if (!is_enrolled($context,$userenrolled)) $viewilp = false;	
+			}
+			if (empty($viewilp)) print_error('usernotenrolled','block_ilp');
 		} 
 	}
 	
