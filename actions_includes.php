@@ -39,7 +39,7 @@ if ($USER->id != $user_id ) {
 			//check that the user is enrolled on the current course if not then print error			
 			$viewilp = true;
 			if (stripos($CFG->release,"2.") === false) {
-				if(!has_capability('moodle/grade:view',$context,$userenrolled))	$viewilp = false;
+				if(!has_capability('moodle/course:view',$context,$userenrolled))	$viewilp = false;
 			} else {
 				if (!is_enrolled($context,$userenrolled)) $viewilp = false;	
 			}
