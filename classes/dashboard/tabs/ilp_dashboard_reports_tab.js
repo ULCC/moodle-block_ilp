@@ -27,8 +27,6 @@ function get_height(elem) {
  */
 function toggle_container(elem, from, to) {
 	
-	console.log(elem);
-	
 	// disable the onclick so it can't be pressed twice
 	elem.onclick = null;
 
@@ -168,7 +166,7 @@ M.ilp_dashboard_reports_tab = {
 			//add the onchange event to the select button
 			document.getElementById('reportstateselect').addEventListener(
 				     'change',
-				     function() {console.log('test')},
+				     function() {},
 				     false
 				  );			
 			
