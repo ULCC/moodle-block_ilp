@@ -1727,10 +1727,6 @@ class ilp_db_functions	extends ilp_logging {
  	function get_course_users($course_id) {
  		global $CFG;
  		
- 		$params	= false;
- 		
-
- 		
  			$coursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
  			
  			if ($usercontexts		=	get_parent_contexts($coursecontext))	{

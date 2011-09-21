@@ -109,7 +109,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
         $table->addField($table_id);
         
         $table_title = new $this->xmldb_field('value');
-        $table_title->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);
+        $table_title->$set_attributes(XMLDB_TYPE_TEXT);
         $table->addField($table_title);
 
         $table_report = new $this->xmldb_field('entry_id');

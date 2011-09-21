@@ -69,7 +69,8 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 				
 				//start buffering output
 				ob_start();
-			
+					//we will use this to find out if the reports tab is installed if it is the reportname will be a link
+					$reporttab		=	$this->dbc->get_plugin_record_by_classname('block_ilp_dash_tab','ilp_dashboard_reports_tab');
 				
 					//get all enabled reports in this ilp
 					$reports		=	$this->dbc->get_reports(ILP_ENABLED);
@@ -84,7 +85,9 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 						foreach ($reports	as $r) {
 							$detail					=	new object();
 							$detail->report_id		=	$r->id;
-							$detail->name			=	$r->name;
+							
+							
+							$detail->name			=	(empty($reporttab)) ? $r->name : "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}&tabitem={$reporttab->id}:{$r->id}&selectedtab={$reporttab->id}'>{$r->name}</a>";
 							
 							$binary_icon				=	(!empty($r->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$r->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif"; 
 							
@@ -125,6 +128,9 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 							$reportslist[]			=	$detail;
 						}
 					}
+					
+					
+					
 
 					//we need to buffer output to prevent it being sent straight to screen
 					
