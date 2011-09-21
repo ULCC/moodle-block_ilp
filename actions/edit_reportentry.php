@@ -60,7 +60,7 @@ if (empty($access_report_createreports))	{
 
 
 if (!empty($entry_id))	{
-	if (empty($access_report_deletereports))	{
+	if (empty($access_report_editreports))	{
 		//the user doesnt have the capability to edit this type of report entry
 
 		print_error('userdoesnothavedeletecapability','block_ilp');	
