@@ -1726,12 +1726,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of object containing all users enrolled in the course 
      * or bool false
      */
- 	function get_course_users($course_id, $studentsonly=false) {
+ 	function get_course_users($course_id) {
  		global $CFG;
  		
  		$params	= false;
  		
- 		if ( $studentsonly || ( stripos($CFG->release,"2.") === false ) ) {
+
  		
  			$coursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
  			
@@ -1744,7 +1744,7 @@ class ilp_db_functions	extends ilp_logging {
  		
  			$context = get_context_instance(CONTEXT_COURSE, $course_id);
  		
-	 		$sql	=	"SELECT		u.id
+	 		$sql	=	"SELECT		distinct(u.id)
 	 					  FROM		{user} u INNER JOIN {role_assignments} ra on u.id = ra.userid 
 	 					  			LEFT OUTER JOIN {user_lastaccess} ul on (ra.userid and ul.courseid = {$course_id})
 	 					  			LEFT OUTER JOIN {role} r on ra.roleid = r.id
@@ -1754,6 +1754,9 @@ class ilp_db_functions	extends ilp_logging {
 	 					    AND		(ul.courseid = {$course_id} OR ul.courseid IS NULL)
 	 					    AND		u.username <> 'guest'
 	 					    AND		r.id = 5";
+ 		
+	 		/*
+	 	if (( stripos($CFG->release,"2.") === false ) ) {
  		} else {
  			//get the list of users for moodle 2.0
  			$context = get_context_instance(CONTEXT_COURSE, $course_id);
@@ -1761,7 +1764,7 @@ class ilp_db_functions	extends ilp_logging {
             //so I have introduced optional $studentsonly to allow the view script to ask for the $sql above to be used
  			list($sql, $params) = get_enrolled_sql($context,NULL);
  		}
- 		
+ 		*/
 		return (empty($params)) ? $this->dbc->get_records_sql($sql) : $this->dbc->get_records_sql($sql,$params) ;
  	}
  	

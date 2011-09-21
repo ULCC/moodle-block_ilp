@@ -121,7 +121,7 @@ $flextable->initialbars(true);
 $flextable->setup();
 
 if (!empty($course_id)) {
-    $users = $dbc->get_course_users($course_id, true);  //the 2nd argument to get_course_users restricts returned ids to student ids
+    $users = $dbc->get_course_users($course_id);  //the 2nd argument to get_course_users restricts returned ids to student ids
 } else {
     $users = $dbc->get_user_tutees($USER->id);
 }
@@ -165,9 +165,11 @@ $coursearg = ( $course_id ) ? "&course=$course_id" : '' ;
 if (!empty($studentslist)) {
     foreach ($studentslist as $student) {
         $data = array();
-
+		
+        $userprofile	=	(stripos($CFG->release,"2.") === false) ? 'view.php' : 'profile.php';
+                
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
-        $data['fullname'] = "<a href='{$CFG->wwwroot}/user/view.php?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
+        $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
         $data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
