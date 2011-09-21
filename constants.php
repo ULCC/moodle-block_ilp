@@ -87,5 +87,4 @@ define('AUTH_USER_ROLE','Authenticated user');
 define('ILP_EVENT',           0);
 
 define('STRIP_TAGS_DESCRIPTION', '');
-
 ?>
