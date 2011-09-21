@@ -1721,6 +1721,8 @@ class ilp_db_functions	extends ilp_logging {
      * @param int $course_id the id of the course whose enrolled users 
      * we want to retrieve 
      * 
+     * @param boolean $studentslonly - ask for returned ids to be restricted to student ids 
+     * 
      * @return mixed array of object containing all users enrolled in the course 
      * or bool false
      */
