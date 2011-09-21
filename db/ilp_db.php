@@ -1721,8 +1721,6 @@ class ilp_db_functions	extends ilp_logging {
      * @param int $course_id the id of the course whose enrolled users 
      * we want to retrieve 
      * 
-     * @param boolean $studentslonly - ask for returned ids to be restricted to student ids 
-     * 
      * @return mixed array of object containing all users enrolled in the course 
      * or bool false
      */
@@ -1755,17 +1753,8 @@ class ilp_db_functions	extends ilp_logging {
 	 					    AND		u.username <> 'guest'
 	 					    AND		r.id = 5";
  		
-	 		/*
-	 	if (( stripos($CFG->release,"2.") === false ) ) {
- 		} else {
- 			//get the list of users for moodle 2.0
- 			$context = get_context_instance(CONTEXT_COURSE, $course_id);
-            //jfp: get_enrolled_sql() is not working for actions/view_studentlist - the returned ids are for all roles, not just students
-            //so I have introduced optional $studentsonly to allow the view script to ask for the $sql above to be used
- 			list($sql, $params) = get_enrolled_sql($context,NULL);
- 		}
- 		*/
-		return (empty($params)) ? $this->dbc->get_records_sql($sql) : $this->dbc->get_records_sql($sql,$params) ;
+
+		return $this->dbc->get_records_sql($sql);
  	}
  	
  	
