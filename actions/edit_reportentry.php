@@ -186,7 +186,7 @@ $plpuser	=	$dbc->get_user_by_id($user_id);
 $dashboardurl	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&course_id={$course_id}";
 $userprofileurl	=	$CFG->wwwroot."/user/profile.php?id={$user_id}";
 if ($user_id != $USER->id) {
-	if (!empty($access_viewotherilp)) {
+	if (!empty($access_viewotherilp) && !empty($course_id)) {
 		$listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$course_id}";
 	} else {
 		$listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
