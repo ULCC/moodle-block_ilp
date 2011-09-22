@@ -82,15 +82,20 @@ class block_ilp extends block_list {
         $found_current_course = false;
 		foreach($my_courses	as $c) {
         			$coursecontext = get_context_instance(CONTEXT_COURSE, $c->id);
+                    $set_course_groups_link = false;       
 			
 			        //we need to get the capabilites of the current user so we can deceide what to display in the block 
         			if (has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false)) {
         				$access_viewilp		=	true;
+                        $set_course_groups_link = true;       
         			}
         			
         			if ( has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) ) {
         				$access_viewotherilp	=	true;
+                        $set_course_groups_link = true;       
+        			}
 
+                    if( $set_course_groups_link ){
 	                    if( !$found_current_course ){
 	        				$intial_course_id	=	$c->id;
 	                        if( $c->id == $current_course_id ){
@@ -99,8 +104,7 @@ class block_ilp extends block_list {
 	                            $found_current_course = true;
 	                        }
 	                    }
-        
-        			}
+                    }
 		}
         
 		//
