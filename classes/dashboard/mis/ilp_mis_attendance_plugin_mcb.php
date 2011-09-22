@@ -506,7 +506,12 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 }
 
                 $present = $this->presents_cal($presents, $authabsents);
-                $percent = ($absents / $present) * 100;
+                if( $present > 0 ){
+                    $percent = ($absents / $present) * 100;
+                }
+                else{
+                    $percent = '--';
+                }
 
                 $course['overallpercent'] = number_format($percent, 0);
                 $course['overallabsents'] = $absents;
