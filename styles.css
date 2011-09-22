@@ -8,10 +8,19 @@
  * @version 2.0
  */
  
- /* Head info section */
+/* general */
+  
+.ilp .ilp_print_icon{float:right;} 
+.ilp .commands {display:inline} 
+.ilp #plugin_nodata{background: #FFFCE5;color: #884400; padding: 10px; border:1px solid #EEDD55;}
+ 
+/* Head info section */
 
-#ilp-container { padding:0; margin: 0; width: 100%; }
-
+.ilp #ilp-container { 
+	padding:0; 
+	margin: 0; 
+	width: 100%; 
+}
 .ilp #studentinfo-container{ 
 	width: 100%;
 	display:block; 
@@ -55,7 +64,6 @@
 	display:block; 
 	margin: 0 0 10px 0;
 }
-
 .ilp .percentagebar {
 	margin:	2px;
 	border:	1px solid #ccc;
@@ -131,11 +139,8 @@
 	height:75px;
 	width: 75px;
 }
-
-
 .ilp #student_list_container {
    overflow: auto;
-
 }
 
 /* JAVASCRIPT CSS DO NOT REMOVE */
@@ -144,18 +149,17 @@
     display             : none;
     visibility			: hidden;
 }
-
 .ilp form.nothidden {
     display             : inline;
     visibility			: visible;
     
 }
-
 .ilp .overflowtable {
 	overflow: auto;
 	overflow:scroll;
     overflow-y: hidden;
 	-ms-overflow-y: hidden;
+	position:relative;
 }
 
 
@@ -174,6 +178,9 @@
     height:0;
     clear:both;
     visibility:hidden;
+}
+.ilp #ilp_mis_attendance_plugin_byclass{
+	margin: 10px 0;
 }
 /* ATTENDANCE - Register */
 
@@ -222,7 +229,7 @@
 .ilp #ilp_mis_learner_profile_assessments{
 	width: 30%;
 	display:block; 
-	margin: 0 auto;
+	margin: 10px auto;
 }
 .ilp #ilp_mis_learner_profile_assessments:after {
     content:".";
@@ -330,9 +337,16 @@
 /* Reports section */
 
 .ilp .report_state{
-	float:left;
-	width:80%;
+	width: 80%;
+	display:block; 
 	margin: 20px auto;
+}
+.ilp .report_state:after {
+    content:".";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
 }
 .ilp .reports-container{
 	width:100%;
@@ -393,10 +407,26 @@
 	padding: 5px 10px 10px 10px; 
 }
 
-
 /* Tabs */ 
-.tabtree .tabrow0 .tabrow1 { padding: 10px; border-bottom: 2px solid #ddd;}
- 
+
+.tabtree .tabrow0 .tabrow1 { 
+	border-bottom: 2px solid #ddd;
+}
+.tabtree .tabrow1 li a, .tabtree .tabrow1 li a:hover, .tabtree .tabrow1 li a span, .tabtree .tabrow1 li a:hover span {
+    padding: 0 5px;
+}
+/* Fix for alignment of tabs in IE 7*/
+.tabtree ul li.here ul {
+	clear:left;
+	float:left; 
+	list-style:none; 
+	margin: 0; 
+	padding: 0; 
+	position:relative; 
+	left:0; 
+	text-align:center; 
+	width: 100%;
+}
  
 /* Tables */ 
 
@@ -404,15 +434,15 @@
 	font-weight: bold;
 	text-align:left;
 }
-/* General */ 
+/* Icons */ 
 .ilp .icon_small {
 	width:50px;
 	height:50px;
 	margin-right:10px;	
 }
 .ilp .icon_med {
-	width:70px;
-	height:70px;
+	width:50px;
+	height:50px;
 	margin-right:10px;	
 	display:inline;
 }
