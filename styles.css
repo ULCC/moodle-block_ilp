@@ -12,9 +12,12 @@
   
 .ilp .ilp_print_icon{
 	float:right;
+	width:32px;
+	height:32px;
 } 
 .ilp .commands {
 	display:inline;
+	padding-left: 3px;
 } 
 .ilp #plugin_nodata{
 	background: #FFFCE5;
@@ -26,6 +29,21 @@
 	font-size: 2em;
 	margin: 10px 0;
 } 
+.ilp .removeborder td{
+	border:0;
+	font-weight: bold;
+	text-align: center;
+}
+.ilp .removeborder td form{
+	padding: 5px 0;
+}
+/* overflow in tables*/
+
+.ilp .centable{
+	overflow: auto;
+    overflow-y: hidden;
+	-ms-overflow-y: hidden;
+}
 
 /* Head info section */
 
@@ -167,14 +185,6 @@
     visibility			: visible;
     
 }
-.ilp .overflowtable {
-	overflow: auto;
-	overflow:scroll;
-    overflow-y: hidden;
-	-ms-overflow-y: hidden;
-	position:relative;
-}
-
 
 /* ATTENDANCE */
 
@@ -439,15 +449,16 @@
 	left:0; 
 	text-align:center; 
 	width: 100%;
-}
- 
+} 
 /* Tables */ 
 
 .ilp th{
 	font-weight: bold;
 	text-align:left;
 }
+
 /* Icons */ 
+
 .ilp .icon_small {
 	width:50px;
 	height:50px;
@@ -459,6 +470,11 @@
 	margin-right:10px;	
 	display:inline;
 	vertical-align: middle;
+}
+/* Forms */ 
+
+.ilp #filter_form label{
+	font-weight:bold;
 }
 
 /* Buttons */ 
