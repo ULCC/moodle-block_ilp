@@ -96,10 +96,42 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_learner_contact_postcode')) 	$this->fields['postcode']	=	get_config('block_ilp','mis_learner_contact_postcode');
 				
  				$data	=	$this->dbquery( $table, $keyfields, $this->fields);
+                $data   =   $this->populate_from_usertable( array_shift( $data ) , $user_id );
  				
- 				$this->data	=	(!empty($data)) ? array_shift($data) : false;
+ 				//$this->data	=	(!empty($data)) ? array_shift($data) : false;
+ 				$this->data	=	(!empty($data)) ? $data : false;
 				
  			} 
+    }
+
+    /*
+    * not all contact fields may be available from MIS db
+    * here we can add some of the missing data from the moodle user data
+    * @param keyed array $data
+    * @param int $user_id - this should be the moodle user id
+    * @return keyed array
+    */
+    public function populate_from_usertable( $data , $user_id ){
+        global $DB;
+        $user = $DB->get_record( 'user' , array( 'id' => $user_id ) );
+        //keys match keys in $this->fields which could be substituted from mdl_user
+        //values are corresponding fieldnames in mdl_user
+        $fieldlist = array(
+            'email' => 'email',
+            'phone' => 'phone1',
+            'mobile' => 'phone2',
+            'addressone' => 'address',
+            'addresstwo' => 'city',
+            'addressthree' => 'country'
+        );
+        foreach( $fieldlist as $fieldname => $userfieldname ){
+            if( empty( $this->fields[ $fieldname ] ) && !empty( $user->$userfieldname ) ){
+                $this->fields[ $fieldname ] = $userfieldname;
+                $data[ $this->fields[ $fieldname ] ] = $user->$userfieldname;
+            }
+        }
+        $data[ 'addressone' ] = 'a house';
+        return $data;
     }
  	
 	/**
