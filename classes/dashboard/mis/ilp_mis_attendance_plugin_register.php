@@ -203,7 +203,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
 	        
         	//we need to make sure that the mar is within the academic year
         	if ($mark['Week_No'] >= $academicstart && $mark['Week_No'] <= $academicend) {
-	            if (!in_array($mark[$markfield], $this->noclasscodes) && $mark[$markfield] != ' ') {
+	            if (!in_array($mark[$markfield], $this->noclasscodes) && strlen($mark[$markfield]) > 0) {
 	                $total[0]++;
 	            }
 	
@@ -229,7 +229,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
 	
 	                if ($mark['Week_No'] >= $termstart && $mark['Week_No'] <= $termend) {
 	
-	                    if (!in_array($mark[$markfield], $this->noclasscodes) && $mark[$markfield] != ' ') {
+	                    if (!in_array($mark[$markfield], $this->noclasscodes) && strlen($mark[$markfield]) > 0) {
 	                        $total[$i]++;
 	                    }
 	
@@ -425,7 +425,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
 						
                         if (in_array($item['Week_No'], $termsweeks)) {
 
-                            if (!in_array($item[$markfield], $this->noclasscodes) && $mark[$markfield] != ' ') {
+                            if (!in_array($item[$markfield], $this->noclasscodes) && strlen($mark[$markfield]) > 0) {
                                 $total[$groupKey][$cday][$ctime][0][0]++;
                             }
                             if (in_array($item[$markfield], $this->presentcodes)) {
