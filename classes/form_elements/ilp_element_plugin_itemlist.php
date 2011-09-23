@@ -58,15 +58,17 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 			$pluginentry			=	new stdClass();
             $pluginentry->audit_type = $this->audit_type();
 			$pluginentry->entry_id  = 	$entry_id;
-	 		$pluginentry->value		=	$data->$fieldname;
+	 		$pluginentry->value		=	( !empty( $data->$fieldname ) ) ? $data->$fieldname : '' ;
 	 		//pass the values given to $entryvalues as an array
 	 		$entryvalues	=	(!is_array($pluginentry->value)) ? array($pluginentry->value): $pluginentry->value;
 	 		
 	 		foreach ($entryvalues as $ev) {
-	 			$state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$ev, $this->external_items_keyfield, $this->external_items_table );
-	 		    $pluginentry->parent_id	=	$state_item->id;	
-	 			$pluginentry->value 	= 	$state_item->value;
-				$result					= 	$this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+                if( !empty( $ev ) ){
+		 			$state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$ev, $this->external_items_keyfield, $this->external_items_table );
+		 		    $pluginentry->parent_id	=	$state_item->id;	
+		 			$pluginentry->value 	= 	$state_item->value;
+					$result					= 	$this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+                }
 	 		}
 	 	
 			return	$result;
