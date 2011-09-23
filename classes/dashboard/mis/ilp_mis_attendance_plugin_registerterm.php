@@ -342,7 +342,7 @@ function summary_data($data, $term = 0)
 	        
         	//we need to make sure that the mark is within the academic year
         	if ($mark['Week_No'] >= $academicstart && $mark['Week_No'] <= $academicend) {
-	            if (!in_array($mark[$markfield], $this->noclasscodes)) {
+	            if (!in_array($mark[$markfield], $this->noclasscodes) && strlen($mark[$markfield]) > 0) {
 	                $total[0]++;
 	            }
 	
@@ -368,7 +368,7 @@ function summary_data($data, $term = 0)
 	
 	                if ($mark['Week_No'] >= $termstart && $mark['Week_No'] <= $termend) {
 	
-	                    if (!in_array($mark[$markfield], $this->noclasscodes)) {
+	                    if (!in_array($mark[$markfield], $this->noclasscodes) && strlen($mark[$markfield]) > 0) {
 	                        $total[$i]++;
 	                    }
 	
