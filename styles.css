@@ -10,10 +10,22 @@
  
 /* general */
   
-.ilp .ilp_print_icon{float:right;} 
-.ilp .commands {display:inline} 
-.ilp #plugin_nodata{background: #FFFCE5;color: #884400; padding: 10px; border:1px solid #EEDD55;}
-.ilp h2{font-size: 2em;} 
+.ilp .ilp_print_icon{
+	float:right;
+} 
+.ilp .commands {
+	display:inline;
+} 
+.ilp #plugin_nodata{
+	background: #FFFCE5;
+	color: #884400; 
+	padding: 10px; 
+	border:1px solid #EEDD55;
+}
+.ilp h2{
+	font-size: 2em;
+	margin: 10px 0;
+} 
 
 /* Head info section */
 
@@ -416,7 +428,6 @@
 .tabtree .tabrow1 li a, .tabtree .tabrow1 li a:hover, .tabtree .tabrow1 li a span, .tabtree .tabrow1 li a:hover span {
     padding: 0 5px !important;
 }
-
 /* Fix for alignment of tabs in IE 7*/
 .tabtree ul li.here ul {
 	clear:left;
