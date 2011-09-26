@@ -27,9 +27,9 @@
 	$string['createnewreport']		=	'Create New Report';
 	$string['comments']				=	'Comments';
 	$string['comment']				=	'Comment';
+	$string['commeentdeleted']		=	'Comment deleted';
 	$string['commentcreationsuc']	=	'Comment was successfully created';
 	$string['continue']				=	'Continue';
-	
 	$string['contextcourse']		=	'Context Course';
 	$string['contextuser']			=	'Continue User';
 	$string['contextself']			=	'Context Self';

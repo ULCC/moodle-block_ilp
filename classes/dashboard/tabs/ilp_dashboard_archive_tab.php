@@ -46,16 +46,24 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
     function define_second_row()	{
     	global 	$CFG,$USER,$PAGE,$OUTPUT,$PARSER;
     	
+    	$reportone		=	get_config('block_ilp','mis_archive_tab_reportone');
+    	$reporttwo		=	get_config('block_ilp','mis_archive_tab_reporttwo');
+    	$reportthree	=	get_config('block_ilp','mis_archive_tab_reportthree');
+    	$reportfour		=	get_config('block_ilp','mis_archive_tab_reportfour');
+    	$reportfive		=	get_config('block_ilp','mis_archive_tab_reportfive');
+    	$reporttarget	=	get_config('block_ilp','mis_archive_tab_reporttarget');
+    	$reportstudent	=	get_config('block_ilp','mis_archive_tab_reportstudentinfo');
+    	
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {	
-			$this->secondrow[]	=	array('id'=>1,'link'=>$this->linkurl,'name'=>'Student Info');
-			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>'Target Reports');
-			$this->secondrow[]	=	array('id'=>3,'link'=>$this->linkurl,'name'=>'Report 1');
-			$this->secondrow[]	=	array('id'=>4,'link'=>$this->linkurl,'name'=>'Report 2');
-			$this->secondrow[]	=	array('id'=>5,'link'=>$this->linkurl,'name'=>'Report 3');
-			$this->secondrow[]	=	array('id'=>6,'link'=>$this->linkurl,'name'=>'Report 4');
-			$this->secondrow[]	=	array('id'=>7,'link'=>$this->linkurl,'name'=>'Report 5');
+			$this->secondrow[]	=	array('id'=>1,'link'=>$this->linkurl,'name'=>$reportstudent);
+			$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>$reporttarget);
+			$this->secondrow[]	=	array('id'=>3,'link'=>$this->linkurl,'name'=>$reportone);
+			$this->secondrow[]	=	array('id'=>4,'link'=>$this->linkurl,'name'=>$reporttwo);
+			$this->secondrow[]	=	array('id'=>5,'link'=>$this->linkurl,'name'=>$reportthree);
+			$this->secondrow[]	=	array('id'=>6,'link'=>$this->linkurl,'name'=>$reportfour);
+			$this->secondrow[]	=	array('id'=>7,'link'=>$this->linkurl,'name'=>$reportfive);
 		}
     }
     
@@ -105,42 +113,42 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 			
 			//start buffering output
 			ob_start();
-			
-			switch ($seltab[1]) {
-				
-				case 1:
-					$this->ilp_display_student_info($this->student_id);
+			if (!empty($seltab[1]))	{ 
+				switch ($seltab[1]) {
+					
+					case 1:
+						$this->ilp_display_student_info($this->student_id);
+						break;
+					
+					case 2:
+						$this->ilp_display_targets($this->student_id);
+						break;
+	
+					case 3:
+						$this->ilp_display_concerns($this->student_id,0);
+						break;
+	
+					case 4:
+						$this->ilp_display_concerns($this->student_id,1);
+						break;
+	
+					case 5:
+						$this->ilp_display_concerns($this->student_id,2);
+						break;
+	
+					case 6:
+						$this->ilp_display_concerns($this->student_id,3);
+						break;
+	
+					case 7:
+						$this->ilp_display_concerns($this->student_id,4);
+						break;					
+					
+					default:
+						$this->ilp_display_concerns($this->student_id,5);
 					break;
-				
-				case 2:
-					$this->ilp_display_targets($this->student_id);
-					break;
-
-				case 3:
-					$this->ilp_display_concerns($this->student_id,0);
-					break;
-
-				case 4:
-					$this->ilp_display_concerns($this->student_id,1);
-					break;
-
-				case 5:
-					$this->ilp_display_concerns($this->student_id,2);
-					break;
-
-				case 6:
-					$this->ilp_display_concerns($this->student_id,3);
-					break;
-
-				case 7:
-					$this->ilp_display_concerns($this->student_id,4);
-					break;					
-				
-				default:
-					$this->ilp_display_concerns($this->student_id,5);
-				break;
-			}
-			
+				}
+			}			
 			// load custom javascript
 			$module = array(
 			    'name'      => 'ilp_dashboard_archive_tab',
@@ -191,6 +199,18 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
         $string['ilp_dashboard_archive_tab_report3']	 				= 'Report3';
         $string['ilp_dashboard_archive_tab_report4']	 				= 'Report4';
         $string['ilp_dashboard_archive_tab_report5']	 				= 'Report5';
+        $string['ilp_dashboard_archive_tab_target']		 				= 'Target';
+        $string['ilp_dashboard_archive_tab_student']	 				= 'Student';  
+
+        $string['ilp_dashboard_archive_tab_reportdesc']	 				= 'The title of this report';
+        
+        $string['ilp_dashboard_archive_tab_reportoneheader']	 				= 'Report 1';
+        $string['ilp_dashboard_archive_tab_reporttwoheader']	 				= 'Report 2';
+        $string['ilp_dashboard_archive_tab_reportthreeheader']	 				= 'Report 3';
+        $string['ilp_dashboard_archive_tab_reportfourheader']	 				= 'Report 4';
+        $string['ilp_dashboard_archive_tab_reportfiveheader']	 				= 'Report 5';
+        $string['ilp_dashboard_archive_tab_reportstudentheader']	 			= 'Student Info';
+        $string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
         
         $string['ilp_dashboard_archive_tab_studentinfo_student']	 				= 'Student text';
         $string['ilp_dashboard_archive_tab_studentinfo_teacher']	 				= 'Teacher text';
@@ -198,28 +218,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
         
 	    return $string;
     }
-	
-	
-	/**
- 	  * Adds config settings for the plugin to the given mform
- 	  * by default this allows config option allows a tab to be enabled or dispabled
- 	  * override the function if you want more config options REMEMBER TO PUT 
- 	  * 
- 	  */
- 	 function config_form(&$mform)	{
- 	 	
- 	 	//get the name of the current class
- 	 	$classname	=	get_class($this);
- 	 	
- 	 	$options = array(
-    		ILP_ENABLED => get_string('enabled','block_ilp'),
-    		ILP_DISABLED => get_string('disabled','block_ilp')
-    	);
- 	
- 	 	$this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
- 	 	
- 	 }
- 	 
+ 
  	 
  	 
  	 function ilp_display_student_info($student_id)	{
@@ -385,6 +384,39 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
  	 		
  	 	}	 	
 	 }
+	 
+	 	/**
+ 	  * Adds config settings for the plugin to the given mform
+ 	  * 
+ 	  */
+ 	 function config_form(&$mform)	{
+ 	 	
+ 	 	//get the name of the current class
+ 	 	$classname	=	get_class($this);
+ 	 	
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_reportone', get_string('ilp_dashboard_archive_tab_reportoneheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_report1', 'block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_reporttwo', get_string('ilp_dashboard_archive_tab_reporttwoheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_report2', 'block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_reportthree', get_string('ilp_dashboard_archive_tab_reportthreeheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_report3', 'block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_reportfour', get_string('ilp_dashboard_archive_tab_reportfourheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_report4', 'block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_reportfive', get_string('ilp_dashboard_archive_tab_reportfiveheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_report5', 'block_ilp'));
+
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_studentinfo', get_string('ilp_dashboard_archive_tab_reportstudentheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_student', 'block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_target', get_string('ilp_dashboard_archive_tab_reporttargetheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_target', 'block_ilp'));
+ 
+ 	 	$options = array(
+    		ILP_ENABLED => get_string('enabled','block_ilp'),
+    		ILP_DISABLED => get_string('disabled','block_ilp')
+    	);
+ 	
+ 	 	$this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
+ 	 	
+ 	 }
+	
  	 
  	 
  	 
@@ -430,16 +462,6 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 					 FROM		{$CFG->prefix}ilptarget_posts, {$CFG->prefix}user up
 					 WHERE		up.id = setbyuserid AND setforuserid = {$student_id}
 					 ORDER BY 	deadline $sortorder ";
-
-		/* re-implement for status
-		if($status != -1) {
-			$where .= "AND status = $status ";
-		}elseif($config->ilp_show_achieved_targets == 1){
-	    	$where .= "AND status != 3 ";
-		}else{
-	    	$where .= "AND status = 0 ";
-		}
-		*/
 		
 		return 	$this->dbc->get_records_sql($sql);
 	}

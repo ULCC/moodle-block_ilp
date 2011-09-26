@@ -33,6 +33,10 @@ $user_id = $PARSER->required_param('user_id', PARAM_INT);
 //if set get the id of the report entry to be edited
 $entry_id	= $PARSER->required_param('entry_id',PARAM_INT);
 
+//if set get the id of the report entry to be edited
+$comment_id	= $PARSER->required_param('comment_id',PARAM_INT);
+
+
 //get the id of the course that is currently being used
 $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
 
@@ -60,11 +64,6 @@ $entry		=	$dbc->get_entry_by_id($entry_id);
 if (empty($entry)) {
 	print_error('entrynotfouund','block_ilp');
 }
-
-if (empty($report->frequency))	{
-	//entries can only be deleted from reports that allow multiple entries
-	print_error('entrycannotbedeleted','block_ilp');
-} 
  
 //check if the user has the delete record capability
 if (empty($access_report_deletereports))	{
@@ -77,23 +76,10 @@ if (empty($access_report_deletereports))	{
 // instantiate the db
 $dbc = new ilp_db();
 
-//get all of the fields in the current report, they will be returned in order as
-//no position has been specified
-$reportfields		=	$dbc->get_report_fields_by_position($report_id);
-			
-if (!empty($reportfields))	{ 
-	foreach ($reportfields as $field) {
-		//get the plugin record that for the plugin 
-		$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
-				
-		$dbc->delete_element_record_by_id($pluginrecord->tablename.'_ent',$field->id);
-	}
-}
-
-$dbc->delete_entry_by_id($entry_id);
+$dbc->delete_comment_by_id($comment_id);
 
 $return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&course_id={$course_id}&selectedtab=$selectedtab&tabitem={$tabitem}";
-redirect($return_url, get_string('entrydeleted','block_ilp'), REDIRECT_DELAY);
+redirect($return_url, get_string('commeentdeleted','block_ilp'), REDIRECT_DELAY);
 
 
 

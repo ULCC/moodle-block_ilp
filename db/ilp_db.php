@@ -1132,6 +1132,17 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->delete_records( 'block_ilp_entry', array('id'=>$entry_id),array());
     }
     
+    /**
+     * Deletes a entrys comment
+     * 
+     * @param	int $comment_id the id of the record you will be deleting
+     * 
+     * @return mixed true or false
+     */
+    function delete_comment_by_id($entry_id)	{
+    	return $this->delete_records( 'block_ilp_entry_comment', array('id'=>$entry_id),array());
+    }
+    
      /**
      * Returns all user entries for the given report
      * 

@@ -253,7 +253,7 @@ class ilp_dashboard_tab extends ilp_plugin {
 	/**
  	  * Adds config settings for the plugin to the given mform
  	  * by default this allows config option allows a tab to be enabled or dispabled
- 	  * override the function if you want more config options REMEMBER TO PUT 
+ 	  * override the function if you want more config options REMEMBER TO PUT _pluginstatus in it 
  	  * 
  	  */
  	 function config_form(&$mform)	{

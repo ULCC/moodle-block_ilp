@@ -84,6 +84,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
 
             $terms = (empty($sixtermformat)) ? 4 : 7;
 
+              
             foreach ($this->termdata as $metric) {
 
                 $data['metric'] = $metric['name'];
@@ -484,7 +485,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
             //overall late percentage is calculated by geting the percentage of lates and taking
             //it away from 100
             $latepercent = ($lates / $present) * 100;
-            $latepercent = 100 - $latepercent;
+            $latepercent = $latepercent;
 
             $termdata['overall']['attendance'] = $presentpercent;
             $termdata['overall']['punctuality'] = $latepercent;
