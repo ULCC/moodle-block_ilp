@@ -90,7 +90,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
                 do {
                     $data["{$month}month"] = (!empty($this->mcbdata[$cid][$month]))
-                            ? $this->addlinks($this->mcbdata[$cid][$month]['percent'] . "%", array('mis_period_id' => $month))
+                            ? $this->addlinks(round($this->mcbdata[$cid][$month]['percent'],0) . "%", array('mis_period_id' => $month))
                             //? $this->addlinks($this->mcbdata[$cid][$month] . "%", array('mis_period_id' => $month))
                             : "0%";
 
