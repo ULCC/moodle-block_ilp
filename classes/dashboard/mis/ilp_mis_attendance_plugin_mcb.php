@@ -502,8 +502,10 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 $presents = 0;
                 $absents = 0;
                 $authabsents = 0;
+                $total	=	0;
 
                 foreach ($course as $monthdata) {
+                	$total	+=	$monthdata['markstotal'];
                     $presents += $monthdata['markspresent'];
                     $absents += $monthdata['marksabsent'];
                     $authabsents += $monthdata['marksauthabsent'];
@@ -511,7 +513,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
                 $present = $this->presents_cal($presents, $authabsents);
                 if( $present > 0 ){
-                    $percent = ($absents / $present) * 100;
+                    $percent = ($absents / $total) * 100;
                 }
                 else{
                     $percent = '--';
