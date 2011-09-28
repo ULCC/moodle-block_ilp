@@ -25,7 +25,7 @@ function var_crap($var,$header="") {
  *
  * @return int A random number
  */
-function uniqueNum() {
+function ilp_uniqueNum() {
     return rand().time();
 }
 
@@ -96,49 +96,7 @@ function ilp_get_user_role_ids($context,$user_id)	{
 	return $role_ids;
 }
 
-/**
- * Removes any resources from the given array that are disabled in either the global or instance config.
- *
- * @param array $resources the array containing the resources
- * @param int $userid optional id of the user. If 0 then $USER->id is used.
- * @param bool $return optional defaults to false. If true the list is returned rather than printed
- * @return string HTML
- */
-function assmgr_remove_disbaled_resources($resources,$course_id=null) {
 
-    $dbc = new assmgr_db();
-
-    $instance_config  = (array) $dbc->get_instance_config($course_id);
-
-    $resource_array = array();
-    $resource_temp = array();
-
-    $globalconfig = get_config('block_assmgr');
-
-     foreach($globalconfig as $setting => $value) {
-         if(substr($setting, 0, 16) == 'assmgr_resource_') {
-              foreach ($resources as $resource) {
-                   if ($setting == $resource->name && !empty($value)) {
-                        array_push($resource_temp,$resource);
-                   }
-              }
-         }
-     }
-    if (!empty($instance_config)) {
-        foreach ($resource_temp as $resource) {
-            if (isset($instance_config[$resource->name])) {
-                if (!empty($instance_config[$resource->name])) {
-                     array_push($resource_array,$resource);
-                }
-            }
-
-        }
-    } else {
-        $resource_array = $resource_temp;
-    }
-
-    return $resource_array;
-}
 
 
 /**
@@ -159,40 +117,11 @@ function ilp_build_navigation($breadcrumbs) {
         $limit = round(MAXLENGTH_BREADCRUMB/count($breadcrumbs));
         // enforce it
         foreach($breadcrumbs as $id => $crumb) {
-            $breadcrumbs[$id]['name'] = limit_length($crumb['name'], $limit);
+            $breadcrumbs[$id]['name'] = ilp_limit_length($crumb['name'], $limit);
         }
     }
 
     return build_navigation($breadcrumbs);
-}
-
-/**
- * uninstalls all resource tables
- *
- */
-function uninstall_resources()  {
-    global $CFG, $DB;
-    require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
-    $dbc = new assmgr_db();
-
-    $resource_tables    =   $dbc->get_resource_types();
-
-    if (!empty($resource_tables)) {
-        foreach ($resource_tables as $resource_t) {
-            // include the class for this type of evidence
-            if (!empty($resource_t->name)) {
-
-                if (file_exists($CFG->dirroot."/blocks/assmgr/classes/resources/plugins/{$resource_t->name}.php")) {
-                    @include_once($CFG->dirroot."/blocks/assmgr/classes/resources/plugins/{$resource_t->name}.php");
-                    $resource = new $resource_t->name();
-
-                    if (!empty($resource))  {
-                        $resource->uninstall();
-                    }
-                }
-            }
-        }
-    }
 }
 
 
@@ -238,7 +167,7 @@ function reportformpermissions($permissions) {
  *              stop the truncation and deceoding
  * @return string HTML
  */
-function limit_length($html, $maxlength, $tooltip = null) {
+function ilp_limit_length($html, $maxlength, $tooltip = null) {
 
     // permit only html tags and quotes so we can parse the tags properly
     $html = ilp_db::decode_htmlchars(assmgr_db::encode($html));
@@ -318,7 +247,7 @@ function limit_length($html, $maxlength, $tooltip = null) {
         $tooltip = ilp_db::encode($tooltip);
 
         // generate the unique id needed for the YUI tooltip
-        $id = 'tootlip'.uniqueNum();
+        $id = 'tootlip'.ilp_uniqueNum();
 
         $script = "<script type='text/javascript'>
                        //<![CDATA[

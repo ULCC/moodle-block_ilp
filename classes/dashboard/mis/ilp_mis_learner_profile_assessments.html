@@ -1,7 +1,8 @@
 <div id="ilp_mis_learner_profile_assessments">
 		<h3><?php echo get_string('ilp_mis_learner_profile_assessments_disp_assessments','block_ilp') ?></h3>
+		<table>
 		<?php if (!empty($this->data[$this->fields['maths']])) {?>
-			<table><tr><th><?php echo get_string('ilp_mis_learner_profile_assessments_disp_maths','block_ilp') ?></th>
+			<tr><th><?php echo get_string('ilp_mis_learner_profile_assessments_disp_maths','block_ilp') ?></th>
 			<td><?php echo $this->data[$this->fields['maths']]; ?></td></tr>
 		<?php } ?>
 		<?php if (!empty($this->data[$this->fields['english']])) {?>
@@ -14,8 +15,9 @@
 		<?php } ?>
 		<?php if (!empty($this->data[$this->fields['study']])) {?>
 			<tr ><th><?php echo get_string('ilp_mis_learner_profile_assessments_disp_study','block_ilp') ?></th>
-			<td><?php echo $this->data[$this->fields['study']];?></td></tr></table>
+			<td><?php echo $this->data[$this->fields['study']];?></td></tr>
 		<?php } ?>		
+		</table>
 </div>
 
 <div class="clearer"></div>

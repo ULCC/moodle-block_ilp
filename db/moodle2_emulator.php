@@ -254,7 +254,7 @@ class moodle2_renderer_emulator {
 	        $limit = round(MAXLENGTH_BREADCRUMB/count($breadcrumbs));
 	        // enforce it
 	        foreach($breadcrumbs as $id => $crumb) {
-	            $breadcrumbs[$id]['name'] = limit_length($crumb['name'], $limit);
+	            $breadcrumbs[$id]['name'] = ilp_limit_length($crumb['name'], $limit);
 	        }
 	    }
 	

@@ -392,9 +392,9 @@ class ilp_ajax_table extends ilp_flexible_table {
                 if (isset($this->sess->i_first) && $letter == $this->sess->i_first) {
                     echo ' <strong>'.$letter.'</strong>';
                 } else {
-                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_IFIRST].']='.$letter;
+                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_IFIRST].']='.$letter.'&'.$this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']=0';
                     echo ' <a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$letter.'</a>';
-                }
+                } 
             }
             echo '</div>';
 
@@ -411,7 +411,7 @@ class ilp_ajax_table extends ilp_flexible_table {
                 if (isset($this->sess->i_last) && $letter == $this->sess->i_last) {
                     echo ' <strong>'.$letter.'</strong>';
                 } else {
-                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_ILAST].']='.$letter;
+                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_ILAST].']='.$letter.'&'.$this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']=0';
                     echo ' <a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$letter.'</a>';
                 }
             }
