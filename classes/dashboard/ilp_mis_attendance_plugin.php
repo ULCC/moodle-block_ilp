@@ -63,6 +63,11 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin
     */
     protected function calc_attendance($list)
     {
+        foreach( array( 'marksPresent', 'marksAbsent', 'marksTotal', 'marksAuthAbsent', 'marksLate' ) as $key ){
+            if( !isset( $list[ $key ] ) ){
+                return false;
+            }
+        }
         $present = $list['marksPresent'];
         $absent = $list['marksAbsent'];
         $total = $list['marksTotal'];
@@ -84,6 +89,11 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin
     */
     protected function calc_punctuality($list)
     {
+        foreach( array( 'marksPresent', 'marksAbsent', 'marksTotal', 'marksAuthAbsent', 'marksLate' ) as $key ){
+            if( !isset( $list[ $key ] ) ){
+                return false;
+            }
+        }
         $present = $list['marksPresent'];
         $absent = $list['marksAbsent'];
         $total = $list['marksTotal'];
