@@ -461,6 +461,10 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
                 //get the current month
                 $month = $d[$this->fields['month']];
+                
+                //addtional check that month value is a number not a string
+                $month = (is_string($month)) ? date('n',strtotime("1-$month-2011")) : $month;
+                
 
                 //check if an array position for the month exists in the course
                 if (!isset($mcbdata[$courseid][$month])) {

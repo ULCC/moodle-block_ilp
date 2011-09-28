@@ -305,6 +305,8 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
     */
     function interpret_date( $value , $format='d-m-Y' ){
         if( is_string( $value ) ){
+        	
+        	$value	=	str_replace("/", "-", $value);
             //use generic method for turning strings to numerical dates
             $unixtime = strtotime( $value );
         }
