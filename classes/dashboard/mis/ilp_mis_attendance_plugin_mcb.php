@@ -513,7 +513,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
                 $present = $this->presents_cal($presents, $authabsents);
                 if( $present > 0 ){
-                    $percent = ($absents / $total) * 100;
+                    $percent = ($present / $total) * 100;
                 }
                 else{
                     $percent = '--';
