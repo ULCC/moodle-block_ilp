@@ -21,7 +21,7 @@ M.ilp_standard_functions = {
             // if the action is successful then load the content into the page
             success: function(o) {
                 document.getElementById(elem_id).innerHTML = o.responseText;
-                parse_scripts(elem_id);
+                M.ilp_standard_functions.parse_scripts(elem_id);
             },
             // if it failed then do nothing
             failure: function(o) {
