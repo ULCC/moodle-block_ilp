@@ -90,7 +90,7 @@ class moodle2_db_emulator {
         foreach($params as $param) {
             if(is_array($param)) {
                 if(count($param) > 3) {
-                    print_error('toomanykeyvalues', 'block_assmgr');
+                    print_error('toomanykeyvalues', 'block_ilp');
                 }
                 foreach($param as $key => $value) {
                     $flat[] = $key;

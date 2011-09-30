@@ -366,7 +366,7 @@ class ilp_logging {
                     break;
 
                default:
-                   return get_string('unknown', 'block_assmgr');
+                   return get_string('unknown', 'block_ilp');
             }
      }
 

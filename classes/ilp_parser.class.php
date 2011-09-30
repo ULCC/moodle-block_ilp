@@ -58,17 +58,17 @@ class ilp_parser {
         } else if (isset($_GET[$parname])) {
             $param = $_GET[$parname];
         } else {
-            print_error('missingparam', 'block_assmgr', '', $parname);
+            print_error('missingparam', 'block_ilp', '', $parname);
         }
 
         if ($parname == "") {
-            print_error('emptyparam', 'block_assmgr', '', $parname);
+            print_error('emptyparam', 'block_ilp', '', $parname);
         }
 
         $retparam = $this->clean_param($param, $type);
 
         if ($retparam === false) {
-            print_error('wrongparam', 'block_assmgr', '', $parname);
+            print_error('wrongparam', 'block_ilp', '', $parname);
         } else {
             // add the param to the list
             $this->params[$parname] = $retparam;
@@ -125,7 +125,7 @@ class ilp_parser {
         $retparam = $this->clean_param($param, $type);
 
         if ($retparam === false) {
-            print_error('wrongparamopt', 'block_assmgr', '', $parname);
+            print_error('wrongparamopt', 'block_ilp', '', $parname);
         } else {
             // add the param to the list
             $this->params[$parname] = $retparam;

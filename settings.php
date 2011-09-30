@@ -208,7 +208,5 @@ $globalsettings 	= new admin_setting_heading('block_ilp/miscconfig', get_string(
 
 $settings->add($globalsettings);
 
-$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/add_predefined_reports.php">'.get_string('predefinedreports', 'block_ilp').'</a>';
-$settings->add(new admin_setting_heading('block_ilp_report_predefinedreports', '', $link));
 
 ?>

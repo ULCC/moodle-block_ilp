@@ -18,7 +18,9 @@ while (($collapsed = preg_replace('|/[^/]+/\.\./|','/',$path_to_config,1)) !== $
     $path_to_config = $collapsed;
 }
 
-require_once($path_to_config);
+//require_once($path_to_config);
+
+require_once('../../config.php');
 
 global $USER, $CFG, $SESSION, $PARSER,$DB;
 
