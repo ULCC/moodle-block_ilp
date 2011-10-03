@@ -97,7 +97,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 
 		 	//loop through all of the data for this entry in the particular entry		 	
 		 	foreach($entry as $e) {
-		 		$fielddata[]	=	$e->value;
+		 		$fielddata[]	=	$e->parent_id;
 		 	}
 		 	
 		 	//save the data to the objects field
