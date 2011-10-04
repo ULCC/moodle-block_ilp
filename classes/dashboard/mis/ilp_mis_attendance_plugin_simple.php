@@ -74,7 +74,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
         if (!empty($tablename)) {
 	        $keyfield 			= get_config('block_ilp','mis_plugin_simple_studentid');
 	        $attendance_field 	= get_config('block_ilp','mis_plugin_simple_attendance');
-	        $punctuality_field 	= get_config('block_ilp','mis_plugin_simple_punchuality');
+	        $punctuality_field 	= get_config('block_ilp','mis_plugin_simple_punctuality');
 	        
 	        //is the id a string or a int
     		$idtype	=	get_config('block_ilp','mis_plugin_course_idtype');
@@ -117,7 +117,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_simple_studentid',get_string('ilp_mis_attendance_plugin_simple_studentid', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_studentiddesc', 'block_ilp'),'studentID');
  	 	
- 	 	$this->config_text_element($mform,'mis_plugin_simple_punctuality',get_string('ilp_mis_attendance_plugin_simple_punctuality', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_punchualitydesc', 'block_ilp'),'punctuality');
+ 	 	$this->config_text_element($mform,'mis_plugin_simple_punctuality',get_string('ilp_mis_attendance_plugin_simple_punctuality', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_punctualitydesc', 'block_ilp'),'punctuality');
 
  	 	$this->config_text_element($mform,'mis_plugin_simple_attendance',get_string('ilp_mis_attendance_plugin_simple_attendance', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_attendancedesc', 'block_ilp'),'attendance');
  	 	
@@ -183,13 +183,13 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 
     function getAttendance()
     {
-        return $this->data[0];
+        return (!empty($this->data)) ? $this->data[0][0] : 0;
 
     }
 
     function getPunctuality()
     {
-        return $this->data[1];
+        return (!empty($this->data)) ? $this->data[0][1] : 0;
     }
 
 

@@ -565,15 +565,5 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
         return 'Monthly Course Breakdown';
     }
 
-    function getAttendance()
-    {
-        // TODO: Implement getAttendance() method.
-    }
-
-    function getPunctuality()
-    {
-        // TODO: Implement getPunctuality() method.
-    }
-
-
+    
 }

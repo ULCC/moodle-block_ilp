@@ -328,16 +328,6 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
         return $present;
     }
 
-    function getAttendance()
-    {
-        return 'test';
-    }
-
-    function getPunctuality()
-    {
-        // TODO: Implement getPunctuality() method.
-    }
-
 
 }
 

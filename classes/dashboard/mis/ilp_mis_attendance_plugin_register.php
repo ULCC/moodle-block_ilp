@@ -840,12 +840,26 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
 
     function getAttendance()
     {
-        // TODO: Implement getAttendance() method.
+    	$attendance 	=	0;
+
+    	if (!empty($this->data)) {
+            $summarydata = $this->summary_data($this->data);
+            $attendance	= $summarydata['att_prec'][0];
+    	} 
+    	
+        return $attendance;
     }
 
     function getPunctuality()
     {
-        // TODO: Implement getPunctuality() method.
+    	$punctuality	=	0;
+    	
+    	if (!empty($this->data)) {
+            $summarydata 	= $this->summary_data($this->data);
+            $punctuality	= $summarydata['pun_perc'][0];
+    	} 
+    	
+ 		return $punctuality;   	
     }
 
 

@@ -53,29 +53,36 @@ $columns[] = 'view';
 
 //we need to check if the mis plugin has been setup if it has we will get the attendance and punctuality figures
 
+$attendanceclass				=	get_config('block_ilp','attendplugin');
+$misavailable 					= 	false;
+$misattendavailable				=	false;
+$mispunctualityavailable		=	false;
 
-//include the attendance 
-$misclassfile = $CFG->dirroot . '/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_percentbar_plugin.php';
-$misavailable = false;
-
-if (file_exists($misclassfile)) {
-
-    include_once $misclassfile;
-
-    //create an instance of the MIS class
-    $misclass = new ilp_mis_attendance_percentbar_plugin();
-
-
-    $headers[] = get_string('attendance', 'block_ilp');
-    $columns[] = 'u_attendcance';
-    $misattendavailable = true;
-
-    $headers[] = get_string('punctuality', 'block_ilp');
-    $columns[] = 'u_punctuality';
-    $mispunctualityavailable = true;
-
+if (!empty($attendanceclass)) {
+	$misclassfile = $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis/{$attendanceclass}.php";	
+	if (file_exists($misclassfile)) {
+		include_once $misclassfile;
+		
+		$misavailable	=	true;
+		
+		//create an instance of the MIS class
+    	$misclass = new $attendanceclass();
+		
+    	//check if the methods exists
+    	if (method_exists($misclass, 'getAttendance'))	{
+   		    $headers[] = get_string('attendance', 'block_ilp');
+   			$columns[] = 'u_attendcance';
+   			$misattendavailable = true;
+    	}
+    	
+    	//check if the methods exists
+	    if (method_exists($misclass, 'getAttendance'))	{
+    		$headers[] = get_string('punctuality', 'block_ilp');
+    		$columns[] = 'u_punctuality';
+    		$mispunctualityavailable = true;    		
+    	}
+	}
 }
-
 
 //get all enabled reports in this ilp
 $reports = $dbc->get_reports(ILP_ENABLED);
@@ -176,23 +183,29 @@ if (!empty($studentslist)) {
 
         $data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
 
-
-        //set the data for the student in question
-        $misclass->set_data($student->id);
-        if (!empty($misattendavailable)) {
-            $actual = $misclass->getAttendance();
-            //we only want to try to find the percentage if we can get the total possible
-            // attendance else set it to 0;
-            $data['u_attendcance'] = (!empty($actual)) ? $actual : 0;
+		//we will only attempt to get MIS data if an attendace plugin has been selected in the settings page
+		
+        if (!empty($misavailable)) {
+        	$misclass = new $attendanceclass();
+	        //set the data for the student in question
+	        $misclass->set_data($student->idnumber);
+	        if (!empty($misattendavailable)) {
+	        	$attendpercent	=	0;
+	            $attendpercent = $misclass->getAttendance();
+	            //we only want to try to find the percentage if we can get the total possible
+	            // attendance else set it to 0;
+	            $data['u_attendcance'] = (!empty($attendpercent)) ? $attendpercent : 0;
+	        }
+	
+	        if (!empty($mispunctualityavailable)) {
+	            $punctpercent	=	0;
+	        	$punctpercent = $misclass->getPunctuality();
+	            //we only want to try to find the percentage if we can get the total possible
+	            // punctuality else set it to 0;
+	            $data['u_punctuality'] = (!empty($punctpercent)) ? $punctpercent : 0;
+	        }
         }
-
-        if (!empty($mispunctualityavailable)) {
-            $actual = $misclass->getPunctuality();
-            //we only want to try to find the percentage if we can get the total possible
-            // punctuality else set it to 0;
-            $data['u_punctuality'] = (!empty($actual)) ? $actual : 0;
-        }
-
+        
         foreach ($reports as $r) {
 
             //get the number of this report that have been created

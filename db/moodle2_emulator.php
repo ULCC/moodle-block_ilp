@@ -113,9 +113,10 @@ class moodle2_db_emulator {
     }
     
     public function sql_like($fieldname,$param) {
+    	global $CFG;
         $LIKE	= ($CFG->dbfamily == 'postgres') ? 'ILIKE'	:	'LIKE';
         
-    	return $fieldname.' '.$LIKE.' \''.$param.'\'';
+    	return " {$fieldname} {$LIKE} {$param} ";
     }
 }
 

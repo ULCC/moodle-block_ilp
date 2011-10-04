@@ -89,13 +89,13 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
             	$data['code'] 			= $d[$this->fields['coursecode']];
             	
             	$attendance				=	$d[$this->fields['positivemarks']] / ( $d[$this->fields['totalmarks']] - $d[$this->fields['missedmarks']] ) * 100;
-            	$punchuality			=	( $d[$this->fields['totalmarks']] - $d[$this->fields['missedmarks']] - $d[$this->fields['latemarks']]) / ($d[$this->fields['totalmarks']] - $d[$this->fields['missedmarks']] ) * 100;
+            	$punctuality			=	( $d[$this->fields['totalmarks']] - $d[$this->fields['missedmarks']] - $d[$this->fields['latemarks']]) / ($d[$this->fields['totalmarks']] - $d[$this->fields['missedmarks']] ) * 100;
             	
             	$colour					=	$this->performane_css($d['performance']);
             	
             	$data['performance'] 	= "<span style='background-color: {$colour}'>{$d['performance']}</span>";
             	$data['attendance']		= round($attendance,0);
-            	$data['punchuality'] 	= round($punchuality,0);
+            	$data['punctuality'] 	= round($punctuality,0);
             	$flextable->add_data_keyed($data);	
 			}
 

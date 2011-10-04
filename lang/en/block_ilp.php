@@ -16,6 +16,8 @@
 	$string['applyfilter'] 				= 	'Apply Filter';
 	$string['attendance']			= 	'Attendance';
 	
+	$string['attendaceplugin']		= 	'Attendance Plugin';
+	$string['attendaceplugindesc']	= 	'The attendance plugin that will called to get attendance data in various areas of the ilp (the plugin must be enabled to appear in this list)';
 	
 	$string['availablereports']		= 	'Available Reports'; 
 	$string['blockname'] 			= 	'ILP 2.0';
@@ -136,7 +138,7 @@
 	
 	$string['name']					=	'Name';
 	$string['nodataornoconfig']		=	'No data has been found for the current student. If you believe there should be data for the current student then the plugin may not been configured correctly';
-	
+	$string['noplugin']			=	'No Plugin';
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';

@@ -68,11 +68,7 @@ if (!empty($items)) {
 
 
 
-$userstatus			= 	new admin_setting_configselect('block_ilp/defaultstatusitem',get_string('defaultstatusitem','block_ilp'),get_string('defaultstatusitemconfig','block_ilp'), 'simulationassignment',$options);
-
-
-
-
+$userstatus			= 	new admin_setting_configselect('block_ilp/defaultstatusitem',get_string('defaultstatusitem','block_ilp'),get_string('defaultstatusitemconfig','block_ilp'), '',$options);
 $settings->add($userstatus);
 
 
@@ -94,6 +90,41 @@ $settings->add($failpercentage);
 //the fail percentage
 $passpercentage			=	new admin_setting_configtext('block_ilp/passpercent',get_string('passpercent','block_ilp'),get_string('passpercentconfig','block_ilp'),ILP_DEFAULT_PASS_PERCENTAGE,PARAM_INT);
 $settings->add($passpercentage);
+
+
+//get all mis_plugins
+$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
+$plugins = $CFG->dirroot . '/blocks/ilp/classes/dashboard/mis';
+
+$options = array();
+
+$options[0]	=	get_string('noplugin','block_ilp');
+
+foreach ($mis_plugins as $plugin_file) {
+
+      require_once($plugins . '/' . $plugin_file . ".php");
+        // instantiate the object
+        $class = basename($plugin_file, ".php");
+        $pluginobj = new $class();
+        $method = array($pluginobj, 'plugin_type');
+
+        //check whether the config_settings method has been defined
+         if (is_callable($method, true)) {
+         	if ($pluginobj->plugin_type() == 'attendance' || $pluginobj->plugin_type() == 'overview') {
+         		
+         		//we only want to display plugins that are enabled (if they are enabled they should be configured)
+         		$pluginstatus	=	get_config('block_ilp',"{$plugin_file}_pluginstatus");
+         		if (!empty($pluginstatus)) {
+               		$mismisc = $dbc->get_mis_plugin_by_name($plugin_file);
+               		$options[$mismisc->name] = $pluginobj->tab_name();
+         		}
+            }
+         }
+}
+
+$attendplugin			= 	new admin_setting_configselect('block_ilp/attendplugin',get_string('attendaceplugin','block_ilp'),get_string('attendaceplugindesc','block_ilp'), '',$options);
+$settings->add($attendplugin);
+
 
 $mis_settings 	= new admin_setting_heading('block_ilp/mis_connection', get_string('mis_connection', 'block_ilp'), '');
 $settings->add($mis_settings);

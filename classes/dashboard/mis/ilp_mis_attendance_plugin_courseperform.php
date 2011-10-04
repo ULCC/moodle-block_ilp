@@ -370,16 +370,6 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
         return 'Course Based Attendance';
     }
 
-    function getAttendance()
-    {
-        // TODO: Implement getAttendance() method.
-    }
-
-    function getPunctuality()
-    {
-        // TODO: Implement getPunctuality() method.
-    }
-
 
 }
 

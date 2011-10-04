@@ -475,6 +475,8 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
                 $absents += $term['marksabsent'];
                 $authabsents += $term['marksauthabsent'];
                 $lates += $term['markslate'];
+                
+                var_dump($term['marksauthabsent']);
             }
 
 
@@ -482,9 +484,13 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
             $presentpercent = ($absents / $present) * 100;
             $presentpercent = 100 - $presentpercent;
 
+            
+            var_dump($present);
+            var_dump($lates);
+            
             //overall late percentage is calculated by geting the percentage of lates and taking
             //it away from 100
-            $latepercent = ($lates / $present) * 100;
+            $latepercent = 100 - (($lates / $present) * 100);
             $latepercent = $latepercent;
 
             $termdata['overall']['attendance'] = $presentpercent;
@@ -536,15 +542,27 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
         return $present;
     }
 
-    function getAttendance()
-    {
-        // TODO: Implement getAttendance() method.
+    function getAttendance()	{
+    	var_dump($this->termdata);
+    	
+    	//this returns the attendace data for the current record
+    	return (!empty($this->data)) ? $this->termdata[0]['overall'] : 0;	
     }
 
-    function getPunctuality()
-    {
-        // TODO: Implement getPunctuality() method.
+    function getPunctuality()	{
+    	//this returns the attendace data for the current record    	
+        return (!empty($this->data)) ? $this->termdata[1]['overall'] : 0;
     }
 
+
+    /**
+     * This function is used if the plugin is displayed in the tab menu.
+     * Do not use a menu string in this function as it will cause errors
+     *
+     */
+    function tab_name()
+    {
+        return 'Term';
+    }
 
 }

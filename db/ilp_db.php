@@ -1780,6 +1780,7 @@ class ilp_db_functions	extends ilp_logging {
 
     	
         $select = "SELECT 		u.id as id,
+        						u.idnumber as idnumber,
         						u.firstname as firstname,
         						u.lastname as lastname,
         						si.name	as u_status,

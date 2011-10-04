@@ -127,7 +127,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 				$misclass->set_data($this->student_id);
 				
 				
-				$punch_method1 = array($misclass, 'get_student_punchuality');
+				$punch_method1 = array($misclass, 'get_student_punctuality');
 				$attend_method1 = array($misclass, 'get_student_attendance');
 
         
