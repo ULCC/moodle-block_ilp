@@ -1735,10 +1735,14 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of object containing all users enrolled in the course 
      * or bool false
      */
- 	function get_course_users($course_id) {
+ 	function get_course_users($course_id,$group_id=null) {
  		global $CFG;
  		
  			$coursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
+ 			
+ 			$grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
+ 			$groupwhere		=	(!empty($group_id)) ? "AND gm.groupid = {$group_id} " : "";
+ 			
  			
  			if ($usercontexts		=	get_parent_contexts($coursecontext))	{
  					$listofcontexts	=	'('.implode(',',$usercontexts).')';
@@ -1751,6 +1755,7 @@ class ilp_db_functions	extends ilp_logging {
  		
 	 		$sql	=	"SELECT		distinct(u.id)
 	 					  FROM		{user} u INNER JOIN {role_assignments} ra on u.id = ra.userid 
+	 					  			{$grouptable}
 	 					  			LEFT OUTER JOIN {user_lastaccess} ul on (ra.userid and ul.courseid = {$course_id})
 	 					  			LEFT OUTER JOIN {role} r on ra.roleid = r.id
 	 					  			
@@ -1758,8 +1763,8 @@ class ilp_db_functions	extends ilp_logging {
 	 					    AND		u.deleted = 0
 	 					    AND		(ul.courseid = {$course_id} OR ul.courseid IS NULL)
 	 					    AND		u.username <> 'guest'
-	 					    AND		r.id = 5";
- 		
+	 					    AND		r.id = 5
+	 					  			{$groupwhere}";
 
 		return $this->dbc->get_records_sql($sql);
  	}

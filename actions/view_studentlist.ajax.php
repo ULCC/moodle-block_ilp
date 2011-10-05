@@ -128,7 +128,7 @@ $flextable->initialbars(true);
 $flextable->setup();
 
 if (!empty($course_id)) {
-    $users = $dbc->get_course_users($course_id);  
+    $users = $dbc->get_course_users($course_id,$group_id);  
 } else {
     $users = $dbc->get_user_tutees($USER->id);
 }

@@ -24,6 +24,7 @@
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
 	$string['binary_icon']			=	'Icon File';
 	$string['changecourse']			=	'Change Course';
+	$string['changegroup']			=	'Change Group';
 	$string['creator']				=	'Creator';
 	$string['createreport']			=	'Create Report';
 	$string['createnewreport']		=	'Create New Report';

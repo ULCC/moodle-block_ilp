@@ -29,6 +29,9 @@ $tutor		=	$PARSER->optional_param('tutor', 0, PARAM_RAW);
 //get the status_id if set
 $status_id		=	$PARSER->optional_param('status_id', 0, PARAM_INT);
 
+//get the group if set
+$group_id		=	$PARSER->optional_param('group_id', 0, PARAM_INT);
+
 
 
 // instantiate the db
@@ -81,8 +84,24 @@ $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php",$PARSER-
 //we need to list all of the students in the course with the given id
 if (!empty($course_id)) {
 	//get all of the students in this class
-	$students	=	$dbc->get_course_users($course_id);
+	$students	=	$dbc->get_course_users($course_id,$group_id);
 	$course		=	$dbc->get_course_by_id($course_id);
+	
+    $groups		  =	groups_get_all_groups($course->id);
+
+    if (!empty($groups))	{ 
+    	$groupmode    = groups_get_course_groupmode($course);   // Groups are being used
+    	$isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
+                         !has_capability('moodle/site:accessallgroups', $context));
+    }
+	
+
+    
+
+
+
+    
+    
 	$pagetitle	=	$course->shortname;
 	
 	$ucourses	=	$dbc->get_user_courses($USER->id);
@@ -107,7 +126,7 @@ if (!empty($course_id)) {
 }
 
 $status_items	=	$dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);	
-
+$baseurl		=	$CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php";
 //require the view_studentlist.html page
 require_once($CFG->dirroot.'/blocks/ilp/views/view_studentlist.html');
 

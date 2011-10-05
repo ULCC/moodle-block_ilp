@@ -46,10 +46,7 @@ $PAGE->requires->js_init_call('M.ilp_view_studentlist.init', null, true, $jsmodu
 if (isset($course_id)) { 
 	if	(!empty($user_courses) && count($user_courses) > 0) { 
 ?>
-
-
-
-        <label for='select_course_id'><?php echo get_string('changecourse','block_ilp'); ?></label>
+    <label for='select_course_id'><?php echo get_string('changecourse','block_ilp'); ?></label>
 	<select id='select_course_id' name='course_id'>
 		<?php foreach ($user_courses as $c) {?>
 			<option value='<?php echo $c->id; ?>'  <?php if ($course_id == $c->id) echo 'selected="selected"';?> ><?php echo $c->shortname?></option>
@@ -60,7 +57,25 @@ if (isset($course_id)) {
 	<input type='hidden' name='course_id' value='<?php if (isset($course_id)) echo $course_id?>' >
 <?php
 	}
+
+	if	(!empty($groups) && count($groups) > 0) { 
+?>
+    <label for='select_group_id'><?php echo get_string('changegroup','block_ilp'); ?></label>
+	<select id='select_group_id' name='group_id'>
+		<?php foreach ($groups as $g) {?>
+			<option value='<?php echo $g->id; ?>'  <?php if ($group_id == $g->id) echo 'selected="selected"';?> ><?php echo $g->name?></option>
+		<?php } ?> 
+	</select>
+	<br />
+<?php } else { ?>
+	<input type='hidden' name='group_id' value='<?php if (isset($group_id)) echo $group_id?>' >
+<?php
+	}
+
+
 } 
+
+
 
 if (isset($tutor)) { 
 ?>
@@ -74,7 +89,7 @@ if (isset($tutor)) {
 		<?php } ?> 
 	</select>
 
-	
+	<br />
 	<input id='coursesubmit' type='submit' value='<?php echo get_string('applyfilter','block_ilp');?>'>
 	</form>
 
