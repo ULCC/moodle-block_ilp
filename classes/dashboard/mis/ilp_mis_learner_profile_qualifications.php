@@ -23,6 +23,32 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  		$this->tabletype	=	get_config('block_ilp','mis_learner_qualifications_tabletype');
  		$this->fields		=	array();
  	}
+
+    /*
+    * calculate average points on entry for a student, in isolation from outputting the flexable table
+    * used in the grade tracker
+    * @return int
+    */
+    public function get_qca_stats(){
+ 		global $CFG;
+ 		if (!empty($this->data)) {
+	        $i	=	0;
+	        $total	=	0;
+	        foreach( $this->data as $row ){
+	            if (!empty($row[get_config('block_ilp','mis_learner_qualifications_points')])) {
+	            	$i++;
+	            	$weight	=	$row[get_config('block_ilp','mis_learner_qualifications_weight')];
+	            	$points	=	$row[get_config('block_ilp','mis_learner_qualifications_points')];
+	            	$total 	+=	(!empty($weight))	? $points * $weight	: $points ; 
+	            }
+            }
+        }
+		$average	=	(!empty($total)) ? $total	/$i : 0;
+        return array(
+            'average' => $average,
+            'total' => $total
+        );
+    }
  	
  	/**
  	 * 
