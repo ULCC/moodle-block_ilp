@@ -24,6 +24,7 @@ class ilp_mis_connection{
 
     protected $db;
     public 	$errorlist;                   //collect a list of errors
+    public	$prelimcalls;				  //calls to be executed before the sql is called
 
     /**
      * Constructor function
@@ -40,6 +41,7 @@ class ilp_mis_connection{
         global $CFG;
         $this->db = false;
         $this->errorlist = array();
+        $this->prelimcalls	=	array();
 
         $dbconnectiontype	=	(!empty($cparams['type'])) 	? $cparams['type']	: 	get_config( 'block_ilp', 'dbconnectiontype' );
         $host	=	(!empty($cparams['host'])) 	? $cparams['host']	: 	get_config( 'block_ilp', 'dbhost' );
@@ -240,13 +242,30 @@ class ilp_mis_connection{
         }
     }
 
+	/**
+	 * This function makes any calls to the database that need to be made before the sql statement is run
+	 * The function uses the $prelimcalls var 
+	 */    
+    private function make_prelimcall()	{
+    	if (!empty($this->prelimcalls))	{
+    		foreach ($this->prelimcalls as $pc)	{
+	    		try {
+		        	$res = $this->db->Execute( $pc );
+				} catch (exception $e) {
+					//we wont do anything if these calls fail
+				}	
+    		}
+    	}
+    }
+    
     /**
     * executes the given sql query 
     * @param string $sql
     * @return array of arrays      
     */
     public function execute( $sql){
-		try {
+    	$this->make_prelimcall();
+    	try {
         	$res = $this->db->Execute( $sql );
 		} catch (exception $e) {
 			return false;	

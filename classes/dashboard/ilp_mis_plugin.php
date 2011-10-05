@@ -74,8 +74,10 @@ abstract class ilp_mis_plugin extends ilp_plugin
     * @param array $additionalargs
     * @return array
     */
-    protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null)
+    protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null)
     {
+    	if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
+    	    	
         return ($this->tabletype == ILP_MIS_STOREDPROCEDURE)
                 ? $this->db->return_stored_values($table, $params)
                 : $this->db->return_table_values($table, $params, $fields, $addionalargs);
