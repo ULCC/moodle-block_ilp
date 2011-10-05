@@ -81,9 +81,9 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_learner_assessments_study')) 		$this->fields['study']	=	get_config('block_ilp','mis_learner_assessments_study');
  				
  				
- 				$this->
+ 				$prelimdbcalls	=	get_config('block_ilp','mis_learner_assessments_prelimcalls');
  				
- 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
+ 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields,$prelimdbcalls);
  				
  				//we only need the first record so pass it back 
  				$this->data	= (!empty($this->data)) ?  array_shift($this->data)	:	$this->data; 	
