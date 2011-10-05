@@ -68,7 +68,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
             $columns[] = 'code';
             //$columns[] = 'performance';
             $columns[] = 'attendance';
-            $columns[] = 'punchuality';
+            $columns[] = 'punctuality';
 
             //define the columns in the tables
             $flextable->define_columns($columns);
