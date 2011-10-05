@@ -61,7 +61,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
             $headers[] = 'Code';
             //$headers[] = 'Performance';
             $headers[] = 'Attendance';
-            $headers[] = 'Punchuality';
+            $headers[] = 'Punctuality';
             
 
             $columns[] = 'course';
