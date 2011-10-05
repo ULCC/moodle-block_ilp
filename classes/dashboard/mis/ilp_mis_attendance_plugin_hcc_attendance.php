@@ -59,14 +59,14 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
             $columns = array();
             $headers[] = 'Course';
             $headers[] = 'Code';
-            $headers[] = 'Performance';
+            //$headers[] = 'Performance';
             $headers[] = 'Attendance';
             $headers[] = 'Punchuality';
             
 
             $columns[] = 'course';
             $columns[] = 'code';
-            $columns[] = 'performance';
+            //$columns[] = 'performance';
             $columns[] = 'attendance';
             $columns[] = 'punchuality';
 
@@ -91,9 +91,9 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
             	$attendance				=	$d[$this->fields['positivemarks']] / ( $d[$this->fields['totalmarks']] - $d[$this->fields['missedmarks']] ) * 100;
             	$punctuality			=	( $d[$this->fields['totalmarks']] - $d[$this->fields['missedmarks']] - $d[$this->fields['latemarks']]) / ($d[$this->fields['totalmarks']] - $d[$this->fields['missedmarks']] ) * 100;
             	
-            	$colour					=	$this->performane_css($d['performance']);
+            	//$colour					=	$this->performane_css($d['performance']);
             	
-            	$data['performance'] 	= "<span style='background-color: {$colour}'>{$d['performance']}</span>";
+            	//$data['performance'] 	= "<span style='background-color: {$colour}'>{$d['performance']}</span>";
             	$data['attendance']		= round($attendance,0);
             	$data['punctuality'] 	= round($punctuality,0);
             	$flextable->add_data_keyed($data);	
@@ -114,77 +114,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
 
 
 
-    /**
-     * This function determines whether links should be added to the content if yes then it adds the link
-     * pointing to any mis plugin that can link to this plugin
-     *
-     * @param string $content the content that will be displayed
-     * @param array  $param    any additional paramaters that should be added
-     */
-    public function addlinks($content, $params = false)
-    {
-        global $CFG;
 
-        $plugin_id = get_config('block_ilp', 'mis_plugin_registerterm_linkedplugin');
-
-        if (!empty($plugin_id)) {
-
-            //get the
-            $plugin_id = get_config('block_ilp', 'mis_plugin_registerterm_linkedplugin');
-
-            if (!empty($plugin_id)) {
-                $plugin = $this->dbc->get_mis_plugin_by_id($plugin_id);
-
-                //links will only be made if the plugin being linked to is enabled
-                if ($plugin->status == ILP_ENABLED) {
-                    $urlparams = explode('&', $_SERVER['QUERY_STRING']);
-                    $newurlparams = array();
-                    if (!empty($urlparams)) {
-                        foreach ($urlparams as $v) {
-                            if (strpos($v, 'mis_term_id') === FALSE
-                                && strpos($v, 'tabitem') === FALSE && strpos($v, 'selectedtab') === FALSE
-                            ) {
-                                array_push($newurlparams, $v);
-                            }
-                        }
-                    }
-
-                    //add the params given by the user to the newurlparams var
-                    if (!empty($params)) {
-                        foreach ($params as $k => $v) {
-                            array_push($newurlparams, "{$k}={$v}");
-                        }
-                    }
-
-                    //TODO work out a way to do this dynamically
-                    //get the id of the attendance tab
-                    $atttab = $this->dbc->get_plugin_by_name('block_ilp_dash_tab', 'ilp_dashboard_mis_attendance_tab');
-
-                    if (!empty($atttab)) {
-                        //set the selected tab url param
-                        array_push($newurlparams, "selectedtab={$atttab->id}");
-
-                        //set the tabitem url param
-                        array_push($newurlparams, "tabitem={$atttab->id}:$plugin_id");
-
-                        $querystring = implode('&', $newurlparams);
-                        $url = $CFG->wwwroot . "/blocks/ilp/actions/view_main.php?{$querystring}";
-
-                        $content = "<a href='$url' >{$content}</a>";
-                    }
-                }
-            }
-
-
-        }
-
-
-        //check if plugin is enabled
-
-        return $content;
-
-
-    }
     /**
      * Retrieves user data from the mis database
      *
@@ -222,7 +152,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
 
             //get the users monthly attendance data
             $this->data = $this->dbquery($table, $keyfields, $this->fields);
-            
+            /*
             //we now need to get behaviour data 
             if (!empty($this->data))	{
             	
@@ -238,6 +168,8 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
             		}
             	}
             } 
+            
+            */
         }
     }
     
