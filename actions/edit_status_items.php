@@ -81,7 +81,7 @@ $PAGE->navbar->add(get_string('blocks'),null,'title');
 
 
 //block name
-$url	=	"http://ilpdev2.local/admin/settings.php?section=blocksettingilp";
+$url	=	$CFG->wwwroot . "/admin/settings.php?section=blocksettingilp";
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
 
 //section name
