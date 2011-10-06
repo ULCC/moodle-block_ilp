@@ -151,6 +151,7 @@
 	
 	
 	$string['passpercent']			=	'Pass Percentage';
+	$string['progressbarcolour']	=	'Progress Bar colour';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
 	$string['passcsscolour']		=	'Pass CSS colour';
 	$string['passcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in a pass state';

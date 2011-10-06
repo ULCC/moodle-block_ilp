@@ -28,6 +28,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
     */
     public function display()
     {
+        $this->init_bgcolours();
 
         if (!empty($this->courselist) && !empty($this->mcbdata)) {
 
@@ -86,13 +87,13 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 //we start the month counter from the first month
                 $month = $startmonth;
                 $data['course'] = $cname;
-                $data['overall'] = $this->mcbdata[$cid]['overallpercent'] . '%';
+                $cellcontents = $this->mcbdata[$cid]['overallpercent'] . '%';
+                $data['overall'] = $this->format_background_by_value( $cellcontents );
 
                 do {
-                    $data["{$month}month"] = (!empty($this->mcbdata[$cid][$month]))
-                            ? $this->addlinks(round($this->mcbdata[$cid][$month]['percent'],0) . "%", array('mis_period_id' => $month))
+                    $cellcontents = (!empty($this->mcbdata[$cid][$month])) ? $this->addlinks(round($this->mcbdata[$cid][$month]['percent'],0) . "%", array('mis_period_id' => $month)) : "";    //the value when the condition is not met will fill the blank cells in the table row
+                    $data["{$month}month"] = $this->format_background_by_value( $cellcontents );
                             //? $this->addlinks($this->mcbdata[$cid][$month] . "%", array('mis_period_id' => $month))
-                            : "0%";
 
                     $month++;
                     if ($month >= 13) $month = 1;
@@ -512,7 +513,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 }
 
                 $present = $this->presents_cal($presents, $authabsents);
-                if( $present > 0 ){
+                if( $total > 0 ){
                     $percent = ($present / $total) * 100;
                 }
                 else{

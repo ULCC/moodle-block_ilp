@@ -26,4 +26,46 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
         parent::__construct($params);
     }
 
+    /*
+    * go to status item table to  get the background colours for table cells
+    * sets class variables for use in format_background_by_value()
+    */
+    protected function init_bgcolours(){
+/*
+        these are the wrong colours !
+        global $DB;
+        $this->passcolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_PASSFAIL_PASS ) )->value;
+        $this->failcolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_PASSFAIL_FAIL ) )->value;
+        $this->middlecolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_PASSFAIL_UNSET ) )->value;
+*/
+        $this->passcolour = get_config( 'block_ilp' , 'passcolour' );
+        $this->failcolour = get_config( 'block_ilp' , 'failcolour' );
+        $this->middlecolour = get_config( 'block_ilp' , 'midcolour' );
+    }
+
+    /*
+    * take a table cell with a percentage and return a span with a background colour
+    * according to config settings
+    * @param string $percentage
+    * @return string
+    */
+    protected function format_background_by_value( $percentage ){
+        global $CFG;
+        require_once($CFG->dirroot . '/lib/outputcomponents.php');
+        $n = intval( $percentage );
+        $ceiling = get_config( 'block_ilp', passpercent );
+        $floor = get_config( 'block_ilp', failpercent );
+        $colour = $this->middlecolour;
+
+        //get the colours for each status
+
+        if( $n <= $floor ){
+            $colour = $this->failcolour;
+        }
+        elseif( $n >= $ceiling ){
+            $colour = $this->passcolour;
+        }
+        return html_writer::tag( 'span', $percentage, array( 'style' => "background-color:$colour;display:block" ) );
+    }
+
 }

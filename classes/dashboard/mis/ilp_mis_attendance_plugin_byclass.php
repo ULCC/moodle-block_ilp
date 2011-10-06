@@ -44,6 +44,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
 
         if (!empty($this->normdata)) {
+            $this->init_bgcolours();
 
             //set up the flexible table for displaying
 
@@ -100,7 +101,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
                     if (get_config('block_ilp', 'mis_plugin_course_byclass_starttime')) $data['start'] = $d['starttime'];
                     if (get_config('block_ilp', 'mis_plugin_course_byclass_endtime')) $data['end'] = $d['endtime'];
                     if (get_config('block_ilp', 'mis_plugin_course_byclass_tutor')) $data['tutor'] = $d['tutor'];
-                    $data['overall'] = $d['attendance'];
+                    $data['overall'] = $this->format_background_by_value( $d['attendance'] . '%' );
                     $data['present'] = $d['markspresent'];
                     $data['absent'] = $d['marksabsent'];
                     $data['unauth'] = $d['marksauthabsent'];

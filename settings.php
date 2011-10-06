@@ -71,6 +71,9 @@ if (!empty($items)) {
 $userstatus			= 	new admin_setting_configselect('block_ilp/defaultstatusitem',get_string('defaultstatusitem','block_ilp'),get_string('defaultstatusitemconfig','block_ilp'), '',$options);
 $settings->add($userstatus);
 
+$progressbarcolour			=	new admin_setting_configtext('block_ilp/progressbarcolour',get_string('progressbarcolour','block_ilp'),get_string('progressbarcolour','block_ilp'), '#999',PARAM_RAW);
+$settings->add($progressbarcolour);
+
 
 //fail colour
 $failcolour			=	new admin_setting_configtext('block_ilp/failcolour',get_string('failcsscolour','block_ilp'),get_string('failcsscolourconfig','block_ilp'),ILP_CSSCOLOUR_FAIL,PARAM_RAW);
@@ -90,7 +93,6 @@ $settings->add($failpercentage);
 //the fail percentage
 $passpercentage			=	new admin_setting_configtext('block_ilp/passpercent',get_string('passpercent','block_ilp'),get_string('passpercentconfig','block_ilp'),ILP_DEFAULT_PASS_PERCENTAGE,PARAM_INT);
 $settings->add($passpercentage);
-
 
 //get all mis_plugins
 $mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');

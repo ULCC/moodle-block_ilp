@@ -108,6 +108,7 @@ class edit_status_item_mform extends ilp_moodleform {
         }
 
 		function specific_process_data( $data ){
+            global $DB;
 			//if we are here, we can assume $data is valid
 			$optionlist = array();
 			if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
@@ -173,6 +174,16 @@ class edit_status_item_mform extends ilp_moodleform {
             //that's dealt with the fresh options submitted
             //but we still need to re-assign pass and fail to the existing items, should they have changed
             foreach( $this->dbc->listelement_item_exists( $this->items_tablename, array() ) as $obj ){
+                //if an element has been submitted with blank name and value, delete existing record
+                $itemid = $obj->id;
+                $labelkey = "itemname_$itemid";
+                $valuekey = "itemvalue_$itemid";
+                if( empty( $data->$labelkey ) && empty( $data->$labelkey ) ){
+                    //delete the record
+                    $DB->delete_records( $this->items_tablename, array( 'id' => $itemid ) );
+                }
+
+
                 $update = false;    //set to true if data from form make it necessary to update the item record
                 //actually this will set all the passfail values, so if we keep this block, we don't need the  line above involving $this->deducePassFailFromLists
                 $old_passfail = $obj->passfail;
