@@ -86,7 +86,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
 
 
         } else {
-            echo '<div id="plugin_nodata">' . get_string('nodataornoconfig', 'block_ilp') . '</div>';
+            echo '';//'<div id="plugin_nodata">' . get_string('nodataornoconfig', 'block_ilp') . '</div>';
         }
 
 

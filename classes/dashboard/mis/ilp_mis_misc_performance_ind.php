@@ -95,7 +95,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  			
  			
  		} else {
-    		echo '<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
+    		echo '';//'<div id="plugin_nodata">'.get_string('nodataornoconfig','block_ilp').'</div>';
     	}
  	} 
  	
