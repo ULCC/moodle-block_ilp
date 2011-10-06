@@ -168,4 +168,6 @@ class ilp_element_plugin_free_html extends ilp_element_plugin {
         $table = new $this->xmldb_table( $this->data_entry_tablename );
         drop_table($table);
     }
+    
+
 }

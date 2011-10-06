@@ -293,5 +293,12 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	  	
 	 }
 	 
+   	/**
+     * Delete a form element
+     */
+    public function delete_form_element($reportfield_id) {
+    	return parent::delete_form_element($this->tablename, $reportfield_id);
+    }
+	 
 }
 
