@@ -93,6 +93,20 @@ if (!empty($course_id)) {
     	$groupmode    = groups_get_course_groupmode($course);   // Groups are being used
     	$isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
                          !has_capability('moodle/site:accessallgroups', $context));
+    } else {
+    	$group_id	=	0;
+    }
+    
+    $groupexists	=	groups_group_exists($group_id);
+    
+    if (empty($groupexists))	{
+    	$group_id	=	0;
+    } else	{
+    	$groupincourse	=	groups_get_grouping_by_name($course_id,$groupexists->name);
+    	
+    	if (empty($groupincourse)) {
+    		$group_id = 0;
+    	}
     }
 	
 
