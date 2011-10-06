@@ -62,6 +62,7 @@ if (isset($course_id)) {
 ?>
     <label for='select_group_id'><?php echo get_string('changegroup','block_ilp'); ?></label>
 	<select id='select_group_id' name='group_id'>
+		<option value="0" <?php if ($group_id == 0) echo 'selected="selected"';?> >No Group</option>
 		<?php foreach ($groups as $g) {?>
 			<option value='<?php echo $g->id; ?>'  <?php if ($group_id == $g->id) echo 'selected="selected"';?> ><?php echo $g->name?></option>
 		<?php } ?> 
