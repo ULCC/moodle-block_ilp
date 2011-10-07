@@ -32,19 +32,42 @@ function xmldb_block_ilp_upgrade($oldversion) {
     $result = TRUE;
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2011041301 ) {
-        $table = new xmldb_table('block_ilp_log');
+    $xmldb_key   = class_exists('xmldb_key')   ? 'xmldb_key'   : 'XMLDBKey';
+    if( class_exists( 'xmldb_table' ) ){
+        $tableclass = 'xmldb_table';
+        $fieldclass = 'xmldb_field';
+        $setAttributesMethod = 'set_attributes';
+        $fieldExistsMethod = 'field_exists';
+        $use_dbman = true;
+    }
+    elseif( class_exists( 'XMLDBTable' ) ){
+        $tableclass = 'XMLDBTable';
+        $fieldclass = 'XMLDBField';
+        $setAttributesMethod = 'setAttributes';
+        $fieldExistsMethod = 'findFieldInArray';
+        $use_dbman = false;
+    }
+    if ($oldversion < 2011090711 ) {
+        $table = new $tableclass('block_ilp_log');
         $changefieldlist = array(
             'oldvalue' => array( 'type' => XMLDB_TYPE_BINARY, 'size' => 'medium' ),
             'newvalue' => array( 'type' => XMLDB_TYPE_BINARY, 'size' => 'medium' )
         );
+        $changefieldlist = array();
         foreach( $changefieldlist as $field=>$newtype ){
             $type = $newtype[ 'type' ];
             $size = $newtype[ 'size' ];
-            $xmlfield = new xmldb_field( $field );
-            $xmlfield->set_attributes( $type, $size, null );
+            $xmlfield = new $fieldclass( $field );
+            $xmlfield->$setAttributesMethod( $type, $size, null );
 	        try {
-	            $dbman->change_field_type($table, $xmlfield);
+                if( $use_dbman ){
+	                $dbman->change_field_type($table, $xmlfield);
+                }
+                else{
+                    //not sure how to modify a field if dbman not available
+                    $xmlfield = &$table->getField( $field );
+                    $xmlfield->$setAttributesMethod( $type, $size, null );
+                }
 	        } catch (Exception $e) {
                 var_dump( $e );
 	            exit();
@@ -53,14 +76,21 @@ function xmldb_block_ilp_upgrade($oldversion) {
     }
 
     //add hexcolour field to block_ilp_plu_sts_items
-    if ($oldversion < 2011090700 ) {
+    if ($oldversion < 2011090711 ) {
         $tablename =  'block_ilp_plu_sts_items';
-        $table = new xmldb_table( $tablename );
+        $table = new $tableclass( $tablename );
         $fieldname = 'hexcolour';
-        $field = new xmldb_field( $fieldname );
-        $field->set_attributes( XMLDB_TYPE_CHAR, 255 );
-        if( !$dbman->field_exists( $table, $field ) ){
-            $dbman->add_field( $table, $field );
+        $field = new $fieldclass( $fieldname );
+        $field->$setAttributesMethod( XMLDB_TYPE_CHAR, 255 );
+        if( $use_dbman ){
+            if( !$dbman->field_exists( $table, $field ) ){
+                $dbman->add_field( $table, $field );
+            }
+        }
+        else{
+            if( !$table->$fieldExistsMethod( $fieldname ) ){
+                $table->addField( $field );
+            }
         }
     }
     return true;
