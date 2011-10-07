@@ -148,7 +148,9 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
             $output = ob_get_contents();
             ob_end_clean();
         } else {
-            $output = '';//'<div id="plugin_nodata">' . get_string('nodataornoconfig', 'block_ilp') . '</div>';
+            if( $msg = get_string('nodataornoconfig', 'block_ilp') ){
+                $output = '<div id="plugin_nodata">' . $msg . '</div>';
+            }
         }
 
         return $output;

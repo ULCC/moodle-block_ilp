@@ -129,7 +129,9 @@ class ilp_mis_learner_profile_hcc_tracker extends ilp_mis_attendance_plugin
             ob_end_clean();
 
         } else {
-            $output = '';//'<div id="plugin_nodata">' . get_string('nodataornoconfig', 'block_ilp') . '</div>';
+            if( $msg = get_string('nodataornoconfig', 'block_ilp') ){
+                $output = '<div id="plugin_nodata">' . $msg . '</div>';
+            }
         }
 
         return $output;

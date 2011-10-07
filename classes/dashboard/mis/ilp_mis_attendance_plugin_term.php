@@ -108,7 +108,9 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
 
             return $pluginoutput;
         } else {
-            echo '';//'<div id="plugin_nodata">' . get_string('nodataornoconfig', 'block_ilp') . '</div>';
+            if( $msg = get_string('nodataornoconfig', 'block_ilp') ){
+                echo '<div id="plugin_nodata">' . $msg . '</div>';
+            }
         }
     }
 

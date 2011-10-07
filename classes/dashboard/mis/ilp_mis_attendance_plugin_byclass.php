@@ -123,7 +123,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
         } else {
 
-            $pluginoutput = '';//'<div id="plugin_nodata">' . get_string('nodataornoconfig', 'block_ilp') . '</div>';
+            if( $msg = get_string('nodataornoconfig', 'block_ilp') ){
+                $pluginoutput = '<div id="plugin_nodata">' . $msg . '</div>';
+            }
 
             ob_start();
             require_once $CFG->dirroot . '/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_plugin_byclass.html';
