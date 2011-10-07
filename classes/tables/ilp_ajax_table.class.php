@@ -327,7 +327,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         // ensure that all the sort keys are actual columns
         foreach($this->sess->sortby as $key => $index) {
             if(!isset($this->columns[$key])) {
-                if(!isset($this->keys['fullname']) || !in_array($key, array('firstname', 'lastname')) ) {
+                if(!in_array($key, array('firstname', 'lastname')) ) {
                     unset($this->sess->sortby[$key]);
                 }
             }

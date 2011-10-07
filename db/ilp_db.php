@@ -1172,7 +1172,8 @@ class ilp_db_functions	extends ilp_logging {
     				 			{$tables}
     				 WHERE		e.report_id		=	{$report_id}
     				 AND 		e.user_id	=	{$user_id}
-    				 {$where}";
+    				 {$where}
+    				 ORDER BY   e.timemodified DESC";
     				 
     	return $this->dbc->get_records_sql($sql);
     }
@@ -1829,6 +1830,7 @@ class ilp_db_functions	extends ilp_logging {
 
         // fetch any sort keys provided by the table
         $sql_sort = $flextable->get_sql_sort();
+
         if(!empty($sql_sort)) {
             $sort = ' ORDER BY '.$sql_sort;
         }
@@ -1880,7 +1882,7 @@ class ilp_db_functions	extends ilp_logging {
     	global $CFG;
     	
     	if (stripos($CFG->release,"2.") !== false) {
-    		$courses	=	enrol_get_users_courses($user_id);
+    		$courses	=	enrol_get_users_courses($user_id, false,NULL,'fullname DESC');
     	} else {
     		$courses	=	get_my_courses($user_id);
     	}

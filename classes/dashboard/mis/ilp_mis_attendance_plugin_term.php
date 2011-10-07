@@ -477,8 +477,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
                 $absents += $term['marksabsent'];
                 $authabsents += $term['marksauthabsent'];
                 $lates += $term['markslate'];
-                
-                var_dump($term['marksauthabsent']);
+
             }
 
 
@@ -486,9 +485,6 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
             $presentpercent = ($absents / $present) * 100;
             $presentpercent = 100 - $presentpercent;
 
-            
-            var_dump($present);
-            var_dump($lates);
             
             //overall late percentage is calculated by geting the percentage of lates and taking
             //it away from 100
@@ -545,8 +541,6 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
     }
 
     function getAttendance()	{
-    	var_dump($this->termdata);
-    	
     	//this returns the attendace data for the current record
     	return (!empty($this->data)) ? $this->termdata[0]['overall'] : 0;	
     }

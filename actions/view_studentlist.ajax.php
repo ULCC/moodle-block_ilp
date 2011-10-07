@@ -29,6 +29,9 @@ $tutor = $PARSER->optional_param('tutor', 0, PARAM_INT);
 //get the status_id if set
 $status_id = $PARSER->optional_param('status_id', 0, PARAM_INT);
 
+//get the group_id if set
+$group_id = $PARSER->optional_param('group_id', 0, PARAM_INT);
+
 // instantiate the db
 $dbc = new ilp_db();
 
@@ -50,6 +53,7 @@ $columns = array('picture', 'fullname', 'u_status');
 
 $headers[] = '';
 $columns[] = 'view';
+$nosorting = array('picture', 'u_status','view');
 
 //we need to check if the mis plugin has been setup if it has we will get the attendance and punctuality figures
 
@@ -72,6 +76,7 @@ if (!empty($attendanceclass)) {
     	if (method_exists($misclass, 'getAttendance'))	{
    		    $headers[] = get_string('attendance', 'block_ilp');
    			$columns[] = 'u_attendcance';
+   			$nosorting[] = 'u_attendcance';
    			$misattendavailable = true;
     	}
     	
@@ -79,6 +84,7 @@ if (!empty($attendanceclass)) {
 	    if (method_exists($misclass, 'getAttendance'))	{
     		$headers[] = get_string('punctuality', 'block_ilp');
     		$columns[] = 'u_punctuality';
+    		$nosorting[] = 'u_punctuality';
     		$mispunctualityavailable = true;    		
     	}
 	}
@@ -103,13 +109,14 @@ $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 foreach ($reports as $r) {
     $headers[] = $r->name;
     $columns[] = $r->id;
+    $nosorting[] = $r->id;
 }
 
 $flextable->hoz_string = 'displayingreports';
 
 $headers[] = get_string('lastupdated', 'block_ilp');
 $columns[] = 'lastupdated';
-
+$nosorting[] = 'lastupdated';
 
 $flextable->define_fragment('studentlist');
 $flextable->collapsible(true);
@@ -117,6 +124,8 @@ $flextable->collapsible(true);
 $flextable->define_columns($columns);
 $flextable->define_headers($headers);
 
+$flextable->column_nosort = $nosorting;
+$flextable->sortable(true, 'lastname', 'DESC');
 $flextable->set_attribute('summary', get_string('studentslist', 'block_ilp'));
 $flextable->set_attribute('cellspacing', '0');
 $flextable->set_attribute('class', 'generaltable fit');

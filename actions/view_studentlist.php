@@ -97,7 +97,7 @@ if (!empty($course_id)) {
     	$group_id	=	0;
     }
     
-    $groupexists	=	groups_group_exists($group_id);
+    $groupexists	=	groups_get_group($group_id);
     
     if (empty($groupexists))	{
     	$group_id	=	0;
