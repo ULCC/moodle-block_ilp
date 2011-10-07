@@ -216,6 +216,12 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 				if( 1 == count( $row ) ){
 					$value = trim( $row[0] );
 				}
+                elseif( 2 < count( $row ) ){
+                    $value = array(
+                        trim( $row[1] ),
+                        trim( $row[2] )
+                    );
+                }
 				elseif( 1 < count( $row ) ){
 					$value = trim( $row[1] );
 				}

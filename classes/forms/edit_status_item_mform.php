@@ -156,7 +156,13 @@ class edit_status_item_mform extends ilp_moodleform {
 					//one item row inserted here
                     $itemrecord = new stdClass();
 					$itemrecord->value = $key;
-					$itemrecord->name = $itemname;
+                    if( is_array( $itemname ) ){
+					    $itemrecord->name = $itemname[0];
+					    $itemrecord->hexcolour = $itemname[1];
+                    }
+                    else{
+					    $itemrecord->name = $itemname;
+                    }
 	           		$itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
                     if( $existing_record = $this->item_record_exists( $itemrecord ) ){
                         //update the record
@@ -196,6 +202,7 @@ class edit_status_item_mform extends ilp_moodleform {
                 //keys correspond to field names, values correspond to element names from the form
                 $editable_fields = array(
                     'value' => 'itemvalue_' . $obj->id,
+                    'hexcolour' => 'itemhexcolour_' . $obj->id,
                     'name'  => 'itemname_' . $obj->id
                 );
                 foreach( $editable_fields as $fieldname=>$form_element_name ){

@@ -51,4 +51,17 @@ function xmldb_block_ilp_upgrade($oldversion) {
 	        }
         }
     }
+
+    //add hexcolour field to block_ilp_plu_sts_items
+    if ($oldversion < 2011090700 ) {
+        $tablename =  'block_ilp_plu_sts_items';
+        $table = new xmldb_table( $tablename );
+        $fieldname = 'hexcolour';
+        $field = new xmldb_field( $fieldname );
+        $field->set_attributes( XMLDB_TYPE_CHAR, 255 );
+        if( !$dbman->field_exists( $table, $field ) ){
+            $dbman->add_field( $table, $field );
+        }
+    }
+    return true;
 }

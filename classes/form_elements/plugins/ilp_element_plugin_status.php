@@ -61,6 +61,17 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 			        array('class' => 'form_input')
                 );
                 $B->setValue( $option->name );
+
+                $C = $mform->addElement(
+                    'text',
+                    'itemhexcolour_' . $option->id,
+                    'hex colour',
+			        array('class' => 'form_input')
+                );
+                $C->setValue( $option->hexcolour );
+
+                $mform->addElement( 'html', '<hr />' );
+
                 if( !$data_exists ){
                     $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
                     $mform->addElement(
@@ -340,6 +351,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 	    $table_itemname = new $this->xmldb_field('name');
 	    $table_itemname->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
 	    $table->addField($table_itemname);
+
+	    $table_hexcolour = new $this->xmldb_field('hexcolour');
+	    $table_hexcolour->$set_attributes(XMLDB_TYPE_CHAR, 255, null);
+	    $table->addField($table_hexcolour);
 
         //special field to categorise states as pass or fail
         //0=unset,1=fail,2=pass
