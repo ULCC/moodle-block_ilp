@@ -52,7 +52,6 @@ if (isset($course_id)) {
 			<option value='<?php echo $c->id; ?>'  <?php if ($course_id == $c->id) echo 'selected="selected"';?> ><?php echo $c->shortname?></option>
 		<?php } ?> 
 	</select>
-	<br />
 <?php } else { ?>
 	<input type='hidden' name='course_id' value='<?php if (isset($course_id)) echo $course_id?>' >
 <?php
@@ -67,16 +66,12 @@ if (isset($course_id)) {
 			<option value='<?php echo $g->id; ?>'  <?php if ($group_id == $g->id) echo 'selected="selected"';?> ><?php echo $g->name?></option>
 		<?php } ?> 
 	</select>
-	<br />
 <?php } else { ?>
 	<input type='hidden' name='group_id' value='<?php if (isset($group_id)) echo $group_id?>' >
 <?php
 	}
 
-
 } 
-
-
 
 if (isset($tutor)) { 
 ?>
@@ -89,12 +84,8 @@ if (isset($tutor)) {
 			<option value='<?php echo $s->id; ?>' <?php if ($status_id == $s->id) echo 'selected="selected"';?> ><?php echo $s->name?></option>
 		<?php } ?> 
 	</select>
-
-	<br />
 	<input id='coursesubmit' type='submit' value='<?php echo get_string('applyfilter','block_ilp');?>'>
 	</form>
-
-
 
 <div class="entry_floatright"><a href='#' onclick="M.ilp_standard_functions.printfunction()"><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
 <div class='clearer'></div>
