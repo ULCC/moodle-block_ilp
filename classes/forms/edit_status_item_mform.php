@@ -185,8 +185,12 @@ class edit_status_item_mform extends ilp_moodleform {
                 $labelkey = "itemname_$itemid";
                 $valuekey = "itemvalue_$itemid";
                 if( empty( $data->$labelkey ) && empty( $data->$labelkey ) ){
-                    //delete the record
-                    $DB->delete_records( $this->items_tablename, array( 'id' => $itemid ) );
+                    //form submit is asking for this item to be deleted ... first check if there is child data
+                    $children = $DB->get_records( 'block_ilp_user_status', array( 'parent_id' => $itemid ) );
+                    if( 0 == count($children) ){
+                        //delete the record
+                        $DB->delete_records( $this->items_tablename, array( 'id' => $itemid ) );
+                    }
                 }
 
 
