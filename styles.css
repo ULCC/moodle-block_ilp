@@ -9,7 +9,7 @@
  */
  
 /* general */
-  
+
 .ilp .ilp_print_icon{
 	float:right;
 	width:32px;
@@ -29,6 +29,9 @@
 	font-size: 2em;
 	margin: 10px 0;
 } 
+.ilp h2.main {
+    text-align: center;
+}
 .ilp .removeborder td{
 	border:0;
 	font-weight: bold;
@@ -139,12 +142,12 @@
 }
 .ilp  #middle-entries { 
 	float:left; 
-	width:70%;
+	width:60%;
 	padding:10px; 
 }
 .ilp  #right-entries { 
 	float:right; 
-	width:10%;
+	width:20%;
 	padding:20px;
 }
 .ilp  #middle-entries h2{
@@ -432,6 +435,12 @@
 
 /* Tabs */ 
 
+.ilp .tabtree .tabrow0 .tabrow1 {
+	background:#FFFFFF;
+}
+.ilp .tabtree {
+	margin-bottom: 3em;
+}
 .tabtree .tabrow0 .tabrow1 { 
 	border-bottom: 2px solid #ddd;
 }
