@@ -40,8 +40,9 @@ class ilp_percentage_bar {
 */
         //...we are using a single config variable
         $colour = get_config( 'block_ilp', 'progressbarcolour' );
-		
-		return "<p><strong>{$name}</strong><div class='percentagebar'  ><div style='width: {$percentage}%; height: 10px; background-color: {$colour}' ></div></div><br /></p>";		
+
+		$msg_numeric = "$percentage/100";
+		return "<p><nobr><strong>{$name}</strong> <small>{$msg_numeric}</small></nobr><div class='percentagebar'  ><div style='width: {$percentage}%; height: 10px; background-color: {$colour}' ></div></div><br /></p>";		
 	}
 	
 }
