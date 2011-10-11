@@ -29,7 +29,7 @@
 				 if (!empty($percentagebars)) {  
 							foreach($percentagebars	as $p) {
 
-								echo $pbar->display_bar($p->percentage,$p->name);
+								echo $pbar->display_bar($p->percentage,$p->name,$p->total);
 							?>
 					
 					<?php } 
