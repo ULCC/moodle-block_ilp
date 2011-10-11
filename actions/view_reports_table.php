@@ -24,10 +24,12 @@ $columns[]	=	'editreport';
 $columns[]	=	'editprompts';
 $columns[]	=	'editpermission';
 $columns[]	=	'changestatus';
+$columns[]	=	'delete';
 
 
 //setup the array holding the header texts
 $headers	=	array();
+$headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
@@ -89,13 +91,13 @@ if (!empty($reports)) {
 									<img class='status' src=".$OUTPUT->pix_url("/i/".$icon)." alt='".$title."' title='".$title."' />
 							</a>";
 		
-		/*
+		
 		//set the delete field this is not enabled at the moment
-		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_field.php?reportfield_id={$row->id}&report_id={$report_id}&course_id={$course_id}'>
+		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_report.php?report_id={$row->id}'>
 									<img class='delete' src='".$OUTPUT->pix_url("/t/delete")."' alt='".get_string('delete')."' title='".get_string('delete')."' />
 								 </a>";
 		
-		*/
+		
 		$flextable->add_data($data);
 		
 	}

@@ -44,7 +44,7 @@ $dbc = new ilp_db();
 $report		=	$dbc->get_report_by_id($report_id);
 
 //if the report is not found throw an error of if the report has a status of disabled
-if (empty($report) || empty($report->status)) {
+if (empty($report) || empty($report->status) || !empty($report->deleted)) {
 	print_error('reportnotfouund','block_ilp');
 }
 

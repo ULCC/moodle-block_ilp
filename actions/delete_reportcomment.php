@@ -66,7 +66,7 @@ if (empty($entry)) {
 }
  
 //check if the user has the delete record capability
-if (empty($access_report_deletereports))	{
+if (empty($access_report_deletecomment))	{
 	//the user doesnt have the capability to create this type of report entry
 	print_error('userdoesnothavedeletecapability','block_ilp');	
 }

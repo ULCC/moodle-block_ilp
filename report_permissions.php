@@ -50,6 +50,12 @@ $access_report_viewreports		=	0;
 $access_report_viewilp			=	0;
 $access_report_viewotherilp		=	0;
 
+//comment capabilites
+$access_report_addcomment		=	0;
+$access_report_editcomment		=	0;
+$access_report_deletecomment	=	0;
+$access_report_viewcomment		=	0;
+
 
 
 //we only need to check if a report permission has been assigned 
@@ -95,6 +101,31 @@ if ($access_viewotherilp) {
 
 	$capability	=	$dbc->get_capability_by_name('block/ilp:viewotherilp');
 	if (!empty($capability))	$access_report_viewotherilp		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
+}
+
+
+if ($access_addcomment) {
+
+	$capability	=	$dbc->get_capability_by_name('block/ilp:addcomment');
+	if (!empty($capability))	$access_report_addcomment		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
+}
+
+if ($access_editcomment) {
+
+	$capability	=	$dbc->get_capability_by_name('block/ilp:editcomment');
+	if (!empty($capability))	$access_report_editcomment		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
+}
+
+if ($access_deletecomment) {
+
+	$capability	=	$dbc->get_capability_by_name('block/ilp:deletecomment');
+	if (!empty($capability))	$access_report_deletecomment		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
+}
+
+if ($access_viewcomment) {
+
+	$capability	=	$dbc->get_capability_by_name('block/ilp:viewcomment');
+	if (!empty($capability))	$access_report_viewcomment		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
 }
 
 

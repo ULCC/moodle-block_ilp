@@ -67,12 +67,12 @@ if (empty($entry) ) {
 //check if the any of the users roles in the 
 //current context has the create report capability for this report
 
-if (empty($access_report_createreports))	{
-	//the user doesnt have the capability to create this type of report entry
+if (empty($comment_id) && empty($access_report_addcomment))	{
+	//the user doesnt have the capability to create a comment
 	print_error('userdoesnothavecreatecapability','block_ilp');	
 }
 
-if (empty($access_report_editreports))	{
+if (!empty($comment_id) && empty($access_report_editcomment))	{
 	//the user doesnt have the capability to edit this type of report entry
 	print_error('userdoesnothaveeditcapability','block_ilp');	
 }	

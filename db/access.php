@@ -105,6 +105,62 @@ $block_ilp_capabilities = array(
             'admin' => CAP_ALLOW
         )
 	),
+	
+	//the capaability needed in order to add a comment
+	'block/ilp:addcomment' => array(
+		'captype' => 'write',
+		'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'student' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+			'user' => CAP_ALLOW
+        )
+	
+	),
+	
+	//the capaability needed in order to edit a comment
+	'block/ilp:editcomment' => array(
+		'captype' => 'write',
+		'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'student' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+			'user' => CAP_ALLOW
+        )
+	
+	),
+	
+	//the capaability needed in order to delete a comment
+	'block/ilp:deletecomment' => array(
+		'captype' => 'write',
+		'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'student' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+			'user' => CAP_ALLOW
+        )
+	),
+	
+	//the capaability needed in order to view a comment
+	'block/ilp:viewcomment' => array(
+		'captype' => 'read',
+		'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'student' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+			'user' => CAP_ALLOW
+        )
+	),
+	
+	
+	
+	
+	
+	
 );
 global $CFG;
 //test the version number if we are in 2.0 we need to pass the $block_ilp_capabilities to $capabilities

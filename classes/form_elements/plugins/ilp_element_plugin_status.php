@@ -68,7 +68,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                     'hex colour',
 			        array('class' => 'form_input')
                 );
-                $C->setValue( $option->hexcolour );
+                
+                $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : ""; 
+                
+                $C->setValue( $hexcolour );
 
                 $mform->addElement( 'html', '<hr />' );
 

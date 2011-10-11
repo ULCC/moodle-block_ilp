@@ -596,20 +596,22 @@ class ilp_db_functions	extends ilp_logging {
      * returns data that can be used with a pagable ilp_flexible_table
      *
      * @param object $flextable an object of type flextable
+     * @param boolean $deleted should deleted reports be returned
+     * 				  defaults to false
      * @return mixed object containing report records or false
      */ 
-    function get_reports_table($flextable)	{
+    function get_reports_table($flextable,$deleted=false)	{
     	global $CFG;
     	
-    	$select	=	"SELECT		*";
+    	$select	=	"SELECT		* ";
     	
     	$from	=	"FROM 		{$CFG->prefix}block_ilp_report";
     	
-    	$where	=	"";
+    	$where	=	(empty($deleted)) ? " WHERE deleted != 1 " : "";
 
     	// get a count of all the records for the pagination links
         $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
-
+        
         // tell the table how many pages it needs
         //$flextable->totalrows($count);
     	
@@ -1585,6 +1587,15 @@ class ilp_db_functions	extends ilp_logging {
   		return $this->dbc->set_field('block_ilp_report','status', $status, array('id'=>$report_id));
   	}
   	
+  	
+  	/**
+    * This function sets the delete field of a reportd   
+    * 
+    * @return	mixed  object containing the record or bool false  
+    */
+  	function delete_report($report_id,$deleted)	{	
+  		return $this->dbc->set_field('block_ilp_report','deleted', $deleted, array('id'=>$report_id));
+  	}
   	
   	function create_statusfield($statusfield)	{
   		$this->insert_record('block_ilp_plu_rf_sts', $statusfield);

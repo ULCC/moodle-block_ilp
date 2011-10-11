@@ -72,6 +72,11 @@ $access_viewreports		=	has_capability('block/ilp:viewreport', $context);
 $access_viewilp			=	has_capability('block/ilp:viewilp', $context);
 $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $context);
 
+$access_addcomment		=	has_capability('block/ilp:addcomment', $context);
+$access_editcomment		=	has_capability('block/ilp:editcomment', $context);
+$access_deletecomment	=	has_capability('block/ilp:deletecomment', $context);
+$access_viewcomment		=	has_capability('block/ilp:viewcomment', $context);
+
 //TODO: we should not be in the course context change to another context
 $PAGE->set_context($context);
 

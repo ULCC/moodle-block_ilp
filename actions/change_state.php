@@ -51,7 +51,7 @@ $reportfield	=	$dbc->get_reportfield_by_id($reportfield_id);
 $report		=	(!empty($reportfield)) ? $dbc->get_report_by_id($reportfield->report_id) : false;  
 
 //if the report is not found throw an error of if the report has a status of disabled
-if (empty($report) || empty($report->status)) {
+if (empty($report) || empty($report->status) || !empty($report->deleted)) {
 	print_error('reportnotfouund','block_ilp');
 }
 

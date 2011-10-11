@@ -439,7 +439,7 @@ class moodle2_database_manager_emulator {
 
         // include the xmldb classes
         require_once($CFG->libdir.'/ddllib.php');
-
+       
         // execute the query and return the result
         return call_user_func_array($method, $params);
     }

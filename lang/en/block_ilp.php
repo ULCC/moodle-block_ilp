@@ -180,9 +180,8 @@
 	$string['reportname'] 						= 	'Report Name:';
 	$string['reportprompt']						= 	'Report Prompts';
 	$string['reportdeadline']					= 	'Report Deadline';
-	
-	
-	
+	$string['reportdeleteerror']				= 	'Report delete error';
+	$string['reportdeleted']					= 	'Report deleted';
 	$string['required']	 						= 	'Required';
 	$string['reportpermissions']				= 	'Report Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
@@ -250,13 +249,18 @@
 
 	//CAPABILITY STRINGS
 	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
-	$string['ilp:addreport'] 			= 	'Add a report';
-	$string['ilp:editreport'] 			= 	'Edit a report';
-	$string['ilp:deletereport'] 		= 	'Delete a report';
+	$string['ilp:addreport'] 			= 	'Add a report entry';
+	$string['ilp:editreport'] 			= 	'Edit a report entry';
+	$string['ilp:deletereport'] 		= 	'Delete a report entry';
 	$string['ilp:updatestatus'] 		= 	'Update Status';
 	$string['ilp:viewreport'] 			= 	'View a report';
 	$string['ilp:viewilp'] 				= 	'View my own ilp';
 	$string['ilp:viewotherilp'] 		= 	'View others ilp';
+	$string['ilp:addcomment'] 			= 	'Add a entry comment';
+	$string['ilp:deletecomment'] 		= 	'Delete entry comment';
+	$string['ilp:editcomment'] 			= 	'Edit entry comment';
+	$string['ilp:viewcomment'] 			= 	'View entry comments';
+	
 	
 	//ERROR MESSAGES CHANGING THESE IS NOT RECOMMENDED
 	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';

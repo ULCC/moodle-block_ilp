@@ -70,6 +70,13 @@ $blockcapabilities	=	$dbc->get_block_capabilities();
 
 $report		=	$dbc->get_report_by_id($report_id);
 
+
+//if the report is not found throw an error of if the report has a status of disabled
+if (empty($report) || !empty($report->deleted)) {
+	print_error('reportnotfouund','block_ilp');
+}
+
+
 $mform	=	new edit_report_permissions_mform($report_id);
 
 //was the form cancelled?

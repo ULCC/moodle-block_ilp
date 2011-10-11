@@ -271,6 +271,28 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							$capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
 							if (!empty($capability))	$access_report_deletereports	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 	
+							//find out if the current user has the add comment capability for the report 
+							$access_report_addcomment	= false;
+							$capability	=	$this->dbc->get_capability_by_name('block/ilp:addcomment');
+							if (!empty($capability)) $access_report_addcomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);	
+	
+							//find out if the current user has the edit comment capability for the report
+							$access_report_editcomment	=	false;
+							$capability	=	$this->dbc->get_capability_by_name('block/ilp:editcomment');
+							if (!empty($capability))	$access_report_editcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+							
+							//find out if the current user has the add comment capability for the report 
+							$access_report_deletecomment	= false;
+							$capability	=	$this->dbc->get_capability_by_name('block/ilp:deletecomment');
+							if (!empty($capability)) $access_report_deletecomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);	
+	
+							//find out if the current user has the edit comment capability for the report
+							$access_report_viewcomment	=	false;
+							$capability	=	$this->dbc->get_capability_by_name('block/ilp:viewcomment');
+							if (!empty($capability))	$access_report_viewcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+							
+
+							
 							//check to see whether the user can delete the reports entry
 							$candelete =	(!empty($report->frequency) && !empty($access_report_deletereports))	?	true	: false;
 							
