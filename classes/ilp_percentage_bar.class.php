@@ -7,6 +7,9 @@ class ilp_percentage_bar {
 	public	$passpercentage;
 	public	$failpercentage;
 	public 	$passfail;
+
+    public  $total=100;    //can b overridden to modify display_bar
+    //public  $actual=false;    
 	
 	function __construct($passfail=true,$failcolour=false,$passcolour=false,$neutralcolour=false)	{
 		
@@ -41,7 +44,14 @@ class ilp_percentage_bar {
         //...we are using a single config variable
         $colour = get_config( 'block_ilp', 'progressbarcolour' );
 
-		$msg_numeric = "$percentage/100";
+        $actual = $percentage;
+        if( 100 != $total ){
+            $actual = $percentage * $total / 100;
+        }
+        if( 100 < $percentage ){
+            $percentage = 100;
+        }
+		$msg_numeric = "$actual/$total";
 		return "<p><nobr><strong>{$name}</strong> <small>{$msg_numeric}</small></nobr><div class='percentagebar'  ><div style='width: {$percentage}%; height: 10px; background-color: {$colour}' ></div></div><br /></p>";		
 	}
 	
