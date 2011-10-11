@@ -46,7 +46,7 @@ class ilp_percentage_bar {
 
         $actual = $percentage;
         if( 100 != $total ){
-            $actual = $percentage * $total / 100;
+            $actual = number_format( $percentage * $total / 100, 2 );
         }
         if( 100 < $percentage ){
             $percentage = 100;
