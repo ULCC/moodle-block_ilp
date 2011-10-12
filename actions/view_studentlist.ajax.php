@@ -39,8 +39,8 @@ $dbc = new ilp_db();
 $flextable = new ilp_ajax_table("student_listcourse_id{$course_id}tutor{$tutor}status_id{$status_id}");
 
 
-$flextable->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
-$flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.ajax.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}");
+$flextable->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
+$flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist.ajax.php?course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
 
 // set the basic details to dispaly in the table
 $headers = array(
@@ -147,6 +147,7 @@ $students = array();
 foreach ($users as $u) {
     $students[] = $u->id;
 }
+file_put_contents( '/tmp/mlog', print_r( $students, true ), FILE_APPEND );
 
 $notstatus_ids = false;
 
@@ -162,7 +163,6 @@ if (!empty($status_id)) {
 //we only want to get the student matrix if students have been provided
 $studentslist = (!empty($students)) ? $dbc->get_students_matrix($flextable, $students, $status_id, $notstatus_ids)
         : false;
-
 //get the default status item which will be used as the status for students who
 //have not entered their ilp and have not had a status assigned
 $defaultstatusitem_id = get_config('block_ilp', 'defaultstatusitem');
