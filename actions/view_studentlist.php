@@ -102,7 +102,7 @@ if (!empty($course_id)) {
     if (empty($groupexists))	{
     	$group_id	=	0;
     } else	{
-    	$groupincourse	=	groups_get_grouping_by_name($course_id,$groupexists->name);
+    	$groupincourse	=	groups_get_group_by_name($course_id,$groupexists->name);
     	
     	if (empty($groupincourse)) {
     		$group_id = 0;
