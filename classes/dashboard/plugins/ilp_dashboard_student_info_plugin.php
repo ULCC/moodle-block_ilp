@@ -72,6 +72,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			 
 			if (!empty($statusitem))	{
 				if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
+                //that's all very well, but if the ilp is up to date, status hex colour is defined, so actually we should always do this...
+                //the above logic only allows 2 colours, so is inadequate to the task
+                if( !empty( $statusitem->hexcolour ) ){
+                    $userstatuscolor = $statusitem->hexcolour;
+                }
+                //ah that's better
 			} 
 			
 			//TODO place percentage bar code into a class 
@@ -227,6 +233,9 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 						$reportinfo				=	new stdClass();
 						$reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
 						$reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
+
+						$reportinfo->total		=	7;
+						$reportinfo->actual		=	1;
 						
 						 //if total_possible is empty then there will be nothing to report
 		    	        if (!empty($reportinfo->total)) {
