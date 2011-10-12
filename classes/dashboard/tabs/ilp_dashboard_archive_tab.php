@@ -51,8 +51,8 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
     	$reportthree	=	get_config('block_ilp','mis_archive_tab_reportthree');
     	$reportfour		=	get_config('block_ilp','mis_archive_tab_reportfour');
     	$reportfive		=	get_config('block_ilp','mis_archive_tab_reportfive');
-    	$reporttarget	=	get_config('block_ilp','mis_archive_tab_reporttarget');
-    	$reportstudent	=	get_config('block_ilp','mis_archive_tab_reportstudentinfo');
+    	$reporttarget	=	get_config('block_ilp','mis_archive_tab_target');
+    	$reportstudent	=	get_config('block_ilp','mis_archive_tab_studentinfo');
     	
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
