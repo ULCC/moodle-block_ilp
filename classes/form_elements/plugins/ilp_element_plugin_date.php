@@ -231,7 +231,7 @@ class ilp_element_plugin_date extends ilp_element_plugin {
 	 	
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
 	 	if (!empty($entry)) {
-	 		$entryobj->$fieldname	=	userdate(html_entity_decode($entry->value));
+	 		$entryobj->$fieldname	=	userdate(html_entity_decode($entry->value),'%a %d %B %Y');
 	 	}
 	  	
 	 }

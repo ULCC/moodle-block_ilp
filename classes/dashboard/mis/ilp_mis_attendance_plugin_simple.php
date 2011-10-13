@@ -47,8 +47,8 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        //add the row to table
 	        foreach( $this->data as $row ){
 	            $data = array();
-	            $data[ 'attendance' ]  = $row[ 0 ];
-	            $data[ 'punctuality' ] = $row[ 1 ];
+	            $data[ 'attendance' ]  = $row[ 0 ] * 100;
+	            $data[ 'punctuality' ] = $row[ 1 ] * 100;
 	            $flextable->add_data_keyed( $data );
 	        }
 	        
