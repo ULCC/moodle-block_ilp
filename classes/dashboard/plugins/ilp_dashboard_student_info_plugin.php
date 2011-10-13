@@ -234,9 +234,6 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 						$reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
 						$reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
 
-						$reportinfo->total		=	7;
-						$reportinfo->actual		=	1;
-						
 						 //if total_possible is empty then there will be nothing to report
 		    	        if (!empty($reportinfo->total)) {
 		    	        	//calculate the percentage
