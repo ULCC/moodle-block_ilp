@@ -292,9 +292,11 @@ class block_ilp extends block_list {
         	
         	*/
         	
-        	$courseurl	=	(!empty($course_id)) ? "&course_id={$course_id}" : '';
+        	//additional check to stop users from being able to access the ilp in course context 
+        	//from the front page
+        	$courseurl	=	(!empty($course_id) && $course_id != 1) ? "&course_id={$course_id}" : '';
         	
-        	$this->content->text	= "";
+	       	$this->content->text	= "";
 	         
 			$label = get_string('mypersonallearningplan', 'block_ilp');
 	        $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}$courseurl";
