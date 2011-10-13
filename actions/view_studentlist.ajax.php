@@ -147,7 +147,6 @@ $students = array();
 foreach ($users as $u) {
     $students[] = $u->id;
 }
-file_put_contents( '/tmp/mlog', print_r( $students, true ), FILE_APPEND );
 
 $notstatus_ids = false;
 
