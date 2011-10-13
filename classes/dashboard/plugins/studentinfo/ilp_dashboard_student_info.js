@@ -100,14 +100,19 @@ M.ilp_dashboard_student_info.init = function(Y,statusval) {
     
 	YAHOO.util.Event.addListener("edit_userstatus_icon", "click", M.ilp_dashboard_student_info.addselect);
 	
+	
+	
 	if (typeof(document.getElementById('select_userstatus')) != 'undefined') {
 		
+		YAHOO.util.Event.addListener("select_userstatus", "change", M.ilp_dashboard_student_info.save_userstatus(document.getElementById('select_userstatus').value));
+		
+	
 		//add the onchange event to the select button
-		document.getElementById('select_userstatus').addEventListener(
-			     'change',
-			     function() {M.ilp_dashboard_student_info.save_userstatus(this.value)},
-			     false
-			  );
+		//document.getElementById('select_userstatus').addEventListener(
+		//	     'change',
+		//	     function() {M.ilp_dashboard_student_info.save_userstatus(this.value)},
+		//	     false
+		//	  );
 	}
 };
 
