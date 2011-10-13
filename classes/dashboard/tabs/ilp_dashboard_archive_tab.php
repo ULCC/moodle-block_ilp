@@ -53,17 +53,21 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
     	$reportfive		=	get_config('block_ilp','mis_archive_tab_reportfive');
     	$reporttarget	=	get_config('block_ilp','mis_archive_tab_target');
     	$reportstudent	=	get_config('block_ilp','mis_archive_tab_studentinfo');
+    	$reportteacher	=	get_config('block_ilp','mis_archive_tab_teacherinfo');
+    	$reporttutor	=	get_config('block_ilp','mis_archive_tab_tutorinfo');
     	
     	//if the tab plugin has been installed we will use the id of the class in the block_ilp_dash_tab table 
 		//as part fo the identifier for sub tabs. ALL TABS SHOULD FOLLOW THIS CONVENTION 
 		if (!empty($this->plugin_id)) {	
 			if (!empty($reportstudent)) $this->secondrow[]	=	array('id'=>1,'link'=>$this->linkurl,'name'=>$reportstudent);
-			if (!empty($reporttarget))	$this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>$reporttarget);
-			if (!empty($reportone))		$this->secondrow[]	=	array('id'=>3,'link'=>$this->linkurl,'name'=>$reportone);
-			if (!empty($reporttwo))		$this->secondrow[]	=	array('id'=>4,'link'=>$this->linkurl,'name'=>$reporttwo);
-			if (!empty($reportthree))	$this->secondrow[]	=	array('id'=>5,'link'=>$this->linkurl,'name'=>$reportthree);
-			if (!empty($reportfour))	$this->secondrow[]	=	array('id'=>6,'link'=>$this->linkurl,'name'=>$reportfour);
-			if (!empty($reportfive))	$this->secondrow[]	=	array('id'=>7,'link'=>$this->linkurl,'name'=>$reportfive);
+			if (!empty($reportstudent)) $this->secondrow[]	=	array('id'=>2,'link'=>$this->linkurl,'name'=>$reportteacher);
+			if (!empty($reportstudent)) $this->secondrow[]	=	array('id'=>3,'link'=>$this->linkurl,'name'=>$reporttutor);
+			if (!empty($reporttarget))	$this->secondrow[]	=	array('id'=>4,'link'=>$this->linkurl,'name'=>$reporttarget);
+			if (!empty($reportone))		$this->secondrow[]	=	array('id'=>5,'link'=>$this->linkurl,'name'=>$reportone);
+			if (!empty($reporttwo))		$this->secondrow[]	=	array('id'=>6,'link'=>$this->linkurl,'name'=>$reporttwo);
+			if (!empty($reportthree))	$this->secondrow[]	=	array('id'=>7,'link'=>$this->linkurl,'name'=>$reportthree);
+			if (!empty($reportfour))	$this->secondrow[]	=	array('id'=>8,'link'=>$this->linkurl,'name'=>$reportfour);
+			if (!empty($reportfive))	$this->secondrow[]	=	array('id'=>9,'link'=>$this->linkurl,'name'=>$reportfive);
 		}
     }
     
@@ -119,28 +123,36 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 					case 1:
 						$this->ilp_display_student_info($this->student_id);
 						break;
-					
+						
 					case 2:
+						$this->ilp_display_teacher_info($this->student_id);
+						break;
+
+					case 3:
+						$this->ilp_display_tutor_info($this->student_id);
+						break;
+					
+					case 4:
 						$this->ilp_display_targets($this->student_id);
 						break;
 	
-					case 3:
+					case 5:
 						$this->ilp_display_concerns($this->student_id,0);
 						break;
 	
-					case 4:
+					case 6:
 						$this->ilp_display_concerns($this->student_id,1);
 						break;
 	
-					case 5:
+					case 7:
 						$this->ilp_display_concerns($this->student_id,2);
 						break;
 	
-					case 6:
+					case 8:
 						$this->ilp_display_concerns($this->student_id,3);
 						break;
 	
-					case 7:
+					case 9:
 						$this->ilp_display_concerns($this->student_id,4);
 						break;					
 					
@@ -200,7 +212,9 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
         $string['ilp_dashboard_archive_tab_report4']	 				= 'Report4';
         $string['ilp_dashboard_archive_tab_report5']	 				= 'Report5';
         $string['ilp_dashboard_archive_tab_target']		 				= 'Target';
-        $string['ilp_dashboard_archive_tab_student']	 				= 'Student';  
+        $string['ilp_dashboard_archive_tab_student']	 				= 'Student';
+        $string['ilp_dashboard_archive_tab_teacher']	 				= 'Teacher';
+        $string['ilp_dashboard_archive_tab_tutor']		 				= 'Tutor';  
 
         $string['ilp_dashboard_archive_tab_reportdesc']	 				= 'The title of this report';
         
@@ -211,6 +225,11 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
         $string['ilp_dashboard_archive_tab_reportfiveheader']	 				= 'Report 5';
         $string['ilp_dashboard_archive_tab_reportstudentheader']	 			= 'Student Info';
         $string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
+        $string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
+        $string['ilp_dashboard_archive_tab_reportteacherheader']	 				= 'Teacher';
+        $string['ilp_dashboard_archive_tab_reporttutorheader']	 				= 'Tutor';
+        
+        
         
         $string['ilp_dashboard_archive_tab_studentinfo_student']	 				= 'Student text';
         $string['ilp_dashboard_archive_tab_studentinfo_teacher']	 				= 'Teacher text';
@@ -220,19 +239,56 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
     }
  
  	 
- 	 
- 	 function ilp_display_student_info($student_id)	{
+	 /**
+	  * 
+	  * Retrieves student info data from ILP 1 tables to be displayed in the archive tab
+	  * @param int $student_id
+	  */ 	 
+    function ilp_display_student_info($student_id)	{
  	 		global	$CFG;
  	 	
  	 		$infotexts			=	array();
  	 		
  	 		$studentinfo		=	$this->dbc->get_per_student_info($student_id);
- 	 		$teacherinfo		=	$this->dbc->get_per_teacher_info($student_id);
- 	 		$tutorinfo			=	$this->dbc->get_per_tutor_info($student_id);
 
  	 		$this->return_texts($studentinfo,$infotexts);
- 	 		$this->return_texts($teacherinfo,$infotexts);
- 	 		$this->return_texts($tutorinfo,$infotexts);
+ 	 		
+ 	 		if (!empty($infotexts)) {
+	 	 		$this->get_archive_student_info($infotexts);
+ 	 		}
+ 	 }
+ 	 
+	 /**
+	  * Retrieves teacher info data from ILP 1 tables to be displayed in the archive tab
+	  * @param int $student_id
+	  */ 	 
+ 	 
+ 	 function ilp_display_teacher_info($student_id)	{
+ 	 		global	$CFG;
+ 	 	
+ 	 		$teacherinfo		=	$this->dbc->get_per_teacher_info($student_id);
+ 	 		
+ 	 		$infotexts			=	array();
+ 	 		
+ 	 		foreach ($teacherinfo as $ti) {
+ 	 			$this->return_texts($ti,$infotexts);	
+ 	 		}
+ 	 		
+ 	 		if (!empty($infotexts)) {
+	 	 		$this->get_archive_student_info($infotexts);
+ 	 		}
+ 	 }
+ 	 
+ 	 function ilp_display_tutor_info($student_id)	{
+ 	 		global	$CFG;
+ 	 	
+ 	 		$tutorinfo		=	$this->dbc->get_per_tutor_info($student_id);
+ 	 		
+ 	 		$infotexts			=	array();
+ 	 		
+ 	 		foreach ($tutorinfo as $ti) {
+ 	 			$this->return_texts($ti,$infotexts);	
+ 	 		}
  	 		
  	 		if (!empty($infotexts)) {
 	 	 		$this->get_archive_student_info($infotexts);
@@ -252,8 +308,10 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
  	  	 	if (!empty($infoobj) && !empty($infoobj->student_textid))	{
  	 			$text	=	$this->dbc->get_info_text($infoobj->student_textid);
  	 			if (!empty($text))  {
- 	 				$text->type		=	'student';
- 	 				$infotexts[]	=	$text;	
+ 	 				$text->type			=	'student';
+ 	 				$text->course_id	=	$infoobj->courseid;
+ 	 				$text->user_id		=	$infoobj->student_userid;
+ 	 				$infotexts[]		=	$text;	
  	 			}
  	 		} 
  	 	
@@ -261,6 +319,8 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
  	 			$text	=	$this->dbc->get_info_text($infoobj->teacher_textid);
  	 			if (!empty($text))  {	
  	 				$text->type		=	'teacher';
+ 	 				$text->course_id	=	$infoobj->courseid;
+ 	 				$text->user_id		=	$infoobj->teacher_userid;
  	 				$infotexts[]	=	$text;		
  	 			}
  	 		}
@@ -269,6 +329,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
  	 			$text	=	$this->dbc->get_info_text($infoobj->shared_textid);
  	 			if (!empty($text))  {
  	 				$text->type		=	'shared';
+ 	 				$text->course_id	=	$infoobj->courseid;
  	 				$infotexts[]	=	$text;		
  	 			}
  	 		}
@@ -281,7 +342,8 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 		 				 	 			
 		 		$setby				=	$this->dbc->get_user_by_id($sir->lastchanged_userid);
 		 		$sir->setbyname		=	fullname($setby);
-		 	 			
+		 		$course				=	$this->dbc->get_course_by_id($sir->course_id);
+		 		$sir->coursename	= 	(!empty($course)) ? $course->fullname : false; 
 		 		$sir->creationtime	=	userdate($sir->lastchanged_datetime, get_string('strftimedate'));
 		 			
 		 		$comments			=	false;
@@ -406,6 +468,10 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 
  	 	$this->config_text_element($mform, 'mis_archive_tab_studentinfo', get_string('ilp_dashboard_archive_tab_reportstudentheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_student', 'block_ilp'));
  	 	
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_teacherinfo', get_string('ilp_dashboard_archive_tab_reportteacherheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_teacher', 'block_ilp'));
+ 	 	
+ 	 	$this->config_text_element($mform, 'mis_archive_tab_tutorinfo', get_string('ilp_dashboard_archive_tab_reporttutorheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_tutor', 'block_ilp'));
+ 	 	
  	 	$this->config_text_element($mform, 'mis_archive_tab_target', get_string('ilp_dashboard_archive_tab_reporttargetheader', 'block_ilp'), get_string('ilp_dashboard_archive_tab_reportdesc', 'block_ilp'), get_string('ilp_dashboard_archive_tab_target', 'block_ilp'));
  
  	 	$options = array(
@@ -499,11 +565,11 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 	}
 	
 	function get_per_teacher_info($student_id)	{
-		return $this->dbc->get_record('ilp_student_info_per_teacher',array('student_userid'=>$student_id));
+		return $this->dbc->get_records('ilp_student_info_per_teacher',array('student_userid'=>$student_id));
 	}
 	
 	function get_per_tutor_info($student_id)	{
-		return $this->dbc->get_record('ilp_student_info_per_tutor',array('student_userid'=>$student_id));
+		return $this->dbc->get_records('ilp_student_info_per_tutor',array('student_userid'=>$student_id));
 	}
 	
 	

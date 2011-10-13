@@ -10,8 +10,8 @@
 					</div>
 					<div class="right-reports">
 							<?php if (isset($post->catgoryname)) {?> <strong><?php echo get_string('ilp_dashboard_archive_tab_targetcategory', 'block_ilp'); ?> :</strong><?php echo $post->catgoryname; ?><br /><?php } ?>
-							<?php if (isset($post->setbyname)) {?><strong><?php echo get_string('ilp_dashboard_archive_tab_addedby','block_ilp')?> :</strong><?php echo $post->setbyname;?><br /><?php } ?>
-							<?php if (isset($post->coursename)) {?><strong><?php echo get_string('course','block_ilp')?> :</strong><?php echo $post->coursename;?><br /><?php } ?>
+							<?php if (isset($post->setbyname) && !empty($post->setbyname)) {?><strong><?php echo get_string('ilp_dashboard_archive_tab_addedby','block_ilp')?> :</strong><?php echo $post->setbyname;?><br /><?php } ?>
+							<?php if (isset($post->coursename) && !empty($post->coursename)) {?><strong><?php echo get_string('course','block_ilp')?> :</strong><?php echo $post->coursename;?><br /><?php } ?>
 							<?php if (isset($post->creationtime)) {?><strong><?php echo  get_string('ilp_dashboard_archive_tab_targetset', 'block_ilp'); ?> :</strong><?php echo $post->creationtime;?><br /><?php } ?>
 							<?php if (isset($post->deadlinetime)) {?><strong><?php echo  get_string('ilp_dashboard_archive_tab_targetdeadline', 'block_ilp'); ?> :</strong><?php echo $post->deadlinetime;?><br /><?php } ?>
 					</div>
