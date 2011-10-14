@@ -34,7 +34,8 @@ M.ilp_dashboard_student_info = {
         },
 		
         
-        save_userstatus : function (value) {
+        save_userstatus : function () {
+        	
         	// get course_id and candidate_id from the form
             var student_id = document.getElementById('student_id').value;
 
@@ -43,7 +44,7 @@ M.ilp_dashboard_student_info = {
             YAHOO.util.Connect.asyncRequest('POST',
                                             '/blocks/ilp/actions/save_userstatus.php',
                                             M.ilp_dashboard_student_info.callback,
-                                            'ajax=true&student_id='+student_id+'&select_userstatus='+value);
+                                            'ajax=true&student_id='+student_id+'&select_userstatus='+this.value);
         	
         },
         
@@ -72,48 +73,31 @@ M.ilp_dashboard_student_info = {
         	failure : function() {
         		
         	}
-        	
-        	
         }
-        	
 }   	
-        	
-        
-        
-        
-        
 
  
 M.ilp_dashboard_student_info.init = function(Y,statusval) {
 
 	//hide select and submit button 
-	 
     var statusform 	= document.getElementById('changestatus');
     var userstatus 	= document.getElementById('user_status');
     var statusform 	= document.getElementById('studentstatusform');
+    var sltusrsts	= document.getElementById('select_userstatus');	 
 	
     M.ilp_dashboard_student_info.hideelement(statusform);
     
     M.ilp_dashboard_student_info.showelement(userstatus);
     M.ilp_dashboard_student_info.showelement(editicon);
+    
+	if (typeof(document.getElementById('select_userstatus')) != 'undefined') {
+		YAHOO.util.Event.addListener("select_userstatus", "change", M.ilp_dashboard_student_info.save_userstatus,document.getElementById('select_userstatus'),true);
+	}
+    
     M.ilp_dashboard_student_info.hideelement(statusform);
     
-	YAHOO.util.Event.addListener("edit_userstatus_icon", "click", M.ilp_dashboard_student_info.addselect);
-	
-	
-	
-	if (typeof(document.getElementById('select_userstatus')) != 'undefined') {
-		
-		YAHOO.util.Event.addListener("select_userstatus", "change", M.ilp_dashboard_student_info.save_userstatus(document.getElementById('select_userstatus').value));
-		
-	
-		//add the onchange event to the select button
-		//document.getElementById('select_userstatus').addEventListener(
-		//	     'change',
-		//	     function() {M.ilp_dashboard_student_info.save_userstatus(this.value)},
-		//	     false
-		//	  );
-	}
+    YAHOO.util.Event.addListener("edit_userstatus_icon", "click", M.ilp_dashboard_student_info.addselect);
+
 };
 
 
