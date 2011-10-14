@@ -508,17 +508,6 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
         return 'Register By Class';
     }
 
-    function getAttendance()
-    {
-        // TODO: Implement getAttendance() method.
-    }
-
-    function getPunctuality()
-    {
-        // TODO: Implement getPunctuality() method.
-    }
-
-
 }
 
 
