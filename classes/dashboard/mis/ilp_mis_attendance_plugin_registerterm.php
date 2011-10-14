@@ -391,34 +391,36 @@ function summary_data($data, $term = 0)
         }
 
         for ($i = 0; $i <= $this->numterms; $i++) {
-            if ($total[$i] > 0) {
-                @$att_perc[$i] = round(($present[$i] / $total[$i]) * 100, 0) . '%';
-                @$pun_perc[$i] = round((($total[$i] - $late[$i]) / $total[$i]) * 100, 0) . '%';
-            } else {
-                @$att_perc[$i] = '';
-                @$pun_perc[$i] = '';
-            }
-
-            if ($total[$i] > 0) {
-                if ($att_perc[$i] > 85) {
-                    $att_class[$i] = 'green';
-                } elseif ($att_perc[$i] >= 75 && $att_perc[$i] <= 85) {
-                    $att_class[$i] = 'amber';
-                } elseif ($att_perc[$i] < 75) {
-                    $att_class[$i] = 'red';
-                }
-
-                if ($pun_perc[$i] > 85) {
-                    $pun_class[$i] = 'green';
-                } elseif ($pun_perc[$i] >= 75 && $pun_perc[$i] <= 85) {
-                    $pun_class[$i] = 'amber';
-                } elseif ($pun_perc[$i] < 75) {
-                    $pun_class[$i] = 'red';
-                }
-            } else {
-                $att_class[$i] = 'none';
-                $pun_class[$i] = 'none';
-            }
+        	if (isset($total[$i])) {
+	            if ($total[$i] > 0) {
+	                @$att_perc[$i] = round(($present[$i] / $total[$i]) * 100, 0) . '%';
+	                @$pun_perc[$i] = round((($total[$i] - $late[$i]) / $total[$i]) * 100, 0) . '%';
+	            } else {
+	                @$att_perc[$i] = '';
+	                @$pun_perc[$i] = '';
+	            }
+	
+	            if ($total[$i] > 0) {
+	                if ($att_perc[$i] > 85) {
+	                    $att_class[$i] = 'green';
+	                } elseif ($att_perc[$i] >= 75 && $att_perc[$i] <= 85) {
+	                    $att_class[$i] = 'amber';
+	                } elseif ($att_perc[$i] < 75) {
+	                    $att_class[$i] = 'red';
+	                }
+	
+	                if ($pun_perc[$i] > 85) {
+	                    $pun_class[$i] = 'green';
+	                } elseif ($pun_perc[$i] >= 75 && $pun_perc[$i] <= 85) {
+	                    $pun_class[$i] = 'amber';
+	                } elseif ($pun_perc[$i] < 75) {
+	                    $pun_class[$i] = 'red';
+	                }
+	            } else {
+	                $att_class[$i] = 'none';
+	                $pun_class[$i] = 'none';
+	            }
+        	}
         }
      
         return array('total' => $total, 'present' => $present, 'late' => $late, 'absent' => $absent, 'att_prec' => $att_perc, 'pun_perc' => $pun_perc, 'att_class' => $att_class, 'pun_class' => $pun_class);
