@@ -40,7 +40,7 @@ M.ilp_dashboard_student_info = {
             var student_id = document.getElementById('student_id').value;
 
             ajaxinprogress = true;
-
+            
             YAHOO.util.Connect.asyncRequest('POST',
                                             '/blocks/ilp/actions/save_userstatus.php',
                                             M.ilp_dashboard_student_info.callback,
@@ -78,7 +78,6 @@ M.ilp_dashboard_student_info = {
 
  
 M.ilp_dashboard_student_info.init = function(Y,statusval) {
-
 	//hide select and submit button 
     var statusform 	= document.getElementById('changestatus');
     var userstatus 	= document.getElementById('user_status');
@@ -90,14 +89,14 @@ M.ilp_dashboard_student_info.init = function(Y,statusval) {
     M.ilp_dashboard_student_info.showelement(userstatus);
     M.ilp_dashboard_student_info.showelement(editicon);
     
-	if (typeof(document.getElementById('select_userstatus')) != 'undefined') {
-		YAHOO.util.Event.addListener("select_userstatus", "change", M.ilp_dashboard_student_info.save_userstatus,document.getElementById('select_userstatus'),true);
-	}
-    
     M.ilp_dashboard_student_info.hideelement(statusform);
     
     YAHOO.util.Event.addListener("edit_userstatus_icon", "click", M.ilp_dashboard_student_info.addselect);
-
+    
+	if (typeof(document.getElementById('select_userstatus')) != 'undefined') {
+		YAHOO.util.Event.addListener("select_userstatus", "change", M.ilp_dashboard_student_info.save_userstatus,document.getElementById('select_userstatus'),true);
+	}
+	
 };
 
 
