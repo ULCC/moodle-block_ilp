@@ -184,7 +184,8 @@ class edit_status_item_mform extends ilp_moodleform {
                 $itemid = $obj->id;
                 $labelkey = "itemname_$itemid";
                 $valuekey = "itemvalue_$itemid";
-                if( empty( $data->$labelkey ) && empty( $data->$labelkey ) ){
+                if( isset( $data->$labelkey ) && empty( $data->$labelkey ) && isset( $data->$valuekey ) && empty( $data->$valuekey ) ){
+                    //this block should only apply to previously written data - hence the issets in the condition
                     //form submit is asking for this item to be deleted ... first check if there is child data
                     $children = $DB->get_records( 'block_ilp_user_status', array( 'parent_id' => $itemid ) );
                     if( 0 == count($children) ){
