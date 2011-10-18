@@ -202,6 +202,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
         $string['ilp_mis_learner_profile_assessments_disp_english']					= 'English';
         $string['ilp_mis_learner_profile_assessments_disp_ict']						= 'ICT';
         $string['ilp_mis_learner_profile_assessments_disp_study']					= 'Study Support';
+        $string['ilp_mis_learner_profile_assessments_disp_freewriting']				= 'Free Writing';
         
         
         return $string;

@@ -17,6 +17,10 @@
 			<tr ><th><?php echo get_string('ilp_mis_learner_profile_assessments_disp_study','block_ilp') ?></th>
 			<td><?php echo $this->data[$this->fields['study']];?></td></tr>
 		<?php } ?>		
+		<?php if (!empty($this->data[$this->fields['freewriting']])) {?>
+			<tr ><th><?php echo get_string('ilp_mis_learner_profile_assessments_disp_freewriting','block_ilp') ?></th>
+			<td><?php echo $this->data[$this->fields['freewriting']];?></td></tr>
+		<?php } ?>		
 		</table>
 </div>
 
