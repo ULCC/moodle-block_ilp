@@ -79,6 +79,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_learner_assessments_studentid')) 	$this->fields['studentid']	=	get_config('block_ilp','mis_learner_assessments_studentid');
  				if 	(get_config('block_ilp','mis_learner_assessments_maths')) 	$this->fields['maths']	=	get_config('block_ilp','mis_learner_assessments_maths');
  				if 	(get_config('block_ilp','mis_learner_assessments_english')) 		$this->fields['english']	=	get_config('block_ilp','mis_learner_assessments_english');
+ 				if 	(get_config('block_ilp','mis_learner_assessments_freewriting')) 		$this->fields['freewriting']	=	get_config('block_ilp','mis_learner_assessments_freewriting');
  				if 	(get_config('block_ilp','mis_learner_assessments_ict')) 		$this->fields['ict']	=	get_config('block_ilp','mis_learner_assessments_ict');
  				if 	(get_config('block_ilp','mis_learner_assessments_study')) 		$this->fields['study']	=	get_config('block_ilp','mis_learner_assessments_study');
  				
@@ -119,6 +120,8 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  	 	$this->config_text_element($mform,'mis_learner_assessments_maths',get_string('ilp_mis_learner_assessments_maths', 'block_ilp'),get_string('ilp_mis_learner_assessments_mathsdesc', 'block_ilp'),'mathsResult');
 
  	 	$this->config_text_element($mform,'mis_learner_assessments_english',get_string('ilp_mis_learner_assessments_english', 'block_ilp'),get_string('ilp_mis_learner_assessments_englishdesc', 'block_ilp'),'englishResult');
+ 	 	
+ 	 	$this->config_text_element($mform,'mis_learner_assessments_freewriting',get_string('ilp_mis_learner_assessments_freewriting', 'block_ilp'),get_string('ilp_mis_learner_assessments_freewritingdesc', 'block_ilp'),'freewritingResult');
  	 	
  	 	$this->config_text_element($mform,'mis_learner_assessments_ict',get_string('ilp_mis_learner_assessments_ict', 'block_ilp'),get_string('ilp_mis_learner_assessments_ictdesc', 'block_ilp'),'ictResult');
  	 	
@@ -172,6 +175,9 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
         
         $string['ilp_mis_learner_assessments_english']							= 'English data field';
         $string['ilp_mis_learner_assessments_englishdesc']						= 'English data';
+        
+        $string['ilp_mis_learner_assessments_freewriting']						= 'freewriting data field';
+        $string['ilp_mis_learner_assessments_freewritingdesc']					= 'Freewriting data';
         
         
         
