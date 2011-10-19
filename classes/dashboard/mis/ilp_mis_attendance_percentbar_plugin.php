@@ -117,6 +117,14 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
         $this->config_text_element($mform, 'mis_plugin_attendance_percentbarattendance', get_string('ilp_mis_attendance_percentbar_plugin_attendance', 'block_ilp'), get_string('ilp_mis_attendance_percentbar_plugin_attendancedesc', 'block_ilp'), 'attendance');
 
         $options = array(
+            ILP_IDTYPE_STRING => get_string('stringid', 'block_ilp'),
+            ILP_IDTYPE_INT => get_string('intid', 'block_ilp')
+        );
+
+        $this->config_select_element($mform, 'mis_plugin_attendance_percentbar_idtype', $options, get_string('idtype', 'block_ilp'), get_string('idtypedesc', 'block_ilp'), 1);
+
+
+        $options = array(
             ILP_MIS_TABLE => get_string('table', 'block_ilp'),
             ILP_MIS_STOREDPROCEDURE => get_string('storedprocedure', 'block_ilp')
         );

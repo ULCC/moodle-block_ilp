@@ -122,6 +122,14 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
  	 	$this->config_text_element($mform,'mis_plugin_simple_punctuality',get_string('ilp_mis_attendance_plugin_simple_punctuality', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_punctualitydesc', 'block_ilp'),'punctuality');
 
  	 	$this->config_text_element($mform,'mis_plugin_simple_attendance',get_string('ilp_mis_attendance_plugin_simple_attendance', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_attendancedesc', 'block_ilp'),'attendance');
+
+        $options = array(
+            ILP_IDTYPE_STRING => get_string('stringid', 'block_ilp'),
+            ILP_IDTYPE_INT => get_string('intid', 'block_ilp')
+        );
+
+        $this->config_select_element($mform, 'mis_plugin_simple_idtype', $options, get_string('idtype', 'block_ilp'), get_string('idtypedesc', 'block_ilp'), 1);
+
  	 	
  	 	$options = array(
     		 ILP_MIS_TABLE => get_string('table','block_ilp'),
