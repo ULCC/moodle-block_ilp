@@ -42,7 +42,7 @@ M.ilp_dashboard_student_info = {
             ajaxinprogress = true;
             
             YAHOO.util.Connect.asyncRequest('POST',
-                                            '/blocks/ilp/actions/save_userstatus.php',
+                                            'save_userstatus.php',  //ok as long as  save_user_status.php is in the same directory as the parent script ie /actions ... otherwise we will need to consider putting a fully qualified url here
                                             M.ilp_dashboard_student_info.callback,
                                             'ajax=true&student_id='+student_id+'&select_userstatus='+this.value);
         	
