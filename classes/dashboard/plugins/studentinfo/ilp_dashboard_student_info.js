@@ -52,10 +52,7 @@ M.ilp_dashboard_student_info = {
             M.ilp_dashboard_student_info.hideelement(document.getElementById('edit_userstatus_icon'));
             M.ilp_dashboard_student_info.hideelement(document.getElementById('user_status'));
             M.ilp_dashboard_student_info.showelement(document.getElementById('studentstatusform'));
-            //hides the submit button as this should be seen if JS is off
-            //jfp west anglia have a problem where button is invisible, but the onchange event doesn't work,
-            //so for the moment we will make the button always visible
-            //document.getElementById('studentstatussub').style.visibility='hidden';
+            document.getElementById('studentstatussub').style.visibility='hidden';
         },
         
         callback	:	{
