@@ -205,7 +205,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
         $string['ilp_dashboard_archive_tab_addedby'] 					= 'Set By';
         $string['ilp_dashboard_archive_tab_targetset'] 					= 'Set';
         $string['ilp_dashboard_archive_tab_targetdeadline'] 			= 'Deadline';
-        $string['ilp_dashboard_archive_tab_concername'] 				= 'Report';
+        $string['ilp_dashboard_archive_tab_concername'] 				= 'Concern';
         $string['ilp_dashboard_archive_tab_report1']	 				= 'Report1';
         $string['ilp_dashboard_archive_tab_report2']	 				= 'Report2';
         $string['ilp_dashboard_archive_tab_report3']	 				= 'Report3';
