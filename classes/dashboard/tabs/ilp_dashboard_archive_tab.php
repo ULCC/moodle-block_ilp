@@ -521,18 +521,18 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 	}
 	
 	
-	function get_student_target_posts($student_id,$status=-1,$sortorder='ASC')	{
+	function get_student_target_posts($student_id,$status=-1,$sortorder='DESC')	{
 		global $CFG;
 		
 		$sql	=	"SELECT 	{$CFG->prefix}ilptarget_posts.*, up.username
 					 FROM		{$CFG->prefix}ilptarget_posts, {$CFG->prefix}user up
 					 WHERE		up.id = setbyuserid AND setforuserid = {$student_id}
-					 ORDER BY 	deadline $sortorder ";
+					 ORDER BY 	timemodified $sortorder ";
 		
 		return 	$this->dbc->get_records_sql($sql);
 	}
 	
-	function get_student_concern_posts($student_id,$reporttype_id=false)	{
+	function get_student_concern_posts($student_id,$reporttype_id=false,$sortorder='DESC')	{
 		global 	$CFG;
 		
 		$statussql	=	(!empty($reporttype_id))	? "AND 		status = {$reporttype_id}"	: "";		
@@ -541,7 +541,8 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 					 FROM 		{$CFG->prefix}ilpconcern_posts, {$CFG->prefix}user up
 					 WHERE		up.id = setbyuserid 
 					 {$statussql} 
-					 AND 		setforuserid = {$student_id}";
+					 AND 		setforuserid = {$student_id}
+					 ORDER BY 	timemodified $sortorder ";
 
 		return $this->dbc->get_records_sql($sql);
 		
