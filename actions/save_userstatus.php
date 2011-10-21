@@ -66,7 +66,7 @@ $userstatus->parent_id			=	$status_id;
 if ($dbc->update_userstatus($userstatus)) {
 	
 	if ($ajax == 'false') {
-		 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$student_id.'&tabitem='.$tabitem.'&selectedtab='.$selecttedtab;
+		 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$student_id.'&course_id='.$course_id.'&tabitem='.$tabitem.'&selectedtab='.$selecttedtab;
          redirect($return_url, get_string("stausupdated", 'block_ilp'), REDIRECT_DELAY); 
 	} else {
 		

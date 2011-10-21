@@ -290,17 +290,23 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * just need to simply add the plugins entries on to it
 	 */
 	function userstatus_select($selected_value =null)	{
-		global	$USER, $CFG;
+		global	$USER, $CFG, $PARSER;
 
 
 		$statusitems	=	$this->dbc->get_user_status_items();
 		
 		if (!empty($statusitems)) {
+			$selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_RAW);
+			$tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_RAW);
+			$course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
 			$form	= "<form action='{$CFG->wwwroot}/blocks/ilp/actions/save_userstatus.php' method='GET' id='studentstatusform' >";
 					
 			$form	.=	"<input type='hidden' name='student_id' id='student_id' value='{$this->student_id}' >";
+			$form	.=	"<input type='hidden' name='course_id' id='course_id' value='{$course_id}' >";
 			$form	.=	"<input type='hidden' name='user_modified_id' id='user_modified_id' value='{$USER->id}' >";
 			$form	.=	"<input type='hidden' name='ajax' id='ajax' value='false' >";
+			$form	.=	"<input type='hidden' name='tabitem' id='tabitem' value='$tabitem' >";
+			$form	.=	"<input type='hidden' name='selectedtab' id='selectedtab' value='$selectedtab' >";
 			
 			$form .= "<select id='select_userstatus'  name='select_userstatus' >";
 
