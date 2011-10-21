@@ -631,7 +631,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object containing all course records or false
      */
     function get_courses()	{	
-    	return $this->dbc->get_records("course");
+    	return $this->dbc->get_records("course", array(), 'fullname ASC');
     }
 	 
 	 /**

@@ -45,7 +45,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 		$courselist = (!empty($user_id)) ? $this->dbc->get_user_courses($user_id) : $this->dbc->get_courses();
 		
 		foreach( $courselist as $c ){
-			$courseoptions[ $c->id ] = $c->shortname;
+			$courseoptions[ $c->id ] = $c->fullname;
 		}
 		
 		return $courseoptions;
