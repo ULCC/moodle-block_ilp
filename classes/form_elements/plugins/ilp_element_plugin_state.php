@@ -31,9 +31,8 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
         return !$this->dbc->element_type_exists( $report_id, $this->tablename );
     }
 
-    protected function get_creator_id(){
-        $info = $this->dbc->get_report_field_data( $this->reportfield_id );
-        return $info->creator_id;
+    protected function get_creator_id( $entry ){
+        return $entry->creator_id;
     }
 
     function language_strings(&$string) {
@@ -180,7 +179,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		 		
 			 	foreach($pluginentry as $e) {
 			 		
-			 		$entryobj->$fieldname	.=	($entry->get_creator_id() == $USER->id) ? $OUTPUT->single_select($CFG->wwwroot."/blocks/ilp/actions/change_state.php?entry_id={$entry_id}&reportfield_id={$reportfield_id}&$query_string",'item_id',$optionslist,$e->parent_id,$nothing=array(''=>'choosedots'),'sc_rep{$reportfield_id}ent{$entry_id}') : $e->name;
+			 		$entryobj->$fieldname	.=	($this->get_creator_id($entry) == $USER->id) ? $OUTPUT->single_select($CFG->wwwroot."/blocks/ilp/actions/change_state.php?entry_id={$entry_id}&reportfield_id={$reportfield_id}&$query_string",'item_id',$optionslist,$e->parent_id,$nothing=array(''=>'choosedots'),'sc_rep{$reportfield_id}ent{$entry_id}') : $e->name;
 			 	}
 	 		}
 	  }
