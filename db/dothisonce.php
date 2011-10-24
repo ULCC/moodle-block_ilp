@@ -5,11 +5,19 @@ require_once( $CFG->dirroot . '/lib/xmldb/xmldb_object.php' );
 require_once( $CFG->dirroot . '/lib/xmldb/xmldb_table.php' );
 
 $dbman = $DB->get_manager();
-$table = new xmldb_table( 'block_ilp_plu_hte_ent' );
-$field = new xmldb_field( 'value' );
-$field->setType( XMLDB_TYPE_TEXT );
-$dbman->change_field_type( $table, $field );
-echo "block_ilp_plu_hte_ent.value type is now 'text'\n";
+
+$problematic_table_list = array(
+    "block_ilp_plu_hte_ent" => 'value',
+    "block_ilp_plu_are_ent" => 'value'
+);
+
+foreach( $problematic_table_list as $table=>$field ){
+	$table = new xmldb_table( $table );
+	$field = new xmldb_field( $field );
+	$field->setType( XMLDB_TYPE_TEXT );
+	$dbman->change_field_type( $table, $field );
+	echo "block_ilp_plu_hte_ent.value type is now 'text'\n";
+}
 /*
 $table = new xmldb_table( 'block_ilp_plu_gradebooktracker_ent' );
 
