@@ -16,7 +16,7 @@ foreach( $problematic_table_list as $table=>$field ){
 	$field = new xmldb_field( $field );
 	$field->setType( XMLDB_TYPE_TEXT );
 	$dbman->change_field_type( $table, $field );
-	echo "block_ilp_plu_hte_ent.value type is now 'text'\n";
+	echo "$table.$field type is now 'text'\n";
 }
 /*
 $table = new xmldb_table( 'block_ilp_plu_gradebooktracker_ent' );
