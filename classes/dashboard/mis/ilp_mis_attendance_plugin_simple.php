@@ -18,7 +18,6 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     */
     public function display(){
         global $CFG;
-        
         if (!empty($this->data)) {
 	        // set up the flexible table for displaying the data
 	
@@ -47,8 +46,8 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        //add the row to table
 	        foreach( $this->data as $row ){
 	            $data = array();
-	            $data[ 'attendance' ]  = $row[ 0 ] * 100;
-	            $data[ 'punctuality' ] = $row[ 1 ] * 100;
+	            $data[ 'attendance' ]  = $this->percent_format( $row[ 0 ] );// * 100;
+	            $data[ 'punctuality' ] = $this->percent_format( $row[ 1 ] );// * 100;
 	            $flextable->add_data_keyed( $data );
 	        }
 	        
@@ -70,6 +69,11 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     	}
     }
 
+    protected function percent_format( $decimal ){
+        $percentage = number_format( 100 * $decimal, 0 );
+        return "$percentage%";
+    }
+
     public function set_data( $student_id ){
     	//get the plugins configuration and pass to variables 
         $tablename 			= get_config('block_ilp','mis_plugin_simple_studenttable'); //$this->params[ 'student_table' ];
@@ -83,6 +87,9 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     		$student_id	=	(empty($idtype)) ? "'{$student_id}'" : $student_id;
 	        
 	        
+            if( !is_numeric( $student_id ) ){
+                $student_id = "'$student_id'";
+            }
 	        $querydata = $this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field) );
 	        
 	        $data = (is_array($querydata)) ? array_shift( $querydata ) : $querydata;
