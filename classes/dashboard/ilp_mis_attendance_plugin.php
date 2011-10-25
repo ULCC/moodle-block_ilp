@@ -68,4 +68,21 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
         return html_writer::tag( 'span', $percentage, array( 'style' => "background-color:$colour;display:block" ) );
     }
 
+    /*
+    * take number to be displayed in a table, and format it as a percentage
+    * @param float $decimal
+    * @return string
+    */
+    protected function percent_format( $decimal , $percentagealready=false ){
+        if( !is_numeric( $decimal ) ) return '-';
+        if( $percentagealready ){
+            $percentage = $decimal;
+        }
+        else{
+            $percentage = number_format( 100 * $decimal, 0 );
+        }
+        return "$percentage%";
+    }
+
+
 }

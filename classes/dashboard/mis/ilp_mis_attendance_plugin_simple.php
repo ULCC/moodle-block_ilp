@@ -69,11 +69,6 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     	}
     }
 
-    protected function percent_format( $decimal ){
-        $percentage = number_format( 100 * $decimal, 0 );
-        return "$percentage%";
-    }
-
     public function set_data( $student_id ){
     	//get the plugins configuration and pass to variables 
         $tablename 			= get_config('block_ilp','mis_plugin_simple_studenttable'); //$this->params[ 'student_table' ];

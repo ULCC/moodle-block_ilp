@@ -88,15 +88,15 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
             foreach ($this->termdata as $metric) {
 
                 $data['metric'] = $metric['name'];
-                $data['overall'] = $metric['overall'] . '%';
-                $data['one'] = $metric[1] . '%';
-                $data['two'] = $metric[2] . '%';
-                $data['three'] = $metric[3] . '%';
+                $data['overall'] = $this->percent_format( $metric['overall'] , true );//. '%';
+                $data['one'] = $this->percent_format( $metric[1] , true );//. '%';
+                $data['two'] = $this->percent_format( $metric[2] , true );// . '%';
+                $data['three'] = $this->percent_format( $metric[3] , true );//. '%';
 
                 if (!empty($sixtermformat)) {
-                    $data['four'] = $metric[4] . '%';
-                    $data['five'] = $metric[5] . '%';
-                    $data['six'] = $metric[6] . '%';
+                    $data['four'] = $this->percent_format( $metric[4] , true );// . '%';
+                    $data['five'] = $this->percent_format( $metric[5] , true );// . '%';
+                    $data['six'] = $this->percent_format( $metric[6] , true );// . '%';
                 }
                 $flextable->add_data_keyed($data);
             }
@@ -431,6 +431,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
         $termdata = array();
         if (!empty($data)) {
             foreach ($data as $d) {
+                if( !$d[  $this->fields[ 'markstotal' ] ] ) continue;   //if markstotal is zero, there is no data for this term
 
                 //get the id of the current course
                 $termid = $d[$this->fields['term']];
@@ -449,21 +450,23 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
                 $present = $this->presents_cal($d[$this->fields['markspresent']], $authab);
 
                 //caculate the months attendance percentage
-                $attendpercent = ($present / $d[$this->fields['markstotal']]) * 100;
+                //$attendpercent = ($present / $d[$this->fields['markstotal']]) * 100;
+                $attendpercent = 100 * (1 - ( $d[ $this->fields[ 'marksabsent' ] ] / $d[$this->fields['markstotal']] ));
 
                 //caculate the months attendance percentage
                 $punctpercent = ($d[$this->fields['markslate']] / $present) * 100;
                 $punctpercent = 100 - $punctpercent;
-
                 //fill the couse month array position with percentage for the month
-                $termdata[$termid] = array(
-                    'attendance' => $attendpercent,
-                    'punctuality' => $punctpercent,
-                    'markstotal' => $d[$this->fields['markstotal']],
-                    'markspresent' => $d[$this->fields['markspresent']],
-                    'marksabsent' => $d[$this->fields['marksabsent']],
-                    'marksauthabsent' => $authab,
-                    'markslate' => $d[$this->fields['markslate']]);
+                if( $d[ $this->fields[ 'markstotal' ] ] ){
+		                $termdata[$termid] = array(
+		                    'attendance' => $attendpercent,
+		                    'punctuality' => $punctpercent,
+		                    'markstotal' => $d[$this->fields['markstotal']],
+		                    'markspresent' => $d[$this->fields['markspresent']],
+		                    'marksabsent' => $d[$this->fields['marksabsent']],
+		                    'marksauthabsent' => $authab,
+		                    'markslate' => $d[$this->fields['markslate']]);
+                }
             }
 
             $presents = 0;
@@ -473,16 +476,16 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
 
             //now we have all course data nicely in an array we can work the overall totals
             foreach ($termdata as &$term) {
-                $presents += $term['markspresent'];
-                $absents += $term['marksabsent'];
-                $authabsents += $term['marksauthabsent'];
-                $lates += $term['markslate'];
-
+	                $presents += $term['markspresent'];
+	                $absents += $term['marksabsent'];
+	                $authabsents += $term['marksauthabsent'];
+	                $lates += $term['markslate'];
+                    $total += $term[ 'markstotal' ];
             }
 
 
             $present = $this->presents_cal($presents, $authabsents);
-            $presentpercent = ($absents / $present) * 100;
+            $presentpercent = ($absents / $total) * 100;
             $presentpercent = 100 - $presentpercent;
 
             
