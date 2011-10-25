@@ -66,8 +66,8 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
             foreach ($this->courselist as $cid => $cname) {
                 //we start the month counter from the first month
                 $data['course'] = $cname;
-                $data['attendance'] = $this->mcbdata[$cid]['attendance'] . '%';
-                $data['punctuality'] = $this->mcbdata[$cid]['punctuality'] . '%';
+                $data['attendance'] = $this->percent_format( $this->mcbdata[$cid]['attendance'] , true );//. '%';
+                $data['punctuality'] = $this->percent_format( $this->mcbdata[$cid]['punctuality'] , true );//. '%';
                 $flextable->add_data_keyed($data);
             }
             ob_start();
@@ -274,12 +274,13 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
                 $present = $this->presents_cal($d[$this->fields['markspresent']], $d[$this->fields['marksauthabsent']]);
 
                 //calculate the months attendance percentage
-                $monthpercent = ($present / $d[$this->fields['markstotal']]) * 100;
+                //$monthpercent = ($present / $d[$this->fields['markstotal']]) * 100;
+                $monthpercent = 100 * (1 - ( $d[ $this->fields[ 'marksabsent' ] ] / $d[$this->fields['markstotal']] ));
 
                 //remove any decimal places
                 $monthpercent = number_format($monthpercent, 0);
 
-                $latepercent = ($d[$this->fields['markslate']] / $present) * 100;
+                $latepercent = (1 - $d[$this->fields['markslate']] / $present) * 100;
 
                 $latepercent = number_format($latepercent, 0);
 
