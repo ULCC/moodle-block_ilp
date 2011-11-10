@@ -62,7 +62,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			$selectedtab	=	$PARSER->optional_param('selectedtab',$defaulttab,PARAM_RAW);
 			
 			//get the actual tab item that was selected
-			$tabitem		=	$PARSER->optional_param('tabitem','1:1',PARAM_RAW);
+			$tabitem		=	$PARSER->optional_param('tabitem',$defaulttab.':1',PARAM_RAW);
 			
 			$tabs = array();
    			$tabrows = array();
