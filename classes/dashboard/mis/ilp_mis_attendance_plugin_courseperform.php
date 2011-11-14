@@ -43,14 +43,26 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
             $headers[] = get_string('ilp_mis_attendance_plugin_courseperform_course', 'block_ilp');
             $headers[] = get_string('ilp_mis_attendance_plugin_courseperform_attendance', 'block_ilp');
             $headers[] = get_string('ilp_mis_attendance_plugin_courseperform_punctuality', 'block_ilp');
+//gregp
+			if (get_config('block_ilp', 'mis_plugin_courseperform_effortinclass')!=='') {
+            	$headers[] = get_string('ilp_mis_attendance_plugin_courseperform_effortinclass', 'block_ilp');
+            	$headers[] = get_string('ilp_mis_attendance_plugin_courseperform_effortathome', 'block_ilp');
+			}
             $headers[] = get_string('ilp_mis_attendance_plugin_courseperform_grade', 'block_ilp');
             $headers[] = get_string('ilp_mis_attendance_plugin_courseperform_performance', 'block_ilp');
-
+            
+            
             $columns[] = 'course';
             $columns[] = 'attendance';
             $columns[] = 'punctuality';
+//gregp
+            if (get_config('block_ilp', 'mis_plugin_courseperform_effortinclass')!=='') {
+            	$columns[] = 'effortinclass';
+            	$columns[] = 'effortathome';
+            }	
             $columns[] = 'grade';
             $columns[] = 'performance';
+            
 
 
             //define the columns in the tables
@@ -73,6 +85,8 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
                 $data['course'] = $cname;
                 $data['attendance'] = $this->mcbdata[$cid]['attendance'] . '%';
                 $data['punctuality'] = $this->mcbdata[$cid]['punctuality'] . '%';
+                $data['effortinclass'] = $this->mcbdata[$cid]['effortinclass'];
+                $data['effortathome'] = $this->mcbdata[$cid]['effortathome'];
                 $data['grade'] = $this->mcbdata[$cid]['grade'];
                 $data['performance'] = $this->mcbdata[$cid]['performance'];
                 $flextable->add_data_keyed($data);
@@ -135,6 +149,10 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
         $this->config_text_element($mform, 'mis_plugin_courseperform_grade', get_string('ilp_mis_attendance_plugin_courseperform_grade', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_gradedesc', 'block_ilp'), 'Grade');
 
         $this->config_text_element($mform, 'mis_plugin_courseperform_performance', get_string('ilp_mis_attendance_plugin_courseperform_performance', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_performancedesc', 'block_ilp'), 'performance');
+        
+        $this->config_text_element($mform, 'mis_plugin_courseperform_effortinclass', get_string('ilp_mis_attendance_plugin_courseperform_effortinclass', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_effortinclass', 'block_ilp'), 'EffortInClass');
+        
+        $this->config_text_element($mform, 'mis_plugin_courseperform_effortathome', get_string('ilp_mis_attendance_plugin_courseperform_effortathome', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_effortathome', 'block_ilp'), 'EffortAtHome');
 
         $options = array(
             ILP_IDTYPE_STRING => get_string('stringid', 'block_ilp'),
@@ -231,6 +249,14 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_courseperform_grade'] = 'Grade';
         $string['ilp_mis_attendance_plugin_courseperform_performance'] = 'Performance';
 
+        
+        $string['ilp_mis_attendance_plugin_courseperform_effortinclass'] = 'Effort in class';
+        $string['ilp_mis_attendance_plugin_courseperform_effortinclassdesc'] = 'the field containing the effort in class (Default: empty)';
+        
+        $string['ilp_mis_attendance_plugin_courseperform_effortathome'] = 'Effort at home';
+        $string['ilp_mis_attendance_plugin_courseperform_effortathomedesc'] = 'the field containing the effort at home Default: empty)';
+        
+
     }
 
 
@@ -270,6 +296,9 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_courseperform_marksabsentfield')) $this->fields['marksabsent'] = get_config('block_ilp', 'mis_plugin_courseperform_marksabsentfield');
             if (get_config('block_ilp', 'mis_plugin_courseperform_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_courseperform_marksauthabsentfield');
             if (get_config('block_ilp', 'mis_plugin_courseperform_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_courseperform_markslatefield');
+            if (get_config('block_ilp', 'mis_plugin_courseperform_effortinclass')) $this->fields['effortinclass'] = get_config('block_ilp', 'mis_plugin_courseperform_effortinclass');
+            if (get_config('block_ilp', 'mis_plugin_courseperform_effortathome')) $this->fields['effortathome'] = get_config('block_ilp', 'mis_plugin_courseperform_effortathome');
+            
 
             //get the users monthly attendance data
             $this->data = $this->dbquery($table, $keyfields, $this->fields);
@@ -324,7 +353,10 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
                 'markspresent' => $d[$this->fields['markspresent']],
                 'marksabsent' => $d[$this->fields['marksabsent']],
                 'marksauthabsent' => $d[$this->fields['marksauthabsent']],
-                'markslate' => $d[$this->fields['markslate']]);
+                'markslate' => $d[$this->fields['markslate']],
+            	'effortinclass' => $d[$this->fields['effortinclass']] ? $d[$this->fields['effortinclass']] : '',
+            	'effortathome' => $d[$this->fields['effortathome']] ? $d[$this->fields['effortathome']] : '');
+            
 
             //check if the course has been added to the courselist array
             if (!isset($courselist[$courseid])) {
