@@ -108,17 +108,14 @@ if (!empty($course_id)) {
     		$group_id = 0;
     	}
     }
-	
-
-    
-
-
-
-    
     
 	$pagetitle	=	$course->shortname;
 	
-	$ucourses	=	$dbc->get_user_courses($USER->id);
+	if (stripos($CFG->release,"2.") !== false) {
+    		$ucourses	=	enrol_get_users_courses($USER->id, false,NULL,'shortname ASC');
+    	} else {
+    		$ucourses	=	$dbc->get_user_courses($USER->id);
+    	}
 	$user_courses	=	array();
 	
 	
