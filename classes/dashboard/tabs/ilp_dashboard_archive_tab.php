@@ -549,7 +549,7 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 	}
 	
 	function get_archive_category($category_id)	{
-		return $this->dbc->get_record('ilp_post_category',array('id'=>$category_id));
+		return (!empty($category_id)) ? $this->dbc->get_record('ilp_post_category',array('id'=>$category_id)) : false;
 	}
 	
 	function get_target_comments($target_id)	{
