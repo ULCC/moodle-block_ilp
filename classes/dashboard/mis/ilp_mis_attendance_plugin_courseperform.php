@@ -246,7 +246,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_courseperform_course'] = 'Course';
         $string['ilp_mis_attendance_plugin_courseperform_attendance'] = 'Attendance';
         $string['ilp_mis_attendance_plugin_courseperform_punctuality'] = 'Punctuality';
-        $string['ilp_mis_attendance_plugin_courseperform_grade'] = 'Grade';
+        $string['ilp_mis_attendance_plugin_courseperform_grade'] = 'Target Grade';
         $string['ilp_mis_attendance_plugin_courseperform_performance'] = 'Performance';
 
         
@@ -254,7 +254,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_courseperform_effortinclassdesc'] = 'the field containing the effort in class (Default: empty)';
         
         $string['ilp_mis_attendance_plugin_courseperform_effortathome'] = 'Effort at home';
-        $string['ilp_mis_attendance_plugin_courseperform_effortathomedesc'] = 'the field containing the effort at home Default: empty)';
+        $string['ilp_mis_attendance_plugin_courseperform_effortathomedesc'] = 'the field containing the effort at home (Default: empty)';
         
 
     }
