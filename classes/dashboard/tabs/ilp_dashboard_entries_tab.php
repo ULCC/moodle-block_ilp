@@ -83,49 +83,61 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 						
 						//cycle through all reports and save the relevant details
 						foreach ($reports	as $r) {
-							$detail					=	new object();
-							$detail->report_id		=	$r->id;
 							
-							
-							$detail->name			=	(empty($reporttab)) ? $r->name : "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}&tabitem={$reporttab->id}:{$r->id}&selectedtab={$reporttab->id}'>{$r->name}</a>";
-							
-							$binary_icon				=	(!empty($r->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$r->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif"; 
-							
-							$detail->icon 	=	 "<img id='reporticon' class='icon_small' alt='$r->name ".get_string('reports','block_ilp')."' src='$binary_icon' />";
-							
-							//does this report have a state field
-							
-							//get all entries for this student in report
-							$detail->entries		=	($this->dbc->count_report_entries($r->id,$this->student_id)) ? $this->dbc->count_report_entries($r->id,$this->student_id) : 0;
-							$detail->state_report	=	false;
-							
-							$res = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state');
-							if ($res) {
-								//get the number of entries achieved
-								$detail->achieved	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
-								$detail->state_report	=	true;
-							}
-							
-							//get the last updated report entry
-							$lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
-
-							$detail->frequency		=	$r->frequency;
-							
-							//if the report does not allow mutiple entries (frequency is empty)
-							//then we need to find a report entry instance this will be editable
-							$detail->editentry	=	(empty($detail->frequency) && !empty($lastentry)) ?  $lastentry->id : false;
-							
-							$detail->lastmod	=	(!empty($lastentry->timemodified)) ?  userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
-
 							$addcapability		=	$this->dbc->get_capability_by_name('block/ilp:addreport');
-														
-							$detail->canadd	= ($this->dbc->has_report_permission($r->id,$role_ids,$addcapability->id)) ? true : false;
 							
 							$editcapability		=	$this->dbc->get_capability_by_name('block/ilp:editreport');
-														
-							$detail->canedit	= ($this->dbc->has_report_permission($r->id,$role_ids,$editcapability->id)) ? true : false;
 							
-							$reportslist[]			=	$detail;
+							$viewcapability		=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
+							
+							$caneditreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$editcapability->id);
+							
+							$canaddreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$addcapability->id);
+							
+							$canviewreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$viewcapability->id);
+							
+							if (!empty($caneditreport) && !empty($canaddreport) && !empty($canviewreport)) {
+							
+								$detail					=	new object();
+								$detail->report_id		=	$r->id;
+								
+								
+								$detail->name			=	(empty($reporttab)) ? $r->name : "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}&tabitem={$reporttab->id}:{$r->id}&selectedtab={$reporttab->id}'>{$r->name}</a>";
+								
+								$binary_icon				=	(!empty($r->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$r->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif"; 
+								
+								$detail->icon 	=	 "<img id='reporticon' class='icon_small' alt='$r->name ".get_string('reports','block_ilp')."' src='$binary_icon' />";
+								
+								//does this report have a state field
+								
+								//get all entries for this student in report
+								$detail->entries		=	($this->dbc->count_report_entries($r->id,$this->student_id)) ? $this->dbc->count_report_entries($r->id,$this->student_id) : 0;
+								$detail->state_report	=	false;
+								
+								$res = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state');
+								if ($res) {
+									//get the number of entries achieved
+									$detail->achieved	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
+									$detail->state_report	=	true;
+								}
+								
+								//get the last updated report entry
+								$lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
+	
+								$detail->frequency		=	$r->frequency;
+								
+								//if the report does not allow mutiple entries (frequency is empty)
+								//then we need to find a report entry instance this will be editable
+								$detail->editentry	=	(empty($detail->frequency) && !empty($lastentry)) ?  $lastentry->id : false;
+								
+								$detail->lastmod	=	(!empty($lastentry->timemodified)) ?  userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
+															
+								$detail->canadd	= ($canaddreport) ? true : false;
+															
+								$detail->canedit	= ($caneditreport) ? true : false;
+								
+								$reportslist[]			=	$detail;
+							}
 						}
 					}
 					
