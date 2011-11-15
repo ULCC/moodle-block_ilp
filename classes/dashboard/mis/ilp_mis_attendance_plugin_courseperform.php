@@ -147,7 +147,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_courseperform_markslatefield', get_string('ilp_mis_attendance_plugin_courseperform_markslate', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_markslatedesc', 'block_ilp'), 'marksLate');
 
-        $this->config_text_element($mform, 'mis_plugin_courseperform_grade', get_string('ilp_mis_attendance_plugin_courseperform_grade', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_gradedesc', 'block_ilp'), 'Grade');
+        $this->config_text_element($mform, 'mis_plugin_courseperform_grade', get_string('ilp_mis_attendance_plugin_courseperform_grade', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_gradedesc', 'block_ilp'), 'Target Grade');
 
         $this->config_text_element($mform, 'mis_plugin_courseperform_performance', get_string('ilp_mis_attendance_plugin_courseperform_performance', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_performancedesc', 'block_ilp'), 'performance');
         
