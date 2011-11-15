@@ -43,7 +43,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
             $headers[] = get_string('ilp_mis_attendance_plugin_courseperform_course', 'block_ilp');
             $headers[] = get_string('ilp_mis_attendance_plugin_courseperform_attendance', 'block_ilp');
             $headers[] = get_string('ilp_mis_attendance_plugin_courseperform_punctuality', 'block_ilp');
-//gregp
+			//additional two columns
 			if (get_config('block_ilp', 'mis_plugin_courseperform_effortinclass')!=='') {
             	$headers[] = get_string('ilp_mis_attendance_plugin_courseperform_effortinclass', 'block_ilp');
             	$headers[] = get_string('ilp_mis_attendance_plugin_courseperform_effortathome', 'block_ilp');
@@ -55,7 +55,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
             $columns[] = 'course';
             $columns[] = 'attendance';
             $columns[] = 'punctuality';
-//gregp
+
             if (get_config('block_ilp', 'mis_plugin_courseperform_effortinclass')!=='') {
             	$columns[] = 'effortinclass';
             	$columns[] = 'effortathome';
@@ -249,13 +249,12 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_courseperform_grade'] = 'Target Grade';
         $string['ilp_mis_attendance_plugin_courseperform_performance'] = 'Performance';
 
-        
+		// for additiona tables        
         $string['ilp_mis_attendance_plugin_courseperform_effortinclass'] = 'Effort in class';
         $string['ilp_mis_attendance_plugin_courseperform_effortinclassdesc'] = 'the field containing the effort in class (Default: empty)';
         
         $string['ilp_mis_attendance_plugin_courseperform_effortathome'] = 'Effort at home';
-        $string['ilp_mis_attendance_plugin_courseperform_effortathomedesc'] = 'the field containing the effort at home (Default: empty)';
-        
+        $string['ilp_mis_attendance_plugin_courseperform_effortathomedesc'] = 'the field containing the effort at home (Default: empty)';       
 
     }
 
