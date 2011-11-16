@@ -129,8 +129,11 @@ if ($access_viewcomment) {
 }
 
 
+//check for the ilpviewall capability at site level this gives the user rights to view all
+$ilpadmin				=	has_capability('block/ilp:ilpviewall',$sitecontext);
+
 //this is only in for debug and testing purposes 
-if ($USER->username == 'moodle-support') {
+if (is_siteadmin($USER) || $ilpadmin) {
 $access_report_createreports	=	1;
 $access_report_editreports		=	1;
 $access_report_deletereports	=	1;

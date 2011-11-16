@@ -156,6 +156,18 @@ $block_ilp_capabilities = array(
         )
 	),
 	
+	//the capaability needed in order to view anything in the -
+	'block/ilp:ilpviewall' => array(
+		'captype' => 'write',
+		'contextlevel' => CONTEXT_SYSTEM,
+        'legacy' => array(
+            'student' => CAP_PREVENT,
+            'editingteacher' => CAP_PREVENT,
+            'admin' => CAP_ALLOW,
+			'user' => CAP_PREVENT
+        )
+	),
+	
 	
 	
 	
