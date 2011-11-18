@@ -214,44 +214,50 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	 	
 	 	$title		=	(!empty($report))	? $report->name." ".get_string('deadline','block_ilp') : get_string('deadline','block_ilp');
 	 	
-	 	//check if the entry_id has been set
-	 	$update 	=	(!empty($data->entry_id)) ? true : false; 
+	 	$event	=	$this->dbc->get_calendar_event($entry_id,$reportfield_id);
 	 	
-	 	/*
-	 	 * The calendar event has been removed as it is not possible to create a calendar event that we can easily update without a
-	 	 *  way to refernce the calendar entry. This reference should be placed inside of the plugins entry table 
-	 	 *  
- 	 	if (empty($update))		{
-	 		$event = new object();
+ 
+ 	 	if (empty($event))		{
+	 		$event = new stdClass();
 	        $event->name        = $title;
-	        $event->description = "<br/><a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$data->user_id}'>{$title}</a>";
+	        //link to ilp has been removed due to moodle encoding html and outputing it.
+	        $event->description = $title;
 	        $event->format      = 0;
 	        $event->courseid    = 0;
 	        $event->groupid     = 0;
 	        $event->userid      = $data->user_id;
-	        $event->modulename  = '';
+	        $event->modulename  = '0';
 	        $event->instance    = 0;
 	        $event->eventtype   = 'due';
 	        $event->timestart   = $data->$fieldname;
 	        $event->timeduration = time();
-	      
-	        $this->dbc->save_event($event);
+	        
+	        $event->id = $this->dbc->save_event($event);
+
+	        $record					=	new stdClass();
+	        $record->entry_id		=	$entry_id;
+	        $record->reportfield_id	=	$reportfield_id;
+	        $record->event_id		=	$event->id;
+	        $record->timemodified	=	time();	
+	        $record->timecreated	=	time();	
+	        
+	        //create the calendar cross reference record
+	        $this->dbc->create_event_cross_reference($record);
 	        
 	 	}   else	{
-	 		
-	 		$event	=	$this->dbc->get_calendar_event($title,$data->user_id);
-	 		
+	 		$event	=	$this->dbc->get_calendar_event($entry_id,$reportfield_id);
 	 		if (!empty($event))	{	
 	 			$event->timestart		=	$data->$fieldname;
 	 			$event->timemodified	=	time();	
-	 			$event->modulename  = '';
-
+	 			$event->modulename  	= 	'0';
+	 			$event->uuid  			= 	0;
 	 			$this->dbc->update_event($event);
 	 		} 
-	 	
-	 		
 	 	}
-	 	*/
+	 	
+	 	
+	 	
+
 	 	//before saving save a event in the users calendar for this report
 	 	//Add Calendar event
 	 	

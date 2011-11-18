@@ -73,6 +73,55 @@ function xmldb_block_ilp_upgrade($oldversion) {
     }
     
     
+    if ($oldversion < 2011101103)	{
+    	$table = new $xmldb_table('block_ilp_cal_events');
+	
+		$table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+        
+        $table_entry = new $xmldb_field('entry_id');
+        $table_entry->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_entry);
+        
+        $table_rf = new $xmldb_field('reportfield_id');
+        $table_rf->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_rf);
+        
+        $table_event = new $xmldb_field('event_id');
+        $table_event->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_event);
+        
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+        
+        
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        $table_key = new $xmldb_key('date_unique_reportfield');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('reportfield_id'),'block_ilp_report_field','id');
+        $table->addKey($table_key);
+        
+        $table_key = new $xmldb_key('unique_event');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('event_id'),'event','id');
+        $table->addKey($table_key);
+        
+        $table_key = new $xmldb_key('entry');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('entry_id'),'block_ilp_entry','id');
+        $table->addKey($table_key);
+        
+       	
+        $dbman->create_table($table);
+    } 
+    
+    
     
     return true;
 }

@@ -2092,23 +2092,81 @@ class ilp_db_functions	extends ilp_logging {
     	return 	$this->dbc->get_record_sql($sql);
     }
 
-    
+    /**
+     * 
+     * Adds an event to the calendar of a user
+     * @param object $event a object containing details of an event tot be saved into a users calendar
+     */
     function save_event($event)	{
-    	add_event($event);
+    	   	
+    	//we can not user add_event in moodle 2.0 as it requires the user to have persmissions to add events to the 
+    	//calendar however this capability check can be bypassed if we use the calendar event class so we will use add_event in 
+    	//1.9 and calendar_event class in 2.0
+    	global $CFG, $USER;
+    	
+    	
+    	if (stripos($CFG->release,"2.") !== false) {
+    	    require_once($CFG->dirroot.'/calendar/lib.php');
+    		$calevent = new calendar_event($event);
+	    	$calevent->update($event,false);
+    		
+    		if ($calevent !== false) {
+        		return $calevent->id;
+	    	}
+    		
+    	} else {
+    		return add_event($event);
+    	}
     }
     
+    /**
+     * 
+     * Updates a calendar event with new details
+     * @param object $event a object containing details of an event tot be saved into a users calendar
+     */
     function update_event($event)	{
-    	update_event($event);
+    	
+		global $CFG, $USER;
+		
+    	if (stripos($CFG->release,"2.") !== false) {
+    	    require_once($CFG->dirroot.'/calendar/lib.php');
+    		$calevent = calendar_event::load($event->id);
+	    	return $calevent->update($event,false);
+    	} else {
+    		return update_event($event);
+    	}
+    	
+    	
+    	
     }
     
-    function get_calendar_event($name,$entry_id,$user_id)	{
-    	return $this->dbc->get_record('event',array('name'=>$name,'instance'=>$entry_id,'userid'=>$user_id));
+    /**
+     * 
+     * Returns a record from the block_cal_event table  
+     * @param int $entry_id the id of the entry that the record was creared for
+     * @param int $reportfield_id the id of the reportfield that the report was created for
+     */
+    function get_calendar_event($entry_id,$reportfield_id)	{
+    	$sql	=	"SELECT		e.*
+    				 FROM 		{block_ilp_cal_events} as ce,
+    				 			{event} as e
+    				 WHERE		e.id = ce.event_id
+    				 AND		ce.reportfield_id	=	{$reportfield_id}
+    				 AND		ce.entry_id			=	{$entry_id}";
+    	
+    	return $this->dbc->get_record_sql($sql);
     }
     
     
     function get_reportfield_by_id($reportfield_id)	{
     	return $this->dbc->get_record('block_ilp_report_field',array('id'=>$reportfield_id));
     }
+    
+    
+    function create_event_cross_reference($record) {
+    	return $this->dbc->insert_record('block_ilp_cal_events',$record);
+    }
+    
 }
 
 
