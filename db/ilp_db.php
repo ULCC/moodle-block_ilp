@@ -1366,19 +1366,23 @@ class ilp_db_functions	extends ilp_logging {
     } 
     
     
-    /**
+/**
      * Count the number of entries in the given report with a pass state
      * 
      * @param	int $report_id	the id of the report whose entries will be counted
      * @param	int $user_id the id of the  user whose entries will be counted
      * @param	int	$state the state that the report entry should have 
+     * @param	bool $count true if the function should return a count or false to return the
+     * entry records (defaults true) 
      * 
      * @return	mixed int the number of entries or false    
      */
-    public	function count_report_entries_with_state($report_id,$user_id,$state)	{
+    public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true)	{
 			global 		$CFG;
     	
-    		$sql	=	"SELECT		count(e.id)
+			$select	=	(!empty($count))	? "count(e.id)" : " e.* ";
+			
+    		$sql	=	"SELECT		{$select}
     					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
     					 			{$CFG->prefix}block_ilp_plu_ste_ent as pe,
     					 			{$CFG->prefix}block_ilp_plu_ste_items as pi
@@ -1388,8 +1392,43 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		e.user_id		=	{$user_id}
     					 AND		pi.passfail		=	{$state}";
 
+    		return 		(!empty($count)) ? $this->dbc->count_records_sql($sql) : $this->dbc->get_records_sql($sql);
+    }
+    
+    
+    /**
+     * Count the number of entries in the given report with a deadline that has passed
+     * the given time 
+     * 
+     * @param	int $report_id	the id of the report whose entries will be counted
+     * @param	int $user_id the id of the  user whose entries will be counted
+     * @param	array $entries a list of entry ids that should be checked to see 
+     * if they are overdue
+     * @param	int	$time a unix timestamp 
+     * 
+     * @return	mixed int the number of entries or false    
+     */
+    public	function count_overdue_report($report_id,$user_id,$entries,$time)	{
+			global 		$CFG;
+			
+			$entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : ""; 
+			
+			
+    	
+    		$sql	=	"SELECT		count(e.id)
+    					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
+    					 			{$CFG->prefix}block_ilp_plu_ddl 	as 	ddl,
+    					 			{$CFG->prefix}block_ilp_plu_ddl_ent as	ddlent 
+    					 WHERE		e.id			=	ddlent.entry_id
+    					 AND		ddlent.parent_id	=	ddl.id
+    					 AND		e.report_id			=	{$report_id}
+    					 AND		e.user_id			=	{$user_id}
+    					 AND		ddlent.value		>	{$time}
+    					 {$entriessql}";
+
     		return 		$this->dbc->count_records_sql($sql);
     }
+    
     
     
    /**

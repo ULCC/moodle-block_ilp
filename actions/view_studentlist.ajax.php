@@ -228,6 +228,22 @@ if (!empty($studentslist)) {
                 $achievedentries = $dbc->count_report_entries_with_state($r->id, $student->id, ILP_PASSFAIL_PASS);
                 $reporttext = $achievedentries . "/" . $createdentries . " " . get_string('achieved', 'block_ilp');
             }
+            
+        	
+			if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_date_deadline')) {
+				$inprogressentries	=	$dbc->count_report_entries_with_state($r->id,$student->id,ILP_PASSFAIL_UNSET,false);
+				$inprogentries 		=	array(); 
+				
+				if (!empty($inprogressentries)) {
+					foreach ($inprogressent as $e) {
+						$inprogentries[]	=	$e->id;
+					}
+				}
+				
+				//get the number of entries that are overdue
+				$overdueentries			=	$dbc->count_overdue_report($r->id,$student->id,$inprogentries,time());
+				$reporttext				.=	(!empty($overdueentries))?  "<br />".$overdueentries." ".get_string('reportsoverdue','block_ilp') : "";	
+			}
 
             $data[$r->id] = $reporttext;
         }

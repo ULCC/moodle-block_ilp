@@ -121,6 +121,23 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 									$detail->state_report	=	true;
 								}
 								
+								$res = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_date_deadline');
+								if ($res) {
+									
+									$inprogressentries	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_UNSET,false);
+									$inprogentries 		=	array(); 
+									
+									if (!empty($inprogressentries)) {
+										foreach ($inprogressent as $e) {
+											$inprogentries[]	=	$e->id;
+										}
+									}
+									
+									//get the number of entries that are overdue
+									$detail->overdue			=	$this->dbc->count_overdue_report($r->id,$this->student_id,$inprogentries,time());
+									$detail->deadline_report	=	true;
+								}
+							
 								//get the last updated report entry
 								$lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
 	

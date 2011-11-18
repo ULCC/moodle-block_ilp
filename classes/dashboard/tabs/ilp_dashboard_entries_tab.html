@@ -28,6 +28,7 @@ foreach ($reportslist as $rep) {
 			<h2><?php echo $rep->name?></h2>
 			<?php 
 				if (!empty($rep->state_report)) { echo $rep->achieved."/".$rep->entries." ".get_string('achieved','block_ilp'); } else { echo $rep->entries." ".get_string('reports','block_ilp');} ?><br />
+				<?php if (!empty($rep->deadline_report) && $rep->overdue > 0) { echo $rep->overdue." ".get_string('reportsoverdue','block_ilp'); }  ?><br />
 				<?php echo get_string('ilp_dashboard_entries_tab_lastupdate','block_ilp');?>: <?php echo $rep->lastmod; ?><br />
 		</div>
 		

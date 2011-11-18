@@ -182,6 +182,8 @@
 	$string['reportdeadline']					= 	'Report Deadline';
 	$string['reportdeleteerror']				= 	'Report delete error';
 	$string['reportdeleted']					= 	'Report deleted';
+	$string['reportsoverdue']					= 	'Report overdue';
+	
 	$string['required']	 						= 	'Required';
 	$string['reportpermissions']				= 	'Report Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
