@@ -160,14 +160,23 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		 		$fielddata	=	array();
 		 		$comma	= "";
 		 		
-		 		$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename);
+		 		$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, 'passfail');
 		 		
 		 		$optionslist	=	array();
+		 		
+		 		$failedoptions		=	array();
+		 		$achievedoptions	=	array();
 		 		
 		 		if (!empty($objlist)) {
 		 			foreach( $objlist as $obj ){
 						//place the name into an array with value as key
 						$optionslist[ $obj->id ] = $obj->name;
+						
+						if ($obj->passfail == 1) {
+							$failedoptions[]	=	$obj->id;		
+						} else if ($obj->passfail == 2) {
+							$achievedoptions[]	=	$obj->id;
+						}
 		 			}
 		 		}
 
@@ -177,9 +186,21 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 
 		 		$query_string	=	$_SERVER['QUERY_STRING'];
 		 		
+		 		$acheivedimg		=	"achieved.png";
+		 		$overdueimg			=	"overdue.jpg";
+		 		$failedimg			=	"failed.jpg";
+		 		
 			 	foreach($pluginentry as $e) {
-			 		
 			 		$entryobj->$fieldname	.=	($this->get_creator_id($entry) == $USER->id) ? $OUTPUT->single_select($CFG->wwwroot."/blocks/ilp/actions/change_state.php?entry_id={$entry_id}&reportfield_id={$reportfield_id}&$query_string",'item_id',$optionslist,$e->parent_id,$nothing=array(''=>'choosedots'),'sc_rep{$reportfield_id}ent{$entry_id}') : $e->name;
+			 		$img	=	false;
+			 		
+			 		//check if the report is in a failed or achieved state then add the appropriate icon
+			 		if (in_array($e->parent_id,$failedoptions) || in_array($e->parent_id, $achievedoptions)) {
+			 			$img	=	(in_array($e->parent_id,$failedoptions)) ? $failedimg: $acheivedimg;
+			 		} 
+
+			 		//add the icon
+			 		$entryobj->$fieldname	.=	(!empty($img)) ?  "<img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/{$img}' alt='' width='32px' height='32px' />" : '';
 			 	}
 	 		}
 	  }

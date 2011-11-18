@@ -294,7 +294,9 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
  	
 	 	if (!empty($entry)) {
-	 		$entryobj->$fieldname	=	userdate(html_entity_decode($entry->value),'%a %d %B %Y');
+	 		$img	=	 ($entry->value < time()) ?	"<img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/overdue.jpg' alt='' width='32px' height='32px' />"	: ""; 
+	 		
+	 		$entryobj->$fieldname	=	userdate(html_entity_decode($entry->value),'%a %d %B %Y') ." ".$img;
 	 	}
 	  	
 	 }
