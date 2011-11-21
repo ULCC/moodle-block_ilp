@@ -1398,7 +1398,7 @@ class ilp_db_functions	extends ilp_logging {
     
     /**
      * Count the number of entries in the given report with a deadline that has passed
-     * the given time 
+     	* the given time 
      * 
      * @param	int $report_id	the id of the report whose entries will be counted
      * @param	int $user_id the id of the  user whose entries will be counted
@@ -1429,7 +1429,32 @@ class ilp_db_functions	extends ilp_logging {
     		return 		$this->dbc->count_records_sql($sql);
     }
     
-    
+    /**
+     * Returns a list of reports that have deadline dates that fall between the given timestamps
+     * and are in 
+     * 
+     * 
+     * 
+     */
+    public	function get_reports_in_period($ltimestamp,$utimestamp)	{
+    	
+    	$sql	=	"SELECT 		e.*, r.*,ddl.value as deadline
+					   FROM			{block_ilp_entry} 			AS e,
+									{block_ilp_plu_ddl_ent}		AS ddl,
+									{block_ilp_plu_ste_items}	AS stitems,
+									{block_ilp_report}			AS r,
+									{block_ilp_plu_ste_ent}		AS stent
+						WHERE		stitems.passfail = 0
+						  AND		ddl.value > {$ltimestamp}
+						  AND		ddl.value < {$utimestamp}
+						  AND		stent.parent_id = stitems.id
+						  AND		e.id 	=	ddl.entry_id
+						  AND		e.id 	=	stent.entry_id
+						  AND		e.report_id	= r.id";
+    	
+    	return 		$this->dbc->get_records_sql($sql);
+    	
+    }
     
    /**
     * Returns the last updated entry for the given student in the gicen report

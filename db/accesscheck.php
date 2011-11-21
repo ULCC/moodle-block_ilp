@@ -77,6 +77,7 @@ $access_editcomment		=	has_capability('block/ilp:editcomment', $context);
 $access_deletecomment	=	has_capability('block/ilp:deletecomment', $context);
 $access_viewcomment		=	has_capability('block/ilp:viewcomment', $context);
 
+
 //TODO: we should not be in the course context change to another context
 $PAGE->set_context($context);
 
