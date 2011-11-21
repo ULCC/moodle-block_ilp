@@ -96,9 +96,9 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 							
 							$canviewreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$viewcapability->id);
 							
-							if (!empty($caneditreport) && !empty($canaddreport) && !empty($canviewreport)) {
+							if (!empty($caneditreport) || !empty($canaddreport) || !empty($canviewreport)) {
 							
-								$detail					=	new object();
+								$detail					=	new stdClass();
 								$detail->report_id		=	$r->id;
 								
 								
