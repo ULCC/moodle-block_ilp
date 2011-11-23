@@ -461,7 +461,7 @@ class ilp_db_functions	extends ilp_logging {
 		//the operand that will be used
 		if (!empty($position)) {
 			$otherfield		=	(!empty($type)) ? $position-1 : $position+1;
-			$positionsql 	=  "AND position = {$position} ||  position = {$otherfield}";
+			$positionsql 	=  "AND (position = {$position} ||  position = {$otherfield})";
 		}
 		
 		$sql	=	"SELECT		*
@@ -469,8 +469,7 @@ class ilp_db_functions	extends ilp_logging {
 					 WHERE		report_id	=	{$report_id}
 					{$positionsql}
 					 ORDER BY 	position";
-					
-					
+			
 		return		$this->dbc->get_records_sql($sql);
 	}
 	
@@ -1290,7 +1289,7 @@ class ilp_db_functions	extends ilp_logging {
     public function get_next_position( $report_id, $tablename ){
     	global $CFG;
         $tablename = $CFG->prefix . $tablename;
-        $sql = "SELECT MAX( position ) n FROM  $tablename WHERE report_id = $report_id";
+        $sql = "SELECT MAX( position ) n FROM  $tablename WHERE report_id = $report_id";  //gregp - records should be counted not the position #
         $res = array_values( $this->dbc->get_records_sql( $sql ) );
         $n = $res[0]->n;
         if( $n ){
