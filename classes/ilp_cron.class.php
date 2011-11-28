@@ -19,7 +19,7 @@ class ilp_cron	{
 	}
 	
 	
-	function run_cron()	{	
+	function run()	{	
 		
 		$notificationdays	=	get_config('block_ilp','deadlinenotification');
 		
@@ -28,6 +28,8 @@ class ilp_cron	{
 			$uppertimestamp		=	mktime(23,59,59,date('n'),date('j')+$notificationdays);
 			
 			$reports	=	$this->get_list($lowertimestamp,$uppertimestamp);
+			mtrace( "running cron" );
+			mtrace( $reports);
 			
 			foreach ($reports as $r) {
 				
