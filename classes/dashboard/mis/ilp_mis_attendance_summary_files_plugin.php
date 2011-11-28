@@ -117,9 +117,9 @@ class ilp_mis_attendance_summary_files_plugin extends ilp_mis_attendance_plugin	
       			$fileName = $plpuser->username.'_ilp_'.$dir.'.pdf';
      			    		
       		if (file_exists($ilp_filesDir.$dir.'/'.$fileName))
-    			$link =	'<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/download_reports.php?'.$dir.'/'.$fileName.'">'.$fileName.''.'</a>'.'<img src="'.$CFG->wwwroot.'/pix/f/pdf.gif"/>';
+    			$link =	'<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/download_reports.php?'.$dir.'/'.$fileName.'">'.'View'.''.'</a>'.'<img src="'.$CFG->wwwroot.'/pix/f/pdf.gif"/>';
     		else 
-    			$link = 'No Report File found';   		
+    			$link = 'None Recorded';   		
     		
     		$this->data[]	=	 array( $dir, $link);   		
     	}    	
