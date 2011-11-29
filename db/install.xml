@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/ilp/db" VERSION="20111010" COMMENT="XMLDB file for Moodle blocks/ilp"
+<XMLDB PATH="blocks/ilp/db" VERSION="20111129" COMMENT="XMLDB file for Moodle blocks/ilp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -227,7 +227,7 @@
         <KEY NAME="mis_plugin_primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_user_status" COMMENT="block_ilp_user_status table retrofitted from MySQL" PREVIOUS="block_ilp_mis_plugin">
+    <TABLE NAME="block_ilp_user_status" COMMENT="block_ilp_user_status table retrofitted from MySQL" PREVIOUS="block_ilp_mis_plugin" NEXT="block_ilp_cal_events">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="user_id"/>
         <FIELD NAME="user_id" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="user_modified_id"/>
@@ -240,6 +240,19 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="status_user"/>
         <KEY NAME="status_user" TYPE="foreign-unique" FIELDS="user_id" REFTABLE="user" REFFIELDS="id" PREVIOUS="primary" NEXT="modfying_user"/>
         <KEY NAME="modfying_user" TYPE="foreign" FIELDS="user_modified_id" REFTABLE="user" REFFIELDS="id" PREVIOUS="status_user"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_ilp_cal_events" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_ilp_user_status">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="entry_id"/>
+        <FIELD NAME="entry_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" PREVIOUS="id" NEXT="reportfield_id"/>
+        <FIELD NAME="reportfield_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" PREVIOUS="entry_id" NEXT="event_id"/>
+        <FIELD NAME="event_id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" PREVIOUS="reportfield_id" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" PREVIOUS="event_id" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" PREVIOUS="timecreated"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
   </TABLES>
