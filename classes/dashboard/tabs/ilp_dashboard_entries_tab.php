@@ -122,7 +122,8 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 								}
 								
 								$res = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_date_deadline');
-								if ($res) {
+								$res2 = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state');
+								if (!empty($res) && !empty($res2)) {
 									
 									$inprogressentries	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_UNSET,false);
 									$inprogentries 		=	array(); 
