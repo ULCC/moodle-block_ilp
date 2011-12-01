@@ -121,9 +121,9 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 									$detail->state_report	=	true;
 								}
 								
-								$res = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_date_deadline');
-								$res2 = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state');
-								if (!empty($res) && !empty($res2)) {
+								$has_deadlinefield 	= $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_date_deadline');
+								$has_statefield 	= $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state');
+								if (!empty($has_deadlinefield) && !empty($has_statefield)) {
 									
 									$inprogressentries	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_UNSET,false);
 									$inprogentries 		=	array(); 

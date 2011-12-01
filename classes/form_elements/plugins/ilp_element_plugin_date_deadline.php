@@ -294,8 +294,22 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
  	
 	 	if (!empty($entry)) {
-	 		$img	=	 ($entry->value < time()) ?	"<img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/overdue.jpg' alt='' width='32px' height='32px' />"	: ""; 
 	 		
+	 		//we can only judge whether a report entry is overdue or not if the report has a state field if it does not 
+	 		//we can never correctly say that the entry is overdue. 
+	 		
+	 		$entryrecord	=	$this->dbc->get_entry_by_id($entry_id);
+	 		//check if current report has state field
+	 		$has_statefield 	= $this->dbc->has_plugin_field($entryrecord->report_id,'ilp_element_plugin_state');
+	 		$img	=	"";
+	 		
+	 		if (!empty($has_statefield))	{ 
+	 			//check if the entry is in a unset state 
+				$recordstate	=	$this->dbc->count_report_entries_with_state($entryrecord->report_id,$entryrecord->user_id,ILP_PASSFAIL_UNSET,false,$entry_id);
+	 			if (!empty($recordstate) && $entry->value < time()) {
+  			 		$img	=	 "<img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/overdue.jpg' alt='' width='32px' height='32px' />";
+	 			} 
+	 		}
 	 		$entryobj->$fieldname	=	userdate(html_entity_decode($entry->value),'%a %d %B %Y') ." ".$img;
 	 	}
 	  	

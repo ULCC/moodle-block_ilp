@@ -1376,10 +1376,12 @@ class ilp_db_functions	extends ilp_logging {
      * 
      * @return	mixed int the number of entries or false    
      */
-    public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true)	{
+    public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
 			global 		$CFG;
     	
 			$select	=	(!empty($count))	? "count(e.id)" : " e.* ";
+			
+			$entrysql	=	(!empty($entry_id))	? " AND e.id = {$entry_id} "	: "";
 			
     		$sql	=	"SELECT		{$select}
     					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
@@ -1389,7 +1391,8 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		pe.parent_id	=	pi.id
     					 AND		e.report_id		=	{$report_id}
     					 AND		e.user_id		=	{$user_id}
-    					 AND		pi.passfail		=	{$state}";
+    					 AND		pi.passfail		=	{$state}
+    					 $entrysql";
 
     		return 		(!empty($count)) ? $this->dbc->count_records_sql($sql) : $this->dbc->get_records_sql($sql);
     }
