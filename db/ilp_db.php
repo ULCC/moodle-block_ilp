@@ -1424,8 +1424,6 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		e.user_id			=	{$user_id}
     					 AND		ddlent.value		<	{$time}
     					 {$entriessql}";
-
-    		var_dump($sql);			 
     					 
     		return 		$this->dbc->count_records_sql($sql);
     }
