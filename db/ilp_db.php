@@ -1433,8 +1433,8 @@ class ilp_db_functions	extends ilp_logging {
      * Returns a list of reports that have deadline dates that fall between the given timestamps
      * and are in 
      * 
-     * 
-     * 
+     * @param	$ltimestamp	lower time stamp for the records that will be retrieved
+     * @param	$utimestamp	upper time stamp for the records that will be retrieved 
      */
     public	function get_reports_in_period($ltimestamp,$utimestamp)	{
     	
