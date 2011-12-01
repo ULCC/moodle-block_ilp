@@ -1422,9 +1422,11 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		ddlent.parent_id	=	ddl.id
     					 AND		e.report_id			=	{$report_id}
     					 AND		e.user_id			=	{$user_id}
-    					 AND		ddlent.value		>	{$time}
+    					 AND		ddlent.value		<	{$time}
     					 {$entriessql}";
 
+    		var_dump($sql);			 
+    					 
     		return 		$this->dbc->count_records_sql($sql);
     }
     
