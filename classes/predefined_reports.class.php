@@ -36,7 +36,7 @@ class quickdb{
         if( 'INSERT' == strtoupper( substr( $sql, 0, 6 ) ) ){
             $sqlwords = preg_split( '/\s/', $sql );
             $table = $sqlwords[ 2 ];
-            $action = LOG_ADD;
+            $action = ILP_LOG_ADD;
             
         }
         if( $CFG->prefix = substr( $table, 0, strlen( $CFG->prefix ) ) ){

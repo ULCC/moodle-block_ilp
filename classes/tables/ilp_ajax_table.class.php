@@ -17,8 +17,8 @@
 require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_tablelib.class.php');
 
 define('TABLE_VAR_PAGESIZE',   7);
-define('TABLE_VAR_HOZOFFSET',  8);
-define('TABLE_VAR_FILTERS',    9);
+define('ILP_TABLE_VAR_HOZOFFSET',  8);
+define('ILP_TABLE_VAR_FILTERS',    9);
 
 class ilp_ajax_table extends ilp_flexible_table {
 
@@ -68,15 +68,15 @@ class ilp_ajax_table extends ilp_flexible_table {
         $hozsize = get_config('block_ilp', 'defaulthozsize');
         $pagesize = get_config('block_ilp', 'defaultverticalperpage');
         $this->request = array(
-            TABLE_VAR_SORT      => 'tsort',
-            TABLE_VAR_HIDE      => 'thide',
-            TABLE_VAR_SHOW      => 'tshow',
-            TABLE_VAR_IFIRST    => 'tifirst',
-            TABLE_VAR_ILAST     => 'tilast',
-            TABLE_VAR_PAGE      => 'page',
-            TABLE_VAR_PAGESIZE  => 'pagesize',
-            TABLE_VAR_HOZOFFSET => 'currhoz',
-            TABLE_VAR_FILTERS   => 'filters'
+            ILP_TABLE_VAR_SORT      => 'tsort',
+            ILP_TABLE_VAR_HIDE      => 'thide',
+            ILP_TABLE_VAR_SHOW      => 'tshow',
+            ILP_TABLE_VAR_IFIRST    => 'tifirst',
+            ILP_TABLE_VAR_ILAST     => 'tilast',
+            ILP_TABLE_VAR_PAGE      => 'page',
+            ILP_TABLE_VAR_PAGESIZE  => 'pagesize',
+            ILP_TABLE_VAR_HOZOFFSET => 'currhoz',
+            ILP_TABLE_VAR_FILTERS   => 'filters'
         );
 
         // include and instantiate the db class
@@ -105,8 +105,8 @@ class ilp_ajax_table extends ilp_flexible_table {
 
 
         
-        if(isset($_POST[$this->uniqueid][$this->request[TABLE_VAR_PAGESIZE]])) {
-            $this->sess->pagesize = $_POST[$this->uniqueid][$this->request[TABLE_VAR_PAGESIZE]];
+        if(isset($_POST[$this->uniqueid][$this->request[ILP_TABLE_VAR_PAGESIZE]])) {
+            $this->sess->pagesize = $_POST[$this->uniqueid][$this->request[ILP_TABLE_VAR_PAGESIZE]];
 
             // reset the current page to zero as we're altering the number of pages
             $this->sess->currpage = 0;
@@ -114,20 +114,20 @@ class ilp_ajax_table extends ilp_flexible_table {
 
         $this->pagesize = $this->sess->pagesize;
 
-        if(isset($_GET[$this->uniqueid][$this->request[TABLE_VAR_HOZOFFSET]])) {
-            $this->sess->currhoz = $_GET[$this->uniqueid][$this->request[TABLE_VAR_HOZOFFSET]];
+        if(isset($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HOZOFFSET]])) {
+            $this->sess->currhoz = $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HOZOFFSET]];
         }
 
         $this->currhoz = $this->sess->currhoz;
 
-        if(isset($_POST[$this->uniqueid][$this->request[TABLE_VAR_FILTERS]])) {
-            $this->sess->filters = $_POST[$this->uniqueid][$this->request[TABLE_VAR_FILTERS]];
+        if(isset($_POST[$this->uniqueid][$this->request[ILP_TABLE_VAR_FILTERS]])) {
+            $this->sess->filters = $_POST[$this->uniqueid][$this->request[ILP_TABLE_VAR_FILTERS]];
         }
 
         $this->filters = $this->sess->filters;
 
-        if(isset($_GET[$this->uniqueid][$this->request[TABLE_VAR_PAGE]])) {
-            $this->sess->currpage = $_GET[$this->uniqueid][$this->request[TABLE_VAR_PAGE]];
+        if(isset($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_PAGE]])) {
+            $this->sess->currpage = $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_PAGE]];
         }
 
         // set the optional filters
@@ -188,15 +188,15 @@ class ilp_ajax_table extends ilp_flexible_table {
             return false;
         }
 
-        if(!empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]])) {
+        if(!empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]])) {
             // Show this column
-            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SHOW]]] = false;
+            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]] = false;
         }
-        else if(!empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]])) {
+        else if(!empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]])) {
          	// Hide this column
-            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]] = true;
-            if(array_key_exists($_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]], $this->sess->sortby)) {
-                unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[TABLE_VAR_HIDE]]]);
+            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]] = true;
+            if(array_key_exists($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]], $this->sess->sortby)) {
+                unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]]);
             }
         }
         
@@ -210,21 +210,21 @@ class ilp_ajax_table extends ilp_flexible_table {
         
         
         if(
-            !empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]) && $this->is_sortable($_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]) &&
-            (isset($this->columns[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]]) ||
-                (($_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]] == 'firstname' || $_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]] == 'lastname') && isset($this->columns['fullname']))
+            !empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]]) && $this->is_sortable($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]]) &&
+            (isset($this->columns[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]]]) ||
+                (($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]] == 'firstname' || $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]] == 'lastname') && isset($this->columns['fullname']))
             ))
         {
-            if(empty($this->sess->collapse[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]])) {
-                if(array_key_exists($_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]], $this->sess->sortby)) {
+            if(empty($this->sess->collapse[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]]])) {
+                if(array_key_exists($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]], $this->sess->sortby)) {
                     // This key already exists somewhere. Change its sortorder and bring it to the top.
-                    $sortorder = $this->sess->sortby[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]] == SORT_ASC ? SORT_DESC : SORT_ASC;
-                    unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]]]);
-                    $this->sess->sortby = array_merge(array($_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]] => $sortorder), $this->sess->sortby);
+                    $sortorder = $this->sess->sortby[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]]] == SORT_ASC ? SORT_DESC : SORT_ASC;
+                    unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]]]);
+                    $this->sess->sortby = array_merge(array($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]] => $sortorder), $this->sess->sortby);
                 }
                 else {
                     // Key doesn't exist, so just add it to the beginning of the array, ascending order
-                    $this->sess->sortby = array_merge(array($_GET[$this->uniqueid][$this->request[TABLE_VAR_SORT]] => SORT_ASC), $this->sess->sortby);
+                    $this->sess->sortby = array_merge(array($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SORT]] => SORT_ASC), $this->sess->sortby);
                 }
                 // Finally, make sure that no more than $this->maxsortkeys are present into the array
                 if(!empty($this->maxsortkeys) && ($sortkeys = count($this->sess->sortby)) > $this->maxsortkeys) {
@@ -240,26 +240,26 @@ class ilp_ajax_table extends ilp_flexible_table {
             $this->sess->sortby = array ($this->sort_default_column => ($this->sort_default_order == SORT_DESC ? SORT_DESC : SORT_ASC));
         }
 
-        if(isset($_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]])) {
-            if(empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]]) || is_numeric(strpos(get_string('alphabet','langconfig'), $_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]]))) {
-                $this->sess->i_last = $_GET[$this->uniqueid][$this->request[TABLE_VAR_ILAST]];
+        if(isset($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_ILAST]])) {
+            if(empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_ILAST]]) || is_numeric(strpos(get_string('alphabet','langconfig'), $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_ILAST]]))) {
+                $this->sess->i_last = $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_ILAST]];
             }
         }
 
-        if(isset($_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]])) {
-            if(empty($_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]]) || is_numeric(strpos(get_string('alphabet','langconfig'), $_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]]))) {
-                $this->sess->i_first = $_GET[$this->uniqueid][$this->request[TABLE_VAR_IFIRST]];
+        if(isset($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_IFIRST]])) {
+            if(empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_IFIRST]]) || is_numeric(strpos(get_string('alphabet','langconfig'), $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_IFIRST]]))) {
+                $this->sess->i_first = $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_IFIRST]];
             }
         }
 
         if(empty($this->baseurl)) {
             $getcopy  = !empty($_GET[$this->uniqueid]) ? $_GET[$this->uniqueid] : array();
-            unset($getcopy[$this->request[TABLE_VAR_SHOW]]);
-            unset($getcopy[$this->request[TABLE_VAR_HIDE]]);
-            unset($getcopy[$this->request[TABLE_VAR_SORT]]);
-            unset($getcopy[$this->request[TABLE_VAR_IFIRST]]);
-            unset($getcopy[$this->request[TABLE_VAR_ILAST]]);
-            unset($getcopy[$this->request[TABLE_VAR_PAGE]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_SHOW]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_HIDE]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_SORT]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_IFIRST]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_ILAST]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_PAGE]]);
 
             $strippedurl = strip_querystring(qualified_me());
 
@@ -292,7 +292,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         }
 
         $params = optional_param($this->uniqueid, array(),PARAM_RAW);
-        $this->currpage = isset($params[$this->request[TABLE_VAR_PAGE]]) ? $params[$this->request[TABLE_VAR_PAGE]] : $SESSION->flextable[$this->uniqueid]->currpage;
+        $this->currpage = isset($params[$this->request[ILP_TABLE_VAR_PAGE]]) ? $params[$this->request[ILP_TABLE_VAR_PAGE]] : $SESSION->flextable[$this->uniqueid]->currpage;
         $this->setup = true;
 
     /// Always introduce the "flexible" class for the table if not specified
@@ -383,7 +383,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
             echo '<div class="initialbar firstinitial">'.get_string('firstname').' : ';
             if(!empty($this->sess->i_first)) {
-                $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_IFIRST].']=';
+                $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_IFIRST].']=';
                 echo '<a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$strall.'</a>';
             } else {
                 echo '<strong>'.$strall.'</strong>';
@@ -392,7 +392,7 @@ class ilp_ajax_table extends ilp_flexible_table {
                 if (isset($this->sess->i_first) && $letter == $this->sess->i_first) {
                     echo ' <strong>'.$letter.'</strong>';
                 } else {
-                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_IFIRST].']='.$letter.'&'.$this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']=0';
+                    $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_IFIRST].']='.$letter.'&'.$this->uniqueid.'['.$this->request[ILP_TABLE_VAR_PAGE].']=0';
                     echo ' <a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$letter.'</a>';
                 } 
             }
@@ -402,7 +402,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
             echo '<div class="initialbar lastinitial">'.get_string('lastname').' : ';
             if(!empty($this->sess->i_last)) {
-                $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_ILAST].']=';
+                $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_ILAST].']=';
                 echo '<a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$strall.'</a>';
             } else {
                 echo '<strong>'.$strall.'</strong>';
@@ -411,7 +411,7 @@ class ilp_ajax_table extends ilp_flexible_table {
                 if (isset($this->sess->i_last) && $letter == $this->sess->i_last) {
                     echo ' <strong>'.$letter.'</strong>';
                 } else {
-                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_ILAST].']='.$letter.'&'.$this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']=0';
+                    $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_ILAST].']='.$letter.'&'.$this->uniqueid.'['.$this->request[ILP_TABLE_VAR_PAGE].']=0';
                     echo ' <a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$letter.'</a>';
                 }
             }
@@ -532,7 +532,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
             $this->wrap_html_finish();
             // Paging bar
-            if(in_array(TABLE_P_BOTTOM, $this->showdownloadbuttonsat)) {
+            if(in_array(ILP_TABLE_P_BOTTOM, $this->showdownloadbuttonsat)) {
                 echo $this->download_buttons();
             }
         }
@@ -556,12 +556,12 @@ class ilp_ajax_table extends ilp_flexible_table {
             if($this->is_collapsible) {
                 if(!empty($this->sess->collapse[$column])) {
                     // some headers contain < br/> tags, do not include in title
-                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_SHOW].']='.$column;
+                    $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_SHOW].']='.$column;
                     $icon_hide = ' <a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');"><img src="'.$OUTPUT->pix_url('t/switch_plus') . '" title="'.get_string('show').' '.strip_tags($this->headers[$index]).'" alt="'.get_string('show').'" /></a>';
                 }
                 else if($this->headers[$index] !== NULL) {
                     // some headers contain < br/> tags, do not include in title
-                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_HIDE].']='.$column;
+                    $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_HIDE].']='.$column;
                     $icon_hide = ' <a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');"><img src="'.$OUTPUT->pix_url('t/switch_minus') . '" title="'.get_string('hide').' '.strip_tags($this->headers[$index]).'" alt="'.get_string('hide').'" /></a>';
                 }
             }
@@ -614,13 +614,13 @@ class ilp_ajax_table extends ilp_flexible_table {
                     if (($CFG->fullnamedisplay == 'firstname lastname') or
                         ($CFG->fullnamedisplay == 'firstname') or
                         ($CFG->fullnamedisplay == 'language' and $fullnamelanguage == 'firstname lastname' )) {
-                        $suffix1 = $this->uniqueid.'['.$this->request[TABLE_VAR_SORT].']=firstname';
-                        $suffix2 = $this->uniqueid.'['.$this->request[TABLE_VAR_SORT].']=lastname';
+                        $suffix1 = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_SORT].']=firstname';
+                        $suffix2 = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_SORT].']=lastname';
                         $this->headers[$index] = get_string('firstname').'&nbsp;<a href="'.$this->baseurl.$suffix1.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix1.'\');">'.$icon_sort_first.'</a> / '.
                                                  get_string('lastname').'&nbsp;<a href="'.$this->baseurl.$suffix2.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix2.'\');">'.$icon_sort_last.'</a> ';
                     } else {
-                        $suffix1 = $this->uniqueid.'['.$this->request[TABLE_VAR_SORT].']=lastname';
-                        $suffix2 = $this->uniqueid.'['.$this->request[TABLE_VAR_SORT].']=firstname';
+                        $suffix1 = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_SORT].']=lastname';
+                        $suffix2 = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_SORT].']=firstname';
                         $this->headers[$index] = get_string('lastname').'&nbsp;<a href="'.$this->baseurl.$suffix1.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix1.'\');">'.$icon_sort_last.'</a> / '.
                                                  get_string('firstname').'&nbsp;<a href="'.$this->baseurl.$suffix2.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix2.'\');">'.$icon_sort_first.'</a> ';
                     }
@@ -646,7 +646,7 @@ class ilp_ajax_table extends ilp_flexible_table {
                         $icon_sort = '<img src="'.$OUTPUT->pix_url('t/move') . '" title="'.get_string('sortasc', 'grades').'" alt="'.get_string('asc').'" />';
                         $localsortorder = get_string('asc');
                     }
-                    $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_SORT].']='.$column;
+                    $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_SORT].']='.$column;
                     $this->headers[$index] = $this->headers[$index].'&nbsp;<a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$icon_sort.'</a>';
                 }
 
@@ -693,7 +693,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         // Do we need to print initial bars?
         $this->print_initials_bar();
 
-        if(in_array(TABLE_P_TOP, $this->showdownloadbuttonsat)) {
+        if(in_array(ILP_TABLE_P_TOP, $this->showdownloadbuttonsat)) {
             echo $this->download_buttons();
         }
 
@@ -744,7 +744,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
         if ($this->currpage > 0) {
             $pagenum = $this->currpage - 1;
-            $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']'.'='.$pagenum;
+            $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_PAGE].']'.'='.$pagenum;
             $output .= '&nbsp;(<a class="previous" href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.get_string('previous').'</a>)&nbsp;';
         }
         if ($this->pagesize > 0) {
@@ -754,7 +754,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         }
         if ($this->currpage > 15) {
             $startpage = $this->currpage - 10;
-            $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']' .'=0';
+            $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_PAGE].']' .'=0';
             $output .= '&nbsp;<a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">1</a>&nbsp;...';
         } else {
             $startpage = 0;
@@ -766,7 +766,7 @@ class ilp_ajax_table extends ilp_flexible_table {
             if ($this->currpage == $currpage && empty($nocurr)) {
                 $output .= '&nbsp;&nbsp;'. $displaypage;
             } else {
-                $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']'.'='.$currpage;
+                $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_PAGE].']'.'='.$currpage;
                 $output .= '&nbsp;&nbsp;<a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$displaypage.'</a>';
             }
             $displaycount++;
@@ -774,12 +774,12 @@ class ilp_ajax_table extends ilp_flexible_table {
         }
         if ($currpage < $lastpage) {
             $lastpageactual = $lastpage - 1;
-            $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']' .'='. $lastpageactual;
+            $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_PAGE].']' .'='. $lastpageactual;
             $output .= '&nbsp;...<a href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.$lastpage.'</a>&nbsp;';
         }
         $pagenum = $this->currpage + 1;
         if ($pagenum != $displaypage) {
-            $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_PAGE].']'.'='.$pagenum;
+            $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_PAGE].']'.'='.$pagenum;
             $output .= '&nbsp;&nbsp;(<a class="next" href="'.$this->baseurl.$suffix.$this->fragment.'" onclick="return M.ilp_standard_functions.ajax_request(\''.$this->uniqueid.'_container\', \''.$this->ajaxurl.$suffix.'\');">'.get_string('next').'</a>)';
         }
 
@@ -859,7 +859,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
                     if($hozleftdouble !== false) {
                         $title = ($hozleftdouble == 0) ? get_string('movetoend', 'block_ilp') : get_string('moveleft', 'block_ilp').' '.abs($this->currhoz - $hozleftdouble);
-                        $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_HOZOFFSET].']='.$hozleftdouble; ?>
+                        $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_HOZOFFSET].']='.$hozleftdouble; ?>
                         <a href="<?php echo $this->baseurl.$suffix.$this->fragment; ?>" onclick="return M.ilp_standard_functions.M.ilp_standard_functions.ajax_request('<?php echo $this->uniqueid; ?>_container', '<?php echo $this->ajaxurl.$suffix; ?>');">
                             <img alt="&lt;&lt;" title="<?php echo $title; ?>" src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/icons/moveleft2.gif" />
                         </a>
@@ -873,7 +873,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
                     if($hozleftsingle !== false) {
                         $title = get_string('moveleftone', 'block_ilp');
-                        $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_HOZOFFSET].']='.$hozleftsingle; ?>
+                        $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_HOZOFFSET].']='.$hozleftsingle; ?>
                         <a href="<?php echo $this->baseurl.$suffix.$this->fragment; ?>" onclick="return M.ilp_standard_functions.ajax_request('<?php echo $this->uniqueid; ?>_container', '<?php echo $this->ajaxurl.$suffix; ?>');">
                             <img alt="&lt;" title="<?php echo $title; ?>" src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/icons/moveleft.gif" />
                         </a>
@@ -896,7 +896,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
                     if($hozrightsingle !== false) {
                         $title = get_string('moverightone', 'block_ilp');
-                        $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_HOZOFFSET].']='.$hozrightsingle; ?>
+                        $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_HOZOFFSET].']='.$hozrightsingle; ?>
                         <a href="<?php echo $this->baseurl.$suffix.$this->fragment; ?>" onclick="return M.ilp_standard_functions.ajax_request('<?php echo $this->uniqueid; ?>_container', '<?php echo $this->ajaxurl.$suffix; ?>');">
                             <img alt="&gt;" title="<?php echo $title; ?>" src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/icons/moveright.gif" />
                         </a>
@@ -911,7 +911,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
                     if($hozrightdouble !== false) {
                         $title = ($hozrightdouble+$this->hozsize == $this->totalcols) ? get_string('movetoend', 'block_ilp') : get_string('moveright', 'block_ilp').' '.abs($this->currhoz - $hozrightdouble);
-                        $suffix = $this->uniqueid.'['.$this->request[TABLE_VAR_HOZOFFSET].']='.$hozrightdouble; ?>
+                        $suffix = $this->uniqueid.'['.$this->request[ILP_TABLE_VAR_HOZOFFSET].']='.$hozrightdouble; ?>
                         <a href="<?php echo $this->baseurl.$suffix.$this->fragment; ?>" onclick="return M.ilp_standard_functions.ajax_request('<?php echo $this->uniqueid; ?>_container', '<?php echo $this->ajaxurl.$suffix; ?>');">
                             <img alt="&gt;&gt;" title="<?php echo $title; ?>" src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/icons/moveright2.gif" />
                         </a>

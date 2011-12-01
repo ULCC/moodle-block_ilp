@@ -77,7 +77,7 @@ if (!empty($reportfields)) {
 			$icon	=	$OUTPUT->pix_url("/t/up");
 			$movetype	=	"up";
 			
-			$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_field.php?reportfield_id={$row->id}&report_id={$report_id}&move=".MOVE_UP."&position={$row->position}'>
+			$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_field.php?reportfield_id={$row->id}&report_id={$report_id}&move=".ILP_MOVE_UP."&position={$row->position}'>
 									<img class='move' src='{$icon}' alt='{$title}' title='{$title}' />
 								 	</a>";
 		} else {
@@ -90,7 +90,7 @@ if (!empty($reportfields)) {
 			$icon	=	$OUTPUT->pix_url("/t/down");
 			$movetype	=	"down";
 			
-			$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_field.php?reportfield_id={$row->id}&report_id={$report_id}&move=".MOVE_DOWN."&position={$row->position}'>
+			$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_field.php?reportfield_id={$row->id}&report_id={$report_id}&move=".ILP_MOVE_DOWN."&position={$row->position}'>
 									<img class='move' src='{$icon}' alt='{$title}' title='{$title}' />
 								 	</a>";
 		} else {

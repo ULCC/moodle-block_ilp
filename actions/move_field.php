@@ -70,6 +70,6 @@ $resulttext = (!empty($movesuc)) ? get_string("fieldmovesuc", 'block_ilp') : get
 
 //$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id.'&course_id='.$course_id;
 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
-redirect($return_url, $resulttext, REDIRECT_DELAY);
+redirect($return_url, $resulttext, ILP_REDIRECT_DELAY);
 
 ?>

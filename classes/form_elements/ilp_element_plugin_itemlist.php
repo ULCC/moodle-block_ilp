@@ -244,7 +244,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		$optionlist = $this->get_option_list( $this->reportfield_id );
 
     	if (!empty($this->description)) {
-    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),STRIP_TAGS_DESCRIPTION));
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
     		$this->label = '';
     	} 
 
@@ -258,7 +258,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
             array('class' => 'form_input')
         );
 		
-        if( OPTIONMULTI == $this->selecttype ){
+        if( ILP_OPTIONMULTI == $this->selecttype ){
 			$select->setMultiple(true);
 		}
         

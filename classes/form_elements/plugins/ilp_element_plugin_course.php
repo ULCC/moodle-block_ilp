@@ -17,7 +17,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
     	$this->tablename = "block_ilp_plu_crs";
     	$this->data_entry_tablename = "block_ilp_plu_crs_ent";
 		$this->items_tablename = false;		//items tablename is the course table
-    	$this->selecttype = OPTIONSINGLE;
+    	$this->selecttype = ILP_OPTIONSINGLE;
 		$this->optionlist = false;
         $this->external_items_table = 'course';
         $this->external_items_keyfield = 'id';
@@ -209,7 +209,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 		$optionlist = $this->get_option_list( $this->reportfield_id, $user_id );
 
     	if (!empty($this->description)) {
-    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),STRIP_TAGS_DESCRIPTION));
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
     		$this->label = '';
     	} 
 
@@ -223,7 +223,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
             array('class' => 'form_input')
         );
 		
-        if( OPTIONMULTI == $this->selecttype ){
+        if( ILP_OPTIONMULTI == $this->selecttype ){
 			$select->setMultiple(true);
 		}
         

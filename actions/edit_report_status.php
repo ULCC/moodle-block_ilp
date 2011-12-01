@@ -48,6 +48,6 @@ if (!empty($res)) {
 } 
 
 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?report_id='.$report_id;
-redirect($return_url, $resulttext, REDIRECT_DELAY);
+redirect($return_url, $resulttext, ILP_REDIRECT_DELAY);
 
 ?>

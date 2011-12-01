@@ -500,7 +500,7 @@ class block_ilp extends block_list {
 		    //the config page with the appropriate url
 		    $returnurl .= (!empty($bui_editid)) ?  "&bui_editid={$bui_editid}" : "&blockaction={$blockaction}&instanceid={$instanceid}";	
 		    //redirect the user back to the edit page
-        	 redirect($returnurl, '', REDIRECT_DELAY);
+        	 redirect($returnurl, '', ILP_REDIRECT_DELAY);
         }
         
         // and now actually save it in the parent class

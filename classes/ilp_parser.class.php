@@ -152,7 +152,7 @@ class ilp_parser {
                 }
             }
 
-        if ($type == PARAM_ARRAY) {
+        if ($type == ILP_PARAM_ARRAY) {
                 if(!is_array($param)) {
                     return false;
                 } else {

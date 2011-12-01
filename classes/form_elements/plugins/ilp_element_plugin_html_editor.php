@@ -193,7 +193,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
     	$fieldname	=	"{$this->reportfield_id}_field";
     	
     	if (!empty($this->description)) {
-    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),STRIP_TAGS_DESCRIPTION));
+    		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
     		$this->label = '';
     	} 
     	//text field for element label

@@ -250,9 +250,9 @@ class moodle2_renderer_emulator {
     	}
 
 	    // if it too long then we need to truncate
-	    if($length > MAXLENGTH_BREADCRUMB) {
+	    if($length > ILP_MAXLENGTH_BREADCRUMB) {
 	        // calculate the per crumb limit
-	        $limit = round(MAXLENGTH_BREADCRUMB/count($breadcrumbs));
+	        $limit = round(ILP_MAXLENGTH_BREADCRUMB/count($breadcrumbs));
 	        // enforce it
 	        foreach($breadcrumbs as $id => $crumb) {
 	            $breadcrumbs[$id]['name'] = ilp_limit_length($crumb['name'], $limit);

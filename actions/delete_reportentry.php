@@ -93,7 +93,7 @@ if (!empty($reportfields))	{
 $dbc->delete_entry_by_id($entry_id);
 
 $return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&course_id={$course_id}&selectedtab=$selectedtab&tabitem={$tabitem}";
-redirect($return_url, get_string('entrydeleted','block_ilp'), REDIRECT_DELAY);
+redirect($return_url, get_string('entrydeleted','block_ilp'), ILP_REDIRECT_DELAY);
 
 
 

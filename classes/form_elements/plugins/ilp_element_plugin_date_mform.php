@@ -7,10 +7,10 @@ class ilp_element_plugin_date_mform  extends ilp_element_plugin_mform {
 	  protected function specific_definition($mform) {
 	  	//element to define a date as past, present or future
 		$optionlist = array(
-				PASTDATE => get_string( 'ilp_element_plugin_date_past' , 'block_ilp' ),
-				PRESENTDATE => get_string( 'ilp_element_plugin_date_present' , 'block_ilp' ),
-				FUTUREDATE => get_string( 'ilp_element_plugin_date_future' , 'block_ilp' ),
-				ANYDATE => get_string( 'ilp_element_plugin_date_anydate' , 'block_ilp' )
+				ILP_PASTDATE => get_string( 'ilp_element_plugin_date_past' , 'block_ilp' ),
+				ILP_PRESENTDATE => get_string( 'ilp_element_plugin_date_present' , 'block_ilp' ),
+				ILP_FUTUREDATE => get_string( 'ilp_element_plugin_date_future' , 'block_ilp' ),
+				ILP_ANYDATE => get_string( 'ilp_element_plugin_date_anydate' , 'block_ilp' )
 		);
 
 		$mform->addElement(

@@ -86,7 +86,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 			//an array 
 			$role_ids	=	 array();
 			
-			$authuserrole	=	$this->dbc->get_role_by_name(AUTH_USER_ROLE);
+			$authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
 			if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
 
 
@@ -252,7 +252,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							//an array 
 							$role_ids	=	 array();
 							
-							$authuserrole	=	$this->dbc->get_role_by_name(AUTH_USER_ROLE);
+							$authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
 							if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
 							
 							if ($roles = get_user_roles($PAGE->context, $USER->id)) {

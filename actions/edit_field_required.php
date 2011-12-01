@@ -40,6 +40,6 @@ $reportfield->req	=	(empty($reportfield->req)) ? 1 : 0;
 $resulttext = ($dbc->update_report_field($reportfield)) ? get_string("fieldreqsuc", 'block_ilp') : get_string("fieldreqerror", 'block_ilp');
 
 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
-redirect($return_url, $resulttext, REDIRECT_DELAY);
+redirect($return_url, $resulttext, ILP_REDIRECT_DELAY);
 
 ?>

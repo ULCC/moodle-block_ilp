@@ -21,23 +21,23 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/** TABLE_VAR_SORT = 1 */
-define('TABLE_VAR_SORT',   1);
-/** TABLE_VAR_HIDE = 2 */
-define('TABLE_VAR_HIDE',   2);
-/** TABLE_VAR_SHOW = 3 */
-define('TABLE_VAR_SHOW',   3);
-/** TABLE_VAR_IFIRST = 4 */
-define('TABLE_VAR_IFIRST', 4);
-/** TABLE_VAR_ILAST = 5 */
-define('TABLE_VAR_ILAST',  5);
-/** TABLE_VAR_PAGE = 6 */
-define('TABLE_VAR_PAGE',   6);
+/** ILP_TABLE_VAR_SORT = 1 */
+define('ILP_TABLE_VAR_SORT',   1);
+/** ILP_TABLE_VAR_HIDE = 2 */
+define('ILP_TABLE_VAR_HIDE',   2);
+/** ILP_TABLE_VAR_SHOW = 3 */
+define('ILP_TABLE_VAR_SHOW',   3);
+/** ILP_TABLE_VAR_IFIRST = 4 */
+define('ILP_TABLE_VAR_IFIRST', 4);
+/** ILP_TABLE_VAR_ILAST = 5 */
+define('ILP_TABLE_VAR_ILAST',  5);
+/** ILP_TABLE_VAR_PAGE = 6 */
+define('ILP_TABLE_VAR_PAGE',   6);
 
-/** TABLE_P_TOP = 1 */
-define('TABLE_P_TOP',   1);
-/** TABLE_P_BOTTOM = 2 */
-define('TABLE_P_BOTTOM',  2);
+/** ILP_TABLE_P_TOP = 1 */
+define('ILP_TABLE_P_TOP',   1);
+/** ILP_TABLE_P_BOTTOM = 2 */
+define('ILP_TABLE_P_BOTTOM',  2);
 
 /**
  * @package   moodlecore
@@ -74,7 +74,7 @@ class ilp_flexible_table {
     /**
      * Array of positions in which to display download controls.
      */
-    var $showdownloadbuttonsat= array(TABLE_P_TOP);
+    var $showdownloadbuttonsat= array(ILP_TABLE_P_TOP);
 
 
     /**
@@ -117,12 +117,12 @@ class ilp_flexible_table {
     function ilp_flexible_table($uniqueid) {
         $this->uniqueid = $uniqueid;
         $this->request  = array(
-            TABLE_VAR_SORT    => 'tsort',
-            TABLE_VAR_HIDE    => 'thide',
-            TABLE_VAR_SHOW    => 'tshow',
-            TABLE_VAR_IFIRST  => 'tifirst',
-            TABLE_VAR_ILAST   => 'tilast',
-            TABLE_VAR_PAGE    => 'page'
+            ILP_TABLE_VAR_SORT    => 'tsort',
+            ILP_TABLE_VAR_HIDE    => 'thide',
+            ILP_TABLE_VAR_SHOW    => 'tshow',
+            ILP_TABLE_VAR_IFIRST  => 'tifirst',
+            ILP_TABLE_VAR_ILAST   => 'tilast',
+            ILP_TABLE_VAR_PAGE    => 'page'
         );
     }
 
@@ -185,7 +185,7 @@ class ilp_flexible_table {
     /**
      * Where to show download buttons.
      * @param array $showat array of postions in which to show download buttons.
-     * Containing TABLE_P_TOP and/or TABLE_P_BOTTOM
+     * Containing ILP_TABLE_P_TOP and/or ILP_TABLE_P_BOTTOM
      */
     function show_download_buttons_at($showat){
         $this->showdownloadbuttonsat = $showat;
@@ -416,15 +416,15 @@ class ilp_flexible_table {
 
         $this->sess = &$SESSION->flextable[$this->uniqueid];
 
-        if(!empty($_GET[$this->request[TABLE_VAR_SHOW]]) && isset($this->columns[$_GET[$this->request[TABLE_VAR_SHOW]]])) {
+        if(!empty($_GET[$this->request[ILP_TABLE_VAR_SHOW]]) && isset($this->columns[$_GET[$this->request[ILP_TABLE_VAR_SHOW]]])) {
             // Show this column
-            $this->sess->collapse[$_GET[$this->request[TABLE_VAR_SHOW]]] = false;
+            $this->sess->collapse[$_GET[$this->request[ILP_TABLE_VAR_SHOW]]] = false;
         }
-        else if(!empty($_GET[$this->request[TABLE_VAR_HIDE]]) && isset($this->columns[$_GET[$this->request[TABLE_VAR_HIDE]]])) {
+        else if(!empty($_GET[$this->request[ILP_TABLE_VAR_HIDE]]) && isset($this->columns[$_GET[$this->request[ILP_TABLE_VAR_HIDE]]])) {
             // Hide this column
-            $this->sess->collapse[$_GET[$this->request[TABLE_VAR_HIDE]]] = true;
-            if(array_key_exists($_GET[$this->request[TABLE_VAR_HIDE]], $this->sess->sortby)) {
-                unset($this->sess->sortby[$_GET[$this->request[TABLE_VAR_HIDE]]]);
+            $this->sess->collapse[$_GET[$this->request[ILP_TABLE_VAR_HIDE]]] = true;
+            if(array_key_exists($_GET[$this->request[ILP_TABLE_VAR_HIDE]], $this->sess->sortby)) {
+                unset($this->sess->sortby[$_GET[$this->request[ILP_TABLE_VAR_HIDE]]]);
             }
         }
 
@@ -436,21 +436,21 @@ class ilp_flexible_table {
         }
 
         if(
-            !empty($_GET[$this->request[TABLE_VAR_SORT]]) && $this->is_sortable($_GET[$this->request[TABLE_VAR_SORT]]) &&
-            (isset($this->columns[$_GET[$this->request[TABLE_VAR_SORT]]]) ||
-                (($_GET[$this->request[TABLE_VAR_SORT]] == 'firstname' || $_GET[$this->request[TABLE_VAR_SORT]] == 'lastname') && isset($this->columns['fullname']))
+            !empty($_GET[$this->request[ILP_TABLE_VAR_SORT]]) && $this->is_sortable($_GET[$this->request[ILP_TABLE_VAR_SORT]]) &&
+            (isset($this->columns[$_GET[$this->request[ILP_TABLE_VAR_SORT]]]) ||
+                (($_GET[$this->request[ILP_TABLE_VAR_SORT]] == 'firstname' || $_GET[$this->request[ILP_TABLE_VAR_SORT]] == 'lastname') && isset($this->columns['fullname']))
             ))
         {
-            if(empty($this->sess->collapse[$_GET[$this->request[TABLE_VAR_SORT]]])) {
-                if(array_key_exists($_GET[$this->request[TABLE_VAR_SORT]], $this->sess->sortby)) {
+            if(empty($this->sess->collapse[$_GET[$this->request[ILP_TABLE_VAR_SORT]]])) {
+                if(array_key_exists($_GET[$this->request[ILP_TABLE_VAR_SORT]], $this->sess->sortby)) {
                     // This key already exists somewhere. Change its sortorder and bring it to the top.
-                    $sortorder = $this->sess->sortby[$_GET[$this->request[TABLE_VAR_SORT]]] == SORT_ASC ? SORT_DESC : SORT_ASC;
-                    unset($this->sess->sortby[$_GET[$this->request[TABLE_VAR_SORT]]]);
-                    $this->sess->sortby = array_merge(array($_GET[$this->request[TABLE_VAR_SORT]] => $sortorder), $this->sess->sortby);
+                    $sortorder = $this->sess->sortby[$_GET[$this->request[ILP_TABLE_VAR_SORT]]] == SORT_ASC ? SORT_DESC : SORT_ASC;
+                    unset($this->sess->sortby[$_GET[$this->request[ILP_TABLE_VAR_SORT]]]);
+                    $this->sess->sortby = array_merge(array($_GET[$this->request[ILP_TABLE_VAR_SORT]] => $sortorder), $this->sess->sortby);
                 }
                 else {
                     // Key doesn't exist, so just add it to the beginning of the array, ascending order
-                    $this->sess->sortby = array_merge(array($_GET[$this->request[TABLE_VAR_SORT]] => SORT_ASC), $this->sess->sortby);
+                    $this->sess->sortby = array_merge(array($_GET[$this->request[ILP_TABLE_VAR_SORT]] => SORT_ASC), $this->sess->sortby);
                 }
                 // Finally, make sure that no more than $this->maxsortkeys are present into the array
                 if(!empty($this->maxsortkeys) && ($sortkeys = count($this->sess->sortby)) > $this->maxsortkeys) {
@@ -466,26 +466,26 @@ class ilp_flexible_table {
             $this->sess->sortby = array ($this->sort_default_column => ($this->sort_default_order == SORT_DESC ? SORT_DESC : SORT_ASC));
         }
 
-        if(isset($_GET[$this->request[TABLE_VAR_ILAST]])) {
-            if(empty($_GET[$this->request[TABLE_VAR_ILAST]]) || is_numeric(strpos(get_string('alphabet'), $_GET[$this->request[TABLE_VAR_ILAST]]))) {
-                $this->sess->i_last = $_GET[$this->request[TABLE_VAR_ILAST]];
+        if(isset($_GET[$this->request[ILP_TABLE_VAR_ILAST]])) {
+            if(empty($_GET[$this->request[ILP_TABLE_VAR_ILAST]]) || is_numeric(strpos(get_string('alphabet'), $_GET[$this->request[ILP_TABLE_VAR_ILAST]]))) {
+                $this->sess->i_last = $_GET[$this->request[ILP_TABLE_VAR_ILAST]];
             }
         }
 
-        if(isset($_GET[$this->request[TABLE_VAR_IFIRST]])) {
-            if(empty($_GET[$this->request[TABLE_VAR_IFIRST]]) || is_numeric(strpos(get_string('alphabet'), $_GET[$this->request[TABLE_VAR_IFIRST]]))) {
-                $this->sess->i_first = $_GET[$this->request[TABLE_VAR_IFIRST]];
+        if(isset($_GET[$this->request[ILP_TABLE_VAR_IFIRST]])) {
+            if(empty($_GET[$this->request[ILP_TABLE_VAR_IFIRST]]) || is_numeric(strpos(get_string('alphabet'), $_GET[$this->request[ILP_TABLE_VAR_IFIRST]]))) {
+                $this->sess->i_first = $_GET[$this->request[ILP_TABLE_VAR_IFIRST]];
             }
         }
 
         if(empty($this->baseurl)) {
             $getcopy  = $_GET;
-            unset($getcopy[$this->request[TABLE_VAR_SHOW]]);
-            unset($getcopy[$this->request[TABLE_VAR_HIDE]]);
-            unset($getcopy[$this->request[TABLE_VAR_SORT]]);
-            unset($getcopy[$this->request[TABLE_VAR_IFIRST]]);
-            unset($getcopy[$this->request[TABLE_VAR_ILAST]]);
-            unset($getcopy[$this->request[TABLE_VAR_PAGE]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_SHOW]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_HIDE]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_SORT]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_IFIRST]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_ILAST]]);
+            unset($getcopy[$this->request[ILP_TABLE_VAR_PAGE]]);
 
             $strippedurl = strip_querystring(qualified_me());
 
@@ -518,7 +518,7 @@ class ilp_flexible_table {
             $this->sess->i_last  = '';
         }
 
-        $this->currpage = optional_param($this->request[TABLE_VAR_PAGE], 0, PARAM_INT);
+        $this->currpage = optional_param($this->request[ILP_TABLE_VAR_PAGE], 0, PARAM_INT);
         $this->setup = true;
 
     /// Always introduce the "flexible" class for the table if not specified
@@ -873,7 +873,7 @@ class ilp_flexible_table {
 
             echo '<div class="initialbar firstinitial">'.get_string('firstname').' : ';
             if(!empty($this->sess->i_first)) {
-                echo '<a href="'.$this->baseurl.$this->request[TABLE_VAR_IFIRST].'=">'.$strall.'</a>';
+                echo '<a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_IFIRST].'=">'.$strall.'</a>';
             } else {
                 echo '<strong>'.$strall.'</strong>';
             }
@@ -881,7 +881,7 @@ class ilp_flexible_table {
                 if (isset($this->sess->i_first) && $letter == $this->sess->i_first) {
                     echo ' <strong>'.$letter.'</strong>';
                 } else {
-                    echo ' <a href="'.$this->baseurl.$this->request[TABLE_VAR_IFIRST].'='.$letter.'">'.$letter.'</a>';
+                    echo ' <a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_IFIRST].'='.$letter.'">'.$letter.'</a>';
                 }
             }
             echo '</div>';
@@ -890,7 +890,7 @@ class ilp_flexible_table {
 
             echo '<div class="initialbar lastinitial">'.get_string('lastname').' : ';
             if(!empty($this->sess->i_last)) {
-                echo '<a href="'.$this->baseurl.$this->request[TABLE_VAR_ILAST].'=">'.$strall.'</a>';
+                echo '<a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_ILAST].'=">'.$strall.'</a>';
             } else {
                 echo '<strong>'.$strall.'</strong>';
             }
@@ -898,7 +898,7 @@ class ilp_flexible_table {
                 if (isset($this->sess->i_last) && $letter == $this->sess->i_last) {
                     echo ' <strong>'.$letter.'</strong>';
                 } else {
-                    echo ' <a href="'.$this->baseurl.$this->request[TABLE_VAR_ILAST].'='.$letter.'">'.$letter.'</a>';
+                    echo ' <a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_ILAST].'='.$letter.'">'.$letter.'</a>';
                 }
             }
             echo '</div>';
@@ -1043,14 +1043,14 @@ class ilp_flexible_table {
             echo '</table>';
             $this->wrap_html_finish();
             // Paging bar
-            if(in_array(TABLE_P_BOTTOM, $this->showdownloadbuttonsat)) {
+            if(in_array(ILP_TABLE_P_BOTTOM, $this->showdownloadbuttonsat)) {
                 echo $this->download_buttons();
             }
             if($this->use_pages) {
                 // disable debugging for this function call
                 $debug = $CFG->debug;
                 $CFG->debug = false;
-                print_paging_bar($this->totalrows, $this->currpage, $this->pagesize, $this->baseurl, $this->request[TABLE_VAR_PAGE]);
+                print_paging_bar($this->totalrows, $this->currpage, $this->pagesize, $this->baseurl, $this->request[ILP_TABLE_VAR_PAGE]);
                 $CFG->debug = $debug;
             }
         }
@@ -1069,11 +1069,11 @@ class ilp_flexible_table {
             if($this->is_collapsible) {
                 if(!empty($this->sess->collapse[$column])) {
                     // some headers contain < br/> tags, do not include in title
-                    $icon_hide = ' <a href="'.$this->baseurl.$this->request[TABLE_VAR_SHOW].'='.$column.'"><img src="'.$OUTPUT->pix_url('t/switch_plus') . '" title="'.get_string('show').' '.strip_tags($this->headers[$index]).'" alt="'.get_string('show').'" /></a>';
+                    $icon_hide = ' <a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_SHOW].'='.$column.'"><img src="'.$OUTPUT->pix_url('t/switch_plus') . '" title="'.get_string('show').' '.strip_tags($this->headers[$index]).'" alt="'.get_string('show').'" /></a>';
                 }
                 else if($this->headers[$index] !== NULL) {
                     // some headers contain < br/> tags, do not include in title
-                    $icon_hide = ' <a href="'.$this->baseurl.$this->request[TABLE_VAR_HIDE].'='.$column.'"><img src="'.$OUTPUT->pix_url('t/switch_minus') . '" title="'.get_string('hide').' '.strip_tags($this->headers[$index]).'" alt="'.get_string('hide').'" /></a>';
+                    $icon_hide = ' <a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_HIDE].'='.$column.'"><img src="'.$OUTPUT->pix_url('t/switch_minus') . '" title="'.get_string('hide').' '.strip_tags($this->headers[$index]).'" alt="'.get_string('hide').'" /></a>';
                 }
             }
 
@@ -1123,11 +1123,11 @@ class ilp_flexible_table {
                     if (($CFG->fullnamedisplay == 'firstname lastname') or
                         ($CFG->fullnamedisplay == 'firstname') or
                         ($CFG->fullnamedisplay == 'language' and $fullnamelanguage == 'firstname lastname' )) {
-                        $this->headers[$index] = '<a href="'.$this->baseurl.$this->request[TABLE_VAR_SORT].'=firstname">'.get_string('firstname').get_accesshide(get_string('sortby').' '.get_string('firstname').' '.$fsortorder).'</a> '.$icon_sort_first.' / '.
-                                                 '<a href="'.$this->baseurl.$this->request[TABLE_VAR_SORT].'=lastname">'.get_string('lastname').get_accesshide(get_string('sortby').' '.get_string('lastname').' '.$lsortorder).'</a> '.$icon_sort_last;
+                        $this->headers[$index] = '<a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_SORT].'=firstname">'.get_string('firstname').get_accesshide(get_string('sortby').' '.get_string('firstname').' '.$fsortorder).'</a> '.$icon_sort_first.' / '.
+                                                 '<a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_SORT].'=lastname">'.get_string('lastname').get_accesshide(get_string('sortby').' '.get_string('lastname').' '.$lsortorder).'</a> '.$icon_sort_last;
                     } else {
-                        $this->headers[$index] = '<a href="'.$this->baseurl.$this->request[TABLE_VAR_SORT].'=lastname">'.get_string('lastname').get_accesshide(get_string('sortby').' '.get_string('lastname').' '.$lsortorder).'</a> '.$icon_sort_last.' / '.
-                                                 '<a href="'.$this->baseurl.$this->request[TABLE_VAR_SORT].'=firstname">'.get_string('firstname').get_accesshide(get_string('sortby').' '.get_string('firstname').' '.$fsortorder).'</a> '.$icon_sort_first;
+                        $this->headers[$index] = '<a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_SORT].'=lastname">'.get_string('lastname').get_accesshide(get_string('sortby').' '.get_string('lastname').' '.$lsortorder).'</a> '.$icon_sort_last.' / '.
+                                                 '<a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_SORT].'=firstname">'.get_string('firstname').get_accesshide(get_string('sortby').' '.get_string('firstname').' '.$fsortorder).'</a> '.$icon_sort_first;
                     }
                 }
                 break;
@@ -1150,7 +1150,7 @@ class ilp_flexible_table {
                     } else {
                         $localsortorder = get_string('asc');
                     }
-                    $this->headers[$index] = '<a href="'.$this->baseurl.$this->request[TABLE_VAR_SORT].'='.$column.'">'.$this->headers[$index].get_accesshide(get_string('sortby').' '.$this->headers[$index].' '.$localsortorder).'</a>';
+                    $this->headers[$index] = '<a href="'.$this->baseurl.$this->request[ILP_TABLE_VAR_SORT].'='.$column.'">'.$this->headers[$index].get_accesshide(get_string('sortby').' '.$this->headers[$index].' '.$localsortorder).'</a>';
                 }
             }
 
@@ -1189,11 +1189,11 @@ class ilp_flexible_table {
             // disable debugging for this function call
             $debug = $CFG->debug;
             $CFG->debug = false;
-            print_paging_bar($this->totalrows, $this->currpage, $this->pagesize, $this->baseurl, $this->request[TABLE_VAR_PAGE]);
+            print_paging_bar($this->totalrows, $this->currpage, $this->pagesize, $this->baseurl, $this->request[ILP_TABLE_VAR_PAGE]);
             $CFG->debug = $debug;
         }
 
-        if(in_array(TABLE_P_TOP, $this->showdownloadbuttonsat)) {
+        if(in_array(ILP_TABLE_P_TOP, $this->showdownloadbuttonsat)) {
             echo $this->download_buttons();
         }
 
