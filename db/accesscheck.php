@@ -77,6 +77,27 @@ $access_editcomment		=	has_capability('block/ilp:editcomment', $context);
 $access_deletecomment	=	has_capability('block/ilp:deletecomment', $context);
 $access_viewcomment		=	has_capability('block/ilp:viewcomment', $context);
 
+
+//check if the current user is an admin or has the ilpviewall capabilty at site level
+$ilpadmin						=	has_capability('block/ilp:ilpviewall',$sitecontext);
+    	
+$access_ilp_admin				=	(is_siteadmin($USER) || $ilpadmin) ? true : false; 
+
+if (!empty($access_ilp_admin)) {
+	$access_createreports	=	true;
+	$access_editreports		=	true;
+	$access_deletereports	=	true;
+	$access_viewreports		=	true;	
+	$access_viewilp			=	true;
+	$access_viewotherilp	=	true;
+	
+	$access_addcomment		=	true;
+	$access_editcomment		=	true;
+	$access_deletecomment	=	true;
+	$access_viewcomment		=	true;	
+}
+
+
 //TODO: we should not be in the course context change to another context
 $PAGE->set_context($context);
 
