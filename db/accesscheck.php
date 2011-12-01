@@ -97,7 +97,6 @@ if (!empty($access_ilp_admin)) {
 	$access_viewcomment		=	true;	
 }
 
-
 //TODO: we should not be in the course context change to another context
 $PAGE->set_context($context);
 
