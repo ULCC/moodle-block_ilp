@@ -27,11 +27,11 @@ class ilp_cron	{
 			$lowertimestamp		=	mktime(0,0,0,date('n'),date('j')+$notificationdays);
 			$uppertimestamp		=	mktime(23,59,59,date('n'),date('j')+$notificationdays);
 			
-			$reports	=	$this->get_list($lowertimestamp,$uppertimestamp);
+			$reportentries	=	$this->get_list($lowertimestamp,$uppertimestamp);
 			mtrace( "running cron" );
-			mtrace( $reports);
+			mtrace( $reportentries);
 			
-			foreach ($reports as $r) {
+			foreach ($reportentries as $r) {
 				
 				$user	=	$this->dbc->get_user($r->user_id);
 				
