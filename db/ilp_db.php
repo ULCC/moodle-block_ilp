@@ -458,7 +458,7 @@ class ilp_db_functions	extends ilp_logging {
 		global	$CFG;
 
 		$positionsql	=	"";
-		//the operand that will be used
+        //the operand that will be used
 		if (!empty($position)) {
 			$otherfield		=	(!empty($type)) ? $position-1 : $position+1;
 			$positionsql 	=  "AND (position = {$position} ||  position = {$otherfield})";
@@ -473,7 +473,7 @@ class ilp_db_functions	extends ilp_logging {
 
 
 =======
-			
+
 >>>>>>> remotes/origin/master
 		return		$this->dbc->get_records_sql($sql);
 	}
@@ -1388,9 +1388,9 @@ class ilp_db_functions	extends ilp_logging {
 <<<<<<< HEAD
 
 =======
-			
+
 			$entrysql	=	(!empty($entry_id))	? " AND e.id = {$entry_id} "	: "";
-			
+
 >>>>>>> remotes/origin/master
     		$sql	=	"SELECT		{$select}
     					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
@@ -1413,8 +1413,8 @@ class ilp_db_functions	extends ilp_logging {
      * the given time
      *
 =======
-     	* the given time 
-     * 
+     	* the given time
+     *
 >>>>>>> remotes/origin/master
      * @param	int $report_id	the id of the report whose entries will be counted
      * @param	int $user_id the id of the  user whose entries will be counted
@@ -1441,23 +1441,23 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		e.user_id			=	{$user_id}
     					 AND		ddlent.value		<	{$time}
     					 {$entriessql}";
-    					 
+
     		return 		$this->dbc->count_records_sql($sql);
     }
 <<<<<<< HEAD
 
 
 =======
-    
+
     /**
      * Returns a list of reports that have deadline dates that fall between the given timestamps
-     * and are in 
-     * 
+     * and are in
+     *
      * @param	$ltimestamp	lower time stamp for the records that will be retrieved
-     * @param	$utimestamp	upper time stamp for the records that will be retrieved 
+     * @param	$utimestamp	upper time stamp for the records that will be retrieved
      */
     public	function get_reports_in_period($ltimestamp,$utimestamp)	{
-    	
+
     	$sql	=	"SELECT 		e.*, r.*,ddl.value as deadline
 					   FROM			{block_ilp_entry} 			AS e,
 									{block_ilp_plu_ddl_ent}		AS ddl,
@@ -1471,11 +1471,11 @@ class ilp_db_functions	extends ilp_logging {
 						  AND		e.id 	=	ddl.entry_id
 						  AND		e.id 	=	stent.entry_id
 						  AND		e.report_id	= r.id";
-    	
+
     	return 		$this->dbc->get_records_sql($sql);
-    	
+
     }
-    
+
 >>>>>>> remotes/origin/master
    /**
     * Returns the last updated entry for the given student in the gicen report
