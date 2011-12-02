@@ -22,7 +22,7 @@ $mform	=	new edit_status_item_mform($report_id);
 if ($mform->is_cancelled()) {
 	//send the user back
 	$return_url = $CFG->wwwroot.'/admin/settings.php?section=blocksettingilp';
-    redirect($return_url, '', REDIRECT_DELAY);
+    redirect($return_url, '', ILP_REDIRECT_DELAY);
 }
 
 
@@ -54,7 +54,7 @@ if($mform->is_submitted()) {
         //decide whether the user has chosen to save and exit or save or display
         if (isset($formdata->saveanddisplaybutton)) { 
         	$return_url = $CFG->wwwroot.'/admin/settings.php?section=blocksettingilp';
-        	redirect($return_url, get_string("statusitemupdatesuc", 'block_ilp'), REDIRECT_DELAY);
+        	redirect($return_url, get_string("statusitemupdatesuc", 'block_ilp'), ILP_REDIRECT_DELAY);
         }
     }
 }

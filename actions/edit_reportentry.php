@@ -74,7 +74,7 @@ $reportfields		=	$dbc->get_report_fields_by_position($report_id);
 if (empty($reportfields)) {
 	//send the user back to the dashboard page telling them that the report is not ready for display
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
-    redirect($return_url, get_string("reportnotready", 'block_ilp'), REDIRECT_DELAY);
+    redirect($return_url, get_string("reportnotready", 'block_ilp'), ILP_REDIRECT_DELAY);
 } 
 
 //require the reportentry_mform so we can display the report
@@ -86,7 +86,7 @@ $mform	= new	report_entry_mform($report_id,$user_id,$entry_id,$course_id);
 if ($mform->is_cancelled()) {
 	//send the user back to dashboard
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?course_id='.$course_id.'&user_id='.$user_id;
-    redirect($return_url, '', REDIRECT_DELAY);
+    redirect($return_url, '', ILP_REDIRECT_DELAY);
 }
 
 
@@ -110,7 +110,7 @@ if($mform->is_submitted()) {
 
         if (!isset($formdata->saveanddisplaybutton)) { 
             $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
-        	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), REDIRECT_DELAY);
+        	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
         }
     }
 }
@@ -134,7 +134,7 @@ if (!empty($entry_id)) {
 			//then return the user to the 
 			if ($entryage > $CFG->maxeditingtime)	{
 				 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
-        		redirect($return_url, get_string("maxeditexceed", 'block_ilp'), REDIRECT_DELAY);
+        		redirect($return_url, get_string("maxeditexceed", 'block_ilp'), ILP_REDIRECT_DELAY);
 			}
 			
 		}

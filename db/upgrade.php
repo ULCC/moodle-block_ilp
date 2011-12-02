@@ -92,14 +92,13 @@ function xmldb_block_ilp_upgrade($oldversion) {
         $table_event->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_event);
         
-        $table_timemodified = new $xmldb_field('timemodified');
-        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
-        $table->addField($table_timemodified);
-
-        $table_timecreated = new $xmldb_field('timecreated');
+         $table_timecreated = new $xmldb_field('timecreated');
         $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_timecreated);
         
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
         
         $table_key = new $xmldb_key('primary');
         $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));

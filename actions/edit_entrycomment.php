@@ -92,7 +92,7 @@ $mform	= new	edit_entrycomment_mform($report_id,$entry_id,$user_id,$course_id,$c
 if ($mform->is_cancelled()) {
 	//send the user back to dashboard
 	$return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&selectedtab={$selectedtab}&tabitem={$tabitem}&course_id={$course_id}";
-    redirect($return_url, '', REDIRECT_DELAY);
+    redirect($return_url, '', ILP_REDIRECT_DELAY);
 }
 
 
@@ -116,7 +116,7 @@ if($mform->is_submitted()) {
 
         if (!isset($formdata->saveanddisplaybutton)) { 
             $return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&selectedtab={$selectedtab}&tabitem={$tabitem}&course_id={$course_id}";
-        	redirect($return_url, get_string("commentcreationsuc", 'block_ilp'), REDIRECT_DELAY);
+        	redirect($return_url, get_string("commentcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
         }
     }
 }

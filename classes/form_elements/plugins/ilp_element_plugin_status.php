@@ -22,7 +22,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
     	$this->data_entry_tablename = "block_ilp_user_status";
 		$this->items_tablename = "block_ilp_plu_sts_items";
 		$this->optionlist_keyfield = "status_id";
-		$this->selecttype = OPTIONSINGLE;
+		$this->selecttype = ILP_OPTIONSINGLE;
 		parent::__construct();
     }
     
@@ -233,7 +233,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 	 		$pluginrecord 			=	new stdClass();
 	 		$pluginrecord->id		=	$oldrecord->id;
 	 		$pluginrecord->optionlist	=	$data->optionlist;
-			$pluginrecord->selecttype 	= 	OPTIONSINGLE;
+			$pluginrecord->selecttype 	= 	ILP_OPTIONSINGLE;
 	 			
 	 		//update the plugin with the new data
 	 		//return $this->dbc->update_plugin_record($this->tablename,$pluginrecord);

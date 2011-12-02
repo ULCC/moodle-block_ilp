@@ -27,7 +27,7 @@ class block_ilp extends block_list {
     	
         $this->title = get_string('blockname', 'block_ilp');
         $this->version = $ilpsettings->version();
-        $this->cron = 43200; //run the cron at minimum once every 12 hours
+        $this->cron = 86400; //run the cron at minimum once every 24 hours
     }
     
     /**
@@ -72,27 +72,35 @@ class block_ilp extends block_list {
             return $this->content;
         }
        
-        //get all course that the current user is enrolled in 
+    	//get all course that the current user is enrolled in 
 		$my_courses				=	$dbc->get_user_courses($USER->id);
 		$access_viewilp			=	false;
 		$access_viewotherilp	= 	false;
+		
+		if (empty($my_courses))	{
+			$c			=	new stdClass();
+			$c->id		=	$course_id;
+			$my_courses	=	array($c);
+		}
 		
 		//we are going to loop through all the courses the user is enrolled in so that we can 
 		//choose which display they will see 
         $found_current_course = false;
 		foreach($my_courses	as $c) {
+			
+					$sitecontext = get_context_instance(CONTEXT_SYSTEM);
         			$coursecontext = get_context_instance(CONTEXT_COURSE, $c->id);
                     $set_course_groups_link = false;       
 			
 			        //we need to get the capabilites of the current user so we can deceide what to display in the block 
-        			if (has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false)) {
+        			if (has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false) ) {
         				$access_viewilp		=	true;
         				//I have removed the var below as we dont want the my course groups link to contain
         				//the id of a  course which the user is not a teacher in 
                         //$set_course_groups_link = true;       
         			}
         			
-        			if ( has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) ) {
+        			if ( has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) || has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) || is_siteadmin($USER)) {
         				$access_viewotherilp	=	true;
                         $set_course_groups_link = true;       
         			}
@@ -500,7 +508,7 @@ class block_ilp extends block_list {
 		    //the config page with the appropriate url
 		    $returnurl .= (!empty($bui_editid)) ?  "&bui_editid={$bui_editid}" : "&blockaction={$blockaction}&instanceid={$instanceid}";	
 		    //redirect the user back to the edit page
-        	 redirect($returnurl, '', REDIRECT_DELAY);
+        	 redirect($returnurl, '', ILP_REDIRECT_DELAY);
         }
         
         // and now actually save it in the parent class
@@ -508,6 +516,15 @@ class block_ilp extends block_list {
     	*/
 	}
 	
+	
+	function cron() {
+		global $CFG;
+	
+		require_once($CFG->dirroot."/blocks/ilp/classes/ilp_cron.class.php");
+		
+		$cron	=	 new ilp_cron();
+		$cron->run();
+	}
 	
     
 }

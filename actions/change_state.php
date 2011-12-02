@@ -86,7 +86,7 @@ if ($stateplugin) {
 
 
 $return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&course_id={$course_id}&selectedtab={$selectedtab}&tabitem={$tabitem}";
-redirect($return_url, $resulttext, REDIRECT_DELAY);
+redirect($return_url, $resulttext, ILP_REDIRECT_DELAY);
 
 
 

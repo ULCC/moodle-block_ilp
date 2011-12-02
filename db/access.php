@@ -29,10 +29,10 @@ $block_ilp_capabilities = array(
             'admin' => CAP_ALLOW
         )
 	),
-	
-	//the capaability needed in order to add a report instance 
+
+	//the capaability needed in order to add a report instance
 	//to the ilp
-	
+
 	'block/ilp:addreport' => array(
 		'captype' => 'write',
 		'contextlevel' => CONTEXT_BLOCK,
@@ -42,11 +42,11 @@ $block_ilp_capabilities = array(
             'admin' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-	
+
 	),
-	
-	//the capaability needed in order to edit a report instance 
-	//to the ilp	
+
+	//the capaability needed in order to edit a report instance
+	//to the ilp
 	'block/ilp:editreport' => array(
 		'captype' => 'write',
 		'contextlevel' => CONTEXT_BLOCK,
@@ -55,10 +55,10 @@ $block_ilp_capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW
         )
-	
+
 	),
-	
-	//the capaability needed in order to delete a report instance 
+
+	//the capaability needed in order to delete a report instance
 	//to the ilp
 	'block/ilp:deletereport' => array(
 		'captype' => 'write',
@@ -66,10 +66,10 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'admin' => CAP_ALLOW
         )
-	
+
 	),
-	
-	//the capaability needed in order veiw a report in the ilp 
+
+	//the capaability needed in order veiw a report in the ilp
 	'block/ilp:viewreport' => array(
 		'captype' => 'read',
 		'contextlevel' => CONTEXT_BLOCK,
@@ -79,11 +79,11 @@ $block_ilp_capabilities = array(
             'admin' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-	
+
 	),
-    
-	
-	//the capaability needed in order to view an ilp 
+
+
+	//the capaability needed in order to view an ilp
 	'block/ilp:viewilp' => array(
 		'captype' => 'read',
 		'contextlevel' => CONTEXT_BLOCK,
@@ -93,10 +93,10 @@ $block_ilp_capabilities = array(
             'admin' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-	
+
 	),
-	
-	//the capaability needed in order to view an ilp belong to someone else 
+
+	//the capaability needed in order to view an ilp belong to someone else
 	'block/ilp:viewotherilp' => array(
 		'captype' => 'read',
 		'contextlevel' => CONTEXT_BLOCK,
@@ -105,7 +105,7 @@ $block_ilp_capabilities = array(
             'admin' => CAP_ALLOW
         )
 	),
-	
+
 	//the capaability needed in order to add a comment
 	'block/ilp:addcomment' => array(
 		'captype' => 'write',
@@ -116,9 +116,9 @@ $block_ilp_capabilities = array(
             'admin' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-	
+
 	),
-	
+
 	//the capaability needed in order to edit a comment
 	'block/ilp:editcomment' => array(
 		'captype' => 'write',
@@ -129,9 +129,9 @@ $block_ilp_capabilities = array(
             'admin' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-	
+
 	),
-	
+
 	//the capaability needed in order to delete a comment
 	'block/ilp:deletecomment' => array(
 		'captype' => 'write',
@@ -143,7 +143,7 @@ $block_ilp_capabilities = array(
 			'user' => CAP_ALLOW
         )
 	),
-	
+
 	//the capaability needed in order to view a comment
 	'block/ilp:viewcomment' => array(
 		'captype' => 'read',
@@ -155,7 +155,7 @@ $block_ilp_capabilities = array(
 			'user' => CAP_ALLOW
         )
 	),
-	
+
 	//the capaability needed in order to view anything in the -
 	'block/ilp:ilpviewall' => array(
 		'captype' => 'write',
@@ -167,48 +167,43 @@ $block_ilp_capabilities = array(
 			'user' => CAP_PREVENT
         )
 	),
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 );
 global $CFG;
 //test the version number if we are in 2.0 we need to pass the $block_ilp_capabilities to $capabilities
 
 if (stripos($CFG->release,"2.") !== false) {
-	
+
 	//pass the $block_ilp_capabilities to $capabilities
 	$capabilities	=	$block_ilp_capabilities;
 
-	//move all values in admin key to manager key 	
+	//move all values in admin key to manager key
 	$capabilities['block/ilp:creeddelreport']['legacy']['manager'] = $capabilities['block/ilp:creeddelreport']['legacy']['admin'];
 	//unset the admin key
 	unset($capabilities['block/ilp:creeddelreport']['legacy']['admin']);
-	
+
 	$capabilities['block/ilp:addreport']['legacy']['manager'] = $capabilities['block/ilp:addreport']['legacy']['admin'];
 	unset($capabilities['block/ilp:addreport']['legacy']['admin']);
-	
+
 	$capabilities['block/ilp:editreport']['legacy']['manager'] = $capabilities['block/ilp:editreport']['legacy']['admin'];
 	unset($capabilities['block/ilp:editreport']['legacy']['admin']);
-	
+
 	$capabilities['block/ilp:deletereport']['legacy']['manager'] = $capabilities['block/ilp:deletereport']['legacy']['admin'];
 	unset($capabilities['block/ilp:deletereport']['legacy']['admin']);
-	
+
 	$capabilities['block/ilp:viewreport']['legacy']['manager'] = $capabilities['block/ilp:viewreport']['legacy']['admin'];
 	unset($capabilities['block/ilp:viewreport']['legacy']['admin']);
-	
+
 	$capabilities['block/ilp:viewotherilp']['legacy']['manager'] = $capabilities['block/ilp:viewotherilp']['legacy']['admin'];
 	unset($capabilities['block/ilp:viewotherilp']['legacy']['admin']);
-	
+
 	$capabilities['block/ilp:viewilp']['legacy']['manager'] = $capabilities['block/ilp:viewilp']['legacy']['admin'];
 	unset($capabilities['block/ilp:viewilp']['legacy']['admin']);
-	
+
 	unset($block_ilp_capabilities);
 }
-
-
-
-
-?>

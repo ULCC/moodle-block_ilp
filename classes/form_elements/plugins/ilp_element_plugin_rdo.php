@@ -16,7 +16,7 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_itemlist{
     	$this->tablename = "block_ilp_plu_rdo";
     	$this->data_entry_tablename = "block_ilp_plu_rdo_ent";
 		$this->items_tablename = "block_ilp_plu_rdo_items";
-		$this->selecttype = OPTIONSINGLE;
+		$this->selecttype = ILP_OPTIONSINGLE;
 		parent::__construct();
     }
 	

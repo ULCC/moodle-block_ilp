@@ -28,6 +28,14 @@
 	$string['creator']				=	'Creator';
 	$string['createreport']			=	'Create Report';
 	$string['createnewreport']		=	'Create New Report';
+	$string['cronemailsender'] 		= 	'ILP';
+	$string['cronemailsubject'] 	= 	'Reminder: {$a->reportname} is due on {$a->deadline}';
+	$string['cronemailhtml'] 		= 	'<p>Dear {$a->firstname} {$a->lastname},</p>
+	<p>We wish to remind you that {$a->reportname} is due on {$a->deadline}.</p>
+	<p>Regards,<br />
+		Course Admin
+	</p>
+	';
 	$string['comments']				=	'Comments';
 	$string['comment']				=	'Comment';
 	$string['commeentdeleted']		=	'Comment deleted';
@@ -41,6 +49,10 @@
 	$string['coursereports']		=	'Course Reports';
 	$string['dashboard']	 		= 	'Dashboard';
 	$string['deadline']		 					= 	'deadline';
+	$string['deadlinenotification']		 = 	'Deadline Notification';
+	$string['deadlinenotificationconfig']		 = 	'How many days before a deadline a target deadline should a reminder be sent to a user to remind them of the deadline';
+	
+	
 	$string['defaulthozsize'] 					= 	'Default number of columns';
 	$string['defaulthozsizeconfig'] 			= 	'The default number of columns for all AJAX tables that do not override this setting.';
 	$string['defaultverticalperpage'] 			= 	'Default number of table rows';
@@ -139,7 +151,8 @@
 	
 	$string['name']					=	'Name';
 	$string['nodataornoconfig']		=	'No data has been found for the current student. If you believe there should be data for the current student then the plugin may not been configured correctly';
-	$string['noplugin']			=	'No Plugin';
+	$string['none']					=	'None';
+	$string['noplugin']				=	'No Plugin';
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';

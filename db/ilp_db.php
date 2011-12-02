@@ -461,7 +461,7 @@ class ilp_db_functions	extends ilp_logging {
 		//the operand that will be used
 		if (!empty($position)) {
 			$otherfield		=	(!empty($type)) ? $position-1 : $position+1;
-			$positionsql 	=  "AND position = {$position} ||  position = {$otherfield}";
+			$positionsql 	=  "AND (position = {$position} ||  position = {$otherfield})";
 		}
 
 		$sql	=	"SELECT		*
@@ -469,8 +469,12 @@ class ilp_db_functions	extends ilp_logging {
 					 WHERE		report_id	=	{$report_id}
 					{$positionsql}
 					 ORDER BY 	position";
+<<<<<<< HEAD
 
 
+=======
+			
+>>>>>>> remotes/origin/master
 		return		$this->dbc->get_records_sql($sql);
 	}
 
@@ -1290,7 +1294,7 @@ class ilp_db_functions	extends ilp_logging {
     public function get_next_position( $report_id, $tablename ){
     	global $CFG;
         $tablename = $CFG->prefix . $tablename;
-        $sql = "SELECT MAX( position ) n FROM  $tablename WHERE report_id = $report_id";
+        $sql = "SELECT MAX( position ) n FROM  $tablename WHERE report_id = $report_id";  //gregp - records should be counted not the position #
         $res = array_values( $this->dbc->get_records_sql( $sql ) );
         $n = $res[0]->n;
         if( $n ){
@@ -1377,11 +1381,17 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return	mixed int the number of entries or false
      */
-    public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true)	{
+    public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
 			global 		$CFG;
 
 			$select	=	(!empty($count))	? "count(e.id)" : " e.* ";
+<<<<<<< HEAD
 
+=======
+			
+			$entrysql	=	(!empty($entry_id))	? " AND e.id = {$entry_id} "	: "";
+			
+>>>>>>> remotes/origin/master
     		$sql	=	"SELECT		{$select}
     					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
     					 			{$CFG->prefix}block_ilp_plu_ste_ent as pe,
@@ -1390,7 +1400,8 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		pe.parent_id	=	pi.id
     					 AND		e.report_id		=	{$report_id}
     					 AND		e.user_id		=	{$user_id}
-    					 AND		pi.passfail		=	{$state}";
+    					 AND		pi.passfail		=	{$state}
+    					 $entrysql";
 
     		return 		(!empty($count)) ? $this->dbc->count_records_sql($sql) : $this->dbc->get_records_sql($sql);
     }
@@ -1398,8 +1409,13 @@ class ilp_db_functions	extends ilp_logging {
 
     /**
      * Count the number of entries in the given report with a deadline that has passed
+<<<<<<< HEAD
      * the given time
      *
+=======
+     	* the given time 
+     * 
+>>>>>>> remotes/origin/master
      * @param	int $report_id	the id of the report whose entries will be counted
      * @param	int $user_id the id of the  user whose entries will be counted
      * @param	array $entries a list of entry ids that should be checked to see
@@ -1423,13 +1439,44 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		ddlent.parent_id	=	ddl.id
     					 AND		e.report_id			=	{$report_id}
     					 AND		e.user_id			=	{$user_id}
-    					 AND		ddlent.value		>	{$time}
+    					 AND		ddlent.value		<	{$time}
     					 {$entriessql}";
-
+    					 
     		return 		$this->dbc->count_records_sql($sql);
     }
+<<<<<<< HEAD
 
 
+=======
+    
+    /**
+     * Returns a list of reports that have deadline dates that fall between the given timestamps
+     * and are in 
+     * 
+     * @param	$ltimestamp	lower time stamp for the records that will be retrieved
+     * @param	$utimestamp	upper time stamp for the records that will be retrieved 
+     */
+    public	function get_reports_in_period($ltimestamp,$utimestamp)	{
+    	
+    	$sql	=	"SELECT 		e.*, r.*,ddl.value as deadline
+					   FROM			{block_ilp_entry} 			AS e,
+									{block_ilp_plu_ddl_ent}		AS ddl,
+									{block_ilp_plu_ste_items}	AS stitems,
+									{block_ilp_report}			AS r,
+									{block_ilp_plu_ste_ent}		AS stent
+						WHERE		stitems.passfail = 0
+						  AND		ddl.value > {$ltimestamp}
+						  AND		ddl.value < {$utimestamp}
+						  AND		stent.parent_id = stitems.id
+						  AND		e.id 	=	ddl.entry_id
+						  AND		e.id 	=	stent.entry_id
+						  AND		e.report_id	= r.id";
+    	
+    	return 		$this->dbc->get_records_sql($sql);
+    	
+    }
+    
+>>>>>>> remotes/origin/master
    /**
     * Returns the last updated entry for the given student in the gicen report
     *

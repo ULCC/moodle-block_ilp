@@ -33,7 +33,7 @@ class ilp_logging {
          $success = $this->dbc->update_record($table, $paramsobj);
          
         if( $success ){
-         $this->add_to_audit($table,LOG_UPDATE,$paramsobj,$currobject);
+         $this->add_to_audit($table,ILP_LOG_UPDATE,$paramsobj,$currobject);
         }
          return $success;
      }
@@ -81,7 +81,7 @@ class ilp_logging {
                 foreach( $extraparams as $key=>$value ){
                         $delobj->$key = $value;
                 }
-                $this->add_to_audit($table,LOG_DELETE,$delobj);
+                $this->add_to_audit($table,ILP_LOG_DELETE,$delobj);
              }
 
          }
@@ -130,7 +130,7 @@ class ilp_logging {
             default:
                 $attributes = array();
 
-            if( LOG_UPDATE == $action ){
+            if( ILP_LOG_UPDATE == $action ){
                 if( 'block_ilp_plu_' == substr( $table, 0, 14 ) ){
                     $newobject->record_id = $newobject->id;
                     $attributes[] = 'minimumlength';
@@ -141,9 +141,9 @@ class ilp_logging {
         }
 
         $oplist = array(
-                LOG_ADD => 'INSERT',
-                LOG_UPDATE => 'UPDATE',
-                LOG_DELETE => 'DELETE',
+                ILP_LOG_ADD => 'INSERT',
+                ILP_LOG_UPDATE => 'UPDATE',
+                ILP_ILP_LOG_DELETE => 'DELETE',
          );
 
          
@@ -181,7 +181,7 @@ class ilp_logging {
                         $log->newvalue = isset( $newobject->$value ) ? $newobject->$value : get_string('notapplicable','block_ilp');
 
                         $log->oldvalue = '';
-	                    if ($action != LOG_ADD && 'value' == $value ) {
+	                    if ($action != ILP_LOG_ADD && 'value' == $value ) {
                             if( !empty( $currobject ) ){
                                 $log->oldvalue = $currobject->value;
                             }
@@ -201,7 +201,7 @@ class ilp_logging {
             );
 	        foreach ($newobject as $key => $val) {
 	            if ((in_array($key,$attributes) &&
-	                ($this->diff_object($table,$newobject,$currobject,$key,$action) || $action == LOG_DELETE))) {
+	                ($this->diff_object($table,$newobject,$currobject,$key,$action) || $action == ILP_LOG_DELETE))) {
 	
 	                $log = new object();
 	                $log->creator_id = $USER->id;
@@ -227,7 +227,7 @@ class ilp_logging {
 
                     $log->attribute = $key;
 
-	                if ( $action != LOG_ADD ) {
+	                if ( $action != ILP_LOG_ADD ) {
                         if( isset( $currobject->$key ) ){
                             $log->oldvalue = $currobject->$key;
                         }
@@ -236,7 +236,7 @@ class ilp_logging {
                         }
 	                }
 
-	                $log->newvalue = ($action != LOG_DELETE ) ? $newobject->$key : NULL;
+	                $log->newvalue = ($action != ILP_LOG_DELETE ) ? $newobject->$key : NULL;
 	                $log->timecreated = $now;
 	                $log->timemodified = $now;
 	
@@ -311,7 +311,7 @@ class ilp_logging {
      * @return bool The success of the action
      */
      private function diff_object($table,$newobj,$currobj,$attrib,$action) {
-         if ($action == LOG_UPDATE || $action == LOG_DELETE || $action == LOG_ASSESSMENT) {
+         if ($action == ILP_LOG_UPDATE || $action == ILP_LOG_DELETE || $action == ILP_LOG_ASSESSMENT) {
              if( !isset( $currobj->$attrib ) ) {
                 if( isset( $newobj->$attrib ) )	{
                     //one is set and the other isn't - they must be different
@@ -349,17 +349,17 @@ class ilp_logging {
      */
 	private function action_type($table,$action,$candidate_id,$creator_id) {
             switch($action) {
-                case LOG_ADD:
+                case ILP_LOG_ADD:
                     if( $table == 'block_ilp_report' ) return get_string( 'ilp_report', 'block_ilp' );
                     if( $table == 'block_ilp_reportpermissions' ) return get_string( 'reportpermissions', 'block_ilp' );
                     if( $table == 'block_ilp_report_field' ) return get_string( 'ilp_element_plugin_add', 'block_ilp' );
                     break;
-                case LOG_UPDATE:
+                case ILP_LOG_UPDATE:
                     if( $table == 'block_ilp_report' ) return get_string( 'ilp_report', 'block_ilp' );
                     if( $table == 'block_ilp_reportpermissions' ) return get_string( 'reportpermissions', 'block_ilp' );
                     if( $table == 'block_ilp_report_field' ) return get_string( 'ilp_element_plugin_update', 'block_ilp' );
                     break;
-                case LOG_DELETE:
+                case ILP_LOG_DELETE:
                     if( $table == 'block_ilp_report' ) return get_string( 'ilp_report', 'block_ilp' );
                     if( $table == 'block_ilp_reportpermissions' ) return get_string( 'reportpermissions', 'block_ilp' );
                     if( $table == 'block_ilp_report_field' ) return get_string( 'ilp_element_plugin_delete', 'block_ilp' );

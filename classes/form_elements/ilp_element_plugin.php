@@ -203,7 +203,7 @@ class ilp_element_plugin {
 			
 			
 			//send the user back
-			redirect($backurl, get_string('returnreportprompt', 'block_ilp'), REDIRECT_DELAY);
+			redirect($backurl, get_string('returnreportprompt', 'block_ilp'), ILP_REDIRECT_DELAY);
 		}
 
 
@@ -230,7 +230,7 @@ class ilp_element_plugin {
 		         if ($this->mform->is_submitted()) { 
 		            //return the user to the 
 		        	$return_url = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
-		        	redirect($return_url, get_string("fieldcreationsuc", 'block_ilp'), REDIRECT_DELAY);
+		        	redirect($return_url, get_string("fieldcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
 		        }
 		    }
 		}

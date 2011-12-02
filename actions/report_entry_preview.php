@@ -73,7 +73,7 @@ if (empty($reportfields)) {
 	//send the user back to the edit_prompt.php page telling them that the report must contain fields
 	//before it may be previewed
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
-    redirect($return_url, get_string("reportmustcontainfields", 'block_ilp'), REDIRECT_DELAY);
+    redirect($return_url, get_string("reportmustcontainfields", 'block_ilp'), ILP_REDIRECT_DELAY);
 } 
 
 $mform	= new	report_entry_preview_mform($report_id);

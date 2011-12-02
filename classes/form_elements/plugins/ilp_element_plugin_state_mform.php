@@ -191,7 +191,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 	 		$pluginrecord 			=	new stdClass();
 	 		$pluginrecord->id		=	$oldrecord->id;
 	 		$pluginrecord->optionlist	=	$data->optionlist;
-			$pluginrecord->selecttype 	= 	OPTIONSINGLE;
+			$pluginrecord->selecttype 	= 	ILP_OPTIONSINGLE;
 	 			
 	 		//update the plugin with the new data
 	 		//return $this->dbc->update_plugin_record($this->tablename,$pluginrecord);

@@ -34,8 +34,8 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_itemlist_mform {
         $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
 		$typelist = array(
-			OPTIONSINGLE => get_string( 'ilp_element_plugin_dd_single' , 'block_ilp' ),
-			OPTIONMULTI => get_string( 'ilp_element_plugin_dd_multi' , 'block_ilp' )
+			ILP_OPTIONSINGLE => get_string( 'ilp_element_plugin_dd_single' , 'block_ilp' ),
+			ILP_OPTIONMULTI => get_string( 'ilp_element_plugin_dd_multi' , 'block_ilp' )
 		);
 		
 		$mform->addElement(
