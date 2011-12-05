@@ -104,7 +104,9 @@ $options[0]	=	get_string('noplugin','block_ilp');
 
 foreach ($mis_plugins as $plugin_file) {
 
-      require_once($plugins . '/' . $plugin_file . ".php");
+	 if (file_exists($plugins . '/' . $plugin_file . ".php")) {
+	
+      	require_once($plugins . '/' . $plugin_file . ".php");
         // instantiate the object
         $class = basename($plugin_file, ".php");
         $pluginobj = new $class();
@@ -122,6 +124,9 @@ foreach ($mis_plugins as $plugin_file) {
          		}
             }
          }
+	 } else	{
+	 	
+	 }
 }
 
 $attendplugin			= 	new admin_setting_configselect('block_ilp/attendplugin',get_string('attendaceplugin','block_ilp'),get_string('attendaceplugindesc','block_ilp'), '',$options);
@@ -193,21 +198,21 @@ if ($dbc->get_mis_plugins() !== false) {
 	$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
 	
 	foreach ($mis_plugins as $plugin_file) {
+		if (file_exists($plugins.'/'.$plugin_file.".php")) {
+		    require_once($plugins.'/'.$plugin_file.".php");
+		    
+		    // instantiate the object
+		    $class = basename($plugin_file, ".php");
+		    $pluginobj = new $class();
+		    $method = array($pluginobj, 'config_settings');
+			
+		    //check whether the config_settings method has been defined
 	
-	    require_once($plugins.'/'.$plugin_file.".php");
-	    
-	    // instantiate the object
-	    $class = basename($plugin_file, ".php");
-	    $pluginobj = new $class();
-	    $method = array($pluginobj, 'config_settings');
-		
-	    //check whether the config_settings method has been defined
-
-	    if (is_callable($method,true)) {
-	        $pluginobj->config_settings($settings);
-	        
-	    }
-
+		    if (is_callable($method,true)) {
+		        $pluginobj->config_settings($settings);
+		        
+		    }
+		}
 	}
 }
 
@@ -228,20 +233,20 @@ if ($dbc->get_tab_plugins() !== false) {
 	$tab_plugins = ilp_records_to_menu($dbc->get_tab_plugins(), 'id', 'name');
 	
 	foreach ($tab_plugins as $plugin_file) {
+		if (file_exists($plugins.'/'.$plugin_file.".php")) {
+		    require_once($plugins.'/'.$plugin_file.".php");
+		    
+		    // instantiate the object
+		    $class = basename($plugin_file, ".php");
+		    $pluginobj = new $class();
+		    $method = array($pluginobj, 'config_settings');
+			
+		    //check whether the config_settings method has been defined
 	
-	    require_once($plugins.'/'.$plugin_file.".php");
-	    
-	    // instantiate the object
-	    $class = basename($plugin_file, ".php");
-	    $pluginobj = new $class();
-	    $method = array($pluginobj, 'config_settings');
-		
-	    //check whether the config_settings method has been defined
-
-	    if (is_callable($method,true)) {
-	        $pluginobj->config_settings($settings);
-	    }
-
+		    if (is_callable($method,true)) {
+		        $pluginobj->config_settings($settings);
+		    }
+		}
 	}
 }
 

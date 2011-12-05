@@ -60,30 +60,33 @@ class ilp_dashboard_mis_attendance_tab  extends ilp_dashboard_tab {
 				
 				foreach ($mis_plugins as $plugin_file) {
 					
-				    require_once($plugins.'/'.$plugin_file.".php");
-				    
-				    // instantiate the object
-				    $class = basename($plugin_file, ".php");
-				    $pluginobj = new $class();
-				    $method = array($pluginobj, 'plugin_type');
+					if (file_exists($plugins.'/'.$plugin_file.".php")) {
 					
-				    //check whether the config_settings method has been defined
-			
-				    if (is_callable($method,true)) {
-				        if ($pluginobj->plugin_type() == 'attendance') {
-				        	
-				        	$mismisc	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
-				        	
-				        	$status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
-				        	
-				        	$status	=	(!empty($status)) ?  $status: 0;
-				        	
-				        	if (!empty($mismisc) && $status == ILP_ENABLED ) {
-					        	//NOTE names of tabs can not be get_string as this causes a nesting error 
-								$this->secondrow[]	=	array('id'=>$mismisc->id,'link'=>$this->linkurl,'name'=>$pluginobj->tab_name());
-				        	}
-				        }
-				    }
+					    require_once($plugins.'/'.$plugin_file.".php");
+					    
+					    // instantiate the object
+					    $class = basename($plugin_file, ".php");
+					    $pluginobj = new $class();
+					    $method = array($pluginobj, 'plugin_type');
+						
+					    //check whether the config_settings method has been defined
+				
+					    if (is_callable($method,true)) {
+					        if ($pluginobj->plugin_type() == 'attendance') {
+					        	
+					        	$mismisc	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
+					        	
+					        	$status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
+					        	
+					        	$status	=	(!empty($status)) ?  $status: 0;
+					        	
+					        	if (!empty($mismisc) && $status == ILP_ENABLED ) {
+						        	//NOTE names of tabs can not be get_string as this causes a nesting error 
+									$this->secondrow[]	=	array('id'=>$mismisc->id,'link'=>$this->linkurl,'name'=>$pluginobj->tab_name());
+					        	}
+					        }
+					    }
+					}
 			
 				}
 			}

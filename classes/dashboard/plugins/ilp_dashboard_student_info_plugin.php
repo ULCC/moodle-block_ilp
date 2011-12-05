@@ -186,33 +186,34 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 				
 				foreach ($mis_plugins as $plugin_file) {
 					
-				    require_once($plugins.'/'.$plugin_file.".php");
-				    
-				    // instantiate the object
-				    $class = basename($plugin_file, ".php");
-				    $pluginobj = new $class();
-				    $method = array($pluginobj, 'plugin_type');
-					
-				    if (is_callable($method,true)) {
-				    	//we only want mis plugins that are of type overview 
-				        if ($pluginobj->plugin_type() == 'overview') {
-				        	
-				        	//get the actual overview plugin
-				        	$misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
-				        	
-				        	//if the admin of the moodle has done there job properly then only one overview mis plugin will be enabled 
-				        	//otherwise there may be more and they will all be displayed 
-				        	
-				        	$status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
-				        	
-				        	$status	=	(!empty($status)) ?  $status: ILP_DISABLED;
-				        	
-				        	if (!empty($misplug) & $status == ILP_ENABLED ) {
-								$misoverviewplugins[]	=	$pluginobj;
-				        	}
-				        }
-				    }
-			
+					if (file_exists($plugins.'/'.$plugin_file.".php")) {
+					    require_once($plugins.'/'.$plugin_file.".php");
+					    
+					    // instantiate the object
+					    $class = basename($plugin_file, ".php");
+					    $pluginobj = new $class();
+					    $method = array($pluginobj, 'plugin_type');
+						
+					    if (is_callable($method,true)) {
+					    	//we only want mis plugins that are of type overview 
+					        if ($pluginobj->plugin_type() == 'overview') {
+					        	
+					        	//get the actual overview plugin
+					        	$misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
+					        	
+					        	//if the admin of the moodle has done there job properly then only one overview mis plugin will be enabled 
+					        	//otherwise there may be more and they will all be displayed 
+					        	
+					        	$status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
+					        	
+					        	$status	=	(!empty($status)) ?  $status: ILP_DISABLED;
+					        	
+					        	if (!empty($misplug) & $status == ILP_ENABLED ) {
+									$misoverviewplugins[]	=	$pluginobj;
+					        	}
+					        }
+					    }
+					}
 				}
 			}
 			

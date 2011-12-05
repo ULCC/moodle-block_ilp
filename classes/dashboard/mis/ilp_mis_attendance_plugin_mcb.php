@@ -285,21 +285,22 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
         $plugins = $CFG->dirroot . '/blocks/ilp/classes/dashboard/mis';
 
         foreach ($mis_plugins as $plugin_file) {
-
-            require_once($plugins . '/' . $plugin_file . ".php");
-            // instantiate the object
-            $class = basename($plugin_file, ".php");
-            $pluginobj = new $class();
-            $method = array($pluginobj, 'plugin_type');
-
-            //check whether the config_settings method has been defined
-
-            if (is_callable($method, true)) {
-                if ($pluginobj->plugin_type() == 'attendance') {
-                    $mismisc = $this->dbc->get_mis_plugin_by_name($plugin_file);
-                    $options[$mismisc->id] = $pluginobj->tab_name();
-                }
-            }
+        	if (file_exists($plugins.'/'.$plugin_file.".php")) {
+	            require_once($plugins . '/' . $plugin_file . ".php");
+	            // instantiate the object
+	            $class = basename($plugin_file, ".php");
+	            $pluginobj = new $class();
+	            $method = array($pluginobj, 'plugin_type');
+	
+	            //check whether the config_settings method has been defined
+	
+	            if (is_callable($method, true)) {
+	                if ($pluginobj->plugin_type() == 'attendance') {
+	                    $mismisc = $this->dbc->get_mis_plugin_by_name($plugin_file);
+	                    $options[$mismisc->id] = $pluginobj->tab_name();
+	                }
+	            }
+        	}
         }
 
         $this->config_select_element($mform, 'mis_plugin_mcb_linkedplugin', $options, get_string('linkedplugin', 'block_ilp'), get_string('linkedplugindesc', 'block_ilp'), '');

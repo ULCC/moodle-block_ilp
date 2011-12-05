@@ -154,25 +154,27 @@ class ilp_plugin {
 
         foreach($files as $file) {
             // look for plugins
-            if(preg_match('/^([a-z_]+)\.php$/i', $file, $matches)) {
 
-                if(!in_array($matches[1], $plugins)) {
-                    // include the class
-
-                	require_once($plugin_class_directory.'/'.$file);
-
-                    // instantiate the object
-                    $class = basename($file, ".php");
-                    
-                    $pluginobj = new $class();
-                    
-                    // update the resource_types table
-                    $id	=	$dbc->create_plugin($pluginobj->get_plugin_table(),$pluginobj->get_name());
-                    
-                    // any additional functions that must be carried that are specific to a child class can be carried out in the install function
-                    $pluginobj->install($id);
-                }
-            }
+	            if(preg_match('/^([a-z_]+)\.php$/i', $file, $matches)) {
+	
+	                if(!in_array($matches[1], $plugins)) {
+	                    // include the class
+	
+	                	require_once($plugin_class_directory.'/'.$file);
+	
+	                    // instantiate the object
+	                    $class = basename($file, ".php");
+	                    
+	                    $pluginobj = new $class();
+	                    
+	                    // update the resource_types table
+	                    $id	=	$dbc->create_plugin($pluginobj->get_plugin_table(),$pluginobj->get_name());
+	                    
+	                    // any additional functions that must be carried that are specific to a child class can be carried out in the install function
+	                    $pluginobj->install($id);
+	                }
+	            }
+        	
         }
 
     }
