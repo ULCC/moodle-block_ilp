@@ -27,7 +27,7 @@ class block_ilp extends block_list {
     	
         $this->title = get_string('blockname', 'block_ilp');
         $this->version = $ilpsettings->version();
-        $this->cron = 86400; //run the cron at minimum once every 24 hours
+        $this->cron = $ilpsettings->cron(); 
     }
     
     /**
@@ -519,10 +519,14 @@ class block_ilp extends block_list {
 	
 	function cron() {
 		global $CFG;
-	
+
 		require_once($CFG->dirroot."/blocks/ilp/classes/ilp_cron.class.php");
+
 		
 		$cron	=	 new ilp_cron();
+		
+		mtrace('yep');
+		
 		$cron->run();
 	}
 	

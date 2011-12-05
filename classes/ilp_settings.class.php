@@ -18,6 +18,7 @@ class ilp_settings {
  */
 	
 	private 		$version;
+	private 		$cron;
 	
 	
    /*
@@ -25,6 +26,7 @@ class ilp_settings {
     */
    function __construct() {
        $this->version = "2011101103";
+       $this->cron 		= 86400; 	//run the cron at minimum once every 24 hours
    }
 	
 	
@@ -36,6 +38,15 @@ class ilp_settings {
      */
 	function version() {
 		return $this->version; 
+	}
+	
+	 /**
+     * Returns the current version number of the block
+     *
+     * @return the current version number of the ilp
+     */
+	function cron() {
+		return $this->cron; 
 	}
 	
 	

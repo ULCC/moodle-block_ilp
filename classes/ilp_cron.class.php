@@ -6,6 +6,8 @@ class ilp_cron	{
 	
 	
 	function __construct()	{
+		global	$CFG;
+		
         // include the assmgr db
         require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 
@@ -29,12 +31,15 @@ class ilp_cron	{
 			
 			$reportentries	=	$this->get_list($lowertimestamp,$uppertimestamp);
 			mtrace( "running cron" );
-			mtrace( $reportentries);
+			
+			
+			
 			
 			foreach ($reportentries as $r) {
+				mtrace( $r->name);
 				
-				$user	=	$this->dbc->get_user($r->user_id);
-				
+				$user	=	$this->dbc->get_user_by_id($r->user_id);
+				mtrace( $user->firstname);
 				$email	=	new stdClass();
 				$email->reportname		=	$r->name;
 				$email->firsttname		=	$user->firstname;

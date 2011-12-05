@@ -795,7 +795,7 @@ class ilp_db_functions	extends ilp_logging {
     	//check for the ilpviewall capability at site level this gives the user rights to view all
 		$ilpadmin				=	has_capability('block/ilp:ilpviewall',$sitecontext);
     	
-		$is_admin				=	(is_siteadmin($USER) || $ilpadmin) ? true : false; 
+		$is_admin				=	(is_siteadmin($USER->id) || $ilpadmin) ? true : false; 
 		
 		
 		//if permissions where returned from then the role (or one of the roles given) has the permission in the course    
@@ -1447,7 +1447,7 @@ class ilp_db_functions	extends ilp_logging {
 									{block_ilp_report}			AS r,
 									{block_ilp_plu_ste_ent}		AS stent
 						WHERE		stitems.passfail = 0
-						  AND		ddl.value > {$ltimestamp}
+						  AND		ddl.value >= {$ltimestamp}
 						  AND		ddl.value < {$utimestamp}
 						  AND		stent.parent_id = stitems.id
 						  AND		e.id 	=	ddl.entry_id
