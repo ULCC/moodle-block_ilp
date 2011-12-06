@@ -78,7 +78,10 @@ class edit_report_mform extends ilp_moodleform {
 	        );
 	        
 	        $mform->addRule('description', null, 'maxlength', 65535, 'client');
-	        $mform->addRule('description', null, 'required', null, 'client');
+
+	        // commented out as causing problems with double submitting 
+	        // $mform->addRule('description', null, 'required', null, 'client');
+
 	        $mform->setType('description', PARAM_RAW);
         	
 	        //TODO add the elements to implement the frequency functionlaity
