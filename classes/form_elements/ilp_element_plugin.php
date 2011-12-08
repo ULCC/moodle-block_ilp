@@ -302,8 +302,6 @@ class ilp_element_plugin {
 
         foreach($files as $file) {
             // look for plugins
-        	if (file_exists($plugins.'/'.$plugin_file.".php")) {
-        	
             if(preg_match('/^([a-z_]+)\.php$/i', $file, $matches)) {
 
                 if(!in_array($matches[1], $plugins) && substr($matches[1], -5)  != 'mform') {
