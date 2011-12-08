@@ -84,10 +84,10 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
                 //we start the month counter from the first month
                 $month = $startmonth;
                 $data['course'] = $cname;
-                $data['attendance'] = $this->mcbdata[$cid]['attendance'] . '%';
-                $data['punctuality'] = $this->mcbdata[$cid]['punctuality'] . '%';
-                $data['effortinclass'] = $this->mcbdata[$cid]['effortinclass'];
-                $data['effortathome'] = $this->mcbdata[$cid]['effortathome'];
+                $data['attendance'] = $this->percent_format( $this->mcbdata[$cid]['attendance'] , true );//. '%';
+                $data['punctuality'] = $this->percent_format( $this->mcbdata[$cid]['punctuality'] , true );//. '%';
+                $data['effortinclass'] = $this->percent_format( $this->mcbdata[$cid]['effortinclass'] );
+                $data['effortathome'] = $this->percent_format( $this->mcbdata[$cid]['effortathome'] );
                 $data['grade'] = $this->mcbdata[$cid]['grade'];
                 $data['performance'] = $this->mcbdata[$cid]['performance'];
                 $flextable->add_data_keyed($data);

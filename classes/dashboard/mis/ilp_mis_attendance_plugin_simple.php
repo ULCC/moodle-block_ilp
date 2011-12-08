@@ -24,6 +24,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        //instantiate the ilp_ajax_table class
 	        $flextable = new ilp_mis_ajax_table( 'attendance_plugin_simple',true ,'ilp_mis_attendance_plugin_simple'); 
 	
+            $flextable->set_attribute('class', 'flexible generaltable');
 	        //create headers
 	        $headers = array( get_string('ilp_mis_attendance_plugin_simple_attendance','block_ilp') , get_string('ilp_mis_attendance_plugin_simple_punctuality','block_ilp') );
 	        //create columns
@@ -46,8 +47,10 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        //add the row to table
 	        foreach( $this->data as $row ){
 	            $data = array();
-	            $data[ 'attendance' ]  = $this->percent_format( $row[ 0 ] );// * 100;
-	            $data[ 'punctuality' ] = $this->percent_format( $row[ 1 ] );// * 100;
+                $att = $this->percent_format( $row[ 0 ] );
+                $punc = $this->percent_format( $row[ 1 ] );
+	            $data[ 'attendance' ]  = $att;
+	            $data[ 'punctuality' ] = $punc;
 	            $flextable->add_data_keyed( $data );
 	        }
 	        

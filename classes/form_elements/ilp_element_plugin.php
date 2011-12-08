@@ -323,8 +323,8 @@ class ilp_element_plugin {
                     $dbc->create_form_element_plugin($formelementobj->get_name(),$formelementobj->get_tablename());
                 }
             }
+          }
         }
-
     }
 
 
