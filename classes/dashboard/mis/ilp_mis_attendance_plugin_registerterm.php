@@ -175,29 +175,29 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
             $terms = (empty($sixtermformat)) ? 4 : 7;
 
             $data['metric'] = get_string('ilp_mis_attendance_plugin_registerterm_disp_attendance', 'block_ilp');
-            $data['overall'] = $summarydata['att_prec'][0];
-            $data['one'] = $summarydata['att_prec'][1];
-            $data['two'] = $summarydata['att_prec'][2];
-            $data['three'] = $summarydata['att_prec'][3];
+            $data['overall'] = $this->percent_format( $summarydata['att_prec'][0], true );
+            $data['one'] = $this->percent_format( $summarydata['att_prec'][1], true );
+            $data['two'] = $this->percent_format( $summarydata['att_prec'][2], true );
+            $data['three'] = $this->percent_format( $summarydata['att_prec'][3], true );
 
             if (!empty($sixtermformat)) {
-                $data['four'] = $summarydata['att_prec'][4];
-                $data['five'] = $summarydata['att_prec'][5];
-                $data['six'] = $summarydata['att_prec'][6];
+                $data['four'] = $this->percent_format( $summarydata['att_prec'][4], true );
+                $data['five'] = $this->percent_format( $summarydata['att_prec'][5], true );
+                $data['six'] = $this->percent_format( $summarydata['att_prec'][6], true );
             }
 
             $flextable->add_data_keyed($data);
 
             $data['metric'] = get_string('ilp_mis_attendance_plugin_registerterm_disp_punctuality', 'block_ilp');
-            $data['overall'] = $summarydata['pun_perc'][0];
-            $data['one'] = $summarydata['pun_perc'][1];
-            $data['two'] = $summarydata['pun_perc'][2];
-            $data['three'] = $summarydata['pun_perc'][3];
+            $data['overall'] = $this->percent_format( $summarydata['pun_perc'][0], true );
+            $data['one'] = $this->percent_format( $summarydata['pun_perc'][1], true );
+            $data['two'] = $this->percent_format( $summarydata['pun_perc'][2], true );
+            $data['three'] = $this->percent_format( $summarydata['pun_perc'][3], true );
 
             if (!empty($sixtermformat)) {
-                $data['four'] = $summarydata['pun_perc'][4];
-                $data['five'] = $summarydata['pun_perc'][5];
-                $data['six'] = $summarydata['pun_perc'][6];
+                $data['four'] = $this->percent_format( $summarydata['pun_perc'][4], true );
+                $data['five'] = $this->percent_format( $summarydata['pun_perc'][5], true );
+                $data['six'] = $this->percent_format( $summarydata['pun_perc'][6], true );
             }
 
             $flextable->add_data_keyed($data);
@@ -210,7 +210,7 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
 
         } else {
             if( $msg = get_string('nodataornoconfig', 'block_ilp') ){
-                $output = '<div id="plugin_nodata">' . $msg . '</div>';
+                $output = '<div id="plugin_nodata">*******************' . $msg . '</div>';
             }
         }
 

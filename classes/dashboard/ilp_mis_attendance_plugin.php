@@ -73,15 +73,28 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
     * @param float $decimal
     * @return string
     */
-    protected function percent_format( $decimal , $percentagealready=false ){
-        if( !is_numeric( $decimal ) ) return '-';
+    protected function percent_format( $inpdecimal , $percentagealready=false , $colourbg=true ){
         if( $percentagealready ){
-            $percentage = $decimal;
+            $decimal = str_replace( '%' , '' , $inpdecimal );
+        }
+        else{
+            $decimal = $inpdecimal;
+        }
+        if( !is_numeric( $decimal ) ) return $inpdecimal;   //if input is not numeric, simply return it untouched
+        if( $percentagealready ){
+            $percentage = number_format( $decimal, 0 );
         }
         else{
             $percentage = number_format( 100 * $decimal, 0 );
         }
-        return "$percentage%";
+        $percentage .= '%';
+        if( $colourbg ){
+            $this->init_bgcolours();
+            return $this->format_background_by_value( "$percentage" );
+        }
+        else{
+            return "$percentage";
+        }
     }
 
 
