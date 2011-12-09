@@ -44,6 +44,10 @@ class ilp_mis_connection{
         $this->prelimcalls	=	array();
 
         $dbconnectiontype	=	(!empty($cparams['type'])) 	? $cparams['type']	: 	get_config( 'block_ilp', 'dbconnectiontype' );
+
+        //if the dbconnection is empty return false
+       if (empty($dbconnectiontype)) return false;
+
         $host	=	(!empty($cparams['host'])) 	? $cparams['host']	: 	get_config( 'block_ilp', 'dbhost' );
         $user	=	(!empty($cparams['user'])) 	? $cparams['user']	: 	get_config( 'block_ilp', 'dbuser' );
         $pass	=	(!empty($cparams['pass'])) 	? $cparams['pass']	: 	get_config( 'block_ilp', 'dbpass' );
@@ -73,6 +77,11 @@ class ilp_mis_connection{
     public function get_mis_connection( $type, $host, $user, $pass, $dbname ){
         $errorlist = array();
         $db = false;
+
+        //trim any space chars (which seem to pass empty tests) and if empty return false
+        $trimtype   =  trim($type);
+        if (empty($trimtype))  return false;
+
         try{
             $db = ADONewConnection( $type );
         }
