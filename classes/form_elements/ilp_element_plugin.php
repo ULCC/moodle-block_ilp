@@ -322,7 +322,6 @@ class ilp_element_plugin {
                 }
             }
           }
-        }
     }
 
 
@@ -377,7 +376,7 @@ class ilp_element_plugin {
      * function used to update records in the resource
      */
     function update() {
-
+        return true;
     }
 
 
