@@ -18,6 +18,22 @@ function var_crap($var,$header="") {
 	
 }
 
+/**
+ * Test whether the id is that of an admin user
+ *
+ * @return bool true or false
+ */
+function ilp_is_siteadmin($userid) {
+    global $CFG;
+
+    if (stripos($CFG->release,"2.") !== false) {
+        return is_siteadmin($userid);
+    } else {
+        $sitecontext = get_context_instance(CONTEXT_SYSTEM);
+        return has_capability('moodle/site:doanything',$sitecontext);
+    }
+}
+
 
 /**
  * Generates a random number for when something needs to be identified
