@@ -10,7 +10,9 @@
  * @version 2.0
  */
 
-global $CFG, $PARSER,$USER;
+global $CFG, $PARSER,$USER,$PAGE;
+
+require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
 
 //get the user id if it is not set then we will pass the global $USER->id 
 $user_id   = $PARSER->optional_param('user_id',$USER->id,PARAM_INT);
@@ -81,7 +83,7 @@ $access_viewcomment		=	has_capability('block/ilp:viewcomment', $context);
 //check if the current user is an admin or has the ilpviewall capabilty at site level
 $ilpadmin						=	has_capability('block/ilp:ilpviewall',$sitecontext);
     	
-$access_ilp_admin				=	(is_siteadmin($USER) || $ilpadmin) ? true : false; 
+$access_ilp_admin				=	(ilp_is_siteadmin($USER->id) || $ilpadmin) ? true : false;
 
 if (!empty($access_ilp_admin)) {
 	$access_createreports	=	true;

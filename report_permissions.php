@@ -12,6 +12,8 @@
 
 global	$CFG,$USER;
 
+require_once($CFG->dirroot."/blocks/ilp/lib.php");
+
 //get the user id if it is not set then we will pass the global $USER->id 
 $user_id   = $PARSER->optional_param('user_id',$USER->id,PARAM_INT);
 
@@ -133,7 +135,7 @@ if ($access_viewcomment) {
 $ilpadmin				=	has_capability('block/ilp:ilpviewall',$sitecontext);
 
 //this is only in for debug and testing purposes 
-if (is_siteadmin($USER) || $ilpadmin) {
+if (ilp_is_siteadmin($USER->id) || $ilpadmin) {
 $access_report_createreports	=	1;
 $access_report_editreports		=	1;
 $access_report_deletereports	=	1;
