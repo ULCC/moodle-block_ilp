@@ -156,13 +156,10 @@
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';
-	$string['nocomments']			=	'No Comments';
+    $string['nocomments']			=	'No Comments';
+    $string['noconnection']			=	'No Connection';
 	$string['notapplicable']		=	'N/A';
 	$string['nothingtodisplay']		=	'Nothing to display';
-	
-	
-	
-	
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
