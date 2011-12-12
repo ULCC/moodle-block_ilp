@@ -16,7 +16,7 @@
 // fetch the table library
 require_once($CFG->dirroot.'/blocks/ilp/classes/tables/ilp_tablelib.class.php');
 
-define('TABLE_VAR_PAGESIZE',   7);
+define('ILP_TABLE_VAR_PAGESIZE',   7);
 define('ILP_TABLE_VAR_HOZOFFSET',  8);
 define('ILP_TABLE_VAR_FILTERS',    9);
 

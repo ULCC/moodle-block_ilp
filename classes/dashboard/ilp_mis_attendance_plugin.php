@@ -51,10 +51,9 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
     */
     protected function format_background_by_value( $percentage ){
         global $CFG;
-        require_once($CFG->dirroot . '/lib/outputcomponents.php');
         $n = intval( $percentage );
-        $ceiling = get_config( 'block_ilp', passpercent );
-        $floor = get_config( 'block_ilp', failpercent );
+        $ceiling = get_config( 'block_ilp', 'passpercent' );
+        $floor = get_config( 'block_ilp', 'failpercent' );
         $colour = $this->middlecolour;
 
         //get the colours for each status
@@ -65,7 +64,8 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
         elseif( $n >= $ceiling ){
             $colour = $this->passcolour;
         }
-        return html_writer::tag( 'span', $percentage, array( 'style' => "background-color:$colour;display:block" ) );
+        //return html_writer::tag( 'span', $percentage, array( 'style' => "background-color:$colour;display:block" ) );
+        return  "<span style='background-color:$colour;display:block'>$percentage</span>";
     }
 
     /*
