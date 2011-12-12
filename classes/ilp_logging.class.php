@@ -53,7 +53,7 @@ class ilp_logging {
         $paramsobj->id = $this->dbc->insert_record($table, $paramsobj);
 
         if ($paramsobj->id) {
-          $this->add_to_audit($table,LOG_ADD,$paramsobj);
+          $this->add_to_audit($table,ILP_LOG_ADD,$paramsobj);
         }
 
         return $paramsobj->id;
@@ -143,7 +143,7 @@ class ilp_logging {
         $oplist = array(
                 ILP_LOG_ADD => 'INSERT',
                 ILP_LOG_UPDATE => 'UPDATE',
-                ILP_ILP_LOG_DELETE => 'DELETE',
+                ILP_LOG_DELETE => 'DELETE',
          );
 
          
