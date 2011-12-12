@@ -136,6 +136,7 @@ $settings->add($attendplugin);
 $mis_settings 	= new admin_setting_heading('block_ilp/mis_connection', get_string('mis_connection', 'block_ilp'), '');
 $settings->add($mis_settings);
 $options = array(
+    ' '     => get_string('noconnection','block_ilp'),
     'mssql' => 'Mssql',
     'mysql' => 'Mysql',
     'odbc' => 'Odbc',
@@ -143,18 +144,18 @@ $options = array(
     'postgres' => 'Postgres',
     'sybase' => 'Sybase'
 );
-$mis_connection			= 	new admin_setting_configselect('block_ilp/dbconnectiontype',get_string('db_connection','block_ilp'),get_string('reportconfigurationsection','block_ilp'), 'mysql', $options);
+$mis_connection			= 	new admin_setting_configselect('block_ilp/dbconnectiontype',get_string('db_connection','block_ilp'),get_string('reportconfigurationsection','block_ilp'), '', $options);
 $settings->add( $mis_connection );
 /*
 */
 
-$dbname			=	new admin_setting_configtext('block_ilp/dbname',get_string( 'db_name', 'block_ilp' ),get_string( 'set_db_name', 'block_ilp' ),'moodle',PARAM_RAW);
+$dbname			=	new admin_setting_configtext('block_ilp/dbname',get_string( 'db_name', 'block_ilp' ),get_string( 'set_db_name', 'block_ilp' ),'',PARAM_RAW);
 $settings->add($dbname);
 
-$dbprefix			=	new admin_setting_configtext('block_ilp/dbprefix',get_string( 'db_prefix', 'block_ilp' ),get_string( 'prefix_for_tablenames', 'block_ilp' ),'mdl_',PARAM_RAW);
+$dbprefix			=	new admin_setting_configtext('block_ilp/dbprefix',get_string( 'db_prefix', 'block_ilp' ),get_string( 'prefix_for_tablenames', 'block_ilp' ),'',PARAM_RAW);
 $settings->add($dbprefix);
 
-$dbhost			=	new admin_setting_configtext('block_ilp/dbhost',get_string( 'db_host', 'block_ilp' ), get_string( 'host_name_or_ip', 'block_ilp' ),'localhost',PARAM_RAW);
+$dbhost			=	new admin_setting_configtext('block_ilp/dbhost',get_string( 'db_host', 'block_ilp' ), get_string( 'host_name_or_ip', 'block_ilp' ),'',PARAM_RAW);
 $settings->add($dbhost);
 
 $dbuser			=	new admin_setting_configtext('block_ilp/dbuser',get_string( 'db_user', 'block_ilp' ), get_string( 'db_user', 'block_ilp' ),'',PARAM_RAW);
