@@ -139,7 +139,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 								}
 
 								//get the last updated report entry
-								$lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
+								$lastentry				=	$this->dbc->get_lastupdatetime($r->id,$this->student_id);
 
 								$detail->frequency		=	$r->frequency;
 
