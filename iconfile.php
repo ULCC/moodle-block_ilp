@@ -13,11 +13,6 @@
 //NOTE if icons are not being displayed a likely cause is output in one of the included files (within action_includes.php) check this as
 //as well other factors
 
-$path_to_config = dirname($_SERVER['SCRIPT_FILENAME']).'/../../config.php';
-while (($collapsed = preg_replace('|/[^/]+/\.\./|','/',$path_to_config,1)) !== $path_to_config) {
-    $path_to_config = $collapsed;
-}
-
 //require_once($path_to_config);
 
 require_once('../../config.php');
