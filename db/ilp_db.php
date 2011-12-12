@@ -1462,7 +1462,7 @@ class ilp_db_functions	extends ilp_logging {
     }
 
    /**
-    * Returns the last updated entry for the given student in the gicen report
+    * Returns the last updated entry for the given student in the given report
     *
     * @param	int $report_id	the id of the report whose entry will be returned
     * @param	int $user_id the id of the user whose entry will be returned
@@ -1482,6 +1482,51 @@ class ilp_db_functions	extends ilp_logging {
 
     	return $this->dbc->get_record_sql($sql);
     }
+
+    /**
+     * Returns the timestamp for the last update to entries for the given report and user_id
+     * Differs from get_lastupdatedentry in that this only returns the timestamp and checks
+     * for updates to comments and user status
+     *
+     * @param	int $report_id	the id of the report whose entry will be returned
+     * @param	int $user_id the id of the user whose entry will be returned
+     *
+     * @return	mixed object the  of entries or false
+     */
+    public  function get_lastupdatetime($report_id,$user_id)    {
+
+        $sql    =   "SELECT MAX(timemodified) AS timemodified
+                     FROM (
+                            (
+                                SELECT MAX(timemodified) AS timemodified
+                                FROM	{block_ilp_entry}
+                                WHERE	report_id	=	{$report_id}
+                                AND 	user_id		=	{$user_id}
+                            )
+                            UNION
+                            (
+                                SELECT 	MAX(ec.timemodified) AS timemodified
+                                FROM 	{block_ilp_entry_comment} AS ec,
+                                        {block_ilp_entry} AS e
+                                WHERE 	entry_id = e.id
+                                AND	report_id	=	{$report_id}
+                                AND	user_id		=	{$user_id}
+                            )
+                            UNION
+                            (
+                                SELECT	timemodified
+                                FROM	{block_ilp_user_status}
+                                WHERE	user_id		=	{$user_id}
+                            )
+			            ) AS lastreportupdate
+                     ";
+
+        return $this->dbc->get_record_sql($sql);
+
+    }
+
+
+
 
      /**
      * Returns the plugin record that has the matching name in the given table
