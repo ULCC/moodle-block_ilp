@@ -46,26 +46,55 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_itemlist{
     	$fieldname	=	"{$this->reportfield_id}_field";
     	
 		$optionlist = $this->get_option_list( $this->reportfield_id );
-		$elementname = $fieldname;
 		$radioarray = array();
 		foreach( $optionlist as $key => $value ){
-			$radioarray[] = &MoodleQuickForm::createElement( 'radio', $elementname, '', $value, $key );
+			$radioarray[] = &MoodleQuickForm::createElement( 'radio', $fieldname, '', $value, $key );
 		}
 
 
         $mform->addGroup(
             $radioarray,
-            $elementname,
+            $fieldname,
 	    	$this->label,
 			'',
 			'',
             array('class' => 'form_input'),
 		    false
         );
-        
-        if (!empty($this->req)) $mform->addRule($elementname, null, 'required', null, 'client');
 
-        $mform->setType($elementname, PARAM_RAW);
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+
+        $mform->setType($fieldname, PARAM_RAW);
     }
+
+
+    /**
+     * places entry data for the report field given into the entryobj given by the user
+     *
+     * @param int $reportfield_id the id of the reportfield that the entry is attached to
+     * @param int $entry_id the id of the entry
+     * @param object $entryobj an object that will add parameters to
+     */
+    public function entry_data( $reportfield_id,$entry_id,&$entryobj ){
+        //this function will suffice for 90% of plugins who only have one value field (named value) i
+        //in the _ent table of the plugin. However if your plugin has more fields you should override
+        //the function
+
+        //default entry_data
+        $fieldname	=	$reportfield_id."_field";
+
+        $entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+        if (!empty($entry)) {
+            $entryobj->$fieldname	=	html_entity_decode($entry->value);
+        }
+
+        //loop through all of the data for this entry in the particular entry
+        foreach($entry as $e) {
+            $entryobj->$fieldname	=	$e->parent_id;
+        }
+    }
+
+
+
 }
 

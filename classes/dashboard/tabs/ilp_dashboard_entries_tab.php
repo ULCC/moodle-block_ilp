@@ -78,7 +78,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 					if (!empty($reports)) {
 
 						$role_ids	=	ilp_get_user_role_ids($PAGE->context,$USER->id);
-						$authuserrole	=	$this->dbc->get_role_by_name(AUTH_USER_ROLE);
+						$authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
 						if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
 
 						//cycle through all reports and save the relevant details
