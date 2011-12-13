@@ -190,7 +190,7 @@ class ilp_mis_connection{
    		}
    	
     	$sql		=	$select.$from.$where.$sort.$group.$limit;
-    	$result		= $this->execute($sql);
+    	$result		= (!empty($this->db)) ? $this->execute($sql) : false;
     	return		(!empty($result->fields))	?	$result->getRows() :	false;
     }
 
@@ -233,7 +233,7 @@ class ilp_mis_connection{
     	}
 		$sql	=	"EXECUTE {$procedurename} {$args}";
 		
-		$result		= $this->execute($sql);
+		$result		= (!empty($this->db)) ? $this->execute($sql) : false;
 		return		(!empty($result->fields))	?	$result->getRows() :	false;
     }
 
