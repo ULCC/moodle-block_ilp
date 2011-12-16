@@ -2142,7 +2142,7 @@ class ilp_db_functions	extends ilp_logging {
   		$currentfieldsql	=	(!empty($field_id)) 	?	"AND id != {$field_id}" : "";
 
   		$sql	=	'SELECT		*
-  					 FROM		mdl_block_ilp_report_field
+  					 FROM		{block_ilp_report_field}
   					 WHERE		label		=	"'.$label.'"
   					 AND		report_id	=	'.$report_id
   					 .' '.$currentfieldsql;
