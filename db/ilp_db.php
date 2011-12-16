@@ -1420,18 +1420,31 @@ class ilp_db_functions	extends ilp_logging {
 
 
 
-    		$sql	=	"SELECT		count(e.id)
+    		//$sql	=	"SELECT		count(e.id)
+    		$sql	=	"SELECT		e.id
     					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
     					 			{$CFG->prefix}block_ilp_plu_ddl 	as 	ddl,
-    					 			{$CFG->prefix}block_ilp_plu_ddl_ent as	ddlent
+    					 			{$CFG->prefix}block_ilp_plu_ddl_ent as	ddlent,
+
+    					 			{$CFG->prefix}block_ilp_plu_ste_ent as pe,
+    					 			{$CFG->prefix}block_ilp_plu_ste_items as pi
+
     					 WHERE		e.id			=	ddlent.entry_id
     					 AND		ddlent.parent_id	=	ddl.id
     					 AND		e.report_id			=	{$report_id}
     					 AND		e.user_id			=	{$user_id}
     					 AND		ddlent.value		<	{$time}
+
+    					 AND		e.id		        =	pe.entry_id
+    					 AND		pe.parent_id	    =	pi.id
+    					 AND		pi.passfail         !=  " . ILP_PASSFAIL_PASS . "
+
     					 {$entriessql}";
     					 
-    		return 		$this->dbc->count_records_sql($sql);
+    		$rst = $this->dbc->get_records_sql($sql);
+    		$c = count( $rst );
+    		return	$c;
+    					 
     }
 
     /**
