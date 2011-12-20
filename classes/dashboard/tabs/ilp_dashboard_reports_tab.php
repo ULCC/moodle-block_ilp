@@ -426,7 +426,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 					$states		=	$this->dbc->get_report_state_items($report_id,'ilp_element_plugin_state');
 					$stateselector	=	"<div class='report_state'><form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
 											<label>Report State</label>
-											<input type='hidden' name='course' value='{$this->course_id}' />
+											<input type='hidden' name='course_id' value='{$this->course_id}' />
 											<input type='hidden' name='user_id' value='{$this->student_id}' />
 											<input type='hidden' name='selectedtab' value='{$this->plugin_id}' />
 											<select name='tabitem' id='reportstateselect'>
