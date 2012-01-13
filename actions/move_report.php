@@ -58,7 +58,7 @@ if (!empty($reports)) {
 	$movesuc	=	false;
 }
 
-$resulttext = (!empty($movesuc)) ? get_string("fieldmovesuc", 'block_ilp') : get_string("fieldmoveerror", 'block_ilp');
+$resulttext = (!empty($movesuc)) ? get_string("reportmovesuc", 'block_ilp') : get_string("reportmoveerror", 'block_ilp');
 
 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php';
 redirect($return_url, $resulttext, ILP_REDIRECT_DELAY);
