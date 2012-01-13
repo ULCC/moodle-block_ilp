@@ -73,7 +73,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 					$reporttab		=	$this->dbc->get_plugin_record_by_classname('block_ilp_dash_tab','ilp_dashboard_reports_tab');
 
 					//get all enabled reports in this ilp
-					$reports		=	$this->dbc->get_reports(ILP_ENABLED);
+					$reports		=	$this->dbc->get_reports_by_position(null,null,false);
 					$reportslist	=	array();
 					if (!empty($reports)) {
 

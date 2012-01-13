@@ -195,7 +195,8 @@
 	$string['reportdeleteerror']				= 	'Report delete error';
 	$string['reportdeleted']					= 	'Report deleted';
 	$string['reportsoverdue']					= 	'Report overdue';
-	
+    $string['reportmovesuc']        			    =	'The report was successfully moved';
+    $string['reportmoveerror']        			    =	'An error has occurred the report was not move';
 	$string['required']	 						= 	'Required';
 	$string['reportpermissions']				= 	'Report Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';

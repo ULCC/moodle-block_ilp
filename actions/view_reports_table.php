@@ -20,6 +20,8 @@ $flextable->define_baseurl($CFG->wwwroot."/blocks/ilp/actions/edit_report_config
 //setup the array holding the column ids
 $columns	=	array();
 $columns[]	=	'reportname';
+$columns[]	=	'moveup';
+$columns[]	=	'movedown';
 $columns[]	=	'editreport';
 $columns[]	=	'editprompts';
 $columns[]	=	'editpermission';
@@ -29,6 +31,8 @@ $columns[]	=	'delete';
 
 //setup the array holding the header texts
 $headers	=	array();
+$headers[]	=	'';
+$headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
@@ -60,12 +64,38 @@ $flextable->setup();
 
 //get the data on fields to be used in the table
 $reports		=	$dbc->get_reports_table($flextable);
-
+$totalreportfields	=	count($reports);
 if (!empty($reports)) {
 	foreach ($reports as $row) {
 		$data = array();
 		
 		$data[] 		=	$row->name;
+
+        if ($row->position != 1) {
+            //if the field is in any position except 1 it needs a up icon
+            $title 	=	get_string('moveup','block_ilp');
+            $icon	=	$OUTPUT->pix_url("/t/up");
+            $movetype	=	"up";
+
+            $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_report.php?report_id={$row->id}&move=".ILP_MOVE_UP."&position={$row->position}'>
+									<img class='move' src='{$icon}' alt='{$title}' title='{$title}' />
+								 	</a>";
+        } else {
+            $data[] 	=	"";
+        }
+
+        if ($totalreportfields != $row->position) {
+            //if the field is in any position except last it needs a down icon
+            $title 	=	get_string('movedown','block_ilp');
+            $icon	=	$OUTPUT->pix_url("/t/down");
+            $movetype	=	"down";
+
+            $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_report.php?report_id={$row->id}&move=".ILP_MOVE_DOWN."&position={$row->position}'>
+									<img class='move' src='{$icon}' alt='{$title}' title='{$title}' />
+								 	</a>";
+        } else {
+            $data[] 	=	"";
+        }
 
 		//set the edit report link
 		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report.php?report_id={$row->id}'>
