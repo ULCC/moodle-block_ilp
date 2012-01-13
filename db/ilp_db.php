@@ -433,13 +433,62 @@ class ilp_db_functions	extends ilp_logging {
    	/**
      * Sets the new position of a field
      *
-     * @param int $plugin_id the id of the plugin that will be retrieved
+     * @param int $reportfield_id the id of the reportfield whose position will be changed
      * @return mixed object containing the plugin record or false
      */
     function set_new_position($reportfield_id,$newposition) {
     	return $this->dbc->set_field('block_ilp_report_field',"position",$newposition,array('id'=>$reportfield_id));
     }
 
+    /**
+     * Sets the new position of a report
+     *
+     * @param int $report_id the id of the report whose position will be changed
+     * @return mixed object containing the plugin record or false
+     */
+    function set_new_report_position($report_id,$newposition) {
+        return $this->dbc->set_field('block_ilp_report',"position",$newposition,array('id'=>$report_id));
+    }
+
+
+    /**
+     * Returns all reports with a position less than or greater than
+     * depending on type given. the results will include the position as well.
+     * if position and type are not specified all reports are returned ordered by
+     * position
+     *
+     * @param bool $disabled should disabled reports be returned
+     * @param int $position the position of fields that will be returned
+     *  	greater than or less than depending on $type
+     * @param  int $type determines whether fields returned will be greater than
+     * 		or less than position. move up = 1 move down 0
+     * @return mixed object containing the plugin record or false
+     */
+    function get_reports_by_position($position=null,$type=null,$disabled=true) {
+        global	$CFG;
+
+        $positionsql	=	"";
+        //the operand that will be used
+        if (!empty($position)) {
+            $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
+            $positionsql 	=  "AND (position = {$position} ||  position = {$otherfield})";
+        }
+
+        $disabledsql    =   '';
+        if (empty($disabled)) {
+            $disabledsql    =   "AND status = 1 ";
+        }
+
+        $sql	=	"SELECT		*
+					 FROM		{$CFG->prefix}block_ilp_report
+					 WHERE      deleted = 0
+                     {$disabledsql}
+					 {$positionsql}
+					 ORDER BY 	position";
+
+
+        return		$this->dbc->get_records_sql($sql);
+    }
 
     /**
      * Returns all fields in a report with a position less than or greater than
@@ -609,6 +658,8 @@ class ilp_db_functions	extends ilp_logging {
 
     	$where	=	(empty($deleted)) ? " WHERE deleted != 1 " : "";
 
+        $order  =   " order by position";
+
     	// get a count of all the records for the pagination links
         $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
 
@@ -616,7 +667,7 @@ class ilp_db_functions	extends ilp_logging {
         //$flextable->totalrows($count);
 
     	$data = $this->dbc->get_records_sql(
-            $select.$from.$where,
+            $select.$from.$where. $order,
             null,
             $flextable->get_page_start(),
             $flextable->get_page_size()
