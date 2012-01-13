@@ -133,6 +133,7 @@ if($mform->is_submitted()) {
                 if (stripos($CFG->release,"2.") !== false) {
                     message_send($message);
                 }   else {
+                    require_once($CFG->dirroot.'/message/lib.php');
                     message_post_message($message->userfrom, $message->userto,$message->fullmessage,$message->fullmessageformat,'direct');
                 }
             }
