@@ -173,7 +173,7 @@ if (!empty($entry_id)) {
 			//call the plugin class entry data method
 			$pluginclass->entry_data($field->id,$entry_id,$entry_data);
 		}
-		
+
 		//loop through the plugins and get the data for each one
 		$mform->set_data($entry_data);
 	}	

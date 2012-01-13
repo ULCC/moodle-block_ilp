@@ -136,12 +136,12 @@ $ilpadmin				=	has_capability('block/ilp:ilpviewall',$sitecontext);
 
 //this is only in for debug and testing purposes 
 if (ilp_is_siteadmin($USER->id) || $ilpadmin) {
-$access_report_createreports	=	1;
-$access_report_editreports		=	1;
-$access_report_deletereports	=	1;
-$access_report_viewreports		=	1;	
-$access_report_viewilp			=	1;
-$access_report_viewotherilp		=	1;	
+    $access_report_createreports	=	1;
+    $access_report_editreports		=	1;
+    $access_report_deletereports	=	1;
+    $access_report_viewreports		=	1;
+    $access_report_viewilp			=	1;
+    $access_report_viewotherilp		=	1;
 	
 }
 
