@@ -226,8 +226,13 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_form_element_plugins() {
+        global $CFG;
+
         // check for the presence of a table to determine which query to run
-        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_plugin}'");
+        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
+               in_array('block_ilp_plugin',$this->dbc->get_tables())
+            :
+                $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_plugin}'");
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_plugin', array()) : false;
@@ -257,8 +262,13 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_plugins() {
+        global $CFG;
+
         // check for the presence of a table to determine which query to run
-        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_plugin}'");
+        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
+            in_array('block_ilp_dash_plugin',$this->dbc->get_tables())
+            :
+            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_plugin}'");
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_plugin', array()) : false;
@@ -270,8 +280,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_tabs() {
-        // check for the presence of a table to determine which query to run
-        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_tab}'");
+        global $CFG;
+
+        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
+            in_array('block_ilp_dash_tab',$this->dbc->get_tables())
+            :
+            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_tab}'");
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
@@ -283,8 +297,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_templates() {
-        // check for the presence of a table to determine which query to run
-        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_temp}'");
+        global $CFG;
+
+        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
+            in_array('block_ilp_dash_temp',$this->dbc->get_tables())
+            :
+            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_temp}'");
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_temp', array()) : false;
@@ -2099,10 +2117,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_mis_plugins() 	{
-    	global	$CFG;
+        global $CFG;
 
-    	        // check for the presence of a table to determine which query to run
-        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{$CFG->prefix}block_ilp_mis_plugin'");
+        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
+            in_array('block_ilp_mis_plugin',$this->dbc->get_tables())
+            :
+            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_mis_plugin}'");
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_mis_plugin', array()) : false;
@@ -2139,10 +2159,14 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_tab_plugins() 	{
-    	global	$CFG;
+        global $CFG;
 
-    	        // check for the presence of a table to determine which query to run
-        $tableexists = $this->dbc->get_records_sql("SHOW TABLES LIKE '{$CFG->prefix}block_ilp_dash_tab'");
+        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
+            in_array('block_ilp_dash_tab',$this->dbc->get_tables())
+            :
+            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_tab}'");
+
+
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
