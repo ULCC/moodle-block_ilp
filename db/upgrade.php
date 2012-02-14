@@ -116,8 +116,8 @@ function xmldb_block_ilp_upgrade($oldversion) {
         $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('entry_id'),'block_ilp_entry','id');
         $table->addKey($table_key);
         
-       	
-        $dbman->create_table($table);
+       	if (!$dbman->table_exists($table)) $dbman->create_table($table);
+
     } 
     
     
