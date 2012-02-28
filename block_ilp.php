@@ -270,7 +270,7 @@ class block_ilp extends block_list {
 
 					$reportinfo				=	new stdClass();
 					$reportinfo->total		=	$dbc->count_report_entries($r->id,$USER->id);
-					$reportinfo->actual		=	$dbc->count_report_entries_with_state($r->id,$USER->id,ILP_PASSFAIL_PASS);
+					$reportinfo->actual		=	$dbc->count_report_entries_with_state($r->id,$USER->id,ILP_STATE_PASS);
 					
 					 //if total_possible is empty then there will be nothing to report
 	    	        if (!empty($reportinfo->total)) {

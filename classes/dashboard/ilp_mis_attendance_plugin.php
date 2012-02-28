@@ -34,9 +34,9 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
 /*
         these are the wrong colours !
         global $DB;
-        $this->passcolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_PASSFAIL_PASS ) )->value;
-        $this->failcolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_PASSFAIL_FAIL ) )->value;
-        $this->middlecolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_PASSFAIL_UNSET ) )->value;
+        $this->passcolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_STATE_PASS ) )->value;
+        $this->failcolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_STATE_FAIL ) )->value;
+        $this->middlecolour = $DB->get_record( 'block_ilp_plu_sts_items', array( 'passfail' => ILP_STATE_UNSET ) )->value;
 */
         $this->passcolour = get_config( 'block_ilp' , 'passcolour' );
         $this->failcolour = get_config( 'block_ilp' , 'failcolour' );
