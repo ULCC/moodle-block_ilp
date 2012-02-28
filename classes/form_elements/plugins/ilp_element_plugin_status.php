@@ -560,10 +560,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 				//if the the name of the extra field is passfail then 
                 if( 'passfail' == $field ){
                 	//if the field value is fail add to fail list
-                    if( ILP_PASSFAIL_FAIL == $obj->passfail ){
+                    if( ILP_STATE_FAIL == $obj->passfail ){
                         $faillist[] = $obj->name;
                     }
-                    if( ILP_PASSFAIL_PASS == $obj->passfail ){
+                    if( ILP_STATE_PASS == $obj->passfail ){
                         $passlist[] = $obj->name;
                     }
                 }

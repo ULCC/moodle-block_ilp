@@ -233,10 +233,13 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	
 						$reportinfo				=	new stdClass();
 						$reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
-						$reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
+                        $reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_PASS);
+                        //retrieve the number of entries that have the not counted state
+                        $reportinfo->notcounted	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_NOTCOUNTED);
 
 						 //if total_possible is empty then there will be nothing to report
 		    	        if (!empty($reportinfo->total)) {
+                            $reportinfo->total     =   $reportinfo->total -  $reportinfo->notcounted;
 		    	        	//calculate the percentage
 		    	        	$reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
 		    	        

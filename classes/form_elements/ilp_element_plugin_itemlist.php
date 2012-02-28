@@ -202,9 +202,15 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		return $outlist;
 	}
 
-    public static function optlist2Array( $optstring ){
-		//split on lines
-		$optsep = "\n";
+    /**
+     * converts a string of options into an array
+     * @param string $optstring the string that you want to convert
+     * @param string $optsep the seperator that is used to seperate lines
+     *
+     * @return array array given list converted into an array
+     */
+    public static function optlist2Array( $optstring, $optsep = "\n" ){
+
 		$keysep = ":";
 		$optlist = explode( $optsep , $optstring );
 		//now split each entry into key and value

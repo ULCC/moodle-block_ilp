@@ -1521,7 +1521,7 @@ class ilp_db_functions	extends ilp_logging {
 
     					 AND		e.id		        =	pe.entry_id
     					 AND		pe.parent_id	    =	pi.id
-    					 AND		pi.passfail         =   " . ILP_PASSFAIL_FAIL . "
+    					 AND		pi.passfail         =   " . ILP_STATE_UNSET . "
 
     					 {$entriessql}";
     					 

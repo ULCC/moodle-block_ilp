@@ -344,9 +344,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 									}
 
 									foreach ($reportfields as $field) {
-
-
-
 										//get the plugin record that for the plugin
 										$pluginrecord	=	$this->dbc->get_plugin_by_id($field->plugin_id);
 

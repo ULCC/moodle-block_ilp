@@ -288,7 +288,8 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	  * @param object $entryobj an object that will add parameters to
 	  */
 	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
-	  	
+	  	global $CFG;
+
 	  	$fieldname	=	$reportfield_id."_field";
 	 	
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
@@ -305,7 +306,7 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
 	 		
 	 		if (!empty($has_statefield))	{ 
 	 			//check if the entry is in a unset state 
-				$recordstate	=	$this->dbc->count_report_entries_with_state($entryrecord->report_id,$entryrecord->user_id,ILP_PASSFAIL_UNSET,false,$entry_id);
+				$recordstate	=	$this->dbc->count_report_entries_with_state($entryrecord->report_id,$entryrecord->user_id,ILP_STATE_UNSET,false,$entry_id);
 	 			if (!empty($recordstate) && $entry->value < time()) {
   			 		$img	=	 "<img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/overdue.jpg' alt='' width='32px' height='32px' />";
 	 			} 

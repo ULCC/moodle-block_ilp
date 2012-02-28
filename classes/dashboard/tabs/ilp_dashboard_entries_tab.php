@@ -111,20 +111,24 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 								//does this report have a state field
 
 								//get all entries for this student in report
-								$detail->entries		=	($this->dbc->count_report_entries($r->id,$this->student_id)) ? $this->dbc->count_report_entries($r->id,$this->student_id) : 0;
-								$detail->state_report	=	false;
+                                $detail->entries		=	($this->dbc->count_report_entries($r->id,$this->student_id)) ? $this->dbc->count_report_entries($r->id,$this->student_id) : 0;
+                                $detail->state_report	=	false;
 
 								$res = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state');
 								if ($res) {
 									//get the number of entries achieved
-									$detail->achieved	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_PASS);
+            						$detail->achieved	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_PASS);
+
+                                    //get number of entries with notcounted state and minus this from the number of entries
+                                    $detail->notcounted	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_NOTCOUNTED);
+                                    $detail->entries    = $detail->entries - $detail->notcounted;
 									$detail->state_report	=	true;
 								}
 
 								$res = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_date_deadline');
 								if ($res) {
 
-									$inprogressentries	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_PASSFAIL_UNSET,false);
+									$inprogressentries	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_UNSET,false);
 									$inprogentries 		=	array();
 
 									if (!empty($inprogressentries)) {
@@ -150,7 +154,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
 								$detail->lastmod	=	(!empty($lastupdate->timemodified)) ?  userdate($lastupdate->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
 
-								$detail->canadd	= ($canaddreport) ? true : false;
+								$detail->canadd	    = ($canaddreport) ? true : false;
 
 								$detail->canedit	= ($caneditreport) ? true : false;
 

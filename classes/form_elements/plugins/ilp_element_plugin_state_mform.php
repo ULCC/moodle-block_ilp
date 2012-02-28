@@ -23,17 +23,24 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
     * @param array $pass_list - list of values to be classified as pass
     * @param array $unset_list - not really necessary ... if nothing matches, we default to unset anyway
     */
-    protected function deducePassFailFromLists( $state_list, $fail_list, $pass_list, $keysep=':' ){
+    protected function deduceItemState( $state_list, $fail_list, $pass_list,$notcounted_list, $keysep=':' ){
+
         foreach( $state_list as $grade ){
 	        $grade = trim( $grade );
-	        if( in_array( $grade, $fail_list ) ){
-	            return ILP_PASSFAIL_FAIL;
+
+            if( in_array( $grade, $fail_list ) ){
+	            return ILP_STATE_FAIL;
 	        }
-	        if( in_array( $grade, $pass_list ) ){
-	            return ILP_PASSFAIL_PASS;
-	        }
+
+            if( in_array( $grade, $pass_list ) ){
+                return ILP_STATE_PASS;
+            }
+
+            if( in_array( $grade, $notcounted_list ) ){
+                return ILP_STATE_NOTCOUNTED;
+            }
         }
-        return ILP_PASSFAIL_UNSET;
+        return ILP_STATE_UNSET;
     }
 	
 		/**
@@ -51,6 +58,13 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 			array('class' => 'form_input')
 	    );
 
+        $mform->addElement(
+            'static',
+            'existing_options',
+            get_string( 'ilp_element_plugin_dd_existing_options' , 'block_ilp' ),
+            ''
+        );
+
 		$mform->addElement(
 			'textarea',
 			'fail',
@@ -65,6 +79,18 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 			array('class' => 'form_input')
 	    );
 
+        $mform->addElement(
+            'textarea',
+            'notcounted',
+            get_string( 'ilp_element_plugin_state_notcounted', 'block_ilp' ),
+            array('class' => 'form_input')
+        );
+
+        $mform->addElement(
+            'hidden',
+            'existing_options_hidden'
+        );
+
 		//admin must specify at least 1 option, with at least 1 character
         $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 
@@ -74,7 +100,8 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
     protected function is_valid_item( $item, $item_list, $keysep=":" ){
         $item = trim( $item );
         $itemparts = explode( $keysep, $item );
-        foreach( $itemparts  as $item ){
+
+        foreach( $itemparts  as $item ) {
             //$item should be either a key or value of $item_list
             if( in_array( $item, array_values( $item_list ) ) || in_array( $item, array_keys( $item_list ) ) ){
                 return true;
@@ -84,22 +111,31 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
     }
 
 	protected function specific_validation($data) {
-		$optionlist = array();
-		if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
-			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data[ 'optionlist' ] );
-		}
+
+        $optionlist = (isset($data[ 'optionlist' ])) ? ilp_element_plugin_itemlist::optlist2Array( $data[ 'optionlist' ] ) : array();
+
+        //this code is based on the current rule that any option that exits can not be removed
+        //if this changes this code will need to be changed
+        $existingoptionlist = (isset($data[ 'existing_options_hidden' ])) ? ilp_element_plugin_itemlist::optlist2Array( $data[ 'existing_options_hidden' ] ,"<br />" ) : array();
+        $optionlist =   array_merge($optionlist,$existingoptionlist);
+
         //all contents of $data->fail and $data->pass must match valid keys or values in $optionlist
         $sep = "\n";
         $keysep = ":";
-        $fail_item_list = explode( $sep, $data[ 'fail' ] );
-        $pass_item_list = explode( $sep, $data[ 'pass' ] );
-        foreach( array( $fail_item_list, $pass_item_list ) as $item_list ){
+        $fail_item_list         = explode( $sep, $data[ 'fail' ] );
+        $pass_item_list         = explode( $sep, $data[ 'pass' ] );
+        $notcounted_item_list   = explode( $sep, $data[ 'notcounted' ] );
+
+
+
+        foreach( array( $fail_item_list, $pass_item_list, $notcounted_item_list ) as $item_list ){
             foreach( $item_list as $submitted_item ){
                 if( trim( $submitted_item ) && !$this->is_valid_item( $submitted_item , $optionlist, $keysep ) ){
                     $this->errors[] = get_string( 'ilp_element_plugin_error_not_valid_item' , 'block_ilp' ) . ": <em>$submitted_item</em>";
                 }
             }
         }
+
     }
 
 
@@ -107,34 +143,33 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 	* take input from the management form and write the element info
 	*/
 	 protected function specific_process_data($data) {
-		$optionlist = array();
-		if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
-			//dd type needs to take values from admin form and write them to items table
-			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
-		}
 
-	        $sep = "\n";
-	        $keysep = ":";
+         $optionlist = (isset($data->optionlist)) ? ilp_element_plugin_itemlist::optlist2Array( $data->optionlist ) : array();
+
+        $sep = "\n";
+        $keysep = ":";
 		//entries from data to go into $this->tablename and $this->items_tablename
 
-	        $gradekeylist = array(
-       		     'pass', 'fail'
-	        );
-	        foreach( $gradekeylist as $key ){
-       		     $v = $key . '_list';
-       		     $$v = explode( $sep, $data->$key );
-       		     //deal with pesky whitespace
-       		     foreach( $$v as &$entry ){
-       		         $entry = trim( $entry );
-       		         $entryparts = explode( $keysep , $entry );
-       		         if( 1 < count( $entryparts ) ){
-       		             //admin has copied a whole key:value string into the pass or fail textarea
-       		             //so throw away the key 
-       		             $entry = $entryparts[1];
-       		         }
-       		     }
-       		 }
-	        //we now have 2 lists: $pass_list and $fail_list 
+        $gradekeylist = array(
+             'pass', 'fail','notcounted'
+        );
+
+       foreach( $gradekeylist as $key ){
+         $v = $key . '_list';
+         $$v = explode( $sep, $data->$key );
+         //deal with pesky whitespace
+         foreach( $$v as &$entry ){
+             $entry = trim( $entry );
+             $entryparts = explode( $keysep , $entry );
+             if( 1 < count( $entryparts ) ){
+                 //admin has copied a whole key:value string into the pass or fail textarea
+                 //so throw away the key
+                 $entry = $entryparts[1];
+             }
+         }
+        }
+
+        //we now have 2 lists: $pass_list and $fail_list
 	  	
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;
 	 	
@@ -150,7 +185,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 				//one item row inserted here
 				$itemrecord->value = $key;
 				$itemrecord->name = $itemname;
-                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+                $itemrecord->passfail = $this->deduceItemState( array( $itemname, $key ), $fail_list, $pass_list, $notcounted_list );
 	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	 	} else {
@@ -183,7 +218,7 @@ class ilp_element_plugin_state_mform  extends ilp_element_plugin_itemlist_mform 
 				//one item row inserted here
 				$itemrecord->value = $key;
 				$itemrecord->name = $itemname;
-                $itemrecord->passfail = $this->deducePassFailFromLists( array( $itemname, $key ), $fail_list, $pass_list );
+                $itemrecord->passfail = $this->deduceItemState( array( $itemname, $key ), $fail_list, $pass_list, $notcounted_list );
 		 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
 			}
 	

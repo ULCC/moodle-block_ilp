@@ -59,19 +59,20 @@ class ilp_element_plugin_status_mform  extends ilp_element_plugin_itemlist_mform
     * @param array $pass_list - list of values to be classified as pass
     * @param array $unset_list - not really necessary ... if nothing matches, we default to unset anyway
     */
+    /* todo: REMOVE THIS function as it does not look like it is being used by anything
     protected function deducePassFailFromLists( $state_list, $fail_list, $pass_list, $keysep=':' )	{
         foreach( $state_list as $grade ){
 	        $grade = trim( $grade );
 	        if( in_array( $grade, $fail_list ) ){
-	            return ILP_PASSFAIL_FAIL;
+	            return ILP_STATE_FAIL;
 	        }
 	        if( in_array( $grade, $pass_list ) ){
-	            return ILP_PASSFAIL_PASS;
+	            return ILP_STATE_PASS;
 	        }
         }
-        return ILP_PASSFAIL_UNSET;
+        return ILP_STATE_UNSET;
     }
-	
+	*/
 	
     protected function is_valid_item( $item, $item_list, $keysep=":" ){
         $item = trim( $item );
