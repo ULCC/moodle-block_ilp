@@ -33,6 +33,14 @@ class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_itemlist_mform {
 		//admin must specify at least 1 option, with at least 1 character
         $mform->addRule('optionlist', null, 'minlength', 1, 'client');
 		//@todo should we insist on a default option being chosen ?
+
+        //added the below so that exisiting options can be seen
+        $mform->addElement(
+              'static',
+              'existing_options',
+              get_string( 'ilp_element_plugin_dd_existing_options' , 'block_ilp' ),
+              ''
+        );
 	  }
 	 
 	 function definition_after_data() {
