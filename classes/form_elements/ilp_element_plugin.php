@@ -166,9 +166,9 @@ class ilp_element_plugin {
         	//get the form element data from the plugin table
         	$form_element		=	$this->dbc->get_form_element_by_reportfield($plugin->tablename,$reportfield->id);
 		
-		
-		
-        	
+
+
+
             $non_attrib = array('id', 'timemodified', 'timecreated');
 
             if (!empty($form_element)) {
@@ -179,12 +179,11 @@ class ilp_element_plugin {
                 }
             }
 	    $this->return_data( $reportfield );
-        }
-	else{
-		//new element - check for config file
-		if(file_exists($this->local_config_file)) {
-			$reportfield->optionlist = self::itemlist_flatten( parse_ini_file( $this->local_config_file ) );
-		}
+        }   else    {
+            //new element - check for config file
+            if(file_exists($this->local_config_file)) {
+                $reportfield->optionlist = self::itemlist_flatten( parse_ini_file( $this->local_config_file ) );
+            }
 	}
 
         // instantiate the form and load the data
@@ -192,16 +191,16 @@ class ilp_element_plugin {
 
         $this->mform->set_data($reportfield);
 
-        
+
         //enter a back u
         $backurl = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
         
         
 	    //was the form cancelled?
 		if ($this->mform->is_cancelled()) {
-			
-			
-			
+
+
+
 			//send the user back
 			redirect($backurl, get_string('returnreportprompt', 'block_ilp'), ILP_REDIRECT_DELAY);
 		}
@@ -225,8 +224,8 @@ class ilp_element_plugin {
 					//print an error message	
 		            print_error(get_string("fieldcreationerror", 'block_ilp'), 'block_ilp');
 		        }
-		
-		                
+
+
 		         if ($this->mform->is_submitted()) { 
 		            //return the user to the 
 		        	$return_url = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
