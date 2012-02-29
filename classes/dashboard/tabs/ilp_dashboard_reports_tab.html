@@ -36,8 +36,8 @@
 							<p><?php echo get_string('date')." : ".$entry_data->modified;?></p>
 					</div>
 			<div class="clearfix"> </div>
-		
-			
+
+            <?php if (!empty($has_comments)) {?>
 			<div class="reports-comments">
 				<div class="view-comments">
 				<h3 id="entry_<?php echo $entry->id; ?>" class="commentheading"><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3>
@@ -45,7 +45,7 @@
 				</div>
 			</div>
 				<?php 
-				if (!empty($comments) && !empty($access_report_viewcomment)) {
+				if (!empty($comments) && !empty($access_report_viewcomment) ) {
 				?>
 				
 				<div id="entry_<?php echo $entry->id; ?>_container">
@@ -66,6 +66,7 @@
 								
 					<?php } ?> 
 				</div>
-			<?php }	
+			<?php }
+			}
 			?>
 			</div>
