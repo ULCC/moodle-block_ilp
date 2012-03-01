@@ -147,8 +147,8 @@ class ilp_element_plugin_date_deadline extends ilp_element_plugin {
     * function used to return the language strings for the plugin
     */
     function language_strings(&$string) {
-        $string['ilp_element_plugin_date_deadline']		= 'Date selector';
-        $string['ilp_element_plugin_date_deadline_type'] 	= 'date selector';
+        $string['ilp_element_plugin_date_deadline']		= 'Date deadline';
+        $string['ilp_element_plugin_date_deadline_type'] 	= 'date deadline';
         $string['ilp_element_plugin_date_deadline_description']	= 'A date deadline entry element';
         $string['ilp_element_plugin_date_deadline_tense'] 	= 'Date tense';
         $string['ilp_element_plugin_date_deadline_past'] 	= 'past';
