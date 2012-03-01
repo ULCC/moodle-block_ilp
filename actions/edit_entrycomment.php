@@ -118,7 +118,9 @@ if($mform->is_submitted()) {
 
            //notify the user that a comment has been made on one of their report entries
             if ($USER->id != $entry->user_id)   {
-                $reportsviewtab             =   0;
+                $reportsviewtab             =   $dbc->get_tab_plugin_by_name('ilp_dashboard_reports_tab');
+                $reportstaburl              =   (!empty($reportsviewtab)) ?  "&selectedtab={$reportsviewtab->id}&tabitem={$reportsviewtab->id}:{$report->id}" : "";
+
                 $message                    =   new stdClass();
                 $message->component         =   'block_ilp';
                 $message->name              =   'ilp_comment';
@@ -127,7 +129,7 @@ if($mform->is_submitted()) {
                 $message->userto            =   $dbc->get_user_by_id($entry->user_id);
                 $message->fullmessage       =   get_string('newreportcomment','block_ilp',$report);
                 $message->fullmessageformat =   FORMAT_PLAIN;
-                $message->contexturl        =   $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$entry->user_id}&selectedtab={$reportsviewtab}:{$entry->id}&tabitem={$reportsviewtab}";
+                $message->contexturl        =   $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$entry->user_id}{$reportstaburl}";
                 $message->contexturlname    =   get_string('viewreport','block_ilp');
 
                 if (stripos($CFG->release,"2.") !== false) {
