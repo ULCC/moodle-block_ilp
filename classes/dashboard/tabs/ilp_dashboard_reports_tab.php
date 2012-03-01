@@ -118,7 +118,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
 
 					//get all reports
-					$reports	=	$this->dbc->get_reports(ILP_ENABLED);
+					$reports	=	$this->dbc->get_reports_by_position(null,null,false);
 					if (!empty($reports)) {
 						//create a tab for each enabled report
 						foreach($reports as $r)	{
