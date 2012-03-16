@@ -95,7 +95,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 			
 			foreach( $objlist as $obj ){
 				//place the name into an array with value as key
-				$outlist[ $obj->id ] = $obj->name;
+				$outlist[ $obj->value ] = $obj->name;
 				
 				//if the the name of the extra field is passfail then 
                 if( 'passfail' == $field ){
