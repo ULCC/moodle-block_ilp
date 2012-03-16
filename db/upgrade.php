@@ -169,7 +169,7 @@ function xmldb_block_ilp_upgrade($oldversion) {
 
         // Define index report_entry (not unique) to be added to block_ilp_entry
         $table = new xmldb_table('block_ilp_plu_ste_items');
-        $index = new xmldb_index('report_entry', XMLDB_INDEX_NOTUNIQUE, array('passfail'));
+        $index = new xmldb_index('passfail', XMLDB_INDEX_NOTUNIQUE, array('passfail'));
 
         // Conditionally launch add index report_entry
         if (!$dbman->index_exists($table, $index)) {
