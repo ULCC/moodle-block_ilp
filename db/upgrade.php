@@ -120,11 +120,6 @@ function xmldb_block_ilp_upgrade($oldversion) {
        	if (!$dbman->table_exists($table)) $dbman->create_table($table);
 
     } 
-    
-    
-    
-
-
 
 
     if ($oldversion < 2012022405)	{
@@ -160,6 +155,31 @@ function xmldb_block_ilp_upgrade($oldversion) {
             }
         }
     }
+
+    if ($oldversion < 2012030104) {
+
+        // Define index report_entry (not unique) to be added to block_ilp_entry
+        $table = new xmldb_table('block_ilp_entry');
+        $index = new xmldb_index('report_entry', XMLDB_INDEX_NOTUNIQUE, array('report_id', 'user_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Define index report_entry (not unique) to be added to block_ilp_entry
+        $table = new xmldb_table('block_ilp_plu_ste_items');
+        $index = new xmldb_index('report_entry', XMLDB_INDEX_NOTUNIQUE, array('passfail'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // ilp savepoint reached
+        upgrade_block_savepoint(true, 2012030104, 'ilp');
+    }
+
 
     return true;
 }
