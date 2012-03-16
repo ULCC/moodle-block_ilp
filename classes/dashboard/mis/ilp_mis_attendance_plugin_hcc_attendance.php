@@ -125,7 +125,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
     function set_data($mis_user_id)
     {
 
-        $table = 'VLE1112_StudentAttendance';
+        $table = 'VLE1112_NEWStudentAttendance';
 
 
         $this->mis_user_id = $mis_user_id;
