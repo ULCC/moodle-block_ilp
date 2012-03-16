@@ -116,11 +116,52 @@ function xmldb_block_ilp_upgrade($oldversion) {
         $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('entry_id'),'block_ilp_entry','id');
         $table->addKey($table_key);
         
-       	
-        $dbman->create_table($table);
+
+       	if (!$dbman->table_exists($table)) $dbman->create_table($table);
+
     } 
     
     
     
+
+
+
+
+    if ($oldversion < 2012022405)	{
+
+        //include ilp db class
+        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+
+        require_once($CFG->dirroot.'/blocks/ilp/lib.php');
+        $dbc                =   new ilp_db();
+        $takenPositions     =   array();
+        $unpositionedReports    = array();
+
+        $reports    =   $dbc->get_reports_by_position();
+
+        //first compile a list of all taken positions
+        if (!empty($reports)) {
+            foreach ($reports as $r)  {
+                if (!empty($r->position))   {
+                    $takenPositions[]           =   $r->position;
+                }   else {
+                    $unpositionedReports[]      =   $r;
+                }
+            }
+
+            //
+            if (!empty($unpositionedReports)) {
+                foreach($unpositionedReports as $ur)   {
+                    $ur->position = returnNextPosition($takenPositions);
+                    $dbc->update_report($ur);
+                    $takenPositions[]           =   $ur->position;
+                    echo "Positon {$ur->position} allocated to {$ur->name}<br />";
+                }
+            }
+        }
+    }
+
     return true;
 }
+
+

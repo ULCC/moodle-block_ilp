@@ -148,8 +148,10 @@
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';
 	$string['mycoursegroups']			=	'My Course Groups';
-	
-	$string['name']					=	'Name';
+
+    $string['name']					=	'Name';
+    $string['newreportcomment']		=	'A comment has been made about your entry for the {$a->name} report';
+
 	$string['nodataornoconfig']		=	'No data has been found for the current student. If you believe there should be data for the current student then the plugin may not been configured correctly';
 	$string['none']					=	'None';
 	$string['noplugin']				=	'No Plugin';
@@ -193,7 +195,8 @@
 	$string['reportdeleteerror']				= 	'Report delete error';
 	$string['reportdeleted']					= 	'Report deleted';
 	$string['reportsoverdue']					= 	'Report overdue';
-	
+    $string['reportmovesuc']        			    =	'The report was successfully moved';
+    $string['reportmoveerror']        			    =	'An error has occurred the report was not move';
 	$string['required']	 						= 	'Required';
 	$string['reportpermissions']				= 	'Report Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
@@ -225,15 +228,12 @@
 	$string['type'] 							= 	'Type';
 	$string['table'] 							= 	'Table';
 	$string['tabstatusdesc'] 					= 	'Select whether the tab is enabled or disabled';
-	
-	
-	$string['viewreportpreview'] 				= 	'View Report Preview';
+
+    $string['viewreport']        				= 	'View Report';
+    $string['viewreportpreview'] 				= 	'View Report Preview';
 	$string['viewplp'] 							= 	'View';
 	$string['userpicture'] 						= 	'Student Picture';
 
-	
-	
-	
 	$string['unknown'] 							= 	'Unknown';
 
 	//Archive Titles
@@ -318,7 +318,10 @@
 	$string[ 'mis_configuration_settings' ]		=	"MIS Configuration Settings";	
 
 	$string[ 'not_applicable' ]		            =	"n/a";	
-	
+
+    //MESSAGE PROVIDER
+    $string['messageprovider:ilp_comment']      = 'New report comment';
+
 	global $CFG;
 
 	// Include ilp db class
@@ -376,30 +379,28 @@
 	    }
 	}
 
-$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+    $plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
 
-if ($dbc->get_mis_plugins() !== false) {
-	
-	
-	$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
-	
-	foreach ($mis_plugins as $plugin_file) {
-		if (file_exists($plugins.'/'.$plugin_file.".php")) {
-	    	require_once($plugins.'/'.$plugin_file.".php");
-	    
-		    // instantiate the object
-		    $class = basename($plugin_file, ".php");
-		    $pluginobj = new $class();
-		    $method = array($pluginobj, 'language_strings');
-		
-	    	//check whether the config_settings method has been defined
+    if ($dbc->get_mis_plugins() !== false) {
+        $mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
 
-		    if (is_callable($method,true)) {
-		        $pluginobj->language_strings($string);
-		    }
-		}
-	}
-}
+        foreach ($mis_plugins as $plugin_file) {
+            if (file_exists($plugins.'/'.$plugin_file.".php")) {
+                require_once($plugins.'/'.$plugin_file.".php");
+
+                // instantiate the object
+                $class = basename($plugin_file, ".php");
+                $pluginobj = new $class();
+                $method = array($pluginobj, 'language_strings');
+
+                //check whether the config_settings method has been defined
+
+                if (is_callable($method,true)) {
+                    $pluginobj->language_strings($string);
+                }
+            }
+        }
+    }
 	
 
 

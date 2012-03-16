@@ -52,6 +52,12 @@ class edit_report_mform extends ilp_moodleform {
         	$mform->addElement('hidden', 'creator_id', $USER->id);
         	$mform->setType('creator_id', PARAM_INT);
 
+            //the id of the form element creator
+            $mform->addElement('hidden', 'position');
+            $mform->setType('position', PARAM_INT);
+            //set the field position of the field
+            $mform->setDefault('position', $this->dbc->get_new_report_position());
+
         	// NAME element
 	        $mform->addElement(
 	            'text',

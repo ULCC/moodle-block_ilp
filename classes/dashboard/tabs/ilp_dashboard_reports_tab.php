@@ -118,7 +118,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
 
 					//get all reports
-					$reports	=	$this->dbc->get_reports(ILP_ENABLED);
+					$reports	=	$this->dbc->get_reports_by_position(null,null,false);
 					if (!empty($reports)) {
 						//create a tab for each enabled report
 						foreach($reports as $r)	{
@@ -345,8 +345,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
 									foreach ($reportfields as $field) {
 
-
-
 										//get the plugin record that for the plugin
 										$pluginrecord	=	$this->dbc->get_plugin_by_id($field->plugin_id);
 
@@ -426,7 +424,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 					$states		=	$this->dbc->get_report_state_items($report_id,'ilp_element_plugin_state');
 					$stateselector	=	"<div class='report_state'><form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
 											<label>Report State</label>
-											<input type='hidden' name='course' value='{$this->course_id}' />
+											<input type='hidden' name='course_id' value='{$this->course_id}' />
 											<input type='hidden' name='user_id' value='{$this->student_id}' />
 											<input type='hidden' name='selectedtab' value='{$this->plugin_id}' />
 											<select name='tabitem' id='reportstateselect'>

@@ -34,9 +34,10 @@ define( 'ILP_OPTIONMULTI' , 2 );
 define( 'ILP_ENABLED' , 1 );
 define( 'ILP_DISABLED' , 0 );
 
-define( 'ILP_PASSFAIL_UNSET' , 0 );
-define( 'ILP_PASSFAIL_FAIL' , 1 );
-define( 'ILP_PASSFAIL_PASS' , 2 );
+define( 'ILP_STATE_UNSET' , 0 );
+define( 'ILP_STATE_FAIL' , 1 );
+define( 'ILP_STATE_PASS' , 2 );
+define( 'ILP_STATE_NOTCOUNTED' , 3 );
 
 //this is the default status record that will be used for all users it should be set to 1
 //as the user status record is created on installation any changes to the status items can

@@ -45,7 +45,8 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		$string[ 'ilp_element_plugin_state_typelabel' ] 	= 'Select type (single/multi)';
 		$string[ 'ilp_element_plugin_state_fail' ] 	        = 'fail';
 		$string[ 'ilp_element_plugin_state_pass' ] 	        = 'pass';
-		$string[ 'ilp_element_plugin_state_unset' ] 	    = 'unset';
+        $string[ 'ilp_element_plugin_state_unset' ] 	    = 'unset';
+        $string[ 'ilp_element_plugin_state_notcounted' ] 	= 'not counted';
         $string[ 'ilp_element_plugin_error_not_valid_item' ]= 'Not a valid option';
         
         return $string;
@@ -70,7 +71,9 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		return array(
             'options' => $rtn,
             'pass' => implode( $sep, $option_data[ 'pass' ] ),
-            'fail' => implode( $sep, $option_data[ 'fail' ] )
+            'fail' => implode( $sep, $option_data[ 'fail' ] ),
+            'notcounted' => implode( $sep, $option_data[ 'notcounted' ] )
+
         );
 	}
 
@@ -80,10 +83,12 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
     * @param string $field - the name of a extra field to read from items table: used by ilp_element_plugin_state
     */
 	protected function get_option_list( $reportfield_id, $field=false ){
-		//return $this->optlist2Array( $this->get_optionlist() );   	
-		$outlist = array();
-		$passlist = array();
-		$faillist = array();
+
+		$outlist        = array();
+		$passlist       = array();
+        $faillist       = array();
+        $notcountlist   = array();
+
 		if( $reportfield_id ){
 			//get the list of options for this reportfield in the given table from the db 
 			$objlist = $this->dbc->get_optionlist($reportfield_id , $this->tablename, $field );
@@ -94,12 +99,18 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 				
 				//if the the name of the extra field is passfail then 
                 if( 'passfail' == $field ){
+
                 	//if the field value is fail add to fail list
-                    if( ILP_PASSFAIL_FAIL == $obj->passfail ){
+                    if( ILP_STATE_FAIL == $obj->passfail ){
                         $faillist[] = $obj->name;
                     }
-                    if( ILP_PASSFAIL_PASS == $obj->passfail ){
+
+                    if( ILP_STATE_PASS == $obj->passfail ){
                         $passlist[] = $obj->name;
+                    }
+
+                    if( ILP_STATE_NOTCOUNTED == $obj->passfail ){
+                        $notcountlist[] = $obj->name;
                     }
                 }
 			}
@@ -111,10 +122,12 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		$adminvalues = array(
             'optlist' => $outlist,
             'pass' => $passlist,
-            'fail' => $faillist
+            'fail' => $faillist,
+            'notcounted' => $notcountlist
         );
         
-        //we only need to return the admin values if the $field value is not false (it should be set to passfail to get admin values) 
+        //we only need to return the admin values if the $field value
+        //is not false (it should be set to passfail to get admin values)
         return (!empty($field)) ? $adminvalues : $outlist; 
 	}
 
@@ -127,13 +140,14 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 			//if no, get options list
             $options_data = $this->get_option_list_text( $reportfield->id, "\n", 'passfail' );
 			$reportfield->optionlist = $options_data[ 'options' ];
-		}
-		else{
+		}   else{
 			$options_data = $this->get_option_list_text( $reportfield->id , '<br />', 'passfail' );
-			$reportfield->existing_options = $options_data[ 'options' ];
+            $reportfield->existing_options = $options_data[ 'options' ];
+            $reportfield->existing_options_hidden = $options_data[ 'options' ];
 		}
-        $reportfield->fail = $options_data[ 'fail' ];
-        $reportfield->pass = $options_data[ 'pass' ];
+        $reportfield->fail          = $options_data[ 'fail' ];
+        $reportfield->pass          = $options_data[ 'pass' ];
+        $reportfield->notcounted    = $options_data[ 'notcounted' ];
 	}
 	
 

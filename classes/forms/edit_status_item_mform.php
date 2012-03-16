@@ -290,13 +290,13 @@ class edit_status_item_mform extends ilp_moodleform {
         foreach( $state_list as $grade ){
 	        $grade = trim( $grade );
 	        if( in_array( $grade, $fail_list ) ){
-	            return ILP_PASSFAIL_FAIL;
+	            return ILP_STATE_FAIL;
 	        }
 	        if( in_array( $grade, $pass_list ) ){
-	            return ILP_PASSFAIL_PASS;
+	            return ILP_STATE_PASS;
 	        }
         }
-        return ILP_PASSFAIL_UNSET;
+        return ILP_STATE_UNSET;
     }
 		/**
      	 * TODO comment this

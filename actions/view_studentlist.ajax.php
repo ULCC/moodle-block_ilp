@@ -225,13 +225,17 @@ if (!empty($studentslist)) {
             if ($dbc->has_plugin_field($r->id, 'ilp_element_plugin_state')) {
 
                 //count the number of entries with a pass state
-                $achievedentries = $dbc->count_report_entries_with_state($r->id, $student->id, ILP_PASSFAIL_PASS);
-                $reporttext = $achievedentries . "/" . $createdentries . " " . get_string('achieved', 'block_ilp');
+                $achievedentries = $dbc->count_report_entries_with_state($r->id, $student->id, ILP_STATE_PASS);
+                //we need to count the number of entries that have a notcounted status
+                $notcountedentries = $dbc->count_report_entries_with_state($r->id, $student->id, ILP_STATE_NOTCOUNTED);
+                $createdentries     =   $createdentries     -   $notcountedentries;
+
+                $reporttext         =   $achievedentries . "/" . $createdentries . " " . get_string('achieved', 'block_ilp');
             }
             
         	
 			if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_date_deadline')) {
-				$inprogressentries	=	$dbc->count_report_entries_with_state($r->id,$student->id,ILP_PASSFAIL_UNSET,false);
+				$inprogressentries	=	$dbc->count_report_entries_with_state($r->id,$student->id,ILP_STATE_UNSET,false);
 				$inprogentries 		=	array(); 
 				
 				if (!empty($inprogressentries)) {

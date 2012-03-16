@@ -275,4 +275,14 @@ function ilp_limit_length($html, $maxlength, $tooltip = null) {
         return "<span id='{$id}' class='tooltip' title='{$tooltip}'>{$return}</span>{$script}";
     }
 }
+
+function returnNextPosition($takenPos)   {
+    $i  =   0;
+
+    do {
+        $i++;
+    } while (in_array($i,$takenPos));
+
+    return  $i;
+}
 ?>
