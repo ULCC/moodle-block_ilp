@@ -126,7 +126,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
     		 		 ILP_IDTYPE_INT		=> get_string('intid','block_ilp') 
     			 );
  	 	
- 	 			$this->config_select_element($mform,'mis_misc_performance_ind_idtype',$options,get_string('idtype', 'block_ilp'),get_string('idtypedesc', 'block_ilp'),1);
+
  	 	
  				$keyfields	=	($this->tabletype == ILP_MIS_STOREDPROCEDURE) ? array($mis_user_id) : array($sidfield	=> array('=' => $mis_user_id));
  				
@@ -136,9 +136,9 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_misc_performance_ind_mtg')) 		$this->fields['mtg']	=	get_config('block_ilp','mis_misc_performance_ind_mtg');
  				if 	(get_config('block_ilp','mis_misc_performance_ind_grade')) 		$this->fields['grade']	=	get_config('block_ilp','mis_misc_performance_ind_grade');
  				if 	(get_config('block_ilp','mis_misc_performance_ind_performancscore')) 	$this->fields['performancescore']	=	get_config('block_ilp','mis_misc_performance_ind_performancscore');
- 				
+
  				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
- 				
+
  				$this->data	=	(!empty($this->data)) ? array_shift($this->data) : false;
  				
  			} 
@@ -172,7 +172,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  	 	
  	 	$this->config_text_element($mform,'mis_misc_performance_ind_grade',get_string('ilp_mis_misc_performance_ind_grade', 'block_ilp'),get_string('ilp_mis_misc_performance_ind_gradedesc', 'block_ilp'),'Grade');
  	 	
- 	 	$this->config_text_element($mform,'mis_misc_performance_ind_performancscore',get_string('ilp_mis_misc_performance_ind_performancescore', 'block_ilp'),get_string('ilp_mis_misc_performance_ind_performancescoredesc', 'block_ilp'),'perfomranceScore');
+ 	 	$this->config_text_element($mform,'mis_misc_performance_ind_performancscore',get_string('ilp_mis_misc_performance_ind_performancescore', 'block_ilp'),get_string('ilp_mis_misc_performance_ind_performancescoredesc', 'block_ilp'),'performanceScore');
 
  	 	$options = array(
     		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
