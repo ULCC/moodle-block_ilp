@@ -61,7 +61,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	 		$pluginentry->value		=	( !empty( $data->$fieldname ) ) ? $data->$fieldname : '' ;
 	 		//pass the values given to $entryvalues as an array
 	 		$entryvalues	=	(!is_array($pluginentry->value)) ? array($pluginentry->value): $pluginentry->value;
-	 		
+
 	 		foreach ($entryvalues as $ev) {
                 if( !empty( $ev ) ){
 		 			$state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$ev, $this->external_items_keyfield, $this->external_items_table );
