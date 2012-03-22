@@ -1584,10 +1584,23 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @param	int $report_id	the id of the report whose entry will be returned
      * @param	int $user_id the id of the user whose entry will be returned
+     * @param	bool $statuscheck should the status field be checked to see if it has been updated
      *
      * @return	mixed object the  of entries or false
      */
-    public  function get_lastupdatetime($report_id,$user_id)    {
+    public  function get_lastupdatetime($report_id,$user_id,$statuscheck=true)    {
+
+        $statussql  = "";
+
+        if (!empty($statuscheck)) {
+            $statussql  =    "UNION
+                             (
+                                SELECT	timemodified
+                                 FROM	{block_ilp_user_status}
+                                 WHERE	user_id		=	{$user_id}
+                              )";
+        }
+
 
         $sql    =   "SELECT MAX(timemodified) AS timemodified
                      FROM (
@@ -1606,12 +1619,7 @@ class ilp_db_functions	extends ilp_logging {
                                 AND	report_id	=	{$report_id}
                                 AND	user_id		=	{$user_id}
                             )
-                            UNION
-                            (
-                                SELECT	timemodified
-                                FROM	{block_ilp_user_status}
-                                WHERE	user_id		=	{$user_id}
-                            )
+                            {$statussql}
 			            ) AS lastreportupdate
                      ";
 
