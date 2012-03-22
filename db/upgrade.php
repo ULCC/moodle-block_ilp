@@ -179,6 +179,21 @@ function xmldb_block_ilp_upgrade($oldversion) {
         // ilp savepoint reached
         upgrade_block_savepoint(true, 2012030104, 'ilp');
     }
+	
+	if ($oldversion < 2012030107) {
+
+        // Define index report_entry (not unique) to be added to block_ilp_entry
+        $table = new xmldb_table('block_ilp_plu_ddl_ent');
+        $index = new xmldb_index('entry_id', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // ilp savepoint reached
+        upgrade_block_savepoint(true, 2012030107, 'ilp');
+    }
 
 
     return true;
