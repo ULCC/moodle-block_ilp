@@ -218,7 +218,40 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 			 	}
 	 		}
 	  }
-	
+
+
+    /**************
+     * @param int $reportfield_id
+     * @param int $entry_id
+     * @param object $data
+     * @return bool
+     *
+     * Overrides the parent entry_process_data to allow the data fieldname value which is text to be converted into an id
+     */
+
+    public	function entry_process_data($reportfield_id,$entry_id,$data) {
+
+        $fieldname =	$reportfield_id."_field";
+
+        $pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+
+        if (!empty($data->$fieldname)) {
+
+            $pluginentry->value		=	$data->$fieldname;
+            //pass the values given to $entryvalues as an array
+            $entryvalues	=	(!is_array($pluginentry->value)) ? array($pluginentry->value): $pluginentry->value;
+
+            foreach ($entryvalues as $ev) {
+                $state_item   =   $this->dbc->get_state_item_id($this->tablename,$pluginrecord->id ,$ev, 'value', $this->external_items_table );
+                //there should only be one entryvalues as this is a state_item if there are more there is a problem
+                $temp           =   $state_item->id;
+            }
+
+            $data->$fieldname   =   $temp;
+        }
+
+        return parent::entry_process_data($reportfield_id,$entry_id,$data);
+    }
 	
     public function audit_type() {
         return get_string('ilp_element_plugin_state_type','block_ilp');

@@ -1697,29 +1697,20 @@ class ilp_db_functions	extends ilp_logging {
     * @param	string $keyfield field from $itemtable to use as key
     * @param	string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
     *
-    * In my opinion this is a flakey function as it bases the
-    *
     * @return	mixed object or false
     */
    public function get_state_item_id($tablename,$parent_id,$itemvalue, $keyfield='id', $itemtable=false )	{
    		global 	$CFG;
 
-   		 $tablename =	( !empty($itemtable) ) ? $itemtable : $tablename."_items";
-
-   		$sql	=	"SELECT		*
-   					 FROM 		{$CFG->prefix}{$tablename} 	as si
-        		 	 WHERE		$keyfield		=	{$itemvalue}";
+       	$tablename              =	( !empty($itemtable) ) ? $itemtable : $tablename."_items";
+        $params[$keyfield]      =   $itemvalue;
 
         if( !$itemtable )	{
-            //not an '_items' table - so comes from some other area eg course and has no parent id
-   		    $sql    .=  " AND   	parent_id	=	{$parent_id}";
+            $params['parent_id']  =   $parent_id;
         }
 
-   		return 		$this->dbc->get_record_sql($sql);
+   		return 		$this->dbc->get_record($tablename,$params);
    }
-
-
-
 
    /**
     * Creates a entry comment record in the database
