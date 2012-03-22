@@ -144,7 +144,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
 								//get the last updated report entry
                                 $lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
-                                $lastupdate				=	$this->dbc->get_lastupdatetime($r->id,$this->student_id);
+                                $lastupdate				=	$this->dbc->get_lastupdatetime($r->id,$this->student_id,false);
 
 								$detail->frequency		=	$r->frequency;
 
@@ -152,7 +152,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 								//then we need to find a report entry instance this will be editable
 								$detail->editentry	=	(empty($detail->frequency) && !empty($lastentry)) ?  $lastentry->id : false;
 
-								$detail->lastmod	=	(!empty($lastentry->timemodified)) ?  userdate($lastentry->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
+								$detail->lastmod	=	(!empty($lastupdate->timemodified)) ?  userdate($lastupdate->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
 
 								$detail->canadd	    = ($canaddreport) ? true : false;
 
