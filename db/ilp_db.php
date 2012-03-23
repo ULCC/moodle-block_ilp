@@ -2090,9 +2090,30 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_lastupdate($user_id) {
 
-    	$sql	=	"SELECT		MAX(timemodified) as timemodified
-    				 FROM		{block_ilp_entry}
-    				 WHERE		user_id	=	{$user_id}";
+    	$sql	=	"SELECT MAX(timemodified) AS timemodified
+                     FROM (
+                            (
+                                SELECT MAX(timemodified) AS timemodified
+                                FROM	{block_ilp_entry}
+                                WHERE	user_id		=	{$user_id}
+                            )
+                            UNION
+                            (
+                                SELECT 	MAX(ec.timemodified) AS timemodified
+                                FROM 	{block_ilp_entry_comment} AS ec,
+                                        {block_ilp_entry} AS e
+                                WHERE 	entry_id = e.id
+                                AND	    user_id		=	{$user_id}
+                            )
+							UNION
+                             (
+                                SELECT	timemodified
+                                 FROM	{block_ilp_user_status}
+                                 WHERE	user_id		=	{$user_id}
+                              )
+
+			            ) AS lastreportupdate
+";
 
 
     	return	$this->dbc->get_record_sql($sql);
