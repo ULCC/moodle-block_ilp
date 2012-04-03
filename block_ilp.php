@@ -93,14 +93,14 @@ class block_ilp extends block_list {
                     $set_course_groups_link = false;       
 			
 			        //we need to get the capabilites of the current user so we can deceide what to display in the block 
-        			if (has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false) ) {
+        			if (!empty($coursecontext) && has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false) ) {
         				$access_viewilp		=	true;
         				//I have removed the var below as we dont want the my course groups link to contain
         				//the id of a  course which the user is not a teacher in 
                         //$set_course_groups_link = true;       
         			}
         			
-        			if ( has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) || has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) || is_siteadmin($USER)) {
+        			if (!empty($coursecontext) && has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) || has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) || is_siteadmin($USER)) {
         				$access_viewotherilp	=	true;
                         $set_course_groups_link = true;
         			}
