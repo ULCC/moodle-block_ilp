@@ -112,23 +112,18 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  	
  	
     public function set_data( $mis_user_id ){
-    		
-    		$this->mis_user_id	=	$mis_user_id;
-    		
+
     		$table	=	get_config('block_ilp','mis_misc_performance_ind_table');
     		
 			if (!empty($table)) {
-				
- 				$sidfield	=	get_config('block_ilp','mis_misc_performance_ind_studentid');
- 				
- 		 	 	$options = array(
-    				 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
-    		 		 ILP_IDTYPE_INT		=> get_string('intid','block_ilp') 
-    			 );
- 	 	
 
- 	 	
- 				$keyfields	=	($this->tabletype == ILP_MIS_STOREDPROCEDURE) ? array($mis_user_id) : array($sidfield	=> array('=' => $mis_user_id));
+                $idtype	=	get_config('block_ilp','mis_misc_performance_ind_idtype');
+
+                $sidfield	=	get_config('block_ilp','mis_misc_performance_ind_studentid');
+
+                $this->mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id;
+
+ 				$keyfields	=	($this->tabletype == ILP_MIS_STOREDPROCEDURE) ? array($this->mis_user_id) : array($sidfield	=> array('=' => $this->mis_user_id));
  				
  				$this->fields		=	array();
  				
