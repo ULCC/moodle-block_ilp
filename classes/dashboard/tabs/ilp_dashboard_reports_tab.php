@@ -212,11 +212,11 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                             }
                         }
 
-                        $access_report_createreports	= false;
-                        $capability	=	$this->dbc->get_capability_by_name('block/ilp:addreport');
-                        if (!empty($capability)) $access_report_createreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                        $access_report_viewreports	= false;
+                        $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
+                        if (!empty($capability)) $access_report_viewreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
-						if ($report->status == ILP_ENABLED && !empty($access_report_createreports)) {
+						if ($report->status == ILP_ENABLED && !empty($access_report_viewreports)) {
 
 							$icon				=	(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
 
