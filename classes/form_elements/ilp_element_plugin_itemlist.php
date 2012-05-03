@@ -80,7 +80,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
-	  */
+      */
 	 public function entry_data( $reportfield_id,$entry_id,&$entryobj ){
 	 	//this function will suffix for 90% of plugins who only have one value field (named value) i
 	 	//in the _ent table of the plugin. However if your plugin has more fields you should override
@@ -114,17 +114,24 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
+      * @param bool returnvalue should a label or value be returned
 	  */
-	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+	  public function view_data( $reportfield_id,$entry_id,&$entryobj, $returnvalue=false ){
 	  		$fieldname	=	$reportfield_id."_field";
 	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+            if (!empty($returnvalue)) $entryobj->$fieldname = array();
 			if (!empty($entry)) {
 		 		$fielddata	=	array();
 		 		$comma	= "";
 			 	//loop through all of the data for this entry in the particular entry		 	
 			 	foreach($entry as $e) {
-			 		$entryobj->$fieldname	.=	"{$comma}{$e->name}";
-			 		$comma	=	",";
+                    if (empty($returnvalue)) {
+                        $entryobj->$fieldname	.=	"{$comma}{$e->name}";
+                        $comma	=	",";
+                    } else {
+                        array_push($entryobj->$fieldname,$e->value);
+                    }
+
 			 	}
 	 		}
 	  }

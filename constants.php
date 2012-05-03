@@ -90,4 +90,11 @@ define('ILP_EVENT',           0);
 
 define('ILP_STRIP_TAGS_DESCRIPTION', '');
 
+define('ILP_DISPLAYGRAPHTHUMBS', 1);
+define('ILP_DISPLAYGRAPHLINKS', 2);
+define('ILP_DISPLAYGRAPHICON', 3);
+
+
+
+
 ?>

@@ -196,6 +196,87 @@ function xmldb_block_ilp_upgrade($oldversion) {
     }
 
 
+    if ($oldversion < 2012030110) {
+
+        //
+
+        $table = new $xmldb_table('block_ilp_graph_plugin');
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_name = new $xmldb_field('name');
+        $table_name->$set_attributes(XMLDB_TYPE_CHAR, 255, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_name);
+
+        $table_name = new $xmldb_field('tablename');
+        $table_name->$set_attributes(XMLDB_TYPE_CHAR, 255, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_name);
+
+        $table_status = new $xmldb_field('status');
+        $table_status->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_status);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        if (!$dbman->table_exists($table)) $dbman->create_table($table);
+
+        $table = new $xmldb_table('block_ilp_report_graph');
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_name = new $xmldb_field('name');
+        $table_name->$set_attributes(XMLDB_TYPE_CHAR, 255, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_name);
+
+        $table_name = new $xmldb_field('description');
+        $table_name->$set_attributes(XMLDB_TYPE_TEXT);
+        $table->addField($table_name);
+
+        $table_report_id = new $xmldb_field('report_id');
+        $table_report_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_report_id);
+
+        $table_plugin_id = new $xmldb_field('plugin_id');
+        $table_plugin_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_plugin_id);
+
+        $table_status = new $xmldb_field('status');
+        $table_status->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_status);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        if (!$dbman->table_exists($table)) $dbman->create_table($table);
+
+        // ilp savepoint reached
+        //upgrade_block_savepoint(true, 2012030108, 'ilp');
+    }
+
+
     return true;
 }
 

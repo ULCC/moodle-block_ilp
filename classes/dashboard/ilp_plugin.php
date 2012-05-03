@@ -156,23 +156,25 @@ class ilp_plugin {
             // look for plugins
 
 	            if(preg_match('/^([a-z_]+)\.php$/i', $file, $matches)) {
-	
-	                if(!in_array($matches[1], $plugins)) {
-	                    // include the class
-	
-	                	require_once($plugin_class_directory.'/'.$file);
-	
-	                    // instantiate the object
-	                    $class = basename($file, ".php");
-	                    
-	                    $pluginobj = new $class();
-	                    
-	                    // update the resource_types table
-	                    $id	=	$dbc->create_plugin($pluginobj->get_plugin_table(),$pluginobj->get_name());
-	                    
-	                    // any additional functions that must be carried that are specific to a child class can be carried out in the install function
-	                    $pluginobj->install($id);
-	                }
+
+                    if(!in_array($matches[1], $plugins) && substr($matches[1], -5)  != 'mform') {
+                        if(!in_array($matches[1], $plugins)) {
+                            // include the class
+
+                            require_once($plugin_class_directory.'/'.$file);
+
+                            // instantiate the object
+                            $class = basename($file, ".php");
+
+                            $pluginobj = new $class();
+
+                            // update the resource_types table
+                            $id	=	$dbc->create_plugin($pluginobj->get_plugin_table(),$pluginobj->get_name(),$pluginobj->get_tablename());
+
+                            // any additional functions that must be carried that are specific to a child class can be carried out in the install function
+                            $pluginobj->install($id);
+                        }
+                    }
 	            }
         	
         }
@@ -299,6 +301,10 @@ class ilp_plugin {
 	 	
 	 	return true;
 	 }
+
+    function get_tablename()    {
+        return $this->tablename;
+    }
 
 }
 ?>
