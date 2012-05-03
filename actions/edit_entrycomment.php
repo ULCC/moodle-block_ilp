@@ -91,7 +91,7 @@ $mform	= new	edit_entrycomment_mform($report_id,$entry_id,$user_id,$course_id,$c
 //was the form cancelled?
 if ($mform->is_cancelled()) {
 	//send the user back to dashboard
-	$return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&selectedtab={$selectedtab}&tabitem={$tabitem}&course_id={$course_id}";
+    $return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&selectedtab={$selectedtab}&tabitem={$tabitem}&course_id={$course_id}";
     redirect($return_url, '', ILP_REDIRECT_DELAY);
 }
 

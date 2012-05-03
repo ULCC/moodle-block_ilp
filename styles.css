@@ -177,6 +177,17 @@
    overflow: auto;
 }
 
+.ilp #graph_link_container  {
+    width: 100;
+}
+
+.llp #graph_container {
+    margin-top: 10%;
+    margin-left: 10%;
+    width: 70%;
+    
+}
+
 /* JAVASCRIPT CSS DO NOT REMOVE */
 
 .ilp form.hidden, .ilp img.hidden  .ilp input.hidden {
@@ -480,6 +491,17 @@
 	display:inline;
 	vertical-align: middle;
 }
+
+.ilp .graphicon {
+    width: 20px;
+    height: 20px;
+}
+
+.ilp .inlinegraphicon {
+    float: right;
+}
+
+
 /* Forms */ 
 
 .ilp #filter_form label{

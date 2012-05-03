@@ -30,6 +30,15 @@ foreach ($reportslist as $rep) {
 				if (!empty($rep->state_report)) { echo $rep->achieved."/".$rep->entries." ".get_string('achieved','block_ilp'); } else { echo $rep->entries." ".get_string('reports','block_ilp');} ?><br />
 				<?php if (!empty($rep->deadline_report) && $rep->overdue > 0) { echo $rep->overdue." ".get_string('reportsoverdue','block_ilp'); }  ?><br />
 				<?php echo get_string('ilp_dashboard_entries_tab_lastupdate','block_ilp');?>: <?php echo $rep->lastmod; ?><br />
+                <div id="graph_link_container">
+                <?php   if (!empty($rep->reportgraphs)) {
+                            //echo get_string('ilp_dashboard_entries_tab_graphs','block_ilp');
+                            foreach ($rep->reportgraphs as $rg)  {
+                                echo $rg.'<br />';
+                            }
+                        }
+                ?>
+                </div>
 		</div>
 		
 		<div id="right-entries">

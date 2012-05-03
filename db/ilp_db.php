@@ -316,14 +316,15 @@ class ilp_db_functions	extends ilp_logging {
      * @param string $name the name of the new form element plugin
      * @return mixed the id of the inserted record or false
      */
-    function create_plugin($tablename,$name) {
+    function create_plugin($table,$name,$tablename=NULL) {
         $type = new object();
-        $type->name 		= $name;
+        $type->name 		    = $name;
+        $type->tablename 		= $tablename;
 
         //TODO: should the dashboard plugin be enabled by default?
         $type->status 		= 1;
 
-        return $this->insert_record($tablename, $type);
+        return $this->insert_record($table, $type);
     }
 
     /**
@@ -2184,6 +2185,41 @@ class ilp_db_functions	extends ilp_logging {
   		return $this->dbc->get_record('block_ilp_mis_plugin',array('name'=>$pluginname));
   	}
 
+    /**
+     * Returns all currently installed stats plugins
+     *
+     * @return array of recordset objects or bool false
+     */
+    function get_graph_plugins() 	{
+        global $CFG;
+
+        // return stats or false
+        return $this->dbc->get_records('block_ilp_graph_plugin');
+    }
+
+
+    /**
+     * Returns the graph plugin with the id given
+     *
+     * @param int $plugin_id
+     *
+     * @return mixed object containing the plugin record selected
+     */
+    function get_graph_plugin_by_id($plugin_id)	{
+        return $this->dbc->get_record('block_ilp_graph_plugin',array('id'=>$plugin_id));
+    }
+
+
+    /**
+     * Returns the grap plugin with the name given
+     *
+     * @param int $pluginname
+     *
+     * @return mixed object containing the plugin record selected
+     */
+    function get_graph_plugin_by_name($pluginname)	{
+        return $this->dbc->get_record('block_ilp_graph_plugin',array('name'=>$pluginname));
+    }
 
     /**
      * Returns all currently installed tab plugins
@@ -2398,7 +2434,93 @@ class ilp_db_functions	extends ilp_logging {
 
 
     function create_event_cross_reference($record) {
-    	return $this->dbc->insert_record('block_ilp_cal_events',$record);
+    	return $this->insert_record('block_ilp_cal_events',$record);
+    }
+
+    /**
+     * Returns the plugin record of the report field with the given id
+     *
+     * @param   int reportfield_id the id of the rpeort field whose plugin will be returned
+     *
+     * @return  mixed object the plugin record or false
+     */
+    function get_reportfield_plugin($reportfield_id)    {
+        $sql    =   "SELECT     p.*
+                      FROM      {block_ilp_plugin} as p,
+                                {block_ilp_report_field} as rf
+                      WHERE     p.id  = rf.plugin_id
+                      AND       rf.id    = :id";
+
+        return $this->dbc->get_record_sql($sql,array('id'=>$reportfield_id));
+    }
+
+
+    /**
+     * Creates a new report graph record
+     *
+     * @param object $reportgraph an object containing the data to be saved
+     * @return mixed the id of the inserted record or false
+     */
+    function create_report_graph($reportgraph) {
+        return $this->insert_record("block_ilp_report_graph",$reportgraph);
+    }
+
+    /**
+     * Updates the record in the report graph table with a id matching the one
+     * in the given object
+     *
+     * @param object $reportgraph an object containing the data on the record
+     * @return bool true or false depending on result of query
+     */
+    function update_report_graph($reportgraph) {
+        return $this->update_record('block_ilp_report_graph',$reportgraph);
+    }
+
+    /*******************************************
+     * Gets all graph records attached to the given report
+     *
+     * @param int $report_id the id of the report whose graphs you want to retrieve
+     * return mixed bool false or
+     */
+    function get_report_graphs($report_id)    {
+        return $this->dbc->get_records('block_ilp_report_graph',array('report_id'=>$report_id));
+    }
+
+    /**
+     * Returns the ilp_report_graph record with the id given
+     *
+     * @param int    $graph_id the id of the report graph that you want to get the data on
+     * @return object containing data from the report graph record that matches criteria
+     */
+    function get_report_graph_data($reportgraph_id) {
+        return $this->dbc->get_record("block_ilp_report_graph",array("id"=>$reportgraph_id));
+    }
+
+
+    /**
+     * Returns the record from the given ilp form element plugin table with the reportgraph_id given
+     *
+     * @param int    $reportgraph_id the id of the element in the given table
+     * @param string $tablename the name of the plugin table that holds the data that will be retrieved
+     * @return object containing plugin record that matches criteria
+     */
+    function get_graph_by_report($tablename,$reportgraph_id) {
+        return $this->dbc->get_records($tablename,array("reportgraph_id"=>$reportgraph_id));
+    }
+
+
+    /**
+     * Deletes a record from the specified table with the matching criteria
+     *
+     * @param   string $tablename the name of the table that the record
+     * will be deleted form
+     * @param	int $param criteria that should be matched to delete the field. Criteria must be specified
+     * no blanket deletes are allowed
+     *
+     * @return mixed true or false
+     */
+    function delete_record ( $tablename, $params, $extraparams=array() ) {
+        return (!empty($params)) ? $this->delete_records( $tablename, $params, $extraparams ) : false;
     }
 
 }

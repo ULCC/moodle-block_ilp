@@ -21,7 +21,6 @@ require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 $dbc = new ilp_db();
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
-
 //install new plugins
 ilp_element_plugin::install_new_plugins();
 
@@ -39,8 +38,12 @@ require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_tab.php
 ilp_dashboard_tab::install_new_plugins();
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
-//install new tabs
+//install new mis plugins
 ilp_mis_plugin::install_new_plugins();
+
+require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_graph_plugin.class.php');
+//install new graphs
+ilp_graph_plugin::install_new_plugins();
 
 
 $globalsettings 	= new admin_setting_heading('block_ilp/reportconfig', get_string('reports', 'block_ilp'), '');
@@ -249,6 +252,40 @@ if ($dbc->get_tab_plugins() !== false) {
 		    }
 		}
 	}
+}
+
+
+
+// -----------------------------------------------------------------------------
+// Get graph plugin settings
+// -----------------------------------------------------------------------------
+
+$graphplugin_settings 	= new admin_setting_heading('block_ilp/graph_plugins', get_string('graph_pluginsettings', 'block_ilp'), '');
+
+$settings->add($graphplugin_settings);
+global $CFG;
+
+$plugins = $CFG->dirroot.'/blocks/ilp/plugins/graph';
+
+if ($dbc->get_graph_plugins() !== false) {
+
+    $graph_plugins = ilp_records_to_menu($dbc->get_graph_plugins(), 'id', 'name');
+
+    foreach ($graph_plugins as $plugin_file) {
+        if (file_exists($plugins.'/'.$plugin_file.".php")) {
+            require_once($plugins.'/'.$plugin_file.".php");
+
+            // instantiate the object
+            $class = basename($plugin_file, ".php");
+            $pluginobj = new $class();
+            $method = array($pluginobj, 'config_settings');
+
+            //check whether the config_settings method has been defined
+            if (is_callable($method,true)) {
+                $pluginobj->config_settings($settings);
+            }
+        }
+    }
 }
 
 /********************************

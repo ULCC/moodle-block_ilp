@@ -4,7 +4,8 @@
 	$string['addcomment']			= 	'Add Comment';
 	$string['addedby']				= 	'Added By';
 	$string['addprompt'] 			= 	'Add Prompt';
-	$string['addfield'] 			= 	'Add Field';
+    $string['addfield'] 			= 	'Add Field';
+    $string['addgraph'] 			= 	'Add Graph';
 	$string['addpromptdots'] 		= 	'Select Field Type';
 	$string['addnew'] 				= 	'Add New';
 	$string['addsel'] 				= 	'Add selected';
@@ -18,15 +19,18 @@
 	
 	$string['attendaceplugin']		= 	'Attendance Plugin';
 	$string['attendaceplugindesc']	= 	'The attendance plugin that will called to get attendance data in various areas of the ilp (the plugin must be enabled to appear in this list)';
-	
-	$string['availablereports']		= 	'Available Reports'; 
+    $string['attachedgraphs']		= 	'Attached Graphs';
+
+    $string['availablereports']		= 	'Available Reports';
+    $string['average']      		= 	'Average';
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
 	$string['binary_icon']			=	'Icon File';
 	$string['changecourse']			=	'Change Course';
 	$string['changegroup']			=	'Change Group';
 	$string['creator']				=	'Creator';
-	$string['createreport']			=	'Create Report';
+    $string['createreport']			=	'Create Report';
+    $string['creategraph']			=	'Create Graph';
 	$string['createnewreport']		=	'Create New Report';
 	$string['cronemailsender'] 		= 	'ILP';
 	$string['cronemailsubject'] 	= 	'Reminder: {$a->reportname} is due on {$a->deadline}';
@@ -59,9 +63,9 @@
 	$string['defaultverticalperpageconfig'] 	= 	'How many rows to show in the tables as the default for the vertical pagination';
 	$string['defaultstatusitem']	 			= 	'Default user status';
 	$string['defaultstatusitemconfig'] 			= 	'The default status item that will be assigned to users ';
-	
-	
-	
+
+    $string['deleteerror']			=	'An error has occured and the the record wasnot successfully deleted';
+    $string['deletesuccess']			=	'The record was successfully deleted';
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
 	$string['displayingreports'] 				= 	'Display Reports';
@@ -71,7 +75,8 @@
 	$string['disabled'] 			= 	'Disabled';
 	$string['editcomment']			= 	'Edit Comment';
 	$string['editfield']			=	'Edit Field';
-	$string['editfields']			=	'Edit Fields';
+    $string['editfields']			=	'Edit Fields';
+    $string['editgraphs']			=	'Edit Graphs';
 	$string['editprompt']			=	'Edit Prompt';
 	$string['editpermissions']		=	'Edit Permisssions';
 	$string['editreport']			=	'Edit Report';
@@ -91,8 +96,7 @@
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['fieldmaximum']			=	'The mamximum number of {$a} fields has been added you can not add anymore';
 	$string['filter']				=	'Filter';
-	
-	
+
 	
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
@@ -100,6 +104,12 @@
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
+    $string['graph_pluginsettings']	= 	'Graph Plugin Settings';
+$string['graphcreationsuc'] 	= 	'Graph successfully created';
+$string['graphcreationerror'] 	= 	'Error whilst creating graph';
+
+
+    $string['graphname']            = 	'Graph Name';
 	$string['idtype']				=	'ID type';
 	$string['idtypedesc']			=	'Is the id a string or a int, if it is a string it will have commas appended to it in the query';
 	
@@ -151,15 +161,19 @@
 
     $string['name']					=	'Name';
     $string['newreportcomment']		=	'A comment has been made about your entry for the {$a->name} report';
+    $string['nocompatiblefields']					=	'None of the fields in this report can be used with this graph type';
 
 	$string['nodataornoconfig']		=	'No data has been found for the current student. If you believe there should be data for the current student then the plugin may not been configured correctly';
+    $string['nodatafoundgraph']  =   'No data was found for this graph';
 	$string['none']					=	'None';
 	$string['noplugin']				=	'No Plugin';
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';
     $string['nocomments']			=	'No Comments';
-    $string['noconnection']			=	'No Connection';
+$string['noconnection']			=	'No Connection';
+$string['nopermissiongraph']			=	'You do not have permission to view this graph';
+
 	$string['notapplicable']		=	'N/A';
 	$string['nothingtodisplay']		=	'Nothing to display';
 	$string['passpercent']			=	'Pass Percentage';
@@ -178,16 +192,20 @@
 	$string['predefinedreports'] 	= 	'Predefined Reports';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
 	$string['punctuality']			= 	'Punctuality';
-	$string['removesel']			= 	'Remove selected';
+    $string['removefield']			= 	'Remove 1 field';
+    $string['removesel']			= 	'Remove selected';
 	$string['removeall']			= 	'Remove all';
 	$string['req'] 					= 	'Required';
 	$string['reports'] 				= 	'Reports';
 	$string['reportconfiguration'] 				= 	'Report Configuration';
 	$string['reportconfigurationsection'] 		= 	'Report Configuration Section';
-	$string['reportfields'] 					= 	'Report Fields';
+    $string['reportfields'] 					= 	'Report Fields';
+    $string['reportgraph'] 					    = 	'Report Graph';
+    $string['reportgraphs'] 					= 	'Report Graphs';
+
 	$string['reportconfigurationdesc'] 			= 	'The report configuration admininstration area allows you to create and edit reports. ';
 	$string['reportcreationsuc'] 				= 	'The report was successfully created';
-	$string['reportfields'] 					= 	'Report Fields';
+	$string['reportfield'] 					    = 	'Report Field';
 	$string['reportmustcontainfields'] 			= 	'The report must contain fields';
 	$string['reportname'] 						= 	'Report Name:';
 	$string['reportprompt']						= 	'Report Prompts';
@@ -207,7 +225,10 @@
 	
 	$string['selecttype'] 						= 	'Select Field Type';
 	$string['selectedreports']					= 	'Selected Reports';
-	$string['selectedreportlist']				= 	'Select report list options';
+    $string['selectedreportlist']				= 	'Select report list options';
+    $string['selectagraph']				= 	'Select a graph';
+
+
 	$string['settings']							= 	'Settings';
 	$string['statenotchanged']					= 	'State has not been changed';
 	$string['statechanged']						= 	'State changed';
@@ -223,12 +244,12 @@
 	$string['submitanddisplay'] 				= 	'Submit and display';
 	$string['studentslist'] 					= 	'Student list description';
 	$string['tabsettings']						= 	'Tab Settings';
-	$string['tab_pluginsettings']				= 	'Tab Plugin Settings';
+    $string['tab_pluginsettings']				= 	'Tab Plugin Settings';
 	
 	$string['type'] 							= 	'Type';
 	$string['table'] 							= 	'Table';
 	$string['tabstatusdesc'] 					= 	'Select whether the tab is enabled or disabled';
-
+    $string['total']                      		= 	'Total';
     $string['viewreport']        				= 	'View Report';
     $string['viewreportpreview'] 				= 	'View Report Preview';
 	$string['viewplp'] 							= 	'View';
@@ -401,6 +422,32 @@
             }
         }
     }
+
+
+    $plugins = $CFG->dirroot.'/blocks/ilp/plugins/graph/';
+
+    if ($dbc->get_mis_plugins() !== false) {
+        $graphplugins = ilp_records_to_menu($dbc->get_graph_plugins(), 'id', 'name');
+
+        foreach ($graphplugins as $plugin_file) {
+            if (file_exists($plugins.'/'.$plugin_file.".php")) {
+                require_once($plugins.'/'.$plugin_file.".php");
+
+                // instantiate the object
+                $class = basename($plugin_file, ".php");
+                $pluginobj = new $class();
+                $method = array($pluginobj, 'language_strings');
+
+                //check whether the config_settings method has been defined
+
+                if (is_callable($method,true)) {
+                    $pluginobj->language_strings($string);
+                }
+            }
+        }
+    }
+
+
 	
 
 

@@ -94,10 +94,8 @@ class ilp_dashboard_tab extends ilp_plugin {
      * Returns the secondrow of this plugins tabs 
      */
     function second_row()	{
-    	
     	//call the define third row function to define the third row
 		//$this->define_second_row();
-    	
     	$row	=	false;
 
 		//if the secondrow var is not empty then 
@@ -106,7 +104,6 @@ class ilp_dashboard_tab extends ilp_plugin {
 			
 			//get each tab
 			foreach($this->secondrow	as	$key => $value)	{
-				
 				//this is the unique id of the tab
 				$tabitem_id	=	"{$this->plugin_id}:{$value['id']}";
 				
