@@ -123,7 +123,7 @@
                 $i++;
             }
 
-            
+
             /* Define the absissa serie */
 
             $MyData->addPoints($chartpoints,"Labels");
