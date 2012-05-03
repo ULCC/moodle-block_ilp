@@ -45,8 +45,12 @@
             $reportgraphfields      =   $dbc->get_graph_by_report($graphplugin->tablename,$reportgraph->id);
 
             $rgfarray   =   array();
+            $calculation    =   0;
             foreach ($reportgraphfields as $rgf)  {
                 $rgfarray[]     =  $rgf->reportfield_id;
+                //all of the calculation types for all fields in a graph should be the same so
+                //it is safe to use one variable
+                $calculation    =   $rgf->calculation;
             }
 
             $data       =   array();
@@ -107,15 +111,16 @@
                     }
 
                     //if calulation is empty then the data should be averaged
-                    $data['total'][]    =   (empty($reportgraphfields->calculation))   ?  $total / $z :   $total;
+                    $data['total'][]    =   (empty($calculation))   ?  $total / $z :   $total;
 
                     $labels[$counter]    =   $ue->timecreated;
                     $counter++;
                 }
             }
+var_dump($data['total']);
+            var_dump($calculation);
 
-
-
+exit;
             $count = count($rgfarray);
             /* Create and populate the pData object */
 
