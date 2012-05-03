@@ -74,6 +74,23 @@ class ilp_graph_plugin_line_mform extends ilp_graph_plugin_mform {
 
     protected function specific_validation($data) {
         $data = (object) $data;
+
+       $rftemp      =   $data->reportfield_id;
+
+       for($i=0;$i < count($data->reportfield_id);$i++) {
+           $temp_id     =   array_pop($rftemp);
+           if (is_array($rftemp) && in_array($temp_id,$rftemp))  {
+               $fieldnum    =   $i  +1;
+               $this->errors["reportfield_id[{$i}]"]  =   get_string('reportfield','block_ilp')." {$fieldnum} ".get_string('duplicated','block_ilp');
+           }
+
+       }
+
+
+
+
+
+
         return $this->errors;
     }
 

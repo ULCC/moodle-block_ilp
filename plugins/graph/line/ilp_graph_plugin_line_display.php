@@ -117,10 +117,7 @@
                     $counter++;
                 }
             }
-var_dump($data['total']);
-            var_dump($calculation);
 
-exit;
             $count = count($rgfarray);
             /* Create and populate the pData object */
 
