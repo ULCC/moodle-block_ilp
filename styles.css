@@ -179,11 +179,11 @@
 
 /* JAVASCRIPT CSS DO NOT REMOVE */
 
-.ilp form.hidden, .ilp img.hidden  .ilp input.hidden {
+.ilp form.hidden, .ilp img.hidden  .ilp input.hidden, .ilp row.hidden {
     display             : none;
     visibility			: hidden;
 }
-.ilp form.nothidden {
+.ilp form.nothidden, .ilp row.hidden {
     display             : inline;
     visibility			: visible;
     
@@ -486,6 +486,21 @@
 	font-weight:bold;
 }
 
-/* Buttons */ 
+/* Buttons */
+
+
+
+/* View student reports */
+
+.ilp .report-entry  {
+    margin-top :  20px;
+    margin-left:  20px;
+    padding-top:  20px;
+}
+
+.ilp .hidden-entry  {
+    display :   none;
+    visibility: hidden;
+}
 
 

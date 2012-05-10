@@ -45,10 +45,14 @@
 	$string['contextuser']			=	'Continue User';
 	$string['contextself']			=	'Context Self';
 	$string['configsuc']			=	'Configuration change saved';
-	$string['course']				=	'Course';
+    $string['course']				=	'Course';
+    $string['courseentries']				=	'{$a->report} entries for students in {$a->course}';
 	$string['coursereports']		=	'Course Reports';
+
 	$string['dashboard']	 		= 	'Dashboard';
-	$string['deadline']		 					= 	'deadline';
+    $string['deadline']		 					= 	'deadline';
+    $string['deadlinestate']		 			= 	'Deadline state';
+
 	$string['deadlinenotification']		 = 	'Deadline Notification';
 	$string['deadlinenotificationconfig']		 = 	'How many days before a deadline a target deadline should a reminder be sent to a user to remind them of the deadline';
 	
@@ -79,8 +83,8 @@
 	$string['edit_status_items']	=	'Edit Status Items';
 	$string['editstatusitems']		=	'Edit Status Items';	
 	$string['enablereport'] 		= 	'Enable Report';
-	$string['enabled'] 				= 	'Enabled';
-	$string['entrydeleted']			= 	'The entry has been deleted';
+    $string['enabled'] 				= 	'Enabled';
+    $string['numberentries']		= 	'{$a->entries} entries';
 	
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';
@@ -193,7 +197,9 @@
 	$string['reportprompt']						= 	'Report Prompts';
 	$string['reportdeadline']					= 	'Report Deadline';
 	$string['reportdeleteerror']				= 	'Report delete error';
-	$string['reportdeleted']					= 	'Report deleted';
+    $string['reportdeleted']					= 	'Report deleted';
+    $string['reportentries']					= 	'report entries';
+
 	$string['reportsoverdue']					= 	'Report overdue';
     $string['reportmovesuc']        			    =	'The report was successfully moved';
     $string['reportmoveerror']        			    =	'An error has occurred the report was not move';
@@ -201,7 +207,11 @@
 	$string['reportpermissions']				= 	'Report Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
 	$string['reportpermissionsdescription']		= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
-	$string['savechanges'] 						= 	'Save Changes';
+    $string['savechanges'] 						= 	'Save Changes';
+    $string['showall'] 						    = 	'Any';
+    $string['showcomplete']					    = 	'Complete';
+    $string['showoverdue'] 					    = 	'Overdue';
+
 	$string['statuschangesuc'] 					= 	'The reports status was successfully changed';
 	$string['statusitemupdatesuc'] 				= 	'The status items have been updated';
 	
@@ -231,7 +241,8 @@
 
     $string['viewreport']        				= 	'View Report';
     $string['viewreportpreview'] 				= 	'View Report Preview';
-	$string['viewplp'] 							= 	'View';
+    $string['viewplp'] 							= 	'View';
+    $string['viewilp'] 							= 	'View ILP';
 	$string['userpicture'] 						= 	'Student Picture';
 
 	$string['unknown'] 							= 	'Unknown';
