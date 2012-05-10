@@ -1218,8 +1218,8 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return mixed true or false
      */
-    function delete_entryfield($tablename,$entry_id)	{
-    	return $this->delete_records( $tablename, array('id'=>$entry_id));
+    function delete_entryfield($tablename,$entry_id, $extraparams=array())	{
+    	return $this->delete_records( $tablename, array('id'=>$entry_id), $extraparams );
     }
 
     /**
@@ -1265,7 +1265,6 @@ class ilp_db_functions	extends ilp_logging {
 
     		$where		=	" 	AND e.id	=	se.entry_id
     							AND	se.parent_id	=	{$state_id}";
-
     	}
 
     	$sql	=	"SELECT		e.*
@@ -1277,6 +1276,49 @@ class ilp_db_functions	extends ilp_logging {
     				 ORDER BY   e.timemodified DESC";
 
     	return $this->dbc->get_records_sql($sql);
+    }
+
+
+    /**
+     * Returns all entries by the specidified user for the specified report that with a datedeadline date less than the given date.
+     * This function is intended for use on reports that have a state field and and a date dealine field. The function will also
+     * take a array or
+     *
+     * @param int   $report_id  the id of the report that the entries will be for
+     * @param int   $user_id    the user id of the user whose entries will be returned
+     * @param int   $time       a unix timestamp of the date at which the entry datedeadline should have be less than if not set it
+     *                          the time is set to the current timestamp
+     * @param int   $state      expected to be one of ILP_STATE_UNSET, ILP_STATE_FAIL, ILP_STATE_PASS,ILP_STATE_NOTCOUNTED
+     * @param array $entries    the user may provide an array containing the ids of report entries that will then be checked
+     *                          to see if they fit the given critera if a entry does not it will not be returned
+     * @return array
+     */
+
+    public  function    get_deadline_entries($report_id,$user_id,$time=null,$state=ILP_STATE_UNSET,$entries=false)   {
+        global 		$CFG;
+
+        $entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
+
+        $time       =   (empty($time))  ?   time()  :   $time;
+
+
+        $sql	=	"SELECT		e.*
+                     FROM 		{$CFG->prefix}block_ilp_entry  as e,
+                                {$CFG->prefix}block_ilp_plu_ddl_ent as	ddlent,
+                                {$CFG->prefix}block_ilp_plu_ste_ent as se,
+                                {$CFG->prefix}block_ilp_plu_ste_items as si
+
+                     WHERE		e.id			=	ddlent.entry_id
+                     AND		e.report_id			=	{$report_id}
+                     AND		e.user_id			=	{$user_id}
+                     AND		ddlent.value		<	{$time}
+
+                     AND		e.id		        =	se.entry_id
+                     AND		se.parent_id	    =	si.id
+                     AND		si.passfail         =   {$state}
+                     {$entriessql}";
+
+        return $this->dbc->get_records_sql($sql);
     }
 
     /**
@@ -1499,14 +1541,14 @@ class ilp_db_functions	extends ilp_logging {
      * @return	mixed int the number of entries or false
      */
     public	function count_overdue_report($report_id,$user_id,$entries,$time)	{
-			global 		$CFG;
+        global 		$CFG;
 
-			$entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
+        $entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
 
 
 
-    		//$sql	=	"SELECT		count(e.id)
-    		$sql	=	"SELECT		e.id
+        //$sql	=	"SELECT		count(e.id)
+        $sql	=	"SELECT		e.id
     					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
     					 			{$CFG->prefix}block_ilp_plu_ddl_ent as	ddlent,
     					 			{$CFG->prefix}block_ilp_plu_ste_ent as pe,
@@ -1522,12 +1564,17 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		pi.passfail         =   " . ILP_STATE_UNSET . "
 
     					 {$entriessql}";
-    					 
+
     		$rst = $this->dbc->get_records_sql($sql);
     		$c = count( $rst );
     		return	$c;
     					 
     }
+
+
+
+
+
 
     /**
      * Returns a list of reports that have deadline dates that fall between the given timestamps

@@ -105,5 +105,24 @@ M.ilp_standard_functions = {
                 window.setTimeout(scripts[i].text, 0);
             }
         }
-    }
+    },
+
+
+/**
+ * Calculates the height attribute of a rendered element.
+ *
+ * @param elem
+ * @return
+ */
+ get_height : function(elem) {
+
+    // work out the height of the rendered element minus the extra bits
+    var padding = parseFloat(Dom.getStyle(elem, "padding-top")) + parseFloat(Dom.getStyle(elem, "padding-bottom"));
+    var border = parseFloat(Dom.getStyle(elem, "border-top-width")) + parseFloat(Dom.getStyle(elem, "border-bottom-width"));
+
+    //additional check added as IE would sometimes return isNaN
+    if (isNaN(border)) border = 0;
+
+    return elem.offsetHeight - padding - border;
+}
 }
