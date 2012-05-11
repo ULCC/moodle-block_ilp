@@ -160,8 +160,9 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
+      * @param bool $selectenabled should a select box be returned if the user is the creator
 	  */
-	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+	  public function view_data( $reportfield_id,$entry_id,&$entryobj,$selectenabled=true){
 	  		global $CFG,$OUTPUT,$USER;
 	  	
 	  		$fieldname	=	$reportfield_id."_field";
@@ -205,7 +206,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 		 		$failedimg			=	"failed.jpg";
 		 		
 			 	foreach($pluginentry as $e) {
-			 		$entryobj->$fieldname	.=	($this->get_creator_id($entry) == $USER->id) ? $OUTPUT->single_select($CFG->wwwroot."/blocks/ilp/actions/change_state.php?entry_id={$entry_id}&reportfield_id={$reportfield_id}&$query_string",'item_id',$optionslist,$e->parent_id,$nothing=array(''=>'choosedots'),'sc_rep{$reportfield_id}ent{$entry_id}') : $e->name;
+			 		$entryobj->$fieldname	.=	($this->get_creator_id($entry) == $USER->id && !empty($selectenabled)) ? $OUTPUT->single_select($CFG->wwwroot."/blocks/ilp/actions/change_state.php?entry_id={$entry_id}&reportfield_id={$reportfield_id}&$query_string",'item_id',$optionslist,$e->parent_id,$nothing=array(''=>'choosedots'),'sc_rep{$reportfield_id}ent{$entry_id}') : $e->name;
 			 		$img	=	false;
 			 		
 			 		//check if the report is in a failed or achieved state then add the appropriate icon
