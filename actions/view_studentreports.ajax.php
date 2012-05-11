@@ -45,10 +45,10 @@ $deadline_id    =	$PARSER->optional_param('deadline_id', 0, PARAM_INT);
 $dbc = new ilp_db();
 
 // set up the flexible table for displaying the portfolios
-$flextable = new ilp_hiddenrow_ajax_table("reportstudent_listcourse_id{$course_id}tutor{$tutor}status_id{$status_id}report_id{$report_id}");
+$flextable = new ilp_hiddenrow_ajax_table("student_listcourse_id{$course_id}tutor{$tutor}status_id{$status_id}report_id{$report_id}");
 
-$flextable->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentrepot.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
-$flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentreport.ajax.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
+$flextable->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentreports.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
+$flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentreports.ajax.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
 
 // set the basic details to dispaly in the table
 $headers = array(
@@ -100,7 +100,7 @@ $flextable->sortable(true, 'lastname', 'DESC');
 $flextable->set_attribute('summary', get_string('studentslist', 'block_ilp'));
 $flextable->set_attribute('cellspacing', '0');
 $flextable->set_attribute('class', 'generaltable fit');
-$flextable->set_attribute('id', "student_listcourse_id={$course_id}tutor={$tutor}status_id={$status_id}&report_id={$report_id}");
+$flextable->set_attribute('id', "student_listcourse_id={$course_id}tutor={$tutor}status_id={$status_id}report_id={$report_id}");
 
 
 $flextable->initialbars(true);
@@ -286,7 +286,7 @@ if (!empty($studentslist)) {
                         $pluginclass->load($field->id);
 
                         //call the plugin class entry data method
-                        $pluginclass->view_data($field->id,$entry->id,$entry_data);
+                        $pluginclass->view_data($field->id,$entry->id,$entry_data,false);
                     } else	{
                         $dontdisplay[]	=	$field->id;
                     }
