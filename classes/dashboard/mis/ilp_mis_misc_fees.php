@@ -83,8 +83,18 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  				
 	    		//is the id a string or a int
     			$idtype	=	get_config('block_ilp','mis_misc_fees_idtype');
-    			$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id; 				
- 			
+    			$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id;
+
+                $useyearfilter = get_config('block_ilp', 'mis_learner_assessments_yearfilter');
+
+                if (!empty($useyearfilter)) {
+
+                    $yearfilterfield = get_config('block_ilp', 'mis_learner_assessments_yearfilter_field');
+                    $yearfilteryear = get_config('block_ilp', 'mis_learner_assessments_yearfilter_year');
+
+                    $keyfields[$yearfilterfield] = array('=' => $yearfilteryear);
+                }
+
  				$keyfields	=	($this->tabletype == ILP_MIS_STOREDPROCEDURE) ? array($mis_user_id) : array($sidfield	=> array('=' => $mis_user_id));
  				
  				$this->fields		=	array();
@@ -95,7 +105,7 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_misc_fees_outstanding')) 		$this->fields['outstanding']	=	get_config('block_ilp','mis_misc_fees_outstanding');
  				if 	(get_config('block_ilp','mis_misc_fees_overdue')) 		$this->fields['overdue']	=	get_config('block_ilp','mis_misc_fees_overdue');
 
-                $prelimdbcalls	=	get_config('block_ilp','mis_learner_assessments_prelimcalls');
+                $prelimdbcalls	=	get_config('block_ilp','mis_misc_fees_prelimcalls');
 
                 $this->data	=	$this->dbquery( $table, $keyfields, $this->fields,null,$prelimdbcalls);
 
@@ -136,7 +146,19 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  	 	
  	 	$this->config_text_element($mform,'mis_misc_fees_overdue',get_string('ilp_mis_misc_fees_overdue', 'block_ilp'),get_string('ilp_mis_misc_fees_overduedesc', 'block_ilp'),'overdue');
 
-        $this->config_text_element($mform,'mis_learner_assessments_prelimcalls',get_string('ilp_mis_learner_assessments_prelimcalls', 'block_ilp'),get_string('ilp_mis_learner_assessments_prelimcallsdesc', 'block_ilp'),'');
+        $this->config_text_element($mform,'mis_misc_fees_prelimcalls',get_string('ilp_mis_misc_fees_prelimcalls', 'block_ilp'),get_string('ilp_mis_misc_fees_prelimcallsdesc', 'block_ilp'),'');
+
+          $options = array(
+              ILP_DISABLED => get_string('disabled', 'block_ilp'),
+              ILP_ENABLED => get_string('enabled', 'block_ilp')
+          );
+
+          $this->config_select_element($mform, 'mis_misc_fees_yearfilter', $options, get_string('ilp_mis_misc_fees_yearfilter', 'block_ilp'), get_string('ilp_mis_misc_fees_yearfilterdesc', 'block_ilp'), 0);
+
+          $this->config_text_element($mform, 'mis_misc_fees_yearfilter_field', get_string('ilp_mis_misc_fees_yearfilter_fielddesc', 'block_ilp'), 'year');
+
+          $this->config_text_element($mform, 'mis_misc_fees_yearfilter_year', get_string('ilp_mis_misc_fees_yearfilter_year', 'block_ilp'), get_string('ilp_mis_misc_fees_yearfilter_yeardesc', 'block_ilp'), date('Y'));
+
 
  	 	$options = array(
     		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
@@ -210,9 +232,21 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
         $string['ilp_mis_misc_fees_overdue_disp']						= 'Payments Overdue';
         
         $string['ilp_mis_misc_fees']											=	'Fee Payment';
-        			 
-        
-        return $string;
+
+         $string['ilp_mis_misc_prelimcalls']						= 'Preliminary db calls';
+         $string['ilp_mis_misc_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
+         $string['ilp_mis_misc_yearfilter']                      = 'Year filter';
+         $string['ilp_mis_misc_yearfilterdesc']                  = 'Is a year filter used when selecting data from the MIS';
+
+         $string['ilp_mis_misc_yearfilter_field']                = 'Year filter field';
+         $string['ilp_mis_misc_yearfilter_fielddesc']            = 'If a MIS year filter is being used enter the field that will be filter on. (if stored procedure and field not needed leave field as year)';
+
+         $string['ilp_mis_misc_yearfilter_year']                 = 'Year filter date';
+         $string['ilp_mis_misc_yearfilter_yeardesc']             = 'The date that will be filtered on';
+
+
+         return $string;
     }
 
     

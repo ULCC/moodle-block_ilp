@@ -139,7 +139,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  	 	
  	 	$this->config_text_element($mform,'mis_learner_assessments_study',get_string('ilp_mis_learner_assessments_study', 'block_ilp'),get_string('ilp_mis_learner_assessments_studydesc', 'block_ilp'),'studySupport');
 
-        $this->config_text_element($mform,'mis_learner_assessments_prelimcalls',get_string('ilp_mis_learner_assessments_prelimcalls', 'block_ilp'),get_string('ilp_mis_learner_assessments_prelimcallsdesc', 'block_ilp'),'');
+          $this->config_text_element($mform,'mis_learner_assessments_prelimcalls',get_string('ilp_mis_learner_assessments_prelimcalls', 'block_ilp'),get_string('ilp_mis_learner_assessments_prelimcallsdesc', 'block_ilp'),'');
 
           $options = array(
               ILP_DISABLED => get_string('disabled', 'block_ilp'),
@@ -217,7 +217,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
         
         $string['ilp_mis_learner_profile_assessments_pluginstatus']				= 'Status';
         $string['ilp_mis_learner_profile_assessments_pluginstatusdesc']			= 'Is the block enabled or disabled';
-        
+
         $string['ilp_mis_learner_assessments_prelimcalls']						= 'Preliminary db calls';
         $string['ilp_mis_learner_assessments_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
 
