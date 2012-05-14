@@ -85,12 +85,12 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
     			$idtype	=	get_config('block_ilp','mis_misc_fees_idtype');
     			$mis_user_id	=	(empty($idtype)) ? "'{$mis_user_id}'" : $mis_user_id;
 
-                $useyearfilter = get_config('block_ilp', 'mis_learner_assessments_yearfilter');
+                $useyearfilter = get_config('block_ilp', 'mis_misc_fees_yearfilter');
 
                 if (!empty($useyearfilter)) {
 
-                    $yearfilterfield = get_config('block_ilp', 'mis_learner_assessments_yearfilter_field');
-                    $yearfilteryear = get_config('block_ilp', 'mis_learner_assessments_yearfilter_year');
+                    $yearfilterfield = get_config('block_ilp', 'mis_misc_fees_yearfilter_field');
+                    $yearfilteryear = get_config('block_ilp', 'mis_misc_fees_yearfilter_year');
 
                     $keyfields[$yearfilterfield] = array('=' => $yearfilteryear);
                 }
@@ -236,14 +236,14 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
          $string['ilp_mis_misc_prelimcalls']						= 'Preliminary db calls';
          $string['ilp_mis_misc_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
 
-         $string['ilp_mis_misc_yearfilter']                      = 'Year filter';
-         $string['ilp_mis_misc_yearfilterdesc']                  = 'Is a year filter used when selecting data from the MIS';
+         $string['ilp_mis_misc_fees_yearfilter']                      = 'Year filter';
+         $string['ilp_mis_misc_fees_yearfilterdesc']                  = 'Is a year filter used when selecting data from the MIS';
 
-         $string['ilp_mis_misc_yearfilter_field']                = 'Year filter field';
-         $string['ilp_mis_misc_yearfilter_fielddesc']            = 'If a MIS year filter is being used enter the field that will be filter on. (if stored procedure and field not needed leave field as year)';
+         $string['ilp_mis_misc_fees_yearfilter_field']                = 'Year filter field';
+         $string['ilp_mis_misc_fees_yearfilter_fielddesc']            = 'If a MIS year filter is being used enter the field that will be filter on. (if stored procedure and field not needed leave field as year)';
 
-         $string['ilp_mis_misc_yearfilter_year']                 = 'Year filter date';
-         $string['ilp_mis_misc_yearfilter_yeardesc']             = 'The date that will be filtered on';
+         $string['ilp_mis_misc_fees_yearfilter_year']                 = 'Year filter date';
+         $string['ilp_mis_misc_fees_yearfilter_yeardesc']             = 'The date that will be filtered on';
 
 
          return $string;
