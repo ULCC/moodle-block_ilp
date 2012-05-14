@@ -84,7 +84,8 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
                     $keyfields[$yearfilterfield] = array('=' => $yearfilteryear);
                 }
 
- 				$keyfields	=	array($sidfield	=> array('=' => $mis_user_id));
+                //create the key that will be used in sql query
+                $keyfields[$sidfield] = array('=' => $mis_user_id);
  				
  				$this->fields		=	array();
  				
