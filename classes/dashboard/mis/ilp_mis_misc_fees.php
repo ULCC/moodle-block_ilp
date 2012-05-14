@@ -94,9 +94,11 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_misc_fees_totalpaid')) 		$this->fields['totalpaid']	=	get_config('block_ilp','mis_misc_fees_totalpaid');
  				if 	(get_config('block_ilp','mis_misc_fees_outstanding')) 		$this->fields['outstanding']	=	get_config('block_ilp','mis_misc_fees_outstanding');
  				if 	(get_config('block_ilp','mis_misc_fees_overdue')) 		$this->fields['overdue']	=	get_config('block_ilp','mis_misc_fees_overdue');
- 				
- 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
- 				
+
+                $prelimdbcalls	=	get_config('block_ilp','mis_learner_assessments_prelimcalls');
+
+                $this->data	=	$this->dbquery( $table, $keyfields, $this->fields,null,$prelimdbcalls);
+
  				if (!empty($this->data)) {
  					$this->data	=	(is_array($this->data)) ? array_shift($this->data)	:	$this->data;
  				}
@@ -133,6 +135,8 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
  	 	$this->config_text_element($mform,'mis_misc_fees_outstanding',get_string('ilp_mis_misc_fees_outstanding', 'block_ilp'),get_string('ilp_mis_misc_fees_outstandingdesc', 'block_ilp'),'outstanding');
  	 	
  	 	$this->config_text_element($mform,'mis_misc_fees_overdue',get_string('ilp_mis_misc_fees_overdue', 'block_ilp'),get_string('ilp_mis_misc_fees_overduedesc', 'block_ilp'),'overdue');
+
+        $this->config_text_element($mform,'mis_learner_assessments_prelimcalls',get_string('ilp_mis_learner_assessments_prelimcalls', 'block_ilp'),get_string('ilp_mis_learner_assessments_prelimcallsdesc', 'block_ilp'),'');
 
  	 	$options = array(
     		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
