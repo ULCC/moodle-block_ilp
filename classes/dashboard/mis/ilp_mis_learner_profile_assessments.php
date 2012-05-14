@@ -138,8 +138,8 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  	 	$this->config_text_element($mform,'mis_learner_assessments_ict',get_string('ilp_mis_learner_assessments_ict', 'block_ilp'),get_string('ilp_mis_learner_assessments_ictdesc', 'block_ilp'),'ictResult');
  	 	
  	 	$this->config_text_element($mform,'mis_learner_assessments_study',get_string('ilp_mis_learner_assessments_study', 'block_ilp'),get_string('ilp_mis_learner_assessments_studydesc', 'block_ilp'),'studySupport');
- 	 	
- 	 	$this->config_text_element($mform,'mis_learner_assessments_prelimcalls',get_string('ilp_mis_learner_assessments_prelimcalls', 'block_ilp'),get_string('ilp_mis_learner_assessments_prelimcallsdesc', 'block_ilp'),'');
+
+        $this->config_text_element($mform,'mis_learner_assessments_prelimcalls',get_string('ilp_mis_learner_assessments_prelimcalls', 'block_ilp'),get_string('ilp_mis_learner_assessments_prelimcallsdesc', 'block_ilp'),'');
 
           $options = array(
               ILP_DISABLED => get_string('disabled', 'block_ilp'),
