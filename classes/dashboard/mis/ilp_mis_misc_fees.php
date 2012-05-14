@@ -95,8 +95,10 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
                     $keyfields[$yearfilterfield] = array('=' => $yearfilteryear);
                 }
 
- 				$keyfields	=	($this->tabletype == ILP_MIS_STOREDPROCEDURE) ? array($mis_user_id) : array($sidfield	=> array('=' => $mis_user_id));
- 				
+                //create the key that will be used in sql query
+                $keyfields[$sidfield] = array('=' => $mis_user_id);
+
+ 								
  				$this->fields		=	array();
  				
  				if 	(get_config('block_ilp','mis_misc_fees_totalfees')) 	$this->fields['totalfees']	=	get_config('block_ilp','mis_misc_fees_totalfees');
