@@ -113,8 +113,38 @@ class ilp_graph_plugin_line extends ilp_graph_plugin {
                 $width  =   '500px';
         }
 
+        $start  = null;
+        $end    = null;
+
+        switch  ($reportgraph->datacollected)  {
+
+            case ILP_GRAPH_ONEMONTHDATA: //past months data
+                $start  =   strtotime("-4 weeks");
+                $end    =   time();
+                break;
+
+            case ILP_GRAPH_THREEMONTHDATA:
+                $start  =   strtotime("-12 weeks");
+                $end    =   time();
+                break;
+
+            case ILP_GRAPH_SIXMONTHDATA:
+                    $start  =   strtotime("-24 weeks");
+                    $end    =   time();
+                    break;
+
+            case ILP_GRAPH_YEARDATA:
+                $start  =   strtotime("-1 year");
+                $end    =   time();
+                break;
+
+            default :
+                $start  =   null;
+                $end    =   null;
+        };
+
         //get all entries for this user
-        $userentries    =   $this->dbc->get_user_report_entries($report_id,$user_id);
+        $userentries    =   $this->dbc->get_user_report_entries_between_time($report_id,$user_id,$start,$end);
 
         if (!empty($userentries))   {
             if (empty($return)) {

@@ -9,8 +9,9 @@
 	$string['addpromptdots'] 		= 	'Select Field Type';
 	$string['addnew'] 				= 	'Add New';
 	$string['addsel'] 				= 	'Add selected';
-	
-	$string['allowcomments']		= 	'Allow comments';
+
+    $string['alldata']      		= 	'All data';
+    $string['allowcomments']		= 	'Allow comments';
 	$string['allcourses']			= 	'All Courses';
 	$string['anystatus']			= 	'Any Status';
 	$string['apply'] 				= 	'Apply';
@@ -53,7 +54,8 @@
     $string['courseentries']				=	'{$a->report} entries for students in {$a->course}';
 	$string['coursereports']		=	'Course Reports';
 
-	$string['dashboard']	 		= 	'Dashboard';
+    $string['dashboard']	 		= 	'Dashboard';
+    $string['datacollection'] 		= 	'Data collected over:';
     $string['deadline']		 					= 	'deadline';
     $string['deadlinestate']		 			= 	'Deadline state';
 
@@ -179,7 +181,11 @@ $string['noconnection']			=	'No Connection';
 $string['nopermissiongraph']			=	'You do not have permission to view this graph';
 
 	$string['notapplicable']		=	'N/A';
-	$string['nothingtodisplay']		=	'Nothing to display';
+    $string['nothingtodisplay']		=	'Nothing to display';
+    $string['onemonthdata']		    =	'past 1 months data';
+
+
+
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
@@ -240,6 +246,7 @@ $string['nopermissiongraph']			=	'You do not have permission to view this graph'
 
 
 	$string['settings']							= 	'Settings';
+    $string['sixmonthdata']				        = 	'Past 6 months data';
 	$string['statenotchanged']					= 	'State has not been changed';
 	$string['statechanged']						= 	'State changed';
 	
@@ -255,15 +262,18 @@ $string['nopermissiongraph']			=	'You do not have permission to view this graph'
 	$string['studentslist'] 					= 	'Student list description';
 	$string['tabsettings']						= 	'Tab Settings';
     $string['tab_pluginsettings']				= 	'Tab Plugin Settings';
+    $string['threemonthdata']				    = 	'Past 3 months data';
 	
 	$string['type'] 							= 	'Type';
 	$string['table'] 							= 	'Table';
 	$string['tabstatusdesc'] 					= 	'Select whether the tab is enabled or disabled';
     $string['total']                      		= 	'Total';
+
     $string['viewreport']        				= 	'View Report';
     $string['viewreportpreview'] 				= 	'View Report Preview';
     $string['viewplp'] 							= 	'View';
     $string['viewilp'] 							= 	'View ILP';
+    $string['yeardata']				            = 	'Past years data';
 	$string['userpicture'] 						= 	'Student Picture';
 
 	$string['unknown'] 							= 	'Unknown';

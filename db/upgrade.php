@@ -258,6 +258,10 @@ function xmldb_block_ilp_upgrade($oldversion) {
         $table_status->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_status);
 
+        $table_datacol = new $xmldb_field('datacollected');
+        $table_datacol->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_datacol);
+
         $table_timecreated = new $xmldb_field('timecreated');
         $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_timecreated);

@@ -1244,30 +1244,30 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->delete_records( 'block_ilp_entry_comment', array('id'=>$entry_id),array());
     }
 
-     /**
+    /**
      * Returns all user entries for the given report
      *
      * @param  int $report_id the id of the report that we are looking for
      * @param  int $user_id	the id of user who will be retrieving report entries for
-     *
+     * @param  int $state_id if set only entries that have a specified state are returned
      * @return mixed array of objects containing databases recordsets or false
      */
     function get_user_report_entries($report_id,$user_id,$state_id=null)	{
-    	global		$CFG;
-    	$tables		=	"";
-    	$where		=	"";
+        global		$CFG;
+        $tables		=	"";
+        $where		=	"";
 
-    	//if the the id of a status has been given then we need to add mroe contitions to
-    	//find the reports in this state
-    	if (!empty($state_id)) {
-    		$tables		=	", {$CFG->prefix}block_ilp_plu_ste_ent as se
+        //if the the id of a status has been given then we need to add mroe contitions to
+        //find the reports in this state
+        if (!empty($state_id)) {
+            $tables		=	", {$CFG->prefix}block_ilp_plu_ste_ent as se
     						   ";
 
-    		$where		=	" 	AND e.id	=	se.entry_id
+            $where		=	" 	AND e.id	=	se.entry_id
     							AND	se.parent_id	=	{$state_id}";
-    	}
+        }
 
-    	$sql	=	"SELECT		e.*
+        $sql	=	"SELECT		e.*
     				 FROM		{$CFG->prefix}block_ilp_entry as e
     				 			{$tables}
     				 WHERE		e.report_id		=	{$report_id}
@@ -1275,8 +1275,44 @@ class ilp_db_functions	extends ilp_logging {
     				 {$where}
     				 ORDER BY   e.timemodified DESC";
 
-    	return $this->dbc->get_records_sql($sql);
+        return $this->dbc->get_records_sql($sql);
     }
+
+
+    /**
+     * Returns all user entries for the given report
+     *
+     * @param  int $report_id the id of the report that we are looking for
+     * @param  int $user_id	the id of user who will be retrieving report entries for
+     * @param  int $state_id if set only entries that have a specified state are returned
+     * @return mixed array of objects containing databases recordsets or false
+     */
+    function get_user_report_entries_between_time($report_id,$user_id,$start=null,$end=null)	{
+        global		$CFG;
+        $tables		=	"";
+        $where		=	"";
+
+        //if the the id of a status has been given then we need to add mroe contitions to
+        //find the reports in this state
+        if (!empty($start)) $where		.=	" 	AND e.timemodified	>   {$start}";
+
+        if (!empty($end))   $where		.=	" 	AND e.timemodified	<   {$end}";
+
+
+
+
+        $sql	=	"SELECT		e.*
+    				 FROM		{$CFG->prefix}block_ilp_entry as e
+    				 			{$tables}
+    				 WHERE		e.report_id		=	{$report_id}
+    				 AND 		e.user_id	=	{$user_id}
+    				 {$where}
+    				 ORDER BY   e.timemodified DESC";
+
+        return $this->dbc->get_records_sql($sql);
+    }
+
+
 
 
     /**

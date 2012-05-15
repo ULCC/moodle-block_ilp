@@ -91,8 +91,24 @@ abstract class ilp_graph_plugin_mform extends ilp_moodleform {
         $mform->addRule('description', null, 'maxlength', 1000, 'client');
         $mform->setType('description', PARAM_RAW);
 
+        $optionlist     =   array();
+
+        $optionlist[ILP_GRAPH_ALLDATA]          =   get_string('alldata','block_ilp');
+        $optionlist[ILP_GRAPH_ONEMONTHDATA]     =   get_string('onemonthdata','block_ilp');
+        $optionlist[ILP_GRAPH_THREEMONTHDATA]   =   get_string('threemonthdata','block_ilp');
+        $optionlist[ILP_GRAPH_SIXMONTHDATA]     =   get_string('sixmonthdata','block_ilp');
+        $optionlist[ILP_GRAPH_YEARDATA]         =   get_string('yeardata','block_ilp');
+
+
+        $mform->addElement(
+            'select',
+            'datacollected',
+            get_string( 'datacollection' , 'block_ilp' ),
+            $optionlist
+        );
 
         $this->specific_definition($mform);
+
 
         //add the submit and cancel buttons
         $this->add_action_buttons(true, get_string('submit'));
