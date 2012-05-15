@@ -181,6 +181,10 @@
     width: 100;
 }
 
+.ilp #graph_link_container img {
+    padding-left: 20px;
+}
+
 .llp #graph_container {
     margin-top: 10%;
     margin-left: 10%;

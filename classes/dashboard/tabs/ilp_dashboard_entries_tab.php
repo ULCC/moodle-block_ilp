@@ -227,6 +227,8 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
                                 $classname      =   $graphplugin->name;
 
+                                $additionalcontent  =   "";
+
                                 //start buffering output
                                 ob_start();
 
@@ -241,16 +243,16 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
                                         break;
 
                                     case  ILP_DISPLAYGRAPHLINKS:
-                                        $element   =   $reportgraph->name;
+                                        $element            =   $reportgraph->name;
+                                        $additionalcontent  =   "<br />";
                                          break;
 
                                     case  ILP_DISPLAYGRAPHICON:
                                         $element   =   $graph->icon();
                                         break;
-
                                 }
 
-                                $detail->reportgraphs[]   = (!empty($graphtab)) ? "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}&tabitem={$graphtab->id}:{$r->id}:{$rg->id}&selectedtab={$graphtab->id}'>{$element}</a>"  :  $element  ;
+                                $detail->reportgraphs[]   = (!empty($graphtab)) ? "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}&tabitem={$graphtab->id}:{$r->id}:{$rg->id}&selectedtab={$graphtab->id}'>{$element}</a>".$additionalcontent  :  $element.$additionalcontent  ;
                             }
                         }
                     }
@@ -262,8 +264,6 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
         //we need to buffer output to prevent it being sent straight to screen
         require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs/ilp_dashboard_entries_tab.html');
     }
-
-
 
 
 
