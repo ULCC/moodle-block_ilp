@@ -7,8 +7,8 @@ class ilp_element_plugin_gradebooktracker_mform  extends ilp_element_plugin_mfor
 	public $tablename;
     function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
     	parent::__construct($report_id,$plugin_id,$creator_id,$reportfield_id);
-    	$this->tablename = "block_ilp_plu_gbtracker";
-    	//$this->data_entry_tablename = "block_ilp_plu_gbtracker_ent";
+    	$this->tablename = "block_ilp_plu_gbt";
+    	//$this->data_entry_tablename = "block_ilp_plu_gbt_ent";
     }
 
 	protected function specific_definition($mform) {

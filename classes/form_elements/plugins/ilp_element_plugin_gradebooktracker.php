@@ -26,9 +26,9 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     * Constructor
     */
     function __construct() {
-    	$this->tablename = "block_ilp_plu_gbtracker";
-    	$this->data_entry_tablename = "block_ilp_plu_gbtracker_ent";
-    	$this->items_tablename = "block_ilp_plu_gbtracker_items";
+    	$this->tablename = "block_ilp_plu_gbt";
+    	$this->data_entry_tablename = "block_ilp_plu_gbt_ent";
+    	$this->items_tablename = "block_ilp_plu_gbt_items";
 
     	parent::__construct();
     }
