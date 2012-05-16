@@ -239,7 +239,7 @@ if (!empty($studentslist)) {
 				$inprogentries 		=	array(); 
 				
 				if (!empty($inprogressentries)) {
-					foreach ($inprogressent as $e) {
+					foreach ($inprogressentries as $e) {
 						$inprogentries[]	=	$e->id;
 					}
 				}
