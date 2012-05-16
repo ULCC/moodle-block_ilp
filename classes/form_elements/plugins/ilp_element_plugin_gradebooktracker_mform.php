@@ -7,10 +7,10 @@ class ilp_element_plugin_gradebooktracker_mform  extends ilp_element_plugin_mfor
 	public $tablename;
     function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
     	parent::__construct($report_id,$plugin_id,$creator_id,$reportfield_id);
-    	$this->tablename = "block_ilp_plu_gradebooktracker";
-    	//$this->data_entry_tablename = "block_ilp_plu_gradebooktracker_ent";
+    	$this->tablename = "block_ilp_plu_gbtracker";
+    	//$this->data_entry_tablename = "block_ilp_plu_gbtracker_ent";
     }
-	
+
 	protected function specific_definition($mform) {
 /*
 		$select = &$mform->addElement(
@@ -22,7 +22,7 @@ class ilp_element_plugin_gradebooktracker_mform  extends ilp_element_plugin_mfor
 		);
 */
 	}
-	
+
     protected function courselist_flatten( $objlist , $key='fullname' ){
         $outlist = array();
         foreach( $objlist as $row ){
@@ -30,7 +30,7 @@ class ilp_element_plugin_gradebooktracker_mform  extends ilp_element_plugin_mfor
         }
         return $outlist;
     }
-    
+
 	protected function specific_validation($data) {
 	 }
 
@@ -41,13 +41,13 @@ class ilp_element_plugin_gradebooktracker_mform  extends ilp_element_plugin_mfor
  		    return $this->dbc->create_plugin_record( $this->tablename,$data );
         }
         else{
-	 		//get the old record from the elements plugins table 
+	 		//get the old record from the elements plugins table
 	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield( $this->tablename ,$data->reportfield_id );
-	
+
 	 		//create a new object to hold the updated data
 	 		$pluginrecord 					=	new stdClass();
 	 		$pluginrecord->id				=	$oldrecord->id;
-	 			
+
 	 		//update the plugin with the new data
 	 		return $this->dbc->update_plugin_record("block_ilp_plu_tex",$pluginrecord);
         }

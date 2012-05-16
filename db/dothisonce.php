@@ -19,25 +19,25 @@ foreach( $problematic_table_list as $table=>$field ){
 	echo "$table.$field type is now 'text'\n";
 }
 /*
-$table = new xmldb_table( 'block_ilp_plu_gradebooktracker_ent' );
+$table = new xmldb_table( 'block_ilp_plu_gbtracker_ent' );
 
 $dropfield = new xmldb_field( 'review' );
 
 if($dbman->field_exists( $table, $dropfield ) ){
-    echo "Found 'review': dropping 'review' from block_ilp_plu_gradebooktracker_ent\n";
+    echo "Found 'review': dropping 'review' from block_ilp_plu_gbtracker_ent\n";
     $dbman->drop_field( $table, $dropfield );
 }
 else{
-    echo "Didn't find 'review' in block_ilp_plu_gradebooktracker_ent\n";
+    echo "Didn't find 'review' in block_ilp_plu_gbtracker_ent\n";
 }
 
 $addfield = new xmldb_field( 'entry_id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED ) ;
 if( !$dbman->field_exists( $table, $addfield ) ){
-    echo "adding 'entry_id' to block_ilp_plu_gradebooktracker_ent\n";
+    echo "adding 'entry_id' to block_ilp_plu_gbtracker_ent\n";
     $dbman->add_field( $table, $addfield );
 }
 else{
-    echo "block_ilp_plu_gradebooktracker_ent.entry_id already exists.\n";
+    echo "block_ilp_plu_gbtracker_ent.entry_id already exists.\n";
 }
 */
 echo "Finished\n";

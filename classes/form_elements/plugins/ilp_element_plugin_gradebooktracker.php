@@ -17,19 +17,19 @@ if( file_exists( $gradebooktracker_file ) ){
 }
 
 class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
-	
+
 	public $tablename;
 	public $data_entry_tablename;
 	public $items_tablename;
-	
+
     /**
     * Constructor
     */
     function __construct() {
-    	$this->tablename = "block_ilp_plu_gradebooktracker";
-    	$this->data_entry_tablename = "block_ilp_plu_gradebooktracker_ent";
-    	$this->items_tablename = "block_ilp_plu_gradebooktracker_items";
-    	
+    	$this->tablename = "block_ilp_plu_gbtracker";
+    	$this->data_entry_tablename = "block_ilp_plu_gbtracker_ent";
+    	$this->items_tablename = "block_ilp_plu_gbtracker_items";
+
     	parent::__construct();
     }
 	/*
@@ -46,7 +46,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 			$reportfield->existing_options = $this->get_option_list_text( $reportfield->id , '<br />' );
 		}
 	}
-	
+
     /*
     * write data for an actual report
     * take the current grades for a student and write them to the items table for this report
@@ -63,17 +63,17 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         //@todo
         //list type data is not captured in $data object, so I am having to get it from global $_POST which is very bad
         //must find better way
-        if( isset( $_POST[ $expected_gradelist_label ] ) ){ 
+        if( isset( $_POST[ $expected_gradelist_label ] ) ){
 		$data->$valuefieldname = $_POST[ $expected_gradelist_label ];
 	}
-	else{ 
-		$data->$valuefieldname = false; 
+	else{
+		$data->$valuefieldname = false;
 	}
 
 
 	  		$result	=	true;
-	  		
-		 	//get the plugin table record that has the reportfield_id 
+
+		 	//get the plugin table record that has the reportfield_id
 //var_dump($reportfield_id);exit;
 		 	$pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
 		 	if (empty($pluginrecord)) {
@@ -82,12 +82,12 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 				$pluginrecord->reportfield_id = $reportfield_id;
 		 		$pluginrecord->id = $this->dbc->create_plugin_entry($this->tablename,$pluginrecord);
 		 	}
-		 	
+
 		 	//check to see if a entry record already exists for the reportfield in this plugin
             		$multiple = !empty( $this->items_tablename );
 		 	$entrydata 	=	$this->dbc->get_pluginentry($this->tablename, $entry_id,$reportfield_id,$multiple);
-		 	
-		 	//if there are records connected to this entry in this reportfield_id 
+
+		 	//if there are records connected to this entry in this reportfield_id
 			if (!empty($entrydata)) {
                 /***********************************************************************/
                 //maybe this should never happen
@@ -99,8 +99,8 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 						$this->dbc->delete_element_record_by_id( $this->data_entry_tablename, $e->id, $extraparams );
 					}
 				}
-			}  
-		 	
+			}
+
 			//create new entries
 			$pluginentry		=	new stdClass();
             		$pluginentry->audit_type = 	$this->audit_type();
@@ -128,7 +128,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 			if( is_string( $pluginentry->value ))	{
                 //this should never happen for this plugin type: $pluginentry->value should always be array
 	 		    $state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$data->$valuefieldname, $this->external_items_keyfield, $this->external_items_table );
-	 		    $pluginentry->parent_id	=	$state_item->id;	
+	 		    $pluginentry->parent_id	=	$state_item->id;
 	 			$result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
 			} else if (is_array( $pluginentry->value ))	{
                 //THIS should happen
@@ -167,7 +167,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     protected function get_gradeitem_name( $gradeitem_id ){
         return grade_tracker_funcs::get_gradeitem_name( $gradeitem_id );
     }
-    
+
     /*
     * get the final grade for a given student on a given grade item
     * @param int $student_id
@@ -183,22 +183,22 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 		if (!empty($reportfield)) {
 			//set the reportfield_id var
 			$this->reportfield_id	=	$reportfield_id;
-			
-			//get the record of the plugin used for the field 
+
+			//get the record of the plugin used for the field
 			$plugin		=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
-						
+
 			$this->plugin_id	=	$reportfield->plugin_id;
-			
-			//get the form element record for the reportfield 
+
+			//get the form element record for the reportfield
 			$pluginrecord	=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
-			
+
 			if (!empty($pluginrecord)) {
 				$this->label			=	$reportfield->label;
 				$this->description		=	$reportfield->description;
 				$this->req				=	$reportfield->req;
 				$this->position			=	$reportfield->position;
                 $this->audit_type       =   $this->audit_type();
-				return true;	
+				return true;
 			}
 		}
     }
@@ -210,19 +210,19 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     */
     public	function entry_form( &$mform ) {
         global $CFG,$PAGE,$PARSER,$DB,$USER;
-        
+
         //$pluginentry = $DB->get_record( $this->tablename, array( 'id' => $entry_id ) );
 
         $parentid = $this->reportfield_id;
 
         $gradebooktracker_file = $CFG->dirroot.'/grade/report/tracker/gradetrackerfuncs.php';
         if( file_exists( $gradebooktracker_file ) ){
-			
+
 			$user_id	=	optional_param('user_id', NULL, PARAM_INT);
             if( !$user_id ){
                 $user_id = $USER->id;
             }
-			
+
             $mform->addElement( 'hidden', 'parent_id', $parentid );
 	        //$courselist = grade_tracker_funcs::collect_option_list( 'course' );
             $course_selector_name = "{$this->reportfield_id}_subjectid";
@@ -241,11 +241,11 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 			$subject_id	=	optional_param( $course_selector_name , NULL, PARAM_INT );
             if( empty( $subject_id ) ) $subject_id = optional_param( 'course_id', NULL, PARAM_INT );
             if (!empty($subject_id)) $mform->setDefault( $course_selector_name , $subject_id );
-			
+
             $mform->setDefault( 'review', 'random comment ' . date( 'Y-m-d H:i:s' ) );
-	
+
 	        $fieldname = "{$this->reportfield_id}_gradeitem_list";
-	        
+
 	        $label =  'Grades';
 
 	        $optionlist = $this->get_grade_item_list( $subject_id, true );
@@ -259,7 +259,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
                 )
 	        );
 			$select->setMultiple(true);
-	
+
 /*
 	        $ta = &$mform->addElement(
 	            'textarea',
@@ -269,7 +269,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 	        );
 */
 	    }
-	    
+
 	    //js function for entry form
 		$localdir = '/blocks/ilp/classes/form_elements/plugins/';
 		$module = array(
@@ -297,7 +297,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
 	        return $optionlist;
         }
     }
-    
+
     /**
     * function used to return the language strings for the plugin
     */
@@ -306,7 +306,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         $string['ilp_element_plugin_gradebooktracker_type'] = 'Gradebooktracker Field';
         $string['ilp_element_plugin_gradebooktracker_description'] = 'A gradebooktracker field';
         $string['ilp_element_plugin_gradebooktracker_course_select_label'] = 'Course';
-        
+
         return $string;
     }
 
@@ -324,7 +324,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     	//return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
     	return parent::delete_form_element( $reportfield_id, $extraparams );	//$extraparams seeme to be irrelevant at the moment
     }
-	 
+
     public function audit_type(){
         return get_string('ilp_element_plugin_gradebooktracker_type','block_ilp');
     }
@@ -343,17 +343,17 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         $table_id = new $this->xmldb_field('id');
         $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
         $table->addField($table_id);
-        
+
         $table_report = new $this->xmldb_field('reportfield_id');
         $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_report);
-        
+
 /*
         $table_courseid = new $this->xmldb_field('course_id');
         $table_courseid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED);
         $table->addField($table_courseid);
 */
-        
+
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_timemodified);
@@ -373,38 +373,38 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
         }
-        
-        
+
+
 	    // create the new table to store responses to fields
         $table = new $this->xmldb_table( $this->data_entry_tablename );
 
         $table_id = new $this->xmldb_field('id');
         $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
         $table->addField($table_id);
-        
+
         //entryid only seems necessary to make the logging happy - this seems a bit wag-the-dog
         $table_entryid = new $this->xmldb_field('entry_id');
         $table_entryid->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);
         $table->addField($table_entryid);
-        
+
         $table_title = new $this->xmldb_field('course_id');
         $table_title->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);
         $table->addField($table_title);
-        
+
         $table_maxlength = new $this->xmldb_field('parent_id');
         $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_maxlength);
-        
+
         $table_userid = new $this->xmldb_field('user_id');
         $table_userid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_userid);
-        
+
 /*
         $table_review = new $this->xmldb_field('review');
         $table_review->$set_attributes(XMLDB_TYPE_CHAR, 255);
         $table->addField($table_review);
 */
-        
+
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_timemodified);
@@ -416,22 +416,22 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         $table_key = new $this->xmldb_key('primary');
         $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
         $table->addKey($table_key);
-        
+
        	$table_key = new $this->xmldb_key($this->tablename.'_foreign_key');
         $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), $this->tablename ,'id');
         $table->addKey($table_key);
-        
+
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
         }
 
         //create the table to store individual grade items with scores
         $table = new $this->xmldb_table( $this->items_tablename );
-        
+
         $table_id = new $this->xmldb_field('id');
         $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
         $table->addField($table_id);
-        
+
         $table_maxlength = new $this->xmldb_field('parent_id');
         $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_maxlength);
@@ -439,19 +439,19 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         $table_report = new $this->xmldb_field('gradeitem_id');
         $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_report);
-	        
+
         $table_itemvalue = new $this->xmldb_field('value');
         $table_itemvalue->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
         $table->addField($table_itemvalue);
-        
+
         $table_itemname = new $this->xmldb_field('name');
         $table_itemname->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
         $table->addField($table_itemname);
-	
+
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_timemodified);
-	
+
         $table_timecreated = new $this->xmldb_field('timecreated');
         $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_timecreated);
@@ -459,12 +459,12 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         $table_key = new $this->xmldb_key('primary');
         $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
         $table->addKey($table_key);
-	
+
        	$table_key = new $this->xmldb_key('listpluginentry_unique_fk');
         $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), $this->tablename, 'id');
         $table->addKey($table_key);
-        
-        
+
+
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
         }
@@ -472,9 +472,9 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
     public function process_data( $formdata ){
     }
 	 /**
-	  * places entry data for the report field given into the entryobj given by the user 
-	  * 
-	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * places entry data for the report field given into the entryobj given by the user
+	  *
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
 	  */
@@ -482,14 +482,14 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
         //var_dump($entryobj);exit;
         //return parent::entry_data( $reportfield_id,$entry_id,&$entryobj );
 	 }
-	 
+
 	  /**
-	  * places entry data formated for viewing for the report field given  into the  
+	  * places entry data formated for viewing for the report field given  into the
 	  * entryobj given by the user. By default the entry_data function is called to provide
 	  * the data. Any child class which needs to have its data formated should override this
-	  * function. 
-	  * 
-	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
+	  * function.
+	  *
+	  * @param int $reportfield_id the id of the reportfield that the entry is attached to
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
 	  */
@@ -502,7 +502,7 @@ class ilp_element_plugin_gradebooktracker extends ilp_element_plugin_itemlist {
             require_once( $trackerfile );
             $tracker = new student_grade_tracker( $entryobj->user_id );
             $entryobj->$fieldname = $tracker->display_saved_reports( $this->data_entry_tablename, $this->items_tablename, $reportfield_id );
-           
+
             //$tracker->display();
         }
         else{
