@@ -16,7 +16,7 @@
 //require the ilp_plugin.php class
 require_once($CFG->dirroot . '/blocks/ilp/classes/dashboard/ilp_plugin.php');
 
-//require the ilp_mis_connection.php file 
+//require the ilp_mis_connection.php file
 require_once($CFG->dirroot . '/blocks/ilp/db/ilp_mis_connection.php');
 
 
@@ -77,24 +77,26 @@ abstract class ilp_mis_plugin extends ilp_plugin
     protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null)
     {
     	if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
-    	    	
+
         return ($this->tabletype == ILP_MIS_STOREDPROCEDURE)
                 ? $this->db->return_stored_values($table, $params)
                 : $this->db->return_table_values($table, $params, $fields, $addionalargs);
     }
 
-
     /**
      * Installs any new plugins
+     *
+     * @param $dbplugins
+     * @param $plugin_class_directory
      */
-    public function install_new_plugins()
+    public static function install_new_plugins($dbplugins, $plugin_class_directory)
     {
         global $CFG;
 
         // include the ilp db
         require_once($CFG->dirroot . '/blocks/ilp/db/ilp_db.php');
 
-        // instantiate the ilp db class needed as this function will be called 
+        // instantiate the ilp db class needed as this function will be called
         //when not in object context
         $dbc = new ilp_db();
 

@@ -32,31 +32,31 @@ class ilp_plugin {
      */
     var $mform;
 
-    
+
     /**
      * The  directory in which the plugin classes reside
      *
      * @var string
      */
      var	$plugin_class_directory;
-     
+
      /**
      * The name of the table that the plugins details will be saved to
      *
      * @var string
      */
      var	$plugintable;
-     
-    
+
+
     /**
      * The plugins id
      *
      * @var int
      */
 	var $plugin_id;
-	
+
 	var	$dbc;
-	
+
 	var $xmldb_table;
 
     var $xmldb_field;
@@ -73,13 +73,13 @@ class ilp_plugin {
     function __construct() {
         global $CFG,$DB;
 
-        
+
         // include the ilp db
         require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 
         // instantiate the ilp db
         $this->dbc = new ilp_db();
-        
+
         $this->name = get_class($this);
 
         // include the xmldb classes
@@ -107,29 +107,29 @@ class ilp_plugin {
     public function get_directory() {
         return $this->directory;
     }
-    
+
 	/**
      * Returns the name of the plugin
      */
     public function get_plugin_class_directory() {
         return $this->plugin_class_directory;
     }
-    
+
 	/**
      * Returns the name of the plugin
      */
     public function get_plugin_table() {
         return $this->plugintable;
     }
-    
+
 	/**
      * Delete the plugin
      */
     public final function delete($plugin_id) {
-        return false; 
+        return false;
     }
-    
-    
+
+
     /**
      * Install function can be used to install any additional tables or files, records etc
      */
@@ -139,16 +139,17 @@ class ilp_plugin {
 
     /**
      * Installs any new plugins
+     * @param $dbplugins
+     * @param $plugin_class_directory
      */
-    public function install_new_plugins($dbplugins,$plugin_class_directory) {
-        global $CFG;
+    public static function install_new_plugins($dbplugins, $plugin_class_directory) {
 
         // instantiate the assmgr db
         $dbc = new ilp_db();
 
         // get all the currently installed evidence resource types
         $plugins = ilp_records_to_menu($dbplugins, 'id', 'name');
-        
+
         // get the folder contents of the resource plugin directory
         $files = scandir($plugin_class_directory);
 
@@ -156,25 +157,25 @@ class ilp_plugin {
             // look for plugins
 
 	            if(preg_match('/^([a-z_]+)\.php$/i', $file, $matches)) {
-	
+
 	                if(!in_array($matches[1], $plugins)) {
 	                    // include the class
-	
+
 	                	require_once($plugin_class_directory.'/'.$file);
-	
+
 	                    // instantiate the object
 	                    $class = basename($file, ".php");
-	                    
+
 	                    $pluginobj = new $class();
-	                    
+
 	                    // update the resource_types table
 	                    $id	=	$dbc->create_plugin($pluginobj->get_plugin_table(),$pluginobj->get_name());
-	                    
+
 	                    // any additional functions that must be carried that are specific to a child class can be carried out in the install function
 	                    $pluginobj->install($id);
 	                }
 	            }
-        	
+
         }
 
     }
@@ -196,107 +197,107 @@ class ilp_plugin {
 
      /**
      * Creates a text element with a description on the config page for the plugin
-     * 
+     *
      * @param ilp_moodleform $mform the form that the text element will be added to
-     * @param string $elementname the name of the element this will be saved to the 
+     * @param string $elementname the name of the element this will be saved to the
      * 							  block_config table with the value
      * @param string $label the label to be put on the text element
      * @param strnig $description a description of what should be in the config element
-     * @param mixed $defaultvalue the default contents of the text element 
+     * @param mixed $defaultvalue the default contents of the text element
      */
 	 function config_text_element(&$mform,$elementname,$label,$description,$defaultvalue='') {
 
 	 	//check if the value is already in the config table
 	 	$configsetting	=	get_config('block_ilp',$elementname);
-	 	
+
 	 	if (empty($configsetting)) {
-	 		//we need to check if the value is empty because the user set it that way so 
-	 		//we will perform a query to see if the setting exists if it does then we will go 
+	 		//we need to check if the value is empty because the user set it that way so
+	 		//we will perform a query to see if the setting exists if it does then we will go
 	 		//with the config setting, if not set $value to default
 	 		$settingexists	= $this->dbc->setting_exists($elementname);
 	 		$value	=	(!empty($settingexists)) ? $configsetting : $defaultvalue;
 	 	}	else	{
 	 		$value	=	$configsetting;
 	 	}
-	 	
+
 	 	$mform->addElement('text',"s_{$elementname}",$label,array('class' => 'form_input'),$value);
  	 	$mform->addElement('static', "{$elementname}_desc", NULL, $description);
  	 	$mform->setDefault("s_{$elementname}",$value);
  	 }
-	 
- 	 
+
+
  	  /**
      * Creates a select element with a description on the config page for the plugin
-     * 
+     *
      * @param ilp_moodleform $mform the form that the select element will be added to
      * @param string $elementname the name of the element this will be saved to the s
      * 							  block_config table with the value
      * @param string $label the label to be put on the select element
      * @param array $options options to be placed in the select
      * @param strnig $description a description of what should be in the config element
-     * @param mixed $defaultvalue the default contents of the text element 
+     * @param mixed $defaultvalue the default contents of the text element
      */
 	 function config_select_element(&$mform,$elementname,$options,$label,$description,$defaultvalue='') {
-	 	
+
 	 	$configsetting	=	get_config('block_ilp',$elementname);
-	 	
+
 	 	if (empty($configsetting)) {
-	 		//we need to check if the value is empty because the user set it that way so 
-	 		//we will perform a query to see if the setting exists if it does then we will go 
+	 		//we need to check if the value is empty because the user set it that way so
+	 		//we will perform a query to see if the setting exists if it does then we will go
 	 		//with the config setting, if not set $value to default
 	 		$settingexists	= $this->dbc->setting_exists($elementname);
 	 		$value	=	(!empty($settingexists)) ? $configsetting : $defaultvalue;
 	 	}	else	{
 	 		$value	=	$configsetting;
 	 	}
-	 	
+
 	 	$mform->addElement('select',"s_{$elementname}",$label,$options,array('class' => 'form_input'));
  	 	$mform->addElement('static', "{$elementname}_desc", NULL, $description);
  	 	$mform->setDefault("s_{$elementname}",$value);
 	 }
-	 
+
  	  /**
      * Creates a select element with a description on the config page for the plugin
-     * 
+     *
      * @param ilp_moodleform $mform the form that the select element will be added to
      * @param string $elementname the name of the element this will be saved to the s
      * 							  block_config table with the value
      * @param string $label the label to be put on the select element
      * @param array $options options to be placed in the select
      * @param strnig $description a description of what should be in the config element
-     * @param mixed $defaultvalue the default contents of the text element 
+     * @param mixed $defaultvalue the default contents of the text element
      */
 	 function config_date_element(&$mform,$elementname,$label,$description,$defaultvalue='') {
-	 	
+
 	 	$configsetting	=	get_config('block_ilp',$elementname);
-	 	
+
 	 	$value	= (!empty($configsetting)) ? $configsetting : $defaultvalue;
-	 	
+
 	 	$mform->addElement('date_selector',"s_{$elementname}",$label,array('class' => 'form_input'));
  	 	$mform->addElement('static', "{$elementname}_desc", NULL, $description);
  	 	$mform->setDefault("s_{$elementname}",$value);
 	 }
-	 
-	 
-	 
+
+
+
 	 function config_form(&$mform)	{
-	 	
+
 	 }
-	 
+
 	 function config_save($data)	{
 	 	global $CFG;
-	 	
-	 	
+
+
 	 	foreach ($data as $name => $value)	{
 	 		if ($name != 'saveanddisplaybutton') {
 	 			//removes the s_ from the front of the element name
-				$name	=	substr_replace($name,'',0,2);	 		
-			
+				$name	=	substr_replace($name,'',0,2);
+
 				//use moodles set_config function to save the configuration setting
 				set_config($name,$value,'block_ilp');
 	 		}
 	 	}
-	 	
+
 	 	return true;
 	 }
 
