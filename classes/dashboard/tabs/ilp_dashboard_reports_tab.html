@@ -54,7 +54,7 @@
 					?>
 					<div class="comment">
 								<p><?php  $commentval	=	 html_entity_decode($c->value); 
-										  echo	strip_tags($commentval);
+										  echo	$commentval;
 									?></p>
 								<div class="info">
 								<?php echo get_string('creator','block_ilp').": ".fullname($comment_creator);?> |
