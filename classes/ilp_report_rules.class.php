@@ -1,6 +1,7 @@
 <?php
 /**
- * Class to enable the checking of report rules
+ * This class enables the rules in a report to be checked to see if the given student
+ * can make a new entry
  *
  * @copyright &copy; 2009-2010 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -142,7 +143,7 @@ class ilp_report_rules  {
     /**
      * returns the start and end dates for the recurring period that the user is currently in
      *
-     * @param $start        timestamp of the date when the recurring period started
+     * @param $recurringstart        timestamp of the date when the recurring period started
      * @param $frequency    the frequency of the recurring period
      *
      */
@@ -167,81 +168,4 @@ class ilp_report_rules  {
                 }
             }
      }
-
-
-    function rule_broken()   {
-
-        $report     =       $this->dbc->get_report_by_id($this->report_id);
-
-        //if a maximum number of entries has been set lets see if the student has reached this number
-        if (!empty($report->reportmaxentries))  {
-            $studententries   =   $this->dbc->count_report_entries($this->report_id,$this->student_id);
-
-            if ($studententries >= $report->reportmaxentries) {
-                $extension  =   $this->extension_check('reportmaxentries');
-                if (empty($extension) || $studententries >= $extension->value) {
-                    return get_string('','block_ilp');
-                }
-            }
-
-        }
-
-        //if this report has a lock date check if the date has passed
-        if ($report->reporttype ==  ILP_RT_RECURRING_FINALDATE  || $report->reporttype == ILP_RT_FINALDATE)   {
-            if ($report->reportlockdate < time())   {
-                //find out if this student has been given a report extension
-                $extension  =   $this->extension_check('reportlockdate');
-                if (empty($extension) || $extension->value < time()) {
-                    return get_string('','block_ilp');
-                }
-            }
-        }
-
-        //if the report is a recurring report
-        if ($report->reporttype ==  ILP_RT_RECURRING)   {
-            //
-
-            $recuringstart  =   0;
-
-            if ($report->recurstart == ILP_RECURRING_REPORTCREATION)   {
-                //rules started at report creation
-                $recuringstart  =   $report->timecreated;
-            }   else if ($report->recurstart == ILP_RECURRING_SPECIFICDATE) {
-                //rules started at specific date
-                $recuringstart  =   $report->recurdate;
-            }  else {
-                //rules started at first entry
-                $studententries =   $this->dbc->get_user_report_entries($this->report_id,$this->student_id);
-
-                if (!empty($studententries))    {
-                    //get the creation time of the first user entry
-                    $recuringstart  =   $studententries[0]->timecreated;
-                }
-            }
-
-
-            if (!empty($recuringstart)) {
-
-                $recurringperiod    =   $this->recurring_period($recuringstart,$report->recurfrequency);
-
-                $entriescount       =   $this->dbc->count_report_entries($this->report_id,$this->student_id,$recurringperiod['start'],$recurringperiod['end']);
-
-                if (!empty($entriescount) && $entriescount >= $report->recurmax) {
-                    $extension  =   $this->extension_check('recurmax');
-                    if (empty($extension) || $extension->value >= $entriescount) {
-                        return get_string('','block_ilp');
-                    }
-                }
-            }
-
-
-
-        }
-        return true;
-    }
-
-
-
-
-
 }

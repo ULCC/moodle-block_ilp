@@ -365,11 +365,11 @@ function xmldb_block_ilp_upgrade($oldversion) {
         $table->addField($table_field);
 
         $table_field = new $xmldb_field('param2');
-        $table_field->$set_attributes(XMLDB_TYPE_TEXT,'large',null,XMLDB_NOTNULL);
+        $table_field->$set_attributes(XMLDB_TYPE_TEXT,'large',null,null);
         $table->addField($table_field);
 
         $table_field = new $xmldb_field('value2');
-        $table_field->$set_attributes(XMLDB_TYPE_TEXT,'large',null,XMLDB_NOTNULL);
+        $table_field->$set_attributes(XMLDB_TYPE_TEXT,'large',null,null);
         $table->addField($table_field);
 
         $table_timecreated = new $xmldb_field('timecreated');
