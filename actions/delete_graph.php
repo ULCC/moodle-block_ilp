@@ -49,7 +49,7 @@ if (!empty($reportgraph)) {
 	$pluginclass	=	new $classname();
 
 	if ($pluginclass->delete_graph($reportgraph_id)) {
-        $resulttext =   get_string('deletesuccess');
+        $resulttext =   get_string('deletesuccess','block_ilp');
 	}	else {
 		$resulttext	=	get_string('deleteerror','block_ilp');
 	}

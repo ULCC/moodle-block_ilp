@@ -1496,17 +1496,25 @@ class ilp_db_functions	extends ilp_logging {
      * @param	int $report_id	the id of the report whose entries will be counted
      * @param	int $user_id the id of the  user whose entries will be counted
      *
+     *
      * @return	mixed int the number of entries or false
      */
-    public function count_report_entries($report_id,$user_id)	{
+    public function count_report_entries($report_id,$user_id,$timestart=null,$timeend=null)	{
     	global $CFG;
+
+
+
+        $timestartsql   =  (!empty($timestart)) ?    " AND timecreated > {$timestart} " :   "";
+        $timeendsql     =  (!empty($timeend)) ? " AND timecreated < {$timeend} " : "";
 
     	$sql	=	"SELECT		*
     				 FROM		{$CFG->prefix}block_ilp_entry		as 	e
     				 WHERE		user_id			=		{$user_id}
-    				 AND		report_id		=		{$report_id}";
+    				 AND		report_id		=		{$report_id}
+    				 {$timestartsql}
+    				 {$timeendsql} ";
 
-    	return	$this->dbc->count_records('block_ilp_entry',array('user_id'=>$user_id,'report_id'=>$report_id));
+    	return	$this->dbc->count_records_sql($sql);
     }
 
     /**
@@ -2606,7 +2614,73 @@ class ilp_db_functions	extends ilp_logging {
         return (!empty($params)) ? $this->delete_records( $tablename, $params, $extraparams ) : false;
     }
 
+
+    /**
+     * returns a preference set for a particular user or users of the ilp. Please note that although all
+     * of the functions params can be set to null this will result in false being returned to the user.
+     *
+     * @param int $report_id    the id of a report
+     * @param int $entry_id     the id of a entry
+     * @param string $action
+     * @param int $user_id
+     * @param int $course_id
+     */
+    function get_preferences($report_id=null,$entry_id=null,$action=null,$user_id=null,$course_id=null)  {
+
+        if (empty($report_id) && empty($entry_id) && empty($action) && empty($user_id) && empty($course_id))
+            return false;
+
+
+        $params     =   "WHERE ";
+        $and        =   "";
+
+        if (!empty($report_id))     {
+            $params .=  " report_id =   {$report_id}";
+            $and    =   " AND ";
+        }
+
+
+        if (!empty($entry_id))  {
+            $params .=  "{$and} entry_id    =   {$entry_id}";
+            $and    =   " AND ";
+        }
+
+        if (!empty($action))  {
+            $params .=  "{$and} action    =   '{$action}'";
+            $and    =   " AND ";
+        }
+
+        if (!empty($user_id))  {
+            $params .=  "{$and} user_id    =   {$user_id}";
+            $and    =   " AND ";
+        }
+
+        if (!empty($course_id))  {
+            $params .=  "{$and} course_id    =   {$course_id}";
+            $and    =   " AND ";
+        }
+
+        $sql    =   "SELECT     *
+                     FROM       {block_ilp_preferences}
+                     {$params}";
+
+        return $this->dbc->get_records_sql($sql);
+    }
+
+    /**
+     * Creates a preference record in the database
+     *
+     * @param object object containning preference data
+     *
+     * @return mixed int id of new record or false
+     *
+     */
+    function create_preference($preference)    {
+        return $this->insert_record("block_ilp_preferences",$preference);
+    }
+
 }
+
 
 
 

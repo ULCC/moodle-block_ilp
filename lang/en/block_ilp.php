@@ -1,6 +1,7 @@
 <?php
 	$string['achieved'] 			= 	'Achieved';
 	$string['addall'] 				= 	'Add all';
+    $string['addextension'] 		= 	'Add extension';
 	$string['addcomment']			= 	'Add Comment';
 	$string['addedby']				= 	'Added By';
 	$string['addprompt'] 			= 	'Add Prompt';
@@ -53,8 +54,8 @@
     $string['course']				=	'Course';
     $string['courseentries']				=	'{$a->report} entries for students in {$a->course}';
 	$string['coursereports']		=	'Course Reports';
-
-    $string['dashboard']	 		= 	'Dashboard';
+$string['day']	 		= 	'Daily';
+$string['dashboard']	 		= 	'Dashboard';
     $string['datacollection'] 		= 	'Data collected over:';
     $string['deadline']		 					= 	'deadline';
     $string['deadlinestate']		 			= 	'Deadline state';
@@ -88,21 +89,26 @@
 	$string['editreport']			=	'Edit Report';
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['edit_status_items']	=	'Edit Status Items';
-	$string['editstatusitems']		=	'Edit Status Items';	
+    $string['editstatusitems']		=	'Edit Status Items';
+    $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this report';
+
+
+
 	$string['enablereport'] 		= 	'Enable Report';
     $string['enabled'] 				= 	'Enabled';
     $string['numberentries']		= 	'{$a->entries} entries';
 	
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';
-	$string['failcsscolour']		=	'Fail CSS colour';
+    $string['firstentry']		    =	'First entry';
+    $string['failcsscolour']		=	'Fail CSS colour';
 	$string['failcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in a fail state';
 	$string['failpercent']			=	'Fail Percentage';
 	$string['failpercentconfig']	=	'The percentage that should be considered a fail (all percentages equal to and below this)';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['fieldmaximum']			=	'The mamximum number of {$a} fields has been added you can not add anymore';
 	$string['filter']				=	'Filter';
-
+    $string['finaldate']		    = 	'Final date';
 	
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
@@ -115,7 +121,8 @@ $string['graphcreationsuc'] 	= 	'Graph successfully created';
 $string['graphcreationerror'] 	= 	'Error whilst creating graph';
 
 
-    $string['graphname']            = 	'Graph Name';
+$string['graphname']            = 	'Graph Name';
+$string['howoften']            = 	'How often should rules reset';
 	$string['idtype']				=	'ID type';
 	$string['idtypedesc']			=	'Is the id a string or a int, if it is a string it will have commas appended to it in the query';
 	
@@ -135,10 +142,11 @@ $string['graphcreationerror'] 	= 	'Error whilst creating graph';
 	$string['lastupdated']			=	'Last Updated';
 	$string['linkedplugin']			=	'Linked Plugin';
 	$string['linkedplugindesc']		=	'Choose the plugin that this plugin will link too. Note that if the plugin being linked too is not enabled now link will be available';
-	
-	
-	
-	$string['maxedit'] 				= 	'Use Maximum Edit';
+
+
+
+    $string['maxedit'] 				= 	'Use Maximum Edit';
+    $string['maxentries'] 				= 	'Max number of entries';
 	$string['maxeditexceed'] 		= 	'The length of time in which you may edit this entry has past. The entry may not be edited';	
 	$string['maxreports']			= 	'Maximum Reports In Lists';
 	$string['maxreportsconfig']			= 	'The maximum number of reports displayed in a list. Change this setting if you are having to scroll list due to a large number or reports.';
@@ -177,15 +185,12 @@ $string['graphcreationerror'] 	= 	'Error whilst creating graph';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';
     $string['nocomments']			=	'No Comments';
-$string['noconnection']			=	'No Connection';
-$string['nopermissiongraph']			=	'You do not have permission to view this graph';
-
+    $string['noconnection']			=	'No Connection';
+    $string['nopermissiongraph']			=	'You do not have permission to view this graph';
+    $string['openend']			=	'Open end';
 	$string['notapplicable']		=	'N/A';
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
-
-
-
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
@@ -198,13 +203,24 @@ $string['nopermissiongraph']			=	'You do not have permission to view this graph'
 	$string['plugintype'] 			= 	'Plugin Type';
 	$string['print'] 				= 	'Print';
 	$string['preview'] 				= 	'Preview';
-	$string['previewreport'] 		= 	'Preview Report';
+    $string['previewreport'] 		= 	'Preview Report';
 	$string['predefinedreports'] 	= 	'Predefined Reports';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
+    $string['preferencecreationsuc'] 		= 	'Preference created';
+
 	$string['punctuality']			= 	'Punctuality';
     $string['removefield']			= 	'Remove 1 field';
     $string['removesel']			= 	'Remove selected';
 	$string['removeall']			= 	'Remove all';
+    $string['recurexceededmaxentries']	=	'You have reached maximum number of {$a->maxentries} entries for this report in this period';
+    $string['recurringrules']		    = 	'Recurring rules';
+    $string['recurring']		    = 	'Recurring';
+    $string['recurringfinaldate']		    = 	'Recurring with final date';
+
+    $string['recurringmax']		    = 	'Recurring Maximum';
+    $string['recurringstart']		    = 	'When should the recurring rules start';
+
+
 	$string['req'] 					= 	'Required';
 	$string['reports'] 				= 	'Reports';
 	$string['reportconfiguration'] 				= 	'Report Configuration';
@@ -212,10 +228,13 @@ $string['nopermissiongraph']			=	'You do not have permission to view this graph'
     $string['reportfields'] 					= 	'Report Fields';
     $string['reportgraph'] 					    = 	'Report Graph';
     $string['reportgraphs'] 					= 	'Report Graphs';
-
+    $string['reporttype'] 					    = 	'Report type';
 	$string['reportconfigurationdesc'] 			= 	'The report configuration admininstration area allows you to create and edit reports. ';
-	$string['reportcreationsuc'] 				= 	'The report was successfully created';
-	$string['reportfield'] 					    = 	'Report Field';
+    $string['reportcreationsuc'] 				= 	'The report was successfully created';
+    $string['reportcreation'] 				= 	'Report creation';
+    $string['reportfield'] 					    = 	'Report Field';
+    $string['reportlocked'] 					    = 	'This report has been locked the final date for entries was {$a->expiredate}';
+    $string['reportlockdate'] 					    = 	'Report lock date';
 	$string['reportmustcontainfields'] 			= 	'The report must contain fields';
 	$string['reportname'] 						= 	'Report Name:';
 	$string['reportprompt']						= 	'Report Prompts';
@@ -227,6 +246,8 @@ $string['nopermissiongraph']			=	'You do not have permission to view this graph'
 	$string['reportsoverdue']					= 	'Report overdue';
     $string['reportmovesuc']        			    =	'The report was successfully moved';
     $string['reportmoveerror']        			    =	'An error has occurred the report was not move';
+    $string['reportnojs']        			    =	'You do not have JavaScript enabled. Please note that the creation of reports is easier in a Javascript enabled browser. Some fields may be disregarded if they are not selected with the correct fields';
+
 	$string['required']	 						= 	'Required';
 	$string['reportpermissions']				= 	'Report Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
@@ -242,7 +263,9 @@ $string['nopermissiongraph']			=	'You do not have permission to view this graph'
 	$string['selecttype'] 						= 	'Select Field Type';
 	$string['selectedreports']					= 	'Selected Reports';
     $string['selectedreportlist']				= 	'Select report list options';
-    $string['selectagraph']				= 	'Select a graph';
+    $string['selectagraph']				        = 	'Select a graph';
+    $string['setallowmultipleerror']				        = 	'In order to have a recurring report type you must check allow multiple entries';
+
 
 
 	$string['settings']							= 	'Settings';
@@ -259,7 +282,10 @@ $string['nopermissiongraph']			=	'You do not have permission to view this graph'
 	$string['studentnotfound']					= 	'Student not found';
 	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 				= 	'Submit and display';
-	$string['studentslist'] 					= 	'Student list description';
+    $string['studentslist'] 					= 	'Student list description';
+    $string['specificdate'] 					= 	'Specific date';
+    $string['specificstart'] 					= 	'Specific start date';
+
 	$string['tabsettings']						= 	'Tab Settings';
     $string['tab_pluginsettings']				= 	'Tab Plugin Settings';
     $string['threemonthdata']				    = 	'Past 3 months data';
@@ -273,18 +299,29 @@ $string['nopermissiongraph']			=	'You do not have permission to view this graph'
     $string['viewreportpreview'] 				= 	'View Report Preview';
     $string['viewplp'] 							= 	'View';
     $string['viewilp'] 							= 	'View ILP';
-    $string['yeardata']				            = 	'Past years data';
-	$string['userpicture'] 						= 	'Student Picture';
+    $string['viewextension'] 					= 	'View Extensions';
+    $string['value'] 							= 	'Value';
+
+
+
+    $string['userpicture'] 						= 	'Student Picture';
+    $string['usereportlock'] 					= 	'Use report lock edit';
 
 	$string['unknown'] 							= 	'Unknown';
-
+    $string['yeardata']				            = 	'Past years data';
+    $string['weekly']				                    = 	'Weekly';
+    $string['weeks']				                = 	' Weeks';
 	//Archive Titles
 	$string['overview'] 						= 	'Overview';
 	$string['personal_report'] 					= 	'Personal Reports';	
 	$string['report1'] 							= 	'Progress Review';
 	$string['report2'] 							= 	'Concern';
 	$string['report3'] 							= 	'Comment';
-	$string['report4'] 							= 	'Contribution';
+    $string['report4'] 							= 	'Contribution';
+    $string['recurstartafterlockerror'] 							= 	'The recurring rule start date can not be after the report expiration';
+    $string['recurmaxgreaterthanmaxentrieserror'] 							= 	'The recurring max entries rule value can not be greater than the report maximum entries';
+
+
 	$string['subject_report'] 					= 	'Subject Reports';	
 	$string['student_info'] 					= 	'Student Info';
 	$string['target']							=	'Targets';

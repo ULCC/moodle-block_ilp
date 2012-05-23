@@ -68,35 +68,138 @@ class edit_report_mform extends ilp_moodleform {
 	        $mform->addRule('name', null, 'maxlength', 255, 'client');
 	        $mform->addRule('name', null, 'required', null, 'client');
 	        $mform->setType('name', PARAM_RAW);
-	        
+
+            // DESCRIPTION element
+            $mform->addElement(
+                'htmleditor',
+                'description',
+                get_string('description', 'block_ilp'),
+                array('class' => 'form_input', 'rows'=> '10', 'cols'=>'65')
+            );
+
+            $mform->addRule('description', null, 'maxlength', 65535, 'client');
+
+            // commented out as causing problems with double submitting
+            // $mform->addRule('description', null, 'required', null, 'client');
+
+            $mform->setType('description', PARAM_RAW);
+
+            //TODO add the elements to implement the frequency functionlaity
+            if (stripos($CFG->release,"2.") !== false) {
+                $mform->addElement('filepicker', 'binary_icon',get_string('binary_icon', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
+            } else {
+                $this->set_upload_manager(new upload_manager('binary_icon', false, false, 0, false, ILP_MAXFILE_SIZE, true, true, false));
+                $mform->addElement('file', 'binary_icon', get_string('binary_icon', 'block_ilp'));
+            }
+
+
 	        $mform->addElement('checkbox', 'maxedit',get_String('maxedit','block_ilp'),null);
 	        
 	        $mform->addElement('checkbox', 'comments',get_String('allowcomments','block_ilp'),null);
 	        
 	       	$mform->addElement('checkbox', 'frequency', get_String('multipleentries','block_ilp'),null);
-	        
-	        // DESCRIPTION element
-	        $mform->addElement(
-	            'htmleditor',
-	            'description',
-	            get_string('description', 'block_ilp'),
-	            array('class' => 'form_input', 'rows'=> '10', 'cols'=>'65')
-	        );
-	        
-	        $mform->addRule('description', null, 'maxlength', 65535, 'client');
 
-	        // commented out as causing problems with double submitting 
-	        // $mform->addRule('description', null, 'required', null, 'client');
+            $mform->addElement('html', '<noscript>');
+            $mform->addElement('html', get_string('reportnojs','block_ilp'));
+            $mform->addElement('html', '</noscript>');
 
-	        $mform->setType('description', PARAM_RAW);
-        	
-	        //TODO add the elements to implement the frequency functionlaity
-			if (stripos($CFG->release,"2.") !== false) {
-				$mform->addElement('filepicker', 'binary_icon',get_string('binary_icon', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
-			} else {
-				$this->set_upload_manager(new upload_manager('binary_icon', false, false, 0, false, ILP_MAXFILE_SIZE, true, true, false));
-        		$mform->addElement('file', 'binary_icon', get_string('binary_icon', 'block_ilp'));				
-			}
+            $radioarray     =   array();
+            $radioarray[]     = &MoodleQuickForm::createElement( 'radio', 'reporttype', '', get_string('openend','block_ilp'), ILP_RT_OPENEND);
+            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reporttype', '', get_string('recurring','block_ilp') , ILP_RT_RECURRING);
+            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reporttype', '', get_string('recurringfinaldate','block_ilp') , ILP_RT_RECURRING_FINALDATE);
+            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reporttype', '',get_string('finaldate','block_ilp') , ILP_RT_FINALDATE);
+
+            $mform->addGroup(
+                $radioarray,
+                'reporttype',
+                get_string('reporttype','block_ilp'),
+                '',
+                '',
+                array('class' => 'form_input'),
+                false
+            );
+
+            $mform->addRule('reporttype', null, 'required', null, 'client');
+
+            // maximum entries element
+            $mform->addElement(
+                'text',
+                'reportmaxentries',
+                get_string('maxentries', 'block_ilp'),
+                array('class' => 'form_input')
+            );
+
+
+            //specific date selector
+            $mform->addElement(
+                'date_time_selector',
+                'reportlockdate',
+                get_string('reportlockdate','block_ilp'),
+                array('optional' => false ),
+                array('class' => 'lockdate')
+            );
+
+            $mform->addElement('html', '<fieldset id="recurringfieldset" class="ilpfieldset">');
+            $mform->addElement('html', '<legend >'.get_string('recurringrules','block_ilp').'</legend>');
+            $mform->addElement('html', '<br />');
+            $options    =   array();
+            $options[ILP_RECURRING_DAY]  =   get_string('day','block_ilp');
+            $options[ILP_RECURRING_WEEK]  =   get_string('weekly','block_ilp');
+            $options[ILP_RECURRING_2WEEK]  =   "2".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_3WEEK]  =   "3".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_4WEEK]  =   "4".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_5WEEK]  =   "5".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_6WEEK]  =   "6".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_7WEEK]  =   "7".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_8WEEK]  =   "8".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_9WEEK]   =   "9".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_10WEEK]  =   "10".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_11WEEK]  =   "11".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_12WEEK]  =   "12".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_13WEEK]  =   "13".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_14WEEK]  =   "14".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_15WEEK]  =   "15".get_string('weeks','block_ilp');
+            $options[ILP_RECURRING_16WEEK]   =  "16".get_string('weeks','block_ilp');
+
+            $mform->addElement('select', 'recurfrequency', get_string('howoften', 'block_ilp'), $options, array('class' => 'recurring'));
+            $mform->setType('recurfrequency', PARAM_INT);
+
+            // maximum entries element
+            $mform->addElement(
+                'text',
+                'recurmax',
+                get_string('recurringmax', 'block_ilp'),
+                array('class' => 'recurring')
+            );
+
+            $radioarray         =   array();
+            $radioarray[]       =   &MoodleQuickForm::createElement( 'radio', 'recurstart', '', get_string('reportcreation','block_ilp'), ILP_RECURRING_REPORTCREATION ,array('class'=>'recurring')); ;
+            $radioarray[]       =   &MoodleQuickForm::createElement( 'radio', 'recurstart', '', get_string('firstentry','block_ilp') , ILP_RECURRING_FIRSTENTRY ,array('class'=>'recurring'));
+            $radioarray[]       =   &MoodleQuickForm::createElement( 'radio', 'recurstart', '',get_string('specificdate','block_ilp') , ILP_RECURRING_SPECIFICDATE ,array('class'=>'recurring'));
+
+            $mform->addGroup(
+                $radioarray,
+                'recurstart',
+                get_string('recurringstart','block_ilp'),
+                '',
+                '',
+                array('class' => 'recurring'),
+                false
+            );
+
+            //specific date selector
+            $mform->addElement(
+                'date_time_selector',
+                'recurdate',
+                get_string('specificstart','block_ilp'),
+                array('optional'=>false),
+                array('class'=>'recurring')
+            );
+
+            //close the fieldset
+            $mform->addElement('html', '</fieldset>');
+
+
 	        $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
 	        $buttonarray[] = &$mform->createElement('cancel');
 	        
@@ -105,6 +208,39 @@ class edit_report_mform extends ilp_moodleform {
 	        //close the fieldset
 	        $mform->addElement('html', '</fieldset>');
 		}
+
+
+
+        function validation( $data ){
+
+            $data   =   (object)    $data;
+
+            $this->errors = array();
+
+            if (!isset($data->frequency))   {
+                if ($data->reporttype == 2) {
+                    $this->errors['reporttype']	=	get_string('setallowmultipleerror','block_ilp',$data);
+                }
+
+                //we could check all other fields but the only one that is relevant is the report type field as
+                //everything else is disregarded based on the value of this field
+            }
+
+
+            if ($data->reporttype   ==  2)  {
+
+                if ($data->recurdate > $data->reportlockdate && $data->recurstart == 3) {
+                    $this->errors['recurdate']	=   get_string('recurstartafterlockerror','block_ilp');
+                }
+
+                if ($data->recurmax > $data->reportmaxentries) {
+                    $this->errors['recurmax']	=   get_string('recurmaxgreaterthanmaxentrieserror','block_ilp');
+                }
+
+
+            }
+        }
+
 		
 		/**
      	 * TODO comment this
