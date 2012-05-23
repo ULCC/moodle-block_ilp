@@ -3,6 +3,8 @@
 //require the ilp_plugin.php class
 require_once($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_tab.php');
 
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report_rules.class.php');
+
 class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
 	public		$student_id;
@@ -139,17 +141,20 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
                 $viewcapability		=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
 
+                $viewothercapability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
+
                 $caneditreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$editcapability->id);
 
                 $canaddreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$addcapability->id);
 
                 $canviewreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$viewcapability->id);
 
+                $canviewothersreports		=	$this->dbc->has_report_permission($r->id,$role_ids,$viewothercapability->id);
+
                 if (!empty($caneditreport) || !empty($canaddreport) || !empty($canviewreport)) {
 
                     $detail					=	new stdClass();
                     $detail->report_id		=	$r->id;
-
 
                     $detail->name			=	(empty($reporttab)) ? $r->name : "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}&tabitem={$reporttab->id}:{$r->id}&selectedtab={$reporttab->id}'>{$r->name}</a>";
 
@@ -191,6 +196,8 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
                         $detail->deadline_report	=	true;
                     }
 
+                    $reportrules    =   new ilp_report_rules($r->id,$this->student_id);
+
                     //get the last updated report entry
                     $lastentry				=	$this->dbc->get_lastupdatedentry($r->id,$this->student_id);
                     $lastupdate				=	$this->dbc->get_lastupdatetime($r->id,$this->student_id,false);
@@ -201,9 +208,14 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
                     //then we need to find a report entry instance this will be editable
                     $detail->editentry	=	(empty($detail->frequency) && !empty($lastentry)) ?  $lastentry->id : false;
 
+                    //when was the last entry created for this report
                     $detail->lastmod	=	(!empty($lastupdate->timemodified)) ?  userdate($lastupdate->timemodified , get_string('strftimedate', 'langconfig')) : get_string('notapplicable','block_ilp');
 
-                    $detail->canadd	    = ($canaddreport) ? true : false;
+                    //does the user have the capabiltilty to add a report
+                    $detail->canadd	    = (!empty($canaddreport)) ? true : false;
+
+                    //is the report available to the user
+                    $detail->reportavailable    =   $reportrules->report_availabilty();
 
                     $detail->canedit	= ($caneditreport) ? true : false;
 
@@ -285,9 +297,6 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
          $string['ilp_dashboard_entries_tab_displaylinks'] 		    = 'Display text links';
          $string['ilp_dashboard_entries_tab_graphs'] 		        = 'Graph(s):';
          $string['ilp_dashboard_entries_tab_displayicons'] 		        = 'Display icon links';
-
-
-
 
         return $string;
     }

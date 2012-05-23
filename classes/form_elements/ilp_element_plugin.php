@@ -165,9 +165,6 @@ class ilp_element_plugin {
         	
         	//get the form element data from the plugin table
         	$form_element		=	$this->dbc->get_form_element_by_reportfield($plugin->tablename,$reportfield->id);
-		
-
-
 
             $non_attrib = array('id', 'timemodified', 'timecreated');
 
@@ -198,8 +195,6 @@ class ilp_element_plugin {
         
 	    //was the form cancelled?
 		if ($this->mform->is_cancelled()) {
-
-
 
 			//send the user back
 			redirect($backurl, get_string('returnreportprompt', 'block_ilp'), ILP_REDIRECT_DELAY);

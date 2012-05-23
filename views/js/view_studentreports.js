@@ -47,8 +47,6 @@ M.ilp_view_studentreports = {
 
         stateselector.onchange  =   function () {
 
-            console.log(stateselector.value);
-
             if (stateselector.value != '0')   {
                 deadlineany =   Dom.get('deadline_any');
                 deadlineany.checked = true;

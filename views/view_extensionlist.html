@@ -1,0 +1,15 @@
+<?php
+echo $OUTPUT->header();
+?>
+<div class="ilp">
+    <?php
+    echo $OUTPUT->heading(get_string('viewextension','block_ilp'));
+
+    //render the form
+    $flextable->print_html();
+
+    ?>
+</div>
+<?php
+echo $OUTPUT->footer();
+?>
