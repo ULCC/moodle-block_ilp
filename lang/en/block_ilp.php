@@ -42,6 +42,7 @@
 		Course Admin
 	</p>
 	';
+    $string['collapseall']			=	'Collapse all';
 	$string['comments']				=	'Comments';
 	$string['comment']				=	'Comment';
 	$string['commeentdeleted']		=	'Comment deleted';
@@ -91,7 +92,7 @@ $string['dashboard']	 		= 	'Dashboard';
 	$string['edit_status_items']	=	'Edit Status Items';
     $string['editstatusitems']		=	'Edit Status Items';
     $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this report';
-
+    $string['expandall']			=	'Expand all';
 
 
 	$string['enablereport'] 		= 	'Enable Report';

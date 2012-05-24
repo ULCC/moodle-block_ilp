@@ -52,6 +52,13 @@ class ilp_ajax_table extends ilp_flexible_table {
     // language token for nothing to display
     var $nothing        = 'nothingtodisplay';
 
+    //used to determine whether the expand and collapse
+    //buttns will be used
+    var $use_expandcollapse = false;
+
+    //
+    var    $expandcollapse_cols  =   array();
+
     /**
      * Constructor
      * @param int $uniqueid The id of the table div
@@ -135,6 +142,15 @@ class ilp_ajax_table extends ilp_flexible_table {
     }
 
     /**
+     * Sets the use_initials variable to the given boolean.
+     * @param bool $bool
+     * @return void
+     */
+    function use_expandcollapselinks($bool) {
+        $this->use_expandcollapse = $bool;
+    }
+
+    /**
      * Set defaults for the optional filters.
      *
      */
@@ -188,15 +204,34 @@ class ilp_ajax_table extends ilp_flexible_table {
             return false;
         }
 
-        if(!empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]])) {
-            // Show this column
-            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]] = false;
-        }
-        else if(!empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]) && isset($this->columns[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]])) {
-         	// Hide this column
-            $this->sess->collapse[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]] = true;
-            if(array_key_exists($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]], $this->sess->sortby)) {
-                unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]]);
+        if(!empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]) && (isset($this->columns[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]]) || $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]] == "expandall")) {
+
+            $showcolumn   =   $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]];
+
+            if ($showcolumn == 'expandall') {
+                foreach($this->expandcollapse_cols as $ec) {
+                    $this->sess->collapse[$ec] = false;
+                }
+            } else {
+                // Show this column
+                $this->sess->collapse[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]] = false;
+            }
+        } else if(!empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]) && (isset($this->columns[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]]) ||  $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]] == "collapseall")) {
+            $hidecolumn   =   $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]];
+            if ($hidecolumn == 'collapseall') {
+                foreach($this->expandcollapse_cols as $ec) {
+                    $this->sess->collapse[$ec] = true;
+                    if(array_key_exists($ec, $this->sess->sortby)) {
+                        unset($this->sess->sortby[$ec]);
+                    }
+                }
+            } else {
+                // Hide this column
+
+                $this->sess->collapse[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]] = true;
+                if(array_key_exists($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]], $this->sess->sortby)) {
+                    unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]]);
+                }
             }
         }
         
@@ -306,9 +341,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         } else if (!in_array('flexible', explode(' ', $this->attributes['class']))) {
             $this->attributes['class'] = trim('flexible ' . $this->attributes['class']);
         }
-        
 
-        
     }
 
     /**
@@ -697,6 +730,10 @@ class ilp_ajax_table extends ilp_flexible_table {
             echo $this->download_buttons();
         }
 
+        if (!empty($this->use_expandcollapse)) {
+            echo $this->expand_collapse();
+        }
+
         $this->wrap_html_start();
         // Start of main data table
 
@@ -974,4 +1011,28 @@ class ilp_ajax_table extends ilp_flexible_table {
 
         return $collist;
     }
+
+    function expand_collapse()  {
+
+        $expandurl     =  $this->baseurl.$this->uniqueid.'['.$this->request[ILP_TABLE_VAR_SHOW].']=expandall'.$this->fragment;;
+        $collapseurl     =  $this->baseurl.$this->uniqueid.'['.$this->request[ILP_TABLE_VAR_HIDE].']=collapseall'.$this->fragment;;
+
+
+        echo "<div>";
+        echo "<span><a href='{$expandurl}' >".get_string('expandall','block_ilp')." &nbsp;</a></span>/";
+        echo "<span><a href='{$collapseurl}' >&nbsp; ".get_string('collapseall','block_ilp')."</a></span>";
+        echo "</div>";
+    }
+
+    /**
+     * passes the columns that will be allow to expanded and collapsed
+     * with the expand collapse links
+     *
+     * @param $columns
+     *
+     */
+    function define_expandcollapse($columns)    {
+        $this->expandcollapse_cols  =   $columns;
+    }
+
 }

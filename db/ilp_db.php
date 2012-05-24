@@ -1507,7 +1507,7 @@ class ilp_db_functions	extends ilp_logging {
         $timestartsql   =  (!empty($timestart)) ?    " AND timecreated > {$timestart} " :   "";
         $timeendsql     =  (!empty($timeend)) ? " AND timecreated < {$timeend} " : "";
 
-    	$sql	=	"SELECT		*
+    	$sql	=	"SELECT		COUNT(*)
     				 FROM		{$CFG->prefix}block_ilp_entry		as 	e
     				 WHERE		user_id			=		{$user_id}
     				 AND		report_id		=		{$report_id}

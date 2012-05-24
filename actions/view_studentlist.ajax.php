@@ -54,7 +54,7 @@ $columns = array('picture', 'fullname', 'u_status');
 $headers[] = '';
 $columns[] = 'view';
 $nosorting = array('picture', 'u_status','view');
-
+$expandcollapse =   array('picture', 'u_status');
 //we need to check if the mis plugin has been setup if it has we will get the attendance and punctuality figures
 
 $attendanceclass				=	get_config('block_ilp','attendplugin');
@@ -76,6 +76,7 @@ if (!empty($attendanceclass)) {
     	if (method_exists($misclass, 'getAttendance'))	{
    		    $headers[] = get_string('attendance', 'block_ilp');
    			$columns[] = 'u_attendcance';
+            $expandcollapse[]   = 'u_attendcance';
    			$nosorting[] = 'u_attendcance';
    			$misattendavailable = true;
     	}
@@ -84,6 +85,7 @@ if (!empty($attendanceclass)) {
 	    if (method_exists($misclass, 'getAttendance'))	{
     		$headers[] = get_string('punctuality', 'block_ilp');
     		$columns[] = 'u_punctuality';
+            $expandcollapse[]   = 'u_punctuality';
     		$nosorting[] = 'u_punctuality';
     		$mispunctualityavailable = true;
     	}
@@ -109,6 +111,7 @@ $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 foreach ($reports as $r) {
     $headers[] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_studentreports.php?course_id={$course_id}&tutor={$tutor}&report_id={$r->id}&group_id={$group_id}'>".$r->name."</a>";
     $columns[] = $r->id;
+    $expandcollapse[]   = $r->id;
     $nosorting[] = $r->id;
 }
 
@@ -130,8 +133,8 @@ $flextable->set_attribute('summary', get_string('studentslist', 'block_ilp'));
 $flextable->set_attribute('cellspacing', '0');
 $flextable->set_attribute('class', 'generaltable fit');
 $flextable->set_attribute('id', "student_listcourse_id={$course_id}tutor={$tutor}status_id={$status_id}");
-
-
+$flextable->use_expandcollapselinks(true);
+$flextable->define_expandcollapse($expandcollapse);
 $flextable->initialbars(true);
 
 $flextable->setup();
