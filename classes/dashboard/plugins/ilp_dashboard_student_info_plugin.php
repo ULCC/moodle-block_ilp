@@ -40,14 +40,36 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG,$OUTPUT,$PAGE,$PARSER,$USER;
+		global	$CFG,$OUTPUT,$PAGE,$PARSER,$USER,$SESSION;
 
 		//set any variables needed by the display page	
 		
 		//get students full name
 		$student	=	$this->dbc->get_user_by_id($this->student_id);
-		
-		
+
+        $nextstudent    =   false;
+        $prevstudent    =   false;
+
+        //get the details of the previous and next student in the list
+        //from the $SESSION->ilp_prevnextstudents var if it has been set
+        if (isset($SESSION->ilp_prevnextstudents))   {
+		    $studentlist    =   unserialize($SESSION->ilp_prevnextstudents);
+
+
+            if (!empty($studentlist))   {
+                for($i = 0;$i < count($studentlist); $i++)   {
+                    if ($studentlist[$i] ==  $this->student_id) {
+                        if (isset($studentlist[$i-1]))  {
+                            $prevstudent    =   $studentlist[$i-1];
+                        }
+                        if (isset($studentlist[$i+1]))  {
+                            $nextstudent    =   $studentlist[$i+1];
+                        }
+                    }
+                }
+            }
+        }
+
 		if (!empty($student))	{ 
 			$studentname	=	fullname($student);
 			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true')); 
@@ -91,13 +113,13 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			 * This code is in place as moodle insists on calling the settings functions on normal pages
 			 * 
 			 */
+
+            $course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
+            $user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
+
 			//check if the set_context method exists
 			if (!isset($PAGE->context) === false) {
-				
-				$course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
-				$user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
-				
-				if ($course_id != SITEID && !empty($course_id))	{ 
+				if ($course_id != SITEID && !empty($course_id))	{
 					if (method_exists($PAGE,'set_context')) {
 						//check if the siteid has been set if not 
 						$PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));

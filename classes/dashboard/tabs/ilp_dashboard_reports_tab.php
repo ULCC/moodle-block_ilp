@@ -218,15 +218,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
 						if ($report->status == ILP_ENABLED && !empty($access_report_viewreports)) {
 
-							$icon				=	(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
 
-							echo $this->get_header($report->name,$icon);
-
-							$stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
-
-							//output the print icon
-							echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
-								 ";
 
 							$reportname	=	$report->name;
 							//get all of the fields in the current report, they will be returned in order as
@@ -255,17 +247,11 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 										$courserelatedfield_id	=	$cr->id;
 								}
 							}
-							/*
-							$has_datedeadline	=	(!$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline')) ? false : true;
 
-							if (!empty($has_datedeadline))	{
-								$deadline	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline');
-								//the should not be anymore than one of these fields in a report
-								foreach ($deadline as $d) {
-										$dontdisplay[] 	=	$d->id;
-								}
-							}
-							*/
+                            //find if the current user can add reports
+                            $access_report_addreports	= false;
+                            $capability	=	$this->dbc->get_capability_by_name('block/ilp:addreport');
+                            if (!empty($capability)) $access_report_addreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
 
 							//find out if the current user has the edit report capability for the report
@@ -298,14 +284,57 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							$capability	=	$this->dbc->get_capability_by_name('block/ilp:viewcomment');
 							if (!empty($capability))	$access_report_viewcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
-
-
 							//check to see whether the user can delete the reports entry
 							$candelete =	(!empty($report->frequency) && !empty($access_report_deletereports))	?	true	: false;
 
+                            $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
+                            if (!empty($capability))	$access_report_viewothers		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
 							//get all of the entries for this report
 							$reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
+
+                            //does the current report allow multiple entries
+                            $multiple_entries   =   (!empty($report->frequency)) ? true :   false;
+
+                            //instantiate the report rules class
+                            $reportrules    =   new ilp_report_rules($report_id,$this->student_id);
+
+                            //output html elements to screen
+
+                            $icon				=	(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
+
+                            echo $this->get_header($report->name,$icon);
+
+                            $stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
+
+                            //find out if the rules set on this report allow a new entry to be created
+                            $reportavailable =   $reportrules->report_availabilty();
+
+                            echo "<div id='report-entries'>";
+                            if (!empty($access_report_addreports)   && !empty($multiple_entries) && !empty($reportavailable['result'])) {
+                                echo    "<div class='add' style='float :left'>
+                                            <a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('addnew','block_ilp')."</a>&nbsp;
+                                        </div>";
+                            }
+
+                            if (!empty($access_report_viewothers)) {
+                                echo "<div class='add' style='float :left'>
+                                        <a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_preference.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('addextension','block_ilp')."</a>&nbsp;
+                                      </div>
+
+
+                                    <div class='add' style='float :left'>
+                                        <a href='{$CFG->wwwroot}/blocks/ilp/actions/view_extensionlist.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('viewextension','block_ilp')."</a>
+                                    </div>";
+                             }
+                            echo "</div>
+                            <br />";
+
+                            //output the print icon
+                            echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
+								 ";
+
+
 
 							//create the entries list var that will hold the entry information
 							$entrieslist	=	array();

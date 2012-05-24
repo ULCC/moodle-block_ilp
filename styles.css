@@ -529,4 +529,20 @@
     visibility: hidden;
 }
 
+.ilp  #report-entries .add a{
+    background: #333;
+    color: #fff;
+    padding: 5px;
+    text-decoration:none;
+}
+.ilp  #report-entries .add a:hover{
+    text-decoration:underline;
+}
 
+.ilp   .float-right {
+    float:  right;
+}
+
+.ilp   .float-right {
+    float:  right;
+}

@@ -175,6 +175,7 @@ $string['howoften']            = 	'How often should rules reset';
 	$string['mycoursegroups']			=	'My Course Groups';
 
     $string['name']					=	'Name';
+    $string['nextstudent']          =   'Next student';
     $string['newreportcomment']		=	'A comment has been made about your entry for the {$a->name} report';
     $string['nocompatiblefields']					=	'None of the fields in this report can be used with this graph type';
 
@@ -208,7 +209,7 @@ $string['howoften']            = 	'How often should rules reset';
 	$string['predefinedreports'] 	= 	'Predefined Reports';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
     $string['preferencecreationsuc'] 		= 	'Preference created';
-
+    $string['previousstudent'] 		= 	'Prev student';
 	$string['punctuality']			= 	'Punctuality';
     $string['removefield']			= 	'Remove 1 field';
     $string['removesel']			= 	'Remove selected';

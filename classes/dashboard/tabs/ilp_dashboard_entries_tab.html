@@ -47,7 +47,7 @@ foreach ($reportslist as $rep) {
 					//edit entry will empty except when the report does not allow multiple entries and a entry already exits
   
 					if (empty($rep->editentry) && !empty($rep->canadd) && !empty($rep->reportavailable['result'])) { ?>
-					<a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}&course_id={$this->course_id}"; ?>' ><?php echo get_string('addnew','block_ilp'); ?></a>
+                <a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$rep->report_id}&course_id={$this->course_id}"; ?>' ><?php echo get_string('addnew','block_ilp'); ?></a>
 				<?php
 				    //the user will only see a edit link if they have editing rights and the report is available to them
 				    }  else if (!empty($rep->canedit) && !empty($rep->reportavailable['result'])) { ?>

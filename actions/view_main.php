@@ -26,11 +26,8 @@ $user_id = $PARSER->required_param('user_id', PARAM_INT);
 $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
 
 
-
-
 // instantiate the db
 $dbc = new ilp_db();
-
 
 $plpuser	=	$dbc->get_user_by_id($user_id);
 
