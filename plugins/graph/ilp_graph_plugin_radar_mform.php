@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_graph_plugin_mform.class.php');
 
