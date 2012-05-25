@@ -1,9 +1,9 @@
 <?php
 
-    //$configpath =   "../../../../config.php";
+    $configpath =   "../../../../../config.php";
 
+    require_once($configpath);
 
-    require_once('C:\xampp\htdocs\ilpdevmoodle2.0\docroot\config.php');
 
     global  $CFG, $PARSER;
 
