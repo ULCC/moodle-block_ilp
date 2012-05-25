@@ -1,7 +1,8 @@
 <?php
 	$string['achieved'] 			= 	'Achieved';
 	$string['addall'] 				= 	'Add all';
-	$string['addcomment']			= 	'Add Comment';
+    $string['addcomment']			= 	'Add Comment';
+    $string['addtosummary']			= 	'Add to summary';
 	$string['addedby']				= 	'Added By';
 	$string['addprompt'] 			= 	'Add Prompt';
 	$string['addfield'] 			= 	'Add Field';
@@ -94,10 +95,9 @@
 	$string['failpercentconfig']	=	'The percentage that should be considered a fail (all percentages equal to and below this)';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['fieldmaximum']			=	'The mamximum number of {$a} fields has been added you can not add anymore';
-	$string['filter']				=	'Filter';
-	
-	
-	
+    $string['filter']				=	'Filter';
+    $string['fieldchangesuc']		=	'The field change has been successful';
+    $string['fieldchangeerror']		=	'A error has occurred the field change has not been applied';
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	$string['for']					=	'for';
@@ -114,7 +114,8 @@
 	$string['intid']				=	'Int ID';
 	
 	$string['installedreports']		=	'Installed Reports';
-	$string['installedelements']	=	'Installed Elements';
+    $string['installedelements']	=	'Installed Elements';
+    $string['insummary']	        =	'In summary';
 	$string['warininglist']			=	'Warining List';
 	
 	
@@ -165,6 +166,7 @@
     $string['nocomments']			=	'No Comments';
     $string['noconnection']			=	'No Connection';
 	$string['notapplicable']		=	'N/A';
+    $string['notinsummary']	        =	'Not in summary';
 	$string['nothingtodisplay']		=	'Nothing to display';
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';
@@ -231,6 +233,7 @@
 	$string['studentnotfound']					= 	'Student not found';
 	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 				= 	'Submit and display';
+    $string['summary']	                        =	'Summary';
 	$string['studentslist'] 					= 	'Student list description';
 	$string['tabsettings']						= 	'Tab Settings';
 	$string['tab_pluginsettings']				= 	'Tab Plugin Settings';
