@@ -25,7 +25,9 @@ class ilp_settings {
     * constructor class sets the values of all settings used
     */
    function __construct() {
-       $this->version = "2012030112";
+
+       $this->version = "2012052512";
+
        $this->cron 		= 86400; 	//run the cron at minimum once every 24 hours
    }
 	

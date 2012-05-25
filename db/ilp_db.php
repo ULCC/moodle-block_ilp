@@ -1249,25 +1249,37 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @param  int $report_id the id of the report that we are looking for
      * @param  int $user_id	the id of user who will be retrieving report entries for
-     * @param  int $state_id if set only entries that have a specified state are returned
+     * @param  int $state_id the id of the state that the returned entries should be in
+     * @param  int $createdby who should the entries be created by null for anyone
+     * ILP_CREATED_BY_USER for only user created and ILP_NOTCREATED_BY_USER for entries
+     * created by others
+     *
      * @return mixed array of objects containing databases recordsets or false
      */
-    function get_user_report_entries($report_id,$user_id,$state_id=null)	{
-        global		$CFG;
-        $tables		=	"";
-        $where		=	"";
+    function get_user_report_entries($report_id,$user_id,$state_id=null,$createdby=null)	{
+    	global		$CFG;
+    	$tables		=	"";
+    	$where		=	"";
 
-        //if the the id of a status has been given then we need to add mroe contitions to
-        //find the reports in this state
-        if (!empty($state_id)) {
-            $tables		=	", {$CFG->prefix}block_ilp_plu_ste_ent as se
-    						   ";
+    	//if the the id of a status has been given then we need to add mroe contitions to
+    	//find the reports in this state
+    	if (!empty($state_id)) {
+    		$tables		=	", {$CFG->prefix}block_ilp_plu_ste_ent as se";
 
             $where		=	" 	AND e.id	=	se.entry_id
     							AND	se.parent_id	=	{$state_id}";
         }
 
-        $sql	=	"SELECT		e.*
+        if (!empty($createdby)) {
+            if ($createdby  ==  ILP_CREATED_BY_USER)    {
+                $where .= "AND creator_id = {$user_id}";
+            } else if ($createdby  ==  ILP_NOTCREATED_BY_USER)    {
+                $where .= "AND creator_id != {$user_id}";
+            }
+        }
+
+    	$sql	=	"SELECT		e.*
+
     				 FROM		{$CFG->prefix}block_ilp_entry as e
     				 			{$tables}
     				 WHERE		e.report_id		=	{$report_id}
@@ -1763,30 +1775,6 @@ class ilp_db_functions	extends ilp_logging {
     		return 		$this->dbc->get_records_sql($sql);
     }
 
-
-
-   public function 	get_report_entries_with_state()	{
-   		global $CFG;
-
-   			$sql	=	"SELECT		r.*,
-    					 FROM 		{$CFG->prefix}block_ilp_entry as e,
-   									{$CFG->prefix}block_ilp_report_field as rf,
-    					 			{$CFG->prefix}block_ilp_plugin as p,
-    					 			{$CFG->prefix}block_ilp_pu_sts as s,
-    					 			{$CFG->prefix}block_ilp_pu_sts_items as si,
-    					 			{$CFG->prefix}block_ilp_pu_sts_ent as se
-    					 WHERE		e.report_id		=	$rf.report_id
-    					 AND		p.id			=	rf.plugin_id
-    					 AND		s.reportfield_id	=	rf.id
-				 		 AND		rf.id			=	{$report_id}
-				 		 AND		s.id			=	si.parent_id
-				 		 AND		si.id			=	se.parent_id
-    					 AND		p.name			=	'{$pluginname}'
-    					 AND		e.user_id		=	{$user_id}
-";
-
-    		return 		$this->dbc->get_records_sql($sql);
-   }
 
 
    /**
@@ -2680,7 +2668,6 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 }
-
 
 
 

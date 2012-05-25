@@ -41,6 +41,15 @@ $state_id = $PARSER->optional_param('state_id', 0, PARAM_INT);
 //get the deadline_id if set
 $deadline_id    =	$PARSER->optional_param('deadline_id', 0, PARAM_INT);
 
+//get the summary param if set
+$displaysummary  =	$PARSER->optional_param('summary', 0, PARAM_INT);
+
+//display user entries
+$displayuserentries  =	$PARSER->optional_param('userentries', 1, PARAM_INT);
+
+//display non user entries
+$displaynonuserentries  =	$PARSER->optional_param('nonuserentries', 1, PARAM_INT);
+
 // instantiate the db
 $dbc = new ilp_db();
 
@@ -193,8 +202,16 @@ if (!empty($studentslist)) {
 
         $data[$report_id] = (empty($temp->entries)) ? get_string('numberentries', 'block_ilp',$temp) : "<div id='row{$report_id}{$student->id}' class='entry_toggle'>".get_string('numberentries', 'block_ilp',$temp)."</div>";
 
+        if (!empty($displayuserentries) && empty($displaynonuserentries))  {
+            $createdby  =   ILP_CREATED_BY_USER;
+        } else if (empty($displayuserentries) && !empty($displaynonuserentries))  {
+            $createdby  =   ILP_NOTCREATED_BY_USER;
+        } else {
+            $createdby  =   null;
+        }
+
         //get all of the entries for this report
-        $reportentries	=	$dbc->get_user_report_entries($report_id,$student->id,$state_id);
+        $reportentries	=	$dbc->get_user_report_entries($report_id,$student->id,$state_id,$createdby);
 
         //if the report has a state field and the user has chosen to show reports with a particular state
         //and the student has no reports with this state continue as we will not show them.
@@ -220,8 +237,6 @@ if (!empty($studentslist)) {
         $temp->entries = count($reportentries);
 
         $data[$report_id] = (empty($temp->entries)) ? get_string('numberentries', 'block_ilp',$temp) : "<div id='row{$report_id}{$student->id}' class='entry_toggle'>".get_string('numberentries', 'block_ilp',$temp)."</div>";
-
-
 
         $reportentry    =  "";
 
@@ -296,13 +311,15 @@ if (!empty($studentslist)) {
                 if (!empty($reportfields)) {
                     $reportentry    .=   '<div class="report-entry" >';
                     foreach ($reportfields as $field) 	{
-                        if (!in_array($field->id,$dontdisplay)) {
+                        if (!in_array($field->id,$dontdisplay) && ((!empty($displaysummary) && !empty($field->summary) || empty($displaysummary)))) {
                             $fieldname	=	$field->id."_field";
                             $reportentry    .=   "<p><strong>$field->label: </strong>";
                             $reportentry    .=  (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '&nbsp;';
                             $reportentry    .=  "</p>";
                         }
                     }
+
+
                     if (!empty($has_courserelated)) { $reportentry    .=  "<p><strong>".get_string('course','block_ilp')."</strong> : ".$entry_data->coursename." </p>";}
                     $reportentry    .=  "<p><strong>".get_string('addedby','block_ilp')."</strong>: {$entry_data->creator}</p>";
                     $reportentry    .=  "<p><strong>".get_string('date')."</strong>: {$entry_data->modified}</p>";

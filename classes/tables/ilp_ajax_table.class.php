@@ -1019,7 +1019,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
 
         echo "<div>";
-        echo "<span><a href='{$expandurl}' >".get_string('expandall','block_ilp')." &nbsp;</a></span>/";
+        echo "<span><a href='{$expandurl}'  > ".get_string('expandall','block_ilp')." &nbsp;</a></span>/";
         echo "<span><a href='{$collapseurl}' >&nbsp; ".get_string('collapseall','block_ilp')."</a></span>";
         echo "</div>";
     }

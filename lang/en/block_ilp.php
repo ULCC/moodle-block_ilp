@@ -1,8 +1,13 @@
 <?php
 	$string['achieved'] 			= 	'Achieved';
 	$string['addall'] 				= 	'Add all';
+
     $string['addextension'] 		= 	'Add extension';
 	$string['addcomment']			= 	'Add Comment';
+
+    $string['addcomment']			= 	'Add Comment';
+    $string['addtosummary']			= 	'Add to summary';
+
 	$string['addedby']				= 	'Added By';
 	$string['addprompt'] 			= 	'Add Prompt';
     $string['addfield'] 			= 	'Add Field';
@@ -55,8 +60,8 @@
     $string['course']				=	'Course';
     $string['courseentries']				=	'{$a->report} entries for students in {$a->course}';
 	$string['coursereports']		=	'Course Reports';
-$string['day']	 		= 	'Daily';
-$string['dashboard']	 		= 	'Dashboard';
+    $string['day']	 		= 	'Daily';
+    $string['dashboard']	 		= 	'Dashboard';
     $string['datacollection'] 		= 	'Data collected over:';
     $string['deadline']		 					= 	'deadline';
     $string['deadlinestate']		 			= 	'Deadline state';
@@ -77,8 +82,14 @@ $string['dashboard']	 		= 	'Dashboard';
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
 	$string['displayingreports'] 				= 	'Display Reports';
-	
-	
+
+	$string['description']			        =	'Description';
+	$string['display'] 				        = 	'Display';
+    $string['displayingreports'] 			= 	'Display Reports';
+    $string['displaysummary'] 				= 	'Display summary';
+    $string['displayuserentries'] 	        = 	'Display user entries';
+    $string['displaynonuserentries'] 	    = 	'Display non user entries';
+
 	$string['disablereport']		= 	'Disable Report';
 	$string['disabled'] 			= 	'Disabled';
 	$string['editcomment']			= 	'Edit Comment';
@@ -108,9 +119,15 @@ $string['dashboard']	 		= 	'Dashboard';
 	$string['failpercentconfig']	=	'The percentage that should be considered a fail (all percentages equal to and below this)';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['fieldmaximum']			=	'The mamximum number of {$a} fields has been added you can not add anymore';
+
 	$string['filter']				=	'Filter';
     $string['finaldate']		    = 	'Final date';
 	
+
+    $string['filter']				=	'Filter';
+    $string['fieldchangesuc']		=	'The field change has been successful';
+    $string['fieldchangeerror']		=	'A error has occurred the field change has not been applied';
+
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	$string['for']					=	'for';
@@ -118,12 +135,12 @@ $string['dashboard']	 		= 	'Dashboard';
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
     $string['graph_pluginsettings']	= 	'Graph Plugin Settings';
-$string['graphcreationsuc'] 	= 	'Graph successfully created';
-$string['graphcreationerror'] 	= 	'Error whilst creating graph';
+    $string['graphcreationsuc'] 	= 	'Graph successfully created';
+    $string['graphcreationerror'] 	= 	'Error whilst creating graph';
 
 
-$string['graphname']            = 	'Graph Name';
-$string['howoften']            = 	'How often should rules reset';
+    $string['graphname']            = 	'Graph Name';
+    $string['howoften']            = 	'How often should rules reset';
 	$string['idtype']				=	'ID type';
 	$string['idtypedesc']			=	'Is the id a string or a int, if it is a string it will have commas appended to it in the query';
 	
@@ -134,7 +151,8 @@ $string['howoften']            = 	'How often should rules reset';
 	$string['intid']				=	'Int ID';
 	
 	$string['installedreports']		=	'Installed Reports';
-	$string['installedelements']	=	'Installed Elements';
+    $string['installedelements']	=	'Installed Elements';
+    $string['insummary']	        =	'In summary';
 	$string['warininglist']			=	'Warining List';
 	
 	
@@ -191,8 +209,13 @@ $string['howoften']            = 	'How often should rules reset';
     $string['nopermissiongraph']			=	'You do not have permission to view this graph';
     $string['openend']			=	'Open end';
 	$string['notapplicable']		=	'N/A';
+
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
+
+    $string['notinsummary']	        =	'Not in summary';
+	$string['nothingtodisplay']		=	'Nothing to display';
+
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
@@ -284,9 +307,13 @@ $string['howoften']            = 	'How often should rules reset';
 	$string['studentnotfound']					= 	'Student not found';
 	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 				= 	'Submit and display';
+
     $string['studentslist'] 					= 	'Student list description';
     $string['specificdate'] 					= 	'Specific date';
     $string['specificstart'] 					= 	'Specific start date';
+
+    $string['summary']	                        =	'Summary';
+	$string['studentslist'] 					= 	'Student list description';
 
 	$string['tabsettings']						= 	'Tab Settings';
     $string['tab_pluginsettings']				= 	'Tab Plugin Settings';
