@@ -113,8 +113,13 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
         
         $mform->addRule('description', null, 'maxlength', 1000, 'client');
         $mform->setType('description', PARAM_RAW);
-        
-        
+
+        //button to state whether the element is required
+        $mform->addElement('checkbox',
+            'summary',
+            get_string('addtosummary', 'block_ilp')
+        );
+
         $this->specific_definition($mform);
 
         //add the submit and cancel buttons
@@ -158,6 +163,8 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
     function process_data($data) {
     	
     	$data->label	=	htmlentities($data->label);
+
+        $data->summary  =   (isset($data->summary)) ? 1 : 0;
     	
         if (empty($data->id)) {
             //create the ilp_report_field record

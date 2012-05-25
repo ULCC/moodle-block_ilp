@@ -196,6 +196,18 @@ function xmldb_block_ilp_upgrade($oldversion) {
     }
 
 
+    if ($oldversion < 2012030108) {
+        $table = new xmldb_table('block_ilp_report_field');
+
+        $table_summary = new $xmldb_field('summary');
+        $table_summary->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, NULL);
+        $table->addField($table_summary);
+
+        if (!$dbman->field_exists($table,$table_summary)) {
+            $dbman->add_field($table,$table_summary);
+        }
+    }
+
     return true;
 }
 
