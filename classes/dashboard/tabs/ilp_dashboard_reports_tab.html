@@ -2,7 +2,7 @@
 		<div class="reports-container">
 					<div class="left-reports">
 					<?php foreach ($reportfields as $field) 	{
-							if (!in_array($field->id,$dontdisplay)) {
+							if (!in_array($field->id,$dontdisplay) && ((!empty($displaysummary) && !empty($field->summary) || empty($displaysummary)))) {
 						?>
 						
 							<?php
