@@ -67,9 +67,12 @@
 	
 	
 	
-	$string['description']			=	'Description';
-	$string['display'] 				= 	'Display';
-	$string['displayingreports'] 				= 	'Display Reports';
+	$string['description']			        =	'Description';
+	$string['display'] 				        = 	'Display';
+    $string['displayingreports'] 			= 	'Display Reports';
+    $string['displaysummary'] 				= 	'Display summary';
+
+
 	
 	
 	$string['disablereport']		= 	'Disable Report';

@@ -134,7 +134,10 @@ if ($dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
 
 ?>
     <br />
-	<input id='coursesubmit' type='submit' value='<?php echo get_string('applyfilter','block_ilp');?>'>
+    <label for="summary"><?php echo get_string('displaysummary','block_ilp'); ?></label>
+    <input id="summary" type="checkbox" name="summary" value="1" <?php if (!empty($displaysummary)) {echo "checked='checked'";} ?> >
+    <br />
+	<input id='coursesubmit' type='submit' value='<?php echo get_string('applyfilter','block_ilp'); ?>'>
     <input type='hidden' name='report_id' value='<?php echo $report_id; ?>' >
 
 	</form>

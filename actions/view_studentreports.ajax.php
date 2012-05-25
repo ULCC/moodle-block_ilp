@@ -41,6 +41,9 @@ $state_id = $PARSER->optional_param('state_id', 0, PARAM_INT);
 //get the deadline_id if set
 $deadline_id    =	$PARSER->optional_param('deadline_id', 0, PARAM_INT);
 
+//get the summary param if set
+$displaysummary  =	$PARSER->optional_param('summary', 0, PARAM_INT);
+
 // instantiate the db
 $dbc = new ilp_db();
 
@@ -296,13 +299,15 @@ if (!empty($studentslist)) {
                 if (!empty($reportfields)) {
                     $reportentry    .=   '<div class="report-entry" >';
                     foreach ($reportfields as $field) 	{
-                        if (!in_array($field->id,$dontdisplay)) {
+                        if (!in_array($field->id,$dontdisplay) && ((!empty($displaysummary) && !empty($field->summary) || empty($displaysummary)))) {
                             $fieldname	=	$field->id."_field";
                             $reportentry    .=   "<p><strong>$field->label: </strong>";
                             $reportentry    .=  (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '&nbsp;';
                             $reportentry    .=  "</p>";
                         }
                     }
+
+
                     if (!empty($has_courserelated)) { $reportentry    .=  "<p><strong>".get_string('course','block_ilp')."</strong> : ".$entry_data->coursename." </p>";}
                     $reportentry    .=  "<p><strong>".get_string('addedby','block_ilp')."</strong>: {$entry_data->creator}</p>";
                     $reportentry    .=  "<p><strong>".get_string('date')."</strong>: {$entry_data->modified}</p>";
