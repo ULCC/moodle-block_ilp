@@ -133,10 +133,18 @@ if ($dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
     }
 
 ?>
-    <br />
-    <label for="summary"><?php echo get_string('displaysummary','block_ilp'); ?></label>
-    <input id="summary" type="checkbox" name="summary" value="1" <?php if (!empty($displaysummary)) {echo "checked='checked'";} ?> >
-    <br />
+        <br />
+        <label for="summary"><?php echo get_string('displaysummary','block_ilp'); ?></label>
+        <input id="summary" type="checkbox" name="summary" value="1" <?php if (!empty($displaysummary)) {echo "checked='checked'";} ?> >
+        <br />
+        <label for="userentries"><?php echo get_string('displayuserentries','block_ilp'); ?></label>
+        <input id="userentries" type="checkbox" name="userentries" value="1" <?php if (!empty($displayuserentries)) {echo "checked='checked'";} ?> >
+        <br />
+        <label for="nonuserentries"><?php echo get_string('displaynonuserentries','block_ilp'); ?></label>
+        <input id="nonuserentries" type="checkbox" name="nonuserentries" value="1" <?php if (!empty($displaynonuserentries)) {echo "checked='checked'";} ?> >
+
+        <br />
+        <br />
 	<input id='coursesubmit' type='submit' value='<?php echo get_string('applyfilter','block_ilp'); ?>'>
     <input type='hidden' name='report_id' value='<?php echo $report_id; ?>' >
 

@@ -1248,13 +1248,19 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @param  int $report_id the id of the report that we are looking for
      * @param  int $user_id	the id of user who will be retrieving report entries for
+     * @param  int $state_id the id of the state that the returned entries should be in
+     * @param  int $createdby who should the entries be created by null for anyone
+     * ILP_CREATED_BY_USER for only user created and ILP_NOTCREATED_BY_USER for entries
+     * created by others
      *
      * @return mixed array of objects containing databases recordsets or false
      */
-    function get_user_report_entries($report_id,$user_id,$state_id=null)	{
+    function get_user_report_entries($report_id,$user_id,$state_id=null,$createdby=null)	{
     	global		$CFG;
     	$tables		=	"";
     	$where		=	"";
+
+
 
     	//if the the id of a status has been given then we need to add mroe contitions to
     	//find the reports in this state
@@ -1265,6 +1271,14 @@ class ilp_db_functions	extends ilp_logging {
     		$where		=	" 	AND e.id	=	se.entry_id
     							AND	se.parent_id	=	{$state_id}";
     	}
+
+        if (!empty($createdby)) {
+            if ($createdby  ==  ILP_CREATED_BY_USER)    {
+                $where .= "AND creator_id = {$user_id}";
+            } else if ($createdby  ==  ILP_NOTCREATED_BY_USER)    {
+                $where .= "AND creator_id != {$user_id}";
+            }
+        }
 
     	$sql	=	"SELECT		e.*
     				 FROM		{$CFG->prefix}block_ilp_entry as e
