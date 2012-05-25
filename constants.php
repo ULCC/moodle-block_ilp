@@ -90,4 +90,9 @@ define('ILP_EVENT',           0);
 
 define('ILP_STRIP_TAGS_DESCRIPTION', '');
 
+
+define('ILP_CREATED_BY_USER', '1');
+define('ILP_NOTCREATED_BY_USER', '2');
+
+
 ?>

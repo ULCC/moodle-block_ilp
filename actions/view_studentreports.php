@@ -41,6 +41,12 @@ $deadline_id    =	$PARSER->optional_param('deadline_id', 0, PARAM_INT);
 
 $displaysummary  =	$PARSER->optional_param('summary', 0, PARAM_INT);
 
+$displayuserentries  =	$PARSER->optional_param('userentries', 1, PARAM_INT);
+
+$displaynonuserentries  =	$PARSER->optional_param('nonuserentries', 1, PARAM_INT);
+
+
+
 
 // instantiate the db
 $dbc = new ilp_db();

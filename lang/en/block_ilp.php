@@ -71,10 +71,9 @@
 	$string['display'] 				        = 	'Display';
     $string['displayingreports'] 			= 	'Display Reports';
     $string['displaysummary'] 				= 	'Display summary';
+    $string['displayuserentries'] 	        = 	'Display user entries';
+    $string['displaynonuserentries'] 	    = 	'Display non user entries';
 
-
-	
-	
 	$string['disablereport']		= 	'Disable Report';
 	$string['disabled'] 			= 	'Disabled';
 	$string['editcomment']			= 	'Edit Comment';
