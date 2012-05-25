@@ -175,7 +175,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 	function display($selectedtab=null)	{
 		global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
-		$pluginoutput	=	"";
+		$pluginoutput	    =	"";
+
+
 
 		if ($this->dbc->get_user_by_id($this->student_id)) {
 
@@ -184,6 +186,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
 			//get the tabitem param if has been set
 			$this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_CLEAN);
+
+            $displaysummary     =	$PARSER->optional_param('summary', 0, PARAM_INT);
 
 			//start buffering output
 				ob_start();
@@ -423,16 +427,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 	}
 
 	function stateselector($report_id)	{
-			$stateselector		=	"";
+			$stateselector		=	"<div class='report_state'><form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
+			                                <input type='hidden' name='course_id' value='{$this->course_id}' />
+											<input type='hidden' name='user_id' value='{$this->student_id}' />
+											<input type='hidden' name='selectedtab' value='{$this->plugin_id}' />";
 
 			//find out if the report has state fields
 			if ($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
 					$states		=	$this->dbc->get_report_state_items($report_id,'ilp_element_plugin_state');
-					$stateselector	=	"<div class='report_state'><form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
-											<label>Report State</label>
-											<input type='hidden' name='course_id' value='{$this->course_id}' />
-											<input type='hidden' name='user_id' value='{$this->student_id}' />
-											<input type='hidden' name='selectedtab' value='{$this->plugin_id}' />
+					$stateselector	.=	"<label>Report State</label>
+
 											<select name='tabitem' id='reportstateselect'>
 											<option value='{$this->plugin_id}:{$report_id}' >Any State</option>";
 											if (!empty($states)) {
@@ -440,8 +444,19 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 													$stateselector .= "<option value='{$this->plugin_id}:{$report_id}:{$s->id}'>{$s->name}</option>";
 												}
 											}
-					$stateselector	.=	"</select><input type='submit' value='Apply Filter' id='stateselectorsubmit' /></div></form>";
+                $stateselector	.=	"</select>";
+
+
 			}
+
+            $summarychecked =    (!empty($displaysummary)) ? "checked='checked'" : "";
+
+            $stateselector	.=   "<br />
+                                      <label for='summary'>".get_string('displaysummary','block_ilp')."</label>
+                                      <input id='summary' type='checkbox' name='summary' value='1' {$summarychecked} >
+                                      <p>
+					                  <input type='submit' value='Apply Filter' id='stateselectorsubmit' />
+					                  </p></div></form>";
 			return $stateselector;
 	}
 
