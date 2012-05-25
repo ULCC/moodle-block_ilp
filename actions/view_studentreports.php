@@ -39,6 +39,8 @@ $state_id		=	$PARSER->optional_param('state_id', 0, PARAM_INT);
 
 $deadline_id    =	$PARSER->optional_param('deadline_id', 0, PARAM_INT);
 
+$displaysummary  =	$PARSER->optional_param('summary', 0, PARAM_INT);
+
 
 // instantiate the db
 $dbc = new ilp_db();
