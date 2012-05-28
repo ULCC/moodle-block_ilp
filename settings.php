@@ -20,24 +20,24 @@ require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 // instantiate the assmgr db
 $dbc = new ilp_db();
 
-require_once ($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
+require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin.class.php');
 //install new plugins
 ilp_element_plugin::install_new_plugins();
 
 
-require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_template.php');
+require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_template.class.php');
 //install new templates
 ilp_dashboard_template::install_new_plugins();
 
-require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_plugin.php');
+require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_plugin.class.php');
 //install new dashboard plugins
 ilp_dashboard_plugin::install_new_plugins();
 
-require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_tab.php');
+require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
 //install new tabs
 ilp_dashboard_tab::install_new_plugins();
 
-require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_mis_plugin.php');
+require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_mis_plugin.class.php');
 //install new mis plugins
 ilp_mis_plugin::install_new_plugins();
 
@@ -99,7 +99,7 @@ $settings->add($passpercentage);
 
 //get all mis_plugins
 $mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
-$plugins = $CFG->dirroot . '/blocks/ilp/classes/dashboard/mis';
+$plugins = $CFG->dirroot . '/blocks/ilp/plugins/mis';
 
 $options = array();
 
@@ -194,7 +194,7 @@ $misplugin_settings 	= new admin_setting_heading('block_ilp/mis_plugins', get_st
 $settings->add($misplugin_settings);
 global $CFG;
 
-$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+$plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
 
 if ($dbc->get_mis_plugins() !== false) {
 	
@@ -229,7 +229,7 @@ $tabplugin_settings 	= new admin_setting_heading('block_ilp/tab_plugins', get_st
 $settings->add($tabplugin_settings);
 global $CFG;
 
-$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs';
+$plugins = $CFG->dirroot.'/blocks/ilp/plugins/tabs';
 
 if ($dbc->get_tab_plugins() !== false) {
 	

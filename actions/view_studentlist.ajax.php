@@ -63,7 +63,7 @@ $misattendavailable				=	false;
 $mispunctualityavailable		=	false;
 
 if (!empty($attendanceclass)) {
-	$misclassfile = $CFG->dirroot . "/blocks/ilp/classes/dashboard/mis/{$attendanceclass}.php";
+	$misclassfile = $CFG->dirroot . "/blocks/ilp/plugins/mis/{$attendanceclass}.php";
 	if (file_exists($misclassfile)) {
 		include_once $misclassfile;
 

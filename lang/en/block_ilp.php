@@ -436,7 +436,7 @@
 	require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 	
 	$dbc = new ilp_db();
-	$plugins = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins';
+	$plugins = $CFG->dirroot.'/blocks/ilp/plugins/form_elements';
 	
 	// get all the currently installed form element plugins
 	$form_element_plugins = ilp_records_to_menu($dbc->get_form_element_plugins(), 'id', 'name');
@@ -461,7 +461,7 @@
 	}
 	
 	//import tab plugin language strings
-	$tabs	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs';
+	$tabs	=	$CFG->dirroot.'/blocks/ilp/plugins/tabs';
 	
 	// get all the currently installed tab plugins plugins
 	$tab_plugins = ilp_records_to_menu($dbc->get_dashboard_tabs(), 'id', 'name');
@@ -487,7 +487,7 @@
 	    }
 	}
 
-    $plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+    $plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
 
     if ($dbc->get_mis_plugins() !== false) {
         $mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');

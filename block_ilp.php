@@ -158,7 +158,7 @@ class block_ilp extends block_list {
 
 			
 			//include the attendance 
-			$misclassfile	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_percentbar_plugin.php';
+			$misclassfile	=	$CFG->dirroot.'/blocks/ilp/plugins/mis/ilp_mis_attendance_percentbar_plugin.php';
 			
 			if (file_exists($misclassfile)) {
 				
@@ -220,7 +220,7 @@ class block_ilp extends block_list {
 				$misoverviewplugins	=	array();
 				
 				//get all plugins that mis plugins
-				$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+				$plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
 				
 				$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
 				

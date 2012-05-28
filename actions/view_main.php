@@ -72,7 +72,7 @@ $temp	=	$dbc->get_enabled_template();
 $classname	=	$temp->name;
 
 //include the class file for the enabled template
-require_once($CFG->dirroot."/blocks/ilp/classes/dashboard/templates/{$classname}.php");
+require_once($CFG->dirroot."/blocks/ilp/plugins/dash_templates/{$classname}.php");
 
 $template	=	new $classname();
 
