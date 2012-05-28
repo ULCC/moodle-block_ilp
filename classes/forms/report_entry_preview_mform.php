@@ -72,7 +72,7 @@ class report_entry_preview_mform extends ilp_moodleform {
 				$classname = $pluginrecord->name;
 				
 				// include the class for the plugin
-				include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
+				include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
 				
 				if(!class_exists($classname)) {
 				 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);

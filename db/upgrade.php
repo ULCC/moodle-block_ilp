@@ -281,7 +281,7 @@ function xmldb_block_ilp_upgrade($oldversion) {
     }
 
 
-    if ($oldversion < 2012030112) {
+    if ($oldversion < 2012030113) {
 
         $table = new xmldb_table('block_ilp_report_field');
 

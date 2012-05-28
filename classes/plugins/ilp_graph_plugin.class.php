@@ -14,7 +14,7 @@
 
 
 //require the ilp_plugin.php class
-require_once($CFG->dirroot . '/blocks/ilp/classes/dashboard/ilp_plugin.php');
+require_once($CFG->dirroot . '/blocks/ilp/classes/plugins/ilp_plugin.class.php');
 
 
 abstract class ilp_graph_plugin extends ilp_plugin  {
