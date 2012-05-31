@@ -71,8 +71,8 @@
 	$string['display'] 				        = 	'Display';
     $string['displayingreports'] 			= 	'Display Reports';
     $string['displaysummary'] 				= 	'Display summary';
-    $string['displayuserentries'] 	        = 	'Display user entries';
-    $string['displaynonuserentries'] 	    = 	'Display non user entries';
+    $string['displayuserentries'] 	        = 	'Learner entries';
+    $string['displaynonuserentries'] 	    = 	'Non learner entries';
 
 	$string['disablereport']		= 	'Disable Report';
 	$string['disabled'] 			= 	'Disabled';
@@ -112,7 +112,7 @@
 	
 	$string['ilpname']				=	'ILP';
 	$string['ilps']					=	'ILPs';
-	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
+	$string['ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	$string['intid']				=	'Int ID';
 	
 	$string['installedreports']		=	'Installed Reports';
