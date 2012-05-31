@@ -41,6 +41,8 @@ $state_id = $PARSER->optional_param('state_id', 0, PARAM_INT);
 //get the deadline_id if set
 $deadline_id    =	$PARSER->optional_param('deadline_id', 0, PARAM_INT);
 
+
+
 //get the summary param if set
 $displaysummary  =	$PARSER->optional_param('summary', 0, PARAM_INT);
 
