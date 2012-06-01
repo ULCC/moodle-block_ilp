@@ -63,6 +63,8 @@
     $string['day']	 		= 	'Daily';
     $string['dashboard']	 		= 	'Dashboard';
     $string['datacollection'] 		= 	'Data collected over:';
+    $string['collapseentries']			=	'Collapse entries';
+	$string['dashboard']	 		= 	'Dashboard';
     $string['deadline']		 					= 	'deadline';
     $string['deadlinestate']		 			= 	'Deadline state';
 
@@ -104,12 +106,10 @@
     $string['editstatusitems']		=	'Edit Status Items';
     $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this report';
     $string['expandall']			=	'Expand all';
-
-
 	$string['enablereport'] 		= 	'Enable Report';
     $string['enabled'] 				= 	'Enabled';
+    $string['expandentries']		=	'Expand entries';
     $string['numberentries']		= 	'{$a->entries} entries';
-	
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';
     $string['firstentry']		    =	'First entry';
