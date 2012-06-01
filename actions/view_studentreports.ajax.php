@@ -321,11 +321,14 @@ if (!empty($studentslist)) {
                         }
                     }
 
-
-                    if (!empty($has_courserelated)) { $reportentry    .=  "<p><strong>".get_string('course','block_ilp')."</strong> : ".$entry_data->coursename." </p>";}
-                    $reportentry    .=  "<p><strong>".get_string('addedby','block_ilp')."</strong>: {$entry_data->creator}</p>";
-                    $reportentry    .=  "<p><strong>".get_string('date')."</strong>: {$entry_data->modified}</p>";
-                    $reportentry    .=  "</div>";
+                    if (empty($displaysummary)) {
+                        if (!empty($has_courserelated)) { $reportentry    .=  "<p><strong>".get_string('course','block_ilp')."</strong> : ".$entry_data->coursename." </p>";}
+                        $reportentry    .=  "<p><strong>".get_string('addedby','block_ilp')."</strong>: {$entry_data->creator}</p>";
+                        $reportentry    .=  "<p><strong>".get_string('date')."</strong>: {$entry_data->modified}</p>";
+                        $reportentry    .=  "</div>";
+                    } else {
+                        $reportentry    .=  "</div>";
+                    }
                 }
             }
             $reportentry    .=  "</div>";
