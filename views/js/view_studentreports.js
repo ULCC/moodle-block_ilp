@@ -32,17 +32,60 @@ M.ilp_view_studentreports = {
                 toggle[i].insertBefore(img, document.getElementById(toggle[i].id).firstChild);
 
                 toggle[i].onclick = function() {
-                    M.ilp_view_studentreports.toggle_container(this, 0, heights[this.id]);
+                    M.ilp_view_studentreports.toggle_container(this, heights[this.id], 0);
                  };
 
                 // close and hide the container
-                Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "display", "none");
-                Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "overflow", "hidden");
-                Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "height", "0px");
+                //Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "display", "none");
+                //Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "overflow", "hidden");
+                //Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "height", "0px");
 
                 // add the closed icon
-                document.getElementById(toggle[i].id+'_icon').setAttribute('src', this.closed_image);
+                document.getElementById(toggle[i].id+'_icon').setAttribute('src', this.open_image);
+        }
+
+        // get the expand all link
+        var expandall = document.getElementById('studentreport_expandall');
+
+        expandall.onclick   =   function()  {
+
+            console.log('expand all');
+            // get all the entry links
+            var toggle = Dom.getElementsByClassName('entry_toggle');
+
+            for(i=0; i<toggle.length; i++)   {
+                // get the height of the container element
+                heights[toggle[i].id] = M.ilp_standard_functions.get_height(Dom.get(toggle[i].id+'_entry'));
+
+                //if the entry window is closed open it
+                if (heights[toggle[i].id]   == 0) {
+                    console.log('expanding');
+                    M.ilp_view_studentreports.toggle_container(toggle[i], 0, heights[this.id]);
+                }
             }
+        }
+
+
+        // get the expand all link
+        var collapseall = document.getElementById('studentreport_collapseall');
+
+        collapseall.onclick   =   function()  {
+            // get all the entry links
+            var toggle = Dom.getElementsByClassName('entry_toggle');
+
+            for(i=0; i<toggle.length; i++)   {
+                // get the height of the container element
+                heights[toggle[i].id] = M.ilp_standard_functions.get_height(Dom.get(toggle[i].id+'_entry'));
+
+                //if the entry window is closed open it
+                if (heights[toggle[i].id]   > 0) {
+                    M.ilp_view_studentreports.toggle_container(toggle[i], heights[toggle[i].id], 0 );
+                }
+            }
+        }
+
+
+
         stateselector   =   Dom.get('reportstateselect');
 
         stateselector.onchange  =   function () {

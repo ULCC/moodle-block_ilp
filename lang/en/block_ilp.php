@@ -49,6 +49,7 @@
     $string['course']				=	'Course';
     $string['courseentries']				=	'{$a->report} entries for students in {$a->course}';
 	$string['coursereports']		=	'Course Reports';
+    $string['collapseentries']			=	'Collapse entries';
 
 	$string['dashboard']	 		= 	'Dashboard';
     $string['deadline']		 					= 	'deadline';
@@ -87,6 +88,8 @@
 	$string['editstatusitems']		=	'Edit Status Items';	
 	$string['enablereport'] 		= 	'Enable Report';
     $string['enabled'] 				= 	'Enabled';
+
+    $string['expandentries']		=	'Expand entries';
     $string['numberentries']		= 	'{$a->entries} entries';
 	
 	$string['entrycreator'] 		= 	'Tutor';
