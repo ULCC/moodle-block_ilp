@@ -1,7 +1,7 @@
 <?php
 //require_once($CFG->dirroot.'/blocks/ilp/plugins/form_elements/ilp_element_plugin_dd.php');
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin_itemlist.class.php');
-require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_plu_db.php');
+//require_once($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_plu_db.php');
 
 /*
  * much of the guts of this class inherited from ilp_element_plugin_itemlist
