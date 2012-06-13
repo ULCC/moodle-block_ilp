@@ -36,27 +36,27 @@ class edit_mis_plugin_config_mform extends ilp_moodleform {
 				
 				case 'mis':
 				$this->plugintable	=	'block_ilp_mis_plugin';
-				$this->plugindirectory	=	'dashboard/mis/';
+				$this->plugindirectory	=	'mis/';
 				break;
 				
 				case 'formelement':
 				$this->plugintable	=	'block_ilp_mis_plugin';
-				$this->plugindirectory	=	'form_elements/plugins/';
+				$this->plugindirectory	=	'form_elements/';
 				break;
 				
 				case 'templateplugin':
 				$this->plugintable	=	'block_ilp_dash_plugin';
-				$this->plugindirectory	=	'dashboard/plugins/';
+				$this->plugindirectory	=	'dashboard/';
 				break;
 
 				case 'tab':
 				$this->plugintable	=	'block_ilp_dash_tab';					
-				$this->plugindirectory	=	'dashboard/tabs/';
+				$this->plugindirectory	=	'tabs/';
 				break;
 				
 				case 'template':
 				$this->plugintable	=	'block_ilp_dash_temp';
-				$this->plugindirectory	=	'dashboard/templates/';
+				$this->plugindirectory	=	'dash_templates/';
 				break;				
 				
 				default:
@@ -100,7 +100,7 @@ class edit_mis_plugin_config_mform extends ilp_moodleform {
 			$classname = $pluginrecord->name;
 				
 			// include the class for the plugin
-			include_once("{$CFG->dirroot}/blocks/ilp/classes/{$this->plugindirectory}{$classname}.php");
+			include_once("{$CFG->dirroot}/blocks/ilp/plugins/{$this->plugindirectory}{$classname}.php");
 				
 			if(!class_exists($classname)) {
 			 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
@@ -134,7 +134,7 @@ class edit_mis_plugin_config_mform extends ilp_moodleform {
 			$classname = $pluginrecord->name;
 				
 			// include the class for the plugin
-			include_once("{$CFG->dirroot}/blocks/ilp/classes/{$this->plugindirectory}{$classname}.php");
+			include_once("{$CFG->dirroot}/blocks/ilp/plugins/{$this->plugindirectory}{$classname}.php");
 				
 			if(!class_exists($classname)) {
 			 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
