@@ -49,7 +49,6 @@ M.ilp_view_studentreports = {
 
         expandall.onclick   =   function()  {
 
-            console.log('expand all');
             // get all the entry links
             var toggle = Dom.getElementsByClassName('entry_toggle');
 
@@ -59,7 +58,6 @@ M.ilp_view_studentreports = {
 
                 //if the entry window is closed open it
                 if (heights[toggle[i].id]   == 0) {
-                    console.log('expanding');
                     M.ilp_view_studentreports.toggle_container(toggle[i], 0, heights[this.id]);
                 }
             }
@@ -84,34 +82,34 @@ M.ilp_view_studentreports = {
             }
         }
 
-
-
         stateselector   =   Dom.get('reportstateselect');
 
-        stateselector.onchange  =   function () {
+        if (typeof(stateselector) != "undefined" && stateselector != null) {
 
-            if (stateselector.value != '0')   {
-                deadlineany =   Dom.get('deadline_any');
-                deadlineany.checked = true;
+            stateselector.onchange  =   function () {
 
-                deadlineoverdue =   Dom.get('deadline_overdue');
-                deadlineoverdue.disabled    =   true;
+                if (stateselector.value != '0')   {
 
-                deadlinecomplete =   Dom.get('deadline_complete');
-                deadlinecomplete.disabled    =   true;
+                    deadlineany =   Dom.get('deadline_any');
+                    deadlineany.checked = true;
 
+                    deadlineoverdue =   Dom.get('deadline_overdue');
+                    deadlineoverdue.disabled    =   true;
 
-            } else if (stateselector.value == '0') {
+                    deadlinecomplete =   Dom.get('deadline_complete');
+                    deadlinecomplete.disabled    =   true;
 
-                deadlineoverdue =   Dom.get('deadline_overdue');
-                deadlineoverdue.disabled    =   false;
+                } else if (stateselector.value == '0') {
 
-                deadlinecomplete =   Dom.get('deadline_complete');
-                deadlinecomplete.disabled    =   false;
+                    deadlineoverdue =   Dom.get('deadline_overdue');
+                    deadlineoverdue.disabled    =   false;
+
+                    deadlinecomplete =   Dom.get('deadline_complete');
+                    deadlinecomplete.disabled    =   false;
+                }
+
             }
-
         }
-
 
     },
 
