@@ -198,15 +198,16 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_report_fields($report_id,$orderbyposition=false) {
 
-    	global $CFG;
-
     	$order = (!empty($orderbyposition)) ? "ORDER BY position DESC": "";
-    	$sql	=	"SELECT		*
-    				 FROM 		{$CFG->prefix}block_ilp_report_field
-    				 WHERE		report_id	=	{$report_id}
+        $params = array('report_id'=>$report_id);
+
+        $sql	=	"SELECT		*
+    				 FROM 		{block_ilp_report_field}
+    				 WHERE		report_id	= :report_id      /*{$report_id}*/
     				{$order}";
 
-    	return $this->dbc->get_records_sql($sql);
+    	//return $this->dbc->get_records_sql($sql);
+        return $this->dbc->get_records_sql($sql, $params);
     }
 
     /**
@@ -498,14 +499,19 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object containing the plugin record or false
      */
     function get_reports_by_position($position=null,$type=null,$disabled=true) {
-        global	$CFG;
 
         $positionsql	=	"";
         //the operand that will be used
+
+        $params = array();
         if (!empty($position)) {
             $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
-            $positionsql 	=  "AND (position = {$position} ||  position = {$otherfield})";
+            $params['position'] =  $position;
+            $params['otherfield'] = $otherfield;
+            $positionsql 	=  "AND (position = :position ||  position = :otherfield)";
+           // $positionsql 	=  "AND (position = {$position} ||  position = {$otherfield})";
         }
+
 
         $disabledsql    =   '';
         if (empty($disabled)) {
@@ -513,14 +519,14 @@ class ilp_db_functions	extends ilp_logging {
         }
 
         $sql	=	"SELECT		*
-					 FROM		{$CFG->prefix}block_ilp_report
+					 FROM		{block_ilp_report}
 					 WHERE      deleted = 0
                      {$disabledsql}
 					 {$positionsql}
 					 ORDER BY 	position";
 
 
-        return		$this->dbc->get_records_sql($sql);
+        return		$this->dbc->get_records_sql($sql, $params);
     }
 
     /**
@@ -537,23 +543,26 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object containing the plugin record or false
      */
 	function get_report_fields_by_position($report_id,$position=null,$type=null) {
-		global	$CFG;
 
 		$positionsql	=	"";
 		//the operand that will be used
+
+        $params = array('report_id'=>$report_id);
 		if (!empty($position)) {
-			$otherfield		=	(!empty($type)) ? $position-1 : $position+1;
-			$positionsql 	=  "AND (position = {$position} ||  position = {$otherfield})";
+            $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
+            $params['position'] = $position;
+            $params['otherfield'] = $otherfield;
+            $positionsql 	=  "AND (position = :position ||  position = :otherfield)";
+            //$positionsql 	=  "AND (position = {$position} ||  position = {$otherfield})";
 		}
 
-		$sql	=	"SELECT		*
-					 FROM		{$CFG->prefix}block_ilp_report_field
-					 WHERE		report_id	=	{$report_id}
-					{$positionsql}
-					 ORDER BY 	position";
+       		$sql	=	"SELECT		*
+				    	 FROM		{block_ilp_report_field}
+					     WHERE		report_id	= :report_id	/*{$report_id}*/
+					    {$positionsql}
+					     ORDER BY 	position";
 
-
-		return		$this->dbc->get_records_sql($sql);
+          return		$this->dbc->get_records_sql($sql, $params);
 	}
 
 
@@ -623,10 +632,9 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of objects or false depending on result of query
      */
     function get_block_capabilities() {
-    	global		$CFG;
 
     	$sql	=	"SELECT	*
-    				 FROM	{$CFG->prefix}capabilities
+    				 FROM	{capabilities}
     				 WHERE	name	LIKE	'block/ilp:%'";
 
     	return $this->dbc->get_records_sql($sql);
@@ -683,11 +691,10 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object containing report records or false
      */
     function get_reports_table($flextable,$deleted=false)	{
-    	global $CFG;
 
     	$select	=	"SELECT		* ";
 
-    	$from	=	"FROM 		{$CFG->prefix}block_ilp_report";
+    	$from	=	"FROM 		{block_ilp_report}";
 
     	$where	=	(empty($deleted)) ? " WHERE deleted != 1 " : "";
 
@@ -766,20 +773,34 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array containing recordset objects or false
      */
     function get_coursereports($course_id,$report_id=null,$status=null) {
-		global	$CFG;
 
-		$report_sql		=	(!empty($report_id)) ? " AND report_id = {$report_id} " : "";
-		$status_sql		=	(!empty($status)) ? " AND cr.status = {$status} " : "";
+        $report_sql = "";
+        $status_sql = "";
+
+        $params = array('course_id'=>$course_id);
+
+        if(!empty($report_id)){
+            $params['report_id'] = $report_id;
+            $report_sql = " AND report_id = :report_id ";
+        }
+        if(!empty($status)){
+            $params['status'] = $status;
+            $status_sql = " AND cr.status = :status ";
+        }
+
+        //$report_sql		=	(!empty($report_id)) ? " AND report_id = {$report_id} " : "";
+		//$status_sql		=	(!empty($status)) ? " AND cr.status = {$status} " : "";
+
 
     	$sql	=	"SELECT		*, cr.id as cr_id
-    				 FROM 		{$CFG->prefix}block_ilp_coursereports as cr,
-    				 			{$CFG->prefix}block_ilp_report as r
+    				 FROM 		{block_ilp_coursereports} as cr,
+    				 			{block_ilp_report} as r
     				 WHERE		cr.report_id	=	r.id
-    				 AND		course_id 	=	{$course_id}
+    				 AND		course_id 	=  :course_id	/*{$course_id}*/
     				{$report_sql}
     				{$status_sql}";
 
-    	return	$this->dbc->get_records_sql($sql);
+        return	$this->dbc->get_records_sql($sql, $params);
     }
 
 	/**
@@ -790,11 +811,11 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array containing recordset objects or false
      */
     function get_enabledreports($report_ids=null)	{
-    	global $CFG;
+
     	$unwantedcourses	=	(!empty($report_ids)) ? " AND id NOT IN (".implode(',',$report_ids).")": "";
 
     	$sql	=	"SELECT		*
-    				 FROM		{$CFG->prefix}block_ilp_report
+    				 FROM		{block_ilp_report}
     				 WHERE		status	=	".ILP_ENABLED.
     				 $unwantedcourses;
 
@@ -838,23 +859,24 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array with recordset objects or false
      */
     function get_reportpermissions_by_criteria($report_id,$role_id,$capability_id) {
- 		global	$CFG;
 
     	if (!is_array($role_id)) {
     		$role_id	=	array($role_id);
     	}
 
+       $params = array('report_id'=>$report_id, 'capability_id'=>$capability_id);
+
     	$sql	=	"SELECT 	c.id, r.*, rp.*
-  					 FROM 		{$CFG->prefix}block_ilp_reportpermissions AS rp,
-					 			{$CFG->prefix}role AS r,
-								{$CFG->prefix}capabilities AS c
+  					 FROM 		{block_ilp_reportpermissions} AS rp,
+					 			{role} AS r,
+								{capabilities} AS c
 					 WHERE		rp.capability_id	=	c.id
 					 AND		rp.role_id		=	r.id
-					 AND		rp.report_id	=	{$report_id}
+					 AND		rp.report_id	=	:report_id
 					 AND		r.id IN (".implode(',',$role_id).")
-					 AND		c.id = {$capability_id}";
+					 AND		c.id = :capability_id";
 
-    	return 	(!empty($role_id)) ? $this->dbc->get_records_sql($sql) : false;
+    	return 	(!empty($role_id)) ? $this->dbc->get_records_sql($sql, $params) : false;
     }
 
 
@@ -954,15 +976,18 @@ class ilp_db_functions	extends ilp_logging {
 		$itemtable		=	(!empty($multiple)) ? "{$CFG->prefix}{$tablename}_items as i," : '';
 		$where			=	(!empty($multiple)) ? "e.parent_id	=	i.id AND i.parent_id	=	p.id" : "e.parent_id	=	p.id";
 
+        $params = array('entry_id'=>$entry_id, 'reportfield_id'=>$reportfield_id);
+
 		$sql	=	"SELECT		*
 					 FROM 		{$parenttable} as p,
 					 			{$itemtable}
 					 			{$entrytable} as e
 					 WHERE 		{$where}
-					 AND		e.entry_id	=	{$entry_id}
-					 AND		p.reportfield_id	=	{$reportfield_id}";
+					 AND		e.entry_id	=	:entry_id /*{$entry_id}*/
+					 AND		p.reportfield_id	=	:reportfield_id /*{$reportfield_id}*/
+					 ";
 
-		return (empty($multiple)) ? $this->dbc->get_record_sql($sql) : $this->dbc->get_records_sql($sql);
+		return (empty($multiple)) ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
 	}
 
 
@@ -975,16 +1000,17 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object the entry record or false
      */
 	function get_entrystatus($entry_id,$reportfield_id)	{
-		global 	$CFG;
+
+        $params = array('entry_id'=>$entry_id, 'reportfield_id'=>$reportfield_id);
 
 		$sql	=	"SELECT			*
-					 FROM			{$CFG->prefix}block_ilp_plu_rf_sts as s,
-					 				{$CFG->prefix}block_ilp_plu_sts_ent as se
+					 FROM			{block_ilp_plu_rf_sts} as s,
+					 				{block_ilp_plu_sts_ent} as se
 					 WHERE			se.parent_id		=	s.id
-					 AND			se.entry_id			=	{$entry_id}
-					 AND			s.reportfield_id	=	{$reportfield_id}";
+					 AND			se.entry_id			=	:entry_id /*{$entry_id}*/
+					 AND			s.reportfield_id	=	:reportfield_id /*{$reportfield_id}*/";
 
-		return 		$this->dbc->get_record_sql($sql);
+		return 		$this->dbc->get_record_sql($sql, $params);
 	}
 
     /**
@@ -1019,15 +1045,16 @@ class ilp_db_functions	extends ilp_logging {
             $item_value_field = 'value';
         }
 
+        $params = array('reportfield_id'=>$reportfield_id);
 
 		$sql = "SELECT *
 				FROM {$tablename} ele
 				JOIN {$item_table} item  $item_on_clause
 				JOIN {$entry_table} entry ON entry.value = item.$item_value_field
-				WHERE ele.reportfield_id = {$reportfield_id}
+				WHERE ele.reportfield_id = :reportfield_id /*{$reportfield_id}*/
 				";
 
-		return	$this->dbc->get_records_sql( $sql );
+		return	$this->dbc->get_records_sql( $sql, $params );
 	}
 
 	/*
@@ -1036,14 +1063,19 @@ class ilp_db_functions	extends ilp_logging {
 	* @param int $reportfield_id
 	*/
     function plugin_data_item_exists_gradebooktracker( $tablename, $reportfield_id ){
-	$sql = "
+        global $CFG;
+
+        $tablename 		= $CFG->prefix . $tablename;
+        $params = array('reportfield_id'=>$reportfield_id);
+
+        $sql = "
 		SELECT *
-		FROM $tablename ele
+		FROM  {$tablename} ele
 		JOIN {$tablename}_ent entry ON entry.parent_id = ele.reportfield_id
 		JOIN {$tablename}_items item ON item.parent_id = entry.id
-		WHERE ele.reportfield_id = $reportfield_id
+		WHERE ele.reportfield_id = :reportfield_id /*{$reportfield_id}*/
 	";
-	return	$this->dbc->get_records_sql( $sql );
+	return	$this->dbc->get_records_sql( $sql, $params );
     }
 
 
@@ -1059,7 +1091,9 @@ class ilp_db_functions	extends ilp_logging {
 	*/
     function delete_element_listitems( $tablename, $reportfield_id , $extraparams=array() ){
 		global $CFG;
-		$real_tablename = $CFG->prefix . $tablename;
+
+        $tablename 		= $CFG->prefix . $tablename;
+		$real_tablename =  $tablename;
 		$element_table = $tablename;
 		$item_table = $tablename . "_items";
 		$entry_table = $tablename . "_ent";
@@ -1079,7 +1113,8 @@ class ilp_db_functions	extends ilp_logging {
 	*/
     function delete_element_listitems_by_parent_id( $tablename, $parent_id , $extraparams=array() ){
 		global $CFG;
-		$real_tablename = $CFG->prefix . $tablename;
+        $tablename 		= $CFG->prefix . $tablename;
+		$real_tablename = $tablename;
 		$element_table = $tablename;
 		$item_table = $tablename . "_items";
 		$entry_table = $tablename . "_ent";
@@ -1160,29 +1195,32 @@ class ilp_db_functions	extends ilp_logging {
             "$plugin_table.reportfield_id = $reportfield_id"
         );
 
+        $params = array('reportfield_id'=>$reportfield_id);
+
 		$sql = "SELECT " . implode( ',' , $fieldlist ) . "
-				FROM  	{$CFG->prefix}block_ilp_report_field rptf
+				FROM  	{block_ilp_report_field rptf}
 				JOIN 	$plugin_table ON $plugin_table.reportfield_id = rptf.id
 				JOIN 	$item_table ON $item_table.parent_id = $plugin_table.id
-				WHERE 	$plugin_table.reportfield_id = $reportfield_id
+				WHERE 	$plugin_table.reportfield_id = :reportfield_id
 		";
-    	return $this->dbc->get_records_sql( $sql );
+    	return $this->dbc->get_records_sql( $sql, $params );
     }
 
 
     function get_status_options( $reportfield_id )	{
 
-    	global	$CFG;
+        $params = array('reportfield_id'=>$reportfield_id);
 
     		$sql	=	"SELECT i.id, i.name, i.value
-    					 FROM 	{$CFG->prefix}block_ilp_plu_rf_sts as rs,
-    					 		{$CFG->prefix}block_ilp_plu_sts as s,
-    					 		{$CFG->prefix}block_ilp_plu_sts_items as i
+    					 FROM 	{block_ilp_plu_rf_sts} as rs,
+    					 		{block_ilp_plu_sts} as s,
+    					 		{block_ilp_plu_sts_items} as i
     					 WHERE	rs.status_id	=	s.id
     					 AND	s.id			=	i.parent_id
-    					 AND	rs.reportfield_id	=	{$reportfield_id}";
+    					 AND	rs.reportfield_id	=	:reportfield_id /*{$reportfield_id}*/
+    					 ";
 
-    	return $this->dbc->get_records_sql( $sql );
+    	return $this->dbc->get_records_sql( $sql, $params );
     }
 
 
@@ -1252,30 +1290,33 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of objects containing databases recordsets or false
      */
     function get_user_report_entries($report_id,$user_id,$state_id=null)	{
-    	global		$CFG;
+
     	$tables		=	"";
     	$where		=	"";
 
     	//if the the id of a status has been given then we need to add mroe contitions to
     	//find the reports in this state
-    	if (!empty($state_id)) {
-    		$tables		=	", {$CFG->prefix}block_ilp_plu_ste_ent as se
+
+        $params = array('report_id'=>$report_id, 'user_id'=>$user_id);
+
+        if (!empty($state_id)) {
+    		$tables		=	", {block_ilp_plu_ste_ent} as se
     						   ";
+            $params['state_id'] = $state_id;
 
     		$where		=	" 	AND e.id	=	se.entry_id
-    							AND	se.parent_id	=	{$state_id}";
-
+    							AND	se.parent_id	=	:state_id"; // {$state_id}";
     	}
 
     	$sql	=	"SELECT		e.*
-    				 FROM		{$CFG->prefix}block_ilp_entry as e
+    				 FROM		{block_ilp_entry} as e
     				 			{$tables}
-    				 WHERE		e.report_id		=	{$report_id}
-    				 AND 		e.user_id	=	{$user_id}
+    				 WHERE		e.report_id		=	:report_id /*{$report_id}*/
+    				 AND 		e.user_id	=	:user_id /*{$user_id}*/
     				 {$where}
     				 ORDER BY   e.timemodified DESC";
 
-    	return $this->dbc->get_records_sql($sql);
+    	return $this->dbc->get_records_sql($sql, $params);
     }
 
     /**
@@ -1286,20 +1327,21 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array recordset of objects or false
      */
     function get_report_stateitems($report_id)	{
-    	global	$CFG;
+
+        $params = array('report_id'=>$report_id);
 
     	$sql	=	"SELECT		*
-    	 			 FROM 		{$CFG->prefix}block_ilp_report_field as rf,
-    	 						{$CFG->prefix}block_ilp_plugin as p,
-    	 						{$CFG->prefix}block_ilp_plu_ste as s,
-    	 						{$CFG->prefix}block_ilp_plu_ste_items as si
+    	 			 FROM 		{block_ilp_report_field} as rf,
+    	 						{block_ilp_plugin} as p,
+    	 						{block_ilp_plu_ste} as s,
+    	 						{block_ilp_plu_ste_items} as si
     	 			WHERE		rf.plugin_id	=	p.id
     	 			AND			rf.id			=	s.reportfield_id
     	 			AND			s.id			=	si.parent_id
-    	 			AND			rf.report_id	=	{$report_id}
+    	 			AND			rf.report_id	=	:report_id /*{$report_id}*/
     	 			AND			p.name			=	'ilp_element_plugin_state'";
 
-    	 return		$this->dbc->get_records_sql($sql);
+    	 return		$this->dbc->get_records_sql($sql, $params);
     }
 
     /**
@@ -1309,15 +1351,17 @@ class ilp_db_functions	extends ilp_logging {
     * @return int
     */
     public function element_type_exists( $report_id , $tablename ){
-		global $CFG;
+
+        $params = array('tablename'=>$tablename);
+
         $sql = "
             SELECT COUNT( rpt.id ) n
-            FROM {$CFG->prefix}block_ilp_report rpt
-            JOIN {$CFG->prefix}block_ilp_report_field rptf ON rptf.report_id = rpt.id
-            JOIN {$CFG->prefix}block_ilp_plugin pln ON pln.id = rptf.plugin_id
-            WHERE rpt.id = $report_id AND pln.tablename = '$tablename'
+            FROM {block_ilp_report} rpt
+            JOIN {block_ilp_report_field} rptf ON rptf.report_id = rpt.id
+            JOIN {block_ilp_plugin} pln ON pln.id = rptf.plugin_id
+            WHERE rpt.id = $report_id AND pln.tablename = :tablename /*'$tablename'*/
         ";
-        $res = $this->dbc->get_record_sql( $sql );
+        $res = $this->dbc->get_record_sql( $sql, $params );
         return $res->n;
     }
 
@@ -1336,24 +1380,24 @@ class ilp_db_functions	extends ilp_logging {
      */
     public	function get_template_plugins($templatename)	{
 
-    	global	$CFG;
+        $params = array('templatename'=>$templatename);
 
     	$sql	=	"SELECT 	tr.name as region_name,
     							p.name as plugin_name,
     							tr.id as region_id,
     							p.id as plugin_id
-    				 FROM 		{$CFG->prefix}block_ilp_dash_temp	as t,
-    				 			{$CFG->prefix}block_ilp_dash_temp_region as tr,
-    				 			{$CFG->prefix}block_ilp_dash_region_plugin as rp,
-    				 			{$CFG->prefix}block_ilp_dash_plugin as p
+    				 FROM 		{block_ilp_dash_temp}	as t,
+    				 			{block_ilp_dash_temp_region} as tr,
+    				 			{block_ilp_dash_region_plugin} as rp,
+    				 			{block_ilp_dash_plugin} as p
     				 WHERE 		t.id 	=	tr.template_id
     				 AND		tr.id	=	rp.region_id
     				 AND		rp.plugin_id	=	p.id
-    				 AND 		t.name	=	'{$templatename}'";
+    				 AND 		t.name	=   :templatename	/*'{$templatename}'*/
+    				 ";
 
-
-    	return	$this->dbc->get_records_sql($sql);
-    }
+        return	$this->dbc->get_records_sql($sql, $params);
+       }
 
      /**
      * Returns the record from the given ilp form element plugin table with the reportfield_id given
@@ -1375,9 +1419,11 @@ class ilp_db_functions	extends ilp_logging {
     */
     public function get_next_position( $report_id, $tablename ){
     	global $CFG;
+        $params = array('report_id'=>$report_id);
+
         $tablename = $CFG->prefix . $tablename;
-        $sql = "SELECT MAX( position ) n FROM  $tablename WHERE report_id = $report_id";  //gregp - records should be counted not the position #
-        $res = array_values( $this->dbc->get_records_sql( $sql ) );
+        $sql = "SELECT MAX( position ) n FROM  $tablename WHERE report_id = :report_id /*$report_id*/";  //gregp - records should be counted not the position #
+        $res = array_values( $this->dbc->get_records_sql( $sql, $params ) );
         $n = $res[0]->n;
         if( $n ){
             return $n + 1;
@@ -1420,12 +1466,13 @@ class ilp_db_functions	extends ilp_logging {
      * @return	mixed int the number of entries or false
      */
     public function count_report_entries($report_id,$user_id)	{
-    	global $CFG;
+
+        $params = array('user_id'=>$user_id, 'report_id'=>$report_id);
 
     	$sql	=	"SELECT		*
-    				 FROM		{$CFG->prefix}block_ilp_entry		as 	e
-    				 WHERE		user_id			=		{$user_id}
-    				 AND		report_id		=		{$report_id}";
+    				 FROM		block_ilp_entry		as 	e
+    				 WHERE		user_id			=	:user_id /*{$user_id}*/
+    				 AND		report_id		=	:report_id	/*{$report_id}*/";
 
     	return	$this->dbc->count_records('block_ilp_entry',array('user_id'=>$user_id,'report_id'=>$report_id));
     }
@@ -1439,16 +1486,17 @@ class ilp_db_functions	extends ilp_logging {
      * @return	bool true or false
      */
     public function	has_plugin_field($report_id,$pluginname)	{
-    	global 	$CFG;
+
+        $params = array('report_id'=>$report_id, 'pluginname'=>$pluginname);
 
     	$sql	=	"SELECT			*
-    				 FROM			{$CFG->prefix}block_ilp_plugin as p,
-    				 				{$CFG->prefix}block_ilp_report_field as rf
+    				 FROM			{block_ilp_plugin} as p,
+    				 				{block_ilp_report_field} as rf
     				 WHERE			rf.plugin_id	=	p.id
-    				 AND			rf.report_id	=	{$report_id}
-    				 AND			p.name			=	'{$pluginname}'";
-
-    	return 		$this->dbc->get_records_sql($sql);
+    				 AND			rf.report_id	=	:report_id /*{$report_id}*/
+    				 AND			p.name			=   :pluginname /*'{$pluginname}'*/
+    				 ";
+        return 		$this->dbc->get_records_sql($sql, $params);
     }
 
 
@@ -1464,24 +1512,29 @@ class ilp_db_functions	extends ilp_logging {
      * @return	mixed int the number of entries or false
      */
     public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
-			global 		$CFG;
 
 			$select	=	(!empty($count))	? "count(e.id)" : " e.* ";
+            $params = array('report_id'=>$report_id, 'user_id'=>$user_id, 'state'=>$state);
+            $entrysql = "";
 
-			$entrysql	=	(!empty($entry_id))	? " AND e.id = {$entry_id} "	: "";
+            if(!empty($entry_id)){
+                $params['entry_id'] = $entry_id;
+                $entrysql =  " AND e.id = :$entry_id ";
+            }
+			//$entrysql	=	(!empty($entry_id))	? " AND e.id = {$entry_id} "	: "";
 
     		$sql	=	"SELECT		{$select}
-    					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
-    					 			{$CFG->prefix}block_ilp_plu_ste_ent as pe,
-    					 			{$CFG->prefix}block_ilp_plu_ste_items as pi
+    					 FROM 		{block_ilp_entry}  as e,
+    					 			{block_ilp_plu_ste_ent} as pe,
+    					 			{block_ilp_plu_ste_items} as pi
     					 WHERE		e.id			=	pe.entry_id
     					 AND		pe.parent_id	=	pi.id
-    					 AND		e.report_id		=	{$report_id}
-    					 AND		e.user_id		=	{$user_id}
-    					 AND		pi.passfail		=	{$state}
+    					 AND		e.report_id		=	:report_id /*{$report_id}*/
+    					 AND		e.user_id		=	:user_id /*{$user_id}*/
+    					 AND		pi.passfail		=	:state /*{$state}*/
     					 $entrysql";
 
-    		return 		(!empty($count)) ? $this->dbc->count_records_sql($sql) : $this->dbc->get_records_sql($sql);
+    		return 		(!empty($count)) ? $this->dbc->count_records_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
     }
 
 
@@ -1498,23 +1551,21 @@ class ilp_db_functions	extends ilp_logging {
      * @return	mixed int the number of entries or false
      */
     public	function count_overdue_report($report_id,$user_id,$entries,$time)	{
-			global 		$CFG;
 
-			$entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
-
-
+            $params = array('report_id'=>$report_id, 'user_id'=>$user_id, 'time'=>$time);
+          	$entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
 
     		//$sql	=	"SELECT		count(e.id)
     		$sql	=	"SELECT		e.id
-    					 FROM 		{$CFG->prefix}block_ilp_entry  as e,
-    					 			{$CFG->prefix}block_ilp_plu_ddl_ent as	ddlent,
-    					 			{$CFG->prefix}block_ilp_plu_ste_ent as pe,
-    					 			{$CFG->prefix}block_ilp_plu_ste_items as pi
+    					 FROM 		{block_ilp_entry}  as e,
+    					 			{block_ilp_plu_ddl_ent} as	ddlent,
+    					 			{block_ilp_plu_ste_ent} as pe,
+    					 			{block_ilp_plu_ste_items} as pi
 
     					 WHERE		e.id			=	ddlent.entry_id
-    					 AND		e.report_id			=	{$report_id}
-    					 AND		e.user_id			=	{$user_id}
-    					 AND		ddlent.value		<	{$time}
+    					 AND		e.report_id			=	:report_id
+    					 AND		e.user_id			=	:user_id
+    					 AND		ddlent.value		<	:time
 
     					 AND		e.id		        =	pe.entry_id
     					 AND		pe.parent_id	    =	pi.id
@@ -1522,7 +1573,7 @@ class ilp_db_functions	extends ilp_logging {
 
     					 {$entriessql}";
     					 
-    		$rst = $this->dbc->get_records_sql($sql);
+    		$rst = $this->dbc->get_records_sql($sql, $params);
     		$c = count( $rst );
     		return	$c;
     					 
@@ -1536,7 +1587,9 @@ class ilp_db_functions	extends ilp_logging {
      * @param	$utimestamp	upper time stamp for the records that will be retrieved 
      */
     public	function get_reports_in_period($ltimestamp,$utimestamp)	{
-    	
+
+        $params = array('ltimestamp'=>$ltimestamp, 'utimestamp'=>$utimestamp);
+
     	$sql	=	"SELECT 		e.*, r.*,ddl.value as deadline
 					   FROM			{block_ilp_entry} 			AS e,
 									{block_ilp_plu_ddl_ent}		AS ddl,
@@ -1544,14 +1597,14 @@ class ilp_db_functions	extends ilp_logging {
 									{block_ilp_report}			AS r,
 									{block_ilp_plu_ste_ent}		AS stent
 						WHERE		stitems.passfail = 0
-						  AND		ddl.value >= {$ltimestamp}
-						  AND		ddl.value < {$utimestamp}
+						  AND		ddl.value >= :ltimestamp /*{$ltimestamp}*/
+						  AND		ddl.value < :utimestamp /*{utimestamp}*/
 						  AND		stent.parent_id = stitems.id
 						  AND		e.id 	=	ddl.entry_id
 						  AND		e.id 	=	stent.entry_id
 						  AND		e.report_id	= r.id";
     	
-    	return 		$this->dbc->get_records_sql($sql);
+    	return 		$this->dbc->get_records_sql($sql, $params);
     	
     }
 
@@ -1564,17 +1617,17 @@ class ilp_db_functions	extends ilp_logging {
     * @return	mixed object the  of entries or false
     */
     public function	get_lastupdatedentry($report_id,$user_id)	{
-    	global 	$CFG;
 
+        $params = array('report_id'=>$report_id, 'user_id'=>$user_id);
     	$sql	=	"SELECT			*
-    				 FROM 			{$CFG->prefix}block_ilp_entry
+    				 FROM 			{block_ilp_entry}
     				 WHERE			timemodified	=(SELECT MAX(timemodified)
-    				 								  FROM 			{$CFG->prefix}block_ilp_entry
-    				 								  WHERE			report_id	=	{$report_id}
-    				 								  AND			user_id		=	{$user_id}
+    				 								  FROM 			{block_ilp_entry}
+    				 								  WHERE			report_id	=	:report_id /*{$report_id}*/
+    				 								  AND			user_id		=	:user_id /*{user_id}*/
     				 								 )";
 
-    	return $this->dbc->get_record_sql($sql);
+    	return $this->dbc->get_record_sql($sql, $params);
     }
 
     /**
@@ -1592,12 +1645,15 @@ class ilp_db_functions	extends ilp_logging {
 
         $statussql  = "";
 
+        $params = array('report_id1'=>$report_id, 'report_id2'=>$report_id,'user_id1'=>$user_id, 'user_id2'=>$user_id);
+
         if (!empty($statuscheck)) {
+            $params['user_id3'] = $user_id;
             $statussql  =    "UNION
                              (
                                 SELECT	timemodified
                                  FROM	{block_ilp_user_status}
-                                 WHERE	user_id		=	{$user_id}
+                                 WHERE	user_id		= :user_id3'
                               )";
         }
 
@@ -1607,8 +1663,8 @@ class ilp_db_functions	extends ilp_logging {
                             (
                                 SELECT MAX(timemodified) AS timemodified
                                 FROM	{block_ilp_entry}
-                                WHERE	report_id	=	{$report_id}
-                                AND 	user_id		=	{$user_id}
+                                WHERE	report_id	=	:report_id1 /*{$report_id}*/
+                                AND 	user_id		=	:user_id1 /*{$user_id}*/
                             )
                             UNION
                             (
@@ -1616,14 +1672,14 @@ class ilp_db_functions	extends ilp_logging {
                                 FROM 	{block_ilp_entry_comment} AS ec,
                                         {block_ilp_entry} AS e
                                 WHERE 	entry_id = e.id
-                                AND	report_id	=	{$report_id}
-                                AND	user_id		=	{$user_id}
+                                AND	report_id	=	:report_id2 /*{$report_id}*/
+                                AND	user_id		=	:user_id2 /*{$user_id}*/
                             )
                             {$statussql}
 			            ) AS lastreportupdate
                      ";
 
-        return $this->dbc->get_record_sql($sql);
+        return $this->dbc->get_record_sql($sql, $params);
 
     }
 
@@ -1652,49 +1708,52 @@ class ilp_db_functions	extends ilp_logging {
      * @return	mixed int the number of entries or false
      */
     public	function get_report_state_items($report_id,$pluginname)	{
-			global 		$CFG;
+
+        $params = array('report_id'=>$report_id, 'pluginname'=>$pluginname);
 
 			$sql	=	"SELECT		i.name as name,
     								i.value as value,
     								i.id as id
-    					 FROM 		{$CFG->prefix}block_ilp_report_field as rf,
-    					 			{$CFG->prefix}block_ilp_plugin as p,
-    					 			{$CFG->prefix}block_ilp_plu_ste as s,
-    					 			{$CFG->prefix}block_ilp_plu_ste_items as i
+    					 FROM 		{block_ilp_report_field} as rf,
+    					 			{block_ilp_plugin} as p,
+    					 			{block_ilp_plu_ste} as s,
+    					 			{block_ilp_plu_ste_items} as i
 
     					 WHERE		rf.id			=	s.reportfield_id
     					 AND		p.id			=	rf.plugin_id
     					 AND		s.id			=	i.parent_id
-    					 AND		rf.report_id	=	{$report_id}
-    					 AND		p.name			=	'{$pluginname}'";
+    					 AND		rf.report_id	=	:report_id /*{$report_id}*/
+    					 AND		p.name			=	:pluginname /*'{$pluginname}'*/
+    					 ";
 
-    		return 		$this->dbc->get_records_sql($sql);
+             return 		$this->dbc->get_records_sql($sql, $params);
     }
 
 
 
    public function 	get_report_entries_with_state()	{
-   		global $CFG;
+
+       $params = array('report_id'=>$report_id, 'pluginname'=>$pluginname, 'user_id'=>$user_id);
 
    			$sql	=	"SELECT		r.*,
-    					 FROM 		{$CFG->prefix}block_ilp_entry as e,
-   									{$CFG->prefix}block_ilp_report_field as rf,
-    					 			{$CFG->prefix}block_ilp_plugin as p,
-    					 			{$CFG->prefix}block_ilp_pu_sts as s,
-    					 			{$CFG->prefix}block_ilp_pu_sts_items as si,
-    					 			{$CFG->prefix}block_ilp_pu_sts_ent as se
+    					 FROM 		{block_ilp_entry} as e,
+   									{block_ilp_report_field} as rf,
+    					 			{block_ilp_plugin} as p,
+    					 			{block_ilp_pu_sts as s,
+    					 			{block_ilp_pu_sts_items} as si,
+    					 			{block_ilp_pu_sts_ent} as se
     					 WHERE		e.report_id		=	$rf.report_id
     					 AND		p.id			=	rf.plugin_id
     					 AND		s.reportfield_id	=	rf.id
-				 		 AND		rf.id			=	{$report_id}
+				 		 AND		rf.id			=	:report_id /*{$report_id}*/
 				 		 AND		s.id			=	si.parent_id
 				 		 AND		si.id			=	se.parent_id
-    					 AND		p.name			=	'{$pluginname}'
-    					 AND		e.user_id		=	{$user_id}
+    					 AND		p.name			=	:pluginname /*'{$pluginname}'*/
+    					 AND		e.user_id		=	:user_id /*{$user_id}*/
 ";
 
-    		return 		$this->dbc->get_records_sql($sql);
-   }
+       return 		$this->dbc->get_records_sql($sql, $params);
+       }
 
 
    /**
@@ -1708,7 +1767,6 @@ class ilp_db_functions	extends ilp_logging {
     * @return	mixed object or false
     */
    public function get_state_item_id($tablename,$parent_id,$itemvalue, $keyfield='id', $itemtable=false )	{
-   		global 	$CFG;
 
        	$tablename              =	( !empty($itemtable) ) ? $itemtable : $tablename."_items";
         $params[$keyfield]      =   $itemvalue;
@@ -1781,18 +1839,19 @@ class ilp_db_functions	extends ilp_logging {
     * @return	mixed  object containing the record or bool false
     */
   	function has_statusfield($status_id,$report_id)	{
-  		global	$CFG;
+
+        $params = array('status_id'=>$status_id, 'report_id'=>$report_id);
 
   		$sql	=	"SELECT			*
-  					FROM 			{$CFG->prefix}block_ilp_report as r,
-  									{$CFG->prefix}block_ilp_report_field as rf,
-  									{$CFG->prefix}block_ilp_plu_rf_sts as s
+  					FROM 			{block_ilp_report} as r,
+  									{block_ilp_report_field} as rf,
+  									{block_ilp_plu_rf_sts} as s
   					WHERE			r.id	=	rf.report_id
   					AND				rf.id	=	s.reportfield_id
-  					AND				s.id	=	{$status_id}
-  					AND				r.id	=	{$report_id}";
+  					AND				s.id	=	:status_id
+  					AND				r.id	=	:report_id";
 
-  		return ($this->dbc->get_records_sql($sql)) ? true: false;
+  		return ($this->dbc->get_records_sql($sql, $params)) ? true: false;
   	}
 
 
@@ -1923,6 +1982,8 @@ class ilp_db_functions	extends ilp_logging {
      */
   	function get_student_tutors($user_id)	{
 
+          $params = array('user_id'=>$user_id);
+
   		$sql	=	"SELECT 	tu.*
                        FROM 	{role_assignments} AS ra,
                        			{context} AS c,
@@ -1930,11 +1991,11 @@ class ilp_db_functions	extends ilp_logging {
                        			{user} AS tu
                       WHERE 	ra.contextid = c.id
                         AND 	c.instanceid = u.id
-                        AND 	u.id =	{$user_id}
+                        AND 	u.id =	:user_id
                         AND		ra.userid = tu.id
                         AND 	c.contextlevel = ".CONTEXT_USER;
 
-  		return $this->dbc->get_records_sql($sql);
+  		return $this->dbc->get_records_sql($sql, $params);
   	}
 
   	/**
@@ -1946,15 +2007,18 @@ class ilp_db_functions	extends ilp_logging {
      * by the given user or bool false
      */
   	function get_user_tutees($user_id) {
+
+          $params = array('user_id'=>$user_id);
+
   		$sql	=	"SELECT 	u.id
                        FROM 	{role_assignments} ra, {context} c, {user} u
-                      WHERE 	ra.userid = {$user_id}
+                      WHERE 	ra.userid = :user_id
                         AND 	ra.contextid = c.id
                         AND 	c.instanceid = u.id
                         AND 	c.contextlevel = ".CONTEXT_USER
   						." GROUP BY u.id";
 
-  		return	$this->dbc->get_records_sql($sql);
+  		return	$this->dbc->get_records_sql($sql, $params);
  	}
 
  	/**
@@ -1967,12 +2031,20 @@ class ilp_db_functions	extends ilp_logging {
      * or bool false
      */
  	function get_course_users($course_id,$group_id=null) {
- 		global $CFG;
 
  			$coursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
 
  			$grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
- 			$groupwhere		=	(!empty($group_id)) ? "AND gm.groupid = {$group_id} " : "";
+
+ 			$params = array('course_id1'=>$course_id, 'course_id2'=>$course_id);
+            $groupwhere = "";
+
+            if(!empty($group_id)){
+                 $params['group_id'] = $group_id;
+                 $groupwhere = "AND gm.groupid = :group_id ";
+             }
+
+ 			//$groupwhere		=	(!empty($group_id)) ? "AND gm.groupid = {$group_id} " : "";
 
 
  			if ($usercontexts		=	get_parent_contexts($coursecontext))	{
@@ -1987,17 +2059,17 @@ class ilp_db_functions	extends ilp_logging {
 	 		$sql	=	"SELECT		distinct(u.id)
 	 					  FROM		{user} u INNER JOIN {role_assignments} ra on u.id = ra.userid
 	 					  			{$grouptable}
-	 					  			LEFT OUTER JOIN {user_lastaccess} ul on (ra.userid and ul.courseid = {$course_id})
+	 					  			LEFT OUTER JOIN {user_lastaccess} ul on (ra.userid = ul.userid and ul.courseid = :course_id1 /*{$course_id}*/)
 	 					  			LEFT OUTER JOIN {role} r on ra.roleid = r.id
 
 	 					  WHERE		(ra.contextid = {$context->id} OR ra.contextid in {$listofcontexts})
 	 					    AND		u.deleted = 0
-	 					    AND		(ul.courseid = {$course_id} OR ul.courseid IS NULL)
+	 					    AND		(ul.courseid = :course_id2 /*{$course_id}*/ OR ul.courseid IS NULL)
 	 					    AND		u.username <> 'guest'
 	 					    AND		r.id = 5
 	 					  			{$groupwhere}";
 
-		return $this->dbc->get_records_sql($sql);
+		return $this->dbc->get_records_sql($sql, $params);
  	}
 
 
@@ -2012,8 +2084,6 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of object containing all students in a course or false
      */
     function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false) {
-
-
 
         $select = "SELECT 		u.id as id,
         						u.idnumber as idnumber,
@@ -2090,12 +2160,14 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_lastupdate($user_id) {
 
+      $params = array('user_id1'=>$user_id, 'user_id2'=>$user_id, 'user_id3'=>$user_id );
+
     	$sql	=	"SELECT MAX(timemodified) AS timemodified
                      FROM (
                             (
                                 SELECT MAX(timemodified) AS timemodified
                                 FROM	{block_ilp_entry}
-                                WHERE	user_id		=	{$user_id}
+                                WHERE	user_id		=   :user_id1	/*{$user_id}*/
                             )
                             UNION
                             (
@@ -2103,20 +2175,20 @@ class ilp_db_functions	extends ilp_logging {
                                 FROM 	{block_ilp_entry_comment} AS ec,
                                         {block_ilp_entry} AS e
                                 WHERE 	entry_id = e.id
-                                AND	    user_id		=	{$user_id}
+                                AND	    user_id		=	:user_id2	/*{$user_id}*/
                             )
 							UNION
                              (
                                 SELECT	timemodified
                                  FROM	{block_ilp_user_status}
-                                 WHERE	user_id		=	{$user_id}
+                                 WHERE	user_id		=	:user_id3	/*{$user_id}*/
                               )
 
 			            ) AS lastreportupdate
 ";
 
 
-    	return	$this->dbc->get_record_sql($sql);
+    	return	$this->dbc->get_record_sql($sql, $params);
     }
 
 
@@ -2259,15 +2331,23 @@ class ilp_db_functions	extends ilp_logging {
 		$label = str_replace('?', '.', $label);
 
 
-  		$currentfieldsql	=	(!empty($field_id)) 	?	"AND id != {$field_id}" : "";
+        $params = array('label'=>$label,'report_id'=>$report_id);
+
+          $currentfieldsql = '';
+
+          if(!empty($field_id)){
+              $params['field_id'] = $field_id;
+             $currentfieldsql = "AND id != :field_id";
+
+         }
 
   		$sql	=	'SELECT		*
   					 FROM		{block_ilp_report_field}
-  					 WHERE		label		=	"'.$label.'"
-  					 AND		report_id	=	'.$report_id
-  					 .' '.$currentfieldsql;
+  					 WHERE		label		=	:label
+  					 AND		report_id	=	:report_id
+  					  '.$currentfieldsql;
 
-  		return $this->dbc->get_records_sql($sql);
+  		return $this->dbc->get_records_sql($sql,$params);
   	}
 
 
@@ -2316,14 +2396,16 @@ class ilp_db_functions	extends ilp_logging {
 
     function get_report_coursefield($entry_id,$reportfield_id)	{
 
+        $params = array('reportfield_id'=>$reportfield_id, 'entry_id'=>$entry_id);
+
     	$sql	=	"SELECT 	*
     				 FROM		{block_ilp_plu_crs} as c,
     				 			{block_ilp_plu_crs_ent} as ce
     				 WHERE		c.id = ce.parent_id
-    				 AND		c.reportfield_id 	= 	{$reportfield_id}
-    				 AND		entry_id			=	{$entry_id}";
+    				 AND		c.reportfield_id 	= 	:reportfield_id /*{$reportfield_id}*/
+    				 AND		entry_id			=	:entry_id /*{$entry_id}*/";
 
-    	return 	$this->dbc->get_record_sql($sql);
+    	return 	$this->dbc->get_record_sql($sql, $params);
     }
 
     /**
@@ -2381,14 +2463,17 @@ class ilp_db_functions	extends ilp_logging {
      * @param int $reportfield_id the id of the reportfield that the report was created for
      */
     function get_calendar_event($entry_id,$reportfield_id)	{
-    	$sql	=	"SELECT		e.*
+
+        $params = array('reportfield_id'=>$reportfield_id, 'entry_id'=>$entry_id);
+
+        $sql	=	"SELECT		e.*
     				 FROM 		{block_ilp_cal_events} as ce,
     				 			{event} as e
     				 WHERE		e.id = ce.event_id
-    				 AND		ce.reportfield_id	=	{$reportfield_id}
-    				 AND		ce.entry_id			=	{$entry_id}";
+    				 AND		ce.reportfield_id	=	:reportfield_id /*{$reportfield_id}*/
+    				 AND		ce.entry_id			=	:entry_id /*{$entry_id}*/";
 
-    	return $this->dbc->get_record_sql($sql);
+    	return $this->dbc->get_record_sql($sql, $params );
     }
 
 
