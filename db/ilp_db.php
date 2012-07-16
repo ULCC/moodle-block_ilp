@@ -1198,7 +1198,7 @@ class ilp_db_functions	extends ilp_logging {
         $params = array('reportfield_id'=>$reportfield_id);
 
 		$sql = "SELECT " . implode( ',' , $fieldlist ) . "
-				FROM  	{block_ilp_report_field rptf}
+				FROM  	{block_ilp_report_field} rptf
 				JOIN 	$plugin_table ON $plugin_table.reportfield_id = rptf.id
 				JOIN 	$item_table ON $item_table.parent_id = $plugin_table.id
 				WHERE 	$plugin_table.reportfield_id = :reportfield_id
@@ -1312,7 +1312,7 @@ class ilp_db_functions	extends ilp_logging {
     				 FROM		{block_ilp_entry} as e
     				 			{$tables}
     				 WHERE		e.report_id		=	:report_id /*{$report_id}*/
-    				 AND 		e.user_id	=	:user_id /*{$user_id}*/
+    				 AND 		e.user_id	    =	:user_id /*{$user_id}*/
     				 {$where}
     				 ORDER BY   e.timemodified DESC";
 
