@@ -2667,6 +2667,53 @@ class ilp_db_functions	extends ilp_logging {
         return $this->insert_record("block_ilp_preferences",$preference);
     }
 
+
+    /**
+     * Saves temp data into the block_ilp_temp table data stored using this function is serialised. It should be
+     * noted that only temp data should be stored using this function as the block_ilp_temp table can be purged
+     *
+     * @param $data the data to be serialized and saved into the temp table
+     *
+     * @return mixed int the id of the data thats been saved or bool false
+     */
+    function save_temp_data($data)    {
+        $serialiseddata     =   serialize($data);
+
+        $tempdata           =   new stdClass();
+        $tempdata->data     =   $serialiseddata;
+
+        return $this->insert_record('block_ilp_temp',$tempdata);
+    }
+
+    /**
+     * Updates data stored in the block_ilp_temp table
+     *
+     * @param int $tempid the id of the record to be updated
+     * @param mixed $data the data that will be saved
+     *
+     * return bool true if successful false is not
+     */
+    function update_temp_data($tempid,$data) {
+
+        $serialiseddata     =   serialize($data);
+
+        $tempdata           =   new stdClass();
+        $tempdata->id       =   $tempid;
+        $tempdata->data     =   $serialiseddata;
+
+        return $this->update_record('block_ilp_temp',$tempdata);
+    }
+
+    /**
+     * Returns the temp data with the given id
+     *
+     * @param int $id the id of the data that is being retrieved
+     * @return mixed the data that was saved
+     */
+    function get_temp_data($id)    {
+        $tempdata   =     $this->dbc->get_record('block_ilp_temp',array('id'=>$id));
+        return (!empty($tempdata))  ?   unserialize($tempdata->data) :   false;
+    }
 }
 
 
