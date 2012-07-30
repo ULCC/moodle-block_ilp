@@ -36,6 +36,23 @@ $entry_id	= $PARSER->optional_param('entry_id',NULL,PARAM_INT);
 //get the id of the course that is currently being used
 $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
 
+//get the current page variable if it exists
+$currentpage    =   optional_param('current_page',1,PARAM_INT);
+
+//unset the current page variable otherwise moodleform will take it and use it in the
+//in the current form (which will overwrite any changes we make to the current page element)
+unset($_POST['current_page']);
+
+$page_data        =   optional_param('page_data',0,PARAM_RAW);
+
+//is there a next page button param?
+$nextpressed        =   optional_param('nextbutton',0,PARAM_RAW);
+
+//is there a previous page button param?
+$previouspressed    =   optional_param('previousbutton',0,PARAM_RAW);
+
+
+
 
 // instantiate the db
 $dbc = new ilp_db();
@@ -80,7 +97,21 @@ if (empty($reportfields)) {
 //require the reportentry_mform so we can display the report
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/reportentry_mform.php');
 
-$mform	= new	report_entry_mform($report_id,$user_id,$entry_id,$course_id);
+//The page_data element is part of all forms if it is not found and there is a session var for this report
+//then it must be for old data unset it
+if (empty($page_data) && isset($SESSION->pagedata[$report_id])) unset($SESSION->pagedata[$report_id]);
+
+//if the next button has been pressed increment the page number by 1
+if (!empty($nextpressed))   {
+    $currentpage++;
+}
+
+//if the previous button has been pressed decrease the page number by 1
+if (!empty($previouspressed))   {
+    $currentpage--;
+}
+
+$mform	= new	report_entry_mform($report_id,$user_id,$entry_id,$course_id, $currentpage);
 
 //was the form cancelled?
 if ($mform->is_cancelled()) {
@@ -94,25 +125,46 @@ if ($mform->is_cancelled()) {
 // has the form been submitted?
 if($mform->is_submitted()) {
     // check the validation rules
-    if($mform->is_validated()) {
+    //the server side validation checks have been taken out as they stop multipage forms from working I will reimplement
+    //TODO: reimplement validation
+   // if($mform->is_validated()) {
+
+
+        //call the next function which will carry out the necessary actions if the next button was pressed
+        $mform->next($report_id,$currentpage);
+
+        //call the previous function which will carry out the necessary actions if the next button was pressed
+        $mform->previous($report_id,$currentpage);
+
+        /*
+        $temp   =   new stdClass();
+        $temp->currentpage  =   $currentpage;
+        $mform->set_data($temp);
+        */
 
         //get the form data submitted
-    	$formdata = $mform->get_data();
-  	
-        // process the data
-    	$success = $mform->process_data($formdata);
+        $formdata = $mform->get_multipage_data($report_id);
 
-    	//if saving the data was not successful
-        if(!$success) {
-			//print an error message	
-            print_error(get_string("entrycreationerror", 'block_ilp'), 'block_ilp');
-        }
 
-        if (!isset($formdata->saveanddisplaybutton)) { 
+        if (isset($formdata->submitbutton))   {
+
+            // process the data
+            $success = $mform->submit($report_id);
+
+            //if saving the data was not successful
+            if(!$success) {
+                //print an error message
+                print_error(get_string("entrycreationerror", 'block_ilp'), 'block_ilp');
+            }
+
+            //we no longer need the form information for this page
+            unset($SESSION->pagedata[$report_id]);
+
             $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
-        	redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
+            redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
         }
-    }
+
+    //}
 }
 
 
@@ -136,7 +188,6 @@ if (!empty($entry_id)) {
 				 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
         		redirect($return_url, get_string("maxeditexceed", 'block_ilp'), ILP_REDIRECT_DELAY);
 			}
-			
 		}
 		
 		
@@ -166,8 +217,7 @@ if (!empty($entry_id)) {
 	
 			//create the fieldname
 			$fieldname	=	$field->id."_field";		
-			
-			
+
 			$pluginclass->load($field->id);
 			
 			//call the plugin class entry data method
@@ -213,8 +263,6 @@ $PAGE->set_heading($SITE->fullname);
 $PAGE->set_pagetype('ilp-entry');
 //$PAGE->set_pagelayout('ilp');
 $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php",$PARSER->get_params());
-
-
 
 //require edit_reportentry html
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_reportentry.html');
