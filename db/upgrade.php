@@ -397,6 +397,63 @@ function xmldb_block_ilp_upgrade($oldversion) {
 
     }
 
+    if ($oldversion < 2012073013) {
+
+        //if it is not present we are going to add the block_ilp_plu_sts_ent table
+        //this is used by the ilp_element_plugin_status form element. It gives the
+        //user the option to save data into the plu_sts table or the userstatus table
+        //(thus updating the users status)
+
+
+        // create the new table to store responses to fields
+        $table = new $xmldb_table( 'block_ilp_plu_sts_ent' );
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_maxlength = new $xmldb_field('parent_id');
+        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_maxlength);
+
+        $table_item_id = new $xmldb_field('value');	//foreign key -> $this->items_tablename
+        $table_item_id->$set_attributes(XMLDB_TYPE_CHAR, 255, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_item_id);
+
+        $table_report = new $xmldb_field('entry_id');
+        $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_report);
+
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        $table_key = new $xmldb_key('listpluginentry_unique_fk');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), 'block_ilp_plu_sts_ent', 'id');
+        $table->addKey($table_key);
+
+        if (!$dbman->table_exists($table)) $dbman->create_table($table);
+
+        //changes to the report table
+        $table = new $xmldb_table('block_ilp_plu_sts');
+
+        $xmlfield	=	new $xmldb_field('savetype');
+        if (!$dbman->field_exists($table,$xmlfield)) {
+            $xmlfield->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED);
+            $dbman->add_field($table,$xmlfield);
+        }
+
+
+    }
+
     return true;
 }
 
