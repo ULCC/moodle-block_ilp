@@ -337,6 +337,8 @@
 
     $string['userpicture'] 						= 	'Student Picture';
     $string['usereportlock'] 					= 	'Use report lock edit';
+    $string['updatestatus'] 					= 	'Update user status';
+
 
 	$string['unknown'] 							= 	'Unknown';
     $string['yeardata']				            = 	'Past years data';
