@@ -171,8 +171,8 @@ class ilp_element_plugin_text extends ilp_element_plugin {
         $string['ilp_element_plugin_text_description'] = 'A text field';
         $string['ilp_element_plugin_text_maxlengthrange'] = 'The maximum length field must have a value between 0 and 255';
         $string['ilp_element_plugin_text_maxlessthanmin'] = 'The maximum length field must have a greater value than the minimum length';
-        $string['ilp_element_plugin_text_maximumlength'] = 'Maximum Length';
-        $string['ilp_element_plugin_text_minimumlength'] = 'Minimum Length';
+        $string['ilp_element_plugin_text_maximumlength']  = 'Maximum Length';
+        $string['ilp_element_plugin_text_minimumlength']  = 'Minimum Length';
         
         return $string;
     }

@@ -285,4 +285,31 @@ function returnNextPosition($takenPos)   {
 
     return  $i;
 }
+
+function ilp_pluginfile($context, $filearea, $args, $forcedownload) {
+
+    if ($context->contextlevel != CONTEXT_SYSTEM) {
+        send_file_not_found();
+    }
+
+    require_login();
+
+    if ($filearea !== 'ilp_element_plugin_file') {
+        send_file_not_found();
+    }
+
+    $fs = get_file_storage();
+
+    $filename = array_pop($args);
+    $itemid   = array_pop($args);
+    $filepath = $args ? '/'.implode('/', $args).'/' : '/';
+
+    if (!$file = $fs->get_file($context->id, 'form_elements', $filearea, $itemid, $filepath, $filename) or $file->is_directory()) {
+        send_file_not_found();
+    }
+
+    session_get_instance()->write_close();
+    send_stored_file($file, 60*60, 0, $forcedownload);
+}
+
 ?>
