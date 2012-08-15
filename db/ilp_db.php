@@ -992,17 +992,20 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return mixed object the entry record or false
      */
-	function get_entrystatus($entry_id,$reportfield_id)	{
+    function get_entrystatus($entry_id,$reportfield_id)	{
+        global 	$CFG;
 
-		$sql	=	"SELECT			*
-					 FROM			{block_ilp_plu_rf_sts} as s,
-					 				{block_ilp_plu_sts_ent} as se
-					 WHERE			se.parent_id		=	s.id
-					 AND			se.entry_id			=	:entry_id
-					 AND			s.reportfield_id	=	:reportfield_id ";
+        $sql	=	"SELECT			 si.*
+					 FROM			{block_ilp_plu_user_status} as us,
+					 				{block_ilp_plu_sts_items} as si,
+					 				{block_ilp_entry} as e
+					 WHERE			e.id                =   :entry_id
+					 AND            e.user_id           =   us.user_id
+					 AND            us.parent_id		=	si.id";
 
-		return 		$this->dbc->get_record_sql($sql, array('entry_id'=>$entry_id, 'reportfield_id'=>$reportfield_id));
-	}
+        return 		$this->dbc->get_record_sql($sql, array('entry_id'=>$entry_id));
+    }
+
 
     /**
     * check if any user data has been uploaded to a particular list-type reportfield
@@ -1192,20 +1195,6 @@ class ilp_db_functions	extends ilp_logging {
     	return $this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id));
     }
 
-
-    function get_status_options( $reportfield_id )	{
-
-
-    		$sql	=	"SELECT i.id, i.name, i.value
-    					 FROM 	{block_ilp_plu_rf_sts} as rs,
-    					 		{block_ilp_plu_sts} as s,
-    					 		{block_ilp_plu_sts_items} as i
-    					 WHERE	rs.status_id	=	s.id
-    					 AND	s.id			=	i.parent_id
-    					 AND	rs.reportfield_id	=	:reportfield_id";
-
-    	return $this->dbc->get_records_sql( $sql, array('reportfield_id'=>$reportfield_id) );
-    }
 
 
     /**
@@ -1845,29 +1834,6 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 
-   public function 	get_report_entries_with_state()	{
-
-       $params = array('report_id'=>$report_id, 'pluginname'=>$pluginname, 'user_id'=>$user_id);
-
-   			$sql	=	"SELECT		r.*,
-    					 FROM 		{block_ilp_entry} as e,
-   									{block_ilp_report_field} as rf,
-    					 			{block_ilp_plugin} as p,
-    					 			{block_ilp_pu_sts as s,
-    					 			{block_ilp_pu_sts_items} as si,
-    					 			{block_ilp_pu_sts_ent} as se
-    					 WHERE		e.report_id		=	$rf.report_id
-    					 AND		p.id			=	rf.plugin_id
-    					 AND		s.reportfield_id	=	rf.id
-				 		 AND		rf.id			=	:report_id
-				 		 AND		s.id			=	si.parent_id
-				 		 AND		si.id			=	se.parent_id
-    					 AND		p.name			=	:pluginname
-    					 AND		e.user_id		=	:user_id
-";
-
-       return 		$this->dbc->get_records_sql($sql, $params);
-       }
 
    /**
     * Returns the id of the item with the given value
@@ -1947,26 +1913,6 @@ class ilp_db_functions	extends ilp_logging {
   	}
 
   	/**
-    * Returns whether a link between a given report and the given status field exists
-    *
-    * @return	mixed  object containing the record or bool false
-    */
-  	function has_statusfield($status_id,$report_id)	{
-
-  		$sql	=	"SELECT			*
-  					FROM 			{block_ilp_report} as r,
-  									{block_ilp_report_field} as rf,
-  									{block_ilp_plu_rf_sts} as s
-  					WHERE			r.id	=	rf.report_id
-  					AND				rf.id	=	s.reportfield_id
-  					AND				s.id	=	:status_id
-  					AND				r.id	=	:report_id";
-
-  		return ($this->dbc->get_records_sql($sql, array('status_id'=>$status_id, 'report_id'=>$report_id))) ? true: false;
-  	}
-
-
-  	/**
     * This function sets the status of a report enabled or disabled
     *
     * @return	mixed  object containing the record or bool false
@@ -1987,7 +1933,7 @@ class ilp_db_functions	extends ilp_logging {
   	}
 
   	function create_statusfield($statusfield)	{
-  		$this->insert_record('block_ilp_plu_rf_sts', $statusfield);
+  		$this->insert_record('block_ilp_plu_sts', $statusfield);
   	}
 
 
@@ -2852,6 +2798,68 @@ class ilp_db_functions	extends ilp_logging {
 
 
 
+
+
+    /**
+     * Saves temp data into the block_ilp_temp table data stored using this function is serialised. It should be
+     * noted that only temp data should be stored using this function as the block_ilp_temp table can be purged
+     *
+     * @param $data the data to be serialized and saved into the temp table
+     *
+     * @return mixed int the id of the data thats been saved or bool false
+     */
+    function save_temp_data($data)    {
+        $serialiseddata     =   serialize($data);
+
+        $tempdata           =   new stdClass();
+        $tempdata->data     =   $serialiseddata;
+
+        return $this->insert_record('block_ilp_temp',$tempdata);
+    }
+
+    /**
+     * Updates data stored in the block_ilp_temp table
+     *
+     * @param int $tempid the id of the record to be updated
+     * @param mixed $data the data that will be saved
+     *
+     * return bool true if successful false is not
+     */
+    function update_temp_data($tempid,$data) {
+
+        $serialiseddata     =   serialize($data);
+
+        $tempdata           =   new stdClass();
+        $tempdata->id       =   $tempid;
+        $tempdata->data     =   $serialiseddata;
+
+        return $this->update_record('block_ilp_temp',$tempdata);
+    }
+
+    /**
+     * Returns the temp data with the given id
+     *
+     * @param int $id the id of the data that is being retrieved
+     * @return mixed the data that was saved
+     */
+    function get_temp_data($id)    {
+        $tempdata   =     $this->dbc->get_record('block_ilp_temp',array('id'=>$id));
+        return (!empty($tempdata))  ?   unserialize($tempdata->data) :   false;
+    }
+
+    /**
+     * returns data from the given table using the given field and value
+     *
+     * @param string $tablename the name of the table that will be queried
+     * @param string $field the name of the field that will be used in the query
+     * @param mixed $value a value that will be used in the query
+     * @return array the result of the query
+     */
+    function get_entry_data($tablename,$field,$value)   {
+        global $DB;
+
+        return  $DB->get_records($tablename,array($field=> $value));
+    }
 
 }
 

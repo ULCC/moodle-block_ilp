@@ -92,17 +92,12 @@ $pluginclass	=	new $classname();
 
 //has the maximum number of this field type in this report been reached? 
 if (!$pluginclass->can_add($report_id) && empty($reportfield_id))	{
-		
-	
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
     redirect($return_url, get_string("fieldmaximum", 'block_ilp',$pluginclass->audit_type()), ILP_REDIRECT_DELAY);
 }
 
 //call the plugin edit function inside of which the plugin configuration mform
 $pluginclass->edit($report_id,$plugin_id,$reportfield_id);
-
-
-
 
 
 

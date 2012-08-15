@@ -175,7 +175,7 @@ class ilp_element_plugin {
                     }
                 }
             }
-	    $this->return_data( $reportfield );
+	        $this->return_data( $reportfield );
         }   else    {
             //new element - check for config file
             if(file_exists($this->local_config_file)) {
@@ -183,51 +183,75 @@ class ilp_element_plugin {
             }
 	}
 
-        // instantiate the form and load the data
-        $this->mform = new $classname($report_id,$plugin_id,$USER->id);
+    // instantiate the form and load the data
+    $this->mform = new $classname($report_id,$plugin_id,$USER->id);
 
-        $this->mform->set_data($reportfield);
+        if ($this->is_configurable())   {
 
-
-        //enter a back u
-        $backurl = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
-        
-        
-	    //was the form cancelled?
-		if ($this->mform->is_cancelled()) {
-
-			//send the user back
-			redirect($backurl, get_string('returnreportprompt', 'block_ilp'), ILP_REDIRECT_DELAY);
-		}
+            $this->mform->set_data($reportfield);
 
 
-		//was the form submitted?
-		// has the form been submitted?
-		if($this->mform->is_submitted()) {
-		    // check the validation rules
-		    if($this->mform->is_validated()) {
-		
-		        //get the form data submitted
-		    	$formdata = $this->mform->get_data();
-                $formdata->audit_type = $this->audit_type();
-		    	    	
-		        // process the data
-		    	$success = $this->mform->process_data($formdata);
-		
-		    	//if saving the data was not successful
-		        if(!$success) {
-					//print an error message	
-		            print_error(get_string("fieldcreationerror", 'block_ilp'), 'block_ilp');
-		        }
+            //enter a back u
+            $backurl = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
 
 
-		         if ($this->mform->is_submitted()) { 
-		            //return the user to the 
-		        	$return_url = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
-		        	redirect($return_url, get_string("fieldcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
-		        }
-		    }
-		}
+            //was the form cancelled?
+            if ($this->mform->is_cancelled()) {
+
+                //send the user back
+                redirect($backurl, get_string('returnreportprompt', 'block_ilp'), ILP_REDIRECT_DELAY);
+            }
+
+
+            //was the form submitted?
+            // has the form been submitted?
+            if($this->mform->is_submitted()) {
+                // check the validation rules
+                if($this->mform->is_validated()) {
+
+                    //get the form data submitted
+                    $formdata = $this->mform->get_data();
+                    $formdata->audit_type = $this->audit_type();
+
+                    // process the data
+                    $success = $this->mform->process_data($formdata);
+
+                    //if saving the data was not successful
+                    if(!$success) {
+                        //print an error message
+                        print_error(get_string("fieldcreationerror", 'block_ilp'), 'block_ilp');
+                    }
+
+
+                     if ($this->mform->is_submitted()) {
+                        //return the user to the
+                        $return_url = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
+                        redirect($return_url, get_string("fieldcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
+                    }
+                }
+            }
+        }   else {
+
+            //this is a plugin type that is not configurable
+            $data       =   new stdClass();
+            $data->plugin_id    =   $plugin_id;
+
+            $this->mform->unprocessed_data($data);
+
+            $success    =   $this->mform->process_data($data);
+
+            if(!$success) {
+                //print an error message
+                print_error(get_string("fieldcreationerror", 'block_ilp'), 'block_ilp');
+
+            } else {
+                //return the user to the
+                $return_url = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
+                redirect($return_url, get_string("fieldcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
+            }
+
+
+        }
 
     }
 
@@ -483,6 +507,7 @@ class ilp_element_plugin {
     }
 
 
+
     /** Function used to delete an entry record
      * @param int $entry_id the if of a record entry
      */
@@ -500,6 +525,16 @@ class ilp_element_plugin {
         return true;
         }
 
+
+
+    /**
+     * Function that determines whether the class in question is configurable this should be set to true
+     * (so the class willnot have to implement) however if the form element class is not configurable (e.g page_break class)
+     * then the function should be implemented and should return false
+     */
+    public function is_configurable()	{
+        return true;
+    }
 
 
 }

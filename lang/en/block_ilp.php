@@ -193,6 +193,7 @@
 	$string['mycoursegroups']			=	'My Course Groups';
 
     $string['name']					=	'Name';
+    $string['next']					=	'Next';
     $string['nextstudent']          =   'Next student';
     $string['newreportcomment']		=	'A comment has been made about your entry for the {$a->name} report';
     $string['nocompatiblefields']					=	'None of the fields in this report can be used with this graph type';
@@ -227,7 +228,8 @@
 	$string['pluginname'] 			= 	'ILP block';
 	$string['plugintype'] 			= 	'Plugin Type';
 	$string['print'] 				= 	'Print';
-	$string['preview'] 				= 	'Preview';
+    $string['preview'] 				= 	'Preview';
+    $string['previous'] 		    = 	'Previous';
     $string['previewreport'] 		= 	'Preview Report';
 	$string['predefinedreports'] 	= 	'Predefined Reports';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
@@ -335,6 +337,8 @@
 
     $string['userpicture'] 						= 	'Student Picture';
     $string['usereportlock'] 					= 	'Use report lock edit';
+    $string['updatestatus'] 					= 	'Update user status';
+
 
 	$string['unknown'] 							= 	'Unknown';
     $string['yeardata']				            = 	'Past years data';

@@ -88,9 +88,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 	 	
 		//default entry_data 	
 		$fieldname	=	$reportfield_id."_field";
-	 	
-	 	
-	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+
+
+         $entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
  
 		if (!empty($entry)) {
 		 	$fielddata	=	array();
@@ -99,9 +99,9 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
 		 	foreach($entry as $e) {
 		 		$fielddata[]	=	$e->parent_id;
 		 	}
-		 	
-		 	//save the data to the objects field
-	 		$entryobj->$fieldname	=	$fielddata;
+
+            //save the data to the objects field
+            $entryobj->$fieldname	=	$fielddata;
 	 	}
 	 }
 	 
