@@ -481,5 +481,26 @@ class ilp_element_plugin {
 	public function is_viewable()	{
     	return true;
     }
+
+
+    /** Function used to delete an entry record
+     * @param int $entry_id the if of a record entry
+     */
+    public function delete_entry_record($entry_id){
+
+	    $this->dbc->delete_record ($this->data_entry_tablename, array('entry_id'=>$entry_id));
+    }
+
+
+    /** Function used to 'delete' a report form, in fact set it to invisible
+     * @param int $report_id the id of the report
+     * @return bool true
+     */
+    public function delete_report($report_id){
+        return true;
+        }
+
+
+
 }
 ?>

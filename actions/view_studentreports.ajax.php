@@ -168,7 +168,7 @@ $reportfields		=	$dbc->get_report_fields_by_position($report_id);
 //does this report allow users to say it is related to a particular course
 $has_courserelated	=	(!$dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? false : true;
 $has_statefield     =   (!$dbc->has_plugin_field($report_id,'ilp_element_plugin_state')) ? false : true;
-$has_deadline       =   (!$dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline'))  ?  false : true  ;
+$has_deadline       =   (!$dbc->has_plugin_field($report_id,'ilp_element_plugin_datefield'))  ?  false : true  ;
 
 if (!empty($has_courserelated))	{
     $courserelated	=	$dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
