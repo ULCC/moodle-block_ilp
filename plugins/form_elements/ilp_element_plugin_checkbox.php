@@ -54,10 +54,7 @@ class ilp_element_plugin_checkbox extends ilp_element_plugin_itemlist {
         $chbarray = array();
         //checkboxes
         foreach( $optionlist as $key => $value ){
-          $chbarray[] = &MoodleQuickForm::createElement( 'checkbox', $fieldname."[$key]", '', $value);
-
-          //$chbarray[] = &MoodleQuickForm::createElement('advcheckbox',  $fieldname."[$key]",'',
-            //   $value, $attributes=null, array(0, 1));
+         $chbarray[] = $mform->createElement( 'checkbox', $fieldname."[$key]", '', $value);
 
         }
 

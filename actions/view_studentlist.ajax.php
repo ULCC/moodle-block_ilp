@@ -255,7 +255,7 @@ if (!empty($studentslist)) {
             }
 
 
-			if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_date_deadline')) {
+			if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_datefield')) {
 				$inprogressentries	=	$dbc->count_report_entries_with_state($r->id,$student->id,ILP_STATE_UNSET,false);
 				$inprogentries 		=	array();
 
