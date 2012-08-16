@@ -159,11 +159,10 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
         }
 
 
-       // $DB->
 
     //check whether plugins to be deleted exist- bool true or false
         $check_ddl = $DB->get_record_sql('select * from {block_ilp_plugin} where tablename =:table',array("table"=>'block_ilp_plu_ddl'));
-        $check_dat = $DB->record_exists('block_ilp_plugin',array("tablename"=>'block_ilp_plu_dat'));
+        $check_dat = $DB->get_record_sql('select * from {block_ilp_plugin} where tablename =:table',array("table"=>'block_ilp_plu_dat'));
 
 
      if ($check_ddl==true){
@@ -176,7 +175,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
 
         foreach($ddl_records as $ddl){
             $datf				   = new stdClass();
-            $datf->reportfield_id     = $ddl->reportfield_id;
+            $datf->reportfield_id  = $ddl->reportfield_id;
             $datf->datetype        = 1;
             $datf->scalendar       = 1;
             $datf->ucalendar       = 0;
@@ -268,6 +267,34 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
     }
 
 
+    /** Function used to update plugin_id to which reportfield points
+     * @param int $plugin_id  - the id of new plugin
+     * @return bool|void
+     */
+    public function after_install($plugin_id){
+
+        global $DB;
+
+
+        //retrieve records from report_field table that match the $reportfield_id of datf table
+        $report_fields = $DB->get_records_sql(
+            'SELECT    *, rf.id as id
+                              FROM      {block_ilp_report_field} rf,
+                                        {block_ilp_plu_datf} r
+                              WHERE     rf.id = r.reportfield_id', array(null));
+
+
+        foreach($report_fields  as $rf){
+            $plug_upd			     = new stdClass();
+            $plug_upd->id    		 = $rf->id;
+            $plug_upd->plugin_id     = $plugin_id;
+
+            // update ilp_report_field table with new plugin id
+            $DB->update_record('block_ilp_report_field',$plug_upd);
+
+        }
+
+    }
 
     /**
      * Function used to drop all tables created for this plugin

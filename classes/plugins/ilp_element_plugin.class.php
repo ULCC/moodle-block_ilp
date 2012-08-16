@@ -336,11 +336,22 @@ class ilp_element_plugin {
                     $formelementobj->install();
 
                     // update the resource_types table
-                    $dbc->create_form_element_plugin($formelementobj->get_name(),$formelementobj->get_tablename());
+                    $plugin_id  =   $dbc->create_form_element_plugin($formelementobj->get_name(),$formelementobj->get_tablename());
+
+                    $formelementobj->after_install($plugin_id);
                 }
             }
           }
     }
+
+    /** Function used to specify what needs to be done after the new plugin is created
+     * @param int $plugin_id  - the id of new plugin
+     * @return true
+     */
+    public function after_install($plugin_id){
+        return true;
+    }
+
 
 
     function get_resource_enabled_instances($resource_name,$course=null) {
