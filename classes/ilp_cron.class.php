@@ -48,13 +48,14 @@ class ilp_cron	{
 				
 				$subject		=	get_string('cronemailsubject','block_ilp',$email);
 				$messagetext	=	get_string('cronemailhtml','block_ilp',$email);
-				email_to_user($user, get_string('cronemailsender','block_ilp'), $subject, $messagetext);
+				$sent = email_to_user($user, get_string('cronemailsender','block_ilp'), $subject, $messagetext);
 
+                if($sent==true){
                 $updateemail =	new stdClass();
                 $updateemail->id =  $r->id;
                 $updateemail->emailsent = 1;
                 $this->dbc->update_emailsent_status($updateemail);
-
+                }
 			}
 		}
 	}
