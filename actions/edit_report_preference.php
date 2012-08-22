@@ -36,7 +36,7 @@ $course_id	= $PARSER->optional_param('course_id',null,PARAM_INT);
 $dbc = new ilp_db();
 
 //instantiate the edit_report_mform class
-$mform	=	new edit_report_preference_mform($report_id,null,$user_id,null);
+$mform	=	new edit_report_preference_mform($report_id,$course_id,$user_id,null);
 
 
 //was the form cancelled?
