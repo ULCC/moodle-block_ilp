@@ -220,10 +220,14 @@ class ilp_element_plugin_file extends ilp_element_plugin {
 
         if (empty($this->multiple))    {
 
-            $mform->addElement('filepicker',
+             $mform->addElement('filemanager',
                                 $fieldname,
                                 $this->label,
-                                null
+                                null,
+                                array('subdirs' => 0,
+                                      'maxsize' => $this->maxsize,
+                                      'maxfiles' => 1,
+                                      'accepted_types' => $this->acceptedtypes )
                                );
         }   else    {
             $mform->addElement('filemanager',
@@ -231,8 +235,8 @@ class ilp_element_plugin_file extends ilp_element_plugin {
                                 $this->label,
                                 null,
                                 array('subdirs' => 0,
-                                      'maxsize' => $this->maxsize, '
-                                       maxfiles' => $this->maxfiles,
+                                      'maxsize' => $this->maxsize,
+                                      'maxfiles' => $this->maxfiles,
                                       'accepted_types' => $this->acceptedtypes )
                               );
         }
