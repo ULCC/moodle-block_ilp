@@ -59,11 +59,11 @@ class ilp_element_plugin_dd_mform  extends ilp_element_plugin_itemlist_mform {
 		);
 	  }
 	
-	 protected function specific_validation($data) {
+	/* protected function specific_validation($data) {
 	 	$data = (object) $data;
 	 	return $this->errors;
 	 }
-	 
+	 */
 	 function definition_after_data() {
 	 	
 	 }

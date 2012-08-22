@@ -11,6 +11,7 @@ class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_itemlist_mform {
    		$this->tablename = "block_ilp_plu_rdo";
     	$this->data_entry_tablename = "block_ilp_plu_rdo_ent";
 		$this->items_tablename = "block_ilp_plu_rdo_items";
+        $this->minoptions= 2; //radio button must have at least 2 options
 	}
 	
 	  protected function specific_definition($mform) {
@@ -42,7 +43,6 @@ class ilp_element_plugin_rdo_mform  extends ilp_element_plugin_itemlist_mform {
               ''
         );
 	  }
-	 
 	 function definition_after_data() {
 	 	
 	 }

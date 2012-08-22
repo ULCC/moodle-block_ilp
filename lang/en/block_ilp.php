@@ -434,6 +434,9 @@
     //MESSAGE PROVIDER
     $string['messageprovider:ilp_comment']      = 'New report comment';
 
+
+    $string['ilp_element_plugin_error_minoptions']  = 'Minimum options specified for this report must be ';
+
 	global $CFG;
 
 	// Include ilp db class
