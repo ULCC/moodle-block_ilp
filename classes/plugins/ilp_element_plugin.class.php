@@ -336,11 +336,22 @@ class ilp_element_plugin {
                     $formelementobj->install();
 
                     // update the resource_types table
-                    $dbc->create_form_element_plugin($formelementobj->get_name(),$formelementobj->get_tablename());
+                    $plugin_id  =   $dbc->create_form_element_plugin($formelementobj->get_name(),$formelementobj->get_tablename());
+
+                    $formelementobj->after_install($plugin_id);
                 }
             }
           }
     }
+
+    /** Function used to specify what needs to be done after the new plugin is created
+     * @param int $plugin_id  - the id of new plugin
+     * @return true
+     */
+    public function after_install($plugin_id){
+        return true;
+    }
+
 
 
     function get_resource_enabled_instances($resource_name,$course=null) {
@@ -506,6 +517,27 @@ class ilp_element_plugin {
     	return true;
     }
 
+
+
+    /** Function used to delete an entry record
+     * @param int $entry_id the if of a record entry
+     */
+    public function delete_entry_record($entry_id){
+
+	    $this->dbc->delete_record ($this->data_entry_tablename, array('entry_id'=>$entry_id));
+    }
+
+
+    /** Function used to 'delete' a report form, in fact set it to invisible
+     * @param int $report_id the id of the report
+     * @return bool true
+     */
+    public function delete_report($report_id){
+        return true;
+        }
+
+
+
     /**
      * Function that determines whether the class in question is configurable this should be set to true
      * (so the class willnot have to implement) however if the form element class is not configurable (e.g page_break class)
@@ -514,6 +546,7 @@ class ilp_element_plugin {
     public function is_configurable()	{
         return true;
     }
+
 
 }
 ?>

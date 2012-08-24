@@ -4,10 +4,14 @@ require_once( $CFG->dirroot . '/blocks/ilp/classes/plugins/ilp_element_plugin_mf
 
 class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 
-	public $tablename;
-	public $items_tablename;
+	public  $tablename;
+	public  $items_tablename;
+    public  $minoptions;
+
 	
 	function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
+
+        $this->minoptions   =   1; //default one option
 		parent::__construct($report_id,$plugin_id,$creator_id,$reportfield_id=null);
         //remember to define $this->tablename and $this->items_tablename in the child class
 	}
@@ -20,7 +24,15 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 			//dd type needs to take values from admin form and writen them to items table
 			$optionlist = ilp_element_plugin_itemlist::optlist2Array( $data->optionlist );
 		}
-		$element_id = $this->dbc->get_element_id_from_reportfield_id( $this->tablename, $data->reportfield_id );
+
+
+         if (count($optionlist) < $this->minoptions && empty($data->reportfield_id))    {
+                 $this->errors[]    =   get_string( 'ilp_element_plugin_error_minoptions' , 'block_ilp') . ":  $this->minoptions ";
+         }
+
+
+
+             $element_id = $this->dbc->get_element_id_from_reportfield_id( $this->tablename, $data->reportfield_id );
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;
 	 	if (empty($plgrec)) {
 			//new element

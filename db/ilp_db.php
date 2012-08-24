@@ -1380,14 +1380,14 @@ class ilp_db_functions	extends ilp_logging {
 
         $sql	=	"SELECT		e.*
                      FROM 		{block_ilp_entry}  as e,
-                                {block_ilp_plu_ddl_ent} as	ddlent,
+                                {block_ilp_plu_datf_ent} as	datfent,
                                 {block_ilp_plu_ste_ent} as se,
                                 {block_ilp_plu_ste_items} as si
 
-                     WHERE		e.id			    =	ddlent.entry_id
+                     WHERE		e.id			    =	datfent.entry_id
                      AND		e.report_id			=	:report_id
                      AND		e.user_id			=	:user_id
-                     AND		ddlent.value		<	:time
+                     AND		datfent.value		<	:time
 
                      AND		e.id		        =	se.entry_id
                      AND		se.parent_id	    =	si.id
@@ -1648,13 +1648,13 @@ class ilp_db_functions	extends ilp_logging {
     		//$sql	=	"SELECT		count(e.id)
     		$sql	=	"SELECT		e.id
     					 FROM 		{block_ilp_entry}  as e,
-    					 			{block_ilp_plu_ddl_ent} as	ddlent,
+    					 			{block_ilp_plu_datf_ent} as	datfent,
     					 			{block_ilp_plu_ste_ent} as pe,
     					 			{block_ilp_plu_ste_items} as pi
-    					 WHERE		e.id			    =	ddlent.entry_id
+    					 WHERE		e.id			    =	datfent.entry_id
     					 AND		e.report_id			=	:report_id
     					 AND		e.user_id			=	:user_id
-    					 AND		ddlent.value		<	:time
+    					 AND		datfent.value		<	:time
 
     					 AND		e.id		        =	pe.entry_id
     					 AND		pe.parent_id	    =	pi.id
@@ -1677,24 +1677,42 @@ class ilp_db_functions	extends ilp_logging {
      */
     public	function get_reports_in_period($ltimestamp,$utimestamp)	{
 
-
-    	$sql	=	"SELECT 		e.*, r.*,ddl.value as deadline
+    	$sql	=	"SELECT 		e.*, r.*,datfent.value as deadline, datfent.id AS id
 					   FROM			{block_ilp_entry} 			AS e,
-									{block_ilp_plu_ddl_ent}		AS ddl,
+									{block_ilp_plu_datf_ent}	AS datfent,
+									{block_ilp_plu_datf}    	AS datf,
 									{block_ilp_plu_ste_items}	AS stitems,
 									{block_ilp_report}			AS r,
 									{block_ilp_plu_ste_ent}		AS stent
+
 						WHERE		stitems.passfail = 0
-						  AND		ddl.value >= :ltimestamp
-						  AND		ddl.value < :utimestamp
+						  AND		datfent.value >= :ltimestamp
+						  AND		datfent.value <  :utimestamp
 						  AND		stent.parent_id = stitems.id
-						  AND		e.id 	=	ddl.entry_id
+						  AND		e.id 	=	datfent.entry_id
 						  AND		e.id 	=	stent.entry_id
-						  AND		e.report_id	= r.id";
+						  AND       datf.id = datfent.parent_id
+						  AND		e.report_id	= r.id
+						  AND       datfent.emailsent = 0
+						  AND       datf.reminder = 1
+						  AND       r.deleted     = 0";
     	
     	return 		$this->dbc->get_records_sql($sql, array('ltimestamp'=>$ltimestamp, 'utimestamp'=>$utimestamp));
-    	
     }
+
+
+    /**
+     * Update email status to 'sent' (1)
+     * @param	object $updateemail
+     *
+     * @return  true if update successful or false
+     */
+    public function update_emailsent_status($updateemail){
+
+        return $this->update_record('block_ilp_plu_datf_ent', $updateemail);
+    }
+
+
 
    /**
     * Returns the last updated entry for the given student in the given report
@@ -1816,29 +1834,6 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 
-   public function 	get_report_entries_with_state()	{
-
-       $params = array('report_id'=>$report_id, 'pluginname'=>$pluginname, 'user_id'=>$user_id);
-
-   			$sql	=	"SELECT		r.*,
-    					 FROM 		{block_ilp_entry} as e,
-   									{block_ilp_report_field} as rf,
-    					 			{block_ilp_plugin} as p,
-    					 			{block_ilp_pu_sts as s,
-    					 			{block_ilp_pu_sts_items} as si,
-    					 			{block_ilp_pu_sts_ent} as se
-    					 WHERE		e.report_id		=	$rf.report_id
-    					 AND		p.id			=	rf.plugin_id
-    					 AND		s.reportfield_id	=	rf.id
-				 		 AND		rf.id			=	:report_id
-				 		 AND		s.id			=	si.parent_id
-				 		 AND		si.id			=	se.parent_id
-    					 AND		p.name			=	:pluginname
-    					 AND		e.user_id		=	:user_id
-";
-
-       return 		$this->dbc->get_records_sql($sql, $params);
-       }
 
    /**
     * Returns the id of the item with the given value
@@ -2729,6 +2724,82 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 
+
+
+
+    /**
+     * The function returns reportfield_id for the matched calendar event
+     *
+     * @param int $entry_id     -the id of an entry
+     *
+     * @return object containing $reportfield_id or false
+     *
+     */
+    function get_reportfield_id($entry_id){
+
+        $sql    =   "SELECT     reportfield_id
+                      FROM      {block_ilp_cal_events}
+                      WHERE     entry_id  = :entry_id";
+
+        return $this->dbc->get_record_sql($sql,array('entry_id'=>$entry_id));
+    }
+
+
+    /**
+     * The function returns records from the calendar events
+     *
+     * @param int $entry_id         -the id of an entry
+     * @param int $reportfield_id   -the id of the reportfield
+     *
+     * @return object containing data for matched events or false
+     *
+     */
+    function get_calendar_events($entry_id,$reportfield_id)	{
+
+        $sql	=	"SELECT		e.*
+    				 FROM 		{block_ilp_cal_events} as ce,
+    				 			{event} as e
+    				 WHERE		e.id = ce.event_id
+    				 AND		ce.reportfield_id	=	:reportfield_id
+    				 AND		ce.entry_id			=	:entry_id ";
+
+        return $this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id, 'entry_id'=>$entry_id));
+    }
+
+
+    /**
+     * The function returns ids of entries retrieved by $report_id
+     *
+     * @param int $report_id         -the id of a report
+     *
+     * @return object containing ids of entries or false
+     *
+     */
+    function get_entries_by_report_id($report_id){
+        $sql    =   "SELECT     id
+                     FROM      {block_ilp_entry}
+                     WHERE     report_id  = :report_id";
+
+        return $this->dbc->get_records_sql($sql,array('report_id'=>$report_id));
+    }
+
+
+    /**
+     * The function deletes event entries by given entry id
+     *
+     * @param int $entry         -the id of an entry
+     *
+     * @return true if records successfully deleted or false
+     *
+     */
+    function delete_event_entry($entry) {
+        return $this->delete_records( 'event', array('id'=>$entry),array());
+    }
+
+
+
+
+
     /**
      * Saves temp data into the block_ilp_temp table data stored using this function is serialised. It should be
      * noted that only temp data should be stored using this function as the block_ilp_temp table can be purged
@@ -2789,6 +2860,7 @@ class ilp_db_functions	extends ilp_logging {
 
         return  $DB->get_records($tablename,array($field=> $value));
     }
+
 }
 
 
