@@ -435,7 +435,7 @@
     $string['messageprovider:ilp_comment']      = 'New report comment';
 
 
-    $string['ilp_element_plugin_error_minoptions']  = 'Minimum options specified for this report must be ';
+    $string['ilp_element_plugin_error_minoptions']  = 'Minimum number of options that must be specified for this report is ';
 
 	global $CFG;
 

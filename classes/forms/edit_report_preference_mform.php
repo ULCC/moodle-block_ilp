@@ -146,8 +146,8 @@ class edit_report_preference_mform extends ilp_moodleform {
         }
 
         if (isset($data->userecurmax)) {
-            if (empty($data->recurringmax))   $this->error['recurmax']  = get_string('recurentermaxentries','block_ilp');
-            if (!is_number($data->recurringmax))   $this->error['recurmax']  = get_string('enteranumber','block_ilp');
+            if (empty($data->recurmax))   $this->error['recurmax']  = get_string('recurentermaxentries','block_ilp');
+            if (!is_number($data->recurmax))   $this->error['recurmax']  = get_string('enteranumber','block_ilp');
         }
 
 
