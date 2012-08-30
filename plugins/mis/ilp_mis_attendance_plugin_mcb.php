@@ -204,6 +204,8 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_mcb_table', get_string('ilp_mis_attendance_plugin_mcb_table', 'block_ilp'), get_string('ilp_mis_attendance_plugin_mcb_tabledesc', 'block_ilp'), '');
 
+        $this->config_text_element($mform,'mis_plugin_mcb_prelimcalls',get_string('ilp_mis_attendance_plugin_mcb_prelimcalls', 'block_ilp'),get_string('ilp_mis_attendance_plugin_mcb_prelimcallsdesc', 'block_ilp'),'');
+
         $this->config_text_element($mform, 'mis_plugin_mcb_studentidfield', get_string('ilp_mis_attendance_plugin_mcb_studentidfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_mcb_studentidfielddesc', 'block_ilp'), 'studentID');
 
         $this->config_text_element($mform, 'mis_plugin_mcb_courseidfield', get_string('ilp_mis_attendance_plugin_mcb_course_idfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_mcb_course_idfielddesc', 'block_ilp'), 'courseID');
@@ -397,6 +399,9 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_mcb_tabletype'] = 'Table type';
         $string['ilp_mis_attendance_plugin_mcb_tabletypedesc'] = 'what is the table type';
 
+        $string['ilp_mis_attendance_plugin_mcb_prelimcalls']						= 'Preliminary db calls';
+        $string['ilp_mis_attendance_plugin_mcb_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
     }
 
 
@@ -437,10 +442,10 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield');
             if (get_config('block_ilp', 'mis_plugin_mcb_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_mcb_markslatefield');
 
-
+            $prelimdbcalls   =    get_config('block_ilp','mis_learner_causeforconcern_prelimcalls');
 
             //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields);
+            $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
 
             $this->normalise_data($this->data);
         }

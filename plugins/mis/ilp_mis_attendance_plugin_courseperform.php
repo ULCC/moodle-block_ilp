@@ -131,6 +131,8 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_courseperform_table', get_string('ilp_mis_attendance_plugin_courseperform_table', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_tabledesc', 'block_ilp'), '');
 
+        $this->config_text_element($mform,'mis_plugin_courseperform_prelimcalls',get_string('ilp_mis_attendance_plugin_courseperform_prelimcalls', 'block_ilp'),get_string('ilp_mis_attendance_plugin_courseperform_prelimcallsdesc', 'block_ilp'),'');
+
         $this->config_text_element($mform, 'mis_plugin_courseperform_studentidfield', get_string('ilp_mis_attendance_plugin_courseperform_studentidfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_studentidfielddesc', 'block_ilp'), 'studentID');
 
         $this->config_text_element($mform, 'mis_plugin_courseperform_courseidfield', get_string('ilp_mis_attendance_plugin_courseperform_course_idfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_courseperform_course_idfielddesc', 'block_ilp'), 'courseID');
@@ -255,7 +257,11 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_courseperform_effortinclassdesc'] = 'the field containing the effort in class (Default: empty)';
         
         $string['ilp_mis_attendance_plugin_courseperform_effortathome'] = 'Effort at home';
-        $string['ilp_mis_attendance_plugin_courseperform_effortathomedesc'] = 'the field containing the effort at home (Default: empty)';       
+        $string['ilp_mis_attendance_plugin_courseperform_effortathomedesc'] = 'the field containing the effort at home (Default: empty)';
+
+        $string['ilp_mis_attendance_plugin_courseperform_prelimcalls']						= 'Preliminary db calls';
+        $string['ilp_mis_attendance_plugin_courseperform_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
 
     }
 
@@ -299,10 +305,11 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
             
             if (get_config('block_ilp', 'mis_plugin_courseperform_effortinclass')) $this->fields['effortinclass'] = get_config('block_ilp', 'mis_plugin_courseperform_effortinclass');
             if (get_config('block_ilp', 'mis_plugin_courseperform_effortathome')) $this->fields['effortathome'] = get_config('block_ilp', 'mis_plugin_courseperform_effortathome');
-            
+
+            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_courseperform_prelimcalls');
 
             //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields);
+            $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
 
             $this->normalise_data($this->data);
         }

@@ -227,8 +227,10 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_misc_timetable_room')) 		$this->fields['room']	=	get_config('block_ilp','mis_misc_timetable_room');
  				if 	(get_config('block_ilp','mis_misc_timetable_starttime')) 	$this->fields['starttime']	=	get_config('block_ilp','mis_misc_timetable_starttime');
  				if 	(get_config('block_ilp','mis_misc_timetable_endtime')) 		$this->fields['endtime']	=	get_config('block_ilp','mis_misc_timetable_endtime');
- 				
- 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
+
+                $prelimdbcalls   =    get_config('block_ilp','mis_misc_timetable_prelimcalls');
+
+ 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields, null, $prelimdbcalls);
  			} 
     }
  	
@@ -251,8 +253,11 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  	 function config_form(&$mform)	{
  	 	
  	 	$this->config_text_element($mform,'mis_misc_timetable_table',get_string('ilp_mis_misc_timetable_table', 'block_ilp'),get_string('ilp_mis_misc_timetable_tabledesc', 'block_ilp'),'');
- 	 	
- 	 	$this->config_text_element($mform,'mis_misc_timetable_studentid',get_string('ilp_mis_misc_timetable_studentid', 'block_ilp'),get_string('ilp_mis_misc_timetable_studentiddesc', 'block_ilp'),'studentID');
+
+          $this->config_text_element($mform,'mis_misc_timetable_prelimcalls',get_string('ilp_mis_misc_timetable_prelimcalls', 'block_ilp'),get_string('ilp_mis_misc_timetable_prelimcallsdesc', 'block_ilp'),'');
+
+
+          $this->config_text_element($mform,'mis_misc_timetable_studentid',get_string('ilp_mis_misc_timetable_studentid', 'block_ilp'),get_string('ilp_mis_misc_timetable_studentiddesc', 'block_ilp'),'studentID');
  	 	
  	 	$this->config_text_element($mform,'mis_misc_timetable_registerid',get_string('ilp_mis_misc_timetable_registerid', 'block_ilp'),get_string('ilp_mis_misc_timetable_registeriddesc', 'block_ilp'),'registerID');
 
@@ -368,9 +373,12 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
         $string['ilp_mis_misc_timetable_next_disp']						= 'Next';
         $string['ilp_mis_misc_timetable_current_disp']					= 'Current';
         $string['ilp_mis_misc_timetable_previous_disp']					= 'Previous';
-        
-        
-        return $string;
+
+         $string['ilp_mis_misc_timetable_prelimcalls']						= 'Preliminary db calls';
+         $string['ilp_mis_misc_timetable_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
+
+         return $string;
     }
 
     

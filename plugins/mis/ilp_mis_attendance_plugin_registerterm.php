@@ -473,8 +473,10 @@ function summary_data($data, $term = 0)
             if (get_config('block_ilp', 'mis_plugin_registerterm_endtime')) $this->fields['endtime'] = get_config('block_ilp', 'mis_plugin_registerterm_endtime');
             if (get_config('block_ilp', 'mis_plugin_registerterm_mark')) $this->fields['mark'] = get_config('block_ilp', 'mis_plugin_registerterm_mark');
 
+            $prelimdbcalls   =    get_config('block_ilp','mis_learner_causeforconcern_prelimcalls');
+
             //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields);
+            $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
         }
 
     }
@@ -502,6 +504,8 @@ function summary_data($data, $term = 0)
         global $CFG;
 
         $this->config_text_element($mform, 'mis_plugin_registerterm_table', get_string('ilp_mis_attendance_plugin_registerterm_table', 'block_ilp'), get_string('ilp_mis_attendance_plugin_registerterm_tabledesc', 'block_ilp'), '');
+
+        $this->config_text_element($mform,'mis_plugin_registerterm_prelimcalls',get_string('ilp_mis_attendance_plugin_registerterm_prelimcalls', 'block_ilp'),get_string('ilp_mis_attendance_plugin_registerterm_prelimcallsdesc', 'block_ilp'),'');
 
         $this->config_text_element($mform, 'mis_plugin_registerterm_studentidfield', get_string('ilp_mis_attendance_plugin_registerterm_studentidfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_registerterm_studentidfielddesc', 'block_ilp'), 'studentID');
 
@@ -799,7 +803,8 @@ function summary_data($data, $term = 0)
         $string['ilp_mis_attendance_plugin_registerterm_term6header'] = 'Term 6 header';
         $string['ilp_mis_attendance_plugin_registerterm_termheader'] = 'The header that will be used to when displaying data from this term';
 
-
+        $string['ilp_mis_attendance_plugin_registerterm_prelimcalls']						= 'Preliminary db calls';
+        $string['ilp_mis_attendance_plugin_registerterm_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
     }
 
 

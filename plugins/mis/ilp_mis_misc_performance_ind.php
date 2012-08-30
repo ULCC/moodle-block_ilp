@@ -132,7 +132,9 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_misc_performance_ind_grade')) 		$this->fields['grade']	=	get_config('block_ilp','mis_misc_performance_ind_grade');
  				if 	(get_config('block_ilp','mis_misc_performance_ind_performancscore')) 	$this->fields['performancescore']	=	get_config('block_ilp','mis_misc_performance_ind_performancscore');
 
- 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
+                $prelimdbcalls   =    get_config('block_ilp','mis_misc_performance_ind_prelimcalls');
+
+ 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields, null, $prelimdbcalls);
 
  				$this->data	=	(!empty($this->data)) ? array_shift($this->data) : false;
  				
@@ -158,6 +160,8 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  	 function config_form(&$mform)	{
  	 	
  	 	$this->config_text_element($mform,'mis_misc_performance_ind_table',get_string('ilp_mis_misc_performance_ind_table', 'block_ilp'),get_string('ilp_mis_misc_performance_ind_tabledesc', 'block_ilp'),'');
+
+        $this->config_text_element($mform,'mis_misc_performance_ind_prelimcalls',get_string('ilp_mis_misc_performance_ind_prelimcalls', 'block_ilp'),get_string('ilp_mis_misc_performance_ind_prelimcallsdesc', 'block_ilp'),'');
  	 	
  	 	$this->config_text_element($mform,'mis_misc_performance_ind_studentid',get_string('ilp_mis_misc_performance_ind_studentid', 'block_ilp'),get_string('ilp_mis_misc_performance_ind_studentiddesc', 'block_ilp'),'studentID');
  	 	
@@ -235,8 +239,12 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
         $string['ilp_mis_misc_performance_ind_atg_disp']						= 'Aspiration Target Grade';
         $string['ilp_mis_misc_performance_ind_grade_disp']						= 'Current Grade';
         $string['ilp_mis_misc_performance_ind_performancescore_disp']			= 'Performance';
-                
-        return $string;
+
+         $string['ilp_mis_misc_performance_ind_prelimcalls']						= 'Preliminary db calls';
+         $string['ilp_mis_misc_performance_ind_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
+
+         return $string;
     }
 
     

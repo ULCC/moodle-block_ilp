@@ -534,8 +534,10 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_register_endtime')) $this->fields['endtime'] = get_config('block_ilp', 'mis_plugin_register_endtime');
             if (get_config('block_ilp', 'mis_plugin_register_mark')) $this->fields['mark'] = get_config('block_ilp', 'mis_plugin_register_mark');
 
+            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_register_prelimcalls');
+
             //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields);
+            $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
 
         }
 
@@ -563,6 +565,8 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
     {
 
         $this->config_text_element($mform, 'mis_plugin_register_table', get_string('ilp_mis_attendance_plugin_register_table', 'block_ilp'), get_string('ilp_mis_attendance_plugin_register_tabledesc', 'block_ilp'), '');
+
+        $this->config_text_element($mform,'mis_plugin_register_prelimcalls',get_string('ilp_mis_attendance_plugin_registerprelimcalls', 'block_ilp'),get_string('ilp_mis_attendance_plugin_register_prelimcallsdesc', 'block_ilp'),'');
 
         $this->config_text_element($mform, 'mis_plugin_register_studentidfield', get_string('ilp_mis_attendance_plugin_register_studentidfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_register_studentidfielddesc', 'block_ilp'), 'studentID');
 
@@ -826,6 +830,9 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_register_term5header'] = 'Term 5 header';
         $string['ilp_mis_attendance_plugin_register_term6header'] = 'Term 6 header';
         $string['ilp_mis_attendance_plugin_register_termheader'] = 'The header that will be used to when displaying data from this term';
+
+        $string['ilp_mis_attendance_plugin_register_prelimcalls']						= 'Preliminary db calls';
+        $string['ilp_mis_attendance_plugin_register_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
 
     }
 
