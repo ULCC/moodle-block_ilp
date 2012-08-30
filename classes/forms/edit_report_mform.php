@@ -85,7 +85,7 @@ class edit_report_mform extends ilp_moodleform {
             $mform->setType('description', PARAM_RAW);
 
             //TODO add the elements to implement the frequency functionlaity
-            if (stripos($CFG->release,"2.") !== false) {
+          if (stripos($CFG->release,"2.") !== false) {
                 $mform->addElement('filepicker', 'binary_icon',get_string('binary_icon', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
             } else {
                 $this->set_upload_manager(new upload_manager('binary_icon', false, false, 0, false, ILP_MAXFILE_SIZE, true, true, false));
@@ -103,15 +103,12 @@ class edit_report_mform extends ilp_moodleform {
             $mform->addElement('html', get_string('reportnojs','block_ilp'));
             $mform->addElement('html', '</noscript>');
 
-            $radioarray     =   array();
-            $radioarray[]     = &MoodleQuickForm::createElement( 'radio', 'reporttype', '', get_string('openend','block_ilp'), ILP_RT_OPENEND);
-            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reporttype', '', get_string('recurring','block_ilp') , ILP_RT_RECURRING);
-            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reporttype', '', get_string('recurringfinaldate','block_ilp') , ILP_RT_RECURRING_FINALDATE);
-            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reporttype', '',get_string('finaldate','block_ilp') , ILP_RT_FINALDATE);
+            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reptype', '', get_string('openend','block_ilp'), 1);
+            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reptype', '',get_string('finaldate','block_ilp') , 2);
 
             $mform->addGroup(
                 $radioarray,
-                'reporttype',
+                'reptype',
                 get_string('reporttype','block_ilp'),
                 '',
                 '',
@@ -119,7 +116,11 @@ class edit_report_mform extends ilp_moodleform {
                 false
             );
 
-            $mform->addRule('reporttype', null, 'required', null, 'client');
+            $mform->addRule('reptype', null, 'required', null, 'client');
+
+            $mform->addElement('checkbox', 'recurrent', get_String('reportrecurrence','block_ilp'),null);
+
+
 
             // maximum entries element
             $mform->addElement(
@@ -138,6 +139,7 @@ class edit_report_mform extends ilp_moodleform {
                 array('optional' => false ),
                 array('class' => 'lockdate')
             );
+
 
             $mform->addElement('html', '<fieldset id="recurringfieldset" class="ilpfieldset">');
             $mform->addElement('html', '<legend >'.get_string('recurringrules','block_ilp').'</legend>');
@@ -196,6 +198,25 @@ class edit_report_mform extends ilp_moodleform {
                 array('class'=>'recurring')
             );
 
+            //DISABLE RULES
+            //disable Report Recurrence if 'Allow Multiple Entries' is not selected
+            $mform->disabledIf('recurrent', 'frequency', 'notchecked');
+
+            //disable reportlockdate if open end selected
+            $mform->disabledIf('reportlockdate', 'reptype', 'eq', 1);
+
+            //disable rule reset frequency
+            $mform->disabledIf('recurfrequency', 'recurrent', 'notchecked');
+            //disable rule recurring maximum
+            $mform->disabledIf('recurmax', 'recurrent', 'notchecked');
+            //disable rule reset start of recurring rule
+            $mform->disabledIf('recurstart', 'recurrent', 'notchecked');
+            //disable rule reset specific start date
+            $mform->disabledIf('recurdate', 'recurrent', 'notchecked');
+
+
+
+
             //close the fieldset
             $mform->addElement('html', '</fieldset>');
 
@@ -217,7 +238,7 @@ class edit_report_mform extends ilp_moodleform {
 
             $this->errors = array();
 
-            if (!isset($data->frequency))   {
+         /*  if (!isset($data->frequency))   {
                 if ($data->reporttype == 2) {
                     $this->errors['reporttype']	=	get_string('setallowmultipleerror','block_ilp',$data);
                 }
@@ -225,7 +246,7 @@ class edit_report_mform extends ilp_moodleform {
                 //we could check all other fields but the only one that is relevant is the report type field as
                 //everything else is disregarded based on the value of this field
             }
-
+*/
 
             if ($data->reporttype   ==  2)  {
 
@@ -238,7 +259,11 @@ class edit_report_mform extends ilp_moodleform {
                 }
 
 
-            }
+
+
+          }
+
+
         }
 
 		
@@ -256,7 +281,24 @@ class edit_report_mform extends ilp_moodleform {
 						$data->binary_icon = addslashes($data->binary_icon);
 					}
 				}
-				
+
+                //open end, no recurrent
+                if ($data->reptype==1 && empty($data->recurrent)){
+                  $data->reporttype=ILP_RT_OPENEND;
+                }
+                //open end, recurrent
+                if ($data->reptype==1 && !empty($data->recurrent)){
+                    $data->reporttype=ILP_RT_RECURRING;
+                }
+                //final date, recurrent
+                if ($data->reptype==2 && !empty($data->recurrent)){
+                    $data->reporttype=ILP_RT_RECURRING_FINALDATE;
+                }
+                //final date, no recurrent
+                if ($data->reptype==2 && empty($data->recurrent)){
+                    $data->reporttype=ILP_RT_FINALDATE;
+                }
+
             	$data->id = $this->dbc->create_report($data);
             	
             	//setup report default permissions. They will match the permissions

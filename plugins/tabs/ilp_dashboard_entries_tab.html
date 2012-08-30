@@ -57,8 +57,7 @@ foreach ($reportslist as $rep) {
 
                 <?php } ?>
 			</div>
-            <?php
-            if (!empty($canviewothersreports)) {?>
+            <?php      if ( !empty($canviewothersreports)  && !empty($rep->addextension))  {   ?>
             <br />
             <div class='add'>
                 <a href="<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_report_preference.php?user_id={$this->student_id}&report_id={$rep->report_id}&course_id={$this->course_id}"; ?>" ><?php echo get_string('addextension','block_ilp');?></a>

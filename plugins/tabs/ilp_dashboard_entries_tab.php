@@ -151,6 +151,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
                 $canviewothersreports		=	$this->dbc->has_report_permission($r->id,$role_ids,$viewothercapability->id);
 
+
                 if (!empty($caneditreport) || !empty($canaddreport) || !empty($canviewreport)) {
 
                     $detail					=	new stdClass();
@@ -216,6 +217,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
                     //is the report available to the user
                     $detail->reportavailable    =   $reportrules->report_availabilty();
+                    $detail->addextension = $reportrules->can_add_extensions();
 
                     $detail->canedit	= ($caneditreport) ? true : false;
 
