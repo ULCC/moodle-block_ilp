@@ -109,6 +109,8 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_course_table', get_string('ilp_mis_attendance_plugin_course_table', 'block_ilp'), get_string('ilp_mis_attendance_plugin_course_tabledesc', 'block_ilp'), '');
 
+        $this->config_text_element($mform,'mis_plugin_course_prelimcalls',get_string('ilp_mis_attendance_plugin_course_prelimcalls', 'block_ilp'),get_string('ilp_mis_attendance_plugin_course_prelimcallsdesc', 'block_ilp'),'');
+
         $this->config_text_element($mform, 'mis_plugin_course_studentidfield', get_string('ilp_mis_attendance_plugin_course_studentidfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_course_studentidfielddesc', 'block_ilp'), 'studentID');
 
         $this->config_text_element($mform, 'mis_plugin_course_courseidfield', get_string('ilp_mis_attendance_plugin_course_course_idfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_course_course_idfielddesc', 'block_ilp'), 'courseID');
@@ -200,6 +202,9 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_course_authorised'] = 'Authorised Absents';
         $string['ilp_mis_attendance_plugin_course_authoriseddesc'] = 'What should be done with authorised absents? Positive - to add to present marks, Negative - to add to absents and ignore to not count';
 
+        $string['ilp_mis_attendance_plugin_course_prelimcalls']						= 'Preliminary db calls';
+        $string['ilp_mis_attendance_plugin_course_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
         $string['ilp_mis_attendance_plugin_course_ignore'] = 'Ignore';
         $string['ilp_mis_attendance_plugin_course_positive'] = 'Positive';
         $string['ilp_mis_attendance_plugin_course_negative'] = 'Negative';
@@ -250,8 +255,10 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_course_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_course_marksauthabsentfield');
             if (get_config('block_ilp', 'mis_plugin_course_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_course_markslatefield');
 
+            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_course_prelimcalls');
+
             //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields);
+            $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
 
             $this->normalise_data($this->data);
         }

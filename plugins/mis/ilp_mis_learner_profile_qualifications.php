@@ -184,8 +184,10 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_learner_qualifications_points')) 		$this->fields['points']	=	get_config('block_ilp','mis_learner_qualifications_points');
  				if 	(get_config('block_ilp','mis_learner_qualifications_year')) 		$this->fields['year']	=	get_config('block_ilp','mis_learner_qualifications_year');
  				if 	(get_config('block_ilp','mis_learner_qualifications_weight')) 		$this->fields['weight']	=	get_config('block_ilp','mis_learner_qualifications_weight');
- 				
- 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields);
+
+                $prelimdbcalls   =    get_config('block_ilp','mis_learner_qualifications_prelimcalls');
+
+ 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields, null, $prelimdbcalls);
  				
  			} 
     }
@@ -208,6 +210,8 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  	 function config_form(&$mform)	{
  	 	
  	 	$this->config_text_element($mform,'mis_learner_qualifications_table',get_string('ilp_mis_learner_qualifications_table', 'block_ilp'),get_string('ilp_mis_learner_qualifications_tabledesc', 'block_ilp'),'');
+
+        $this->config_text_element($mform,'mis_learner_qualifications_prelimcalls',get_string('ilp_mis_learner_qualifications_prelimcalls', 'block_ilp'),get_string('ilp_mis_learner_qualifications_prelimcallsdesc', 'block_ilp'),'');
  	 	
  	 	$this->config_text_element($mform,'mis_learner_qualifications_studentid',get_string('ilp_mis_learner_qualifications_studentid', 'block_ilp'),get_string('ilp_mis_learner_qualifications_studentiddesc', 'block_ilp'),'studentID');
  	 	

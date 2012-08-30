@@ -208,6 +208,8 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_term_table', get_string('ilp_mis_attendance_plugin_term_table', 'block_ilp'), get_string('ilp_mis_attendance_plugin_term_tabledesc', 'block_ilp'), '');
 
+        $this->config_text_element($mform,'mis_plugin_term_prelimcalls',get_string('ilp_mis_attendance_plugin_term_prelimcalls', 'block_ilp'),get_string('ilp_mis_attendance_plugin_term_prelimcallsdesc', 'block_ilp'),'');
+
         $this->config_text_element($mform, 'mis_plugin_term_studentidfield', get_string('ilp_mis_attendance_plugin_term_studentidfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_term_studentidfielddesc', 'block_ilp'), 'studentID');
 
         $this->config_text_element($mform, 'mis_plugin_term_term', get_string('ilp_mis_attendance_plugin_term_term', 'block_ilp'), get_string('ilp_mis_attendance_plugin_term_termdesc', 'block_ilp'), 'term');
@@ -382,6 +384,10 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_term_term6header'] = 'Term 6 header';
         $string['ilp_mis_attendance_plugin_term_termheader'] = 'The header that will be used to when displaying data from this term';
 
+        $string['ilp_mis_attendance_plugin_term_prelimcalls']						= 'Preliminary db calls';
+        $string['ilp_mis_attendance_plugin_term_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
+
 
     }
 
@@ -419,8 +425,10 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_term_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_term_marksauthabsentfield');
             if (get_config('block_ilp', 'mis_plugin_term_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_term_markslatefield');
 
+            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_term_prelimcalls');
+
             //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields);
+            $this->data = $this->dbquery($table, $keyfields, $this->fields, null, $prelimdbcalls);
 
             $this->normalise_data($this->data);
         }

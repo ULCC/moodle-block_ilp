@@ -83,9 +83,10 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        //is the id a string or a int
     		$idtype	=	get_config('block_ilp','mis_plugin_course_idtype');
     		$student_id	=	(empty($idtype)) ? "'{$student_id}'" : $student_id;
+
+            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_simple_prelimcalls');
 	        
-	        
-	        $querydata = $this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field) );
+	        $querydata = $this->dbquery( $tablename, array( $keyfield => array('=' => $student_id )), array($attendance_field, $punctuality_field), null, $prelimdbcalls );
 	        
 	        $data = (is_array($querydata)) ? array_shift( $querydata ) : $querydata;
 	        
@@ -118,6 +119,8 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
  	 function config_form(&$mform)	{
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_simple_studenttable',get_string('ilp_mis_attendance_plugin_simple_studenttable', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_studenttabledesc', 'block_ilp'),'');
+
+        $this->config_text_element($mform,'mis_plugin_simple_prelimcalls',get_string('ilp_mis_attendance_plugin_simple_prelimcalls', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_prelimcallsdesc', 'block_ilp'),'');
  	 	
  	 	$this->config_text_element($mform,'mis_plugin_simple_studentid',get_string('ilp_mis_attendance_plugin_simple_studentid', 'block_ilp'),get_string('ilp_mis_attendance_plugin_simple_studentiddesc', 'block_ilp'),'studentID');
  	 	
@@ -180,8 +183,12 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
         
         $string['ilp_mis_attendance_plugin_simple_pluginstatus']			= 'Status';
         $string['ilp_mis_attendance_plugin_simple_pluginstatusdesc']			= 'Is the block enabled or disabled';
-        
-        return $string;
+
+         $string['ilp_mis_attendance_plugin_simple_prelimcalls']						= 'Preliminary db calls';
+         $string['ilp_mis_attendance_plugin_simple_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
+
+         return $string;
     }
     
     /**

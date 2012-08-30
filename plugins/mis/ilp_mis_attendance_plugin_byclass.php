@@ -159,6 +159,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_course_byclass_table', get_string('ilp_mis_attendance_plugin_byclass_table', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_tabledesc', 'block_ilp'), '');
 
+        $this->config_text_element($mform,'mis_plugin_course_byclass_prelimcalls',get_string('ilp_mis_attendance_plugin_byclass_prelimcalls', 'block_ilp'),get_string('ilp_mis_attendance_plugin_byclass_prelimcallsdesc', 'block_ilp'),'');
+
         $this->config_text_element($mform, 'mis_plugin_course_byclass_studentidfield', get_string('ilp_mis_attendance_plugin_byclass_studentidfield', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_studentidfielddesc', 'block_ilp'), 'studentID');
 
         $this->config_text_element($mform, 'mis_plugin_course_byclass_courseid', get_string('ilp_mis_attendance_plugin_byclass_courseid', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_courseiddesc', 'block_ilp'), 'courseID');
@@ -257,6 +259,10 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
         $string['ilp_mis_attendance_plugin_byclass_registerid'] = 'Register ID field';
         $string['ilp_mis_attendance_plugin_byclass_registeriddesc'] = 'The field containing register id data';
+
+        $string['ilp_mis_attendance_plugin_byclass_prelimcalls']						= 'Preliminary db calls';
+        $string['ilp_mis_attendance_plugin_byclass_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
 
         $string['ilp_mis_attendance_plugin_byclass_registername'] = 'Register Name field';
         $string['ilp_mis_attendance_plugin_byclass_registernamedesc'] = 'The field containing register name data';
@@ -389,8 +395,10 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_course_byclass_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_course_byclass_marksauthabsentfield');
             if (get_config('block_ilp', 'mis_plugin_course_byclass_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_course_byclass_markslatefield');
 
+            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_course_byclass_prelimcalls');
+
             //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields);
+            $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
 
             $this->normalise_data($this->data);
         }

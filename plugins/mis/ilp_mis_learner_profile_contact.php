@@ -96,8 +96,11 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_learner_contact_addressthree')) $this->fields['addressthree']	=	get_config('block_ilp','mis_learner_contact_addressthree');
  				if 	(get_config('block_ilp','mis_learner_contact_addressfour')) $this->fields['addressfour']	=	get_config('block_ilp','mis_learner_contact_addressfour');
  				if 	(get_config('block_ilp','mis_learner_contact_postcode')) 	$this->fields['postcode']	=	get_config('block_ilp','mis_learner_contact_postcode');
-				
- 				$data	=	$this->dbquery( $table, $keyfields, $this->fields);
+
+
+                $prelimdbcalls   =    get_config('block_ilp','mis_learner_contact_prelimcalls');
+
+ 				$data	=	$this->dbquery( $table, $keyfields, $this->fields, null, $prelimdbcalls);
                 $data   =   $this->populate_from_usertable( array_shift( $data ) , $user_id );
  				
  				//$this->data	=	(!empty($data)) ? array_shift($data) : false;
@@ -154,6 +157,8 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  	 function config_form(&$mform)	{
  	 	
  	 	$this->config_text_element($mform,'mis_learner_contact_table',get_string('ilp_mis_learner_contact_table', 'block_ilp'),get_string('ilp_mis_learner_contact_tabledesc', 'block_ilp'),'');
+
+          $this->config_text_element($mform,'mis_learner_contact_prelimcalls',get_string('ilp_mis_learner_contact_prelimcalls', 'block_ilp'),get_string('ilp_mis_learner_contact_prelimcallsdesc', 'block_ilp'),'');
  	 	
  	 	$this->config_text_element($mform,'mis_learner_contact_studentid',get_string('ilp_mis_learner_contact_studentid', 'block_ilp'),get_string('ilp_mis_learner_contact_studentiddesc', 'block_ilp'),'studentID');
  	 	
@@ -281,9 +286,12 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
         $string['ilp_mis_learner_profile_contact_disp_mobile']					= 'Mobile';
         $string['ilp_mis_learner_profile_contact_disp_emercontact']				= 'Emergency Contact';
         $string['ilp_mis_learner_profile_contact_disp_emernumber']				= 'Emergency Number';
-        
-        
-        return $string;
+
+         $string['ilp_mis_learner_profile_contact_prelimcalls']						= 'Preliminary db calls';
+         $string['ilp_mis_learner_profile_contact_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+
+
+         return $string;
     }
 
     
