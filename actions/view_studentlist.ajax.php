@@ -273,7 +273,7 @@ if (!empty($studentslist)) {
                 $reporttext				.=	(!empty($overdueentries))?  "<br />".$overdueentries." ".get_string('reportsoverdue','block_ilp') : "";
 
                 $nextreview             =   $dbc->get_next_review($r->id,$student->id);
-                $reporttext				.=	(!empty($nextreview))?  "<br />".get_string('nextreview','block_ilp')." ".userdate($nextreview) : "";
+                $reporttext				.=	(!empty($nextreview->review))?  "<br />".get_string('nextreview','block_ilp')." ".userdate($nextreview->review,'%d-%m-%Y') : "";
             }
 
             $data[$r->id] = $reporttext;

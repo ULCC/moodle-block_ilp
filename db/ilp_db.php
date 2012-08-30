@@ -2885,7 +2885,7 @@ class ilp_db_functions	extends ilp_logging {
                           'reviewtype'=>ILP_DATEFIELD_REVIEWDATE,
                           'time'=>time());
 
-        $sql	=	    "SELECT		max(datfent.value)
+        $sql	=	    "SELECT		max(datfent.value) as review
     					 FROM 		{block_ilp_entry}  as e,
     					 			{block_ilp_plu_datf_ent} as	datfent,
     					 			{block_ilp_plu_datf}    as	datf
