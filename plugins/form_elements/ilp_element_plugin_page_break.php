@@ -168,6 +168,16 @@ class ilp_element_plugin_page_break extends ilp_element_plugin {
     public function is_configurable()	{
         return false;
     }
-	 
-	 
+
+
+    /**
+     * Page breaks are not editable
+     *
+     * @return bool
+     */
+    public function is_editable()	{
+        return false;
+    }
+
+
 }

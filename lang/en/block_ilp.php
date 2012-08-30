@@ -127,6 +127,7 @@
     $string['filter']				=	'Filter';
     $string['fieldchangesuc']		=	'The field change has been successful';
     $string['fieldchangeerror']		=	'A error has occurred the field change has not been applied';
+    $string['fieldnoteditable']		=	'This field is not editable';
 
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';

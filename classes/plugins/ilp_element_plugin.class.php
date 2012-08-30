@@ -183,6 +183,11 @@ class ilp_element_plugin {
             }
 	}
 
+    if (!$this->is_editable() && !empty($reportfield->id))   {
+        $return_url = $CFG->wwwroot."/blocks/ilp/actions/edit_prompt.php?report_id={$report_id}";
+        redirect($return_url, get_string("fieldnoteditable", 'block_ilp'));
+    }
+
     // instantiate the form and load the data
     $this->mform = new $classname($report_id,$plugin_id,$USER->id);
 
@@ -547,6 +552,14 @@ class ilp_element_plugin {
         return true;
     }
 
+    /**
+     * Function that determines whether the class in question is editable this should be set to true
+     * (so the class willnot have to implement) however if the form element class is not editable (e.g page_break class)
+     * then the function should be implemented and should return false
+     */
+    public function is_editable()   {
+        return true;
+    }
 
 }
 ?>
