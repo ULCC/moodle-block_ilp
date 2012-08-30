@@ -187,6 +187,7 @@
 	$string['mytutees']				=	'My Tutees';
 	$string['myilp']				=	'My ILP';
 	$string['multipleentries']		=	'Allow Multiple Entries';
+    $string ['reportrecurrence']    =   'Allow Report Recurrence';
 	
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';

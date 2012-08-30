@@ -56,7 +56,7 @@ class ilp_report_rules  {
         }
 
         //if this report has a lock date check if the date has passed
-        if ( $report->reporttype == ILP_RT_FINALDATE)   {
+        if ($report->reporttype ==  ILP_RT_RECURRING_FINALDATE  || $report->reporttype == ILP_RT_FINALDATE)   {
 
             if ( $report->reportlockdate < time() )   {
                 //find out if this student has been given a report extension
@@ -72,21 +72,6 @@ class ilp_report_rules  {
         //if the report is a recurring report
         if ($report->reporttype ==  ILP_RT_RECURRING || $report->reporttype ==  ILP_RT_RECURRING_FINALDATE)   {
             //
-
-
-            if ($report->reporttype ==  ILP_RT_RECURRING_FINALDATE )   {
-
-                if ( $report->reportlockdate < time() )   {
-                    //find out if this student has been given a report extension
-                    $extension  =   $this->extension_check('reportlockdate');
-                    if (empty($extension) || $extension->value < time()) {
-                        $temp               =   new stdClass();
-                        $temp->expiredate   =  (!empty($extension))? date('d-m-Y',$extension->value) : date('d-m-Y',$report->reportlockdate);
-                        return array('result'=>false,'text'=>get_string('reportlocked','block_ilp',$temp));
-                    }
-                }
-            }
-
 
             $recuringstart  =   0;
 
@@ -183,4 +168,17 @@ class ilp_report_rules  {
                 }
             }
      }
+
+    function can_add_extensions($report_id=NULL){
+
+        $report_id  =   (empty($report_id)) ?   $this->report_id    :   $report_id;
+
+        $report         =   $this->dbc->get_report_by_id($report_id);
+
+        return(empty($report) || ($report->frequency ==1 && $report->reporttype==1 && $report->reportmaxentries==null))?false:true;
+    }
+
+
+
+
 }
