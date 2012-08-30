@@ -127,6 +127,7 @@
     $string['filter']				=	'Filter';
     $string['fieldchangesuc']		=	'The field change has been successful';
     $string['fieldchangeerror']		=	'A error has occurred the field change has not been applied';
+    $string['fieldnoteditable']		=	'This field is not editable';
 
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
@@ -396,7 +397,7 @@
 	$string['statuschangeerror'] 			= 	'A error occurred whilst changing the report status. The status was not changed';
 	$string['fieldreqerror']				=	'A error occurred the required status was not updated';
 	$string['statusitemupdateerror']			=	'A error occurred whilst updating status items';
-	$string['labelexistserror']				=	"field label already exists in this report";
+    $string['labelexistserror']				=	"field label already exists in this report";
 	
 	//month strings
 	$string['jan']								=	'Jan';
