@@ -144,6 +144,14 @@ class ilp_element_plugin_page_break extends ilp_element_plugin {
         //nothing to do in the page break class
 	 }
 
+
+    /**
+     * The page break plugin doesn't need to do add anything
+     * */
+    public function entry_data( $reportfield_id,$entry_id,&$entryobj ){
+
+    }
+
     /**
      * page breaks can not be processed
      * @return bool
