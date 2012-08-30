@@ -48,7 +48,7 @@ class ilp_report_rules  {
                   if (empty($extension) || $studententries >= $extension->value) {
                       $temp             =   new stdClass();
                       $temp->entries    =   $studententries;
-                      $temp->maxentries    =   $report->reportmaxentries;
+                      $temp->maxentries    =  (!empty($extension))? $extension->value : $report->reportmaxentries;
                       return array('result'=>false,'text'=>get_string('exceededmaxentries','block_ilp',$temp));
                   }
               }
@@ -63,14 +63,14 @@ class ilp_report_rules  {
                 $extension  =   $this->extension_check('reportlockdate');
                 if (empty($extension) || $extension->value < time()) {
                     $temp               =   new stdClass();
-                    $temp->expiredate   =   date('d-m-Y',$report->reportlockdate);
-                    return array('result'=>false,'text'=>get_string('reportlocked','block_ilp'),$temp);
+                    $temp->expiredate   =  (!empty($extension))? date('d-m-Y',$extension->value) : date('d-m-Y',$report->reportlockdate);
+                    return array('result'=>false,'text'=>get_string('reportlocked','block_ilp',$temp));
                 }
             }
         }
 
         //if the report is a recurring report
-        if ($report->reporttype ==  ILP_RT_RECURRING)   {
+        if ($report->reporttype ==  ILP_RT_RECURRING || $report->reporttype ==  ILP_RT_RECURRING_FINALDATE)   {
             //
 
             $recuringstart  =   0;
@@ -100,10 +100,10 @@ class ilp_report_rules  {
 
                 if (!empty($entriescount) && $entriescount >= $report->recurmax) {
                     $extension  =   $this->extension_check('recurmax');
-                    if (empty($extension) || $extension->value >= $entriescount) {
+                    if (empty($extension) || $extension->value <= $entriescount) {
                         $temp             =   new stdClass();
                         $temp->entries    =   $entriescount;
-                        $temp->maxentries    =   $report->recurmax;
+                        $temp->maxentries   =  (!empty($extension))? $extension->value : $report->recurmax;
                         return array('result'=>false,'text'=>get_string('recurexceededmaxentries','block_ilp',$temp));
                     }
                 }
@@ -168,4 +168,17 @@ class ilp_report_rules  {
                 }
             }
      }
+
+    function can_add_extensions($report_id=NULL){
+
+        $report_id  =   (empty($report_id)) ?   $this->report_id    :   $report_id;
+
+        $report         =   $this->dbc->get_report_by_id($report_id);
+
+        return(empty($report) || ($report->frequency ==1 && $report->reporttype==1 && $report->reportmaxentries==null))?false:true;
+    }
+
+
+
+
 }

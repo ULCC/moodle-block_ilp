@@ -188,6 +188,7 @@
 	$string['mytutees']				=	'My Tutees';
 	$string['myilp']				=	'My ILP';
 	$string['multipleentries']		=	'Allow Multiple Entries';
+    $string ['reportrecurrence']    =   'Allow Report Recurrence';
 	
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';
@@ -438,7 +439,7 @@
     $string['messageprovider:ilp_comment']      = 'New report comment';
 
 
-    $string['ilp_element_plugin_error_minoptions']  = 'Minimum options specified for this report must be ';
+    $string['ilp_element_plugin_error_minoptions']  = 'Minimum number of options that must be specified for this report is ';
 
 	global $CFG;
 

@@ -2713,10 +2713,13 @@ class ilp_db_functions	extends ilp_logging {
 
         $sql    =   "SELECT     *
                      FROM       {block_ilp_preferences}
-                     {$params}";
+                     {$params}
+                     ORDER BY id  DESC";
 
         return $this->dbc->get_records_sql($sql, $parameters);
     }
+
+
 
     /**
      * Creates a preference record in the database

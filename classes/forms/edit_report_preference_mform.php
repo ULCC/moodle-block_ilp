@@ -45,6 +45,8 @@ class edit_report_preference_mform extends ilp_moodleform {
     function definition() {
         global $USER, $CFG;
 
+        include_once ($CFG->dirroot."/blocks/ilp/classes/ilp_report_rules.class.php");
+
         $dbc = new ilp_db;
 
         $mform =& $this->_form;
@@ -75,6 +77,9 @@ class edit_report_preference_mform extends ilp_moodleform {
             "<div class='fitem'><div class='fitemtitle'> <label>".get_string('name').":</label> </div><div class='felement'> ".fullname($student)." </div></div>"
         );
 
+
+if (ilp_report_rules::can_add_extensions($this->report_id)) {
+
         if ($report->reporttype ==  ILP_RT_RECURRING_FINALDATE || $report->reporttype == ILP_RT_FINALDATE) {
 
             $mform->addElement('checkbox', 'usereportlockdate',get_string('usereportlock','block_ilp'),null);
@@ -88,7 +93,8 @@ class edit_report_preference_mform extends ilp_moodleform {
                 array('class' => 'lockdate')
             );
         }
-
+            //if maximum number of entries is not specified- any number of entries allowed, therefore cannot be extended
+            if ($report->reportmaxentries!=null ){
         $mform->addElement('checkbox', 'usemaxentries',get_String('maxedit','block_ilp'),null);
 
         // maximum entries element
@@ -98,7 +104,7 @@ class edit_report_preference_mform extends ilp_moodleform {
              get_string('maxentries', 'block_ilp'),
              array('class' => 'form_input')
         );
-
+            }
 
         if ($report->reporttype ==  ILP_RT_RECURRING_FINALDATE || $report->reporttype == ILP_RT_RECURRING) {
 
@@ -130,6 +136,7 @@ class edit_report_preference_mform extends ilp_moodleform {
         //close the fieldset
         $mform->addElement('html', '</fieldset>');
     }
+   }
 
 
 
@@ -146,8 +153,8 @@ class edit_report_preference_mform extends ilp_moodleform {
         }
 
         if (isset($data->userecurmax)) {
-            if (empty($data->recurringmax))   $this->error['recurmax']  = get_string('recurentermaxentries','block_ilp');
-            if (!is_number($data->recurringmax))   $this->error['recurmax']  = get_string('enteranumber','block_ilp');
+            if (empty($data->recurmax))   $this->error['recurmax']  = get_string('recurentermaxentries','block_ilp');
+            if (!is_number($data->recurmax))   $this->error['recurmax']  = get_string('enteranumber','block_ilp');
         }
 
 

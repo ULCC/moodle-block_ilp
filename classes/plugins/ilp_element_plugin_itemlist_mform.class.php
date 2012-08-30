@@ -15,8 +15,7 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 		parent::__construct($report_id,$plugin_id,$creator_id,$reportfield_id=null);
         //remember to define $this->tablename and $this->items_tablename in the child class
 	}
-	
-	
+
 	 protected function specific_validation($data) {
 	 	$data = (object) $data;
 		$optionlist = array();
@@ -27,7 +26,7 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 
 
          if (count($optionlist) < $this->minoptions && empty($data->reportfield_id))    {
-                 $this->errors[]    =   get_string( 'ilp_element_plugin_error_minoptions' , 'block_ilp') . ":  $this->minoptions ";
+                 $this->errors['optionlist']    =   get_string( 'ilp_element_plugin_error_minoptions' , 'block_ilp') . ":  $this->minoptions ";
          }
 
 
@@ -46,7 +45,7 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 				//check for keys in $optionlist which clash with already existing keys in the element items
 				foreach( $optionlist as $key=>$itemname ){
 					if( $this->dbc->listelement_item_exists( $this->items_tablename, array( 'parent_id' => $element_id, 'value' => $key ) ) ){
-						$this->errors[] = get_string( 'ilp_element_plugin_error_item_key_exists', 'block_ilp' ) . ": $key";
+						$this->errors['optionlist'] = get_string( 'ilp_element_plugin_error_item_key_exists', 'block_ilp' ) . ": $key";
 					}
 				}
 			}
@@ -55,7 +54,7 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 		$usedkeys = array();
 		foreach( $optionlist as $key=>$itemname ){
 			if( in_array( $key, $usedkeys ) ){
-				$this->errors[] = get_string( 'ilp_element_plugin_error_duplicate_key' , 'block_ilp' ) . ": $key";
+				$this->errors['optionlist'] = get_string( 'ilp_element_plugin_error_duplicate_key' , 'block_ilp' ) . ": $key";
 			}
 			else{
 				$usedkeys[] = $key;

@@ -5,7 +5,7 @@ M.ilp_edit_report = {
 
 
     init: function() {
-
+ /*
         openend         =   Dom.get('id_reporttype_1');
         recurring      =    Dom.get('id_reporttype_2');
         recurringfinaldate   =       Dom.get('id_reporttype_3');
@@ -51,23 +51,27 @@ M.ilp_edit_report = {
             M.ilp_edit_report.recurring_disabled(true);
             M.ilp_edit_report.lockdate_disabled(false);
         }
-
+*/
     },
 
     recurring_disabled: function (state) {
+        /*
         recurringelements   =   Dom.getElementsByClassName('recurring');
 
         for(i=0;i<recurringelements.length;i++) {
             recurringelements[i].disabled   =   state;
         }
+        */
     },
 
     lockdate_disabled: function (state) {
+        /*
         lockdate   =   Dom.getElementsByClassName('lockdate');
 
         for(i=0;i<lockdate.length;i++) {
             lockdate[i].disabled   =   state;
         }
+        */
     }
 
 
