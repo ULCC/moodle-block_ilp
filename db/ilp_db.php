@@ -1641,27 +1641,34 @@ class ilp_db_functions	extends ilp_logging {
      */
     public	function count_overdue_report($report_id,$user_id,$entries,$time)	{
 
-            $params = array('report_id'=>$report_id, 'user_id'=>$user_id, 'time'=>$time);
+            $params = array('report_id'=>$report_id,
+                            'user_id'=>$user_id,
+                            'time'=>$time,
+                            'state'=>ILP_STATE_UNSET,
+                            'deadline'=>ILP_DATEFIELD_DEADLINE);
+
           	$entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
 
 
     		//$sql	=	"SELECT		count(e.id)
-    		$sql	=	"SELECT		e.id
+            $sql	=	"SELECT		e.id
     					 FROM 		{block_ilp_entry}  as e,
     					 			{block_ilp_plu_datf_ent} as	datfent,
+    					 			{block_ilp_plu_datf}    as	datf,
     					 			{block_ilp_plu_ste_ent} as pe,
     					 			{block_ilp_plu_ste_items} as pi
     					 WHERE		e.id			    =	datfent.entry_id
+    					 AND        datf.id             =   datfent.parent_id
     					 AND		e.report_id			=	:report_id
     					 AND		e.user_id			=	:user_id
     					 AND		datfent.value		<	:time
-
+                         AND        datf.datetype       =   :deadline
     					 AND		e.id		        =	pe.entry_id
     					 AND		pe.parent_id	    =	pi.id
-    					 AND		pi.passfail         =   " . ILP_STATE_UNSET . "
+    					 AND		pi.passfail         =   :state
     					            {$entriessql}";
 
-    		$rst = $this->dbc->get_records_sql($sql, $params);
+        $rst = $this->dbc->get_records_sql($sql, $params);
     		$c = count( $rst );
     		return	$c;
     					 
@@ -2859,6 +2866,34 @@ class ilp_db_functions	extends ilp_logging {
         global $DB;
 
         return  $DB->get_records($tablename,array($field=> $value));
+    }
+
+    /**
+     * Returns the next review date for a student on a given report if the report has
+     * a next review date type datefield
+     *
+     * @param int   $report_id  the id of the report
+     * @param int   $student_id the id of the student
+     */
+    function get_next_review($report_id,$student_id)  {
+
+        $params =   array('report_id'=>$report_id,
+                          'student_id'=>$student_id,
+                          'reviewtype'=>ILP_DATEFIELD_REVIEWDATE,
+                          'time'=>time());
+
+        $sql	=	    "SELECT		max(datfent.value)
+    					 FROM 		{block_ilp_entry}  as e,
+    					 			{block_ilp_plu_datf_ent} as	datfent,
+    					 			{block_ilp_plu_datf}    as	datf
+    					 WHERE		e.id			    =	datfent.entry_id
+    					 AND        datf.id             =   datfent.parent_id
+    					 AND		e.report_id			=	:report_id
+    					 AND		e.user_id			=	:student_id
+    					 AND		datfent.value		>	:time
+                         AND        datf.datetype       =   :reviewtype";
+
+        return  $this->dbc->get_record_sql($sql,$params);
     }
 
 }

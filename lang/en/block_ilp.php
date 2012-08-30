@@ -196,6 +196,8 @@
     $string['name']					=	'Name';
     $string['next']					=	'Next';
     $string['nextstudent']          =   'Next student';
+    $string['nextreview']           =   'Next Review Date';
+
     $string['newreportcomment']		=	'A comment has been made about your entry for the {$a->name} report';
     $string['nocompatiblefields']					=	'None of the fields in this report can be used with this graph type';
 

@@ -242,6 +242,10 @@ if (!empty($studentslist)) {
 
             $reporttext = "{$createdentries} " . $r->name;
 
+            //TODO: abstract these out put a function within the ilp_element_plugin classes that allows a var to be passed
+            //in and altered in a similar way to the entr_obj in the entry_data function
+
+
             //check if the report has a state field
             if ($dbc->has_plugin_field($r->id, 'ilp_element_plugin_state')) {
 
@@ -255,20 +259,22 @@ if (!empty($studentslist)) {
             }
 
 
-			if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_datefield')) {
-				$inprogressentries	=	$dbc->count_report_entries_with_state($r->id,$student->id,ILP_STATE_UNSET,false);
-				$inprogentries 		=	array();
+            if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_datefield')) {
+                $inprogressentries	=	$dbc->count_report_entries_with_state($r->id,$student->id,ILP_STATE_UNSET,false);
+                $inprogentries 		=	array();
 
-				if (!empty($inprogressentries)) {
-					foreach ($inprogressentries as $e) {
-						$inprogentries[]	=	$e->id;
-					}
-				}
+                if (!empty($inprogressentries)) {
+                    foreach ($inprogressentries as $e) {
+                        $inprogentries[]	=	$e->id;
+                    }
+                }
+                //get the number of entries that are overdue
+                $overdueentries			=	$dbc->count_overdue_report($r->id,$student->id,$inprogentries,time());
+                $reporttext				.=	(!empty($overdueentries))?  "<br />".$overdueentries." ".get_string('reportsoverdue','block_ilp') : "";
 
-				//get the number of entries that are overdue
-				$overdueentries			=	$dbc->count_overdue_report($r->id,$student->id,$inprogentries,time());
-				$reporttext				.=	(!empty($overdueentries))?  "<br />".$overdueentries." ".get_string('reportsoverdue','block_ilp') : "";
-			}
+                $nextreview             =   $dbc->get_next_review($r->id,$student->id);
+                $reporttext				.=	(!empty($nextreview))?  "<br />".get_string('nextreview','block_ilp')." ".userdate($nextreview) : "";
+            }
 
             $data[$r->id] = $reporttext;
         }

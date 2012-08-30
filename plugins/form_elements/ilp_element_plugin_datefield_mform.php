@@ -11,9 +11,9 @@ class ilp_element_plugin_datefield_mform  extends ilp_element_plugin_mform {
 
         // deadline/review date
         $optionlist = array(
-            0=> get_string ('ilp_element_plugin_datefield_date', 'block_ilp'),
-            1=> get_string('ilp_element_plugin_datefield_deadline', 'block_ilp'),
-            2=> get_string('ilp_element_plugin_datefield_reviewdate', 'block_ilp'),
+            ILP_DATEFIELD_DATE          => get_string('ilp_element_plugin_datefield_date', 'block_ilp'),
+            ILP_DATEFIELD_DEADLINE      => get_string('ilp_element_plugin_datefield_deadline', 'block_ilp'),
+            ILP_DATEFIELD_REVIEWDATE    => get_string('ilp_element_plugin_datefield_reviewdate', 'block_ilp'),
          );
 
        $mform->addElement(
