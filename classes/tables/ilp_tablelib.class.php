@@ -416,9 +416,16 @@ class ilp_flexible_table {
 
         $this->sess = &$SESSION->flextable[$this->uniqueid];
 
+
         if(!empty($_GET[$this->request[ILP_TABLE_VAR_SHOW]]) && isset($this->columns[$_GET[$this->request[ILP_TABLE_VAR_SHOW]]])) {
             // Show this column
+
+
+
             $this->sess->collapse[$_GET[$this->request[ILP_TABLE_VAR_SHOW]]] = false;
+
+
+
         }
         else if(!empty($_GET[$this->request[ILP_TABLE_VAR_HIDE]]) && isset($this->columns[$_GET[$this->request[ILP_TABLE_VAR_HIDE]]])) {
             // Hide this column

@@ -1,15 +1,23 @@
 <?php
 	$string['achieved'] 			= 	'Achieved';
 	$string['addall'] 				= 	'Add all';
+
+    $string['addextension'] 		= 	'Add extension';
 	$string['addcomment']			= 	'Add Comment';
+
+    $string['addcomment']			= 	'Add Comment';
+    $string['addtosummary']			= 	'Add to summary';
+
 	$string['addedby']				= 	'Added By';
 	$string['addprompt'] 			= 	'Add Prompt';
-	$string['addfield'] 			= 	'Add Field';
+    $string['addfield'] 			= 	'Add Field';
+    $string['addgraph'] 			= 	'Add Graph';
 	$string['addpromptdots'] 		= 	'Select Field Type';
 	$string['addnew'] 				= 	'Add New';
 	$string['addsel'] 				= 	'Add selected';
-	
-	$string['allowcomments']		= 	'Allow comments';
+
+    $string['alldata']      		= 	'All data';
+    $string['allowcomments']		= 	'Allow comments';
 	$string['allcourses']			= 	'All Courses';
 	$string['anystatus']			= 	'Any Status';
 	$string['apply'] 				= 	'Apply';
@@ -18,15 +26,18 @@
 	
 	$string['attendaceplugin']		= 	'Attendance Plugin';
 	$string['attendaceplugindesc']	= 	'The attendance plugin that will called to get attendance data in various areas of the ilp (the plugin must be enabled to appear in this list)';
-	
-	$string['availablereports']		= 	'Available Reports'; 
+    $string['attachedgraphs']		= 	'Attached Graphs';
+
+    $string['availablereports']		= 	'Available Reports';
+    $string['average']      		= 	'Average';
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
 	$string['binary_icon']			=	'Icon File';
 	$string['changecourse']			=	'Change Course';
 	$string['changegroup']			=	'Change Group';
 	$string['creator']				=	'Creator';
-	$string['createreport']			=	'Create Report';
+    $string['createreport']			=	'Create Report';
+    $string['creategraph']			=	'Create Graph';
 	$string['createnewreport']		=	'Create New Report';
 	$string['cronemailsender'] 		= 	'ILP';
 	$string['cronemailsubject'] 	= 	'Reminder: {$a->reportname} is due on {$a->deadline}';
@@ -36,6 +47,7 @@
 		Course Admin
 	</p>
 	';
+    $string['collapseall']			=	'Collapse all';
 	$string['comments']				=	'Comments';
 	$string['comment']				=	'Comment';
 	$string['commeentdeleted']		=	'Comment deleted';
@@ -45,10 +57,17 @@
 	$string['contextuser']			=	'Continue User';
 	$string['contextself']			=	'Context Self';
 	$string['configsuc']			=	'Configuration change saved';
-	$string['course']				=	'Course';
+    $string['course']				=	'Course';
+    $string['courseentries']				=	'{$a->report} entries for students in {$a->course}';
 	$string['coursereports']		=	'Course Reports';
+    $string['day']	 		= 	'Daily';
+    $string['dashboard']	 		= 	'Dashboard';
+    $string['datacollection'] 		= 	'Data collected over:';
+    $string['collapseentries']			=	'Collapse entries';
 	$string['dashboard']	 		= 	'Dashboard';
-	$string['deadline']		 					= 	'deadline';
+    $string['deadline']		 					= 	'deadline';
+    $string['deadlinestate']		 			= 	'Deadline state';
+
 	$string['deadlinenotification']		 = 	'Deadline Notification';
 	$string['deadlinenotificationconfig']		 = 	'How many days before a deadline a target deadline should a reminder be sent to a user to remind them of the deadline';
 	
@@ -59,58 +78,82 @@
 	$string['defaultverticalperpageconfig'] 	= 	'How many rows to show in the tables as the default for the vertical pagination';
 	$string['defaultstatusitem']	 			= 	'Default user status';
 	$string['defaultstatusitemconfig'] 			= 	'The default status item that will be assigned to users ';
-	
-	
-	
+
+    $string['deleteerror']			=	'An error has occured and the the record wasnot successfully deleted';
+    $string['deletesuccess']			=	'The record was successfully deleted';
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
 	$string['displayingreports'] 				= 	'Display Reports';
-	
-	
+
+	$string['description']			        =	'Description';
+	$string['display'] 				        = 	'Display';
+    $string['displayingreports'] 			= 	'Display Reports';
+    $string['displaysummary'] 				= 	'Display summary';
+    $string['displayuserentries'] 	        = 	'Learner entries';
+    $string['displaynonuserentries'] 	    = 	'Non learner entries';
+
 	$string['disablereport']		= 	'Disable Report';
 	$string['disabled'] 			= 	'Disabled';
 	$string['editcomment']			= 	'Edit Comment';
 	$string['editfield']			=	'Edit Field';
-	$string['editfields']			=	'Edit Fields';
+    $string['editfields']			=	'Edit Fields';
+    $string['editgraphs']			=	'Edit Graphs';
 	$string['editprompt']			=	'Edit Prompt';
 	$string['editpermissions']		=	'Edit Permisssions';
 	$string['editreport']			=	'Edit Report';
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['edit_status_items']	=	'Edit Status Items';
-	$string['editstatusitems']		=	'Edit Status Items';	
+    $string['editstatusitems']		=	'Edit Status Items';
+    $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this report';
+    $string['expandall']			=	'Expand all';
 	$string['enablereport'] 		= 	'Enable Report';
-	$string['enabled'] 				= 	'Enabled';
-	$string['entrydeleted']			= 	'The entry has been deleted';
-	
+    $string['enabled'] 				= 	'Enabled';
+    $string['expandentries']		=	'Expand entries';
+    $string['numberentries']		= 	'{$a->entries} entries';
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';
-	$string['failcsscolour']		=	'Fail CSS colour';
+    $string['firstentry']		    =	'First entry';
+    $string['failcsscolour']		=	'Fail CSS colour';
 	$string['failcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in a fail state';
 	$string['failpercent']			=	'Fail Percentage';
 	$string['failpercentconfig']	=	'The percentage that should be considered a fail (all percentages equal to and below this)';
 	$string['fieldcreationsuc']		=	'The field was successfully created';
 	$string['fieldmaximum']			=	'The mamximum number of {$a} fields has been added you can not add anymore';
+
 	$string['filter']				=	'Filter';
+    $string['finaldate']		    = 	'Final date';
 	
-	
-	
+
+    $string['filter']				=	'Filter';
+    $string['fieldchangesuc']		=	'The field change has been successful';
+    $string['fieldchangeerror']		=	'A error has occurred the field change has not been applied';
+    $string['fieldnoteditable']		=	'This field is not editable';
+
 	$string['returnreportprompt']	=	'Returning to report fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	$string['for']					=	'for';
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
+    $string['graph_pluginsettings']	= 	'Graph Plugin Settings';
+    $string['graphcreationsuc'] 	= 	'Graph successfully created';
+    $string['graphcreationerror'] 	= 	'Error whilst creating graph';
+
+
+    $string['graphname']            = 	'Graph Name';
+    $string['howoften']            = 	'How often should rules reset';
 	$string['idtype']				=	'ID type';
 	$string['idtypedesc']			=	'Is the id a string or a int, if it is a string it will have commas appended to it in the query';
 	
 	
 	$string['ilpname']				=	'ILP';
 	$string['ilps']					=	'ILPs';
-	$string[ 'ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
+	$string['ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	$string['intid']				=	'Int ID';
 	
 	$string['installedreports']		=	'Installed Reports';
-	$string['installedelements']	=	'Installed Elements';
+    $string['installedelements']	=	'Installed Elements';
+    $string['insummary']	        =	'In summary';
 	$string['warininglist']			=	'Warining List';
 	
 	
@@ -119,10 +162,11 @@
 	$string['lastupdated']			=	'Last Updated';
 	$string['linkedplugin']			=	'Linked Plugin';
 	$string['linkedplugindesc']		=	'Choose the plugin that this plugin will link too. Note that if the plugin being linked too is not enabled now link will be available';
-	
-	
-	
-	$string['maxedit'] 				= 	'Use Maximum Edit';
+
+
+
+    $string['maxedit'] 				= 	'Use Maximum Edit';
+    $string['maxentries'] 				= 	'Max number of entries';
 	$string['maxeditexceed'] 		= 	'The length of time in which you may edit this entry has past. The entry may not be edited';	
 	$string['maxreports']			= 	'Maximum Reports In Lists';
 	$string['maxreportsconfig']			= 	'The maximum number of reports displayed in a list. Change this setting if you are having to scroll list due to a large number or reports.';
@@ -144,15 +188,22 @@
 	$string['mytutees']				=	'My Tutees';
 	$string['myilp']				=	'My ILP';
 	$string['multipleentries']		=	'Allow Multiple Entries';
+    $string ['reportrecurrence']    =   'Allow Report Recurrence';
 	
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';
 	$string['mycoursegroups']			=	'My Course Groups';
 
     $string['name']					=	'Name';
+    $string['next']					=	'Next';
+    $string['nextstudent']          =   'Next student';
+    $string['nextreview']           =   'Next Review Date';
+
     $string['newreportcomment']		=	'A comment has been made about your entry for the {$a->name} report';
+    $string['nocompatiblefields']					=	'None of the fields in this report can be used with this graph type';
 
 	$string['nodataornoconfig']		=	'No data has been found for the current student. If you believe there should be data for the current student then the plugin may not been configured correctly';
+    $string['nodatafoundgraph']  =   'No data was found for this graph';
 	$string['none']					=	'None';
 	$string['noplugin']				=	'No Plugin';
 	$string['notrequired']	 		= 	'Not required';
@@ -160,8 +211,16 @@
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';
     $string['nocomments']			=	'No Comments';
     $string['noconnection']			=	'No Connection';
+    $string['nopermissiongraph']			=	'You do not have permission to view this graph';
+    $string['openend']			=	'Open end';
 	$string['notapplicable']		=	'N/A';
+
+    $string['nothingtodisplay']		=	'Nothing to display';
+    $string['onemonthdata']		    =	'past 1 months data';
+
+    $string['notinsummary']	        =	'Not in summary';
 	$string['nothingtodisplay']		=	'Nothing to display';
+
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
@@ -173,42 +232,75 @@
 	$string['pluginname'] 			= 	'ILP block';
 	$string['plugintype'] 			= 	'Plugin Type';
 	$string['print'] 				= 	'Print';
-	$string['preview'] 				= 	'Preview';
-	$string['previewreport'] 		= 	'Preview Report';
+    $string['preview'] 				= 	'Preview';
+    $string['previous'] 		    = 	'Previous';
+    $string['previewreport'] 		= 	'Preview Report';
 	$string['predefinedreports'] 	= 	'Predefined Reports';
 	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
+    $string['preferencecreationsuc'] 		= 	'Preference created';
+    $string['previousstudent'] 		= 	'Prev student';
 	$string['punctuality']			= 	'Punctuality';
-	$string['removesel']			= 	'Remove selected';
+    $string['removefield']			= 	'Remove 1 field';
+    $string['removesel']			= 	'Remove selected';
 	$string['removeall']			= 	'Remove all';
+    $string['recurexceededmaxentries']	=	'You have reached maximum number of {$a->maxentries} entries for this report in this period';
+    $string['recurringrules']		    = 	'Recurring rules';
+    $string['recurring']		    = 	'Recurring';
+    $string['recurringfinaldate']		    = 	'Recurring with final date';
+
+    $string['recurringmax']		    = 	'Recurring Maximum';
+    $string['recurringstart']		    = 	'When should the recurring rules start';
+
+
 	$string['req'] 					= 	'Required';
 	$string['reports'] 				= 	'Reports';
 	$string['reportconfiguration'] 				= 	'Report Configuration';
 	$string['reportconfigurationsection'] 		= 	'Report Configuration Section';
-	$string['reportfields'] 					= 	'Report Fields';
+    $string['reportfields'] 					= 	'Report Fields';
+    $string['reportgraph'] 					    = 	'Report Graph';
+    $string['reportgraphs'] 					= 	'Report Graphs';
+    $string['reporttype'] 					    = 	'Report type';
 	$string['reportconfigurationdesc'] 			= 	'The report configuration admininstration area allows you to create and edit reports. ';
-	$string['reportcreationsuc'] 				= 	'The report was successfully created';
-	$string['reportfields'] 					= 	'Report Fields';
+    $string['reportcreationsuc'] 				= 	'The report was successfully created';
+    $string['reportcreation'] 				= 	'Report creation';
+    $string['reportfield'] 					    = 	'Report Field';
+    $string['reportlocked'] 					    = 	'This report has been locked the final date for entries was {$a->expiredate}';
+    $string['reportlockdate'] 					    = 	'Report lock date';
 	$string['reportmustcontainfields'] 			= 	'The report must contain fields';
 	$string['reportname'] 						= 	'Report Name:';
 	$string['reportprompt']						= 	'Report Prompts';
 	$string['reportdeadline']					= 	'Report Deadline';
 	$string['reportdeleteerror']				= 	'Report delete error';
-	$string['reportdeleted']					= 	'Report deleted';
+    $string['reportdeleted']					= 	'Report deleted';
+    $string['reportentries']					= 	'report entries';
+
 	$string['reportsoverdue']					= 	'Report overdue';
     $string['reportmovesuc']        			    =	'The report was successfully moved';
     $string['reportmoveerror']        			    =	'An error has occurred the report was not move';
+    $string['reportnojs']        			    =	'You do not have JavaScript enabled. Please note that the creation of reports is easier in a Javascript enabled browser. Some fields may be disregarded if they are not selected with the correct fields';
+
 	$string['required']	 						= 	'Required';
 	$string['reportpermissions']				= 	'Report Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
 	$string['reportpermissionsdescription']		= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
-	$string['savechanges'] 						= 	'Save Changes';
+    $string['savechanges'] 						= 	'Save Changes';
+    $string['showall'] 						    = 	'Any';
+    $string['showcomplete']					    = 	'Complete';
+    $string['showoverdue'] 					    = 	'Overdue';
+
 	$string['statuschangesuc'] 					= 	'The reports status was successfully changed';
 	$string['statusitemupdatesuc'] 				= 	'The status items have been updated';
 	
 	$string['selecttype'] 						= 	'Select Field Type';
 	$string['selectedreports']					= 	'Selected Reports';
-	$string['selectedreportlist']				= 	'Select report list options';
+    $string['selectedreportlist']				= 	'Select report list options';
+    $string['selectagraph']				        = 	'Select a graph';
+    $string['setallowmultipleerror']				        = 	'In order to have a recurring report type you must check allow multiple entries';
+
+
+
 	$string['settings']							= 	'Settings';
+    $string['sixmonthdata']				        = 	'Past 6 months data';
 	$string['statenotchanged']					= 	'State has not been changed';
 	$string['statechanged']						= 	'State changed';
 	
@@ -221,28 +313,52 @@
 	$string['studentnotfound']					= 	'Student not found';
 	$string['showingpages'] 					= 'Showing {$a->startpos} - {$a->endpos} of {$a->total}';
 	$string['submitanddisplay'] 				= 	'Submit and display';
+
+    $string['studentslist'] 					= 	'Student list description';
+    $string['specificdate'] 					= 	'Specific date';
+    $string['specificstart'] 					= 	'Specific start date';
+
+    $string['summary']	                        =	'Summary';
 	$string['studentslist'] 					= 	'Student list description';
+
 	$string['tabsettings']						= 	'Tab Settings';
-	$string['tab_pluginsettings']				= 	'Tab Plugin Settings';
+    $string['tab_pluginsettings']				= 	'Tab Plugin Settings';
+    $string['threemonthdata']				    = 	'Past 3 months data';
 	
 	$string['type'] 							= 	'Type';
 	$string['table'] 							= 	'Table';
 	$string['tabstatusdesc'] 					= 	'Select whether the tab is enabled or disabled';
+    $string['total']                      		= 	'Total';
 
     $string['viewreport']        				= 	'View Report';
     $string['viewreportpreview'] 				= 	'View Report Preview';
-	$string['viewplp'] 							= 	'View';
-	$string['userpicture'] 						= 	'Student Picture';
+    $string['viewplp'] 							= 	'View';
+    $string['viewilp'] 							= 	'View ILP';
+    $string['viewextension'] 					= 	'View Extensions';
+    $string['value'] 							= 	'Value';
+
+
+
+    $string['userpicture'] 						= 	'Student Picture';
+    $string['usereportlock'] 					= 	'Use report lock edit';
+    $string['updatestatus'] 					= 	'Update user status';
+
 
 	$string['unknown'] 							= 	'Unknown';
-
+    $string['yeardata']				            = 	'Past years data';
+    $string['weekly']				                    = 	'Weekly';
+    $string['weeks']				                = 	' Weeks';
 	//Archive Titles
 	$string['overview'] 						= 	'Overview';
 	$string['personal_report'] 					= 	'Personal Reports';	
 	$string['report1'] 							= 	'Progress Review';
 	$string['report2'] 							= 	'Concern';
 	$string['report3'] 							= 	'Comment';
-	$string['report4'] 							= 	'Contribution';
+    $string['report4'] 							= 	'Contribution';
+    $string['recurstartafterlockerror'] 							= 	'The recurring rule start date can not be after the report expiration';
+    $string['recurmaxgreaterthanmaxentrieserror'] 							= 	'The recurring max entries rule value can not be greater than the report maximum entries';
+
+
 	$string['subject_report'] 					= 	'Subject Reports';	
 	$string['student_info'] 					= 	'Student Info';
 	$string['target']							=	'Targets';
@@ -283,7 +399,7 @@
 	$string['statuschangeerror'] 			= 	'A error occurred whilst changing the report status. The status was not changed';
 	$string['fieldreqerror']				=	'A error occurred the required status was not updated';
 	$string['statusitemupdateerror']			=	'A error occurred whilst updating status items';
-	$string['labelexistserror']				=	"field label already exists in this report";
+    $string['labelexistserror']				=	"field label already exists in this report";
 	
 	//month strings
 	$string['jan']								=	'Jan';
@@ -322,13 +438,16 @@
     //MESSAGE PROVIDER
     $string['messageprovider:ilp_comment']      = 'New report comment';
 
+
+    $string['ilp_element_plugin_error_minoptions']  = 'Minimum number of options that must be specified for this report is ';
+
 	global $CFG;
 
 	// Include ilp db class
 	require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 	
 	$dbc = new ilp_db();
-	$plugins = $CFG->dirroot.'/blocks/ilp/classes/form_elements/plugins';
+	$plugins = $CFG->dirroot.'/blocks/ilp/plugins/form_elements';
 	
 	// get all the currently installed form element plugins
 	$form_element_plugins = ilp_records_to_menu($dbc->get_form_element_plugins(), 'id', 'name');
@@ -353,7 +472,7 @@
 	}
 	
 	//import tab plugin language strings
-	$tabs	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/tabs';
+	$tabs	=	$CFG->dirroot.'/blocks/ilp/plugins/tabs';
 	
 	// get all the currently installed tab plugins plugins
 	$tab_plugins = ilp_records_to_menu($dbc->get_dashboard_tabs(), 'id', 'name');
@@ -379,7 +498,7 @@
 	    }
 	}
 
-    $plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+    $plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
 
     if ($dbc->get_mis_plugins() !== false) {
         $mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
@@ -401,6 +520,32 @@
             }
         }
     }
+
+
+    $plugins = $CFG->dirroot.'/blocks/ilp/plugins/graph/';
+
+    if ($dbc->get_mis_plugins() !== false) {
+        $graphplugins = ilp_records_to_menu($dbc->get_graph_plugins(), 'id', 'name');
+
+        foreach ($graphplugins as $plugin_file) {
+            if (file_exists($plugins.'/'.$plugin_file.".php")) {
+                require_once($plugins.'/'.$plugin_file.".php");
+
+                // instantiate the object
+                $class = basename($plugin_file, ".php");
+                $pluginobj = new $class();
+                $method = array($pluginobj, 'language_strings');
+
+                //check whether the config_settings method has been defined
+
+                if (is_callable($method,true)) {
+                    $pluginobj->language_strings($string);
+                }
+            }
+        }
+    }
+
+
 	
 
 

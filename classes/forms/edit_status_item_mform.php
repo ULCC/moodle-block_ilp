@@ -61,7 +61,7 @@ class edit_status_item_mform extends ilp_moodleform {
 
 	        
 				//instantiate status class
-				require_once( "{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/ilp_element_plugin_status.php" );
+				require_once( "{$CFG->dirroot}/blocks/ilp/plugins/form_elements/ilp_element_plugin_status.php" );
 				$status = new ilp_element_plugin_status();
 				//call the definition
 				$status->config_specific_definition( $mform );

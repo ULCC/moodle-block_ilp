@@ -81,7 +81,7 @@ $pluginrecord	=	$dbc->get_plugin_by_id($plugin_id);
 //take the name field from the plugin as it will be used to call the instantiate the plugin class
 $classname = $pluginrecord->name;
 // include the class for the plugin
-include_once("{$CFG->dirroot}/blocks/ilp/classes/form_elements/plugins/{$classname}.php");
+include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
 
 if(!class_exists($classname)) {
  	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
@@ -92,17 +92,12 @@ $pluginclass	=	new $classname();
 
 //has the maximum number of this field type in this report been reached? 
 if (!$pluginclass->can_add($report_id) && empty($reportfield_id))	{
-		
-	
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
     redirect($return_url, get_string("fieldmaximum", 'block_ilp',$pluginclass->audit_type()), ILP_REDIRECT_DELAY);
 }
 
 //call the plugin edit function inside of which the plugin configuration mform
 $pluginclass->edit($report_id,$plugin_id,$reportfield_id);
-
-
-
 
 
 

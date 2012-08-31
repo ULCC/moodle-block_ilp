@@ -1,0 +1,168 @@
+<?php
+
+// include standard libraries
+$PAGE->requires->yui2_lib("yahoo");
+$PAGE->requires->yui2_lib("event");
+$PAGE->requires->yui2_lib("dom");
+$PAGE->requires->yui2_lib("animation");
+$PAGE->requires->yui2_lib("container");
+$PAGE->requires->yui2_lib("connection");
+
+// load the standard YUI style sheet
+$PAGE->requires->css_theme(new moodle_url($CFG->wwwroot.'/lib/yui/2.9.0/build/container/assets/container.css'));
+
+
+
+
+echo $OUTPUT->header();
+
+
+$jsmodule = array(
+    'name'     	=> 'ilp_standard_functions',
+    'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
+);
+
+$PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmodule);
+
+// js arguments
+$jsarguments = array(
+    'open_image'   =>   $CFG->wwwroot.'/pix/t/expanded.png',
+    'closed_image' => 	$CFG->wwwroot.'/pix/t/collapsed.png'
+);
+
+
+
+$jsmodule = array(
+    'name'     	=> 'ilp_view_studentreports',
+    'fullpath' 	=> '/blocks/ilp/views/js/view_studentreports.js',
+	'requires'  	=> array('yahoo','event','dom','element','connection')
+);
+
+
+$PAGE->requires->js_init_call('M.ilp_view_studentreports.init', $jsarguments, true, $jsmodule);
+
+
+
+?>
+
+<div class="ilp">
+<h2><?php echo get_string('students','block_ilp').": ".$pagetitle;?></h2>
+
+	<form method="get" action='<?php echo $CFG->wwwroot."/blocks/ilp/actions/view_studentreports.php?tutor=false";?>' id='filter_form' >
+	<?php 
+if (isset($course_id)) { 
+	if	(!empty($user_courses) && count($user_courses) > 0) { 
+?>
+        <br />
+        <label for='select_course_id'><?php echo get_string('changecourse','block_ilp'); ?></label>
+        <select id='select_course_id' name='course_id'>
+            <?php foreach ($user_courses as $c) {?>
+                <option value='<?php echo $c->id; ?>'  <?php if ($course_id == $c->id) echo 'selected="selected"';?> ><?php echo $c->shortname?></option>
+            <?php } ?>
+        </select>
+<?php } else { ?>
+	    <input type='hidden' name='course_id' value='<?php if (isset($course_id)) echo $course_id?>' >
+<?php
+	}
+
+//if the course has groups display group selector
+	if	(!empty($groups) && count($groups) > 0) { 
+?>
+        <br />
+        <label for='select_group_id'><?php echo get_string('changegroup','block_ilp'); ?></label>
+	    <select id='select_group_id' name='group_id'>
+		<option value="0" <?php if ($group_id == 0) echo 'selected="selected"';?> >No Group</option>
+		<?php foreach ($groups as $g) {?>
+			<option value='<?php echo $g->id; ?>'  <?php if ($group_id == $g->id) echo 'selected="selected"';?> ><?php echo $g->name?></option>
+		<?php } ?> 
+	</select>
+<?php } else { ?>
+	<input type='hidden' name='group_id' value='<?php if (isset($group_id)) echo $group_id?>' >
+<?php
+	}
+
+} 
+
+//if mutliple tutors display tutor selector
+if (isset($tutor)) { 
+?>
+        <input type='hidden' name='tutor' value='<?php if (isset($tutor)) echo $tutor?>' >
+<?php } ?>
+    <br />
+	<label for='select_status'><?php echo get_string('status','block_ilp'); ?></label>
+	<select id='select_status' name='status_id'>
+		<option value='0' <?php if ($status_id == 0) echo "selected='selected'"; ?> ><?php echo get_string('anystatus','block_ilp'); ?></option>
+		<?php foreach ($status_items as $s) {?>
+			<option value='<?php echo $s->id; ?>' <?php if ($status_id == $s->id) echo 'selected="selected"';?> ><?php echo $s->name?></option>
+		<?php } ?> 
+	</select>
+
+<?php
+//find out if the report has state fields
+if ($dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
+    $states		=	$dbc->get_report_state_items($report_id,'ilp_element_plugin_state');
+?>
+     <br />
+     <label>Report State</label>
+     <select name='state_id' id='reportstateselect'>
+     <option value='0' <?php if ($state_id == 0) echo 'selected="selected"';?> >Any State</option>";
+     <?php
+        if (!empty($states)) {
+           foreach($states as $s)	{
+                $selected = ($state_id == $s->id) ? 'selected="selected"' :  '';
+
+                echo "<option value='{$s->id}' {$selected} >{$s->name}</option>";
+           }
+        }
+     ?>
+     </select>
+     <?php
+
+         //find out if the report also has a date deadline field
+         if ($dbc->has_plugin_field($report_id,'ilp_element_plugin_date_deadline')) {
+     ?> <br /><strong><?php echo get_string('deadlinestate','block_ilp');?></strong>
+        <input type="radio" value="0" name="deadline_id" id="deadline_any" <?php if (empty($deadline_id))    echo 'checked="checked"'; ?>><?php echo get_string('showall','block_ilp');?>
+        <input type="radio" value="1" name="deadline_id" id="deadline_overdue" <?php if ($deadline_id == 1)    echo 'checked="checked"'; ?>><?php echo get_string('showoverdue','block_ilp');?>
+        <input type="radio" value="2" name="deadline_id" id="deadline_complete" <?php if ($deadline_id == 2)    echo 'checked="checked"'; ?>><?php echo get_string('showcomplete','block_ilp');?>
+     <?php
+         }
+    }
+
+?>
+        <br />
+        <label for="summary"><?php echo get_string('displaysummary','block_ilp'); ?></label>
+        <input id="summary" type="checkbox" name="summary" value="1" <?php if (!empty($displaysummary)) {echo "checked='checked'";} ?> >
+        <br />
+        <input  name="userentries" value="0" type="hidden"/>
+        <label for="userentries"><?php echo get_string('displayuserentries','block_ilp'); ?></label>
+        <input id="userentries" type="checkbox" name="userentries" value="1" <?php if (!empty($displayuserentries)) {echo "checked='checked'";} ?> >
+        <br />
+        <input  name="nonuserentries" value="0" type="hidden"/>
+        <label for="nonuserentries"><?php echo get_string('displaynonuserentries','block_ilp'); ?></label>
+        <input id="nonuserentries" type="checkbox" name="nonuserentries" value="1" <?php if (!empty($displaynonuserentries)) {echo "checked='checked'";} ?> >
+
+        <br />
+        <br />
+	<input id='coursesubmit' type='submit' value='<?php echo get_string('applyfilter','block_ilp'); ?>'>
+    <input type='hidden' name='report_id' value='<?php echo $report_id; ?>' >
+
+	</form>
+
+<div class="entry_floatright"><a href='#' onclick="M.ilp_standard_functions.printfunction()"><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
+<div class='clearer'></div>
+    <span id='expandcollapselinks' ><a href="#" id="studentreport_expandall"><?php echo get_string('expandentries','block_ilp'); ?></a>&nbsp;/&nbsp;<a href="#" id="studentreport_collapseall"><?php echo get_string('collapseentries','block_ilp'); ?></a></span>
+	<div class="centable" id='student_list<?php echo "course_id{$course_id}tutor{$tutor}status_id{$status_id}report_id{$report_id}_container"; ?>'">
+	<?php
+	   // display the table
+	   require_once($CFG->dirroot.'/blocks/ilp/actions/view_studentreports.ajax.php');
+	?>
+	</div>
+</div>
+<?php
+
+
+
+
+echo $OUTPUT->footer();
+?>

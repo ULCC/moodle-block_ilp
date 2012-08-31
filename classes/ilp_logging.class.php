@@ -399,7 +399,7 @@ class ilp_logging {
 
      		if (!empty($formelement)) {
      			//the path to the class file
-     			$classfile = $CFG->dirroot."/blocks/ilp/classes/form_elements/plugins/{$formelement->name}.php";
+     			$classfile = $CFG->dirroot."/blocks/ilp/plugins/form_elements/{$formelement->name}.php";
      			
      			require_once($classfile);
      			

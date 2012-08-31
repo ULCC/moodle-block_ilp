@@ -1,0 +1,14 @@
+<?php
+echo $OUTPUT->header();
+?>
+<div class="ilp yui-skin-sam">
+<?php
+echo $OUTPUT->heading(get_string('reportgraph', 'block_ilp'));
+
+$pluginclass->mform->display();
+
+?>
+</div>
+<?php
+echo $OUTPUT->footer();
+?>

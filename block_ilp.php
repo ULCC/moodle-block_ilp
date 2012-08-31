@@ -93,14 +93,14 @@ class block_ilp extends block_list {
                     $set_course_groups_link = false;       
 			
 			        //we need to get the capabilites of the current user so we can deceide what to display in the block 
-        			if (has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false) ) {
+        			if (!empty($coursecontext) && has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false) ) {
         				$access_viewilp		=	true;
         				//I have removed the var below as we dont want the my course groups link to contain
         				//the id of a  course which the user is not a teacher in 
                         //$set_course_groups_link = true;       
         			}
         			
-        			if ( has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) || has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) || is_siteadmin($USER)) {
+        			if (!empty($coursecontext) && has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) || has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) || is_siteadmin($USER)) {
         				$access_viewotherilp	=	true;
                         $set_course_groups_link = true;
         			}
@@ -158,7 +158,7 @@ class block_ilp extends block_list {
 
 			
 			//include the attendance 
-			$misclassfile	=	$CFG->dirroot.'/blocks/ilp/classes/dashboard/mis/ilp_mis_attendance_percentbar_plugin.php';
+			$misclassfile	=	$CFG->dirroot.'/blocks/ilp/plugins/mis/ilp_mis_attendance_percentbar_plugin.php';
 			
 			if (file_exists($misclassfile)) {
 				
@@ -220,7 +220,7 @@ class block_ilp extends block_list {
 				$misoverviewplugins	=	array();
 				
 				//get all plugins that mis plugins
-				$plugins = $CFG->dirroot.'/blocks/ilp/classes/dashboard/mis';
+				$plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
 				
 				$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
 				

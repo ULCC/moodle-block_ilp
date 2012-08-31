@@ -85,10 +85,15 @@ if (!empty($reportfields))	{
 	foreach ($reportfields as $field) {
 		//get the plugin record that for the plugin 
 		$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
-				
-		$dbc->delete_element_record_by_id($pluginrecord->tablename.'_ent',$field->id);
+        include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$pluginrecord->name}.php");
+
+        $delete_entry = new $pluginrecord->name();
+        $delete_entry->delete_entry_record($entry_id);
+
 	}
 }
+
+
 
 $dbc->delete_entry_by_id($entry_id);
 

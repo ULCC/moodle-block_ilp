@@ -1,0 +1,64 @@
+<div id="ilp_mis_learner_profile_contact">
+
+	<div class="contactboxes">
+		<h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_personal','block_ilp') ?></h3>
+		<label ><?php echo get_string('name') ?></label>
+		<?php echo fullname($user); ?><br />		
+		<?php if ( isset($this->fields['studentid']) && !empty($this->data[$this->fields['studentid']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_studentid','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['studentid']]; ?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['enrolmentdate']) && !empty($this->data[$this->fields['enrolmentdate']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_enrolmentdate','block_ilp') ?></label>
+			<?php echo $this->interpret_date($this->data[$this->fields['enrolmentdate']],'d-m-Y'); ?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['dob']) && !empty($this->data[$this->fields['dob']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_dob','block_ilp') ?></label>
+			<?php echo $this->interpret_date($this->data[$this->fields['dob']]);?><br />
+		<?php } ?>
+	</div>
+	
+	<div class="contactboxes">
+		<h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_contact','block_ilp') ?></h3>
+		<?php if (isset($this->fields['email']) && !empty($this->data[$this->fields['email']])) {?>
+			<?php echo $this->data[$this->fields['email']]; ?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['phone']) && !empty($this->data[$this->fields['phone']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_phone','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['phone']]; ?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['mobile']) && !empty($this->data[$this->fields['mobile']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_mobile','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['mobile']];?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['emercontact']) && !empty($this->data[$this->fields['emercontact']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_emercontact','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['emercontact']];?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['emernumber']) && !empty($this->data[$this->fields['emernumber']])) {?>
+			<label ><?php echo get_string('ilp_mis_learner_profile_contact_disp_emernumber','block_ilp') ?></label>
+			<?php echo $this->data[$this->fields['emernumber']];?><br />
+		<?php } ?>		
+	</div>
+	
+	<div class="contactboxes">
+		<h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_address','block_ilp') ?></h3>
+		<?php if (isset($this->fields['addressone']) && !empty($this->data[$this->fields['addressone']])) {?>
+			<?php echo $this->data[$this->fields['addressone']]; ?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['addresstwo'])  && !empty($this->data[$this->fields['addresstwo']])) {?>
+			<?php echo $this->data[$this->fields['addresstwo']]; ?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['addressthree']) && !empty($this->data[$this->fields['addressthree']])) {?>
+			<?php echo $this->data[$this->fields['addressthree']]; ?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['addressfour']) && !empty($this->data[$this->fields['addressfour']])) {?>
+			<?php echo $this->data[$this->fields['addressfour']]; ?><br />
+		<?php } ?>
+		<?php if (isset($this->fields['postcode']) && !empty($this->data[$this->fields['postcode']])) {?>
+			<?php echo $this->data[$this->fields['postcode']]; ?><br />
+		<?php } ?>
+	</div>
+
+</div>
+<div class="clearer"></div>

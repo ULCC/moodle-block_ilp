@@ -38,6 +38,7 @@ M.ilp_view_studentlist = {
         document.getElementById('filter_form').submit();
     }
 
+
 }
 
 

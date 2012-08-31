@@ -33,17 +33,30 @@ if (empty($report)) {
 	print_error('reportnotfouund','block_ilp');
 }
 
+
+$reportfields		=	$dbc->get_report_fields_by_position($report_id);
+
+if (!empty($reportfields))	{
+	foreach ($reportfields as $field) {
+
+    $pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
+    include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$pluginrecord->name}.php");
+
+    $delete_report = new $pluginrecord->name();
+    $delete_report->delete_report($report_id);
+    }
+}
+
 //if the report satatus is currently disabled (0) set it to enabled (1)
 $res = $dbc->set_report_status($report_id,0);
-$res = $dbc->delete_report($report_id,1); 
-
+$res = $dbc->delete_report($report_id,1);
 
 //save the changes to the report
 if (!empty($res)) {
-	$resulttext	=	get_string('reportdeleted','block_ilp');	
+	$resulttext	=	get_string('reportdeleted','block_ilp');
 } else {
 	$resulttext	=	get_string('reportdeleteerror','block_ilp');
-} 
+}
 
 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?report_id='.$report_id;
 redirect($return_url, $resulttext, ILP_REDIRECT_DELAY);
