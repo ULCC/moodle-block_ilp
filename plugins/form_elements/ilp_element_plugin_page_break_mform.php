@@ -32,7 +32,7 @@ class ilp_element_plugin_page_break_mform  extends ilp_element_plugin_mform {
 
     function unprocessed_data(&$data)   {
         $data->position         =   $this->dbc->get_new_report_field_position($this->report_id);
-        $data->label            =   '--------'.$data->position;
+        $data->label            =   'Page Break '.$data->position;
         $data->report_id        =   $this->report_id;
         $data->creator_id       =   $this->creator_id;
         $this->summary          =   0;

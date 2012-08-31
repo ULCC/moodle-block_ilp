@@ -454,6 +454,43 @@ function xmldb_block_ilp_upgrade($oldversion) {
 
     }
 
+
+
+    if ($oldversion < 2012073014) {
+
+        //Add missing ILP_temp table
+
+        // create the new table to store responses to fields
+        $table = new $xmldb_table( 'block_ilp_temp' );
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_misc = new $xmldb_field('misc');
+        $table_misc->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_misc);
+
+        $table_data = new $xmldb_field('data');	//data field
+        $table_data->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_data);
+
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        if (!$dbman->table_exists($table)) $dbman->create_table($table);
+    }
+
+
     return true;
 }
 
