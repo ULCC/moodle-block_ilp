@@ -468,11 +468,11 @@ function xmldb_block_ilp_upgrade($oldversion) {
         $table->addField($table_id);
 
         $table_misc = new $xmldb_field('misc');
-        $table_misc->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_misc->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED);
         $table->addField($table_misc);
 
         $table_data = new $xmldb_field('data');	//data field
-        $table_data->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_data->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED);
         $table->addField($table_data);
 
         $table_timemodified = new $xmldb_field('timemodified');
