@@ -1,0 +1,47 @@
+<div class="clearfix"> </div>
+		<div class="reports-container">
+					<div class="left-reports">
+						<?php foreach ($post->displayfields as $d) { ?>
+						<p>
+							<strong><?php echo $d['label']; ?></strong><?php echo $d['content']; ?> 
+						</p>
+						<?php } ?>
+						
+					</div>
+					<div class="right-reports">
+							<?php if (isset($post->catgoryname)) {?> <strong><?php echo get_string('ilp_dashboard_archive_tab_targetcategory', 'block_ilp'); ?> :</strong><?php echo $post->catgoryname; ?><br /><?php } ?>
+							<?php if (isset($post->setbyname) && !empty($post->setbyname)) {?><strong><?php echo get_string('ilp_dashboard_archive_tab_addedby','block_ilp')?> :</strong><?php echo $post->setbyname;?><br /><?php } ?>
+							<?php if (isset($post->coursename) && !empty($post->coursename)) {?><strong><?php echo get_string('course','block_ilp')?> :</strong><?php echo $post->coursename;?><br /><?php } ?>
+							<?php if (isset($post->creationtime)) {?><strong><?php echo  get_string('ilp_dashboard_archive_tab_targetset', 'block_ilp'); ?> :</strong><?php echo $post->creationtime;?><br /><?php } ?>
+							<?php if (isset($post->deadlinetime)) {?><strong><?php echo  get_string('ilp_dashboard_archive_tab_targetdeadline', 'block_ilp'); ?> :</strong><?php echo $post->deadlinetime;?><br /><?php } ?>
+					</div>
+			<div class="clearfix"> </div>
+		
+			<div class="reports-comments">
+				<div class="view-comments">
+				<h3 id="target_<?php echo $post->id; ?>" class="commentheading"><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3>
+				</div>
+			</div>
+			
+				<?php 
+				if (!empty($comments)) {
+				?>
+				
+				<div id="target_<?php echo $post->id; ?>_container">
+					<?php foreach ($comments as $c) { 
+						$commentcreator	=	$this->dbc->get_user_by_id($c->userid);
+					?>
+					<div class="comment">
+								<p><?php  $commentval	=	 html_entity_decode($c->commentpost); 
+										  echo	strip_tags($commentval);
+									?></p>
+								<div class="info">
+								<?php echo get_string('creator','block_ilp').": ".fullname($commentcreator);?> |
+								<?php echo get_string('date').": ".userdate($c->modified, get_string('strftimedate'));?> |
+								</div>
+					</div>					
+								
+					<?php } ?> 
+				</div>
+			<?php }	?>
+			</div>

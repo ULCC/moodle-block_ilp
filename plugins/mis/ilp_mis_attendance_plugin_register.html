@@ -1,0 +1,38 @@
+<div id="ilp_mis_attendance_plugin_register">
+
+<div class="course-attendance">
+<table>
+<th colspan="3">Course Attendance<th>
+<tr><td><?php echo (!empty($summarydata['total'][0])) ? $summarydata['total'][0]: 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_possible','block_ilp');?></td><td><?php echo (!empty($summarydata['present'][0])) ? $summarydata['present'][0] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_present','block_ilp');?></td><td><?php echo (!empty($summarydata['absent'][0])) ? $summarydata['absent'][0] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_absent','block_ilp');?></td></tr>
+<tr><td><?php echo (!empty($summarydata['att_prec'][0])) ? $summarydata['att_prec'][0] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_attendance','block_ilp');?></td><td><?php echo (!empty($summarydata['pun_perc'][0])) ? $summarydata['pun_perc'][0] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_punctuality','block_ilp');?></td></tr>
+</table>
+</div>
+<div class="clearer"> </div>
+<?php if (!empty($displayterms)) {
+$i	=	1;
+	foreach ($displayterms as $t) {
+	$mar	=	25 * $i; 
+
+	$header	=	get_config('block_ilp','mis_plugin_register_term'.$t.'header');
+
+	$header	= (!empty($header))	?	$header	:	"Term {$t}";
+ 
+?>
+
+
+<div class="attendance">
+<table>
+<th colspan="3"><?php echo $header;?> Attendance<th>
+<tr><td><?php echo (!empty($summarydata['total'][$t])) ? $summarydata['total'][$t]: 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_possible','block_ilp');?></td><td><?php echo (!empty($summarydata['present'][$t])) ? $summarydata['present'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_present','block_ilp');?></td><td><?php echo (!empty($summarydata['absent'][$t])) ? $summarydata['absent'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_absent','block_ilp');?></td></tr>
+<tr><td><?php echo (!empty($summarydata['att_prec'][$t])) ? $summarydata['att_prec'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_attendance','block_ilp');?></td><td><?php echo (!empty($summarydata['pun_perc'][$t])) ? $summarydata['pun_perc'][$t] : 0; echo " ".get_string('ilp_mis_attendance_plugin_register_disp_punctuality','block_ilp');?></td></tr>
+</table>
+</div>
+
+<?php } 
+}?>
+<div class="clearer"> </div>
+<div class="attendance-grid">
+<?php echo $grid;?>
+</div>
+
+</div>

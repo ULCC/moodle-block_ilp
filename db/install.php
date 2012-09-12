@@ -22,21 +22,21 @@ global $USER, $CFG, $SESSION, $PARSER;
 		
 		//install the various plugins and templates into the database
 		
-		require_once ($CFG->dirroot.'/blocks/ilp/classes/form_elements/ilp_element_plugin.php');
+		require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin.class.php');
 
 		//install new plugins
 		ilp_element_plugin::install_new_plugins();
 		
 		
-		require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_template.php');
+		require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_template.class.php');
 		//install new templates
 		ilp_dashboard_template::install_new_plugins();
 		
-		require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_plugin.php');
+		require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_plugin.class.php');
 		//install new dashboard plugins
 		ilp_dashboard_plugin::install_new_plugins();
 		
-		require_once ($CFG->dirroot.'/blocks/ilp/classes/dashboard/ilp_dashboard_tab.php');
+		require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
 		//install new tabs
 		ilp_dashboard_tab::install_new_plugins();
 		

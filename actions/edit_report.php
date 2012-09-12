@@ -90,9 +90,28 @@ $pagetitle	=	(empty($report_id)) ? get_string('createreport', 'block_ilp') : get
 
 if (!empty($report_id)) {
 	$reportrecord	=	$dbc->get_report_by_id($report_id);
-	$mform->set_data($reportrecord);
-} 
 
+    //converts back variable stored in database to those on the form
+    //TODO: this needs to be tidied up, it should use constant deifnitions - ND
+    if ($reportrecord->reporttype==1){
+        $reportrecord->reptype = 1;
+    }
+
+    if ($reportrecord->reporttype==2){
+        $reportrecord->reptype = 1;
+        $reportrecord->recurrent =1;
+    }
+    if ($reportrecord->reporttype==3){
+        $reportrecord->reptype = 2;
+        $reportrecord->recurrent =1;
+    }
+    if ($reportrecord->reporttype==4){
+        $reportrecord->reptype = 2;
+
+    }
+
+    $mform->set_data($reportrecord);
+} 
 
 
 
@@ -103,7 +122,6 @@ if (!empty($report_id)) {
 $sectionname	=	(stripos($CFG->release,"2.") !== false) ? get_string('administrationsite') : get_string('administration');
 
 $PAGE->navbar->add($sectionname,null,'title');
-
 
 //plugins or modules
 //we need to determine which moodle we are in and give the correct area name
@@ -116,6 +134,7 @@ $PAGE->navbar->add(get_string('blocks'),null,'title');
 
 //block name
 $url	=	$CFG->wwwroot."/admin/settings.php?section=blocksettingilp";
+
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
 
 //section name

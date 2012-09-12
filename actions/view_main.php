@@ -26,11 +26,8 @@ $user_id = $PARSER->required_param('user_id', PARAM_INT);
 $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
 
 
-
-
 // instantiate the db
 $dbc = new ilp_db();
-
 
 $plpuser	=	$dbc->get_user_by_id($user_id);
 
@@ -75,7 +72,7 @@ $temp	=	$dbc->get_enabled_template();
 $classname	=	$temp->name;
 
 //include the class file for the enabled template
-require_once($CFG->dirroot."/blocks/ilp/classes/dashboard/templates/{$classname}.php");
+require_once($CFG->dirroot."/blocks/ilp/plugins/dash_templates/{$classname}.php");
 
 $template	=	new $classname();
 

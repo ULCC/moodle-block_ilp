@@ -5,7 +5,8 @@
  */
 
 //TO DO - tidy this up and remove the file - pnly required for early development
-/*$path_to_config = dirname($_SERVER['SCRIPT_FILENAME']).'/../../../config.php';
+/*
+$path_to_config = dirname($_SERVER['SCRIPT_FILENAME']).'/../../../config.php';
 while (($collapsed = preg_replace('|/[^/]+/\.\./|','/',$path_to_config,1)) !== $path_to_config) {
     $path_to_config = $collapsed;
 }

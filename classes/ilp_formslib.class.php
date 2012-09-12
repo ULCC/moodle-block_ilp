@@ -64,7 +64,144 @@ class ilp_moodleform extends moodleform {
         // we have to know all input types before processing submission ;-)
         $this->_process_submission($method);
     }
-    
+
+    /**
+     * Method to add a repeating group of elements to a form.
+     *
+     * This is the ilp implementation overridding original it adds a button to delete labels and also allows the user
+     *to set the maximum number of repeated elements
+     *
+     * @param array $elementobjs Array of elements or groups of elements that are to be repeated
+     * @param integer $repeats no of times to repeat elements initially
+     * @param array $options Array of options to apply to elements. Array keys are element names.
+     *                      This is an array of arrays. The second sets of keys are the option types
+     *                      for the elements :
+     *                          'default' - default value is value
+     *                          'type' - PARAM_* constant is value
+     *                          'helpbutton' - helpbutton params array is value
+     *                          'disabledif' - last three moodleform::disabledIf()
+     *                                           params are value as an array
+     * @param string $repeathiddenname name for hidden element storing no of repeats in this form
+     * @param string $addfieldsname name for button to add more fields
+     * @param int $addfieldsno how many fields to add at a time
+     * @param string $addstring name of button, {no} is replaced by no of blanks that will be added.
+     * @param boolean $addbuttoninside if true, don't call closeHeaderBefore($addfieldsname). Default false.
+     * @return int no of repeats of element in this page
+     */
+    function repeat_elements($elementobjs, $repeats, $options, $repeathiddenname,
+                             $addfieldsname, $addfieldsno=5, $addstring=null, $addbuttoninside=false,$maxrepeats=NULL,$removefieldsname='removerepeatfield',$removestring=NULL){
+
+
+        if ($addstring===null){
+            $addstring = get_string('addfields', 'form', $addfieldsno);
+        } else {
+            $addstring = str_ireplace('{no}', $addfieldsno, $addstring);
+        }
+
+        $repeats = optional_param($repeathiddenname, $repeats, PARAM_INT);
+        $addfields = optional_param($addfieldsname, '', PARAM_TEXT);
+        $removefieldspressed = optional_param($removefieldsname, '', PARAM_TEXT);
+
+        if (!empty($addfields)){
+            $repeats += $addfieldsno;
+        }
+
+        if (!empty($removefieldspressed)) {
+            $repeats -= 1;
+        }
+
+        $mform =& $this->_form;
+
+        $mform->registerNoSubmitButton($addfieldsname);
+        $mform->registerNoSubmitButton($removefieldsname);
+        $mform->addElement('hidden', $repeathiddenname, $repeats);
+        $mform->setType($repeathiddenname, PARAM_INT);
+        //value not to be overridden by submitted value
+        $mform->setConstants(array($repeathiddenname=>$repeats));
+        $namecloned = array();
+
+        //makes sure number of repeats is below the max number or repeats (if it has been set)
+        if (!empty($maxrepeats) && $repeats > $maxrepeats) $repeats    =   $maxrepeats;
+
+        if ($removestring===null){
+            $removestring = get_string('removefield', 'block_ilp');
+        } else {
+            $removestring = str_ireplace('{no}', $repeats, $removestring);
+        }
+
+        for ($i = 0; $i < $repeats; $i++) {
+            foreach ($elementobjs as $elementobj){
+                $elementclone = fullclone($elementobj);
+                $this->repeat_elements_fix_clone($i, $elementclone, $namecloned);
+
+                if ($elementclone instanceof HTML_QuickForm_group && !$elementclone->_appendName) {
+                    foreach ($elementclone->getElements() as $el) {
+                        $this->repeat_elements_fix_clone($i, $el, $namecloned);
+                    }
+                }
+                $elementclone->setLabel(str_replace('{no}', $i + 1, $elementclone->getLabel()));
+                $mform->addElement($elementclone);
+            }
+        }
+        for ($i=0; $i<$repeats; $i++) {
+            foreach ($options as $elementname => $elementoptions){
+                $pos=strpos($elementname, '[');
+                if ($pos!==FALSE){
+                    $realelementname = substr($elementname, 0, $pos+1)."[$i]";
+                    $realelementname .= substr($elementname, $pos+1);
+                }else {
+                    $realelementname = $elementname."[$i]";
+                }
+                foreach ($elementoptions as  $option => $params){
+
+                    switch ($option){
+                        case 'default' :
+                            $mform->setDefault($realelementname, $params);
+                            break;
+                        case 'helpbutton' :
+                            $params = array_merge(array($realelementname), $params);
+                            call_user_func_array(array(&$mform, 'addHelpButton'), $params);
+                            break;
+                        case 'disabledif' :
+                            foreach ($namecloned as $num => $name){
+                                if ($params[0] == $name){
+                                    $params[0] = $params[0]."[$i]";
+                                    break;
+                                }
+                            }
+                            $params = array_merge(array($realelementname), $params);
+                            call_user_func_array(array(&$mform, 'disabledIf'), $params);
+                            break;
+                        case 'rule' :
+                            if (is_string($params)){
+                                $params = array(null, $params, null, 'client');
+                            }
+                            $params = array_merge(array($realelementname), $params);
+                            call_user_func_array(array(&$mform, 'addRule'), $params);
+                            break;
+                        case 'type' :
+                            //Type should be set only once
+                            if (!isset($mform->_types[$elementname])) {
+                                $mform->setType($elementname, $params);
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        $buttonarray=array();
+
+        if ($repeats < $maxrepeats)  $buttonarray[] = &$mform->createElement('submit', $addfieldsname, $addstring);;
+        if ($repeats > 1)  $buttonarray[] = &$mform->createElement('submit', $removefieldsname, $removestring);
+        if (!empty($buttonarray)) $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+
+        if (!$addbuttoninside) {
+            $mform->closeHeaderBefore($removefieldsname);
+        }
+
+        return $repeats;
+    }
     
     function definition() {
     	
@@ -173,6 +310,9 @@ class ilp_MoodleQuickForm extends MoodleQuickForm {
             $this->_elements[$key]->onQuickFormEvent('updateValue', null, $this);
         }
     }
+
+
+
     
 }
 

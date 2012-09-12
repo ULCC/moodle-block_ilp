@@ -24,6 +24,7 @@ $columns[]	=	'moveup';
 $columns[]	=	'movedown';
 $columns[]	=	'editreport';
 $columns[]	=	'editprompts';
+$columns[]	=	'editgraphs';
 $columns[]	=	'editpermission';
 $columns[]	=	'changestatus';
 $columns[]	=	'delete';
@@ -31,6 +32,7 @@ $columns[]	=	'delete';
 
 //setup the array holding the header texts
 $headers	=	array();
+$headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
@@ -105,6 +107,11 @@ if (!empty($reports)) {
 		//set the edit report prompts link
 		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_prompt.php?report_id={$row->id}'>
 									<img class='prompt' src='".$OUTPUT->pix_url('i/questions')."' alt='".get_string('editfields','block_ilp')."' title='".get_string('editfields','block_ilp')."' />
+								 </a>";
+
+        //set the edit report graph link
+        $data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_graphs.php?report_id={$row->id}'>
+									<img class='graphs' src='{$CFG->wwwroot}/blocks/ilp/pix/graphicon.jpg' alt='".get_string('editgraphs','block_ilp')."' title='".get_string('editgraphs','block_ilp')."' height='20' width='20' />
 								 </a>";
 		
 		//set the edit report permissions link

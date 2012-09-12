@@ -24,6 +24,7 @@ $columns[]	=	'type';
 $columns[]	=	'moveup';
 $columns[]	=	'movedown';
 $columns[]	=	'edit';
+$columns[]	=	'summary';
 $columns[]	=	'required';
 $columns[]	=	'delete';
 
@@ -31,6 +32,7 @@ $columns[]	=	'delete';
 $headers	=	array();
 $headers[]	=	'';
 $headers[]	=	get_string('type','block_ilp');
+$headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
@@ -104,15 +106,24 @@ if (!empty($reportfields)) {
 								 </a>";
 		
 		//set the required field
-		$title 	= 	(!empty($row->req)) ? get_string('required','block_ilp') : get_string('notrequired','block_ilp');
-		$icon	= 	$CFG->wwwroot."/blocks/ilp/pix/icons/";
-		$icon	.= 	(!empty($row->req)) ? "required.gif" : "notrequired.gif";
-		
-		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_required.php?reportfield_id={$row->id}&report_id={$report_id}'>
+        $title 	= 	(!empty($row->req)) ? get_string('required','block_ilp') : get_string('notrequired','block_ilp');
+        $icon	= 	$CFG->wwwroot."/blocks/ilp/pix/icons/";
+        $icon	.= 	(!empty($row->req)) ? "required.gif" : "notrequired.gif";
+
+        $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_required.php?reportfield_id={$row->id}&report_id={$report_id}'>
 									<img class='required' src='{$icon}' alt='{$title}' title='{$title}' />
 								</a>";
+        //set the summary row
+        $title 	= 	(!empty($row->summary)) ? get_string('insummary','block_ilp') : get_string('notinsummary','block_ilp');
+        $icon	= 	$CFG->wwwroot."/blocks/ilp/pix/icons/";
+        $icon	.= 	(!empty($row->summary)) ? "summary.png" : "notinsummary.png";
 
-		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_field.php?reportfield_id={$row->id}&report_id={$report_id}'>
+        $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_summary.php?reportfield_id={$row->id}&report_id={$report_id}'>
+									<img class='required' src='{$icon}' alt='{$title}' title='{$title}' height='16' width='16'/>
+								</a>";
+
+
+        $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_field.php?reportfield_id={$row->id}&report_id={$report_id}'>
 									<img class='delete' src='".$OUTPUT->pix_url("/t/delete")."' alt='".get_string('delete')."' title='".get_string('delete')."' />
 								 </a>";
 		

@@ -1,0 +1,23 @@
+<?php
+echo $OUTPUT->header();
+?>
+<div class="ilp">
+<?php 
+echo $OUTPUT->heading(get_string('reportgraphs', 'block_ilp'));
+
+    $mform->display();
+?>
+
+
+<fieldset id="ilpreportfieldset" class="clearfix ilpfieldset">
+<legend class="ftoggler"><?php echo get_string('attachedgraphs','block_ilp');?></legend>
+<?php
+require_once($CFG->dirroot.'/blocks/ilp/actions/view_reportgraphs_table.php');
+?>
+</fieldset>
+<div><a href="<?php echo $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php'; ?>" class="button"><?php echo get_string("reportconfiguration","block_ilp");?></a></div>
+
+</div>
+<?php
+echo $OUTPUT->footer();
+?>
