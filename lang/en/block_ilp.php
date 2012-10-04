@@ -383,6 +383,7 @@
 	$string['ilp:updatestatus'] 		= 	'Update Status';
 	$string['ilp:viewreport'] 			= 	'View a report';
 	$string['ilp:viewilp'] 				= 	'View my own ilp';
+    $string['ilp:reviewee']       =   'Appear in student list for a course';
 	$string['ilp:viewotherilp'] 		= 	'View others ilp';
 	$string['ilp:addcomment'] 			= 	'Add a entry comment';
 	$string['ilp:deletecomment'] 		= 	'Delete entry comment';
