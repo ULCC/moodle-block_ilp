@@ -2092,44 +2092,31 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of object containing all users enrolled in the course
      * or bool false
      */
- 	function get_course_users($course_id,$group_id=null) {
+    function get_course_users($course_id,$group_id=null) {
 
- 			$coursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
+        $grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
+        $groupwhere = "";
 
- 			$grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
+        $context = get_context_instance(CONTEXT_COURSE, $course_id);
 
- 			$params = array('course_id1'=>$course_id, 'course_id2'=>$course_id);
-            $groupwhere = "";
+        /// Get all users that should appear in this list
+        list($esql, $params) = get_enrolled_sql($context, 'block/ilp:reviewee', $group_id);
 
-            if(!empty($group_id)){
-                 $params['group_id'] = $group_id;
-                 $groupwhere = "AND gm.groupid = :group_id ";
-             }
+        if(!empty($group_id)){
+            $params['group_id'] = $group_id;
+            $groupwhere = "AND gm.groupid = :group_id ";
+        }
 
- 			if ($usercontexts		=	get_parent_contexts($coursecontext))	{
- 					$listofcontexts	=	'('.implode(',',$usercontexts).')';
- 			} else {
- 				$sitecontext = get_context_instance(CONTEXT_SYSTEM, SITEID);
-        		$listofcontexts = '('.$sitecontext->id.')'; // must be site
- 			}
-
- 			$context = get_context_instance(CONTEXT_COURSE, $course_id);
-
-	 		$sql	=	"SELECT		distinct(u.id)
-	 					  FROM		{user} u INNER JOIN {role_assignments} ra on u.id = ra.userid
+        $sql	=	"SELECT		distinct(u.id)
+	 					  FROM		{user} u
+	 					            LEFT JOIN ($esql) eu ON eu.id=u.id
 	 					  			{$grouptable}
-	 					  			LEFT OUTER JOIN {user_lastaccess} ul on (ra.userid = ul.userid and ul.courseid = :course_id1)
-	 					  			LEFT OUTER JOIN {role} r on ra.roleid = r.id
-
-	 					  WHERE		(ra.contextid = {$context->id} OR ra.contextid in {$listofcontexts})
-	 					    AND		u.deleted = 0
-	 					    AND		(ul.courseid = :course_id2 OR ul.courseid IS NULL)
-	 					    AND		u.username <> 'guest'
-	 					    AND		r.id = 5
+	 					  WHERE		u.deleted = 0
+	 					  AND       eu.id=u.id
 	 					  			{$groupwhere}";
 
-		return $this->dbc->get_records_sql($sql, $params);
- 	}
+        return $this->dbc->get_records_sql($sql, $params);
+    }
 
 
     /**
