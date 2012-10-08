@@ -1733,11 +1733,13 @@ class ilp_db_functions	extends ilp_logging {
 
     	$sql	=	"SELECT			*
     				 FROM 			{block_ilp_entry}
-    				 WHERE			timemodified	=(SELECT MAX(timemodified)
-    				 								  FROM 			{block_ilp_entry}
-    				 								  WHERE			report_id	=	:report_id
-    				 								  AND			user_id		=	:user_id
-    				 								 )";
+    				 WHERE			id	= (SELECT id
+    				 					   FROM   {block_ilp_entry}
+    				 					   WHERE  report_id	=	:report_id
+    				 					   AND	  user_id		=	:user_id
+    				 					   GROUP BY      timemodified
+    				 					   HAVING MAX(timemodified)
+    				 				       )";
 
     	return $this->dbc->get_record_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id));
     }
