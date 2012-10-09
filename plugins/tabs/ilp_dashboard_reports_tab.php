@@ -327,7 +327,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                                     echo "<div class='add' style='float :left'>
                                         <a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_preference.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('addextension','block_ilp')."</a>&nbsp;
                                       </div>
-}
 
                                     <div class='add' style='float :left'>
                                         <a href='{$CFG->wwwroot}/blocks/ilp/actions/view_extensionlist.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('viewextension','block_ilp')."</a>
