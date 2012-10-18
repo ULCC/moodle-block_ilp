@@ -26,7 +26,8 @@ class ilp_settings {
     */
    function __construct() {
 
-       $this->version = "2012100317";
+
+       $this->version = "2012101815";
 
        $this->cron 		= 86400; 	//run the cron at minimum once every 24 hours
    }

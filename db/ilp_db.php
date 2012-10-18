@@ -1734,7 +1734,7 @@ class ilp_db_functions	extends ilp_logging {
         //Getting the entry with the maximum timemodified is alittle more complicated than first thought
 
     	$sql	=	"SELECT e.*, MAX(timemodified) AS tm
-                     FROM mdl_block_ilp_entry AS e
+                     FROM {block_ilp_entry} AS e
                      WHERE report_id = :report_id
                      AND user_id = :user_id
                      GROUP BY timemodified
