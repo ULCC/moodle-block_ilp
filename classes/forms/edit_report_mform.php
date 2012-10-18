@@ -118,9 +118,7 @@ class edit_report_mform extends ilp_moodleform {
 
             $mform->addRule('reptype', null, 'required', null, 'client');
 
-            $mform->addElement('checkbox', 'recurrent', get_String('reportrecurrence','block_ilp'),null);
-
-
+            $mform->addElement('advcheckbox', 'recurrent', get_string('reportrecurrence','block_ilp'),null,null,array(0,1));
 
             // maximum entries element
             $mform->addElement(
@@ -248,13 +246,14 @@ class edit_report_mform extends ilp_moodleform {
             }
 */
 
-            if ($data->reporttype   ==  2)  {
+            if ($data->reptype   ==  2)  {
 
-                if ($data->recurdate > $data->reportlockdate && $data->recurstart == 3) {
+
+                if (isset($data->recurdate) && $data->recurdate > $data->reportlockdate && $data->recurstart == 3) {
                     $this->errors['recurdate']	=   get_string('recurstartafterlockerror','block_ilp');
                 }
 
-                if ($data->recurmax > $data->reportmaxentries) {
+                if (isset($data->recurmax) && $data->recurmax > $data->reportmaxentries) {
                     $this->errors['recurmax']	=   get_string('recurmaxgreaterthanmaxentrieserror','block_ilp');
                 }
 
@@ -272,7 +271,25 @@ class edit_report_mform extends ilp_moodleform {
      	 */		
 		function process_data($data) {
 			global $CFG;
-			
+
+            //open end, no recurrent
+            if ($data->reptype==1 && empty($data->recurrent)){
+                $data->reporttype=ILP_RT_OPENEND;
+            }
+            //open end, recurrent
+            if ($data->reptype==1 && !empty($data->recurrent)){
+                $data->reporttype=ILP_RT_RECURRING;
+            }
+            //final date, recurrent
+            if ($data->reptype==2 && !empty($data->recurrent)){
+                $data->reporttype=ILP_RT_RECURRING_FINALDATE;
+            }
+            //final date, no recurrent
+            if ($data->reptype==2 && empty($data->recurrent)){
+                $data->reporttype=ILP_RT_FINALDATE;
+            }
+
+
 			if (empty($data->id)) {
 				
 				if (!empty($data->binary_icon)) {
@@ -282,22 +299,7 @@ class edit_report_mform extends ilp_moodleform {
 					}
 				}
 
-                //open end, no recurrent
-                if ($data->reptype==1 && empty($data->recurrent)){
-                  $data->reporttype=ILP_RT_OPENEND;
-                }
-                //open end, recurrent
-                if ($data->reptype==1 && !empty($data->recurrent)){
-                    $data->reporttype=ILP_RT_RECURRING;
-                }
-                //final date, recurrent
-                if ($data->reptype==2 && !empty($data->recurrent)){
-                    $data->reporttype=ILP_RT_RECURRING_FINALDATE;
-                }
-                //final date, no recurrent
-                if ($data->reptype==2 && empty($data->recurrent)){
-                    $data->reporttype=ILP_RT_FINALDATE;
-                }
+
 
             	$data->id = $this->dbc->create_report($data);
             	
