@@ -101,16 +101,18 @@ if (!empty($report_id)) {
         $reportrecord->reptype = 1;
         $reportrecord->recurrent =1;
     }
+
     if ($reportrecord->reporttype==3){
         $reportrecord->reptype = 2;
         $reportrecord->recurrent =1;
     }
+
     if ($reportrecord->reporttype==4){
         $reportrecord->reptype = 2;
-
     }
 
     $mform->set_data($reportrecord);
+
 } 
 
 
