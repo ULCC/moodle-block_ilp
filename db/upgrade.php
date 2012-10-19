@@ -523,12 +523,14 @@ function xmldb_block_ilp_upgrade($oldversion) {
             $dbman->add_index($table, $index);
         }
 
-        $table = new xmldb_table('block_ilp_plu_datf_ent');
-        $index = new xmldb_index('datf_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+        if ($dbman->table_exists('block_ilp_plu_datf_ent'))       {
+            $table = new xmldb_table('block_ilp_plu_datf_ent');
+            $index = new xmldb_index('datf_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
 
-        // Conditionally launch add index report_entry
-        if (!$dbman->index_exists($table, $index)) {
-            $dbman->add_index($table, $index);
+            // Conditionally launch add index report_entry
+            if (!$dbman->index_exists($table, $index)) {
+                $dbman->add_index($table, $index);
+            }
         }
 
         $table = new xmldb_table('block_ilp_plu_ste_ent');
@@ -580,23 +582,23 @@ function xmldb_block_ilp_upgrade($oldversion) {
             $dbman->add_index($table, $index);
         }
 
+        if ($dbman->table_exists('block_ilp_plu_chb_ent'))       {
+            $table = new xmldb_table('block_ilp_plu_chb_ent');
+            $index = new xmldb_index('chb_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
 
-        $table = new xmldb_table('block_ilp_plu_chb_ent');
-        $index = new xmldb_index('chb_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+            // Conditionally launch add index report_entry
+            if (!$dbman->index_exists($table, $index)) {
+                $dbman->add_index($table, $index);
+            }
 
-        // Conditionally launch add index report_entry
-        if (!$dbman->index_exists($table, $index)) {
-            $dbman->add_index($table, $index);
+            $table = new xmldb_table('block_ilp_plu_chb_ent');
+            $index = new xmldb_index('chb_entry_parent', XMLDB_INDEX_NOTUNIQUE, array('entry_id,parent_id'));
+
+            // Conditionally launch add index report_entry
+            if (!$dbman->index_exists($table, $index)) {
+                $dbman->add_index($table, $index);
+            }
         }
-
-        $table = new xmldb_table('block_ilp_plu_chb_ent');
-        $index = new xmldb_index('chb_entry_parent', XMLDB_INDEX_NOTUNIQUE, array('entry_id,parent_id'));
-
-        // Conditionally launch add index report_entry
-        if (!$dbman->index_exists($table, $index)) {
-            $dbman->add_index($table, $index);
-        }
-
 
         $table = new xmldb_table('block_ilp_plu_dd_ent');
         $index = new xmldb_index('dd_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
