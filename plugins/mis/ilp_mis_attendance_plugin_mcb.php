@@ -91,8 +91,11 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 $data['overall'] = $this->format_background_by_value( $cellcontents );
 
                 do {
-                    $cellcontents = (!empty($this->mcbdata[$cid][$month])) ? $this->addlinks(round($this->mcbdata[$cid][$month]['percent'],0) . "%", array('mis_period_id' => $month)) : "";    //the value when the condition is not met will fill the blank cells in the table row
-                    $data["{$month}month"] = $this->format_background_by_value( $cellcontents );
+
+                    $precentage =  (!empty($this->mcbdata[$cid][$month])) ? round($this->mcbdata[$cid][$month]['percent'],0).'%' : '';
+                    $background = $this->format_background_by_value( $precentage );
+                    $data["{$month}month"] = (!empty($this->mcbdata[$cid][$month])) ? $this->addlinks( $background, array('mis_period_id' => $month, 'mis_course_id' => $cid)) : "";    //the value when the condition is not met will fill the blank cells in the table row
+                    //$data["{$month}month"] = $this->format_background_by_value( $background );
                             //? $this->addlinks($this->mcbdata[$cid][$month] . "%", array('mis_period_id' => $month))
 
                     $month++;
@@ -129,7 +132,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
     {
         global $CFG;
 
-        $plugin_id = get_config('block_ilp', 'mis_plugin_term_linkedplugin');
+        $plugin_id = get_config('block_ilp', 'mis_plugin_mcb_linkedplugin');
 
         if (!empty($plugin_id)) {
 
