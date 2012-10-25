@@ -29,8 +29,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
     {
         global $CFG, $PARSER, $PAGE;
 
-        $misperiod_id = $PARSER->optional_param('mis_period_id', NULL, PARAM_INT);
-        $miscourse_id = $PARSER->optional_param('mis_course_id', NULL, PARAM_INT);
+        $misperiod_id = $PARSER->optional_param('mis_period_id', date('m',time()), PARAM_ALPHANUM);
+        $miscourse_id = $PARSER->optional_param('mis_course_id', NULL, PARAM_ALPHANUM);
 
         $params = explode('&', $_SERVER['QUERY_STRING']);
         $hiddenparams = "";
@@ -67,6 +67,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             $headers[] = get_string('ilp_mis_attendance_plugin_byclass_disp_attend', 'block_ilp');
             $headers[] = get_string('ilp_mis_attendance_plugin_byclass_disp_unauth', 'block_ilp');
             $headers[] = get_string('ilp_mis_attendance_plugin_byclass_disp_late', 'block_ilp');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_latexfield'))     $headers[] = get_string('ilp_mis_attendance_plugin_byclass_disp_latex', 'block_ilp');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield'))  $headers[] = get_string('ilp_mis_attendance_plugin_byclass_disp_notified', 'block_ilp');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_placementfield')) $headers[] = get_string('ilp_mis_attendance_plugin_byclass_disp_placement', 'block_ilp');
 
             if (get_config('block_ilp', 'mis_plugin_course_byclass_datetime')) $columns[] = 'day';
             if (get_config('block_ilp', 'mis_plugin_course_byclass_room')) $columns[] = 'room';
@@ -78,6 +81,10 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             $columns[] = 'absent';
             $columns[] = 'unauth';
             $columns[] = 'late';
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_latexfield'))        $columns[] = 'latex';
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield'))     $columns[] = 'notified';
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_placementfield'))    $columns[] = 'placement';
+
 
 
             //define the columns in the tables
@@ -85,6 +92,35 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
             //define the headers in the tables
             $flextable->define_headers($headers);
+
+            if (get_config('block_ilp','mis_plugin_course_byclass_markspresentcss'))
+                $flextable->column_style('present','background-color',get_config('block_ilp','mis_plugin_course_byclass_markspresentcss'));
+
+
+            if (get_config('block_ilp','mis_plugin_course_byclass_marksabsentcss'))
+                $flextable->column_style('absent','background-color',get_config('block_ilp','mis_plugin_course_byclass_marksabsentcss'));
+
+
+            if (get_config('block_ilp','mis_plugin_course_byclass_marksauthabsentcss'))
+                $flextable->column_style('unauth','background-color',get_config('block_ilp','mis_plugin_course_byclass_marksauthabsentcss'));
+
+
+            if (get_config('block_ilp','mis_plugin_course_byclass_markslatecss'))
+                $flextable->column_style('late','background-color',get_config('block_ilp','mis_plugin_course_byclass_markslatecss'));
+
+
+            if (get_config('block_ilp','mis_plugin_course_byclass_latexcss') && get_config('block_ilp', 'mis_plugin_course_byclass_latexfield'))
+                $flextable->column_style('latex','background-color',get_config('block_ilp','mis_plugin_course_byclass_latexcss'));
+
+
+            if (get_config('block_ilp','mis_plugin_course_byclass_placementcss') && get_config('block_ilp', 'mis_plugin_course_byclass_placementfield'))
+                $flextable->column_style('placement','background-color',get_config('block_ilp','mis_plugin_course_byclass_placementcss'));
+
+
+            if (get_config('block_ilp','mis_plugin_course_byclass_notifiedcss') && get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield'))
+                $flextable->column_style('notified','background-color',get_config('block_ilp','mis_plugin_course_byclass_notifiedcss'));
+
+
 
             //we do not need the intialbars
             $flextable->initialbars(false);
@@ -102,10 +138,13 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
                     if (get_config('block_ilp', 'mis_plugin_course_byclass_endtime')) $data['end'] = $d['endtime'];
                     if (get_config('block_ilp', 'mis_plugin_course_byclass_tutor')) $data['tutor'] = $d['tutor'];
                     $data['overall'] = $this->format_background_by_value( $d['attendance'] . '%' );
-                    $data['present'] = $d['markspresent'];
-                    $data['absent'] = $d['marksabsent'];
-                    $data['unauth'] = $d['marksauthabsent'];
-                    $data['late'] = $d['markslate'];
+                    $data['present']    = $d['markspresent'];
+                    $data['absent']     = $d['marksabsent'];
+                    $data['unauth']     = $d['marksauthabsent'];
+                    $data['late']       = $d['markslate'];
+                    if (get_config('block_ilp', 'mis_plugin_course_byclass_latexfield'))     $data['latex']      = $d['latex'];
+                    if (get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield'))  $data['notified']   = $d['notified'];
+                    if (get_config('block_ilp', 'mis_plugin_course_byclass_placementfield')) $data['placement']  = $d['placement'];
                     $flextable->add_data_keyed($data);
                 }
             }
@@ -187,11 +226,38 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_course_byclass_markspresentfield', get_string('ilp_mis_attendance_plugin_byclass_markspresent', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_markspresentdesc', 'block_ilp'), 'marksPresent');
 
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_markspresentcss', get_string('ilp_mis_attendance_plugin_byclass_markspresentcss', 'block_ilp'), '', '');
+
         $this->config_text_element($mform, 'mis_plugin_course_byclass_marksabsentfield', get_string('ilp_mis_attendance_plugin_byclass_marksabsent', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_marksabsentdesc', 'block_ilp'), 'marksAbsent');
+
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_marksabsentcss', get_string('ilp_mis_attendance_plugin_byclass_marksabsentcss', 'block_ilp'), '', '');
 
         $this->config_text_element($mform, 'mis_plugin_course_byclass_marksauthabsentfield', get_string('ilp_mis_attendance_plugin_byclass_marksauthabsent', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_marksauthabsentdesc', 'block_ilp'), 'marksAuthAbsent');
 
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_marksauthabsentcss', get_string('ilp_mis_attendance_plugin_byclass_marksauthabsentcss', 'block_ilp'), '', '');
+
         $this->config_text_element($mform, 'mis_plugin_course_byclass_markslatefield', get_string('ilp_mis_attendance_plugin_byclass_markslate', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_markslatedesc', 'block_ilp'), 'marksLate');
+
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_markslatecss', get_string('ilp_mis_attendance_plugin_byclass_markslatecss', 'block_ilp'), '', '');
+
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_latexfield', get_string('ilp_mis_attendance_plugin_byclass_latex', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_latexdesc', 'block_ilp'), 'latex');
+
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_latexcss', get_string('ilp_mis_attendance_plugin_byclass_latexcss', 'block_ilp'), '', '');
+
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_notifiedfield', get_string('ilp_mis_attendance_plugin_byclass_notified', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_notifieddesc', 'block_ilp'), 'notified');
+
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_notifiedcss', get_string('ilp_mis_attendance_plugin_byclass_notifiedcss', 'block_ilp'), '', '');
+
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_placementfield', get_string('ilp_mis_attendance_plugin_byclass_placement', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_placementdesc', 'block_ilp'), 'placement');
+
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_placementcss',get_string('ilp_mis_attendance_plugin_byclass_placementcss', 'block_ilp'), '', '');
+
+        $options    =   array(
+            ILP_ENABLED => get_string('enabled', 'block_ilp'),
+            ILP_DISABLED => get_string('disabled', 'block_ilp')
+        );
+
+        $this->config_select_element($mform, 'mis_plugin_course_byclass_key', $options, get_string('ilp_mis_attendance_plugin_byclass_key', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_keydesc', 'block_ilp'), 1);
 
         $options = array(
             0 => get_string('ilp_mis_attendance_plugin_byclass_ignore', 'block_ilp'),
@@ -300,6 +366,15 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_byclass_markslate'] = 'marks late field';
         $string['ilp_mis_attendance_plugin_byclass_markslatedesc'] = 'the field containing the marks late data';
 
+        $string['ilp_mis_attendance_plugin_byclass_latex'] = 'late x field';
+        $string['ilp_mis_attendance_plugin_byclass_latexdesc'] = 'the field containing the late x data';
+
+        $string['ilp_mis_attendance_plugin_byclass_notified'] = 'notified field';
+        $string['ilp_mis_attendance_plugin_byclass_notifieddesc'] = 'the field containing the notified data';
+
+        $string['ilp_mis_attendance_plugin_byclass_placement'] = 'placement marks field';
+        $string['ilp_mis_attendance_plugin_byclass_placementdesc'] = 'the field containing the placement marks data';
+
         $string['ilp_mis_attendance_plugin_byclass_authorised'] = 'Authorised Absents';
         $string['ilp_mis_attendance_plugin_byclass_authoriseddesc'] = 'What should be done with authorised absents? Positive - to add to present marks, Negative - to add to absents and ignore to not count';
 
@@ -320,6 +395,23 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_byclass_tabletype'] = 'Table type';
         $string['ilp_mis_attendance_plugin_byclass_tabletypedesc'] = 'Is a table or a stored procedure being used';
 
+        $string['ilp_mis_attendance_plugin_byclass_key'] = 'Enable key table';
+        $string['ilp_mis_attendance_plugin_byclass_keydesc'] = 'Do you want a key to display with the class register';
+
+
+        $string['ilp_mis_attendance_plugin_byclass_markspresentcss'] = 'marks present hex colour';
+        $string['ilp_mis_attendance_plugin_byclass_marksabsentcss'] = 'marks absent hex colour';
+        $string['ilp_mis_attendance_plugin_byclass_marksauthabsentcss'] = 'marks authabsent hex colour';
+        $string['ilp_mis_attendance_plugin_byclass_markslatecss'] = 'marks late hex colour';
+        $string['ilp_mis_attendance_plugin_byclass_latexcss'] = 'late x hex colour';
+        $string['ilp_mis_attendance_plugin_byclass_notifiedcss'] = 'notified hex colour';
+        $string['ilp_mis_attendance_plugin_byclass_placementcss'] = 'placement hex colour';
+        $string['ilp_mis_attendance_plugin_byclass_authorisedcss'] = 'Authorised Absents hex colour';
+
+
+
+
+
         $string['ilp_mis_attendance_plugin_byclass_disp_day'] = 'Day';
         $string['ilp_mis_attendance_plugin_byclass_disp_room'] = 'Room';
         $string['ilp_mis_attendance_plugin_byclass_disp_start'] = 'Start';
@@ -330,6 +422,21 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
         $string['ilp_mis_attendance_plugin_byclass_disp_attend'] = 'A';
         $string['ilp_mis_attendance_plugin_byclass_disp_unauth'] = 'U';
         $string['ilp_mis_attendance_plugin_byclass_disp_late'] = 'L';
+        $string['ilp_mis_attendance_plugin_byclass_disp_latex'] = 'L';
+        $string['ilp_mis_attendance_plugin_byclass_disp_notified'] = 'NA';
+        $string['ilp_mis_attendance_plugin_byclass_disp_placement'] = 'WP';
+        $string['ilp_mis_attendance_plugin_byclass_disp_punct_desc'] = 'P description';
+        $string['ilp_mis_attendance_plugin_byclass_disp_attend_desc'] = 'A description';
+        $string['ilp_mis_attendance_plugin_byclass_disp_unauth_desc'] = 'U description';
+        $string['ilp_mis_attendance_plugin_byclass_disp_late_desc'] = 'L description';
+        $string['ilp_mis_attendance_plugin_byclass_disp_latex_desc'] = 'L description';
+        $string['ilp_mis_attendance_plugin_byclass_disp_notified_desc'] = 'NA description';
+        $string['ilp_mis_attendance_plugin_byclass_disp_placement_desc'] = 'WP description';
+        $string['ilp_mis_attendance_plugin_byclass_disp_key'] = 'KEY';
+
+
+
+
 
 
     }
@@ -350,17 +457,43 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
         if (!empty($table)) {
 
-            $misperiod_id = $PARSER->optional_param('mis_period_id', NULL, PARAM_INT);
-            $miscourse_id = $PARSER->optional_param('mis_course_id', NULL, PARAM_INT);
-
+            //we need to perform a query to get all courses that the user is in
             $sidfield = get_config('block_ilp', 'mis_plugin_course_byclass_studentidfield');
 
             //is the id a string or a int
             $idtype = get_config('block_ilp', 'mis_plugin_course_byclass_idtype');
             $misuser_id = (empty($idtype)) ? "'{$misuser_id}'" : $misuser_id;
 
+            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_course_byclass_prelimcalls');
+
             //create the key that will be used in sql query
             $keyfields = array($sidfield => array('=' => $misuser_id));
+
+            $this->coursedata = $this->dbquery($table, $keyfields, array('courseid'=> get_config('block_ilp', 'mis_plugin_course_byclass_courseid'), 'coursename'=>get_config('block_ilp', 'mis_plugin_course_byclass_coursename')),null,$prelimdbcalls);
+
+            //set the default course & month that will be selected
+            $defaultcourseid        = NULL;
+            $defaultperiodid        = date('m',time());
+            $i  =   0;
+
+            //get the db fieldnames for the courseid and course name fields
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_courseid')) $this->fields['courseid'] = get_config('block_ilp', 'mis_plugin_course_byclass_courseid');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_coursename')) $this->fields['coursename'] = get_config('block_ilp', 'mis_plugin_course_byclass_coursename');
+
+
+            foreach($this->coursedata   as $d)  {
+                if (!isset($this->courselist[$d[$this->fields['courseid']]]) && isset($d[$this->fields['coursename']])) {
+                    $this->courselist[$d[$this->fields['courseid']]] = $d[$this->fields['coursename']];
+                    if (empty($i)) {
+                        $defaultcourseid    =   $d[$this->fields['courseid']];
+                        $i++;
+                    }
+                }
+            }
+
+
+            $misperiod_id = $PARSER->optional_param('mis_period_id', $defaultperiodid, PARAM_ALPHANUM);
+            $miscourse_id = $PARSER->optional_param('mis_course_id', $defaultcourseid, PARAM_ALPHANUM);
 
             if (!empty($misperiod_id)) {
                 $pidfield = get_config('block_ilp', 'mis_plugin_course_byclass_period');
@@ -369,6 +502,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
             if (!empty($miscourse_id)) {
                 $cidfield = get_config('block_ilp', 'mis_plugin_course_byclass_courseid');
+                $miscourse_id   =   (is_string($miscourse_id))  ?   "'{$miscourse_id}'" : $miscourse_id;
+
                 $keyfields[$cidfield] = array('=' => $miscourse_id);
             }
 
@@ -376,9 +511,6 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             $this->fields = array();
 
             //get all of the fields that will be returned
-            if (get_config('block_ilp', 'mis_plugin_course_byclass_courseid')) $this->fields['courseid'] = get_config('block_ilp', 'mis_plugin_course_byclass_courseid');
-            if (get_config('block_ilp', 'mis_plugin_course_byclass_coursename')) $this->fields['coursename'] = get_config('block_ilp', 'mis_plugin_course_byclass_coursename');
-
 
             if (get_config('block_ilp', 'mis_plugin_course_byclass_registerid')) $this->fields['registerid'] = get_config('block_ilp', 'mis_plugin_course_byclass_registerid');
             if (get_config('block_ilp', 'mis_plugin_course_byclass_registername')) $this->fields['registername'] = get_config('block_ilp', 'mis_plugin_course_byclass_registername');
@@ -395,12 +527,20 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_course_byclass_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_course_byclass_marksauthabsentfield');
             if (get_config('block_ilp', 'mis_plugin_course_byclass_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_course_byclass_markslatefield');
 
-            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_course_byclass_prelimcalls');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_latexfield')) $this->fields['latex'] = get_config('block_ilp', 'mis_plugin_course_byclass_latexfield');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield')) $this->fields['notified'] = get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_placementfield')) $this->fields['placement'] = get_config('block_ilp', 'mis_plugin_course_byclass_placementfield');
+
+
+
 
             //get the users monthly attendance data
             $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
 
             $this->normalise_data($this->data);
+
+
+
         }
     }
 
@@ -434,9 +574,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
                     }
                 }
 
-                if (!isset($this->courselist[$d[$this->fields['courseid']]]) && isset($d[$this->fields['coursename']])) {
-                    $this->courselist[$d[$this->fields['courseid']]] = $d[$this->fields['coursename']];
-                }
+
 
 
                 //should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
@@ -472,6 +610,10 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
                 if (isset($this->fields['marksauthabsent'])) $tempdata['marksauthabsent'] = $d[$this->fields['marksauthabsent']];
                 if (isset($this->fields['markslate'])) $tempdata['markslate'] = $d[$this->fields['markslate']];
 
+                if (isset($this->fields['latex'])) $tempdata['latex'] = $d[$this->fields['latex']];
+                if (isset($this->fields['notified'])) $tempdata['notified'] = $d[$this->fields['notified']];
+                if (isset($this->fields['placement'])) $tempdata['placement'] = $d[$this->fields['placement']];
+
                 //fill the couse month array position with percentage for the month
                 $normdata[$dayid][] = $tempdata;
 
@@ -479,11 +621,21 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
             asort($normdata);
 
-            $this->normdata = $normdata;
+           $this->normdata = $normdata;
         }
 
     }
 
+    private function format_background($value,$config)    {
+
+        $configval  =   get_config('block_ilp',$config);
+
+        if (!empty($configval)) {
+            return  "<span style='color: #{$configval}'>{$value}</span>";
+        } else {
+            return  $value;
+        }
+    }
 
     private function presents_cal($markspresent, $authabesent)
     {
