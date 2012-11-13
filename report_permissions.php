@@ -57,6 +57,8 @@ $access_report_addcomment		=	0;
 $access_report_editcomment		=	0;
 $access_report_deletecomment	=	0;
 $access_report_viewcomment		=	0;
+$access_report_viewextension    =	0;
+$access_report_addextension    =	0;
 
 
 
@@ -130,6 +132,17 @@ if ($access_viewcomment) {
 	if (!empty($capability))	$access_report_viewcomment		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
 }
 
+if ($access_report_viewextension) {
+
+	$capability	=	$dbc->get_capability_by_name('block/ilp:viewextension');
+	if (!empty($capability))	$access_report_viewextension		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
+}
+
+if ($access_report_addextension) {
+
+	$capability	=	$dbc->get_capability_by_name('block/ilp:addextension');
+	if (!empty($capability))	$access_report_addextension		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
+}
 
 //check for the ilpviewall capability at site level this gives the user rights to view all
 $ilpadmin				=	has_capability('block/ilp:ilpviewall',$sitecontext);
@@ -142,7 +155,10 @@ if (ilp_is_siteadmin($USER->id) || $ilpadmin) {
     $access_report_viewreports		=	1;
     $access_report_viewilp			=	1;
     $access_report_viewotherilp		=	1;
-	
+
+    $access_report_viewextension    =   1;
+    $access_report_addextension     =   1;
+
 }
 
 

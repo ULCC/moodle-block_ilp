@@ -143,6 +143,8 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
                 $viewothercapability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
 
+                $addviewextcapability = $this->dbc->get_capability_by_name('block/ilp:addviewextension');
+
                 $caneditreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$editcapability->id);
 
                 $canaddreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$addcapability->id);
@@ -151,8 +153,9 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
                 $canviewothersreports		=	$this->dbc->has_report_permission($r->id,$role_ids,$viewothercapability->id);
 
+                $canaddviewextreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$addviewextcapability->id);
 
-                if (!empty($caneditreport) || !empty($canaddreport) || !empty($canviewreport)) {
+                if (!empty($caneditreport) || !empty($canaddreport) || !empty($canviewreport) ) {
 
                     $detail					=	new stdClass();
                     $detail->report_id		=	$r->id;
@@ -217,7 +220,10 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
 
                     //is the report available to the user
                     $detail->reportavailable    =   $reportrules->report_availabilty();
+
+                   if( !empty($canaddviewextreport)){
                     $detail->addextension = $reportrules->can_add_extensions();
+                   }
 
                     $detail->canedit	= ($caneditreport) ? true : false;
 
