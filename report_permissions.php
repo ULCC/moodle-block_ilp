@@ -135,7 +135,7 @@ if ($access_viewcomment) {
 if ($access_report_addviewextension) {
 
 	$capability	=	$dbc->get_capability_by_name('block/ilp:addviewextension');
-	if (!empty($capability))	$access_report_addextension		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
+	if (!empty($capability))	$access_report_addviewextension		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
 }
 
 //check for the ilpviewall capability at site level this gives the user rights to view all
