@@ -57,8 +57,7 @@ $access_report_addcomment		=	0;
 $access_report_editcomment		=	0;
 $access_report_deletecomment	=	0;
 $access_report_viewcomment		=	0;
-$access_report_viewextension    =	0;
-$access_report_addextension    =	0;
+$access_report_addviewextension =	0;
 
 
 
@@ -132,15 +131,10 @@ if ($access_viewcomment) {
 	if (!empty($capability))	$access_report_viewcomment		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
 }
 
-if ($access_report_viewextension) {
 
-	$capability	=	$dbc->get_capability_by_name('block/ilp:viewextension');
-	if (!empty($capability))	$access_report_viewextension		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
-}
+if ($access_report_addviewextension) {
 
-if ($access_report_addextension) {
-
-	$capability	=	$dbc->get_capability_by_name('block/ilp:addextension');
+	$capability	=	$dbc->get_capability_by_name('block/ilp:addviewextension');
 	if (!empty($capability))	$access_report_addextension		=	$dbc->has_report_permission($report_id,$role_ids,$capability->id);
 }
 
@@ -156,10 +150,8 @@ if (ilp_is_siteadmin($USER->id) || $ilpadmin) {
     $access_report_viewilp			=	1;
     $access_report_viewotherilp		=	1;
 
-    $access_report_viewextension    =   1;
-    $access_report_addextension     =   1;
-
-}
+    $access_report_addviewextension =   1;
+   }
 
 
 if (empty($access_report_viewotherilp) && $USER->id != $user_id) {
