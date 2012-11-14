@@ -70,7 +70,7 @@ if(isset($coursecontext)){
 $access_createreports	=	has_capability('block/ilp:addreport', $context);
 $access_editreports		=	has_capability('block/ilp:editreport', $context);
 $access_deletereports	=	has_capability('block/ilp:deletereport', $context);
-$access_viewreports		=	has_capability('block/ilp:viewreport', $context);	
+$access_viewreports		=	has_capability('block/ilp:viewreport', $context);
 $access_viewilp			=	has_capability('block/ilp:viewilp', $context);
 $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $context);
 
@@ -79,6 +79,7 @@ $access_editcomment		=	has_capability('block/ilp:editcomment', $context);
 $access_deletecomment	=	has_capability('block/ilp:deletecomment', $context);
 $access_viewcomment		=	has_capability('block/ilp:viewcomment', $context);
 
+$access_addviewextension	=	has_capability('block/ilp:addviewextension', $context);
 
 //check if the current user is an admin or has the ilpviewall capabilty at site level
 $ilpadmin						=	has_capability('block/ilp:ilpviewall',$sitecontext);
@@ -96,7 +97,9 @@ if (!empty($access_ilp_admin)) {
 	$access_addcomment		=	true;
 	$access_editcomment		=	true;
 	$access_deletecomment	=	true;
-	$access_viewcomment		=	true;	
+	$access_viewcomment		=	true;
+
+    $access_addviewextension   = true;
 }
 
 //TODO: we should not be in the course context change to another context
