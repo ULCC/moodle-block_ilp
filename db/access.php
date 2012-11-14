@@ -179,6 +179,17 @@ $block_ilp_capabilities = array(
 
 
 
+    //the capability needed in order to add/view an extension
+    'block/ilp:addviewextension' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'student' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+            'user' => CAP_PREVENT
+        )
+    ),
 
 
 

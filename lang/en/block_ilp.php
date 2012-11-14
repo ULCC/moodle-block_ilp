@@ -389,8 +389,8 @@
 	$string['ilp:deletecomment'] 		= 	'Delete entry comment';
 	$string['ilp:editcomment'] 			= 	'Edit entry comment';
 	$string['ilp:viewcomment'] 			= 	'View entry comments';
-	
-	
+	$string['ilp:addviewextension'] 	= 	'Add/View extension';
+
 	//ERROR MESSAGES CHANGING THESE IS NOT RECOMMENDED
 	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';
 	$string['fieldcreationerror'] 			= 	'A error occurred whilst creating the field';
