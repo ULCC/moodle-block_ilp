@@ -445,7 +445,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield');
             if (get_config('block_ilp', 'mis_plugin_mcb_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_mcb_markslatefield');
 
-            $prelimdbcalls   =    get_config('block_ilp','mis_learner_causeforconcern_prelimcalls');
+            $prelimdbcalls   =    get_config('block_ilp','mis_plugin_mcb_prelimcalls');
 
             //get the users monthly attendance data
             $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
