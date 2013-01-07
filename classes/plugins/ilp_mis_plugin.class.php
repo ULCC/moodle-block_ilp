@@ -74,7 +74,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     * @param array $additionalargs
     * @return array
     */
-    public function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null)
+    protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null)
     {
     	if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
     	    	
