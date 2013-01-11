@@ -1,25 +1,29 @@
 <?php
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin.class.php');
+require_once($CFG->dirroot . '/blocks/ilp/classes/plugins/ilp_mis_plugin.class.php');
 
 class ilp_element_plugin_goal extends ilp_element_plugin {
 
-    //Fieldnames and whether they are required or not. Intended to be shared with goal_mform class
+    //Field names and whether they are required or not. Intended to be shared with goal_mform class
     public static $fieldnames=array('tablenamefield'=>true,'courseidfield'=>true,'studentidfield'=>true,
                                     'goalfield1'=>true,'goalfield2'=>false,'goalfield3'=>false,'goalfield4'=>false);
 
 	public $tablename;
 	public $data_entry_tablename;
 
-	    /**
+    private $db;
+
+	 /**
      * Constructor
      */
     function __construct() {
-    	
-    	$this->tablename = "block_ilp_plu_goal";
-    	$this->data_entry_tablename = "block_ilp_plu_goal_ent";
-    	
+
     	parent::__construct();
+
+        $this->tablename = "block_ilp_plu_goal";
+        $this->data_entry_tablename = "block_ilp_plu_goal_ent";
+
     }
 	
 	/**
@@ -27,39 +31,37 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
      * called when user form is submitted
      */
     public function load($reportfield_id) {
-		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
-		if (!empty($reportfield)) {
-			//set the reportfield_id var
-			$this->reportfield_id	=	$reportfield_id;
-			
-			//get the record of the plugin used for the field 
-			$plugin		=	$this->dbc->get_form_element_plugin($reportfield->plugin_id);
-						
-			$this->plugin_id	=	$reportfield->plugin_id;
-			
-			//get the form element record for the reportfield 
-			$pluginrecord	=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield->id);
-			
-			if (!empty($pluginrecord)) {
-				$this->label			=	$reportfield->label;
-				$this->description		=	$reportfield->description;
-				$this->req				=	$reportfield->req;
-				$this->maximumlength	=	$pluginrecord->maximumlength;
-				$this->minimumlength	=	$pluginrecord->minimumlength;
-				$this->position			=	$reportfield->position;
-                $this->audit_type       =   $this->audit_type();
-				return true;	
-			}
-		}
-		return false;	
-    }	
+        $reportfield = $this->dbc->get_report_field_data($reportfield_id);
+        if (!empty($reportfield)) {
+            //set the reportfield_id var
+            $this->reportfield_id = $reportfield_id;
 
-	
-	/**
+            //get the record of the plugin used for the field
+            $plugin = $this->dbc->get_form_element_plugin($reportfield->plugin_id);
+
+            $this->plugin_id = $reportfield->plugin_id;
+
+            //get the form element record for the reportfield
+            $pluginrecord = $this->dbc->get_form_element_by_reportfield($this->tablename, $reportfield->id);
+
+            if (!empty($pluginrecord)) {
+                $this->label = $reportfield->label;
+                $this->description = $reportfield->description;
+                $this->req = $reportfield->req;
+
+                $this->position = $reportfield->position;
+                $this->tabletype = $pluginrecord->tabletype;
+                $this->parent_id = $pluginrecord->id;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * create tables for this plugin
      */
     public function install() {
-        global $CFG, $DB;
 
         // create the table to store report fields
         $table = new $this->xmldb_table( $this->tablename );
@@ -79,6 +81,10 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
             $newfield->$set_attributes(XMLDB_TYPE_CHAR, 100, null, null);
             $table->addField($newfield);
         }
+
+        $table_tabletype = new $this->xmldb_field('tabletype');
+        $table_tabletype->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_tabletype);
 
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
@@ -113,8 +119,17 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
         $table->addField($table_goal);
 
         $table_courseidnumber = new $this->xmldb_field('courseidnumber');
-        $table_courseidnumber->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_courseidnumber->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);
         $table->addField($table_courseidnumber);
+
+        $table_entryid= new $this->xmldb_field('entry_id');
+        $table_entryid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_entryid);
+
+        $table_parentid= new $this->xmldb_field('parent_id');
+        $table_parentid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_parentid);
+
 
         $table_timemodified = new $this->xmldb_field('timemodified');
         $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
@@ -131,7 +146,11 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
        	$table_key = new $this->xmldb_key($this->tablename.'_foreign_key');
         $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), $this->tablename ,'id');
         $table->addKey($table_key);
-        
+
+        $table_key = new $this->xmldb_key('unique');
+        $table_key->$set_attributes(XMLDB_KEY_UNIQUE, array('entry_id', 'parent_id'),$this->tablename, 'goalentry');
+        $table->addKey($table_key);
+
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
         }
@@ -163,13 +182,18 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
         $string['ilp_element_plugin_goal_type'] = 'Goal field';
         $string['ilp_element_plugin_goal_description'] = 'A linked pair of selection fields for setting goals';
         $string['ilp_element_plugin_goal_tablenamefield'] = 'Table name';
+        $string['ilp_element_plugin_goal_table_type']  = 'Table type';
         $string['ilp_element_plugin_goal_courseidfield'] = 'Course title field';
         $string['ilp_element_plugin_goal_studentidfield']  = 'Student id field';
         $string['ilp_element_plugin_goal_goalfield1']  = 'Course goal field 1';
         $string['ilp_element_plugin_goal_goalfield2']  = 'Course goal field 2';
         $string['ilp_element_plugin_goal_goalfield3']  = 'Course goal field 3';
         $string['ilp_element_plugin_goal_goalfield4']  = 'Course goal field 4';
-        
+        $string['ilp_element_plugin_goal_nocourses']  = 'N/A';
+        $string['ilp_element_plugin_goal_nogoals']  = 'N/A';
+        $string['ilp_element_plugin_goal_courselabel']  = 'Course Title';
+        $string['ilp_element_plugin_goal_goallabel']  = 'Course Goal';
+
         return $string;
     }
 
@@ -192,7 +216,6 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 	*
     */
     public function entry_form( &$mform ) {
-    	
     	$fieldname	=	"{$this->reportfield_id}_field";
     	if (!empty($this->description)) {
     		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
@@ -202,10 +225,132 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
         //Create element
         $sel=&$mform->addElement('hierselect', $fieldname, $this->label, array('class' => 'form_input'));
 
-        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        list($courses,$goals)=$this->get_courses_and_goals($mform->_elements[$mform->_elementIndex['user_id']]->_attributes['value']);
 
+        $sel->setOptions(array($courses,$goals));
+
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
 	 }
-	 
+
+
+    /*
+     * sets up an mis connection and sets the instance variable db to store it
+     */
+    protected function get_mis_connection()
+    {
+        if(isset($this->db))
+            return;
+
+
+        ($this->db = new ilp_mis_connection() or print_error('nomis'));
+
+        ($this->db = new ilp_mis_connection(array('type'=>'mysql',
+                                                  'user'=>'root',
+                                                  'pass'=>'mysql',
+                                                  'dbname'=>'ilptest',
+                                                  'host'=>'localhost'
+                                            ))
+            or print_error('nomis'));
+    }
+
+    protected function get_dbc()
+    {
+        if(!isset($this->dbc))
+        {
+            $this->dbc=new ilp_db_functions();
+        }
+    }
+
+    /*
+     * Returns an array with two items: the courses that the user has possible goals for
+     * in the mis table, and the possible goals, which can be caught by a list"($courses,$goals)="
+     * style construction.
+     * @paramn int $userid
+     * @return array
+     */
+    protected function get_courses_and_goals($userid)
+    {
+        $this->get_dbc(); //local db
+$userid=88;
+        $mydata=$this->dbc->get_form_element_data($this->tablename,$this->parent_id);
+
+        $courses=array(get_string('ilp_element_plugin_goal_nocourses','block_ilp'));
+        $goals=array(array(get_string('ilp_element_plugin_goal_nogoals','block_ilp')));
+
+        if(!$misinfo = $this->dbquery($mydata->tablenamefield,array('userid'=>array('='=>$userid))))
+        {
+            return array($courses,$goals);
+        }
+
+        $tempc=1;
+        foreach($misinfo as $item)
+        {
+            $courses[$tempc]=$item[$mydata->courseidfield];
+            $goalfields=array();
+            foreach(range(1,4) as $idx)
+            {
+                $name="goalfield$idx";
+                if($data=$item[$mydata->$name]) //Leave empty goal fields null
+                {
+                    $goalfields[]=$data;
+                }
+            }
+            $goals[$tempc++]=$goalfields;
+        }
+        //This array can't have named keys (eg., "courses"=>$courses) as this breaks PHP's list function. Shame.
+        return array($courses,$goals);
+    }
+
+    /*
+     * Handle the user's selection
+     */
+    public function entry_process_data($reportfield_id,$entry_id,$data)
+    {
+        //Make sure we have the database connections we need
+        $this->get_mis_connection();  //$this->db is mis db
+        $this->get_dbc();
+
+        list($courses,$goals)=$this->get_courses_and_goals($data->user_id);
+
+        $datafield=$reportfield_id.'_field';
+
+        $myfield=$data->$datafield;
+
+        $course=$courses[$myfield[0]];
+        $goal=$goals[$myfield[0]][$myfield[1]];
+
+        $fieldname =	$reportfield_id."_field";
+
+        //get the plugin table record that has the reportfield_id
+        $pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+        if (empty($pluginrecord)) {
+            print_error('pluginrecordnotfound');
+        }
+
+        //get the _entry table record that has the pluginrecord id
+        $pluginentry 	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
+
+        //if no record has been created create the entry record
+        if (empty($pluginentry)) {
+            $pluginentry	=	new stdClass();
+            $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
+            $pluginentry->entry_id = $entry_id;
+            $pluginentry->goal	=	$goal;
+            $pluginentry->courseidnumber =  $course;
+            $pluginentry->parent_id	=	$pluginrecord->id;
+            $result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+        } else {
+            //update the current record
+            $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
+            $pluginentry->goal	=	$goal;
+            $pluginentry->courseidnumber =  $course;
+            $result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
+        }
+
+        return (!empty($result));
+
+    }
+
 	/**
 	* handle user input
 	**/
@@ -218,9 +363,51 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 		return $this->entry_process_data($reportfield_id,$entry_id,$data); 	
 	 }
 
+    public function entry_data($reportfield_id, $entry_id, &$entryobj) {
+        $this->get_dbc();
+
+        $entry = $this->dbc->get_pluginentry($this->tablename, $entry_id, $reportfield_id);
+
+        $fieldname	=	$reportfield_id."_field";
+
+        if(empty($entry))
+        {
+            //fake default data if not set
+            $entry=new stdClass;
+            $entry->courseidnumber=get_string('ilp_element_plugin_goal_nocourses','block_ilp');
+            $entry->goal=get_string('ilp_element_plugin_goal_nogoals','block_ilp');
+        }
+
+        $entryobj->$fieldname = '<div style="margin-left:2em"><P><strong>'.
+                get_string('ilp_element_plugin_goal_courselabel','block_ilp').
+                ': </strong>'.html_entity_decode($entry->courseidnumber, ENT_QUOTES, 'UTF-8').
+                '<P><strong>'.get_string('ilp_element_plugin_goal_goallabel','block_ilp').
+                ': </strong>'. html_entity_decode($entry->goal, ENT_QUOTES, 'UTF-8').
+            '</div>';
+    }
+
+
     //Single instance per report
     public function can_add( $report_id ){
         return !$this->dbc->element_type_exists( $report_id, $this->tablename );
     }
-	 
+
+    /*
+ * read data from the MIS db connection
+ * @param string $table
+ * @param array $whereparams
+ * @param string $fields
+ * @param array $additionalargs
+ * @return array
+ */
+    protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null)
+    {
+        $this->get_mis_connection();
+
+        if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
+
+        return ($this->tabletype == ILP_MIS_STOREDPROCEDURE)
+            ? $this->db->return_stored_values($table, $params)
+            : $this->db->return_table_values($table, $params, $fields, $addionalargs);
+    }
 }

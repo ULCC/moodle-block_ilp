@@ -6,7 +6,8 @@ class ilp_element_plugin_goal_mform extends ilp_element_plugin_mform
 {
     protected function specific_definition($mform)
     {
-//These are all for the field names in mis; they are not the actual data
+
+//These are all for the field names to be looked up in mis; they are not the actual data
          foreach(ilp_element_plugin_goal::$fieldnames as $fieldname=>$required){
              $mform->addElement('text',
                                 $fieldname,
@@ -17,8 +18,11 @@ class ilp_element_plugin_goal_mform extends ilp_element_plugin_mform
              if($required)
                  $mform->addRule($fieldname,get_string('required'),'required',null,'client');
 
-             $mform->setType('maximumlength', PARAM_ALPHANUMEXT);
          }
+
+        $mform->addElement('select','tabletype',get_string('ilp_element_plugin_goal_table_type','block_ilp'),
+                           array(ILP_MIS_TABLE => get_string('table','block_ilp'),
+                                 ILP_MIS_STOREDPROCEDURE => get_string('storedprocedure','block_ilp')));
     }
 
     protected function specific_validation($data)
@@ -41,8 +45,10 @@ class ilp_element_plugin_goal_mform extends ilp_element_plugin_mform
             $pluginrecord->id = $oldrecord->id;
 
             foreach(ilp_element_plugin_goal::$fieldnames as $fieldname=>$required){
-                $pluginrecord->$fieldname = $data->fieldname;
+                $pluginrecord->$fieldname = $data->$fieldname;
             }
+
+            $pluginrecord->tabletype=$data->tabletype;
 
             //update the plugin with the new data
             return $this->dbc->update_plugin_record("block_ilp_plu_goal", $pluginrecord);
