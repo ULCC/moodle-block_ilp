@@ -217,17 +217,26 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
     */
     public function entry_form( &$mform ) {
     	$fieldname	=	"{$this->reportfield_id}_field";
+
+        $entry_id=required_param('entry_id',PARAM_INT);
+
     	if (!empty($this->description)) {
     		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
     		$this->label = '';
     	}
 
+        $mform->setDefaults(array($fieldname=>array(2,3)));
+
         //Create element
+
         $sel=&$mform->addElement('hierselect', $fieldname, $this->label, array('class' => 'form_input'));
 
         list($courses,$goals)=$this->get_courses_and_goals($mform->_elements[$mform->_elementIndex['user_id']]->_attributes['value']);
 
         $sel->setOptions(array($courses,$goals));
+
+//print_object($sel1);
+        $currentdata=$this->dbc->get_pluginentry($this->tablename,$entry_id,$this->reportfield_id);
 
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
 	 }
@@ -266,8 +275,11 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 $userid=88;
         $mydata=$this->dbc->get_form_element_data($this->tablename,$this->parent_id);
 
-        $courses=array(get_string('ilp_element_plugin_goal_nocourses','block_ilp'));
+/*        $courses=array(get_string('ilp_element_plugin_goal_nocourses','block_ilp'));
         $goals=array(array(get_string('ilp_element_plugin_goal_nogoals','block_ilp')));
+*/
+        $courses=array();
+        $goals=array();
 
         if(!$misinfo = $this->dbquery($mydata->tablenamefield,array('userid'=>array('='=>$userid))))
         {
@@ -298,7 +310,7 @@ $userid=88;
      */
     public function entry_process_data($reportfield_id,$entry_id,$data)
     {
-        //Make sure we have the database connections we need
+        //Make sure we have the database connection we need
         $this->get_mis_connection();  //$this->db is mis db
 
         list($courses,$goals)=$this->get_courses_and_goals($data->user_id);
@@ -354,7 +366,30 @@ $userid=88;
 		return $this->entry_process_data($reportfield_id,$entry_id,$data); 	
 	 }
 
+    /*
+     * user's input.
+     */
     public function entry_data($reportfield_id, $entry_id, &$entryobj) {
+        $entry = $this->dbc->get_pluginentry($this->tablename, $entry_id, $reportfield_id);
+
+        $fieldname	=	$reportfield_id."_field";
+
+        if(empty($entry))
+        {
+            //fake default data if not set
+            $entry=new stdClass;
+            $entry->courseidnumber=0;
+            $entry->goal='';
+        }
+
+        $entryobj->$fieldname = array($entry->courseidnumber,$entry->goal);
+
+    }
+
+    /*
+     * user's input.
+     */
+    public function view_data($reportfield_id, $entry_id, &$entryobj) {
         $entry = $this->dbc->get_pluginentry($this->tablename, $entry_id, $reportfield_id);
 
         $fieldname	=	$reportfield_id."_field";
@@ -368,10 +403,10 @@ $userid=88;
         }
 
         $entryobj->$fieldname = '<div style="margin-left:2em"><P><strong>'.
-                get_string('ilp_element_plugin_goal_courselabel','block_ilp').
-                ': </strong>'.html_entity_decode($entry->courseidnumber, ENT_QUOTES, 'UTF-8').
-                '<P><strong>'.get_string('ilp_element_plugin_goal_goallabel','block_ilp').
-                ': </strong>'. html_entity_decode($entry->goal, ENT_QUOTES, 'UTF-8').
+            get_string('ilp_element_plugin_goal_courselabel','block_ilp').
+            ': </strong>'.html_entity_decode($entry->courseidnumber, ENT_QUOTES, 'UTF-8').
+            '<P><strong>'.get_string('ilp_element_plugin_goal_goallabel','block_ilp').
+            ': </strong>'. html_entity_decode($entry->goal, ENT_QUOTES, 'UTF-8').
             '</div>';
     }
 
