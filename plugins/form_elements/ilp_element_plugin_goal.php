@@ -253,14 +253,6 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
             or print_error('nomis'));
     }
 
-    protected function get_dbc()
-    {
-        if(!isset($this->dbc))
-        {
-            $this->dbc=new ilp_db_functions();
-        }
-    }
-
     /*
      * Returns an array with two items: the courses that the user has possible goals for
      * in the mis table, and the possible goals, which can be caught by a list"($courses,$goals)="
@@ -270,7 +262,7 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
      */
     protected function get_courses_and_goals($userid)
     {
-        $this->get_dbc(); //local db
+
 $userid=88;
         $mydata=$this->dbc->get_form_element_data($this->tablename,$this->parent_id);
 
@@ -308,7 +300,6 @@ $userid=88;
     {
         //Make sure we have the database connections we need
         $this->get_mis_connection();  //$this->db is mis db
-        $this->get_dbc();
 
         list($courses,$goals)=$this->get_courses_and_goals($data->user_id);
 
@@ -364,8 +355,6 @@ $userid=88;
 	 }
 
     public function entry_data($reportfield_id, $entry_id, &$entryobj) {
-        $this->get_dbc();
-
         $entry = $this->dbc->get_pluginentry($this->tablename, $entry_id, $reportfield_id);
 
         $fieldname	=	$reportfield_id."_field";
