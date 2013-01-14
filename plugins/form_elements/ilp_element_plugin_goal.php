@@ -211,6 +211,7 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
     	return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
     }
     
+
     /**
     * this function returns the mform elements that will be added to a report form
 	*
@@ -218,28 +219,73 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
     public function entry_form( &$mform ) {
     	$fieldname	=	"{$this->reportfield_id}_field";
 
-        $entry_id=required_param('entry_id',PARAM_INT);
+        $entry_id=optional_param('entry_id',0,PARAM_INT);
 
     	if (!empty($this->description)) {
     		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
     		$this->label = '';
     	}
 
-        $mform->setDefaults(array($fieldname=>array(2,3)));
-
-        //Create element
-
-        $sel=&$mform->addElement('hierselect', $fieldname, $this->label, array('class' => 'form_input'));
-
         list($courses,$goals)=$this->get_courses_and_goals($mform->_elements[$mform->_elementIndex['user_id']]->_attributes['value']);
 
-        $sel->setOptions(array($courses,$goals));
 
-//print_object($sel1);
-        $currentdata=$this->dbc->get_pluginentry($this->tablename,$entry_id,$this->reportfield_id);
+//prepare json strings for when there is javascript,
+	$allgoals=array();
+	$coursegoals=array();
+	$courseidx=0;
+	$goalidx=0;
+	foreach($goals as $group)
+	{
+	   $coursegoals[$courseidx]=json_encode($group,JSON_HEX_QUOT);
+	   $goalidx=0;
+	   foreach($group as $g)
+	   {
+	      $allgoals["{$courseidx}_{$goalidx}"]=$g;
+	      $goalidx++;
+	   }
+	   $courseidx++;
+	}
 
-        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
-	 }
+//	$allgoals=array_keys($allgoals);
+
+	if($entry_id)
+	{
+	   $currentdata=$this->dbc->get_pluginentry($this->tablename,$entry_id,$this->reportfield_id);
+	   $currentindex=array_search($currentdata->goal,$allgoals);
+	}
+	else
+	{
+	   $currentdata=new stdClass;
+	   $currentindex=0;
+	}
+
+
+	$currentcourse=array_search($currentdata->courseidnumber,$courses);
+	$currentgoal=array_search($currentdata->goal,$allgoals);  //No javascript
+
+	$realgoal=array_search($currentdata->goal,$goals[$currentcourse]);  // Javascript
+
+
+        //Create element
+        $mform->addElement('select', $fieldname.'_sel1', 
+			   get_string('ilp_element_plugin_goal_courselabel','block_ilp'),
+			   $courses,array('class' => 'form_input',
+					  'onclick'=>"initializegoals('id_{$fieldname}_sel2')",
+					  'onchange'=>"updatesubselect('id_{$fieldname}_sel2')"));
+
+        $mform->addElement('select', $fieldname.'_sel2', get_string('ilp_element_plugin_goal_goallabel','block_ilp'),
+			   $allgoals,array('class' => 'form_input',
+					   'onmouseover'=>"initializegoals('id_{$fieldname}_sel2')"));
+	
+
+	include('ilp_element_plugin_goal.js');
+
+	$mform->setDefault($fieldname.'_sel1',$currentcourse);
+	$mform->setDefault($fieldname.'_sel2',$currentgoal);
+
+        if (!empty($this->req)) 
+	   $mform->addRule($fieldname, null, 'required', null, 'client');
+    }
 
 
     /*
@@ -250,16 +296,8 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
         if(isset($this->db))
             return;
 
-
         ($this->db = new ilp_mis_connection() or print_error('nomis'));
 
-        ($this->db = new ilp_mis_connection(array('type'=>'mysql',
-                                                  'user'=>'root',
-                                                  'pass'=>'mysql',
-                                                  'dbname'=>'ilptest',
-                                                  'host'=>'localhost'
-                                            ))
-            or print_error('nomis'));
     }
 
     /*
@@ -272,14 +310,10 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
     protected function get_courses_and_goals($userid)
     {
 
-$userid=88;
         $mydata=$this->dbc->get_form_element_data($this->tablename,$this->parent_id);
 
-/*        $courses=array(get_string('ilp_element_plugin_goal_nocourses','block_ilp'));
+        $courses=array(get_string('ilp_element_plugin_goal_nocourses','block_ilp'));
         $goals=array(array(get_string('ilp_element_plugin_goal_nogoals','block_ilp')));
-*/
-        $courses=array();
-        $goals=array();
 
         if(!$misinfo = $this->dbquery($mydata->tablenamefield,array('userid'=>array('='=>$userid))))
         {
@@ -301,6 +335,7 @@ $userid=88;
             }
             $goals[$tempc++]=$goalfields;
         }
+
         //This array can't have named keys (eg., "courses"=>$courses) as this breaks PHP's list function. Shame.
         return array($courses,$goals);
     }
@@ -315,12 +350,21 @@ $userid=88;
 
         list($courses,$goals)=$this->get_courses_and_goals($data->user_id);
 
-        $datafield=$reportfield_id.'_field';
+        $datafieldcourse=$reportfield_id.'_field_sel1';
+        $datafieldgoal=$reportfield_id.'_field_sel2';
 
-        $myfield=$data->$datafield;
+	if(strpos($data->$datafieldgoal,'_')===false) //Javascript on
+	{
+	   $coursefield=$data->$datafieldcourse;
+	   $goalfield=$data->$datafieldgoal;
+	}
+	else //JS was off
+	{
+	   list($coursefield,$goalfield)=explode('_',$data->$datafieldgoal);
+	}
 
-        $course=$courses[$myfield[0]];
-        $goal=$goals[$myfield[0]][$myfield[1]];
+        $course=$courses[$coursefield];
+        $goal=$goals[$coursefield][$goalfield];
 
         $fieldname =	$reportfield_id."_field";
 
