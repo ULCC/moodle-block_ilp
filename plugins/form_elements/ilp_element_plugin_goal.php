@@ -43,15 +43,16 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 
             //get the form element record for the reportfield
             $pluginrecord = $this->dbc->get_form_element_by_reportfield($this->tablename, $reportfield->id);
-
             if (!empty($pluginrecord)) {
                 $this->label = $reportfield->label;
                 $this->description = $reportfield->description;
                 $this->req = $reportfield->req;
 
+
                 $this->position = $reportfield->position;
                 $this->tabletype = $pluginrecord->tabletype;
                 $this->parent_id = $pluginrecord->id;
+
                 return true;
             }
         }
@@ -114,7 +115,7 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
         $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
         $table->addField($table_id);
         
-        $table_goal = new $this->xmldb_field('goal');
+        $table_goal = new $this->xmldb_field('value');
         $table_goal->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);
         $table->addField($table_goal);
 
@@ -246,12 +247,10 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 	   $courseidx++;
 	}
 
-//	$allgoals=array_keys($allgoals);
-
 	if($entry_id)
 	{
 	   $currentdata=$this->dbc->get_pluginentry($this->tablename,$entry_id,$this->reportfield_id);
-	   $currentindex=array_search($currentdata->goal,$allgoals);
+	   $currentindex=array_search($currentdata->value,$allgoals);
 	}
 	else
 	{
@@ -261,9 +260,9 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 
 
 	$currentcourse=array_search($currentdata->courseidnumber,$courses);
-	$currentgoal=array_search($currentdata->goal,$allgoals);  //No javascript
+	$currentgoal=array_search($currentdata->value,$allgoals);  //No javascript
 
-	$realgoal=array_search($currentdata->goal,$goals[$currentcourse]);  // Javascript
+	($realgoal=array_search($currentdata->value,$goals[$currentcourse]) or $realgoal=0);  // Javascript
 
 
         //Create element
@@ -299,6 +298,7 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
         ($this->db = new ilp_mis_connection() or print_error('nomis'));
 
     }
+
 
     /*
      * Returns an array with two items: the courses that the user has possible goals for
@@ -382,14 +382,14 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
             $pluginentry	=	new stdClass();
             $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
             $pluginentry->entry_id = $entry_id;
-            $pluginentry->goal	=	$goal;
+            $pluginentry->value	=	$goal;
             $pluginentry->courseidnumber =  $course;
             $pluginentry->parent_id	=	$pluginrecord->id;
             $result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
         } else {
             //update the current record
             $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
-            $pluginentry->goal	=	$goal;
+            $pluginentry->value	=	$goal;
             $pluginentry->courseidnumber =  $course;
             $result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
         }
@@ -423,10 +423,10 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
             //fake default data if not set
             $entry=new stdClass;
             $entry->courseidnumber=0;
-            $entry->goal='';
+            $entry->value='';
         }
 
-        $entryobj->$fieldname = array($entry->courseidnumber,$entry->goal);
+        $entryobj->$fieldname = array($entry->courseidnumber,$entry->value);
 
     }
 
@@ -443,14 +443,14 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
             //fake default data if not set
             $entry=new stdClass;
             $entry->courseidnumber=get_string('ilp_element_plugin_goal_nocourses','block_ilp');
-            $entry->goal=get_string('ilp_element_plugin_goal_nogoals','block_ilp');
+            $entry->value=get_string('ilp_element_plugin_goal_nogoals','block_ilp');
         }
 
         $entryobj->$fieldname = '<div style="margin-left:2em"><P><strong>'.
             get_string('ilp_element_plugin_goal_courselabel','block_ilp').
             ': </strong>'.html_entity_decode($entry->courseidnumber, ENT_QUOTES, 'UTF-8').
             '<P><strong>'.get_string('ilp_element_plugin_goal_goallabel','block_ilp').
-            ': </strong>'. html_entity_decode($entry->goal, ENT_QUOTES, 'UTF-8').
+            ': </strong>'. html_entity_decode($entry->value, ENT_QUOTES, 'UTF-8').
             '</div>';
     }
 
