@@ -1733,15 +1733,15 @@ class ilp_db_functions	extends ilp_logging {
 
         //Getting the entry with the maximum timemodified is alittle more complicated than first thought
 
-    	$sql	=	"SELECT e.*, MAX(timemodified) AS tm
+        $sql	=	"SELECT e.id, MAX(timemodified) AS tm
                      FROM {block_ilp_entry} AS e
                      WHERE report_id = :report_id
                      AND user_id = :user_id
-                     GROUP BY timemodified
+                     GROUP BY timemodified, e.id
                      ORDER BY tm DESC
-                     LIMIT 1";
+                     ";
 
-    	return $this->dbc->get_record_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id));
+        return $this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id, 0, 1));
     }
 
     /**
