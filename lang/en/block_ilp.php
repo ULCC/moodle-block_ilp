@@ -104,6 +104,7 @@
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['edit_status_items']	=	'Edit Status Items';
     $string['editstatusitems']		=	'Edit Status Items';
+    $string['entrydeleted']		=	'The Report was successfully deleted';
     $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this report';
     $string['expandall']			=	'Expand all';
 	$string['enablereport'] 		= 	'Enable Report';
