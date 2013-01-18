@@ -1609,7 +1609,7 @@ class ilp_db_functions	extends ilp_logging {
 
             if(!empty($entry_id)){
                 $params['entry_id'] = $entry_id;
-                $entrysql =  " AND e.id = :$entry_id ";
+                $entrysql =  " AND e.id = $entry_id ";
             }
 
     		$sql	=	"SELECT		$select
