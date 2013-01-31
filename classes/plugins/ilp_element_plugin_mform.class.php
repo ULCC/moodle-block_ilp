@@ -165,6 +165,7 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
     	$data->label	=	htmlentities($data->label);
 
         $data->summary  =   (isset($data->summary)) ? 1 : 0;
+        $data->position = $this->dbc->get_new_report_field_position($this->report_id);
     	
         if (empty($data->id)) {
             //create the ilp_report_field record
@@ -177,7 +178,7 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
 
         if(!empty($data->id)) {
         	$data->reportfield_id = $data->id;
-        	
+
             $this->specific_process_data($data);
         }
         return $data->id;
