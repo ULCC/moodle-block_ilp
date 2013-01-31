@@ -1045,7 +1045,7 @@ class ilp_db_functions	extends ilp_logging {
 				JOIN {$entry_table} entry ON entry.value = item.$item_value_field
 				WHERE ele.reportfield_id = :reportfield_id";
 
-		return	$this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id));
+		return	$this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id),0,10);
 	}
 
 	/*
