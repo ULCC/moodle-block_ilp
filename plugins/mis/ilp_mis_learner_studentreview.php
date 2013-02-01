@@ -383,6 +383,7 @@
                     $string['ilp_mis_learner_studentreview_disp_firsteditdate']							= 'First Edit Date';
                     $string['ilp_mis_learner_studentreview_disp_uniquerowid']							= 'Unique Row Id';
                     $string['ilp_mis_learner_studentreview_disp_']							= '';
+                    $string['ilp_mis_learner_studentreview_tab_name']							= 'Student Review';
             }
 
             function plugin_type()	{
@@ -396,7 +397,7 @@
              *
              */
             function tab_name() {
-                return 'Student Review';
+                return get_string('ilp_mis_learner_studentreview_tab_name','block_ilp');
             }
     }
 ?>
