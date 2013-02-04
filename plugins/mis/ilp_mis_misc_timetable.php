@@ -378,6 +378,7 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 
          $string['ilp_mis_misc_timetable_prelimcalls']						= 'Preliminary db calls';
          $string['ilp_mis_misc_timetable_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+         $string['ilp_mis_misc_timetable_tab_name']					= 'Lesson Timetable';
 
 
          return $string;
@@ -394,7 +395,7 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
      * 
      */
     function tab_name() {
-    	return 'Lesson Timetable';
+        return get_string('ilp_mis_misc_timetable_tab_name','block_ilp');
     }
 
 

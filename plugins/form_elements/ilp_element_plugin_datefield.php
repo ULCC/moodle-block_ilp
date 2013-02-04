@@ -535,12 +535,24 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      * @param object $entryobj an object that will add parameters to
      */
     public function view_data( $reportfield_id,$entry_id,&$entryobj ){
-
+global $CFG;
         $fieldname	=	$reportfield_id."_field";
 
         $entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
         if (!empty($entry)) {
-            $entryobj->$fieldname	=	userdate(html_entity_decode($entry->value),'%a %d %B %Y');
+            $entryrecord	=	$this->dbc->get_entry_by_id($entry_id);
+            //check if current report has state field
+            $has_statefield 	= $this->dbc->has_plugin_field($entryrecord->report_id,'ilp_element_plugin_state');
+            $img	=	"";
+
+            if (!empty($has_statefield))	{
+                //check if the entry is in a unset state
+                $recordstate	=	$this->dbc->count_report_entries_with_state($entryrecord->report_id,$entryrecord->user_id,ILP_STATE_UNSET,false,$entry_id);
+                if (!empty($recordstate) && $entry->value < time()) {
+                    $img	=	 "<img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/overdue.jpg' alt='' width='32px' height='32px' />";
+                }
+            }
+            $entryobj->$fieldname	=	userdate(html_entity_decode($entry->value),'%a %d %B %Y')." ".$img;
         }
 
     }

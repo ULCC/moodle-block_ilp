@@ -368,7 +368,8 @@ $string['ilp_mis_learner_causeforconcern_disp_other']							= 'Other';
 $string['ilp_mis_learner_causeforconcern_disp_createddate']							= 'Creation Date';
 $string['ilp_mis_learner_causeforconcern_disp_datagenerated']							= 'Data Generated';
 $string['ilp_mis_learner_causeforconcern_disp_ssuid']							= 'SSUID';
-$string['ilp_mis_learner_causeforconcern_disp_']							= '';}
+$string['ilp_mis_learner_causeforconcern_disp_']							= '';
+$string['ilp_mis_learner_causeforconcern_tab_name']							= 'Cause for Concern';}
 
                           function plugin_type()	{
                                 return 'learnerprofile';
@@ -381,6 +382,6 @@ $string['ilp_mis_learner_causeforconcern_disp_']							= '';}
                  *
                  */
                 function tab_name() {
-                    return 'Cause for Concern';
+                    return get_string('ilp_mis_learner_causeforconcern_tab_name','block_ilp');
                 }
                 }?>
