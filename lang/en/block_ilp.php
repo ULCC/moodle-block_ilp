@@ -392,6 +392,8 @@
 	$string['ilp:viewcomment'] 			= 	'View entry comments';
 	$string['ilp:addviewextension'] 	= 	'Add/View extension';
 
+$string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial Assessments';
+
 	//ERROR MESSAGES CHANGING THESE IS NOT RECOMMENDED
 	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';
 	$string['fieldcreationerror'] 			= 	'A error occurred whilst creating the field';
@@ -488,13 +490,20 @@
 	        require_once($tabs.'/'.$plugin_file.".php");
 	        // instantiate the object
 	        $class = basename($plugin_file, ".php");
-	        $tabobj = new $class();
-	        
-	        $method = array($tabobj, 'language_strings');
-        
-	        //check whether the language string element has been defined
+
+            //  language_string called staticall to prevent  loop between language string and the plugin
+            //caused by define_second_row tab_name() in dasboard tabs.
+
+	        //$tabobj = new $class();
+	        //$method = array($tabobj, 'language_strings');
+            //check whether the language string element has been defined
+
+            $method = "{$class}::language_strings";
+
 	        if (is_callable($method,true)) {
-	            $tabobj->language_strings($string);
+	            //$tabobj->language_strings($string);
+                $class::language_strings($string);
+
 	        }
 	        
 	    }
