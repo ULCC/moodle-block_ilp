@@ -350,6 +350,10 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
 
             $latepercent = number_format($latepercent, 0);
 
+            if($latepercent == 0) {
+                $latepercent = 100;
+            }
+
             //fill the couse month array position with percentage for the month
             $mcbdata[$courseid] = array(
                 'attendance' => $monthpercent,
