@@ -87,7 +87,7 @@ class ilp_mis_learner_causeforcongrats extends ilp_mis_plugin	{
  	         *
  	         * @return	null
  	         */
-             public function set_data( $mis_user_id ) {
+             public function set_data( $mis_user_id, $user_id=null ) {
 
                 $this->mis_user_id      =   $mis_user_id;
 
