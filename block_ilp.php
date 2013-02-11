@@ -100,7 +100,7 @@ class block_ilp extends block_list {
                         //$set_course_groups_link = true;       
         			}
         			
-        			if (!empty($coursecontext) && has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) || has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) || is_siteadmin($USER)) {
+        			if (!empty($coursecontext) && has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) || has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) || ilp_is_siteadmin($USER)) {
         				$access_viewotherilp	=	true;
                         $set_course_groups_link = true;
         			}
