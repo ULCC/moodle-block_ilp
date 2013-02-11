@@ -16,33 +16,31 @@
 
 
 // TODO moodle 2.0 complains that this should be $capabilities
-$block_ilp_capabilities = array(
+$capabilities = array(
 
 
-	//admin report definition capabilities
+	//manager report definition capabilities
 
 	//defines whether the user is able to create,edit or delete a report
 	'block/ilp:creeddelreport' => array(
 		'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'legacy' => array(
-            'admin' => CAP_ALLOW
+            'manager' => CAP_ALLOW
         )
 	),
 
 	//the capaability needed in order to add a report instance
 	//to the ilp
-
 	'block/ilp:addreport' => array(
 		'captype' => 'write',
 		'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-
 	),
 
 	//the capaability needed in order to edit a report instance
@@ -53,9 +51,8 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW
+            'manager' => CAP_ALLOW
         )
-
 	),
 
 	//the capaability needed in order to delete a report instance
@@ -64,9 +61,8 @@ $block_ilp_capabilities = array(
 		'captype' => 'write',
 		'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
-            'admin' => CAP_ALLOW
+            'manager' => CAP_ALLOW
         )
-
 	),
 
 	//the capaability needed in order veiw a report in the ilp
@@ -76,10 +72,9 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-
 	),
 
 
@@ -90,10 +85,9 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-
 	),
 
     //the capability needed in order to appear in student list for a course
@@ -111,7 +105,7 @@ $block_ilp_capabilities = array(
 		'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW
+            'manager' => CAP_ALLOW
         )
 	),
 
@@ -122,10 +116,9 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
-
 	),
 
 	//the capaability needed in order to edit a comment
@@ -135,7 +128,7 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
 
@@ -148,7 +141,7 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_PREVENT,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
 	),
@@ -160,7 +153,7 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
 			'user' => CAP_ALLOW
         )
 	),
@@ -172,12 +165,10 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_PREVENT,
             'editingteacher' => CAP_PREVENT,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
 			'user' => CAP_PREVENT
         )
 	),
-
-
 
     //the capability needed in order to add/view an extension
     'block/ilp:addviewextension' => array(
@@ -186,44 +177,8 @@ $block_ilp_capabilities = array(
         'legacy' => array(
             'student' => CAP_PREVENT,
             'editingteacher' => CAP_ALLOW,
-            'admin' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
             'user' => CAP_PREVENT
         )
     ),
-
-
-
 );
-global $CFG;
-//test the version number if we are in 2.0 we need to pass the $block_ilp_capabilities to $capabilities
-
-if (stripos($CFG->release,"2.") !== false) {
-
-	//pass the $block_ilp_capabilities to $capabilities
-	$capabilities	=	$block_ilp_capabilities;
-
-	//move all values in admin key to manager key
-	$capabilities['block/ilp:creeddelreport']['legacy']['manager'] = $capabilities['block/ilp:creeddelreport']['legacy']['admin'];
-	//unset the admin key
-	unset($capabilities['block/ilp:creeddelreport']['legacy']['admin']);
-
-	$capabilities['block/ilp:addreport']['legacy']['manager'] = $capabilities['block/ilp:addreport']['legacy']['admin'];
-	unset($capabilities['block/ilp:addreport']['legacy']['admin']);
-
-	$capabilities['block/ilp:editreport']['legacy']['manager'] = $capabilities['block/ilp:editreport']['legacy']['admin'];
-	unset($capabilities['block/ilp:editreport']['legacy']['admin']);
-
-	$capabilities['block/ilp:deletereport']['legacy']['manager'] = $capabilities['block/ilp:deletereport']['legacy']['admin'];
-	unset($capabilities['block/ilp:deletereport']['legacy']['admin']);
-
-	$capabilities['block/ilp:viewreport']['legacy']['manager'] = $capabilities['block/ilp:viewreport']['legacy']['admin'];
-	unset($capabilities['block/ilp:viewreport']['legacy']['admin']);
-
-	$capabilities['block/ilp:viewotherilp']['legacy']['manager'] = $capabilities['block/ilp:viewotherilp']['legacy']['admin'];
-	unset($capabilities['block/ilp:viewotherilp']['legacy']['admin']);
-
-	$capabilities['block/ilp:viewilp']['legacy']['manager'] = $capabilities['block/ilp:viewilp']['legacy']['admin'];
-	unset($capabilities['block/ilp:viewilp']['legacy']['admin']);
-
-	unset($block_ilp_capabilities);
-}
