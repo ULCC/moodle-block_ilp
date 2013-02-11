@@ -72,7 +72,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     	}
     }
 
-    public function set_data( $student_id ){
+    public function set_data( $student_id, $user_id=null ){
     	//get the plugins configuration and pass to variables 
         $tablename 			= get_config('block_ilp','mis_plugin_simple_studenttable'); //$this->params[ 'student_table' ];
         if (!empty($tablename)) {

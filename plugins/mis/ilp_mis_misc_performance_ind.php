@@ -111,7 +111,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  	 */
  	
  	
-    public function set_data( $mis_user_id ){
+    public function set_data( $mis_user_id,$user_id=null ){
 
     		$table	=	get_config('block_ilp','mis_misc_performance_ind_table');
     		
