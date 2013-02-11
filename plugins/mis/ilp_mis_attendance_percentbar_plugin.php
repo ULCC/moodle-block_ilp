@@ -63,7 +63,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
         }
     }
 
-    public function set_data($student_id)
+    public function set_data($student_id, $user_id=null)
     {
         //get the plugins configuration and pass to variables
         $tablename = get_config('block_ilp', 'mis_plugin_attendance_percentbarstudenttable'); //$this->params[ 'student_table' ];

@@ -46,8 +46,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     /**
      * Constructor
      */
-    function __construct($params)
-    {
+    function __construct($params)   {
         global $CFG;
 
         //set the directory where plugin files of type ilp_dashboard_tab are stored
@@ -74,8 +73,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     * @param array $additionalargs
     * @return array
     */
-    protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null)
-    {
+    protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null) {
     	if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
     	    	
         return ($this->tabletype == ILP_MIS_STOREDPROCEDURE)
@@ -87,8 +85,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     /**
      * Installs any new plugins
      */
-    public static function install_new_plugins($dbplugins=array(),$plugin_class_directory="")
-    {
+    public static function install_new_plugins($dbplugins=array(),$plugin_class_directory="")   {
         global $CFG;
 
         // include the ilp db
@@ -108,8 +105,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     /**
      * This fucntion updates the install plugin record it sets the plugin type (overview or detail)
      */
-    function install($plugin_id)
-    {
+    function install($plugin_id)    {
         $misplugin = $this->dbc->get_mis_plugin_by_id($plugin_id);
 
         $misplugin->type = $this->plugin_type();
@@ -127,17 +123,15 @@ abstract class ilp_mis_plugin extends ilp_plugin
      */
     abstract function plugin_type();
 
-    protected function set_params($params)
-    {
+    protected function set_params($params)  {
         $this->params = $params;
     }
 
-    public function set_data()
-    {
+    public function set_data($mis_user_id,$user_id=null) {
+
     }
 
-    function config_settings(&$settings)
-    {
+    function config_settings(&$settings)    {
         return $settings;
     }
 
@@ -146,8 +140,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
      * Do not use a menu string in this function as it will cause errors
      *
      */
-    function tab_name()
-    {
+    function tab_name() {
         return 'MIS Plugin';
     }
 

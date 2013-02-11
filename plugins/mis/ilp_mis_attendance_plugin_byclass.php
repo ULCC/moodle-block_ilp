@@ -447,7 +447,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
      *
      * @param $misuser_id the mis id of the user whose data will be retireved.
      */
-    function set_data($misuser_id)
+    function set_data($misuser_id,$user_id=null)
     {
         global $PARSER;
 
