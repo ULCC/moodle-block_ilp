@@ -49,7 +49,7 @@ abstract class ilp_dashboard_template extends ilp_plugin {
     /**
      * Installs any new plugins
      */
-    public function install_new_plugins($dbplugins=array(),$plugin_class_directory="") {
+    public static function install_new_plugins($dbplugins=array(),$plugin_class_directory="") {
     	global $CFG;
     	
         // include the ilp db

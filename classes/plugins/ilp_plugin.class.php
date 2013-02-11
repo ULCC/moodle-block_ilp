@@ -140,7 +140,7 @@ class ilp_plugin {
     /**
      * Installs any new plugins
      */
-    public function install_new_plugins($dbplugins,$plugin_class_directory) {
+    public static function install_new_plugins($dbplugins,$plugin_class_directory) {
         global $CFG;
 
         // instantiate the assmgr db
