@@ -303,7 +303,9 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
         $string['ilp_mis_learner_qualifications_year_disp']						= 'Year';
         
         $string['ilp_mis_learner_qualifications_average']							= 'Average Points:';
-	 
+
+        $string['ilp_mis_learner_qualifications_tab_name']							= 'Qualification of Entry';
+
         
         return $string;
     }
@@ -319,7 +321,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
      * 
      */
     function tab_name() {
-    	return 'Qualifications On Entry';
+    	return get_string('ilp_mis_learner_qualifications_tab_name','block_ilp');
     }
 
 

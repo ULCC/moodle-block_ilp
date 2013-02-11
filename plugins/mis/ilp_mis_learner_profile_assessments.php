@@ -238,7 +238,8 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
         $string['ilp_mis_learner_profile_assessments_disp_ict']						= 'ICT';
         $string['ilp_mis_learner_profile_assessments_disp_study']					= 'Study Support';
         $string['ilp_mis_learner_profile_assessments_disp_freewriting']				= 'Free Writing';
-        
+        $string['ilp_mis_learner_profile_assessments_tab_name']				= 'Initial Assessment';
+
         
         return $string;
     }
@@ -254,7 +255,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
      * 
      */
     function tab_name() {
-    	return 'Initial Assessment';
+        return get_string('ilp_mis_learner_profile_assessments_tab_name','block_ilp');
     }
 
 
