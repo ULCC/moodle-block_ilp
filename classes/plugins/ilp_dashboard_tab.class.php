@@ -57,7 +57,7 @@ class ilp_dashboard_tab extends ilp_plugin {
     /**
      * Installs any new plugins
      */
-    public function install_new_plugins() {
+    public static function install_new_plugins($dbplugins=array(),$plugin_class_directory="") {
     	global $CFG;
     	
         // include the ilp db
