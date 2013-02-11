@@ -36,7 +36,7 @@ class ilp_graph_plugin_line extends ilp_graph_plugin {
      * chart data
      */
 
-    function install()  {
+    function install($plugin_id=null)  {
         // create the table to store radar graph data
         $table = new $this->xmldb_table( $this->tablename );
         $set_attributes = method_exists($this->xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
@@ -188,7 +188,7 @@ class ilp_graph_plugin_line extends ilp_graph_plugin {
     /**
      * Delete a form element
      */
-    public function delete_graph($reportgraph_id) {
+    public function delete_graph($reportgraph_id, $extraparams=array()) {
         $reportgraph		=	$this->dbc->get_report_graph_data($reportgraph_id);
         $extraparams = array(
             'audit_type' => $this->audit_type(),
@@ -203,7 +203,7 @@ class ilp_graph_plugin_line extends ilp_graph_plugin {
     }
 
 
-    public function specific_edit(&$reportgraph)  {
+    public function specific_edit(&$reportgraph,$multipleitems = false,$non_attrib=NULL)  {
         parent::specific_edit($reportgraph,true);
     }
 
