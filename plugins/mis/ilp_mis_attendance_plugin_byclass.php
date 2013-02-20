@@ -531,11 +531,11 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield')) $this->fields['notified'] = get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield');
             if (get_config('block_ilp', 'mis_plugin_course_byclass_placementfield')) $this->fields['placement'] = get_config('block_ilp', 'mis_plugin_course_byclass_placementfield');
 
-
-
-
+            // sort by date time.
+            $addionalargs = array();
+            $addionalargs['sort'] = $this->fields['datetime'];
             //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
+            $this->data = $this->dbquery($table, $keyfields, $this->fields,$addionalargs,$prelimdbcalls);
 
             $this->normalise_data($this->data);
 
