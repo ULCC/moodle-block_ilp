@@ -252,6 +252,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
         $this->config_text_element($mform, 'mis_plugin_course_byclass_placementcss',get_string('ilp_mis_attendance_plugin_byclass_placementcss', 'block_ilp'), '', '');
 
+        $this->config_text_element($mform, 'mis_plugin_course_byclass_sort', get_string('ilp_mis_attendance_plugin_byclass_sort', 'block_ilp'), get_string('ilp_mis_attendance_plugin_byclass_sortdesc', 'block_ilp'), '');
+
         $options    =   array(
             ILP_ENABLED => get_string('enabled', 'block_ilp'),
             ILP_DISABLED => get_string('disabled', 'block_ilp')
@@ -397,6 +399,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
         $string['ilp_mis_attendance_plugin_byclass_key'] = 'Enable key table';
         $string['ilp_mis_attendance_plugin_byclass_keydesc'] = 'Do you want a key to display with the class register';
+        $string['ilp_mis_attendance_plugin_byclass_sort'] = 'Sort field';
+        $string['ilp_mis_attendance_plugin_byclass_sortdesc'] = 'the field you want to sort by';
 
 
         $string['ilp_mis_attendance_plugin_byclass_markspresentcss'] = 'marks present hex colour';
@@ -530,10 +534,11 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_course_byclass_latexfield')) $this->fields['latex'] = get_config('block_ilp', 'mis_plugin_course_byclass_latexfield');
             if (get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield')) $this->fields['notified'] = get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield');
             if (get_config('block_ilp', 'mis_plugin_course_byclass_placementfield')) $this->fields['placement'] = get_config('block_ilp', 'mis_plugin_course_byclass_placementfield');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_sort')) $this->fields['sort'] = get_config('block_ilp', 'mis_plugin_course_byclass_sort');
 
             // sort by date time.
             $addionalargs = array();
-            $addionalargs['sort'] = $this->fields['datetime'];
+            $addionalargs['sort'] = $this->fields['sort'];
             //get the users monthly attendance data
             $this->data = $this->dbquery($table, $keyfields, $this->fields,$addionalargs,$prelimdbcalls);
 
@@ -599,7 +604,6 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
                 $tempdata = array();
                 if (isset($day)) $tempdata['day'] = $day;
                 if (isset($this->fields['room'])) $tempdata['room'] = $d[$this->fields['room']];
-
                 if (isset($attendpercent)) $tempdata['attendance'] = $attendpercent;
                 if (isset($start)) $tempdata['starttime'] = $start;
                 if (isset($end)) $tempdata['endtime'] = $end;
@@ -621,7 +625,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
 
             asort($normdata);
 
-           $this->normdata = $normdata;
+            $this->normdata = $normdata;
         }
 
     }
@@ -661,7 +665,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
     /**
      * This function is used if the plugin is displayed in the tab menu.
      * Do not use a menu string in this function as it will cause errors
-     *@return string 
+     *@return string
      */
     function tab_name()
     {
