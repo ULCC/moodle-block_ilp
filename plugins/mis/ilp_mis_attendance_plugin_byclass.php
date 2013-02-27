@@ -534,11 +534,11 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_course_byclass_latexfield')) $this->fields['latex'] = get_config('block_ilp', 'mis_plugin_course_byclass_latexfield');
             if (get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield')) $this->fields['notified'] = get_config('block_ilp', 'mis_plugin_course_byclass_notifiedfield');
             if (get_config('block_ilp', 'mis_plugin_course_byclass_placementfield')) $this->fields['placement'] = get_config('block_ilp', 'mis_plugin_course_byclass_placementfield');
-            if (get_config('block_ilp', 'mis_plugin_course_byclass_sort')) $this->fields['sort'] = get_config('block_ilp', 'mis_plugin_course_byclass_sort');
+            if (get_config('block_ilp', 'mis_plugin_course_byclass_sort')) $sort = get_config('block_ilp', 'mis_plugin_course_byclass_sort');
 
             // sort by date time.
             $addionalargs = array();
-            $addionalargs['sort'] = $this->fields['sort'];
+            $addionalargs['sort'] = (!empty($sort))? $sort : '';
             //get the users monthly attendance data
             $this->data = $this->dbquery($table, $keyfields, $this->fields,$addionalargs,$prelimdbcalls);
 
@@ -622,8 +622,8 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
                 $normdata[$dayid][] = $tempdata;
 
             }
-
-            asort($normdata);
+            // Sort by array key
+            // ksort($normdata);
 
             $this->normdata = $normdata;
         }
