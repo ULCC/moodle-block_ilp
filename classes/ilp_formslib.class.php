@@ -42,7 +42,7 @@ class ilp_moodleform extends moodleform {
 
         $this->_formname = get_class($this); // '_form' suffix kept in order to prevent collisions of form id and other element
         $this->_customdata = $customdata;
-        $this->_form =& new ilp_MoodleQuickForm($this->_formname, $method, $action, $target, $attributes);
+        $this->_form = new ilp_MoodleQuickForm($this->_formname, $method, $action, $target, $attributes);
         if (!$editable){
             $this->_form->hardFreeze();
         }

@@ -201,7 +201,16 @@
 .ilp form.nothidden, .ilp row.hidden {
     display             : inline;
     visibility			: visible;
-    
+}
+
+.ilp .hiddenelement {
+    display             : none;
+    visibility			: hidden;
+}
+
+.ilp .visbileelement {
+    display             : inline;
+    visibility			: visible;
 }
 
 /* ATTENDANCE */

@@ -8,8 +8,8 @@
  * @version 2.0
  */
 
-var editicon	= document.getElementById('edit_userstatus_icon');
-var userstatus 	= document.getElementById('user_status');
+var editicon	= Y.one('#edit_userstatus_icon');
+var userstatus 	= Y.one('#user_status');
 
 
 M.ilp_dashboard_student_info = {
@@ -20,8 +20,9 @@ M.ilp_dashboard_student_info = {
          * to cover both cases
          */
         showelement : function(element) {
-            YAHOO.util.Dom.removeClass(element, 'hidden');
-            YAHOO.util.Dom.addClass(element, 'nothidden');
+            ele     =   Y.one('#'+element);
+            ele.removeClass('hiddenelement');
+            ele.addClass('visbileelement');
         },
 
         /**
@@ -29,73 +30,86 @@ M.ilp_dashboard_student_info = {
          * coming from the ajax call
          */
         hideelement : function(element) {
-            YAHOO.util.Dom.addClass(element, 'hidden');
-            YAHOO.util.Dom.removeClass(element, 'nothidden');
+            ele     =   Y.one('#'+element);
+            ele.removeClass('visbileelement');
+            ele.addClass('hiddenelement');
         },
 		
         
         save_userstatus : function () {
-        	
-        	// get course_id and candidate_id from the form
-            var student_id = document.getElementById('student_id').value;
+
+            sidelement  = Y.one('#student_id');
+            student_id  =   sidelement.get('value');
+
+            select_userstatus  = Y.one('#select_userstatus');
+            statusvalue  =   select_userstatus.get('value');
+
+            M.ilp_dashboard_student_info.showelement('studentlistloadingicon');
+
+            var cfg	=	{
+                on: {
+                    success: M.ilp_dashboard_student_info.callback.success,
+                    failure: M.ilp_dashboard_student_info.callback.failure
+                },
+                data:   'ajax=true&student_id='+student_id+'&select_userstatus='+statusvalue,
+                context: M.ilp_dashboard_student_info.callback
+            };
+
+            Y.io('save_userstatus.php',cfg);
 
             ajaxinprogress = true;
-            
-            YAHOO.util.Connect.asyncRequest('POST',
-                                            'save_userstatus.php',  //ok as long as  save_user_status.php is in the same directory as the parent script ie /actions ... otherwise we will need to consider putting a fully qualified url here
-                                            M.ilp_dashboard_student_info.callback,
-                                            'ajax=true&student_id='+student_id+'&select_userstatus='+this.value);
-        	
         },
         
         addselect : function () {
-            M.ilp_dashboard_student_info.hideelement(document.getElementById('edit_userstatus_icon'));
-            M.ilp_dashboard_student_info.hideelement(document.getElementById('user_status'));
-            M.ilp_dashboard_student_info.showelement(document.getElementById('studentstatusform'));
-            document.getElementById('studentstatussub').style.visibility='hidden';
+
+            M.ilp_dashboard_student_info.hideelement('edit_userstatus_icon');
+            M.ilp_dashboard_student_info.hideelement('user_status');
+            M.ilp_dashboard_student_info.showelement('select_userstatus');
+
+            var studentstatussub    = Y.one('#studentstatussub');
+            studentstatussub.setStyle('visibility','hidden');
         },
         
         callback	:	{
-        	success : function(o) {
-        		var statusdiv			=	document.getElementById('user_status');
-        		statusdiv.innerHTML		=	o.responseText;
-        		
-        		M.ilp_dashboard_student_info.showelement(document.getElementById('user_status'));
-        		M.ilp_dashboard_student_info.showelement(document.getElementById('edit_userstatus_icon'));
+        	success : function(id,o,args) {
+                //set the status to the new status
+                var statusdiv			=	Y.one('#user_status');
 
-        		M.ilp_dashboard_student_info.hideelement(document.getElementById('studentstatusform'));
-        		
-        		//set value for the select to 
-        			
+
+                data    =   Y.JSON.parse(o.responseText);
+                statusdiv.setHTML(data.status);
+                statusdiv.setStyle('color',data.colour);
+
+                //show and hide the relevant elements
+        		M.ilp_dashboard_student_info.showelement('user_status');
+        		M.ilp_dashboard_student_info.showelement('edit_userstatus_icon');
+        		M.ilp_dashboard_student_info.hideelement('select_userstatus');
+                M.ilp_dashboard_student_info.hideelement('studentlistloadingicon');
         	},
         	
         	failure : function() {
         		
         	}
         }
+
+
+
 }   	
 
  
 M.ilp_dashboard_student_info.init = function(Y,statusval) {
 	//hide select and submit button 
-    var statusform 	= document.getElementById('changestatus');
-    var userstatus 	= document.getElementById('user_status');
-    var statusform 	= document.getElementById('studentstatusform');
-    var sltusrsts	= document.getElementById('select_userstatus');	 
-	
-    M.ilp_dashboard_student_info.hideelement(statusform);
+
+    M.ilp_dashboard_student_info.hideelement('studentstatussub');
     
-    M.ilp_dashboard_student_info.showelement(userstatus);
-    M.ilp_dashboard_student_info.showelement(editicon);
+    M.ilp_dashboard_student_info.showelement('user_status');
+    M.ilp_dashboard_student_info.showelement('edit_userstatus_icon');
     
-    M.ilp_dashboard_student_info.hideelement(statusform);
-    
-    YAHOO.util.Event.addListener("edit_userstatus_icon", "click", M.ilp_dashboard_student_info.addselect);
-    
-	if (typeof(document.getElementById('select_userstatus')) != 'undefined') {
-		YAHOO.util.Event.addListener("select_userstatus", "change", M.ilp_dashboard_student_info.save_userstatus,document.getElementById('select_userstatus'),true);
-	}
-	
+    M.ilp_dashboard_student_info.hideelement('select_userstatus');
+
+    Y.on('click',function () {M.ilp_dashboard_student_info.addselect()},'#edit_userstatus_icon' );
+    Y.on('change',function () {M.ilp_dashboard_student_info.save_userstatus()},'#select_userstatus' );
+
 };
 
 
