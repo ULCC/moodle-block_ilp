@@ -70,16 +70,12 @@ if ($dbc->update_userstatus($userstatus)) {
          redirect($return_url, get_string("stausupdated", 'block_ilp'), ILP_REDIRECT_DELAY); 
 	} else {
 		
-		$userstatuscolor	=	get_config('block_ilp', 'passcolour');
-			 
-		if (!empty($statusitem))	{
-			if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
-		} 
-		
-		
-		//echo "['{$stausitem->name}','{$userstatuscolor}']";
-		
-		echo $stausitem->name;
+		$userstatuscolor	=	get_config('block_ilp', 'midcolour');
+
+        if ($statusitem->passfail == 2) $userstatuscolor	=	get_config('block_ilp', 'passcolour');
+        if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
+
+        echo json_encode(array('status'=>$stausitem->name,'colour'=>str_replace('#','',$userstatuscolor)));
 	}
 
 } else {

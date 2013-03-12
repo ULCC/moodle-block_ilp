@@ -26,6 +26,7 @@
 						<span id="user_status" class="hidden" style="color: <?php echo $userstatuscolor; ?>"><?php echo $statusitem->name; ?></span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" class="hidden editicon" id="edit_userstatus_icon" />
 						<?php echo $this->userstatus_select($statusitem->id); ?>
 					<?php } ?>
+                        <img src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/loading.gif" id="studentlistloadingicon" class="hiddenelement">
 				</p>
 					
 				<?php
@@ -62,7 +63,7 @@
 $jsmodule = array(
     'name'     	=> 'ilp_dashboard_student_info',
     'fullpath' 	=> '/blocks/ilp/plugins/dashboard/studentinfo/ilp_dashboard_student_info.js',
-	'requires'  	=> array('yahoo','event','dom','element','connection')
+    'requires'  	=> array('event','dom','node','io-form')
 );
 
 $PAGE->requires->js_init_call('M.ilp_dashboard_student_info.init', null, true, $jsmodule);

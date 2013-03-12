@@ -17,7 +17,6 @@
 M.ilp_standard_functions = {
 
     init:    function() {
-
     },
 
     printfunction : function() {
@@ -33,28 +32,33 @@ M.ilp_standard_functions = {
      */
     ajax_submit : function (form_id, elem_id, url) {
 
+        formObject  =   Y.one('#'+form_id);
+
         var callback = {
             // if the action is successful then load the content into the page
-            success: function(o) {
-                document.getElementById(elem_id).innerHTML = o.responseText;
+            success: function(id,o,args) {
+                Y.one('#'+elem_id).setHTML(o.responseText);
                 M.ilp_standard_functions.parse_scripts(elem_id);
             },
             // if it failed then do nothing
-            failure: function(o) {
+            failure: function(id,o,args) {
                 //alert("ERROR: The AJAX request didn't work");
             }
         }
 
-        // get the form object
-        var formObject = document.getElementById(form_id);
+        var cfg	=	{
+            on: {
+                success: callback.success,
+                failure: callback.failure
+            },
+            form: {
+                id: formObject
+            },
+            context: callback
+        };
 
-        // fetch the form contents
-        YAHOO.util.Connect.setForm(formObject);
+        Y.io(url.replace(/&amp;/g, '&'),cfg);
 
-        // submit the form
-        YAHOO.util.Connect.asyncRequest('POST', url.replace(/&amp;/g, '&'), callback);
-
-        // return false to block the anchor firing
         return false;
     },
 
@@ -66,23 +70,29 @@ M.ilp_standard_functions = {
      * @return
      */
     ajax_request : function(elem_id, url) {
+
         var callback = {
             // if the action is successful then load the content into the page
-            success: function(o) {
-
+            success: function(id,o,args) {
                 res = o.responseText;
-
-                document.getElementById(elem_id).innerHTML = res;//"<span id='user_status' class='hidden' style='color:" + res[0] + "'>" + res[1] + "</span>";
+                Y.one('#'+elem_id).setHTML(res);
                 M.ilp_standard_functions.parse_scripts(elem_id);
             },
             // if it failed then do nothing
             failure: function(o) {
                 //alert("ERROR: The AJAX request didn't work");
             }
-        }
+        };
 
-        // fetch the requested page
-        YAHOO.util.Connect.asyncRequest('GET', url.replace(/&amp;/g, '&'), callback);
+        var cfg	=	{
+            on: {
+                success: callback.success,
+                failure: callback.failure
+            },
+            context: callback
+        };
+
+        Y.io(url.replace(/&amp;/g, '&'),cfg);
 
         // return false to block the anchor firing
         return false;
@@ -114,18 +124,16 @@ M.ilp_standard_functions = {
  * @param elem
  * @return
  */
- get_height : function(elem) {
-
+get_height  : function(element) {
     // work out the height of the rendered element minus the extra bits
-    var padding = parseFloat(Dom.getStyle(elem, "padding-top")) + parseFloat(Dom.getStyle(elem, "padding-bottom"));
-    var border = parseFloat(Dom.getStyle(elem, "border-top-width")) + parseFloat(Dom.getStyle(elem, "border-bottom-width"));
-
+    var padding = parseFloat(element.getStyle("padding-top")) + parseFloat(element.getStyle("padding-bottom"));
+    var border = parseFloat(element.getStyle("borderTopWidth")) + parseFloat(element.getStyle("borderBottomWidth"));
     //additional check added as IE would sometimes return isNaN
     if (isNaN(border)) border = 0;
+    if (isNaN(padding)) padding = 0;
 
-    return elem.offsetHeight - padding - border;
+    return element.get('offsetHeight') - padding - border;
 },
-
 
     /**
      * Calculates the height attribute of a rendered element.
@@ -133,16 +141,16 @@ M.ilp_standard_functions = {
      * @param elem
      * @return
      */
-    get_width : function(elem) {
+    get_width : function(element) {
 
         // work out the width of the rendered element minus the extra bits
-        var padding = parseFloat(Dom.getStyle(elem, "padding-left")) + parseFloat(Dom.getStyle(elem, "padding-right"));
-        var border = parseFloat(Dom.getStyle(elem, "border-left")) + parseFloat(Dom.getStyle(elem, "border-right"));
+        var padding = parseFloat(element.getStyle("padding-left")) + parseFloat(element.getStyle("padding-right"));
+        var border = parseFloat(element.getStyle("border-left")) + parseFloat(element.getStyle("border-right"));
 
         //additional check added as IE would sometimes return isNaN
         if (isNaN(border)) border = 0;
 
-        return elem.offsetWidth - padding - border;
+        return element.get('offsetWidth') - padding - border;
     }
 
 }

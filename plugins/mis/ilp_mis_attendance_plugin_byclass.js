@@ -17,8 +17,7 @@ M.ilp_mis_attendance_plugin_byclass = {
          * to cover both cases
          */
         showelement : function(element) {
-            YAHOO.util.Dom.removeClass(element, 'hidden');
-            YAHOO.util.Dom.addClass(element, 'nothidden');
+            element.replaceClass('hidden','nothidden');
         },
 
         /**
@@ -26,59 +25,23 @@ M.ilp_mis_attendance_plugin_byclass = {
          * coming from the ajax call
          */
         hideelement : function(element) {
-            YAHOO.util.Dom.addClass(element, 'hidden');
-            YAHOO.util.Dom.removeClass(element, 'nothidden');
+            element.replaceClass('nothidden','hidden');
         }
+}
         	
-}   	
-        	
-        
-        
-        
-        
 
- 
 M.ilp_mis_attendance_plugin_byclass.init = function(Y,statusval) {
+    var submitbut 	=   Y.one('ilp_mis_attendance_plugin_byclass_submit');
+    var classform   =   Y.one('ilp_mis_attendance_plugin_byclass_form');
+    M.ilp_mis_attendance_plugin_byclass.hideelement(submitbut);
 
-	var submitbut 	= document.getElementById('ilp_mis_attendance_plugin_byclass_submit');
-	var classform 	= document.getElementById('ilp_mis_attendance_plugin_byclass_form');
-	M.ilp_mis_attendance_plugin_byclass.hideelement(submitbut);
-	
-	document.getElementById('ilp_mis_attendance_plugin_byclass_course').addEventListener(
-		     'change',
-		     function() {classform.submit();},
-		     false
-	);
-	
-	document.getElementById('ilp_mis_attendance_plugin_byclass_month').addEventListener(
-		     'change',
-		     function() {classform.submit();},
-		     false
-	);
-	
-	
-	/*
-	//hide select and submit button 
-	 
-    var statusform 	= document.getElementById('changestatus');
-    var userstatus 	= document.getElementById('user_status');
-    var statusform 	= document.getElementById('studentstatusform');
-	
-    M.ilp_dashboard_student_info.hideelement(statusform);
-    
-    M.ilp_dashboard_student_info.showelement(userstatus);
-    M.ilp_dashboard_student_info.showelement(editicon);
-    M.ilp_dashboard_student_info.hideelement(statusform);
-    
-	YAHOO.util.Event.addListener("edit_userstatus_icon", "click", M.ilp_dashboard_student_info.addselect);
-	
-	//add the onchange event to the select button
-	document.getElementById('select_userstatus').addEventListener(
-		     'change',
-		     function() {M.ilp_dashboard_student_info.save_userstatus(this.value)},
-		     false
-		  );
-*/
+    Y.on('change',
+        function () {classform.submit();},
+        Y.one('#ilp_mis_attendance_plugin_byclass_course'));
+
+    Y.on('change',
+        function () {classform.submit();},
+        Y.one('#ilp_mis_attendance_plugin_byclass_month'));
 };
 
 
