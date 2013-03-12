@@ -849,13 +849,11 @@ class ilp_ajax_table extends ilp_flexible_table {
         <script type='text/javascript'>
             //<![CDATA[
             // tell the form to autosubmit onchange
-            YAHOO.util.Event.addListener(
-                \"{$this->uniqueid}_perpage_select\",
-                \"change\",
+            Y.on(\"change\",
                 function() {
                     M.ilp_standard_functions.ajax_submit('{$this->uniqueid}_perpage', '{$this->uniqueid}_container', '{$this->ajaxurl}');
-                }
-            );
+                },
+                \"#{$this->uniqueid}_perpage_select\" );
             //]]>
         </script>";
 

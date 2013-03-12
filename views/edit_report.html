@@ -1,33 +1,13 @@
 <?php
 
-// include standard libraries
-$PAGE->requires->yui2_lib("yahoo");
-$PAGE->requires->yui2_lib("event");
-$PAGE->requires->yui2_lib("dom");
-$PAGE->requires->yui2_lib("animation");
-$PAGE->requires->yui2_lib("container");
-$PAGE->requires->yui2_lib("connection");
-
-// load the standard YUI style sheet
-$PAGE->requires->css_theme(new moodle_url($CFG->wwwroot.'/lib/yui/2.9.0/build/container/assets/container.css'));
-
 
 $jsmodule = array(
 'name'     	=> 'ilp_standard_functions',
 'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
-'requires'  	=> array('yahoo','event','dom','element','connection')
+'requires'  	=> array('event','dom','node','io-form')
 );
 
 $PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmodule);
-
-
-$jsmodule = array(
-'name'     	=> 'ilp_edit_report',
-'fullpath' 	=> '/blocks/ilp/views/js/edit_report.js',
-'requires'  	=> array('yahoo','event','dom','element','connection')
-);
-
-$PAGE->requires->js_init_call('M.ilp_edit_report.init', null, true, $jsmodule);
 
 
 echo $OUTPUT->header();

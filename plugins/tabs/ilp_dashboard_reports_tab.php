@@ -435,7 +435,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 					$module = array(
 					    'name'      => 'ilp_dashboard_reports_tab',
 					    'fullpath'  => '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.js',
-					    'requires'  => array('yui2-dom', 'yui2-event', 'yui2-connection', 'yui2-container', 'yui2-animation')
+					    'requires'  => array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
 					);
 
 					// js arguments
