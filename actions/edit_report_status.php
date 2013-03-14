@@ -34,7 +34,7 @@ if (empty($report)) {
 }
 
 //if the report satatus is currently disabled (0) set it to enabled (1)
-if (empty($report->status)) {
+if ($report->status == 0) {
 	$res = $dbc->set_report_status($report_id,1); 
 } else {
 	$res = $dbc->set_report_status($report_id,0);
