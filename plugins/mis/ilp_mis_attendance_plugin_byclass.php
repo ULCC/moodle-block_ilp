@@ -536,7 +536,9 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             if (get_config('block_ilp', 'mis_plugin_course_byclass_placementfield')) $this->fields['placement'] = get_config('block_ilp', 'mis_plugin_course_byclass_placementfield');
 
             $addionalargs = array();
+
             $addionalargs['sort'] = (get_config('block_ilp', 'mis_plugin_course_byclass_sort')) ? get_config('block_ilp', 'mis_plugin_course_byclass_sort') :  "";
+
 
             //get the users monthly attendance data
             $this->data = $this->dbquery($table, $keyfields, $this->fields,$addionalargs,$prelimdbcalls);
@@ -623,6 +625,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             }
             // Sort by array key
             // ksort($normdata);
+
 
             $this->normdata = $normdata;
         }
