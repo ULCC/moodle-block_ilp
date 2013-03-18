@@ -339,7 +339,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      * @param int $reportfield_id - the id of the reportfield
      */
     public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
-        return parent::delete_form_element($this->tablename, $reportfield_id);
+        return parent::delete_form_element( $reportfield_id, $this->tablename);
     }
 
 

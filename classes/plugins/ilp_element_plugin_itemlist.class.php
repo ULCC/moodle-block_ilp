@@ -306,7 +306,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
             'description' => $reportfield->description,
             'id' => $reportfield_id
         );
-    	return parent::delete_form_element($this->tablename,$reportfield_id,$extraparams);
+    	return parent::delete_form_element($reportfield_id,$this->tablename,$extraparams);
     }
 
     public function uninstall() {
