@@ -180,7 +180,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
      * Delete a form element
      */
     public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
-    	return parent::delete_form_element($this->tablename, $reportfield_id);
+    	return parent::delete_form_element( $reportfield_id, $this->tablename);
     }
     
     /**

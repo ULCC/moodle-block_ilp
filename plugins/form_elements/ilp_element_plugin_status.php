@@ -99,7 +99,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             'description' => $reportfield->description,
             'id' => $reportfield_id
         );
-        return parent::delete_form_element($reportfield_id,$this->tablename,$extraparams);
+        return parent::delete_form_element($this->tablename, $reportfield_id, $extraparams);
     }
 
 
