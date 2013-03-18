@@ -31,7 +31,7 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 
 
 
-             $element_id = $this->dbc->get_element_id_from_reportfield_id( $this->tablename, $data->reportfield_id );
+        $element_id = $this->dbc->get_element_id_from_reportfield_id( $this->tablename, $data->reportfield_id );
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record($this->tablename,$data->reportfield_id) : false;
 	 	if (empty($plgrec)) {
 			//new element

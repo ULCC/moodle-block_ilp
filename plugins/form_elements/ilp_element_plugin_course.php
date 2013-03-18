@@ -36,7 +36,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
         return $string;
     }
 	
-	function get_option_list( $reportfield_id,$user_id=false ){
+	function get_option_list( $reportfield_id, $field = false, $useid = true  ){
 		$courseoptions = array();
 		
 		$courseoptions['-1']	=	get_string('personal','block_ilp');
@@ -86,7 +86,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
 	  */
-	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+	  public function view_data( $reportfield_id,$entry_id, &$entryobj ){
 	  		$fieldname	=	$reportfield_id."_field";
 	 		
 	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,false);
@@ -206,7 +206,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
     	$fieldname	=	"{$this->reportfield_id}_field";
     	
 		//definition for user form
-		$optionlist = $this->get_option_list( $this->reportfield_id, $user_id );
+		$optionlist = $this->get_option_list( $this->reportfield_id, false, $user_id );
 
     	if (!empty($this->description)) {
     		$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
@@ -234,28 +234,5 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
         $mform->setType('label', PARAM_RAW);
 
     }
-	 
-	 
-    /**
-    * this function returns the mform elements taht will be added to a report form
-	*
-    public	function entry_form( &$mform ) {
-    	//text field for element label
-        $select = &$mform->addElement(
-            'select',
-            $this->reportfield_id,
-            $this->label,
-	    $this->get_option_list(),
-            array('class' => 'form_input')
-        );
-        
-        if (!empty($this->req)) $mform->addRule("$this->reportfield_id", null, 'required', null, 'client');
-        $mform->setType('label', PARAM_RAW);
-    	
-        //return $mform;
-    	
-    	
-    }
-    */
-   
+
 }

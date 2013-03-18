@@ -462,15 +462,13 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
 	    if (file_exists($plugins.'/'.$plugin_file.".php")) 
 	    {
 	        require_once($plugins.'/'.$plugin_file.".php");
-	        // instantiate the object
-	        $class = basename($plugin_file, ".php");
-	        $resourceobj = new $class();
-	        $method = array($resourceobj, 'language_strings');
 
-	        
+            $class = basename($plugin_file, ".php");
+            $method = "{$class}::language_strings";
+
 	        //check whether the language string element has been defined
 	        if (is_callable($method,true)) {
-	            $resourceobj->language_strings($string);
+                $class::language_strings($string);
 	        }
 	    }
 	}
@@ -488,22 +486,12 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
 	    if (file_exists($tabs.'/'.$plugin_file.".php")) 
 	    {
 	        require_once($tabs.'/'.$plugin_file.".php");
-	        // instantiate the object
+
 	        $class = basename($plugin_file, ".php");
-
-            //  language_string called staticall to prevent  loop between language string and the plugin
-            //caused by define_second_row tab_name() in dasboard tabs.
-
-	        //$tabobj = new $class();
-	        //$method = array($tabobj, 'language_strings');
-            //check whether the language string element has been defined
-
             $method = "{$class}::language_strings";
 
 	        if (is_callable($method,true)) {
-	            //$tabobj->language_strings($string);
                 $class::language_strings($string);
-
 	        }
 	        
 	    }
@@ -518,15 +506,11 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
             if (file_exists($plugins.'/'.$plugin_file.".php")) {
                 require_once($plugins.'/'.$plugin_file.".php");
 
-                // instantiate the object
                 $class = basename($plugin_file, ".php");
-                $pluginobj = new $class();
-                $method = array($pluginobj, 'language_strings');
-
-                //check whether the config_settings method has been defined
+                $method = "{$class}::language_strings";
 
                 if (is_callable($method,true)) {
-                    $pluginobj->language_strings($string);
+                    $class::language_strings($string);
                 }
             }
         }
@@ -542,15 +526,11 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
             if (file_exists($plugins.'/'.$plugin_file.".php")) {
                 require_once($plugins.'/'.$plugin_file.".php");
 
-                // instantiate the object
                 $class = basename($plugin_file, ".php");
-                $pluginobj = new $class();
-                $method = array($pluginobj, 'language_strings');
-
-                //check whether the config_settings method has been defined
+                $method = "{$class}::language_strings";
 
                 if (is_callable($method,true)) {
-                    $pluginobj->language_strings($string);
+                    $class::language_strings($string);
                 }
             }
         }

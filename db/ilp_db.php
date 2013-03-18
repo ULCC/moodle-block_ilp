@@ -996,7 +996,7 @@ class ilp_db_functions	extends ilp_logging {
         global 	$CFG;
 
         $sql	=	"SELECT			 si.*
-					 FROM			{block_ilp_plu_user_status} as us,
+					 FROM			{block_ilp_user_status} as us,
 					 				{block_ilp_plu_sts_items} as si,
 					 				{block_ilp_entry} as e
 					 WHERE			e.id                =   :entry_id
@@ -1120,7 +1120,9 @@ class ilp_db_functions	extends ilp_logging {
     * @return int or false
     */
     public function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
-		$element_record = array_shift( $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ) ) );
+        $records    =   $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ));
+
+		$element_record = array_shift( $records  );
 		if( !empty( $element_record ) ){
 			return $element_record->id;
 		}
