@@ -136,7 +136,7 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
      *
      * @param object $data The data to be saved
      */
-    function validation($data) {
+    function validation($data, $files) {
         $this->errors = array();
         
         //check that the field label does not already exist in this report
