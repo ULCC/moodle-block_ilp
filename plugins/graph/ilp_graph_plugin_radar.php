@@ -164,7 +164,7 @@ class ilp_graph_plugin_radar extends ilp_graph_plugin {
     /**
      * function used to return the language strings for the plugin
      */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_graph_plugin_radar_type'] 		        = 'Radar Graph';
         $string['ilp_graph_plugin_radar_reportfield']       = 'Report Field {no}';
         $string['ilp_graph_plugin_radar_label']             = 'Label {no}';

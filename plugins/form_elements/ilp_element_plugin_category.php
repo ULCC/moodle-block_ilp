@@ -26,7 +26,7 @@ class ilp_element_plugin_category extends ilp_element_plugin_itemlist{
         return !$this->dbc->element_type_exists( $report_id, $this->tablename );
     }
 
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_category'] 			= 'Category Select';
         $string['ilp_element_plugin_category_type'] 		= 'category select';
         $string['ilp_element_plugin_category_description'] 	= 'A category selector';

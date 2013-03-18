@@ -691,7 +691,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
         return 'attendance';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
 
         $string['ilp_mis_attendance_plugin_register_pluginname'] = 'Register Overview';

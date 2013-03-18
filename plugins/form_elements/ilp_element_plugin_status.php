@@ -277,7 +277,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         $table->addKey($table_key);
    }
 
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_status'] 			= 'Select';
         $string['ilp_element_plugin_status_type'] 		= 'status select';
         $string['ilp_element_plugin_status_description'] 	= 'A status selector';

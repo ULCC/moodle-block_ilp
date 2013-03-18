@@ -306,7 +306,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
         return 'attendance';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
         $string['ilp_mis_attendance_plugin_byclass_pluginname'] = 'Register By Class Attendance Overview';
         $string['ilp_mis_attendance_plugin_byclass_pluginnamesettings'] = 'Register By Class Attendance Configuration';
