@@ -88,8 +88,10 @@
  	         *
  	         * @return	null
  	         */
-             public function set_data( $mis_user_id, $user_id ) {
+             public function set_data( $mis_user_id, $user_id = false ) {
 
+                 //this check is in place as we have to make sure the user_id is populated
+                 if (empty($user_id))  return false;
                 $this->mis_user_id      =   $mis_user_id;
 
                 $table  =  get_config('block_ilp','mis_learner_studentreview_table');

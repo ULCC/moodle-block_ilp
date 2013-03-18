@@ -180,7 +180,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
    	/**
      * Delete a form element
      */
-    public function delete_form_element($reportfield_id) {
+    public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
         $extraparams = array(
             'audit_type' => $this->audit_type(),
