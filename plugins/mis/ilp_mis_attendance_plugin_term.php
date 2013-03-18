@@ -316,7 +316,7 @@ class ilp_mis_attendance_plugin_term extends ilp_mis_attendance_plugin
         return 'overview';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
         $string['ilp_mis_attendance_plugin_term_pluginname'] = 'Term attendance overview';
         $string['ilp_mis_attendance_plugin_term_pluginnamesettings'] = 'Term attendance configuration';

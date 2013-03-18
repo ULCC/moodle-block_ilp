@@ -372,7 +372,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * @param	array &$string the language strings array passed by reference so we  
 	 * just need to simply add the plugins entries on to it
 	 */
-	function language_strings(&$string) {
+	static function language_strings(&$string) {
         $string['ilp_dashboard_student_info_plugin'] 					= 'student info plugin';
         $string['ilp_dashboard_student_info_plugin_name'] 				= 'student info';
 	        

@@ -250,7 +250,7 @@
         
                     
 
-            function language_strings(&$string) {
+            static function language_strings(&$string) {
 
                     $string['ilp_mis_learner_studentreview_table']						    = 'Database table';
                     $string['ilp_mis_learner_studentreview_tabledesc']				        = 'The name of the database table where the data for this plugin is held';

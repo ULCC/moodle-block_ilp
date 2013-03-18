@@ -147,7 +147,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
      * @param    array &$string the language strings array passed by reference so we
      * just need to simply add the plugins entries on to it
      */
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
 
         $string['ilp_mis_attendance_percentbar_plugin_attendance'] = 'attendance';

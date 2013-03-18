@@ -23,7 +23,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
         $this->external_items_keyfield = 'id';
     }
 
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_course'] 			= 'Select';
         $string['ilp_element_plugin_course_type'] 		= 'course select';
         $string['ilp_element_plugin_course_description'] 	= 'A course selector';

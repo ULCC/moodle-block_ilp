@@ -108,7 +108,7 @@ class ilp_element_plugin_page_break extends ilp_element_plugin {
     /**
     * function used to return the language strings for the plugin
     */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_page_break'] 		= 'Page break';
         $string['ilp_element_plugin_page_break_type'] = 'Page break';
         $string['ilp_element_plugin_page_break_description'] = 'A page break';

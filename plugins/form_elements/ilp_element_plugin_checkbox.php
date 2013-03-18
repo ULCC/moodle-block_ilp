@@ -31,7 +31,7 @@ class ilp_element_plugin_checkbox extends ilp_element_plugin_itemlist {
     /**
      * function used to return the language strings for the plugin
      */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_checkbox'] 		= 'Check boxes ';
         $string['ilp_element_plugin_checkbox_type'] 		= 'check boxes';
         $string['ilp_element_plugin_checkbox_description'] 	= 'A checkboxes group';

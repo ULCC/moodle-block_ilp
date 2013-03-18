@@ -192,7 +192,7 @@ class ilp_plugin {
     /**
      * function used to return the language strings for the plugin
      */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         return $string;
     }
 

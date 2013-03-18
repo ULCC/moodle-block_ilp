@@ -164,7 +164,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
     /**
     * function used to return the language strings for the plugin
     */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_text_area'] 		= 'Textarea';
         $string['ilp_element_plugin_text_area_type'] 	= 'Textarea';
         $string['ilp_element_plugin_text_area_description'] = 'A textarea field';
