@@ -333,7 +333,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
         return 'overview';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
         $string['ilp_mis_attendance_plugin_mcb_pluginname'] = 'Monthly Course Breakdown Overview';
         $string['ilp_mis_attendance_plugin_mcb_pluginnamesettings'] = 'Monthly Course Breakdown Configuration';

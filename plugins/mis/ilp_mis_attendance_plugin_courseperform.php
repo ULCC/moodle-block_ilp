@@ -195,7 +195,7 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
         return 'overview';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
         $string['ilp_mis_attendance_plugin_courseperform_pluginname'] = 'Course Based Attendance with Performance Overview';
         $string['ilp_mis_attendance_overview_plugin_courseperform_pluginnamesettings'] = 'Course Based Attendance with Performance Configuration';

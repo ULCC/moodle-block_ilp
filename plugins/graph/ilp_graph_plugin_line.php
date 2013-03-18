@@ -171,7 +171,7 @@ class ilp_graph_plugin_line extends ilp_graph_plugin {
     /**
      * function used to return the language strings for the plugin
      */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_graph_plugin_line_type'] 		            = 'Line Graph';
         $string['ilp_graph_plugin_line_reportfield']            = 'Report Field {no}';
         $string['ilp_graph_plugin_line_label']                  = 'Label {no}';

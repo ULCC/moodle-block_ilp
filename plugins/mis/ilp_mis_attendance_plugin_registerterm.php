@@ -662,7 +662,7 @@ function summary_data($data, $term = 0)
         return 'overview';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
 
         $string['ilp_mis_attendance_plugin_registerterm_pluginname'] = 'Register Term Overview';

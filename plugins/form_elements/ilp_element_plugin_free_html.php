@@ -32,7 +32,7 @@ class ilp_element_plugin_free_html extends ilp_element_plugin {
     * @param int $reportfield_id
     * @return boolean
     */
-    public function delete_form_element($reportfield_id) {
+    public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
         $extraparams = array(
             'audit_type' => $this->audit_type(),
@@ -65,7 +65,7 @@ class ilp_element_plugin_free_html extends ilp_element_plugin {
         return get_string('ilp_element_plugin_free_html_type','block_ilp');
     }
 
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_free_html_type'] 		= 'Free markup';
         $string['ilp_element_plugin_free_html_description']	= 'Free HTML';
         $string['ilp_element_plugin_free_html_contents']	= 'Contents (any valid HTML)';

@@ -179,7 +179,7 @@ class ilp_element_plugin_file extends ilp_element_plugin {
     /**
     * function used to return the language strings for the plugin
     */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_file'] 		         = 'File upload';
         $string['ilp_element_plugin_file_type']          = 'File upload';
         $string['ilp_element_plugin_file_description']   = 'A file upload';

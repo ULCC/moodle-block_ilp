@@ -505,7 +505,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 	 * @param	array &$string the language strings array passed by reference so we
 	 * just need to simply add the plugins entries on to it
 	 */
-	 function language_strings(&$string) {
+	 static function language_strings(&$string) {
         $string['ilp_dashboard_reports_tab'] 					= 'entries tab';
         $string['ilp_dashboard_reports_tab_name'] 				= 'Reports';
         $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';

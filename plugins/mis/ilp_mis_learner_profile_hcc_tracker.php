@@ -253,7 +253,7 @@ class ilp_mis_learner_profile_hcc_tracker extends ilp_mis_attendance_plugin
     	return 'learnerprofile';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
 		$string['ilp_mis_learner_profile_hcc_tracker_pluginnamesettings'] = 'HCC tracker plugin';
         $string['ilp_mis_learner_profile_hcc_tracker_pluginstatus'] 		= 'Plugin status';

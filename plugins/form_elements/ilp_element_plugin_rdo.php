@@ -28,7 +28,7 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_itemlist{
     /**
     * function used to return the language strings for the plugin
     */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_rdo'] 		= 'Radio group';
         $string['ilp_element_plugin_rdo_type'] 		= 'radio group';
         $string['ilp_element_plugin_rdo_description'] 	= 'A radio group';

@@ -230,7 +230,7 @@ class ilp_mis_learner_causeforcongrats extends ilp_mis_plugin	{
         
                     
 
-            function language_strings(&$string) {
+            static function language_strings(&$string) {
 
                     $string['ilp_mis_learner_causeforcongrats_table']						    = 'Database table';
                     $string['ilp_mis_learner_causeforcongrats_tabledesc']				        = 'The name of the database table where the data for this plugin is held';
