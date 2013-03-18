@@ -287,11 +287,17 @@ class ilp_element_plugin {
         return false;
     }
 
-    
-	/**
-     * Delete a form element
+
+    /**
+     * Remove a form element from the a report - note this does not remove the data attached  to the element from the
+     * database table
+     *
+     * @param int $reportfield_id the id of the report field
+     * @param string $tablename the name of the table attached to the form element
+     * @param array $extraparams extra params for the log table
+     * @return bool
      */
-    public function delete_form_element( $tablename,$reportfield_id,$extraparams=array() ) {
+    public function delete_form_element(  $reportfield_id,$tablename, $extraparams=array() ) {
         $reportfield	=	$this->dbc->get_plugin_record($tablename,$reportfield_id); 
 
         if ($this->dbc->delete_form_element_by_reportfield($tablename,$reportfield_id, $extraparams )) {

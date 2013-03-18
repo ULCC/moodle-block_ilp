@@ -126,7 +126,7 @@ class ilp_element_plugin_page_break extends ilp_element_plugin {
             'description' => 'page break',
             'id' => $reportfield_id
         );
-    	return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
+    	return parent::delete_form_element(  $reportfield_id, $this->tablename, $extraparams );
     }
 
     /**
