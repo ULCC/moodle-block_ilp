@@ -653,6 +653,38 @@ function xmldb_block_ilp_upgrade($oldversion) {
 
     }
 
+    // To sort out the position values mess in existing database.
+    if ($oldversion < 2013031828)	{
+
+        //include ilp db class
+        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+
+        require_once($CFG->dirroot.'/blocks/ilp/lib.php');
+        $dbc                =   new ilp_db();
+
+
+        $allpositionsarr = array();
+        $reports    =   $dbc->get_reports_by_position(null,null,true,false);
+        //first compile a list of all taken positions
+
+        if (!empty($reports)) {
+            foreach($reports as $report) {
+                if($report->deleted == 1) {
+                    $dbc->set_new_report_position($report->id, 0);
+                } else {
+                    if(checkpositions($report->position, $allpositionsarr) == true) {
+                        do {
+                                $report->position++;
+                           } while(checkpositions($report->position, $allpositionsarr));
+                           $dbc->set_new_report_position($report->id,$report->position);
+                    }
+                    $allpositionsarr[] = $report->position;
+                }
+            }
+        }
+    }
+
+
     return true;
 }
 
