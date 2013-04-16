@@ -840,7 +840,7 @@ class ilp_ajax_table extends ilp_flexible_table {
 
             $output .= '&nbsp;'.get_string('perpage', 'block_ilp').'&nbsp;';
             $output .= "</p>";
-            $output .= "<noscript><p><input type='submit' value='".get_string('apply', 'block_ilp')."' /></p></noscript>";
+            $output .= "<p><noscript><input type='submit' value='".get_string('apply', 'block_ilp')."' /></noscript></p>";
             $output .= "</form>";
 
         }
@@ -851,7 +851,8 @@ class ilp_ajax_table extends ilp_flexible_table {
             // tell the form to autosubmit onchange
             Y.on(\"change\",
                 function() {
-                    M.ilp_standard_functions.ajax_submit('{$this->uniqueid}_perpage', '{$this->uniqueid}_container', '{$this->ajaxurl}');
+                    //M.ilp_standard_functions.ajax_submit('{$this->uniqueid}_perpage', '{$this->uniqueid}_container', '{$this->ajaxurl}');
+                    Y.one('#{$this->uniqueid}_perpage').submit();
                 },
                 \"#{$this->uniqueid}_perpage_select\" );
             //]]>
