@@ -3,6 +3,11 @@ M.ilp_view_studentlist = {
         if (Y.one('#select_course_id') != null)   {
             Y.on('change',function () {M.ilp_view_studentlist.post_from()},'#select_course_id' );
         }
+
+        if (Y.one('#select_group_id') != null)   {
+            Y.on('change',function () {M.ilp_view_studentlist.post_from()},'#select_group_id' );
+        }
+
         Y.on('change',function () {M.ilp_view_studentlist.post_from()},'#select_status' );
 
         //hide the submit button
