@@ -36,14 +36,14 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
         return $string;
     }
 	
-	function get_option_list( $reportfield_id, $field = false, $useid = true  ){
+	function get_option_list( $reportfield_id, $field = false, $user_id = true  ){
 		$courseoptions = array();
 		
 		$courseoptions['-1']	=	get_string('personal','block_ilp');
 		$courseoptions[0]		=	get_string('allcourses','block_ilp');
 		//check if the user_id has been set 
 		$courselist = (!empty($user_id)) ? $this->dbc->get_user_courses($user_id) : $this->dbc->get_courses();
-		
+
 		foreach( $courselist as $c ){
 			$courseoptions[ $c->id ] = $c->fullname;
 		}
