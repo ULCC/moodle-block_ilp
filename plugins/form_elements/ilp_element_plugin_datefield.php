@@ -477,7 +477,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      */
     public function delete_entry_record($entry_id) {
 
-        $cal_events = $this->dbc-> get_cal_events_id($entry_id);
+        $cal_events = $this->dbc-> get_calevent_reportfield_id($entry_id);
 
 
      $event	=	$this->dbc->get_calendar_events($entry_id, $cal_events->reportfield_id);
@@ -503,7 +503,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
 
         foreach($entry as $e) {
 
-        $cal_events = $this->dbc-> get_cal_events_id($e->id);
+        $cal_events = $this->dbc-> get_calevent_reportfield_id($e->id);
 
 
             $event	=	$this->dbc->get_calendar_events($e->id, $cal_events->reportfield_id);
