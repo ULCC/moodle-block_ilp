@@ -202,7 +202,7 @@ if (!empty($studentslist)) {
     foreach ($studentslist as $student) {
         $data = array();
 		
-        $userprofile	=	(stripos($CFG->release,"2.") === false) ? 'view.php' : 'profile.php';
+        $userprofile	=	'view.php' ;
                 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
         $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
