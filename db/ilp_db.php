@@ -2745,7 +2745,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return object containing $reportfield_id or false
      *
      */
-    function get_reportfield_id($entry_id){
+    function get_cal_events_id($entry_id){
 
         $sql    =   "SELECT     reportfield_id
                       FROM      {block_ilp_cal_events}
