@@ -480,7 +480,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      $reportfield_id = $this->dbc-> get_reportfield_id($entry_id);
 
 
-     $event	=	$this->dbc->get_calendar_events($entry_id, $reportfield_id);
+     $event	=	$this->dbc->get_calendar_events($entry_id, $reportfield_id->refortfield_id);
 
         if (!empty($event))	{
             foreach($event as $ev) {
