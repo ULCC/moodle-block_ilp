@@ -195,7 +195,7 @@ $coursearg      = ( $course_id ) ? "&course=$course_id" : '' ;
 //Saving this information on the students in this list in session var so it
 //can be used on student page. not entirely happy about doing it this way
 //this is possible a good place to use a caching class
-$SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
+$SESSION->ilp_prevnextstudents       =  serialize($students);
 
 
 if (!empty($studentslist)) {
