@@ -384,15 +384,14 @@ class ilp_db_functions	extends ilp_logging {
 
     /**
      * Returns the position number a new report field should take
-     *
-     * @param int $report_id the id of the report that the new field will be in
+     * @internal param int $report_id the id of the report that the new field will be in
      * @return int the new fields position number
      */
 
     function get_new_report_position() {
 
-        $position =  $this->dbc->count_records("block_ilp_report");
-
+        $position =  $this->dbc->count_records_select("block_ilp_report", "position !='0'");
+        var_dump($position);
         return (empty($position)) ? 1 : $position+1;
     }
 
