@@ -161,19 +161,12 @@ if (!empty($status_id)) {
         $notstatus_ids = true;
     }
 }
-
 //we only want to get the student matrix if students have been provided
 $studentslist = (!empty($students)) ? $dbc->get_students_matrix($flextable, $students, $status_id, $notstatus_ids)
         : false;
 
 $prevnextstudents   =   array();
 
-//create the list of students ids to be passed to view_main page
-if (!empty($studentslist)) {
-    foreach($studentslist   as $sl)   {
-        $prevnextstudents[]   =   $sl->id;
-    }
-}
 
 //get the default status item which will be used as the status for students who
 //have not entered their ilp and have not had a status assigned
@@ -195,8 +188,21 @@ $coursearg      = ( $course_id ) ? "&course=$course_id" : '' ;
 //Saving this information on the students in this list in session var so it
 //can be used on student page. not entirely happy about doing it this way
 //this is possible a good place to use a caching class
-$SESSION->ilp_prevnextstudents       =  serialize($students);
+if(!empty($students))  {
+    $pagesize = $flextable->pagesize;
+    $flextable->pagesize = 100;
+    $temp_student_list = $dbc->get_students_matrix($flextable, $students, $status_id, $notstatus_ids);
+    $flextable->pagesize = $pagesize;
 
+    // Create the list of 100 students ids to be passed to view_main page
+    if (!empty($temp_student_list)) {
+        foreach($temp_student_list   as $sl)   {
+            $prevnextstudents[]   =   $sl->id;
+        }
+    }
+}
+
+$SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
 
 if (!empty($studentslist)) {
     foreach ($studentslist as $student) {
