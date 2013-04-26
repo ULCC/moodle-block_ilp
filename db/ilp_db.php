@@ -391,7 +391,6 @@ class ilp_db_functions	extends ilp_logging {
     function get_new_report_position() {
 
         $position =  $this->dbc->count_records_select("block_ilp_report", "position !='0'");
-        var_dump($position);
         return (empty($position)) ? 1 : $position+1;
     }
 
