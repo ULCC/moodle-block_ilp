@@ -198,7 +198,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
     	} 
     	//text field for element label
    		$mform->addElement(
-	           'htmleditor',
+	           'editor',
 	            $fieldname,
 	            "$this->label",
 	            array('class' => 'form_input', 'canUseHtmlEditor'=>'detect', 'rows'=> '20', 'cols'=>'65')
