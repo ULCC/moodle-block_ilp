@@ -203,10 +203,10 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
 	            "$this->label",
 	            array('class' => 'form_input', 'canUseHtmlEditor'=>'detect', 'rows'=> '20', 'cols'=>'65')
 	    );
-    	
 
-        if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
-        if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
+        // Disabled until http://tracker.moodle.org/browse/MDL-35402 is fixed as multiple rules is breaking it.
+        //if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
+        //if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
 
