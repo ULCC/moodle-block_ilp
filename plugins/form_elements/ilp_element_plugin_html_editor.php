@@ -198,15 +198,18 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
     	} 
     	//text field for element label
    		$mform->addElement(
-	           'editor',
+               // To solve the validation error 'htmleditor' should be replaced to 'editor'.
+	           'htmleditor',
 	            $fieldname,
 	            "$this->label",
 	            array('class' => 'form_input', 'canUseHtmlEditor'=>'detect', 'rows'=> '20', 'cols'=>'65')
 	    );
 
-        // Disabled until http://tracker.moodle.org/browse/MDL-35402 is fixed as multiple rules is breaking it.
-        //if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
-        //if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
+        // Disable the min and max length to solve the validation issue for html editor and also
+        // remove the same in mform
+        // REF: http://tracker.moodle.org/browse/MDL-35402 is fixed as multiple rules is breaking it.
+        if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
+        if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
 
