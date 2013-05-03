@@ -235,6 +235,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
 
         $string['ilp_mis_misc_performance_ind_title_disp']						= 'Perfomance';
         $string['ilp_mis_misc_performance_ind_score_disp']						= 'Score';
+        $string['ilp_mis_misc_performance_ind_gscore_disp']						= 'Grade Score';
         $string['ilp_mis_misc_performance_ind_mtg_disp']						= 'Minimum Target Grade';
         $string['ilp_mis_misc_performance_ind_atg_disp']						= 'Aspiration Target Grade';
         $string['ilp_mis_misc_performance_ind_grade_disp']						= 'Current Grade';
