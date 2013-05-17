@@ -242,6 +242,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
 
          $string['ilp_mis_misc_performance_ind_prelimcalls']						= 'Preliminary db calls';
          $string['ilp_mis_misc_performance_ind_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+         $string['ilp_mis_misc_performance_ind_tab_name']					= 'Performance Indicators';
 
 
          return $string;
@@ -258,7 +259,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
      * 
      */
     function tab_name() {
-    	return 'Performance Indicators';
+        return get_string('ilp_mis_misc_performance_ind_tab_name','block_ilp');
     }
 
 

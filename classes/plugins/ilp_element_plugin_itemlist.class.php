@@ -296,8 +296,8 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
     	    $this->dbc->delete_items($this->items_tablename, $pluginrecord->id);
         }
 
-	//also delete any submitted data - it'll survive in ghostly form in the log table
-    	$this->dbc->delete_items($this->data_entry_tablename,$pluginrecord->id);
+	    //also delete any submitted data - it'll survive in ghostly form in the log table
+    	//$this->dbc->delete_items($this->data_entry_tablename,$pluginrecord->id);
     	
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);	
         $extraparams = array(

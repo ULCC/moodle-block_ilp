@@ -221,16 +221,18 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_misc_timetable_registerid')) 	$this->fields['registerid']	=	get_config('block_ilp','mis_misc_timetable_registerid');
  				if 	(get_config('block_ilp','mis_misc_timetable_week')) 		$this->fields['week']	=	get_config('block_ilp','mis_misc_timetable_week');
  				if 	(get_config('block_ilp','mis_misc_timetable_tutor')) 		$this->fields['tutor']	=	get_config('block_ilp','mis_misc_timetable_tutor');
- 				
+
  				if 	(get_config('block_ilp','mis_misc_timetable_register')) 	$this->fields['register']	=	get_config('block_ilp','mis_misc_timetable_register');
  				if 	(get_config('block_ilp','mis_misc_timetable_date')) 		$this->fields['date']	=	get_config('block_ilp','mis_misc_timetable_date');
  				if 	(get_config('block_ilp','mis_misc_timetable_room')) 		$this->fields['room']	=	get_config('block_ilp','mis_misc_timetable_room');
  				if 	(get_config('block_ilp','mis_misc_timetable_starttime')) 	$this->fields['starttime']	=	get_config('block_ilp','mis_misc_timetable_starttime');
  				if 	(get_config('block_ilp','mis_misc_timetable_endtime')) 		$this->fields['endtime']	=	get_config('block_ilp','mis_misc_timetable_endtime');
 
+                $addionalargs = array();
+                $addionalargs['sort'] = $this->fields['date'];
                 $prelimdbcalls   =    get_config('block_ilp','mis_misc_timetable_prelimcalls');
 
- 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields, null, $prelimdbcalls);
+ 				$this->data	=	$this->dbquery( $table, $keyfields, $this->fields, $addionalargs, $prelimdbcalls);
  			} 
     }
  	
@@ -376,6 +378,7 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
 
          $string['ilp_mis_misc_timetable_prelimcalls']						= 'Preliminary db calls';
          $string['ilp_mis_misc_timetable_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+         $string['ilp_mis_misc_timetable_tab_name']					= 'Lesson Timetable';
 
 
          return $string;
@@ -392,7 +395,7 @@ class ilp_mis_misc_timetable extends ilp_mis_plugin	{
      * 
      */
     function tab_name() {
-    	return 'Lesson Timetable';
+        return get_string('ilp_mis_misc_timetable_tab_name','block_ilp');
     }
 
 

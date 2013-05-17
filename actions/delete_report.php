@@ -33,6 +33,22 @@ if (empty($report)) {
 	print_error('reportnotfouund','block_ilp');
 }
 
+$deletedposition	=	$report->position;
+
+$reports		=	$dbc->get_reports_by_position();
+
+if (!empty($reports)) {
+    foreach($reports as $field) {
+
+        if ($field->position > $deletedposition) {
+            //if the field is being moved up all other fields have postion value increased
+            //if the field is being moved down all other fields have postion value decreased
+            //move up = 1 move down = 0
+            if(!$dbc->set_new_report_position($field->id,$field->position - 1));
+
+        }
+    }
+}
 
 $reportfields		=	$dbc->get_report_fields_by_position($report_id);
 
@@ -50,7 +66,7 @@ if (!empty($reportfields))	{
 //if the report satatus is currently disabled (0) set it to enabled (1)
 $res = $dbc->set_report_status($report_id,0);
 $res = $dbc->delete_report($report_id,1);
-
+$res = $dbc->set_new_report_position($report_id,0);
 //save the changes to the report
 if (!empty($res)) {
 	$resulttext	=	get_string('reportdeleted','block_ilp');

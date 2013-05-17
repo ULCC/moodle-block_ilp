@@ -294,6 +294,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                             $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
                             if (!empty($capability))	$access_report_viewothers		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
+                            //check to see whether the user can add/view extension for the specific report
+                            $capability		=	$this->dbc->get_capability_by_name('block/ilp:addviewextension');
+                            if (!empty($capability))	$access_report_addviewextension	 =	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+
 							//get all of the entries for this report
 							$reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
 
@@ -323,11 +327,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                             if (!empty($access_report_viewothers)) {
 
-                                if ($reportrules->can_add_extensions()) {
+                                if (!empty($access_report_addviewextension) && $reportrules->can_add_extensions()) {
                                     echo "<div class='add' style='float :left'>
                                         <a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_preference.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('addextension','block_ilp')."</a>&nbsp;
                                       </div>
-}
 
                                     <div class='add' style='float :left'>
                                         <a href='{$CFG->wwwroot}/blocks/ilp/actions/view_extensionlist.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('viewextension','block_ilp')."</a>

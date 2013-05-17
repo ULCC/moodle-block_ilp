@@ -34,7 +34,6 @@ function xmldb_block_ilp_upgrade($oldversion) {
     $xmldb_key   = class_exists('xmldb_key')   ? 'xmldb_key'   : 'XMLDBKey';
     $set_attributes = method_exists($xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
 
-    
     if ($oldversion < 2011090711 ) {
         $table = new $xmldb_table('block_ilp_log');
         
@@ -453,6 +452,231 @@ function xmldb_block_ilp_upgrade($oldversion) {
 
 
     }
+
+
+
+    if ($oldversion < 2012073014) {
+
+        //Add missing ILP_temp table
+
+        // create the new table to store responses to fields
+        $table = new $xmldb_table( 'block_ilp_temp' );
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_misc = new $xmldb_field('misc');
+        $table_misc->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED);
+        $table->addField($table_misc);
+
+        $table_data = new $xmldb_field('data');	//data field
+        $table_data->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED);
+        $table->addField($table_data);
+
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        if (!$dbman->table_exists($table)) $dbman->create_table($table);
+    }
+
+    if ($oldversion <  2012101815)   {
+
+        //creates a index on timemodified and user_id in the entry table
+        $table = new xmldb_table('block_ilp_entry');
+        $index = new xmldb_index('entry_user_timemodified', XMLDB_INDEX_NOTUNIQUE, array('timemodified', 'user_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $index = new xmldb_index('entry_timemodified', XMLDB_INDEX_NOTUNIQUE, array('timemodified'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_tex_ent');
+        $index = new xmldb_index('tex_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_are_ent');
+        $index = new xmldb_index('area_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        if ($dbman->table_exists('block_ilp_plu_datf_ent'))       {
+            $table = new xmldb_table('block_ilp_plu_datf_ent');
+            $index = new xmldb_index('datf_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+            // Conditionally launch add index report_entry
+            if (!$dbman->index_exists($table, $index)) {
+                $dbman->add_index($table, $index);
+            }
+        }
+
+        $table = new xmldb_table('block_ilp_plu_ste_ent');
+        $index = new xmldb_index('ste_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_ste_ent');
+        $index = new xmldb_index('ste_entry_parent', XMLDB_INDEX_NOTUNIQUE, array('entry_id,parent_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_ddl_ent');
+        $index = new xmldb_index('ddl_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_ddl_ent');
+        $index = new xmldb_index('ddl_entry_parent', XMLDB_INDEX_NOTUNIQUE, array('entry_id,parent_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+
+        $table = new xmldb_table('block_ilp_plu_cat_ent');
+        $index = new xmldb_index('cat_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_cat_ent');
+        $index = new xmldb_index('cat_entry_parent', XMLDB_INDEX_NOTUNIQUE, array('entry_id,parent_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        if ($dbman->table_exists('block_ilp_plu_chb_ent'))       {
+            $table = new xmldb_table('block_ilp_plu_chb_ent');
+            $index = new xmldb_index('chb_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+            // Conditionally launch add index report_entry
+            if (!$dbman->index_exists($table, $index)) {
+                $dbman->add_index($table, $index);
+            }
+
+            $table = new xmldb_table('block_ilp_plu_chb_ent');
+            $index = new xmldb_index('chb_entry_parent', XMLDB_INDEX_NOTUNIQUE, array('entry_id,parent_id'));
+
+            // Conditionally launch add index report_entry
+            if (!$dbman->index_exists($table, $index)) {
+                $dbman->add_index($table, $index);
+            }
+        }
+
+        $table = new xmldb_table('block_ilp_plu_dd_ent');
+        $index = new xmldb_index('dd_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_dd_ent');
+        $index = new xmldb_index('dd_entry_parent', XMLDB_INDEX_NOTUNIQUE, array('entry_id,parent_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_rdo_ent');
+        $index = new xmldb_index('rdo_entry', XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_plu_rdo_ent');
+        $index = new xmldb_index('rdo_entry_parent', XMLDB_INDEX_NOTUNIQUE, array('entry_id,parent_id'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+
+        $table = new xmldb_table('block_ilp_user_status');
+        $index = new xmldb_index('userstat_timemodified', XMLDB_INDEX_NOTUNIQUE, array('timemodified'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        $table = new xmldb_table('block_ilp_entry_comment');
+        $index = new xmldb_index('entrycom_timemodified', XMLDB_INDEX_NOTUNIQUE, array('timemodified'));
+
+        // Conditionally launch add index report_entry
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+
+
+    }
+
+    // To sort out the position values mess in existing database.
+    if ($oldversion < 2013031828)	{
+
+        //include ilp db class
+        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+
+        require_once($CFG->dirroot.'/blocks/ilp/lib.php');
+        $dbc                =   new ilp_db();
+
+        $reports    =   $dbc->get_reports_by_position(null,null,true,false);
+        //first compile a list of all taken positions
+        $position = 1;
+        if (!empty($reports)) {
+            foreach($reports as $report) {
+                if($report->deleted == 1) {
+                    $dbc->set_new_report_position($report->id, 0);
+                } else {
+                    $dbc->set_new_report_position($report->id,$position);
+                    $position++;
+                }
+            }
+        }
+    }
+
 
     return true;
 }
