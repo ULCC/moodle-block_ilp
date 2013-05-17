@@ -316,13 +316,12 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
       */
      protected function get_courses_and_goals($userid)
      {
-
 	  $mydata=$this->dbc->get_form_element_data($this->tablename,$this->parent_id);
 
 	  $courses=array(get_string('ilp_element_plugin_goal_nocourses','block_ilp'));
 	  $goals=array(array(get_string('ilp_element_plugin_goal_nogoals','block_ilp')));
 
-	  if(!$misinfo = $this->dbquery($mydata->tablenamefield,array('userid'=>array('='=>$userid))))
+	  if(!$misinfo = $this->dbquery($mydata->tablenamefield,array($mydata->studentidfield=>array('='=>$userid))))
 	  {
 	       return array($courses,$goals);
 	  }
