@@ -2,18 +2,10 @@
 
 echo $OUTPUT->header();
 
-// include standard libraries
-$PAGE->requires->yui2_lib("yahoo");
-$PAGE->requires->yui2_lib("event");
-$PAGE->requires->yui2_lib("dom");
-$PAGE->requires->yui2_lib("animation");
-$PAGE->requires->yui2_lib("container");
-$PAGE->requires->yui2_lib("connection");
-
 $jsmodule = array(
-    'name'     	=> 'ilp_standard_functions',
-    'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
-	'requires'  	=> array('yahoo','event','dom','element','connection')
+'name'     	=> 'ilp_standard_functions',
+'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
+'requires'  	=> array('event','dom','node','io-form')
 );
 
 $PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmodule);

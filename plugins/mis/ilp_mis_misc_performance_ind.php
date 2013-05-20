@@ -111,7 +111,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
  	 */
  	
  	
-    public function set_data( $mis_user_id ){
+    public function set_data( $mis_user_id,$user_id=null ){
 
     		$table	=	get_config('block_ilp','mis_misc_performance_ind_table');
     		
@@ -204,7 +204,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
 	 * @param	array &$string the language strings array passed by reference so we  
 	 * just need to simply add the plugins entries on to it
 	 */
-	 function language_strings(&$string) {
+	 static function language_strings(&$string) {
 
         $string['ilp_mis_misc_performance_ind_pluginname']						= 'Performance Indicators';
         
@@ -235,6 +235,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
 
         $string['ilp_mis_misc_performance_ind_title_disp']						= 'Perfomance';
         $string['ilp_mis_misc_performance_ind_score_disp']						= 'Score';
+        $string['ilp_mis_misc_performance_ind_gscore_disp']						= 'Grade Score';
         $string['ilp_mis_misc_performance_ind_mtg_disp']						= 'Minimum Target Grade';
         $string['ilp_mis_misc_performance_ind_atg_disp']						= 'Aspiration Target Grade';
         $string['ilp_mis_misc_performance_ind_grade_disp']						= 'Current Grade';

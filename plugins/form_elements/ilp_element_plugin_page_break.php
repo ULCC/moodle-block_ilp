@@ -108,7 +108,7 @@ class ilp_element_plugin_page_break extends ilp_element_plugin {
     /**
     * function used to return the language strings for the plugin
     */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_page_break'] 		= 'Page break';
         $string['ilp_element_plugin_page_break_type'] = 'Page break';
         $string['ilp_element_plugin_page_break_description'] = 'A page break';
@@ -119,14 +119,14 @@ class ilp_element_plugin_page_break extends ilp_element_plugin {
    	/**
      * Delete a form element
      */
-    public function delete_form_element($reportfield_id) {
+    public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
         $extraparams = array(
             'audit_type' => $this->audit_type(),
             'label' => 'page break',
             'description' => 'page break',
             'id' => $reportfield_id
         );
-    	return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
+    	return parent::delete_form_element(  $reportfield_id, $this->tablename, $extraparams );
     }
 
     /**

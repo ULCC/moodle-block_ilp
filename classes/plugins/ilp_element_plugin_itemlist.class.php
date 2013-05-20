@@ -286,7 +286,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
      *  
      *  @param int $reportfield_id the id of the reportfield 
      */
-    public function delete_form_element($reportfield_id) {
+    public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
 	   	//get the record for the field
     	$pluginrecord			=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield_id);
     	
@@ -306,7 +306,7 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
             'description' => $reportfield->description,
             'id' => $reportfield_id
         );
-    	return parent::delete_form_element($this->tablename,$reportfield_id,$extraparams);
+    	return parent::delete_form_element($reportfield_id,$this->tablename,$extraparams);
     }
 
     public function uninstall() {

@@ -103,8 +103,8 @@ class edit_report_mform extends ilp_moodleform {
             $mform->addElement('html', get_string('reportnojs','block_ilp'));
             $mform->addElement('html', '</noscript>');
 
-            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reptype', '', get_string('openend','block_ilp'), 1);
-            $radioarray[]   =  &MoodleQuickForm::createElement( 'radio', 'reptype', '',get_string('finaldate','block_ilp') , 2);
+            $radioarray[]   =&  $mform->createElement( 'radio', 'reptype', '', get_string('openend','block_ilp'), 1);
+            $radioarray[]   =&  $mform->createElement( 'radio', 'reptype', '',get_string('finaldate','block_ilp') , 2);
 
             $mform->addGroup(
                 $radioarray,
@@ -173,9 +173,9 @@ class edit_report_mform extends ilp_moodleform {
             );
 
             $radioarray         =   array();
-            $radioarray[]       =   &MoodleQuickForm::createElement( 'radio', 'recurstart', '', get_string('reportcreation','block_ilp'), ILP_RECURRING_REPORTCREATION ,array('class'=>'recurring')); ;
-            $radioarray[]       =   &MoodleQuickForm::createElement( 'radio', 'recurstart', '', get_string('firstentry','block_ilp') , ILP_RECURRING_FIRSTENTRY ,array('class'=>'recurring'));
-            $radioarray[]       =   &MoodleQuickForm::createElement( 'radio', 'recurstart', '',get_string('specificdate','block_ilp') , ILP_RECURRING_SPECIFICDATE ,array('class'=>'recurring'));
+            $radioarray[]       =&  $mform->createElement( 'radio', 'recurstart', '', get_string('reportcreation','block_ilp'), ILP_RECURRING_REPORTCREATION ,array('class'=>'recurring')); ;
+            $radioarray[]       =&  $mform->createElement( 'radio', 'recurstart', '', get_string('firstentry','block_ilp') , ILP_RECURRING_FIRSTENTRY ,array('class'=>'recurring'));
+            $radioarray[]       =&  $mform->createElement( 'radio', 'recurstart', '',get_string('specificdate','block_ilp') , ILP_RECURRING_SPECIFICDATE ,array('class'=>'recurring'));
 
             $mform->addGroup(
                 $radioarray,
@@ -230,7 +230,7 @@ class edit_report_mform extends ilp_moodleform {
 
 
 
-        function validation( $data ){
+        function validation( $data, $files ){
 
             $data   =   (object)    $data;
 

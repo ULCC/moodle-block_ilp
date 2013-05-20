@@ -159,7 +159,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
  	 */
  	
  	
-    public function set_data( $mis_user_id ){
+    public function set_data( $mis_user_id,$user_id=null ){
     		
     		$this->mis_user_id	=	$mis_user_id;
     		
@@ -259,7 +259,7 @@ class ilp_mis_learner_profile_qualifications extends ilp_mis_plugin	{
 	 * @param	array &$string the language strings array passed by reference so we  
 	 * just need to simply add the plugins entries on to it
 	 */
-	 function language_strings(&$string) {
+	 static function language_strings(&$string) {
 
         $string['ilp_mis_learner_qualifications_pluginname']						= 'Learner Profile Qualifications On Entry';
         $string['ilp_mis_learner_qualifications_pluginnamesettings']				= 'Qualifications On Entry Configuration';

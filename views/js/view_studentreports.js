@@ -1,14 +1,13 @@
-var Dom = YAHOO.util.Dom;
-var Event = YAHOO.util.Event;
 
 M.ilp_view_studentreports = {
 
     // params from PHP
     open_image : null,
     closed_image : null,
+    Y : null,
 
-    init: function(Y, open_image, closed_image) {
-
+    init: function(Y,open_image, closed_image) {
+        this.Y  =   Y;
         this.open_image = open_image;
         this.closed_image = closed_image;
 
@@ -17,107 +16,101 @@ M.ilp_view_studentreports = {
         var widths = new Array();
 
        // get all the entry links
-       var toggle = Dom.getElementsByClassName('entry_toggle');
+       var toggle = Y.all('.entry_toggle');
 
-        for(i=0; i<toggle.length; i++)   {
+        toggle.each( function (tog) {
+
+            toggle_id   = tog.get('id');
+
+
+
+            // get the height of the container element
+            heights[toggle_id]  =    M.ilp_standard_functions.get_height(Y.one('#'+toggle_id+'_entry'));
+
+            //get width
+            widths[toggle_id]   =   M.ilp_standard_functions.get_width(Y.one('#'+toggle_id+'_entry'));
+
+            tog.setStyle("cursor", "pointer");
+
+            // create the img icon and insert it into the start of the header
+            var img = Y.Node.create('<img id="'+toggle_id+'_icon" class="collapse">');
+
+            //the before function does not seem to be functioning correctly as the image is being inserted after
+            tog.insert(img,'before');
+
+            Y.on('click',function () {M.ilp_view_studentreports.toggle_container(tog, heights[toggle_id], 0);},tog );
+
+            // add the open icon
+            Y.one('#'+toggle_id+'_icon').set('src', open_image);
+
+        })
+
+        var expandall = Y.one('#studentreport_expandall');
+
+        Y.on('click', function () {
+            var toggle =  Y.all('.entry_toggle');
+
+            toggle.each( function (tog){
+
+                toggle_id   = tog.get('id');
 
                 // get the height of the container element
-                heights[toggle[i].id] = M.ilp_standard_functions.get_height(Dom.get(toggle[i].id+'_entry'));
-
-                //get width
-                widths[toggle[i].id] = M.ilp_standard_functions.get_width(Dom.get(toggle[i].id+'_entry'));
-
-                // set the cursor style so the user can see this is clickable
-                Dom.setStyle(toggle[i], "cursor", "pointer");
-
-                // create the img icon and insert it into the start of the header
-                img = document.createElement('img');
-                img.setAttribute('id', toggle[i].id+'_icon');
-                img.setAttribute('class', 'collapse');
-                toggle[i].insertBefore(img, document.getElementById(toggle[i].id).firstChild);
-
-                toggle[i].onclick = function() {
-                    M.ilp_view_studentreports.toggle_container(this, heights[this.id], 0);
-                 };
-
-                // close and hide the container
-                //Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "display", "none");
-                //Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "overflow", "hidden");
-                //Dom.setStyle(Dom.get(toggle[i].id+'_entry'), "height", "0px");
-
-                // add the closed icon
-                document.getElementById(toggle[i].id+'_icon').setAttribute('src', this.open_image);
-        }
-
-        console.log(widths);
-
-        // get the expand all link
-        var expandall = document.getElementById('studentreport_expandall');
-
-        expandall.onclick   =   function()  {
-
-            // get all the entry links
-            var toggle = Dom.getElementsByClassName('entry_toggle');
-
-            for(i=0; i<toggle.length; i++)   {
-                // get the height of the container element
-                heights[toggle[i].id] = M.ilp_standard_functions.get_height(Dom.get(toggle[i].id+'_entry'));
+                heights[toggle_id]  =    M.ilp_standard_functions.get_height(Y.one('#'+toggle_id+'_entry'));
 
                 //if the entry window is closed open it
-                if (heights[toggle[i].id]   == 0) {
-                    M.ilp_view_studentreports.toggle_container(toggle[i], 0, heights[this.id]);
+                if (heights[toggle_id]   == 0) {
+                    M.ilp_view_studentreports.toggle_container(tog, 0, heights[toggle_id])
                 }
-            }
-        }
+            });
+        },
+        expandall)
 
 
-        // get the expand all link
-        var collapseall = document.getElementById('studentreport_collapseall');
+        var collapseall = Y.one('#studentreport_collapseall');
 
-        collapseall.onclick   =   function()  {
-            // get all the entry links
-            var toggle = Dom.getElementsByClassName('entry_toggle');
+        Y.on('click', function () {
 
-            for(i=0; i<toggle.length; i++)   {
+            var toggle =  Y.all('.entry_toggle');
+
+            toggle.each(function(tog) {
+
+
+                toggle_id   = tog.get('id');
+
+                elem    = Y.one('#'+toggle_id+'_entry');
+
                 // get the height of the container element
-                heights[toggle[i].id] = M.ilp_standard_functions.get_height(Dom.get(toggle[i].id+'_entry'));
+                heights[toggle_id]  =    M.ilp_standard_functions.get_height(elem);
 
                 //if the entry window is closed open it
-                if (heights[toggle[i].id]   > 0) {
-                    M.ilp_view_studentreports.toggle_container(toggle[i], heights[toggle[i].id], 0 );
+                if (heights[toggle_id]   > 0) {
+                    M.ilp_view_studentreports.toggle_container(tog, heights[toggle_id], 0);
                 }
-            }
-        }
+            })
+        }, collapseall);
 
-        stateselector   =   Dom.get('reportstateselect');
+
+        var stateselector = Y.one('#reportstateselect');
 
         if (typeof(stateselector) != "undefined" && stateselector != null) {
 
-            stateselector.onchange  =   function () {
+            Y.on('change',
+                function() {
+                    deadlineany = Y.one("#deadline_any");
+                    deadlineoverdue = Y.one('#deadline_overdue');
+                    deadlinecomplete = Y.one('#deadline_complete');
 
-                if (stateselector.value != '0')   {
+                    if (stateselector.get('value') != '0')   {
+                        deadlineany.set('checked',true);
+                        deadlineoverdue.set('disabled',true);
+                        deadlinecomplete.set('disabled',true);
 
-                    deadlineany =   Dom.get('deadline_any');
-                    deadlineany.checked = true;
-
-                    deadlineoverdue =   Dom.get('deadline_overdue');
-                    deadlineoverdue.disabled    =   true;
-
-                    deadlinecomplete =   Dom.get('deadline_complete');
-                    deadlinecomplete.disabled    =   true;
-
-                } else if (stateselector.value == '0') {
-
-                    deadlineoverdue =   Dom.get('deadline_overdue');
-                    deadlineoverdue.disabled    =   false;
-
-                    deadlinecomplete =   Dom.get('deadline_complete');
-                    deadlinecomplete.disabled    =   false;
-                }
-
-            }
+                    } else if (stateselector.value == '0') {
+                        deadlineoverdue.set('disabled',true);
+                        deadlinecomplete.set('disabled',true);
+                    }
+                }, stateselector);
         }
-
     },
 
 
@@ -135,73 +128,69 @@ M.ilp_view_studentreports = {
         // global variables
 
         // disable the onclick so it can't be pressed twice
-        elem.onclick = null;
+        elem.detach('click');
 
         // add the current id to the location bar
         //window.location.href = new RegExp("[^#]+").exec(window.location.href)+'#'+elem.id;;
 
         // get the top level div for the page
-        var page = Dom.get('page');
+        var page =  Y.one('#page');
+
+        element_id   = elem.get('id');
+
 
         // get the container to animate
-        var container = Dom.get(elem.id+"_entry");
+        var container = Y.one('#'+element_id+"_entry");
 
         containerheight	=	M.ilp_standard_functions.get_height(container);
          if(to == 0) {
-
-             // fix the height of the page so the animation isn't screwy
-             Dom.setStyle(page, "height", M.ilp_standard_functions.get_height(page)+"px");
+            // fix the height of the page so the animation isn't screwy
+             page.setStyle("height",M.ilp_standard_functions.get_height(page)+"px");
 
              // reset the desired height in case ajax has expanded the content
              from = M.ilp_standard_functions.get_height(container);
 
+             elemicon    =   Y.one('#'+element_id+'_icon');
 
-            // add the closed icon
-            document.getElementById(elem.id+'_icon').setAttribute('src', this.closed_image);
+             // add the closed icon
+             elemicon.set('src',this.closed_image);
 
              // set the overflow to hidden on the container so we don't get scroll bars
-             Dom.setStyle(container, "overflow", "hidden");
+              container.setStyle("overflow", "hidden");
 
          } else {
-          //add the open icon
-            document.getElementById(elem.id+'_icon').setAttribute('src', this.open_image);
+             //add the open icon
+             elemicon   =   Y.one('#'+element_id+'_icon');
+             elemicon.set('src', this.open_image);
          }
 
-         // show the hidden div
-         Dom.setStyle(container, "display", "block");
+         container.setStyle("display", "block");
 
-         // set the animation properties
-         var attributes = { height: { from: from, to: to} };
 
-         // create the animation object
-         var anim = new YAHOO.util.Anim(elem.id+"_entry", attributes, Math.abs(from-to)/1000);
+        // create the animation object
+        // set the animation properties
+        var animation  = new this.Y.Anim({
+            node: container,
+            duration: 0.3,
+            to: {height:to},
+            from: {height:from}
+        });
 
-         // set the oncomplete callback
-         anim.onComplete.subscribe(function() {
 
-             // restore the onclick
-             elem.onclick = function() { M.ilp_view_studentreports.toggle_container(this, to, from); };
+        animation.on('end', function(e){
+            elem.on('click',function () { M.ilp_view_studentreports.toggle_container(elem, to, from);});
 
-             if(to == 0) {
+            if (to == 0)   {
+                container.setStyle("display","none");
+                page.setStyle("height","auto");
+            }   else {
+                container.setStyle("overflow","auto");
+                container.setStyle("height","auto");
+            }
 
-                 // hide the container
-                 Dom.setStyle(container, "display", "none");
+        });
 
-                 // allow the page size to drop back now the animation is complete
-                 Dom.setStyle(page, "height", "auto");
-
-             } else {
-                 // set the height to auto so it can grow with new ajax content
-                 Dom.setStyle(container, "height", "auto");
-
-                 // set the overflow to auto so we can see any expanded content
-                 Dom.setStyle(container, "overflow", "auto");
-             }
-
-         });
-
-         // do it
-         anim.animate();
+        animation.run();
 
     }
 

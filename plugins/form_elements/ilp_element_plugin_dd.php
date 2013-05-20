@@ -55,7 +55,7 @@ class ilp_element_plugin_dd extends ilp_element_plugin_itemlist{
     /**
     * function used to return the language strings for the plugin
     */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_dd'] 				= 'Select';
         $string['ilp_element_plugin_dd_type'] 			= 'select box';
         $string['ilp_element_plugin_dd_description'] 	= 'A drop-down selector';

@@ -35,7 +35,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
         return $entry->creator_id;
     }
 
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_state'] 			= 'Select';
         $string['ilp_element_plugin_state_type'] 		= 'state select';
         $string['ilp_element_plugin_state_description'] 	= 'A state selector';
@@ -82,7 +82,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
     * @param int $reportfield_id
     * @param string $field - the name of a extra field to read from items table: used by ilp_element_plugin_state
     */
-	protected function get_option_list( $reportfield_id, $field=false ){
+	protected function get_option_list( $reportfield_id, $field = false, $useid = true ){
 
 		$outlist        = array();
 		$passlist       = array();
@@ -238,9 +238,9 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 
         if (!empty($data->$fieldname)) {
 
-            $pluginentry->value		=	$data->$fieldname;
+            $values		=	$data->$fieldname;
             //pass the values given to $entryvalues as an array
-            $entryvalues	=	(!is_array($pluginentry->value)) ? array($pluginentry->value): $pluginentry->value;
+            $entryvalues	=	(!is_array($values)) ? array($values): $values;
 
             foreach ($entryvalues as $ev) {
                 $state_item   =   $this->dbc->get_state_item_id($this->tablename,$pluginrecord->id ,$ev, 'value', $this->external_items_table );

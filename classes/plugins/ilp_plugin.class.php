@@ -140,7 +140,7 @@ class ilp_plugin {
     /**
      * Installs any new plugins
      */
-    public function install_new_plugins($dbplugins,$plugin_class_directory) {
+    public static function install_new_plugins($dbplugins,$plugin_class_directory) {
         global $CFG;
 
         // instantiate the assmgr db
@@ -192,7 +192,7 @@ class ilp_plugin {
     /**
      * function used to return the language strings for the plugin
      */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         return $string;
     }
 

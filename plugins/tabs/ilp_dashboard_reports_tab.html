@@ -40,7 +40,7 @@
             <?php if (!empty($has_comments)) {?>
 			<div class="reports-comments">
 				<div class="view-comments">
-				<h3 id="entry_<?php echo $entry->id; ?>" class="commentheading"><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3>
+                <h3 id="entry_<?php echo $entry->id; ?>" class="commentheading"><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3>
 				<?php if (!empty($access_report_addcomment)) { ?><div class="add"><a style="float:right;margin: 0 0 0 200px;" href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&course_id={$this->course_id}"?>'  ><?php echo get_string('addcomment','block_ilp');?></a></div><?php } ?>
 				</div>
 			</div>

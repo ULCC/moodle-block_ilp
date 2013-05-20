@@ -317,7 +317,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      * @param $string
      * @return array $string with language strings
      */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_datefield'] 		        = 'Date field';
         $string['ilp_element_plugin_datefield_type'] 	        = 'date field';
         $string['ilp_element_plugin_datefield_description'] 	= 'A date field element';
@@ -338,8 +338,8 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
     /** Function used to delete a form element from the report
      * @param int $reportfield_id - the id of the reportfield
      */
-    public function delete_form_element($reportfield_id) {
-        return parent::delete_form_element($this->tablename, $reportfield_id);
+    public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
+        return parent::delete_form_element( $reportfield_id, $this->tablename);
     }
 
 
@@ -477,10 +477,10 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      */
     public function delete_entry_record($entry_id) {
 
-     $reportfield_id = $this->dbc-> get_reportfield_id($entry_id);
+        $cal_events = $this->dbc-> get_calevent_reportfield_id($entry_id);
 
 
-     $event	=	$this->dbc->get_calendar_events($entry_id, $reportfield_id);
+     $event	=	$this->dbc->get_calendar_events($entry_id, $cal_events->reportfield_id);
 
         if (!empty($event))	{
             foreach($event as $ev) {
@@ -503,10 +503,10 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
 
         foreach($entry as $e) {
 
-        $reportfield_id = $this->dbc-> get_reportfield_id($e->id);
+        $cal_events = $this->dbc-> get_calevent_reportfield_id($e->id);
 
 
-            $event	=	$this->dbc->get_calendar_events($e->id, $reportfield_id);
+            $event	=	$this->dbc->get_calendar_events($e->id, $cal_events->reportfield_id);
 
             //setting report events as invisible
             foreach($event as $ev) {

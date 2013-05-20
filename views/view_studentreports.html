@@ -1,26 +1,12 @@
 <?php
 
-// include standard libraries
-$PAGE->requires->yui2_lib("yahoo");
-$PAGE->requires->yui2_lib("event");
-$PAGE->requires->yui2_lib("dom");
-$PAGE->requires->yui2_lib("animation");
-$PAGE->requires->yui2_lib("container");
-$PAGE->requires->yui2_lib("connection");
-
-// load the standard YUI style sheet
-$PAGE->requires->css_theme(new moodle_url($CFG->wwwroot.'/lib/yui/2.9.0/build/container/assets/container.css'));
-
-
-
-
 echo $OUTPUT->header();
 
 
 $jsmodule = array(
     'name'     	=> 'ilp_standard_functions',
     'fullpath' 	=> '/blocks/ilp/views/js/lib.js',
-	'requires'  	=> array('yahoo','event','dom','element','connection')
+	'requires'  	=> array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
 );
 
 $PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmodule);
@@ -36,7 +22,7 @@ $jsarguments = array(
 $jsmodule = array(
     'name'     	=> 'ilp_view_studentreports',
     'fullpath' 	=> '/blocks/ilp/views/js/view_studentreports.js',
-	'requires'  	=> array('yahoo','event','dom','element','connection')
+	'requires'  	=> array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
 );
 
 

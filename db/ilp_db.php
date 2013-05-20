@@ -384,15 +384,13 @@ class ilp_db_functions	extends ilp_logging {
 
     /**
      * Returns the position number a new report field should take
-     *
-     * @param int $report_id the id of the report that the new field will be in
+     * @internal param int $report_id the id of the report that the new field will be in
      * @return int the new fields position number
      */
 
     function get_new_report_position() {
 
-        $position =  $this->dbc->count_records("block_ilp_report");
-
+        $position =  $this->dbc->count_records_select("block_ilp_report", "position !='0'");
         return (empty($position)) ? 1 : $position+1;
     }
 
@@ -1005,7 +1003,7 @@ class ilp_db_functions	extends ilp_logging {
         global 	$CFG;
 
         $sql	=	"SELECT			 si.*
-					 FROM			{block_ilp_plu_user_status} as us,
+					 FROM			{block_ilp_user_status} as us,
 					 				{block_ilp_plu_sts_items} as si,
 					 				{block_ilp_entry} as e
 					 WHERE			e.id                =   :entry_id
@@ -1129,7 +1127,9 @@ class ilp_db_functions	extends ilp_logging {
     * @return int or false
     */
     public function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
-		$element_record = array_shift( $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ) ) );
+        $records    =   $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ));
+
+		$element_record = array_shift( $records  );
 		if( !empty( $element_record ) ){
 			return $element_record->id;
 		}
@@ -2743,7 +2743,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return object containing $reportfield_id or false
      *
      */
-    function get_reportfield_id($entry_id){
+    function get_calevent_reportfield_id($entry_id){
 
         $sql    =   "SELECT     reportfield_id
                       FROM      {block_ilp_cal_events}

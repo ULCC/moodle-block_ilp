@@ -288,8 +288,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							$capability	=	$this->dbc->get_capability_by_name('block/ilp:viewcomment');
 							if (!empty($capability))	$access_report_viewcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
-							//check to see whether the user can delete the reports entry
-							$candelete =	(!empty($report->frequency) && !empty($access_report_deletereports))	?	true	: false;
+							// Check to see whether the user can delete the reports entry either single entry or multiple entry.
+							$candelete =	(!empty($access_report_deletereports))	?	true	: false;
 
                             $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
                             if (!empty($capability))	$access_report_viewothers		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
@@ -435,7 +435,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 					$module = array(
 					    'name'      => 'ilp_dashboard_reports_tab',
 					    'fullpath'  => '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.js',
-					    'requires'  => array('yui2-dom', 'yui2-event', 'yui2-connection', 'yui2-container', 'yui2-animation')
+					    'requires'  => array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
 					);
 
 					// js arguments
@@ -505,7 +505,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 	 * @param	array &$string the language strings array passed by reference so we
 	 * just need to simply add the plugins entries on to it
 	 */
-	 function language_strings(&$string) {
+	 static function language_strings(&$string) {
         $string['ilp_dashboard_reports_tab'] 					= 'entries tab';
         $string['ilp_dashboard_reports_tab_name'] 				= 'Reports';
         $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';

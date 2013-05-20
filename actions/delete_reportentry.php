@@ -60,11 +60,11 @@ $entry		=	$dbc->get_entry_by_id($entry_id);
 if (empty($entry)) {
 	print_error('entrynotfouund','block_ilp');
 }
-
-if (empty($report->frequency))	{
-	//entries can only be deleted from reports that allow multiple entries
-	print_error('entrycannotbedeleted','block_ilp');
-} 
+// Removed the below coding to enable delete link for single entry in reports tab.
+// if (empty($report->frequency))	{
+//	entries can only be deleted from reports that allow multiple entries
+//	print_error('entrycannotbedeleted','block_ilp');
+//}
  
 //check if the user has the delete record capability
 if (empty($access_report_deletereports))	{

@@ -65,7 +65,11 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  	 */
  	
  	
-    public function set_data( $mis_user_id, $user_id ){
+    public function set_data( $mis_user_id, $user_id=NULL ){
+
+            //this check is in place as we have to make sure the userid is populated
+            if (empty($user_id))  return false;
+
     		$this->mis_user_id	=	$mis_user_id;
     		$this->user_id		=	$user_id;
     		
@@ -218,7 +222,7 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
 	 * @param	array &$string the language strings array passed by reference so we  
 	 * just need to simply add the plugins entries on to it
 	 */
-	 function language_strings(&$string) {
+	 static function language_strings(&$string) {
 
         $string['ilp_mis_learner_contact_pluginname']						= 'Contact Details';
         

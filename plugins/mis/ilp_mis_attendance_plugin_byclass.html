@@ -108,7 +108,7 @@
 $jsmodule = array(
     'name'     	=> 'ilp_mis_attendance_plugin_byclass',
     'fullpath' 	=> '/blocks/ilp/plugins/mis/ilp_mis_attendance_plugin_byclass.js',
-	'requires'  	=> array('yahoo','event','dom','element','connection')
+	'requires'  	=> array('event','dom','node','io-form')
 );
 
 $PAGE->requires->js_init_call('M.ilp_mis_attendance_plugin_byclass.init', null, true, $jsmodule);

@@ -122,7 +122,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
      *
      * @param $mis_user_id the mis id of the user whose data will be retireved.
      */
-    function set_data($mis_user_id)
+    function set_data($mis_user_id, $user_id=null)
     {
 
         $table = 'VLE1112_NEWStudentAttendance';
@@ -254,7 +254,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
         return 'overview';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
 		$string['ilp_mis_attendance_plugin_hcc_attendance_pluginnamesettings'] = 'HCC attendance plugin';
         $string['ilp_mis_attendance_plugin_hcc_attendance_pluginstatus'] = 'Plugin status';

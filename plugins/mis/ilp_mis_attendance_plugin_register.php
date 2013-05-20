@@ -494,7 +494,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
      *
      * @param $mis_user_id the mis id of the user whose data will be retireved.
      */
-    function set_data($mis_user_id)
+    function set_data($mis_user_id, $user_id=null)
     {
 
         $table = get_config('block_ilp', 'mis_plugin_register_table');
@@ -691,7 +691,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
         return 'attendance';
     }
 
-    function language_strings(&$string)
+    static function language_strings(&$string)
     {
 
         $string['ilp_mis_attendance_plugin_register_pluginname'] = 'Register Overview';

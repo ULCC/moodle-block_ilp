@@ -78,7 +78,7 @@ class ilp_element_plugin_file_mform  extends ilp_element_plugin_mform {
 	  	
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record("block_ilp_plu_file",$data->reportfield_id) : false;
 
-         $data->acceptedtypes    =   base64_encode(serialize($data->acceptedtypes));
+        if (!empty($data->acceptedtypes)) $data->acceptedtypes    =   base64_encode(serialize($data->acceptedtypes));
 
 	 	if (empty($plgrec)) {
 	 		return $this->dbc->create_plugin_record("block_ilp_plu_file",$data);

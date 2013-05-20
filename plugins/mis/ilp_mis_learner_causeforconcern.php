@@ -89,7 +89,7 @@
  	         *
  	         * @return	null
  	         */
-             public function set_data( $mis_user_id ) {
+             public function set_data( $mis_user_id, $user_id=null ) {
 
                 $this->mis_user_id      =   $mis_user_id;
 
@@ -238,7 +238,7 @@
         
                     
 
-                    function language_strings(&$string) {
+                    static function language_strings(&$string) {
 
                             $string['ilp_mis_learner_causeforconcern_table']						    = 'Database table';
                             $string['ilp_mis_learner_causeforconcern_tabledesc']				        = 'The name of the database table where the data for this plugin is held';

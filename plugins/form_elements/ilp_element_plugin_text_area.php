@@ -164,7 +164,7 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
     /**
     * function used to return the language strings for the plugin
     */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_text_area'] 		= 'Textarea';
         $string['ilp_element_plugin_text_area_type'] 	= 'Textarea';
         $string['ilp_element_plugin_text_area_description'] = 'A textarea field';
@@ -179,8 +179,8 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
    	/**
      * Delete a form element
      */
-    public function delete_form_element($reportfield_id) {
-    	return parent::delete_form_element($this->tablename, $reportfield_id);
+    public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
+    	return parent::delete_form_element( $reportfield_id, $this->tablename);
     }
     
     /**

@@ -58,7 +58,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
  	 */
  	
  	
-    public function set_data( $mis_user_id ){
+    public function set_data( $mis_user_id,$user_id=null ){
     		
     		$this->mis_user_id	=	$mis_user_id;
     		
@@ -185,7 +185,7 @@ class ilp_mis_learner_profile_assessments extends ilp_mis_plugin	{
 	 * @param	array &$string the language strings array passed by reference so we  
 	 * just need to simply add the plugins entries on to it
 	 */
-	 function language_strings(&$string) {
+	 static function language_strings(&$string) {
 
         $string['ilp_mis_learner_assessments_pluginname']						= 'Learner Profile Initial Assessment';
         $string['ilp_mis_learner_assessments_pluginnamesettings']				= 'Initial Assessment Configuration';

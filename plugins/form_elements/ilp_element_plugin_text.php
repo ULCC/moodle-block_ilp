@@ -165,7 +165,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
     /**
     * function used to return the language strings for the plugin
     */
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_text'] 		= 'Text';
         $string['ilp_element_plugin_text_type'] = 'Text Field';
         $string['ilp_element_plugin_text_description'] = 'A text field';
@@ -180,7 +180,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
    	/**
      * Delete a form element
      */
-    public function delete_form_element($reportfield_id) {
+    public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
 		$reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
         $extraparams = array(
             'audit_type' => $this->audit_type(),
@@ -188,7 +188,7 @@ class ilp_element_plugin_text extends ilp_element_plugin {
             'description' => $reportfield->description,
             'id' => $reportfield_id
         );
-    	return parent::delete_form_element( $this->tablename, $reportfield_id, $extraparams );
+    	return parent::delete_form_element( $reportfield_id, $this->tablename, $extraparams );
     }
     
     /**

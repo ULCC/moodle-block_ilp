@@ -85,7 +85,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
      *
      *  @param int $reportfield_id the id of the reportfield
      */
-    public function delete_form_element($reportfield_id) {
+    public function delete_form_element($reportfield_id, $tablename=null, $extraparams=null) {
         //get the record for the field
         $pluginrecord			=	$this->dbc->get_form_element_by_reportfield($this->tablename,$reportfield_id);
 
@@ -99,7 +99,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             'description' => $reportfield->description,
             'id' => $reportfield_id
         );
-        return parent::delete_form_element($reportfield_id,$this->tablename,$extraparams);
+        return parent::delete_form_element($this->tablename, $reportfield_id, $extraparams);
     }
 
 
@@ -117,13 +117,13 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         $fieldname	=	$reportfield_id."_field";
 
         if (!empty($this->savetype)) {
-            $entry	=	$this->dbc->get_entrystatus($entry_id,$reportfield_id);
-            if (!empty($entry)) {
-                $fielddata	=	array();
+            $statusdata	=	$this->dbc->get_entrystatus($entry_id,$reportfield_id);
+            if (!empty($statusdata)) {
                 $comma	= "";
+                $statusdata = (is_array($statusdata)) ?   $statusdata : array($statusdata);
                 //loop through all of the data for this entry in the particular entry
-                foreach($entry as $e) {
-                    $entryobj->$fieldname	.=	$e->name.$comma;
+                foreach($statusdata as $s) {
+                    $entryobj->$fieldname	.=	$s->name.$comma;
                     $comma	=	",";
                 }
             }
@@ -277,7 +277,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         $table->addKey($table_key);
    }
 
-    function language_strings(&$string) {
+    static function language_strings(&$string) {
         $string['ilp_element_plugin_status'] 			= 'Select';
         $string['ilp_element_plugin_status_type'] 		= 'status select';
         $string['ilp_element_plugin_status_description'] 	= 'A status selector';
@@ -357,7 +357,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
     * @param int $reportfield_id
     * @param string $field - the name of a extra field to read from items table: used by ilp_element_plugin_state
     */
-    public function get_option_list( $reportfield_id, $field=false ){
+    public function get_option_list( $reportfield_id, $field = false, $useid = true ){
         //return $this->optlist2Array( $this->get_optionlist() );
         $outlist = array();
         $passlist = array();

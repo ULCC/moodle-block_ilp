@@ -72,7 +72,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     	}
     }
 
-    public function set_data( $student_id ){
+    public function set_data( $student_id, $user_id=null ){
     	//get the plugins configuration and pass to variables 
         $tablename 			= get_config('block_ilp','mis_plugin_simple_studenttable'); //$this->params[ 'student_table' ];
         if (!empty($tablename)) {
@@ -159,7 +159,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	 * @param	array &$string the language strings array passed by reference so we  
 	 * just need to simply add the plugins entries on to it
 	 */
-	 function language_strings(&$string) {
+	 static function language_strings(&$string) {
 	 	
         $string['ilp_mis_attendance_plugin_simple_attendance']				= 'Attendance';
         $string['ilp_mis_attendance_plugin_simple_punctuality']				= 'Punctuality';
