@@ -346,9 +346,13 @@ class ilp_mis_attendance_plugin_courseperform extends ilp_mis_attendance_plugin
             //remove any decimal places
             $monthpercent = number_format($monthpercent, 0);
 
-            $latepercent = ($d[$this->fields['markslate']] / $present) * 100;
+            $latepercent = (1 - $d[$this->fields['markslate']] / $present) * 100;
 
             $latepercent = number_format($latepercent, 0);
+
+            if($latepercent == 0) {
+                $latepercent = 100;
+            }
 
             //fill the couse month array position with percentage for the month
             $mcbdata[$courseid] = array(

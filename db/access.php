@@ -96,6 +96,15 @@ $block_ilp_capabilities = array(
 
 	),
 
+    //the capability needed in order to appear in student list for a course
+    'block/ilp:reviewee' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'legacy' => array(
+            'student' => CAP_ALLOW,
+        )
+ 	),
+
 	//the capaability needed in order to view an ilp belong to someone else
 	'block/ilp:viewotherilp' => array(
 		'captype' => 'read',
@@ -170,6 +179,17 @@ $block_ilp_capabilities = array(
 
 
 
+    //the capability needed in order to add/view an extension
+    'block/ilp:addviewextension' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_BLOCK,
+        'legacy' => array(
+            'student' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+            'user' => CAP_PREVENT
+        )
+    ),
 
 
 

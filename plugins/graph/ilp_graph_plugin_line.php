@@ -204,7 +204,7 @@ class ilp_graph_plugin_line extends ilp_graph_plugin {
 
 
     public function specific_edit(&$reportgraph)  {
-        parent::specific_edit(&$reportgraph,true);
+        parent::specific_edit($reportgraph,true);
     }
 
 

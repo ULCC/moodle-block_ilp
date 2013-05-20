@@ -104,6 +104,7 @@
 	$string['editreportfields']		=	'Edit Report Fields';
 	$string['edit_status_items']	=	'Edit Status Items';
     $string['editstatusitems']		=	'Edit Status Items';
+    $string['entrydeleted']		=	'The Report was successfully deleted';
     $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this report';
     $string['expandall']			=	'Expand all';
 	$string['enablereport'] 		= 	'Enable Report';
@@ -383,13 +384,16 @@
 	$string['ilp:updatestatus'] 		= 	'Update Status';
 	$string['ilp:viewreport'] 			= 	'View a report';
 	$string['ilp:viewilp'] 				= 	'View my own ilp';
+    $string['ilp:reviewee']       =   'Appear in student list for a course';
 	$string['ilp:viewotherilp'] 		= 	'View others ilp';
 	$string['ilp:addcomment'] 			= 	'Add a entry comment';
 	$string['ilp:deletecomment'] 		= 	'Delete entry comment';
 	$string['ilp:editcomment'] 			= 	'Edit entry comment';
 	$string['ilp:viewcomment'] 			= 	'View entry comments';
-	
-	
+	$string['ilp:addviewextension'] 	= 	'Add/View extension';
+
+$string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial Assessments';
+
 	//ERROR MESSAGES CHANGING THESE IS NOT RECOMMENDED
 	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';
 	$string['fieldcreationerror'] 			= 	'A error occurred whilst creating the field';
@@ -486,13 +490,20 @@
 	        require_once($tabs.'/'.$plugin_file.".php");
 	        // instantiate the object
 	        $class = basename($plugin_file, ".php");
-	        $tabobj = new $class();
-	        
-	        $method = array($tabobj, 'language_strings');
-        
-	        //check whether the language string element has been defined
+
+            //  language_string called staticall to prevent  loop between language string and the plugin
+            //caused by define_second_row tab_name() in dasboard tabs.
+
+	        //$tabobj = new $class();
+	        //$method = array($tabobj, 'language_strings');
+            //check whether the language string element has been defined
+
+            $method = "{$class}::language_strings";
+
 	        if (is_callable($method,true)) {
-	            $tabobj->language_strings($string);
+	            //$tabobj->language_strings($string);
+                $class::language_strings($string);
+
 	        }
 	        
 	    }

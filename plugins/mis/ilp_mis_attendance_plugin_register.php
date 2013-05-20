@@ -427,7 +427,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
 						
                         if (in_array($item['Week_No'], $termsweeks)) {
 
-                            if (!in_array($item[$markfield], $this->noclasscodes) && strlen($mark[$markfield]) > 0) {
+                            if (!in_array($item[$markfield], $this->noclasscodes) && strlen($item[$markfield]) > 0) {
                                 $total[$groupKey][$cday][$ctime][0][0]++;
                             }
                             if (in_array($item[$markfield], $this->presentcodes)) {

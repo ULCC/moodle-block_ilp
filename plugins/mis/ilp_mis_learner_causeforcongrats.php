@@ -345,6 +345,7 @@ class ilp_mis_learner_causeforcongrats extends ilp_mis_plugin	{
                     $string['ilp_mis_learner_causeforcongrats_disp_punctuality']							= 'Punctuality';
                     $string['ilp_mis_learner_causeforcongrats_disp_other']							= 'Other';
                     $string['ilp_mis_learner_causeforcongrats_disp_']							= '';
+                    $string['ilp_mis_learner_causeforcongrats_tab_name']							= 'Cause for Congratulations';
 
             }
 
@@ -359,7 +360,7 @@ class ilp_mis_learner_causeforcongrats extends ilp_mis_plugin	{
              *
              */
             function tab_name() {
-                return 'Cause for Congratulations';
+                return get_string('ilp_mis_learner_causeforcongrats_tab_name','block_ilp');
             }
 
 }

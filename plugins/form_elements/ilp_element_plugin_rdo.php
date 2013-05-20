@@ -47,10 +47,17 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_itemlist{
     	
 		$optionlist = $this->get_option_list( $this->reportfield_id );
 		$radioarray = array();
-		foreach( $optionlist as $key => $value ){
-			$radioarray[] = &MoodleQuickForm::createElement( 'radio', $fieldname, '', $value, $key );
-		}
 
+        $i  =   0;
+
+		foreach( $optionlist as $key => $value ){
+			$radioarray[] = $mform->createElement( 'radio', $fieldname, '', $value, $key );
+            //this sets the first radio option tobe the default selected option
+            if (empty($i))  {
+                $mform->setDefault($fieldname,$key);
+                $i++;
+            }
+		}
 
         $mform->addGroup(
             $radioarray,

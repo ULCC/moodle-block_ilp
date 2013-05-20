@@ -281,8 +281,8 @@ class ilp_mis_attendance_plugin_course extends ilp_mis_attendance_plugin
                 $present = $this->presents_cal($d[$this->fields['markspresent']], $d[$this->fields['marksauthabsent']]);
 
                 //calculate the months attendance percentage
-                //$monthpercent = ($present / $d[$this->fields['markstotal']]) * 100;
-                $monthpercent = 100 * (1 - ( $d[ $this->fields[ 'marksabsent' ] ] / $d[$this->fields['markstotal']] ));
+                $monthpercent = ($present / $d[$this->fields['markstotal']]) * 100;
+                //$monthpercent = 100 * (1 - ( $d[ $this->fields[ 'marksabsent' ] ] / $d[$this->fields['markstotal']] ));
 
                 //remove any decimal places
                 $monthpercent = number_format($monthpercent, 0);

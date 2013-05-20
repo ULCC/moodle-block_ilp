@@ -92,7 +92,7 @@ abstract class ilp_graph_plugin extends ilp_plugin  {
         }
 
         if (!empty($reportgraph->id)) {
-            $this->specific_edit(&$reportgraph);
+            $this->specific_edit($reportgraph);
         }
 
         // instantiate the form and load the data
@@ -245,7 +245,7 @@ abstract class ilp_graph_plugin extends ilp_plugin  {
      *                                  set the following are not added to reportgraph object: id,reportgraph_id,
      *                                  timemodified, timecreated
      */
-    public function specific_edit($reportgraph,$multipleitems = false,$non_attrib=NULL)  {
+    public function specific_edit(&$reportgraph,$multipleitems = false,$non_attrib=NULL)  {
         $plugin	=	$this->dbc->get_graph_plugin_by_id($reportgraph->plugin_id);
 
         //get the graph chart data from the plugin table
