@@ -17,17 +17,7 @@ class block_ilp extends block_list {
      * @return void
      */
     function init() {
-    	global $CFG;
-   	
-    	//require the ilp_settings class
-		require_once "$CFG->dirroot/blocks/ilp/classes/ilp_settings.class.php";
-
-		//instantiate the ilp settings class
-		$ilpsettings = new ilp_settings();
-    	
         $this->title = get_string('blockname', 'block_ilp');
-        $this->version = $ilpsettings->version();
-        $this->cron = $ilpsettings->cron(); 
     }
     
     /**

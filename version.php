@@ -1,25 +1,32 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * This is the ilp version file used by moodle 2.0 
+ * Version details
  *
- * @copyright &copy; 2011 University of London Computer Centre
- * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @package ILP
+ * @package    block
+ * @subpackage ILP
+ * @copyright  2011 University of London Computer Centre
+ * @author     http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @version 2.0
  */
 
-global $CFG;
+defined('MOODLE_INTERNAL') || die();
 
-//require the ilp_settings class
-require_once "$CFG->dirroot/blocks/ilp/classes/ilp_settings.class.php";
-
-//instantiate the ilp settings class
-$ilpsettings = new ilp_settings();
-
-//get the current version number of the ilp
-$plugin->version = $ilpsettings->version();
-
-
-//get the time setting for the ilp cron
-$plugin->cron = $ilpsettings->cron();
+$plugin->version = "2012102231";
+$plugin->cron = 86400;
+$plugin->component = 'block_ilp';
