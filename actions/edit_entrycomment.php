@@ -205,7 +205,7 @@ $SITE	=	$dbc->get_course_by_id(SITEID);
 $PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp')." : ".fullname($plpuser));
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_pagetype('ilp-entry');
-//$PAGE->set_pagelayout('ilp');
+$PAGE->set_pagelayout(ILP_PAGELAYOUT);
 $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php",$PARSER->get_params());
 //section name
 $PAGE->navbar->add($title);

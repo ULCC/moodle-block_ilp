@@ -70,6 +70,8 @@ if (!empty($items)) {
 }
 
 
+$pagelayout			=	new admin_setting_configtext('block_ilp/pagelayout',get_string('pagelayout','block_ilp'),get_string('pagelayoutconfig','block_ilp'),'standard');
+$settings->add($pagelayout);
 
 $userstatus			= 	new admin_setting_configselect('block_ilp/defaultstatusitem',get_string('defaultstatusitem','block_ilp'),get_string('defaultstatusitemconfig','block_ilp'), '',$options);
 $settings->add($userstatus);

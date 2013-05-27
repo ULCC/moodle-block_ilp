@@ -63,7 +63,7 @@ $SITE	=	$dbc->get_course_by_id(SITEID);
 $PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp')." : ".fullname($plpuser));
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_pagetype('ilp-dashboard');
-$PAGE->set_pagelayout('ilp');
+$PAGE->set_pagelayout(ILP_PAGELAYOUT);
 $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_main.php",$PARSER->get_params());
 
 //get the enabled template

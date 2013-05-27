@@ -62,7 +62,7 @@ $PAGE->navbar->add(get_string('predefinedreports', 'block_ilp'),$CFG->wwwroot."/
 //$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp'));
 //$PAGE->set_heading($SITE->fullname);
 //$PAGE->set_pagetype('ilp-configuration');
-//$PAGE->set_pagelayout('ilp');
+$PAGE->set_pagelayout(ILP_PAGELAYOUT);
 $PAGE->set_url('/blocks/ilp/actions/add_predefined_report.php', $PARSER->get_params());
 
 $p = new ilp_predefined_reports();

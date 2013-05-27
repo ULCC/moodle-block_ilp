@@ -140,6 +140,9 @@ define('ILP_DATEFIELD_DATE', 0);
 define('ILP_DATEFIELD_DEADLINE', 1);
 define('ILP_DATEFIELD_REVIEWDATE', 2);
 
-
-
-?>
+$pagelayout = get_config('block_ilp', 'pagelayout');
+if (!empty($pagelayout)) {
+    define('ILP_PAGELAYOUT', $pagelayout);
+} else {
+    define('ILP_PAGELAYOUT', 'standard');
+}
