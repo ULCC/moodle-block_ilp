@@ -534,12 +534,15 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                     array('class' => 'form_input')
                 );
                 $A->setValue( $option->value );
+                $mform->setType('itemvalue_' . $option->id, PARAM_ALPHANUMEXT);
+
                 $B = $mform->addElement(
                     'text',
                     'itemname_' . $option->id,
                     'label',
                     array('class' => 'form_input')
                 );
+                $mform->setType('itemname_' . $option->id, PARAM_ALPHANUMEXT);
                 $B->setValue( $option->name );
 
                 $C = $mform->addElement(
@@ -552,6 +555,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                 $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : "";
 
                 $C->setValue( $hexcolour );
+                $mform->setType('itemhexcolour_' . $option->id, PARAM_ALPHANUMEXT);
 
                 $mform->addElement( 'html', '<hr />' );
 
@@ -592,6 +596,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             array('class' => 'form_input')
         );
         $F->setValue( $info[ 'fail' ] );
+        $mform->setType('fail', PARAM_TEXT);
 
         $G = $mform->addElement(
             'textarea',
@@ -600,6 +605,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             array('class' => 'form_input')
         );
         $G->setValue( $info[ 'pass' ] );
+        $mform->setType('pass', PARAM_TEXT);
 
 
         //$mform->addRule('optionlist', null, 'minlength', 1, 'client');
