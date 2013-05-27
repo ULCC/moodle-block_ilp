@@ -641,6 +641,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             array('class' => 'form_input')
         );
         $F->setValue( $info[ 'fail' ] );
+        $mform->setType('fail', PARAM_TEXT);
 
         $G = $mform->addElement(
             'textarea',
@@ -649,6 +650,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             array('class' => 'form_input')
         );
         $G->setValue( $info[ 'pass' ] );
+        $mform->setType('pass', PARAM_TEXT);
 
 
         //$mform->addRule('optionlist', null, 'minlength', 1, 'client');
