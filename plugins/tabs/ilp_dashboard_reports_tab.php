@@ -847,9 +847,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                                       <input id='summary' type='checkbox' name='summary' value='1' {$summarychecked} >
                                       <p>
 					                  <input type='submit' value='Apply Filter' id='stateselectorsubmit' />
-					                  </p></div></form>";
-      return $stateselector;
-   }
+					                  </p></form></div>";
+			return $stateselector;
+	}
 
 
 
