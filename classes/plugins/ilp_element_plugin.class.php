@@ -502,8 +502,9 @@ class ilp_element_plugin {
 	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
+      * @@param bool returnvalue should a label or value be returned
 	  */
-	  public function view_data( $reportfield_id,$entry_id,&$entryobj ){
+	  public function view_data($reportfield_id, $entry_id, &$entryobj, $returnvalue = false ){
 		$this->entry_data( $reportfield_id,$entry_id, $entryobj );
 	 }
 	 
