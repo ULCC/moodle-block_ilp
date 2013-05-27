@@ -508,7 +508,7 @@ class ilp_db_functions	extends ilp_logging {
             $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
             $params['position'] =  $position;
             $params['otherfield'] = $otherfield;
-            $positionsql 	=  "{$and} (position = :position ||  position = :otherfield) ";
+            $positionsql 	=  "{$and} (position = :position OR position = :otherfield) ";
             $and = "AND";
         }
 
@@ -552,7 +552,7 @@ class ilp_db_functions	extends ilp_logging {
             $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
             $params['position'] = $position;
             $params['otherfield'] = $otherfield;
-            $positionsql 	=  "AND (position = :position ||  position = :otherfield)";
+            $positionsql 	=  "AND (position = :position OR position = :otherfield)";
 		}
 
        		$sql	=	"SELECT		*
