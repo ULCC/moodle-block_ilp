@@ -231,7 +231,9 @@ $string['noreports']='No reports available';
     $string['onemonthdata']		    =	'past 1 months data';
 
     $string['notinsummary']	        =	'Not in summary';
-
+	$string['nothingtodisplay']		=	'Nothing to display';
+    $string['pagelayout']           =   'Page Layout';
+    $string['pagelayoutconfig']     =   'Allows you to define a custom page layout for ilp';
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';

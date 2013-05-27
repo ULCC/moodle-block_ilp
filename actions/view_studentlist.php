@@ -71,7 +71,7 @@ $SITE	=	$dbc->get_course_by_id(SITEID);
 $PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp'));
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_pagetype('ilp-reportlist');
-$PAGE->set_pagelayout('ilp');
+$PAGE->set_pagelayout(ILP_PAGELAYOUT);
 $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_studentlist.php",$PARSER->get_params());
 
 //we need to list all of the students in the course with the given id
