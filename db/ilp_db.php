@@ -157,13 +157,8 @@ class ilp_db_functions	extends ilp_logging {
     function __construct() {
         global $CFG, $DB;
 
-        // if this is empty then we're using Moodle 1.9.x, so we need the 2.0 emulator
-        if(empty($DB)) {
-            require_once($CFG->dirroot.'/blocks/ilp/db/moodle2_emulator.php');
-            $this->dbc = new moodle2_db_emulator();
-        } else {
-            $this->dbc = $DB;
-        }
+        //leave this here for now - but all uses of $this->dbc should eventually be replaced by simple $DB
+        $this->dbc = $DB;
 
         // include the static constants
         require_once($CFG->dirroot.'/blocks/ilp/constants.php');
