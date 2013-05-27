@@ -20,11 +20,6 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_block_ilp_upgrade($oldversion) {
     global $CFG, $DB;
 
-    if (empty($DB))	{ 
-  		include($CFG->dirroot."/blocks/ilp/db/moodle2_emulator.php");
-    }
- 
-    
     
     $result = TRUE;
     $dbman = $DB->get_manager();

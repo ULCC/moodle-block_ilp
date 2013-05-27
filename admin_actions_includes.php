@@ -34,4 +34,3 @@ require_once($CFG->dirroot.'/blocks/ilp/constants.php');
 
 //include the access checks file
 require_once($CFG->dirroot.'/blocks/ilp/db/admin_accesscheck.php');
-?>
