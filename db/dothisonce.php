@@ -4,6 +4,9 @@ require_once('../configpath.php');
 require_once( $CFG->dirroot . '/lib/xmldb/xmldb_object.php' );
 require_once( $CFG->dirroot . '/lib/xmldb/xmldb_table.php' );
 
+require_login(0, false);
+require_capability('block/ilp:creeddelreport', context_system::instance());
+
 $dbman = $DB->get_manager();
 
 $problematic_table_list = array(
