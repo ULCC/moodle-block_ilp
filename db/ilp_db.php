@@ -78,6 +78,10 @@ class ilp_db {
             // purify all data (e.g. validate html, remove js and other bad stuff)
             $data = purify_html($data);
 
+            //I have had to remove the purify call as it was causing pages to timeout in 1.9
+            //this should be put back in once the ilp is moodle 2.0 only
+           	$data = purify_html($data);
+
             // encode the purified string
             $data = trim(preg_replace('/\\\/', '&#92;', htmlentities($data, ENT_QUOTES, 'utf-8', false)));
 
@@ -154,6 +158,7 @@ class ilp_db_functions	extends ilp_logging {
     function __construct() {
         global $CFG, $DB;
 
+        //leave this here for now - but all uses of $this->dbc should eventually be replaced by simple $DB
         $this->dbc = $DB;
 
         // include the static constants
@@ -216,14 +221,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_form_element_plugins() {
-        global $CFG;
-
-        // check for the presence of a table to determine which query to run
-        $tableexists =  in_array('block_ilp_plugin',$this->dbc->get_tables());
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_plugin', array()) : false;
-
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_plugin')) {
+            return $DB->get_records('block_ilp_plugin');
+        }
+        return array();
     }
 
     /**
@@ -249,13 +252,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_plugins() {
-        global $CFG;
-
-        // check for the presence of a table to determine which query to run
-        $tableexists =  in_array('block_ilp_dash_plugin',$this->dbc->get_tables());
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_plugin', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_dash_plugin')) {
+            return $DB->get_records('block_ilp_dash_plugin');
+        }
+        return array();
 	}
 
     /**
@@ -264,12 +266,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_tabs() {
-        global $CFG;
-
-        $tableexists = in_array('block_ilp_dash_tab',$this->dbc->get_tables());
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_dash_tab')) {
+            return $DB->get_records('block_ilp_dash_tab');
+        }
+        return array();
 	}
 
     /**
@@ -278,12 +280,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_templates() {
-        global $CFG;
-
-        $tableexists = in_array('block_ilp_dash_temp',$this->dbc->get_tables());
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_temp', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_dash_temp')) {
+            return $DB->get_records('block_ilp_dash_temp');
+        }
+        return array();
 	}
 
 
@@ -492,7 +494,7 @@ class ilp_db_functions	extends ilp_logging {
             $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
             $params['position'] =  $position;
             $params['otherfield'] = $otherfield;
-            $positionsql 	=  "{$and} (position = :position ||  position = :otherfield) ";
+            $positionsql 	=  "{$and} (position = :position OR position = :otherfield) ";
             $and = "AND";
         }
 
@@ -536,7 +538,7 @@ class ilp_db_functions	extends ilp_logging {
             $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
             $params['position'] = $position;
             $params['otherfield'] = $otherfield;
-            $positionsql 	=  "AND (position = :position ||  position = :otherfield)";
+            $positionsql 	=  "AND (position = :position OR position = :otherfield)";
 		}
 
        		$sql	=	"SELECT		*
@@ -1557,50 +1559,6 @@ class ilp_db_functions	extends ilp_logging {
     	return	$this->dbc->count_records_sql($sql, $params);
     }
 
-/**
- *
- * @param array students optional array of students to limit result to
- * @param int $timestart optional start timestamp
- * @param int $timeend option end timestamp
- *
- * @return array $array[$reportid][$studentid]
- */
-   public function count_all_report_entries($students=array(),$timestart=null,$timeend=null)
-   {
-
-      $timestartsql = "";
-      $timeendsql   = "";
-
-      if (!empty($timestart)){
-         $params['timestart'] = $timestart;
-         $timestartsql = " AND timecreated > :timestart";
-      }
-
-      if (!empty($timeend)){
-         $params['timeend'] = $timeend;
-         $timeendsql= " AND timecreated < :timeend ";
-      }
-
-      if(!empty($students))
-      {
-         $studentpart='and user_id in ('.implode(',',$students).')';
-      }
-
-      $sql = "SELECT  report_id, user_id, COUNT(*) number
-                      FROM  {block_ilp_entry}
-                                 where  1 {$studentpart} {$timestartsql}
-                                 {$timeendsql}
-                      GROUP BY report_id, user_id";
-
-      $r=array();
-      foreach($this->dbc->get_recordset_sql($sql, $params) as $item)
-      {
-         $r[$item->report_id][$item->user_id]=$item->number;
-      }
-
-      return $r;
-   }
-
     /**
      *
      * Returns whether the given report has a plugins field
@@ -1623,37 +1581,6 @@ class ilp_db_functions	extends ilp_logging {
 
 
 /**
-     * Fetch the id, report_id, user_id, and pass/fail state of all reports for the
-     * given users
-     *
-     * @param	array of int $users users to examine
-     *
-     * @return	array of objects (id, report_id, user_id, state)
-     */
-    public  function fetch_all_report_entries_with_state($users)	{
-
-       $r=array();
-       if(empty($users))
-       {
-          return $r;
-       }
-
-       $where=' where e.user_id in ('.implode($users,',').')';
-
-       $sql = "SELECT e.id, e.report_id, e.user_id, pi.passfail as state
-                 FROM {block_ilp_entry}  as e
-                   LEFT JOIN  ({block_ilp_plu_ste_ent} as pe
-                   JOIN   {block_ilp_plu_ste_items} as pi on pi.id=pe.parent_id)  on e.id=pe.entry_id $where";
-
-       foreach ($this->dbc->get_recordset_sql($sql) as $item)
-       {
-          $r[$item->report_id][$item->user_id][]=$item;
-       }
-
-       return $r;
-
-    }
-/**
      * Count the number of entries in the given report with a pass state
      *
      * @param	int $report_id	the id of the report whose entries will be counted
@@ -1664,7 +1591,7 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return	mixed int the number of entries or false
      */
-    public  function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
+    public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
 
 			$select	=	(!empty($count))	? "count(e.id)" : " e.* ";
             $params = array('report_id'=>$report_id, 'user_id'=>$user_id, 'state'=>$state);
@@ -1793,10 +1720,18 @@ class ilp_db_functions	extends ilp_logging {
     * @return	mixed object the  of entries or false
     */
     public function	get_lastupdatedentry($report_id,$user_id)	{
-        $sql='SELECT id, timemodified tm FROM {block_ilp_entry} e
-              WHERE report_id=:report_id AND user_id=:user_id ORDER BY timemodified desc';
 
-        return $this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id), 0, 1);
+        //Getting the entry with the maximum timemodified is alittle more complicated than first thought
+
+        $sql	=	"SELECT e.id, MAX(timemodified) AS tm
+                     FROM {block_ilp_entry} AS e
+                     WHERE report_id = :report_id
+                     AND user_id = :user_id
+                     GROUP BY timemodified, e.id
+                     ORDER BY tm DESC
+                     ";
+
+        return $this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id, 0, 1));
     }
 
     /**
@@ -1904,7 +1839,7 @@ class ilp_db_functions	extends ilp_logging {
     *
     * @param	int $parent_id	the id of the state item record that is the parent of the item
     * @param	int $itemvalue the actual value of the field
-    * @param	string $keyfield field from $itemtable to use as key
+    * @param	string $keyfield field from $itemtable to use as key
     * @param	string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
     *
     * @return	mixed object or false
@@ -2139,7 +2074,7 @@ class ilp_db_functions	extends ilp_logging {
  	}
 
  	/**
-     * Returns the user ids of all users enrolled into the given course
+     * Returns the user records of all users enrolled into the given course
      *
      * @param int $course_id the id of the course whose enrolled users
      * we want to retrieve
@@ -2184,53 +2119,16 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return mixed array of object containing all students in a course or false
      */
-    function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false)
-    {
-       $data=array();
-       $count=0;
-       ($start=$flextable->get_page_start() or $start=0);
-       ($end=$flextable->get_page_size()+$start or $end=1e9);
-
-       foreach($this->get_studentlist_details($student_ids,$status_id,
-                                              $flextable->get_sql_where(), $flextable->get_sql_sort(),
-                                              $includenull)
-               as $item)
-       {
-          if($count>=$start and $count<$end)
-          {
-             $data[$item->id]=$item;
-          }
-          $count++;
-       }
-
-       // tell the table how many pages it needs
-       $flextable->totalrows($count);
-
-       return $data;
-    }
-
-    function get_studentlist_details($student_ids,$status_id, $sql_where='',$sql_sort='',$includenull=false)
-    {
-        global $CFG, $DB;
-
-        if(empty($student_ids))
-        {
-           return array();
-        }
+    function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false) {
 
         $select = "SELECT 		u.id as id,
-        				u.idnumber as idnumber,
-        				u.firstname as firstname,
-        				u.lastname as lastname,
-        				si.id as u_status_id,
-        				si.name	as u_status,
-        				si.icon	as u_status_icon,
-        				si.display_option as u_display_option,
-        				si.bg_colour as bg_colour,
-        				si.description	as u_status_description,
-        				u.picture as picture,
-        				u.imagealt as imagealt,
-        				u.email as email ";
+        						u.idnumber as idnumber,
+        						u.firstname as firstname,
+        						u.lastname as lastname,
+        						si.name	as u_status,
+        						u.picture as picture,
+        						u.imagealt as imagealt,
+        						u.email as email ";
 
         $from = " FROM 			{user} as u LEFT JOIN {block_ilp_user_status} as us on (u.id = us.user_id) LEFT JOIN
         						{block_ilp_plu_sts_items} as si on (us.parent_id = si.id)";
@@ -2238,39 +2136,53 @@ class ilp_db_functions	extends ilp_logging {
         $where = "";
 
         if (!empty($student_ids) || !empty($status_id)) {
-           $where = " WHERE ";
-           $and = '';
+        	    $where = " WHERE ";
+        	    $and = '';
 
-           $studentssql	=	 (!empty($student_ids)) ? " u.id IN (".implode(",",$student_ids).")" : "" ;
-           $statussql		=	 (!empty($status_id)) ? " si.id = {$status_id} " : '';
+        	    $studentssql	=	 (!empty($student_ids)) ? " u.id IN (".implode(",",$student_ids).")" : "" ;
+    			$statussql		=	 (!empty($status_id)) ? " si.id = {$status_id} " : '';
 
-           //if the
-           $statussql		=	 (!empty($includenull)) ? " ( si.id = {$status_id} OR si.id IS NULL)"  : $statussql;
+    			//if the
+    			$statussql		=	 (!empty($includenull)) ? " ( si.id = {$status_id} OR si.id IS NULL)"  : $statussql;
 
-           if (!empty($student_ids)) {
-              $where .= " {$studentssql} ";
-              $and = 'AND';
-           }
+        		if (!empty($student_ids)) {
+        	    	$where .= " {$studentssql} ";
+        	    	$and = 'AND';
+        	    }
 
-           if (!empty($status_id)) {
-              $where .= " {$and} {$statussql} ";
-           }
+        		if (!empty($status_id)) {
+	       	    	$where .= " {$and} {$statussql} ";
+        	    }
         }
 
 
         $sort = "";
 
-        // fetch any additional filters provided by the caller
+        // fetch any additional filters provided by the table
+        $sql_where = $flextable->get_sql_where();
         if(!empty($sql_where)) {
             $where .= ' AND '.$sql_where;
         }
 
-        // fetch any extra sort keys provided by the caller
+        // fetch any sort keys provided by the table
+        $sql_sort = $flextable->get_sql_sort();
+
         if(!empty($sql_sort)) {
             $sort = ' ORDER BY '.$sql_sort;
         }
 
-        return $this->dbc->get_records_sql($select.$from.$where.$sort,null);
+        // get a count of all the records for the pagination links
+        $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
+
+        // tell the table how many pages it needs
+        $flextable->totalrows($count);
+
+        return $this->dbc->get_records_sql(
+            $select.$from.$where.$sort,
+            null,
+            $flextable->get_page_start(),
+            $flextable->get_page_size()
+        );
     }
 
     /**
@@ -2314,6 +2226,7 @@ class ilp_db_functions	extends ilp_logging {
     	return	$this->dbc->get_record_sql($sql, $params);
     }
 
+
      /**
      *
      * Returns all courses that the user with the given id is enrolled
@@ -2326,7 +2239,11 @@ class ilp_db_functions	extends ilp_logging {
     function get_user_courses($user_id)	{
     	global $CFG;
 
-        $courses	=	enrol_get_users_courses($user_id, false,NULL,'fullname DESC');
+    	if (stripos($CFG->release,"2.") !== false) {
+    		$courses	=	enrol_get_users_courses($user_id, false,NULL,'fullname DESC');
+    	} else {
+    		$courses	=	get_my_courses($user_id);
+    	}
 
     	return $courses;
     }
@@ -2341,7 +2258,10 @@ class ilp_db_functions	extends ilp_logging {
     function get_mis_plugins() 	{
         global $CFG;
 
-        $tableexists =  in_array('block_ilp_mis_plugin',$this->dbc->get_tables());
+        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
+            in_array('block_ilp_mis_plugin',$this->dbc->get_tables())
+            :
+            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_mis_plugin}'");
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_mis_plugin', array()) : false;
@@ -2377,12 +2297,10 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_graph_plugins() 	{
-        global $DB;
-        $dbman = $DB->get_manager();
-        if ($dbman->table_exists('block_ilp_graph_plugin')) {
-            return $DB->get_records('block_ilp_graph_plugin');
-        }
-        return array();
+        global $CFG;
+
+        // return stats or false
+        return $this->dbc->get_records('block_ilp_graph_plugin');
     }
 
 
@@ -2415,14 +2333,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_tab_plugins() 	{
-        global $CFG;
-
-        $tableexists =  in_array('block_ilp_dash_tab',$this->dbc->get_tables());
-
-
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_dash_tab')) {
+            return $DB->get_records('block_ilp_dash_tab');
+        }
+        return array();
     }
 
 
@@ -2471,8 +2387,6 @@ class ilp_db_functions	extends ilp_logging {
   	 * @return	mixed array of recordsets or bool false
   	 */
   	function label_exists($label,$report_id,$field_id)	{
-
-  		$label	=	mysql_real_escape_string($label);
 
   		//thsi code is needed due to a substr_count in the
   		//moodle_database.php file (line 666 :-( ) it causes
@@ -2563,17 +2477,23 @@ class ilp_db_functions	extends ilp_logging {
     function save_event($event)	{
 
     	//we can not user add_event in moodle 2.0 as it requires the user to have persmissions to add events to the
-    	//calendar however this capability check can be bypassed if we use the calendar event class
+    	//calendar however this capability check can be bypassed if we use the calendar event class so we will use add_event in
+    	//1.9 and calendar_event class in 2.0
     	global $CFG, $USER;
 
 
-        require_once($CFG->dirroot.'/calendar/lib.php');
-        $calevent = new calendar_event($event);
-        $calevent->update($event,false);
+    	if (stripos($CFG->release,"2.") !== false) {
+    	    require_once($CFG->dirroot.'/calendar/lib.php');
+    		$calevent = new calendar_event($event);
+	    	$calevent->update($event,false);
 
-        if ($calevent !== false) {
-           return $calevent->id;
-        }
+    		if ($calevent !== false) {
+        		return $calevent->id;
+	    	}
+
+    	} else {
+    		return add_event($event);
+    	}
     }
 
     /**
@@ -2583,11 +2503,18 @@ class ilp_db_functions	extends ilp_logging {
      */
     function update_event($event)	{
 
-       global $CFG, $USER;
+		global $CFG, $USER;
 
-       require_once($CFG->dirroot.'/calendar/lib.php');
-       $calevent = calendar_event::load($event->id);
-       return $calevent->update($event,false);
+    	if (stripos($CFG->release,"2.") !== false) {
+    	    require_once($CFG->dirroot.'/calendar/lib.php');
+    		$calevent = calendar_event::load($event->id);
+	    	return $calevent->update($event,false);
+    	} else {
+    		return update_event($event);
+    	}
+
+
+
     }
 
     /**
