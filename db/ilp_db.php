@@ -220,17 +220,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_form_element_plugins() {
-        global $CFG;
-
-        // check for the presence of a table to determine which query to run
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-               in_array('block_ilp_plugin',$this->dbc->get_tables())
-            :
-                $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_plugin}'");
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_plugin', array()) : false;
-
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_plugin')) {
+            return $DB->get_records('block_ilp_plugin');
+        }
+        return array();
     }
 
     /**
@@ -256,16 +251,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_plugins() {
-        global $CFG;
-
-        // check for the presence of a table to determine which query to run
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_dash_plugin',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_plugin}'");
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_plugin', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_dash_plugin')) {
+            return $DB->get_records('block_ilp_dash_plugin');
+        }
+        return array();
 	}
 
     /**
@@ -274,15 +265,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_tabs() {
-        global $CFG;
-
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_dash_tab',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_tab}'");
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_dash_tab')) {
+            return $DB->get_records('block_ilp_dash_tab');
+        }
+        return array();
 	}
 
     /**
@@ -291,15 +279,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_templates() {
-        global $CFG;
-
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_dash_temp',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_temp}'");
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_temp', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_dash_temp')) {
+            return $DB->get_records('block_ilp_dash_temp');
+        }
+        return array();
 	}
 
 
@@ -2270,15 +2255,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_mis_plugins() 	{
-        global $CFG;
-
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_mis_plugin',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_mis_plugin}'");
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_mis_plugin', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_mis_plugin')) {
+            return $DB->get_records('block_ilp_mis_plugin');
+        }
+        return array();
     }
 
 
@@ -2347,17 +2329,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_tab_plugins() 	{
-        global $CFG;
-
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_dash_tab',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_tab}'");
-
-
-
-        // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_dash_tab')) {
+            return $DB->get_records('block_ilp_dash_tab');
+        }
+        return array();
     }
 
 
