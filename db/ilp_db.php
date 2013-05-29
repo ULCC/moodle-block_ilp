@@ -2293,10 +2293,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_graph_plugins() 	{
-        global $CFG;
-
-        // return stats or false
-        return $this->dbc->get_records('block_ilp_graph_plugin');
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_graph_plugin')) {
+            return $DB->get_records('block_ilp_graph_plugin');
+        }
+        return array();
     }
 
 
