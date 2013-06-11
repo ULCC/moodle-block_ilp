@@ -526,8 +526,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         $info = $this->get_option_list_text( ILP_DEFAULT_USERSTATUS_RECORD , "\n", 'passfail' ) ;
 
         if( 1 ){
+            //$mform->addElement('html','<div>');
             foreach( $info[ 'objlist' ] as $option ){
-                $mform->addElement('html','<div>',array('id'=>$option->id,'class'=>'status_form_left'));
+                $mform->addElement('html','<div>');
+                $mform->addElement('html','<div class="status_form_left">');
                 $A = $mform->addElement(
                     'text',
                     'itemvalue_' . $option->id,
@@ -555,14 +557,15 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 
                 $C->setValue( $hexcolour );
 
-                $mform->addElement('html','</div>');
 
-                $mform->addElement('html','<div>',array('id'=>$option->id,'class'=>'status_form_right'));
+
+                $mform->addElement('html','<div class="status_form_right">');
                 $icon4A = $mform->addElement('file','item_icon_'. $option->id, 'Select icon');
                 $mform->addElement('html','</div>');
 
-                $mform->addElement('html','<div>');
-                $mform->addElement( 'html', '<hr />' );
+                $mform->addElement('html','</div>');
+
+                $mform->addElement( 'html', '<hr />');
 
                 if( !$data_exists ){
                     $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
@@ -572,6 +575,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                         '<a href="' . $deleteurl . '">X</a>'
                     );
                 }
+                $mform->addElement('html','</div>');
             }
             /*
                         $mform->addElement(
@@ -581,7 +585,9 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                             $this->config_format_option_list( $info[ "optionlist" ] )
                         );
             */
+            //$mform->addElement( 'html', '</div>' );
         }
+
 
         $E = $mform->addElement(
             'textarea',
