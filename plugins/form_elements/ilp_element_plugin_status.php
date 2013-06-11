@@ -527,6 +527,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 
         if( 1 ){
             foreach( $info[ 'objlist' ] as $option ){
+                $mform->addElement('html','<div>',array('id'=>$option->id,'class'=>'status_form_left'));
                 $A = $mform->addElement(
                     'text',
                     'itemvalue_' . $option->id,
@@ -534,6 +535,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                     array('class' => 'form_input')
                 );
                 $A->setValue( $option->value );
+
                 $B = $mform->addElement(
                     'text',
                     'itemname_' . $option->id,
@@ -553,6 +555,13 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 
                 $C->setValue( $hexcolour );
 
+                $mform->addElement('html','</div>');
+
+                $mform->addElement('html','<div>',array('id'=>$option->id,'class'=>'status_form_right'));
+                $icon4A = $mform->addElement('file','item_icon_'. $option->id, 'Select icon');
+                $mform->addElement('html','</div>');
+
+                $mform->addElement('html','<div>');
                 $mform->addElement( 'html', '<hr />' );
 
                 if( !$data_exists ){
