@@ -1,0 +1,9 @@
+.status_form_left {
+    width: 40%;
+    float: left;
+}
+
+.status_form_right {
+    width: 60%;
+    float: right;
+}
