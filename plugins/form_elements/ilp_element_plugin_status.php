@@ -525,67 +525,55 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 
         $info = $this->get_option_list_text( ILP_DEFAULT_USERSTATUS_RECORD , "\n", 'passfail' ) ;
 
-        if( 1 ){
-            //$mform->addElement('html','<div>');
-            foreach( $info[ 'objlist' ] as $option ){
-                $mform->addElement('html','<div>');
-                $mform->addElement('html','<div class="status_form_left">');
-                $A = $mform->addElement(
-                    'text',
-                    'itemvalue_' . $option->id,
-                    'value',
-                    array('class' => 'form_input')
+        foreach( $info[ 'objlist' ] as $option ){
+            $A = $mform->addElement(
+                'text',
+                'itemvalue_' . $option->id,
+                'value',
+                array('class' => 'form_input')
+            );
+            $A->setValue( $option->value );
+
+            $B = $mform->addElement(
+                'text',
+                'itemname_' . $option->id,
+                'label',
+                array('class' => 'form_input')
+            );
+            $B->setValue( $option->name );
+
+            $C = $mform->addElement(
+                'text',
+                'itemhexcolour_' . $option->id,
+                'hex colour',
+                array('class' => 'form_input')
+            );
+
+            $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : "";
+
+            $C->setValue( $hexcolour );
+
+            $icon4status = $mform->addElement('filemanager','item_icon_'. $option->id, 'Select icon');
+
+            $mform->addElement( 'html', '<hr />');
+
+            if( !$data_exists ){
+                $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
+                $mform->addElement(
+                    'static',
+                    'delete_link',
+                    '<a href="' . $deleteurl . '">X</a>'
                 );
-                $A->setValue( $option->value );
-
-                $B = $mform->addElement(
-                    'text',
-                    'itemname_' . $option->id,
-                    'label',
-                    array('class' => 'form_input')
-                );
-                $B->setValue( $option->name );
-
-                $C = $mform->addElement(
-                    'text',
-                    'itemhexcolour_' . $option->id,
-                    'hex colour',
-                    array('class' => 'form_input')
-                );
-
-                $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : "";
-
-                $C->setValue( $hexcolour );
-
-
-
-                $mform->addElement('html','<div class="status_form_right">');
-                $icon4A = $mform->addElement('file','item_icon_'. $option->id, 'Select icon');
-                $mform->addElement('html','</div>');
-
-                $mform->addElement('html','</div>');
-
-                $mform->addElement( 'html', '<hr />');
-
-                if( !$data_exists ){
-                    $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
-                    $mform->addElement(
-                        'static',
-                        'delete_link',
-                        '<a href="' . $deleteurl . '">X</a>'
-                    );
-                }
-                $mform->addElement('html','</div>');
             }
-            /*
-                        $mform->addElement(
-                            'static',
-                            'description',
-                            get_string( 'existing_options', 'block_ilp' ),
-                            $this->config_format_option_list( $info[ "optionlist" ] )
-                        );
-            */
-            //$mform->addElement( 'html', '</div>' );
+
+        /*
+        $mform->addElement(
+            'static',
+            'description',
+            get_string( 'existing_options', 'block_ilp' ),
+            $this->config_format_option_list( $info[ "optionlist" ] )
+        );
+        */
         }
 
 
