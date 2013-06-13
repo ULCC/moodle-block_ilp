@@ -98,7 +98,7 @@ $reports = $dbc->get_reports(ILP_ENABLED);
 //get the mamximum reports that can be displayed on the screen in the list
 $maxreports = get_config('block_ilp', 'ilp_max_reports');
 
-//check if maxreports is empty if yes then set to 
+//check if maxreports is empty if yes then set to
 $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 
 //set the number of report columns to display
@@ -107,7 +107,7 @@ $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 //$reports	=	$flextable->limitcols($reports,$maxreports);
 
 
-//we are going to create headers and columns for all enabled reports 
+//we are going to create headers and columns for all enabled reports
 foreach ($reports as $r) {
     $headers[] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_studentreports.php?course_id={$course_id}&tutor={$tutor}&report_id={$r->id}&group_id={$group_id}'>".$r->name."</a>";
     $columns[] = $r->id;
@@ -140,7 +140,7 @@ $flextable->initialbars(true);
 $flextable->setup();
 
 if (!empty($course_id)) {
-    $users = $dbc->get_course_users($course_id,$group_id);  
+    $users = $dbc->get_course_users($course_id,$group_id);
 } else {
     $users = $dbc->get_user_tutees($USER->id);
 }
@@ -205,11 +205,12 @@ if(!empty($students))  {
 $SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
 
 if (!empty($studentslist)) {
+   $all_record_counts=$dbc->count_all_report_entries();
     foreach ($studentslist as $student) {
         $data = array();
-		
+
         $userprofile	=	'view.php' ;
-                
+
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
         $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
@@ -242,9 +243,8 @@ if (!empty($studentslist)) {
         }
 
         foreach ($reports as $r) {
-
             //get the number of this report that have been created
-            $createdentries = $dbc->count_report_entries($r->id, $student->id);
+            $createdentries = $all_record_counts[$r->id][$student->id];
 
             $reporttext = "{$createdentries} " . $r->name;
 

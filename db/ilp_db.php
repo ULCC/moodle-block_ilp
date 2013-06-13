@@ -1578,6 +1578,50 @@ class ilp_db_functions	extends ilp_logging {
     	return	$this->dbc->count_records_sql($sql, $params);
     }
 
+/**
+ *
+ * @param array students optional array of students to limit result to
+ * @param int $timestart optional start timestamp
+ * @param int $timeend option end timestamp
+ *
+ * @return array $array[$reportid][$studentid]
+ */
+   public function count_all_report_entries($students=array(),$timestart=null,$timeend=null)
+   {
+
+      $timestartsql = "";
+      $timeendsql   = "";
+
+      if (!empty($timestart)){
+         $params['timestart'] = $timestart;
+         $timestartsql = " AND timecreated > :timestart";
+      }
+
+      if (!empty($timeend)){
+         $params['timeend'] = $timeend;
+         $timeendsql= " AND timecreated < :timeend ";
+      }
+
+      if(!empty($students))
+      {
+         $studentpart='and user_id in ('.implode(',',$students).')';
+      }
+
+      $sql = "SELECT  report_id, user_id, COUNT(*) number
+                      FROM  {block_ilp_entry}
+                                 where  1 {$studentpart} {$timestartsql}
+                                 {$timeendsql}
+                      GROUP BY report_id, user_id";
+
+      $r=array();
+      foreach($this->dbc->get_recordset_sql($sql, $params) as $item)
+      {
+         $r[$item->report_id][$item->user_id]=$item->number;
+      }
+
+      return $r;
+   }
+
     /**
      *
      * Returns whether the given report has a plugins field
@@ -1610,7 +1654,7 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return	mixed int the number of entries or false
      */
-    public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
+    public  function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
 
 			$select	=	(!empty($count))	? "count(e.id)" : " e.* ";
             $params = array('report_id'=>$report_id, 'user_id'=>$user_id, 'state'=>$state);
@@ -1634,7 +1678,6 @@ class ilp_db_functions	extends ilp_logging {
 
     		return 		(!empty($count)) ? $this->dbc->count_records_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
     }
-
 
     /**
      * Count the number of entries in the given report with a deadline that has passed
