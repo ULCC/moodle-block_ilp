@@ -205,7 +205,7 @@ if(!empty($students))  {
 $SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
 
 if (!empty($studentslist)) {
-   $all_record_counts=$dbc->count_all_report_entries();
+   $all_record_counts=$dbc->count_all_report_entries(array_keys($studentslist));
     foreach ($studentslist as $student) {
         $data = array();
 
