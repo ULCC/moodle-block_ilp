@@ -215,7 +215,12 @@ if (!empty($studentslist)) {
       $CACHE->set($cachekey,$all_record_counts);
    }
 
-   $allStates=$dbc->fetch_all_report_entries_with_state($studentids);
+   $cachekey='statelist:'.implode($studentids,'|');
+   if(($allStates=$CACHE->get($cachekey))===false)
+   {
+      $allStates=$dbc->fetch_all_report_entries_with_state($studentids);
+      $CACHE->set($cachekey,$allStates);
+   }
 
     foreach ($studentslist as $student) {
         $data = array();
