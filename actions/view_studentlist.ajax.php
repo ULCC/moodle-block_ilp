@@ -205,7 +205,7 @@ if(!empty($students))  {
 $SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
 $CACHE=cache::make('block_ilp','ilp_miscache');
 if (!empty($studentslist)) {
-   $cachekey=implode(array_keys($studentslist),'|');
+   $cachekey='studentlist:'.implode(array_keys($studentslist),'|');
    if(($all_record_counts=$CACHE->get($cachekey))===false)
    {
       $all_record_counts=$dbc->count_all_report_entries(array_keys($studentslist));
