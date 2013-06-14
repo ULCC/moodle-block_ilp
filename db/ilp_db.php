@@ -1644,6 +1644,37 @@ class ilp_db_functions	extends ilp_logging {
 
 
 /**
+     * Fetch the id, report_id, user_id, and pass/fail state of all reports for the
+     * given users
+     *
+     * @param	array of int $users users to examine
+     *
+     * @return	array of objects (id, report_id, user_id, state)
+     */
+    public  function fetch_all_report_entries_with_state($users)	{
+
+       $r=array();
+       if(empty($users))
+       {
+          return $r;
+       }
+
+       $where=' where e.user_id in ('.implode($users,',').')';
+
+       $sql = "SELECT e.id, e.report_id, e.user_id, pi.passfail as state
+                 FROM {block_ilp_entry}  as e
+                   JOIN   {block_ilp_plu_ste_ent} as pe on e.id=pe.entry_id
+                   JOIN   {block_ilp_plu_ste_items} as pi on pi.id=pe.parent_id";
+
+       foreach ($this->dbc->get_recordset_sql($sql) as $item)
+       {
+          $r[$item->report_id][$item->user_id][]=$item;
+       }
+
+       return $r;
+
+    }
+/**
      * Count the number of entries in the given report with a pass state
      *
      * @param	int $report_id	the id of the report whose entries will be counted
@@ -1678,6 +1709,7 @@ class ilp_db_functions	extends ilp_logging {
 
     		return 		(!empty($count)) ? $this->dbc->count_records_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
     }
+
 
     /**
      * Count the number of entries in the given report with a deadline that has passed
@@ -2287,7 +2319,6 @@ class ilp_db_functions	extends ilp_logging {
 
     	return	$this->dbc->get_record_sql($sql, $params);
     }
-
 
      /**
      *

@@ -205,12 +205,18 @@ if(!empty($students))  {
 $SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
 $CACHE=cache::make('block_ilp','ilp_miscache');
 if (!empty($studentslist)) {
-   $cachekey='studentlist:'.implode(array_keys($studentslist),'|');
+
+   $studentids=array_keys($studentslist);
+
+   $cachekey='studentlist:'.implode($studentids,'|');
    if(($all_record_counts=$CACHE->get($cachekey))===false)
    {
-      $all_record_counts=$dbc->count_all_report_entries(array_keys($studentslist));
+      $all_record_counts=$dbc->count_all_report_entries($studentids);
       $CACHE->set($cachekey,$all_record_counts);
    }
+
+   $allStates=$dbc->fetch_all_report_entries_with_state($studentids);
+
     foreach ($studentslist as $student) {
         $data = array();
 
@@ -261,9 +267,15 @@ if (!empty($studentslist)) {
             if ($dbc->has_plugin_field($r->id, 'ilp_element_plugin_state')) {
 
                 //count the number of entries with a pass state
-                $achievedentries = $dbc->count_report_entries_with_state($r->id, $student->id, ILP_STATE_PASS);
+
+                $achievedentries=count(array_filter($allStates[$r->id][$student->id],
+                                                    function($item){ return ($item->state==ILP_STATE_PASS);}));
+
                 //we need to count the number of entries that have a notcounted status
-                $notcountedentries = $dbc->count_report_entries_with_state($r->id, $student->id, ILP_STATE_NOTCOUNTED);
+
+                $notcountedentries=count(array_filter($allStates[$r->id][$student->id],
+                                                      function($item){ return ($item->state==ILP_STATE_NOTCOUNTED);}));
+
                 $createdentries     =   $createdentries     -   $notcountedentries;
 
                 $reporttext         =   $achievedentries . "/" . $createdentries . " " . get_string('achieved', 'block_ilp');
@@ -271,20 +283,21 @@ if (!empty($studentslist)) {
 
 
             if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_datefield')) {
-                $inprogressentries	=	$dbc->count_report_entries_with_state($r->id,$student->id,ILP_STATE_UNSET,false);
-                $inprogentries 		=	array();
+               $inprogressentries	=	array_filter($allStates[$r->id][$student->id],
+                                                             function($item){return ($item->state==ILP_STATE_UNSET);});
+               $inprogentries 		=	array();
 
-                if (!empty($inprogressentries)) {
-                    foreach ($inprogressentries as $e) {
-                        $inprogentries[]	=	$e->id;
-                    }
-                }
-                //get the number of entries that are overdue
-                $overdueentries			=	$dbc->count_overdue_report($r->id,$student->id,$inprogentries,time());
-                $reporttext				.=	(!empty($overdueentries))?  "<br />".$overdueentries." ".get_string('reportsoverdue','block_ilp') : "";
+               if (!empty($inprogressentries)) {
+                  foreach ($inprogressentries as $e) {
+                     $inprogentries[]	=	$e->id;
+                  }
+               }
+               //get the number of entries that are overdue
+               $overdueentries	=	$dbc->count_overdue_report($r->id,$student->id,$inprogentries,time());
+               $reporttext	.=	(!empty($overdueentries))?  "<br />".$overdueentries." ".get_string('reportsoverdue','block_ilp') : "";
 
-                $nextreview             =   $dbc->get_next_review($r->id,$student->id);
-                $reporttext				.=	(!empty($nextreview->review))?  "<br />".get_string('nextreview','block_ilp')." ".userdate($nextreview->review,'%d-%m-%Y') : "";
+               $nextreview     =   $dbc->get_next_review($r->id,$student->id);
+               $reporttext	.=	(!empty($nextreview->review))?  "<br />".get_string('nextreview','block_ilp')." ".userdate($nextreview->review,'%d-%m-%Y') : "";
             }
 
             $data[$r->id] = $reporttext;
