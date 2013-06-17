@@ -208,13 +208,6 @@ if (!empty($studentslist)) {
 
    $studentids=array_keys($studentslist);
 
-   $cachekey='studentlist:'.implode($studentids,'|');
-   if(($all_record_counts=$CACHE->get($cachekey))===false)
-   {
-      $all_record_counts=$dbc->count_all_report_entries($studentids);
-      $CACHE->set($cachekey,$all_record_counts);
-   }
-
    $cachekey='statelist:'.implode($studentids,'|');
    if(($allStates=$CACHE->get($cachekey))===false)
    {
@@ -260,7 +253,7 @@ if (!empty($studentslist)) {
 
         foreach ($reports as $r) {
             //get the number of this report that have been created
-            $createdentries = $all_record_counts[$r->id][$student->id];
+           $createdentries = count($allStates[$r->id][$student->id]);
 
             $reporttext = "{$createdentries} " . $r->name;
 
