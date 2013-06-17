@@ -94,7 +94,10 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
                     $precentage =  (!empty($this->mcbdata[$cid][$month])) ? round($this->mcbdata[$cid][$month]['percent'],0).'%' : '';
                     $background = $this->format_background_by_value( $precentage );
-                    $data["{$month}month"] = (!empty($this->mcbdata[$cid][$month])) ? $this->addlinks( $background, array('mis_period_id' => $month, 'mis_course_id' => $cid)) : "";    //the value when the condition is not met will fill the blank cells in the table row
+                    $data["{$month}month"] = (!empty($this->mcbdata[$cid][$month]))
+                       ? $this->addlinks( $background, array('mis_period_id' => $month, 'mis_course_id' => $cid))
+                       : "";    //the value when the condition is not met will fill the blank cells in the table row
+
                     //$data["{$month}month"] = $this->format_background_by_value( $background );
                             //? $this->addlinks($this->mcbdata[$cid][$month] . "%", array('mis_period_id' => $month))
 
@@ -296,9 +299,9 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 	            $class = basename($plugin_file, ".php");
 	            $pluginobj = new $class();
 	            $method = array($pluginobj, 'plugin_type');
-	
+
 	            //check whether the config_settings method has been defined
-	
+
 	            if (is_callable($method, true)) {
 	                if ($pluginobj->plugin_type() == 'attendance') {
 	                    $mismisc = $this->dbc->get_mis_plugin_by_name($plugin_file);
@@ -415,6 +418,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
      */
     function set_data($mis_user_id, $user_id=null)
     {
+        $CACHE=cache::make('block_ilp','ilp_miscache');
         $table = get_config('block_ilp', 'mis_plugin_mcb_table');
 
         $this->mis_user_id = $mis_user_id;
@@ -434,21 +438,21 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
             $this->fields = array();
 
             //get all of the fields that will be returned
-            if (get_config('block_ilp', 'mis_plugin_mcb_courseidfield')) $this->fields['courseid'] = get_config('block_ilp', 'mis_plugin_mcb_courseidfield');
-            if (get_config('block_ilp', 'mis_plugin_mcb_coursenamefield')) $this->fields['coursename'] = get_config('block_ilp', 'mis_plugin_mcb_coursenamefield');
-            if (get_config('block_ilp', 'mis_plugin_mcb_monthidfield')) $this->fields['month'] = get_config('block_ilp', 'mis_plugin_mcb_monthidfield');
-            if (get_config('block_ilp', 'mis_plugin_mcb_monthorderfield')) $this->fields['monthorder'] = get_config('block_ilp', 'mis_plugin_mcb_monthorderfield');
-
-            if (get_config('block_ilp', 'mis_plugin_mcb_markstotalfield')) $this->fields['markstotal'] = get_config('block_ilp', 'mis_plugin_mcb_markstotalfield');
-            if (get_config('block_ilp', 'mis_plugin_mcb_markspresentfield')) $this->fields['markspresent'] = get_config('block_ilp', 'mis_plugin_mcb_markspresentfield');
-            if (get_config('block_ilp', 'mis_plugin_mcb_marksabsentfield')) $this->fields['marksabsent'] = get_config('block_ilp', 'mis_plugin_mcb_marksabsentfield');
-            if (get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield');
-            if (get_config('block_ilp', 'mis_plugin_mcb_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_mcb_markslatefield');
+            foreach(array('courseid','coursename','month','monthorder','markstotal',
+                          'markspresent','marksabsent','marksauthabsent','markslate') as $field)
+            {
+               if ($f=get_config('block_ilp', "mis_plugin_mcb_{$field}field")) $this->fields[$field] = $f;
+            }
 
             $prelimdbcalls   =    get_config('block_ilp','mis_plugin_mcb_prelimcalls');
 
-            //get the users monthly attendance data
-            $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
+//get the users monthly attendance data
+            $cachekey="ilp_attendance_data:$mis_user_id";
+            if(($this->data=$CACHE->get($cachekey))===false)
+            {
+               $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
+               $CACHE->set($cachekey,$this->data);
+            }
 
             $this->normalise_data($this->data);
         }
@@ -473,10 +477,10 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
                 //get the current month
                 $month = $d[$this->fields['month']];
-                
+
                 //addtional check that month value is a number not a string
                 $month = (is_string($month)) ? date('n',strtotime("1-$month-2011")) : $month;
-                
+
 
                 //check if an array position for the month exists in the course
                 if (!isset($mcbdata[$courseid][$month])) {
@@ -577,5 +581,5 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
         return 'Monthly Course Breakdown';
     }
 
-    
+
 }
