@@ -453,7 +453,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
             $cachekey="ilp_attendance:$mis_user_id";
             if(($this->data=$CACHE->get($cachekey))===false)
             {
-               $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
+               ($this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls) or $this->data=array());
                $CACHE->set($cachekey,$this->data);
             }
 
