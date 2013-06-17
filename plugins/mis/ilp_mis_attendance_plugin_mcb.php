@@ -423,7 +423,6 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
         $this->mis_user_id = $mis_user_id;
 
-
         if (!empty($table)) {
 
             $sidfield = get_config('block_ilp', 'mis_plugin_mcb_studentidfield');
@@ -437,17 +436,21 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
 
             $this->fields = array();
 
-            //get all of the fields that will be returned
-            foreach(array('courseid','coursename','month','monthorder','markstotal',
-                          'markspresent','marksabsent','marksauthabsent','markslate') as $field)
-            {
-               if ($f=get_config('block_ilp', "mis_plugin_mcb_{$field}field")) $this->fields[$field] = $f;
-            }
+            if (get_config('block_ilp', 'mis_plugin_mcb_courseidfield')) $this->fields['courseid'] = get_config('block_ilp', 'mis_plugin_mcb_courseidfield');
+            if (get_config('block_ilp', 'mis_plugin_mcb_coursenamefield')) $this->fields['coursename'] = get_config('block_ilp', 'mis_plugin_mcb_coursenamefield');
+            if (get_config('block_ilp', 'mis_plugin_mcb_monthidfield')) $this->fields['month'] = get_config('block_ilp', 'mis_plugin_mcb_monthidfield');
+            if (get_config('block_ilp', 'mis_plugin_mcb_monthorderfield')) $this->fields['monthorder'] = get_config('block_ilp', 'mis_plugin_mcb_monthorderfield');
+
+            if (get_config('block_ilp', 'mis_plugin_mcb_markstotalfield')) $this->fields['markstotal'] = get_config('block_ilp', 'mis_plugin_mcb_markstotalfield');
+            if (get_config('block_ilp', 'mis_plugin_mcb_markspresentfield')) $this->fields['markspresent'] = get_config('block_ilp', 'mis_plugin_mcb_markspresentfield');
+            if (get_config('block_ilp', 'mis_plugin_mcb_marksabsentfield')) $this->fields['marksabsent'] = get_config('block_ilp', 'mis_plugin_mcb_marksabsentfield');
+            if (get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield')) $this->fields['marksauthabsent'] = get_config('block_ilp', 'mis_plugin_mcb_marksauthabsentfield');
+            if (get_config('block_ilp', 'mis_plugin_mcb_markslatefield')) $this->fields['markslate'] = get_config('block_ilp', 'mis_plugin_mcb_markslatefield');
 
             $prelimdbcalls   =    get_config('block_ilp','mis_plugin_mcb_prelimcalls');
 
 //get the users monthly attendance data
-            $cachekey="ilp_attendance_data:$mis_user_id";
+            $cachekey="ilp_attendance:$mis_user_id";
             if(($this->data=$CACHE->get($cachekey))===false)
             {
                $this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
