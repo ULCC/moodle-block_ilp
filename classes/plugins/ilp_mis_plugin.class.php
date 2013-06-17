@@ -98,7 +98,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
 
        if(($r=$CACHE->get($sql))===false)
        {
-          $r=$this->db->dbquery_sql($sql);
+          ($r=$this->db->dbquery_sql($sql) or $r=array());
           $CACHE->set($sql,$r);
        }
        return $r;
