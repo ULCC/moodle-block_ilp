@@ -1664,7 +1664,7 @@ class ilp_db_functions	extends ilp_logging {
        $sql = "SELECT e.id, e.report_id, e.user_id, pi.passfail as state
                  FROM {block_ilp_entry}  as e
                    LEFT JOIN  ({block_ilp_plu_ste_ent} as pe
-                   JOIN   {block_ilp_plu_ste_items} as pi on pi.id=pe.parent_id)  on e.id=pe.entry_id";
+                   JOIN   {block_ilp_plu_ste_items} as pi on pi.id=pe.parent_id)  on e.id=pe.entry_id $where";
 
        foreach ($this->dbc->get_recordset_sql($sql) as $item)
        {
