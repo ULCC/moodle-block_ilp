@@ -16,12 +16,12 @@
 //require the ilp_plugin.php class
 require_once($CFG->dirroot . '/blocks/ilp/classes/plugins/ilp_mis_plugin.class.php');
 
-//require the ilp_mis_connection.php file 
+//require the ilp_mis_connection.php file
 require_once($CFG->dirroot . '/blocks/ilp/db/ilp_mis_connection.php');
 
 
 abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
-    
+
 	public function __construct($params = array())	{
         parent::__construct($params);
     }
