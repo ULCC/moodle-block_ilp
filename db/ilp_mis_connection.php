@@ -207,7 +207,7 @@ class ilp_mis_connection{
      * 				 'upperlimit' should be used in conjunction with lowerlimt to limit results
      */
     function return_table_values($table,$whereparams=null,$fields='*',$addionalargs=null) {
-       return $this->dbquery_sql($this->sql_for_table_value($table,$whereparams,$fields,$addionalargs));
+       return $this->dbquery_sql($this->sql_for_table_values($table,$whereparams,$fields,$addionalargs));
     }
 
     function arraytovar($val) {
