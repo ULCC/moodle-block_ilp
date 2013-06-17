@@ -543,14 +543,13 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 $course['overallauthabsents'] = $authabsents;
                 $course['overallpresents'] = $present;
             }
+
+            asort($courselist);
         }
 
         $this->mcbdata = $mcbdata;
 
-        asort($courselist);
-
         $this->courselist = $courselist;
-
     }
 
     private function presents_cal($markspresent, $authabesent)
