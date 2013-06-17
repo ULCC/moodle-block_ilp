@@ -75,12 +75,34 @@ abstract class ilp_mis_plugin extends ilp_plugin
     */
     protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null) {
     	if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
-    	    	
+
         return ($this->tabletype == ILP_MIS_STOREDPROCEDURE)
                 ? $this->db->return_stored_values($table, $params)
                 : $this->db->return_table_values($table, $params, $fields, $addionalargs);
     }
 
+    protected function cached_dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null,$cachename='ilp_miscache')
+    {
+       if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
+
+       $CACHE=cache::make('block_ilp',$cachename);
+
+       if($this->tabletype == ILP_MIS_STOREDPROCEDURE)
+       {
+          $sql=$this->db->sql_for_stored_sql($table, $params);
+       }
+       else
+       {
+          $sql=$this->db->sql_for_table_values($table, $params, $fields, $addionalargs);
+       }
+
+       if(($r=$CACHE->get($sql))===false)
+       {
+          $r=$this->db->dbquery_sql($sql);
+          $CACHE->set($sql,$r);
+       }
+       return $r;
+    }
 
     /**
      * Installs any new plugins
