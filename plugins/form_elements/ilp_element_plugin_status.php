@@ -554,7 +554,11 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : "";
 
             $C->setValue( $hexcolour );
-
+            /*
+             * Below code is working example of displaying status icon.
+             * That's why I didn't delete those codes.
+             * It might help later on
+             ----------------------------------------------------------------------------
             $file_found = false;
             if(!empty($option->icon)){
                 $fs = get_file_storage();
@@ -579,11 +583,27 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                 $icon_preview  .= "</strong>$this_file</div>";
             }
             $mform->addElement("html",$icon_preview);
-
+            */
             // below code is for upload icon for status
             $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
-            $icon4status = $mform->addElement('filemanager', $option->id . '_files_filemanager', get_string('change_icon', 'block_ilp'), null, $icon_options);
 
+            $context = get_context_instance(CONTEXT_SYSTEM);
+            $component = 'ilp';
+            $file_area = 'icon';
+            $item_id = $option->id;
+
+            $data = new stdClass();
+
+            $data = file_prepare_standard_filemanager($data, $option->id . '_files', $icon_options, $context, $component, $file_area, $item_id);
+
+            //$draftid_editor = file_get_submitted_draft_itemid($option->id . '_files');
+            //$draftid_editor = file_get_submitted_draft_itemid($option->id . '_files_filemanager');
+            //$draftid_editor = $option->id . '_files_filemanager';
+            //file_prepare_draft_area($draftid_editor, '1', 'ilp', 'icon', $option->id, $icon_options);
+
+            $icon4status = $mform->addElement('filemanager', $option->id . '_files_filemanager', get_string('change_icon', 'block_ilp'), null, $icon_options);
+            $icon4status->setValue( $data->{$option->id . '_files_filemanager'} );
+            //$icon4status = $draftid_editor;
             //above code is for upload icon status.
             $mform->addElement( 'html', '<hr />');
 

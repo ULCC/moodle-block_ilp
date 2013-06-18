@@ -225,6 +225,9 @@ class edit_status_item_mform extends ilp_moodleform {
                             $newvalue = '';//???? get the icon file name
                             $obj->$fieldname = $file_name;
                             $update = true;
+                        }else {
+                            $obj->$fieldname = '';
+                            $update = true;
                         }
                     }else {
                         $oldvalue = trim( $obj->$fieldname );
