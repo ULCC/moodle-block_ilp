@@ -445,6 +445,10 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
 
     $string['ilp_element_plugin_error_minoptions']  = 'Minimum number of options that must be specified for this report is ';
 
+    $string['change_icon']      = 'Change icon';
+    $string['preview_icon']     = 'Previously uploaded icon';
+    $string['icon_not_found']   = 'There is nothing to preview!';
+
 	global $CFG;
 
 	// Include ilp db class

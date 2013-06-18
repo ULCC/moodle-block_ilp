@@ -520,6 +520,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
      */
     public function config_specific_definition(&$mform) {
         global $CFG;
+        require_once($CFG->dirroot.'/lib/filestorage/file_storage.php');
+        require_once($CFG->dirroot.'/lib/filelib.php');
         //if any rows in status entry table, then data exists, so existing options should nt be editable
         $data_exists = $this->dbc->listelement_item_exists( $this->userstatus_tablename, array() );
 
@@ -553,8 +555,36 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 
             $C->setValue( $hexcolour );
 
-            $icon4status = $mform->addElement('filemanager','item_icon_'. $option->id, 'Select icon');
+            $file_found = false;
+            if(!empty($option->icon)){
+                $fs = get_file_storage();
+                $file = $fs->get_file('1', 'ilp', 'icon', $option->id,'/',$option->icon);
+                if($file){
+                    //make preview of this file
+                    $file_found = true;
+                }else {
+                    $file_found = false;
+                }
+            }
+            if($file_found){
+                $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$option->id&f=",$option->icon);
+                $this_file = "<img src=\"$path\" alt=\"\" class='icon_file'/>";
+                $icon_preview   = "<div class='status_icon'><strong>";
+                $icon_preview  .= get_string('preview_icon', 'block_ilp');
+                $icon_preview  .= "</strong>$this_file</div>";
+            }else{
+                $this_file = get_string('icon_not_found', 'block_ilp');
+                $icon_preview   = "<div class='status_icon_not_found'><strong>";
+                $icon_preview  .= get_string('preview_icon', 'block_ilp');
+                $icon_preview  .= "</strong>$this_file</div>";
+            }
+            $mform->addElement("html",$icon_preview);
 
+            // below code is for upload icon for status
+            $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
+            $icon4status = $mform->addElement('filemanager', $option->id . '_files_filemanager', get_string('change_icon', 'block_ilp'), null, $icon_options);
+
+            //above code is for upload icon status.
             $mform->addElement( 'html', '<hr />');
 
             if( !$data_exists ){
