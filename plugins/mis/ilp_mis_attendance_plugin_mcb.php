@@ -418,7 +418,6 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
      */
     function set_data($mis_user_id, $user_id=null)
     {
-        $CACHE=cache::make('block_ilp','ilp_miscache');
         $table = get_config('block_ilp', 'mis_plugin_mcb_table');
 
         $this->mis_user_id = $mis_user_id;
@@ -450,12 +449,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
             $prelimdbcalls   =    get_config('block_ilp','mis_plugin_mcb_prelimcalls');
 
 //get the users monthly attendance data
-            $cachekey="ilp_attendance:$mis_user_id";
-            if(($this->data=$CACHE->get($cachekey))===false)
-            {
-               ($this->data = $this->dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls) or $this->data=array());
-               $CACHE->set($cachekey,$this->data);
-            }
+            $this->data = $this->cached_dbquery($table, $keyfields, $this->fields,null,$prelimdbcalls);
 
             $this->normalise_data($this->data);
         }
