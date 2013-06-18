@@ -72,8 +72,8 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
 		if (!empty($student))	{ 
 			$studentname	=	fullname($student);
-			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true')); 
-			
+			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true'));
+
 			$tutors	=	$this->dbc->get_student_tutors($this->student_id);
 			$tutorslist	=	array();
 			if (!empty($tutors)) {
@@ -91,7 +91,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			}   
 			
 			$userstatuscolor	=	get_config('block_ilp', 'passcolour');
-			 
+
 			if (!empty($statusitem))	{
 				if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
                 //that's all very well, but if the ilp is up to date, status hex colour is defined, so actually we should always do this...

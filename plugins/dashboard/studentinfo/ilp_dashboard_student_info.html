@@ -19,7 +19,7 @@
 				<?php } ?>
 				<p>
 					<strong><?php echo get_string('studentstatus','block_ilp');?></strong>
-					
+
 					<?php  if (empty($can_editstatus)) { ?>
 						<span id="user_status"  style="color: <?php echo $userstatuscolor; ?>" ><?php echo $statusitem->name; ?></span>
 					<?php } else {?>
@@ -28,6 +28,19 @@
 					<?php } ?>
                         <img src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/loading.gif" id="studentlistloadingicon" class="hiddenelement">
 				</p>
+                <!-- we can display the icon here
+                    below code is liable to display the icon -->
+                <?php
+                if($statusitem->icon){
+                    $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
+                    $this_file = "<img src=\"$path\" alt=\"\" class='icon_file'/>";
+                    //we found there is a icon, so we need to display it
+                    echo '<div class="dashboard_status_icon">'.
+                                $this_file
+                          .'</div>';
+                }
+                ?>
+
 					
 				<?php
 		
