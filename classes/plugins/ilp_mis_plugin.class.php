@@ -83,6 +83,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
 
     protected function cached_dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null,$cachename='ilp_miscache')
     {
+       global $CFG,$T;
        if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
 
        $CACHE=cache::make('block_ilp',$cachename);
@@ -98,8 +99,18 @@ abstract class ilp_mis_plugin extends ilp_plugin
 
        if(($r=$CACHE->get($sql))===false)
        {
+          if($CFG->mis_debug)
+          {
+             print "Cache Miss: running $sql<br>";
+             $T->lap();
+          }
           ($r=$this->db->dbquery_sql($sql) or $r=array());
           $CACHE->set($sql,$r);
+          $T->plap('Took ');
+       }
+       else
+       {
+          print "Cache hit on $sql<br>";
        }
        return $r;
     }
