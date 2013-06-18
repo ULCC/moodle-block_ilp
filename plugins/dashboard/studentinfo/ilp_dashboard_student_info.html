@@ -2,16 +2,19 @@
     <div>
     <?php if (!empty($prevstudent)) {
 ?>
-<span class="float-left"><a href="<?php echo $CFG->wwwroot; ?>/blocks/ilp/actions/view_main.php?user_id=<?php echo $prevstudent; ?>&course_id=<?php echo $course_id; ?>"><?php echo get_string('previousstudent','block_ilp'); ?></a></span><?php 
+<span class="float-left"><a href="<?php echo $CFG->wwwroot; ?>/blocks/ilp/actions/view_main.php?user_id=<?php echo $prevstudent; ?>&course_id=<?php echo $course_id; ?>"><?php echo get_string('previousstudent','block_ilp'); ?></a></span><?php
 
-} ?>
-    <?php if (!empty($nextstudent)) {
-          $jsmodule = array(
-          'name'          => 'ilp_standard_functions',
-    'fullpath'      => '/blocks/ilp/views/js/lib.js',
-    'requires'      => array('event','dom','node','io-form')
-    );
-    $PAGE->requires->js_init_call("M.ilp_standard_functions.preload",array("$CFG->wwwroot/blocks/ilp/actions/view_main.php?user_id=$nextstudent&course_id=$course_id"),true,$jsmodule);
+}
+if (!empty($nextstudent)) {
+   $jsmodule = array(
+      'name'  => 'ilp_standard_functions',
+      'fullpath'  => '/blocks/ilp/views/js/lib.js',
+      'requires'  => array('event','dom','node','io-form')
+      );
+
+   $PAGE->requires->js_init_call('M.ilp_standard_functions.init',null,true,$jsmodule);
+   $PAGE->requires->js_init_call("M.ilp_standard_functions.preload",array("$CFG->wwwroot/blocks/ilp/actions/view_main.php?user_id=$nextstudent&course_id=$course_id"),true,$jsmodule);
+
 ?><span class="float-right"><a href="<?php echo $CFG->wwwroot; ?>/blocks/ilp/actions/view_main.php?user_id=<?php echo $nextstudent; ?>&course_id=<?php echo $course_id; ?>"><?php echo get_string('nextstudent','block_ilp'); ?></a></span><?php } ?>
     </div>
 	<h1><?php echo $studentname; ?></h1>
