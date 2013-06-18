@@ -98,6 +98,36 @@ M.ilp_standard_functions = {
         return false;
     },
 
+/**
+ * Fetch some url and discard the result.
+ * used to trigger mis caching in the target.
+ */
+    preload :  function(Y,url)
+    {
+        var callback = {
+            //dummy
+            success: function(id,o,args) {
+            },
+            // if it failed then do nothing
+            failure: function(o) {
+            }
+        };
+
+        var cfg =       {
+            on: {
+                success: callback.success,
+                failure: callback.failure
+            },
+            context: callback
+        };
+
+        Y.io(url.replace(/&amp;/g, '&'),cfg);
+
+        // return false to block the anchor firing
+        return false;
+    },
+
+
     /**
      * When ajax stuff comes back and gets added via innerHTML, the inline javascripts don't get run.
      * This will run them.
