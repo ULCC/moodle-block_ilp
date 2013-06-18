@@ -230,6 +230,12 @@ class edit_status_item_mform extends ilp_moodleform {
                             $update = true;
                         }
                     }else {
+                        /**
+                         * some of the logic here doesn't make sense to me.
+                         * still I didn't delete theme as it is working example, written by Jonathan.Pagel.
+                         * 2nd [if] from below will be always true in any sense.
+                         * so, there is no point to write this kind of logic.
+                         */
                         $oldvalue = trim( $obj->$fieldname );
                         if( isset( $data->$form_element_name ) ){
                             $newvalue = trim( $data->$form_element_name );
