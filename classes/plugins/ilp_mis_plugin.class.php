@@ -107,6 +107,8 @@ abstract class ilp_mis_plugin extends ilp_plugin
           ($r=$this->db->dbquery_sql($sql) or $r=array());
           $CACHE->set($sql,$r);
           $T->plap('Took ');
+          if($CFG->debug>1)
+             print_object($r);
        }
        else
        {
