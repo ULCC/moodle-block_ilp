@@ -485,7 +485,14 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 }
 
                 //should authabsent not be counted as absent? and does this vary from site to site in which case a config option is needed
-                $present = $this->presents_cal($d[$this->fields['markspresent']], $d[$this->fields['marksauthabsent']]);
+                if(isset($this->fields['markspresent'], $this->fields['marksauthabsent']))
+                {
+                   $present = $this->presents_cal($d[$this->fields['markspresent']], $d[$this->fields['marksauthabsent']]);
+                }
+                else
+                {
+                   $present=0;
+                }
 
                 //caculate the months attendance percentage
                 $monthpercent = ($present / $d[$this->fields['markstotal']]) * 100;
@@ -523,10 +530,10 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 $total	=	0;
 
                 foreach ($course as $monthdata) {
-                	$total	+=	$monthdata['markstotal'];
-                    $presents += $monthdata['markspresent'];
-                    $absents += $monthdata['marksabsent'];
-                    $authabsents += $monthdata['marksauthabsent'];
+                   (isset($monthdata['markstotal']) and $total += $monthdata['markstotal']);
+                   (isset($monthdata['markspresent']) and $presents += $monthdata['markspresent']);
+                   (isset($monthdata['marksabsent']) and $absents += $monthdata['marksabsent']);
+                   (isset($monthdata['marksauthabsent']) and $authabsents += $monthdata['marksauthabsent']);
                 }
 
                 $present = $this->presents_cal($presents, $authabsents);
