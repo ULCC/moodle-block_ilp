@@ -253,12 +253,15 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                if ($this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
 
                   $reportinfo			=	new stdClass();
-                  $reportinfo->total		=	count($allStates[$r->id][$this->student_id]);
-                  $reportinfo->actual		=       count(array_filter($allStates[$r->id][$this->student_id],
-                                                                            function($item){ return ($item->state==ILP_STATE_PASS);}));
+                  $datavalid = isset($allStates[$r->id][$this->student_id]);
+                  $reportinfo->total		=	$datavalid ? count($allStates[$r->id][$this->student_id]): 0;
+                  $reportinfo->actual		=       $datavalid ? count(array_filter($allStates[$r->id][$this->student_id],
+                                                                                        function($item){ return ($item->state==ILP_STATE_PASS);}))
+                     : 0 ;
                   //retrieve the number of entries that have the not counted state
-                  $reportinfo->notcounted	=	count(array_filter($allStates[$r->id][$this->student_id],
-                                                                           function($item){ return ($item->state==ILP_STATE_NOTCOUNTED);}));
+                  $reportinfo->notcounted	=	$datavalid ? count(array_filter($allStates[$r->id][$this->student_id],
+                                                                                        function($item){ return ($item->state==ILP_STATE_NOTCOUNTED);}))
+                     : 0 ;
 
                   //if total_possible is empty then there will be nothing to report
                   if (!empty($reportinfo->total)) {
