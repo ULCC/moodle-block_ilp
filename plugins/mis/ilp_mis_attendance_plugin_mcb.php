@@ -491,13 +491,18 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 $monthpercent = ($present / $d[$this->fields['markstotal']]) * 100;
 
                 //fill the couse month array position with percentage for the month
-                $mcbdata[$courseid][$month] = array(
-                    'percent' => $monthpercent,
-                    'markstotal' => $d[$this->fields['markstotal']],
-                    'markspresent' => $d[$this->fields['markspresent']],
-                    'marksabsent' => $d[$this->fields['marksabsent']],
-                    'marksauthabsent' => $d[$this->fields['marksauthabsent']],
-                    'markslate' => $d[$this->fields['markslate']]);
+                $mcbdata[$courseid][$month]['percent' => $monthpercent];
+
+                foreach('markstotal','markspresent',
+                        'marksabsent','marksauthabsent','markslate' as $fieldname)
+                {
+                   if(isset($d[$this->fields[$fieldname]]))
+                   {
+                      $mcbdata[$courseid][$month][$fieldname]=$d[$this->fields[$fieldname]];
+                   }
+                }
+
+
 
                 //check if the course has been added to the courselist array
                 if (!isset($courselist[$courseid])) {
