@@ -491,7 +491,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 $monthpercent = ($present / $d[$this->fields['markstotal']]) * 100;
 
                 //fill the couse month array position with percentage for the month
-                $mcbdata[$courseid][$month]['percent' => $monthpercent];
+                $mcbdata[$courseid][$month]['percent'] = $monthpercent;
 
                 foreach('markstotal','markspresent',
                         'marksabsent','marksauthabsent','markslate' as $fieldname)
