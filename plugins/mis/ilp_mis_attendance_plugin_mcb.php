@@ -503,7 +503,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 foreach(array('markstotal','markspresent',
                               'marksabsent','marksauthabsent','markslate') as $fieldname)
                 {
-                   if(isset($d[$this->fields[$fieldname]]))
+                   if(isset($this->fields[$fieldname]))
                    {
                       $mcbdata[$courseid][$month][$fieldname]=$d[$this->fields[$fieldname]];
                    }
