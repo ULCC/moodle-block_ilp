@@ -253,7 +253,9 @@ if (!empty($studentslist)) {
 
         foreach ($reports as $r) {
             //get the number of this report that have been created
-           $createdentries = count($allStates[$r->id][$student->id]);
+           $datavalid=isset($allStates[$r->id][$student->id]);
+
+           $createdentries = $datavalid ? count($allStates[$r->id][$student->id]) : 0 ;
 
             $reporttext = "{$createdentries} " . $r->name;
 
@@ -262,8 +264,6 @@ if (!empty($studentslist)) {
 
 
             //check if the report has a state field
-            $datavalid=isset($allStates[$r->id][$student->id]);
-
             if ($dbc->has_plugin_field($r->id, 'ilp_element_plugin_state')) {
                 //count the number of entries with a pass state
 
