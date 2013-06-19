@@ -1814,18 +1814,10 @@ class ilp_db_functions	extends ilp_logging {
     * @return	mixed object the  of entries or false
     */
     public function	get_lastupdatedentry($report_id,$user_id)	{
+        $sql='SELECT id, timemodified tm FROM {block_ilp_entry} e
+              WHERE report_id=:report_id AND user_id=:user_id ORDER BY timemodified desc';
 
-        //Getting the entry with the maximum timemodified is alittle more complicated than first thought
-
-        $sql	=	"SELECT e.id, MAX(timemodified) AS tm
-                     FROM {block_ilp_entry} AS e
-                     WHERE report_id = :report_id
-                     AND user_id = :user_id
-                     GROUP BY timemodified, e.id
-                     ORDER BY tm DESC
-                     ";
-
-        return $this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id, 0, 1));
+        return $this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id), 0, 1);
     }
 
     /**
