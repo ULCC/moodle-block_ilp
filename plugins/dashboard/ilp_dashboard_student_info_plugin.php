@@ -40,7 +40,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG,$OUTPUT,$PAGE,$PARSER,$USER,$SESSION;
+		global	$CFG, $DB, $OUTPUT, $PAGE, $PARSER, $USER, $SESSION;
 
 		//set any variables needed by the display page	
 		
@@ -86,8 +86,17 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			
 			//get the students current status
 			$studentstatus	=	$this->dbc->get_user_status($this->student_id);
+
 			if (!empty($studentstatus)) {
 				$statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->parent_id);
+
+                //need to set display option to the individual student if it not set already!
+                if($studentstatus->display_option == ''){
+                    // if we are hare, then we will write the display option to the individual student
+                    $DB->set_field('block_ilp_user_status', 'display_option', $statusitem->display_option, array('id'=>$studentstatus->id));
+                }else{
+                    $statusitem->display_option = $studentstatus->display_option;
+                }
 			}   
 			
 			$userstatuscolor	=	get_config('block_ilp', 'passcolour');

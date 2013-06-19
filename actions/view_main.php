@@ -87,7 +87,7 @@ if (!$dbc->get_user_status($user_id)) {
 	$defaultconfiguserstatus	=	get_config('block_ilp','defaultstatusitem');
 	
 	$studentstatus->parent_id				=	(!empty($defaultconfiguserstatus)) ? $defaultconfiguserstatus : ILP_DEFAULT_USERSTATUS_RECORD;//ILP_DEFAULT_USERSTATUS_RECORD;
-	
+
 	$dbc->create_userstatus($studentstatus);
 }  
 
