@@ -98,9 +98,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          $contextset = false;
 
          if (stripos($CFG->release,"2.") !== false) {
-            $contextset	=	(!is_null($PAGE->context)) ? true : false;
+            $contextset	= !is_null($PAGE->context);
          } else {
-            $contextset	=	(isset($PAGE->context)) ? true : false;
+            $contextset	=  isset($PAGE->context);
          }
 
 
@@ -227,7 +227,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $reporticon	= (!empty($report->iconfile)) ? '' : '';
 
                //does this report give user the ability to add comments
-               $has_comments	=	(!empty($report->comments)) ? true	:	false;
+               $has_comments	=	!empty($report->comments);
 
                //this will hold the ids of fields that we dont want to display
                $dontdisplay	=	 array();
@@ -280,7 +280,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                if (!empty($capability))	$access_report_viewcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                // Check to see whether the user can delete the reports entry either single entry or multiple entry.
-               $candelete =	(!empty($access_report_deletereports))	?	true	: false;
+               $candelete =	!empty($access_report_deletereports);
 
                $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
                if (!empty($capability))	$access_report_viewothers		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
@@ -293,7 +293,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
 
                //does the current report allow multiple entries
-               $multiple_entries   =   (!empty($report->frequency)) ? true :   false;
+               $multiple_entries   =   !empty($report->frequency);
 
                //instantiate the report rules class
                $reportrules    =   new ilp_report_rules($report_id,$this->student_id);
@@ -562,6 +562,4 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       $this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
 
    }
-
-
 }
