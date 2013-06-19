@@ -357,9 +357,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                      $entry_data	=	new stdClass();
 
                      //get the creator of the entry with caching
-                     if(isset($creators[$entry->creator_id]))
+                     if(!isset($creators[$entry->creator_id]))
                      {
-                        $creator=$creators[$entry->creator_id]          =       $this->dbc->get_user_by_id($entry->creator_id);
+                        $creators[$entry->creator_id]          =       $this->dbc->get_user_by_id($entry->creator_id);
                      }
                      $creator=$creators[$entry->creator_id];
 
@@ -390,12 +390,12 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                      foreach ($reportfields as $field) {
 
                         //get the plugin record that for the plugin, with cacheing
-                        if(isset($pluginRecords[$field->plugin_id]))
+                        if(!isset($pluginRecords[$field->plugin_id]))
                         {
                            $pluginRecords[$field->plugin_id]=$this->dbc->get_plugin_by_id($field->plugin_id);
                         }
 
-                        $pluginrecord=$pluginRecords[$field->plugin_id]
+                        $pluginrecord=$pluginRecords[$field->plugin_id];
 
                         //take the name field from the plugin as it will be used to call the instantiate the plugin class
                         $classname = $pluginrecord->name;
