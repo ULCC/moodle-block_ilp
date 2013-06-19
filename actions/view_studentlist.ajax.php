@@ -262,17 +262,20 @@ if (!empty($studentslist)) {
 
 
             //check if the report has a state field
-            if ($dbc->has_plugin_field($r->id, 'ilp_element_plugin_state')) {
+            $datavalid=isset($allStates[$r->id][$student->id]);
 
+            if ($dbc->has_plugin_field($r->id, 'ilp_element_plugin_state')) {
                 //count the number of entries with a pass state
 
-                $achievedentries=count(array_filter($allStates[$r->id][$student->id],
-                                                    function($item){ return ($item->state==ILP_STATE_PASS);}));
+                $achievedentries=$datavalid ? count(array_filter($allStates[$r->id][$student->id],
+                                                                 function($item){ return ($item->state==ILP_STATE_PASS);}))
+                   : 0 ;
 
                 //we need to count the number of entries that have a notcounted status
 
-                $notcountedentries=count(array_filter($allStates[$r->id][$student->id],
-                                                      function($item){ return ($item->state==ILP_STATE_NOTCOUNTED);}));
+                $notcountedentries=$datavalid? count(array_filter($allStates[$r->id][$student->id],
+                                                                  function($item){ return ($item->state==ILP_STATE_NOTCOUNTED);}))
+                   : 0 ;
 
                 $createdentries     =   $createdentries     -   $notcountedentries;
 
@@ -281,8 +284,9 @@ if (!empty($studentslist)) {
 
 
             if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_datefield')) {
-               $inprogressentries	=	array_filter($allStates[$r->id][$student->id],
-                                                             function($item){return ($item->state==ILP_STATE_UNSET);});
+               $inprogressentries	= $datavalid?	array_filter($allStates[$r->id][$student->id],
+                                                                     function($item){return ($item->state==ILP_STATE_UNSET);})
+                  : array() ;
                $inprogentries 		=	array();
 
                if (!empty($inprogressentries)) {
