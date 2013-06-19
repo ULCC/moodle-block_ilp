@@ -554,6 +554,10 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : "";
 
             $C->setValue( $hexcolour );
+
+            $status_display_option = array('text'=>'Text','icon'=>'Icon');
+            $display_option = $mform->addElement('select', 'display_option_' . $option->id, get_string('display_option', 'block_ilp'), $status_display_option);
+            $display_option->setSelected($option->display_option);
             /*
              * Below code is working example of displaying status icon.
              * That's why I didn't delete those codes.
@@ -593,17 +597,9 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             $item_id = $option->id;
 
             $data = new stdClass();
-
             $data = file_prepare_standard_filemanager($data, $option->id . '_files', $icon_options, $context, $component, $file_area, $item_id);
-
-            //$draftid_editor = file_get_submitted_draft_itemid($option->id . '_files');
-            //$draftid_editor = file_get_submitted_draft_itemid($option->id . '_files_filemanager');
-            //$draftid_editor = $option->id . '_files_filemanager';
-            //file_prepare_draft_area($draftid_editor, '1', 'ilp', 'icon', $option->id, $icon_options);
-
             $icon4status = $mform->addElement('filemanager', $option->id . '_files_filemanager', get_string('change_icon', 'block_ilp'), null, $icon_options);
             $icon4status->setValue( $data->{$option->id . '_files_filemanager'} );
-            //$icon4status = $draftid_editor;
             //above code is for upload icon status.
             $mform->addElement( 'html', '<hr />');
 
