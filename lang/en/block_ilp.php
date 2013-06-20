@@ -185,6 +185,7 @@
 	$string['moverightone'] 		= 	'Move right 1';
 	$string['movetoend'] 			= 	'Move to end';
 	$string['moveup']		 		= 	'Move up';
+    $string['edit']                 =   'Edit';
 	$string['mytutor']				=	'My Tutor:';
 	$string['mytutees']				=	'My Tutees';
 	$string['myilp']				=	'My ILP';
