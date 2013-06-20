@@ -477,18 +477,19 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      */
     public function delete_entry_record($entry_id) {
 
-       $cal_events = $this->dbc-> get_calevent_reportfield_id($entry_id);
+       if($cal_events = $this->dbc-> get_calevent_reportfield_id($entry_id))
+       {
+          $event	=	$this->dbc->get_calendar_events($entry_id, $cal_events->reportfield_id);
 
-
-     $event	=	$this->dbc->get_calendar_events($entry_id, $cal_events->reportfield_id);
-
-        if (!empty($event))	{
-            foreach($event as $ev) {
+          if (!empty($event))	{
+             foreach($event as $ev) {
                 $this->dbc->delete_event_entry($ev->id);
-            }
-        }
-        // call to the parent delete_entry_record to delete an entry record
-        return parent::delete_entry_record($entry_id);
+             }
+          }
+          // call to the parent delete_entry_record to delete an entry record
+          return parent::delete_entry_record($entry_id);
+       }
+       return 0;
     }
 
 
