@@ -122,6 +122,7 @@ foreach ($mis_plugins as $plugin_file) {
             $options[$mismisc->name] = $pluginobj->tab_name();
          }
       }
+   }
 }
 
 $attendplugin			= 	new admin_setting_configselect('block_ilp/attendplugin',get_string('attendaceplugin','block_ilp'),get_string('attendaceplugindesc','block_ilp'), '',$options);
