@@ -89,14 +89,6 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
 			if (!empty($studentstatus)) {
 				$statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->parent_id);
-
-                //need to set display option to the individual student if it not set already!
-                if($studentstatus->display_option == ''){
-                    // if we are hare, then we will write the display option to the individual student
-                    $DB->set_field('block_ilp_user_status', 'display_option', $statusitem->display_option, array('id'=>$studentstatus->id));
-                }else{
-                    $statusitem->display_option = $studentstatus->display_option;
-                }
 			}   
 			
 			$userstatuscolor	=	get_config('block_ilp', 'passcolour');
