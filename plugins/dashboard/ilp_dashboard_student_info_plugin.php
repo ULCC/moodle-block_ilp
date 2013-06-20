@@ -210,28 +210,24 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                if (file_exists($plugins.'/'.$plugin_file.".php")) {
                   require_once($plugins.'/'.$plugin_file.".php");
 
+                  //we only want mis plugins that are of type overview
+                  if ($plugin_file::plugin_type() == 'overview') {
+
                   // instantiate the object
-                  $class = basename($plugin_file, ".php");
-                  $pluginobj = new $class();
-                  $method = array($pluginobj, 'plugin_type');
+                     $pluginobj = new $plugin_file;
 
-                  if (is_callable($method,true)) {
-                     //we only want mis plugins that are of type overview
-                     if ($pluginobj->plugin_type() == 'overview') {
+                     //get the actual overview plugin
+                     $misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
 
-                        //get the actual overview plugin
-                        $misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
+                     //if the admin of the moodle has done their job properly then only one overview mis plugin will be enabled
+                     //otherwise there may be more and they will all be displayed
 
-                        //if the admin of the moodle has done their job properly then only one overview mis plugin will be enabled
-                        //otherwise there may be more and they will all be displayed
+                     $status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
 
-                        $status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
+                     $status	=	(!empty($status)) ?  $status: ILP_DISABLED;
 
-                        $status	=	(!empty($status)) ?  $status: ILP_DISABLED;
-
-                        if (!empty($misplug) & $status == ILP_ENABLED ) {
-                           $misoverviewplugins[]	=	$pluginobj;
-                        }
+                     if (!empty($misplug) & $status == ILP_ENABLED ) {
+                        $misoverviewplugins[]	=	$pluginobj;
                      }
                   }
                }

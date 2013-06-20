@@ -301,7 +301,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
     }
 
 
-    public function plugin_type()
+    public static function plugin_type()
     {
         return 'attendance';
     }

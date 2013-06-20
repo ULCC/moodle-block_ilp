@@ -252,7 +252,7 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
     }
 
     
-    function plugin_type()	{
+    static function plugin_type()	{
     	return 'misc';
     }
  	

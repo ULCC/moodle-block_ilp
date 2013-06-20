@@ -388,7 +388,7 @@
                     $string['ilp_mis_learner_studentreview_tab_name']							= 'Student Review';
             }
 
-            function plugin_type()	{
+            static function plugin_type()	{
                 return 'learnerprofile';
             }
                 

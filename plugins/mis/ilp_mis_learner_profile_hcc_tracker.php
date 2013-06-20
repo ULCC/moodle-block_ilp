@@ -249,7 +249,7 @@ class ilp_mis_learner_profile_hcc_tracker extends ilp_mis_attendance_plugin
     }
 
 
-    function plugin_type()	{
+    static function plugin_type()	{
     	return 'learnerprofile';
     }
 

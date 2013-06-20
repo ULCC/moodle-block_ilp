@@ -295,18 +295,12 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
         foreach ($mis_plugins as $plugin_file) {
         	if (file_exists($plugins.'/'.$plugin_file.".php")) {
 	            require_once($plugins . '/' . $plugin_file . ".php");
-	            // instantiate the object
-	            $class = basename($plugin_file, ".php");
-	            $pluginobj = new $class();
-	            $method = array($pluginobj, 'plugin_type');
 
-	            //check whether the config_settings method has been defined
-
-	            if (is_callable($method, true)) {
-	                if ($pluginobj->plugin_type() == 'attendance') {
-	                    $mismisc = $this->dbc->get_mis_plugin_by_name($plugin_file);
-	                    $options[$mismisc->id] = $pluginobj->tab_name();
-	                }
+                    if ($plugin_file::plugin_type() == 'attendance') {
+                       // instantiate the object
+                       $pluginobj = new $plugin_file();
+                       $mismisc = $this->dbc->get_mis_plugin_by_name($plugin_file);
+                       $options[$mismisc->id] = $pluginobj->tab_name();
 	            }
         	}
         }
@@ -331,7 +325,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
     }
 
 
-    public function plugin_type()
+    public static function plugin_type()
     {
         return 'overview';
     }

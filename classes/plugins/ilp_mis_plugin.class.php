@@ -143,7 +143,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     function install($plugin_id)    {
         $misplugin = $this->dbc->get_mis_plugin_by_id($plugin_id);
 
-        $misplugin->type = $this->plugin_type();
+        $misplugin->type = static::plugin_type();
 
         $this->dbc->update_mis_plugin($misplugin);
     }
@@ -156,7 +156,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     /**
      * Force extending class to implement the plugin type function
      */
-    abstract function plugin_type();
+    abstract static function plugin_type();
 
     protected function set_params($params)  {
         $this->params = $params;
