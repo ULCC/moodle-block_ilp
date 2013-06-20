@@ -73,28 +73,29 @@ class ilp_report_rules  {
         if ($report->reporttype ==  ILP_RT_RECURRING || $report->reporttype ==  ILP_RT_RECURRING_FINALDATE)   {
             //
 
-            $recuringstart  =   0;
+            $recurringstart  =   0;
 
             if ($report->recurstart == ILP_RECURRING_REPORTCREATION)   {
                 //rules started at report creation
-                $recuringstart  =   $report->timecreated;
+                $recurringstart  =   $report->timecreated;
             }   else if ($report->recurstart == ILP_RECURRING_SPECIFICDATE) {
                 //rules started at specific date
-                $recuringstart  =   $report->recurdate;
+                $recurringstart  =   $report->recurdate;
             }  else {
                 //rules started at first entry
                 $studententries =   $this->dbc->get_user_report_entries($this->report_id,$this->student_id);
 
                 if (!empty($studententries))    {
                     //get the creation time of the first user entry
-                    $recuringstart  =   $studententries[0]->timecreated;
+                   $recurringstart  = reset($studententries);
+                   $recurringstart = $recurringstart->timecreated;
                 }
             }
 
 
-            if (!empty($recuringstart)) {
+            if (!empty($recurringstart)) {
 
-                $recurringperiod    =   $this->recurring_period($recuringstart,$report->recurfrequency);
+                $recurringperiod    =   $this->recurring_period($recurringstart,$report->recurfrequency);
 
                 $entriescount       =   $this->dbc->count_report_entries($this->report_id,$this->student_id,$recurringperiod['start'],$recurringperiod['end']);
 
