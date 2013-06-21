@@ -16,4 +16,4 @@ require_once($path_to_config);
 
 
 //when testing and development is over replace with the code below
-require_once(__DIR__'/../../config.php');
+require_once(__DIR__.'/../../config.php');
