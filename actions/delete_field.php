@@ -42,6 +42,7 @@ $deleted = $DB->delete_records('block_ilp_report_field', array('id'=>$reportfiel
 if($deleted){
     //now we need to work to reset the position.
     //I will do it later on
+    // normally it should work without changing the position according previous order
 }
 /*
 //check if the report field was found
