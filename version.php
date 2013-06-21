@@ -9,17 +9,11 @@
  * @version 2.0
  */
 
-global $CFG;
+defined('MOODLE_INTERNAL') || die();
 
-//require the ilp_settings class
-require_once "$CFG->dirroot/blocks/ilp/classes/ilp_settings.class.php";
+$plugin->version   = 2013062101;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->requires  = 2012120300;        // Requires this Moodle version
 
-//instantiate the ilp settings class
-$ilpsettings = new ilp_settings();
+$plugin->component = 'block_ilp';      // Full name of the plugin (used for diagnostics)
 
-//get the current version number of the ilp
-$plugin->version = $ilpsettings->version();
-
-
-//get the time setting for the ilp cron
-$plugin->cron = $ilpsettings->cron();
+$plugin->cron	= 86400; 	//run the cron at minimum once every 24 hours
