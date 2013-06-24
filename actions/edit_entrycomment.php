@@ -88,11 +88,11 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_entrycomment_mform.ph
 
 
 $mform	= new	edit_entrycomment_mform($report_id,$entry_id,$user_id,$course_id,$comment_id,$selectedtab,$tabitem);
-
+/*
 if (!empty($comment_id)) {
 
     $comment	=	$dbc->get_comment_by_id($comment_id);
-
+    //var_dump($comment);
     if (!empty($comment)) {
         //only the creator has the right to edit
         if ($comment->creator_id == $USER->id) {
@@ -105,6 +105,7 @@ if (!empty($comment_id)) {
         print_error('commentnotfound','block_ilp');
     }
 }
+*/
 
 
 //was the form cancelled?
