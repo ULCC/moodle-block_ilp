@@ -86,14 +86,6 @@ if (empty($report->comments))	{
 //require the entrycomment_mform so we can display the report
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_entrycomment_mform.php');
 
-$context = get_context_instance(CONTEXT_SYSTEM);
-$textfieldoptions = array(
-    'trusttext'=>true,
-    'subdirs'=>true,
-    'maxfiles'=>100,
-    'maxbytes'=>$CFG->userquota,
-    'context'=>$context
-);
 
 $mform	= new	edit_entrycomment_mform($report_id,$entry_id,$user_id,$course_id,$comment_id,$selectedtab,$tabitem);
 
