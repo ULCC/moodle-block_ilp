@@ -115,7 +115,7 @@ M.ilp_standard_functions = {
                 window.setTimeout(scripts[i].text, 0);
             }
         }
-    },
+    }
 
 
     /**
@@ -124,6 +124,7 @@ M.ilp_standard_functions = {
      * @param elem
      * @return
      */
+        /*
     get_height  : function(element) {
         // work out the height of the rendered element minus the extra bits
         var padding = parseFloat(element.getStyle("padding-top")) + parseFloat(element.getStyle("padding-bottom"));
@@ -134,13 +135,14 @@ M.ilp_standard_functions = {
 
         return element.get('offsetHeight') - padding - border;
     },
-
+*/
     /**
      * Calculates the height attribute of a rendered element.
      *
      * @param elem
      * @return
      */
+        /*
     get_width : function(element) {
 
         // work out the width of the rendered element minus the extra bits
@@ -152,5 +154,6 @@ M.ilp_standard_functions = {
 
         return element.get('offsetWidth') - padding - border;
     }
+    */
 
 }

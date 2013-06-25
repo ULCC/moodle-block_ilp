@@ -437,6 +437,24 @@
 	margin: 0 0 10px 0;
 	height: 20px;
 }
+
+.ilp .view-comments .view_all_comments {
+    background: url([[pix:block_ilp|open]]) no-repeat;
+    position: relative;
+    top: -3px;
+    left: 110px;
+    width: 31px;
+    height: 25px;
+}
+.ilp .view-comments .hide_all_comments {
+    background: url([[pix:block_ilp|close]]) no-repeat;
+    position: relative;
+    top: -3px;
+    left: 110px;
+    width: 31px;
+    height: 25px;
+}
+
 .ilp .view-comments h3{
 	font-size: 1.3em; 
 	margin: 0; 
