@@ -69,7 +69,7 @@ $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_main.php",$PARSER->get_pa
 //get the enabled template
 $temp	=	$dbc->get_enabled_template();
 
-$classname	=	$temp->name;
+$classname	=	$temp->name; //possible class name = ilp_dashboard_default_template
 
 //include the class file for the enabled template
 require_once($CFG->dirroot."/blocks/ilp/plugins/dash_templates/{$classname}.php");

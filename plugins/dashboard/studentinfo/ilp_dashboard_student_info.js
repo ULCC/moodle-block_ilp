@@ -111,5 +111,3 @@ M.ilp_dashboard_student_info.init = function(Y,statusval) {
     Y.on('change',function () {M.ilp_dashboard_student_info.save_userstatus()},'#select_userstatus' );
 
 };
-
-

@@ -25,38 +25,47 @@ M.ilp_dashboard_reports_tab = {
 		var current = new RegExp("#(.+)").exec(window.location.href);
 
         headers.each( function (headernode)   {
-
+            var my_selector = '#';
+            var my_container = '_container';
             headernode_id   =   headernode.get('id');
 
-            headercontainer  =  Y.one('#'+headernode_id+'_container');
 
-            // get the height of the container element
-            heights[headernode_id] = M.ilp_dashboard_reports_tab.get_height(headercontainer);
+            my_selector = my_selector.concat(headernode_id,my_container);
+            headercontainer  =  Y.one(my_selector);
+            /**
+             * When we have multiple entry for one report,
+             * and first entry doesn't have any comment;
+             * javascript produce error. So we need to have validation check as below:
+              */
+            if(headercontainer){
+                // get the height of the container element
+                heights[headernode_id] = M.ilp_dashboard_reports_tab.get_height(headercontainer);
 
-            // set the cursor style so the user can see this is clickable
-            headernode.setStyle("cursor", "pointer");
+                // set the cursor style so the user can see this is clickable
+                headernode.setStyle("cursor", "pointer");
 
-            // create the img icon and insert it into the start of the header
-            var img = Y.Node.create('<img id="'+headernode_id+'_icon" class="collapse">');
-            //the before function does not seem to be functioning correctly as the image is being inserted after
-            headernode.insert(img,'before');
-            //headernode.insert(img,'after');
+                // create the img icon and insert it into the start of the header
+                var img = Y.Node.create('<img id="'+headernode_id+'_icon" class="collapse">');
+                //the before function does not seem to be functioning correctly as the image is being inserted after
+                headernode.insert(img,'before');
+                //headernode.insert(img,'after');
 
-            if(!current || current[1] != headernode_id) {
-                // set the onclick to open the container
-                Y.on('click',function () {M.ilp_dashboard_reports_tab.toggle_container(headernode, 0, heights[headernode_id]);},headernode );
-                // close and hide the container
-                headercontainer.setStyle("display", "none");
-                headercontainer.setStyle("overflow", "hidden");
+                if(!current || current[1] != headernode_id) {
+                    // set the onclick to open the container
+                    Y.on('click',function () {M.ilp_dashboard_reports_tab.toggle_container(headernode, 0, heights[headernode_id]);},headernode );
+                    // close and hide the container
+                    headercontainer.setStyle("display", "none");
+                    headercontainer.setStyle("overflow", "hidden");
 
-                // add the closed icon
-                Y.one('#'+headernode_id+'_icon').set('src', closed_image);
-            } else {
-                // set the onclick to close the container
-                Y.on('click',function () { M.ilp_dashboard_reports_tab.toggle_container(headernode, heights[headernode_id], 0);},headernode );
+                    // add the closed icon
+                    Y.one('#'+headernode_id+'_icon').set('src', closed_image);
+                } else {
+                    // set the onclick to close the container
+                    Y.on('click',function () { M.ilp_dashboard_reports_tab.toggle_container(headernode, heights[headernode_id], 0);},headernode );
 
-                // add the open icon
-                Y.one('#'+headernode_id+'_icon').set('src', open_image);
+                    // add the open icon
+                    Y.one('#'+headernode_id+'_icon').set('src', open_image);
+                }
             }
 
         })
@@ -120,6 +129,7 @@ M.ilp_dashboard_reports_tab = {
             }   else {
                 container.setStyle("overflow","auto");
                 container.setStyle("height","auto");
+                container.setStyle("width","100%");
             }
 
         });
