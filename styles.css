@@ -450,6 +450,7 @@
     position: relative;
     top: -15px;
     width: 100px;
+    cursor: -moz-zoom-in;
 }
 .ilp .view-comments .hide_all_comments {
     /*background: url([[pix:block_ilp|close]]) no-repeat;
@@ -463,6 +464,7 @@
     position: relative;
     top: -15px;
     width: 100px;
+    cursor: -moz-zoom-out;
 }
 
 .ilp .view-comments h3{

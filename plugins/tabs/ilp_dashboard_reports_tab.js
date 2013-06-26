@@ -5,14 +5,12 @@
  */
 M.ilp_dashboard_reports_tab = {
     // params from PHP
-    open_image : null,
-    closed_image : null,
+    //open_image : null,
+    //closed_image : null,
     Y : null,
 
-    init : function(Y, open_image, closed_image) {
+    init : function(Y) {
         this.Y  =   Y;
-    	this.open_image = open_image;
-		this.closed_image = closed_image;
 
         var my_container = '_container';
 
