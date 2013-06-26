@@ -558,7 +558,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             $status_display_option = array('text'=>'Text','icon'=>'Icon');
             $display_option = $mform->addElement('select', 'display_option_' . $option->id, get_string('display_option', 'block_ilp'), $status_display_option);
             $display_option->setSelected($option->display_option);
-            
+
             // below code is for upload icon for status
             $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
 
@@ -600,10 +600,6 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             get_string( 'ilp_element_plugin_dd_optionlist_additional', 'block_ilp' ),
             array('class' => 'form_input')
         );
-
-        if( 0 ){
-            $E->setValue( $info[ 'options' ] );
-        }
 
         $F = $mform->addElement(
             'textarea',
