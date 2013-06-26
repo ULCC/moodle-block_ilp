@@ -451,6 +451,7 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['preview_icon']     = 'Previously uploaded icon';
     $string['icon_not_found']   = 'There is nothing to preview!';
     $string['display_option']       = 'Display option';
+    $string['status_description']   = 'Description';
 
 	global $CFG;
 
