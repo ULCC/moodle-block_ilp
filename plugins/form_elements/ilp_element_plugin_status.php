@@ -561,6 +561,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                 get_string('status_description','block_ilp'),
                 array('class' => 'form_input')
             );
+
             $description->setValue( $option->description );
 
             $status_display_option = array('text'=>'Text','icon'=>'Icon');
