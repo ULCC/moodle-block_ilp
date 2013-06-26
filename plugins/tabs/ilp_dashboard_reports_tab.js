@@ -37,10 +37,10 @@ M.ilp_dashboard_reports_tab = {
         my_new_element.className    = "view_all_comments";
         my_new_element.id           = el+'_view_comments';
         my_new_element.innerHTML    = 'View Comments';
-        my_new_element.onclick      = function (){ M.ilp_dashboard_reports_tab.to_expand(my_new_element, my_container);};
+        my_new_element.onclick      = function (){ M.ilp_dashboard_reports_tab.show_hide(my_new_element, my_container);};
         return my_new_element;
     },
-    to_expand: function(my_el,my_container){
+    show_hide: function(my_el,my_container){
         if(my_container._isHidden()){
             my_el.classList.add('hide_all_comments');
             my_el.classList.remove('view_all_comments');
