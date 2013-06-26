@@ -558,36 +558,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             $status_display_option = array('text'=>'Text','icon'=>'Icon');
             $display_option = $mform->addElement('select', 'display_option_' . $option->id, get_string('display_option', 'block_ilp'), $status_display_option);
             $display_option->setSelected($option->display_option);
-            /*
-             * Below code is working example of displaying status icon.
-             * That's why I didn't delete those codes.
-             * It might help later on
-             ----------------------------------------------------------------------------
-            $file_found = false;
-            if(!empty($option->icon)){
-                $fs = get_file_storage();
-                $file = $fs->get_file('1', 'ilp', 'icon', $option->id,'/',$option->icon);
-                if($file){
-                    //make preview of this file
-                    $file_found = true;
-                }else {
-                    $file_found = false;
-                }
-            }
-            if($file_found){
-                $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$option->id&f=",$option->icon);
-                $this_file = "<img src=\"$path\" alt=\"\" class='icon_file'/>";
-                $icon_preview   = "<div class='status_icon'><strong>";
-                $icon_preview  .= get_string('preview_icon', 'block_ilp');
-                $icon_preview  .= "</strong>$this_file</div>";
-            }else{
-                $this_file = get_string('icon_not_found', 'block_ilp');
-                $icon_preview   = "<div class='status_icon_not_found'><strong>";
-                $icon_preview  .= get_string('preview_icon', 'block_ilp');
-                $icon_preview  .= "</strong>$this_file</div>";
-            }
-            $mform->addElement("html",$icon_preview);
-            */
+            
             // below code is for upload icon for status
             $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
 
