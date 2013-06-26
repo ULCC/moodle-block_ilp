@@ -439,20 +439,30 @@
 }
 
 .ilp .view-comments .view_all_comments {
-    background: url([[pix:block_ilp|open]]) no-repeat;
+    /*background: url([[pix:block_ilp|open]]) no-repeat;
     position: relative;
     top: -3px;
     left: 110px;
     width: 31px;
-    height: 25px;
+    height: 25px;*/
+    font-weight: bolder;
+    left: 115px;
+    position: relative;
+    top: -15px;
+    width: 100px;
 }
 .ilp .view-comments .hide_all_comments {
-    background: url([[pix:block_ilp|close]]) no-repeat;
+    /*background: url([[pix:block_ilp|close]]) no-repeat;
     position: relative;
     top: -3px;
     left: 110px;
     width: 31px;
-    height: 25px;
+    height: 25px;*/
+    font-weight: bolder;
+    left: 115px;
+    position: relative;
+    top: -15px;
+    width: 100px;
 }
 
 .ilp .view-comments h3{

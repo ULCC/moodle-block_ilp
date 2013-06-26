@@ -30,24 +30,26 @@ M.ilp_dashboard_reports_tab = {
                 headercontainer._hide();
             }
         }
-        //Y.subscribe("clickEvent", M.ilp_dashboard_reports_tab.onClickEvent);
 	},
     get_view_comments: function(el,my_container){
-        var my_new_element = document.createElement("div");
-        my_new_element.name = "view_comments";
-        my_new_element.className = "view_all_comments";
-        my_new_element.id       = el+'_view_comments';
-        my_new_element.onclick  = function (){ M.ilp_dashboard_reports_tab.to_expand(my_new_element, my_container);};
+        var my_new_element          = document.createElement("div");
+        my_new_element.name         = "view_comments";
+        my_new_element.className    = "view_all_comments";
+        my_new_element.id           = el+'_view_comments';
+        my_new_element.innerHTML    = 'View Comments';
+        my_new_element.onclick      = function (){ M.ilp_dashboard_reports_tab.to_expand(my_new_element, my_container);};
         return my_new_element;
     },
     to_expand: function(my_el,my_container){
         if(my_container._isHidden()){
             my_el.classList.add('hide_all_comments');
             my_el.classList.remove('view_all_comments');
+            my_el.innerHTML = 'Hide Comments';
             my_container._show();
         }else{
             my_el.classList.add('view_all_comments');
             my_el.classList.remove('hide_all_comments');
+            my_el.innerHTML = 'Show Comments';
             my_container._hide();
         }
     }
