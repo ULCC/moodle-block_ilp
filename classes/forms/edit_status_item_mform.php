@@ -216,6 +216,7 @@ class edit_status_item_mform extends ilp_moodleform {
                     'value' => 'itemvalue_' . $obj->id,
                     'hexcolour' => 'itemhexcolour_' . $obj->id,
                     'name'  => 'itemname_' . $obj->id,
+                    'description'  => 'description_' . $obj->id,
                     'icon'  => $obj->id . '_file_filemanager',
                     'display_option'=> 'display_option_' . $obj->id,
                 );

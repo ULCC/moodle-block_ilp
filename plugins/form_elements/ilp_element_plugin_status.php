@@ -556,7 +556,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             $C->setValue( $hexcolour );
 
             $description = $mform->addElement(
-                'textarea',
+                'text',
                 'description_' . $option->id,
                 get_string('status_description','block_ilp'),
                 array('class' => 'form_input')
