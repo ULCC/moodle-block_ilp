@@ -145,16 +145,5 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			//the student was not found display and error 
 			print_error('studentnotfound','block_ilp');
 		}
-		
-		
-		
-		
 	}
-	
-	
-	
-	
-	
-	
-	
 }

@@ -288,8 +288,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 							$capability	=	$this->dbc->get_capability_by_name('block/ilp:viewcomment');
 							if (!empty($capability))	$access_report_viewcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
-							//check to see whether the user can delete the reports entry
-							$candelete =	(!empty($report->frequency) && !empty($access_report_deletereports))	?	true	: false;
+							// Check to see whether the user can delete the reports entry either single entry or multiple entry.
+							$candelete =	(!empty($access_report_deletereports))	?	true	: false;
 
                             $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
                             if (!empty($capability))	$access_report_viewothers		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);

@@ -161,19 +161,12 @@ if (!empty($status_id)) {
         $notstatus_ids = true;
     }
 }
-
 //we only want to get the student matrix if students have been provided
 $studentslist = (!empty($students)) ? $dbc->get_students_matrix($flextable, $students, $status_id, $notstatus_ids)
         : false;
 
 $prevnextstudents   =   array();
 
-//create the list of students ids to be passed to view_main page
-if (!empty($studentslist)) {
-    foreach($studentslist   as $sl)   {
-        $prevnextstudents[]   =   $sl->id;
-    }
-}
 
 //get the default status item which will be used as the status for students who
 //have not entered their ilp and have not had a status assigned
@@ -183,7 +176,17 @@ $defaultstatusitem_id = get_config('block_ilp', 'defaultstatusitem');
 $defaultstatusitem = $dbc->get_status_item_by_id($defaultstatusitem_id);
 
 
-$status_item = (!empty($defaultstatusitem)) ? $defaultstatusitem->name : get_string('unknown', 'block_ilp');
+if(!empty($defaultstatusitem)){
+    if($defaultstatusitem->display_option == 'icon'){
+        $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$defaultstatusitem->id&f=",$defaultstatusitem->icon);
+        $this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+        $status_item = $this_file;
+    }else{
+        $status_item = $defaultstatusitem->name;
+    }
+}else {
+    $status_item = get_string('unknown', 'block_ilp');
+}
 
 //this is needed if the current user has capabilities in the course context, it allows view_main page to view the user
 //in the course context
@@ -195,20 +198,44 @@ $coursearg      = ( $course_id ) ? "&course=$course_id" : '' ;
 //Saving this information on the students in this list in session var so it
 //can be used on student page. not entirely happy about doing it this way
 //this is possible a good place to use a caching class
-$SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
+if(!empty($students))  {
+    $pagesize = $flextable->pagesize;
+    $flextable->pagesize = 100;
+    $temp_student_list = $dbc->get_students_matrix($flextable, $students, $status_id, $notstatus_ids);
+    $flextable->pagesize = $pagesize;
 
+    // Create the list of 100 students ids to be passed to view_main page
+    if (!empty($temp_student_list)) {
+        foreach($temp_student_list   as $sl)   {
+            $prevnextstudents[]   =   $sl->id;
+        }
+    }
+}
+
+$SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
 
 if (!empty($studentslist)) {
     foreach ($studentslist as $student) {
         $data = array();
 		
-        $userprofile	=	(stripos($CFG->release,"2.") === false) ? 'view.php' : 'profile.php';
+        $userprofile	=	'view.php' ;
                 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
         $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
-        $data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
+        //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
+        if(!empty($student->u_status)){
+            if($student->u_display_option == 'icon'){
+                $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$student->u_status_id&f=",$student->u_status_icon);
+                $this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+                $data['u_status'] = $this_file;
+            }else {
+                $data['u_status'] = $student->u_status;
+            }
+        }else {
+            $data['u_status'] = $status_item;
+        }
 
         $data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
 

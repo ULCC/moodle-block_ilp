@@ -1,0 +1,24 @@
+/** Displaying status icon in the form
+.status_icon {
+    left: 33px;
+    position: relative;
+}
+.status_icon strong {
+    position: relative;
+    right: 15px;
+    top: -20px;
+}
+.icon_file {
+    width: 50px;
+    height: 50px;
+}
+.status_icon_not_found {
+    left: 40px;
+    position: relative;
+}
+.status_icon_not_found strong {
+    position: relative;
+    right: 18px;
+}
+Styling for displaying status icon finish.
+ */

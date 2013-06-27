@@ -79,7 +79,8 @@ $dbc = new ilp_db();
 $dbc->delete_comment_by_id($comment_id);
 
 $return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&course_id={$course_id}&selectedtab=$selectedtab&tabitem={$tabitem}";
-redirect($return_url, get_string('commeentdeleted','block_ilp'), ILP_REDIRECT_DELAY);
+//redirect($return_url, get_string('commeentdeleted','block_ilp'), ILP_REDIRECT_DELAY);
+redirect($return_url);
 
 
 

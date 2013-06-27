@@ -20,6 +20,6 @@ $ilpsettings = new ilp_settings();
 //get the current version number of the ilp
 $plugin->version = $ilpsettings->version();
 
-
+$plugin->component = 'ilp';
 //get the time setting for the ilp cron
 $plugin->cron = $ilpsettings->cron();

@@ -520,59 +520,95 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
      */
     public function config_specific_definition(&$mform) {
         global $CFG;
+        require_once($CFG->dirroot.'/lib/filestorage/file_storage.php');
+        require_once($CFG->dirroot.'/lib/filelib.php');
         //if any rows in status entry table, then data exists, so existing options should nt be editable
         $data_exists = $this->dbc->listelement_item_exists( $this->userstatus_tablename, array() );
 
         $info = $this->get_option_list_text( ILP_DEFAULT_USERSTATUS_RECORD , "\n", 'passfail' ) ;
 
-        if( 1 ){
-            foreach( $info[ 'objlist' ] as $option ){
-                $A = $mform->addElement(
-                    'text',
-                    'itemvalue_' . $option->id,
-                    'value',
-                    array('class' => 'form_input')
+        foreach( $info[ 'objlist' ] as $option ){
+            $A = $mform->addElement(
+                'text',
+                'itemvalue_' . $option->id,
+                'value',
+                array('class' => 'form_input')
+            );
+            $A->setValue( $option->value );
+
+            $B = $mform->addElement(
+                'text',
+                'itemname_' . $option->id,
+                'label',
+                array('class' => 'form_input')
+            );
+            $B->setValue( $option->name );
+
+            $C = $mform->addElement(
+                'text',
+                'itemhexcolour_' . $option->id,
+                'hex colour',
+                array('class' => 'form_input')
+            );
+
+            $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : "";
+
+            $C->setValue( $hexcolour );
+
+            $description = $mform->addElement(
+                'text',
+                'description_' . $option->id,
+                get_string('status_description','block_ilp'),
+                array('class' => 'form_input')
+            );
+            $description->setValue( html_entity_decode($option->description ));
+
+            $bg_colour = $mform->addElement(
+                'text',
+                'bg_colour_' . $option->id,
+                get_string('bg_colour','block_ilp'),
+                array('class' => 'form_input')
+            );
+            $bg_colour->setValue( ($option->bg_colour ));
+
+            $status_display_option = array('text'=>'Text','icon'=>'Icon');
+            $display_option = $mform->addElement('select', 'display_option_' . $option->id, get_string('display_option', 'block_ilp'), $status_display_option);
+            $display_option->setSelected($option->display_option);
+
+            // below code is for upload icon for status
+            $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
+
+            $context = get_context_instance(CONTEXT_SYSTEM);
+            $component = 'ilp';
+            $file_area = 'icon';
+            $item_id = $option->id;
+
+            $data = new stdClass();
+            $data = file_prepare_standard_filemanager($data, $option->id . '_files', $icon_options, $context, $component, $file_area, $item_id);
+            $icon4status = $mform->addElement('filemanager', $option->id . '_files_filemanager', get_string('change_icon', 'block_ilp'), null, $icon_options);
+            $icon4status->setValue( $data->{$option->id . '_files_filemanager'} );
+            //above code is for upload icon status.
+            $mform->addElement( 'html', '<hr />');
+
+            if( !$data_exists ){
+                $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
+                $mform->addElement(
+                    'static',
+                    'delete_link',
+                    '<a href="' . $deleteurl . '">X</a>'
                 );
-                $A->setValue( $option->value );
-                $B = $mform->addElement(
-                    'text',
-                    'itemname_' . $option->id,
-                    'label',
-                    array('class' => 'form_input')
-                );
-                $B->setValue( $option->name );
-
-                $C = $mform->addElement(
-                    'text',
-                    'itemhexcolour_' . $option->id,
-                    'hex colour',
-                    array('class' => 'form_input')
-                );
-
-                $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : "";
-
-                $C->setValue( $hexcolour );
-
-                $mform->addElement( 'html', '<hr />' );
-
-                if( !$data_exists ){
-                    $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
-                    $mform->addElement(
-                        'static',
-                        'delete_link',
-                        '<a href="' . $deleteurl . '">X</a>'
-                    );
-                }
             }
-            /*
-                        $mform->addElement(
-                            'static',
-                            'description',
-                            get_string( 'existing_options', 'block_ilp' ),
-                            $this->config_format_option_list( $info[ "optionlist" ] )
-                        );
-            */
+
+        /*
+        $mform->addElement(
+            'static',
+            'description',
+            get_string( 'existing_options', 'block_ilp' ),
+            $this->config_format_option_list( $info[ "optionlist" ] )
+        );
+        */
         }
+
 
         $E = $mform->addElement(
             'textarea',
@@ -580,10 +616,6 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             get_string( 'ilp_element_plugin_dd_optionlist_additional', 'block_ilp' ),
             array('class' => 'form_input')
         );
-
-        if( 0 ){
-            $E->setValue( $info[ 'options' ] );
-        }
 
         $F = $mform->addElement(
             'textarea',

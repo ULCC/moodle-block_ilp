@@ -50,7 +50,7 @@ class edit_status_item_mform extends ilp_moodleform {
         	
        		 	//create a new fieldset
        		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
-       		     	$mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
+       		    $mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
 
         	
        		 	$mform->addElement( 'hidden', 'id', ILP_DEFAULT_USERSTATUS_RECORD );
@@ -82,20 +82,20 @@ class edit_status_item_mform extends ilp_moodleform {
 		function process_data($data) {
 			
 			if (empty($data->id)) {
-				//we shouldn't be here
-	        	} else {
-					$this->errors = array();
-					if( $this->specific_validation( $data ) ){
-						//valid input
-						//rewrite the options
-						$this->specific_process_data( $data );
-					}
-					else{
+            //we shouldn't be here
+            } else {
+                $this->errors = array();
+                if( $this->specific_validation( $data ) ){
+                    //valid input
+                    //rewrite the options
+                    $this->specific_process_data( $data );
+                }
+                else{
 
-					}
-	        	}
-   	    		return $data->id;
-	    	}
+                }
+            }
+            return $data->id;
+        }
         
         /*
         * @param object $item
@@ -108,7 +108,10 @@ class edit_status_item_mform extends ilp_moodleform {
         }
 
 		function specific_process_data( $data ){
-            global $DB;
+            global $CFG, $DB;
+            require_once($CFG->dirroot.'/lib/filestorage/file_storage.php');
+            require_once($CFG->dirroot.'/lib/filelib.php');
+            $context = get_context_instance(CONTEXT_SYSTEM);
 			//if we are here, we can assume $data is valid
 			$optionlist = array();
 			if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
@@ -118,28 +121,28 @@ class edit_status_item_mform extends ilp_moodleform {
 			//check for existing user data - if there is any then we can't delete any status options
 			//$data_exists = $this->dbc->listelement_item_exists( $this->data_entry_tablename, array( 'parent_id' => ILP_DEFAULT_USERSTATUS_RECORD ) );
 
-		        $sep = "\n";
-		        $keysep = ":";
+            $sep = "\n";
+            $keysep = ":";
 			//entries from data to go into $this->tablename and $this->items_tablename
 	
-		        $gradekeylist = array(
-	       		     'pass', 'fail'
-		        );
-		        foreach( $gradekeylist as $key ){
-	       		     $v = $key . '_list';
-	       		     $$v = explode( $sep, $data->$key );
-	       		     //deal with pesky whitespace
-	       		     foreach( $$v as &$entry ){
-	       		         $entry = trim( $entry );
-	       		         $entryparts = explode( $keysep , $entry );
-	       		         if( 1 < count( $entryparts ) ){
-	       		             //admin has copied a whole key:value string into the pass or fail textarea
-	       		             //so throw away the key 
-	       		             $entry = $entryparts[1];
-	       		         }
-	       		     }
-	       		 }
-		        //we now have 2 lists: $pass_list and $fail_list 
+            $gradekeylist = array(
+                 'pass', 'fail'
+            );
+            foreach( $gradekeylist as $key ){
+                 $v = $key . '_list';
+                 $$v = explode( $sep, $data->$key );
+                 //deal with pesky whitespace
+                 foreach( $$v as &$entry ){
+                     $entry = trim( $entry );
+                     $entryparts = explode( $keysep , $entry );
+                     if( 1 < count( $entryparts ) ){
+                         //admin has copied a whole key:value string into the pass or fail textarea
+                         //so throw away the key
+                         $entry = $entryparts[1];
+                     }
+                 }
+             }
+            //we now have 2 lists: $pass_list and $fail_list
 	  	
 			$element_id = ILP_DEFAULT_USERSTATUS_RECORD;
 	 		$plgrec = $this->dbc->get_form_element_data( $this->tablename, $element_id );
@@ -180,6 +183,10 @@ class edit_status_item_mform extends ilp_moodleform {
             //that's dealt with the fresh options submitted
             //but we still need to re-assign pass and fail to the existing items, should they have changed
             foreach( $this->dbc->listelement_item_exists( $this->items_tablename, array() ) as $obj ){
+                //below two lines is liable for saving icon files
+                $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
+                file_save_draft_area_files($data->{$obj->id.'_files_filemanager'}, $context->id, 'ilp', 'icon', $obj->id, $icon_options);
+
                 //if an element has been submitted with blank name and value, delete existing record
                 $itemid = $obj->id;
                 $labelkey = "itemname_$itemid";
@@ -206,18 +213,34 @@ class edit_status_item_mform extends ilp_moodleform {
 
                 //keys correspond to field names, values correspond to element names from the form
                 $editable_fields = array(
-                    'value' => 'itemvalue_' . $obj->id,
-                    'hexcolour' => 'itemhexcolour_' . $obj->id,
-                    'name'  => 'itemname_' . $obj->id
+                    'value'         => 'itemvalue_' . $obj->id,
+                    'hexcolour'     => 'itemhexcolour_' . $obj->id,
+                    'name'          => 'itemname_' . $obj->id,
+                    'icon'          => $obj->id . '_file_filemanager',
+                    'display_option'=> 'display_option_' . $obj->id,
+                    'description'   => 'description_' . $obj->id,
+                    'bg_colour'     => 'bg_colour_' . $obj->id,
                 );
                 foreach( $editable_fields as $fieldname=>$form_element_name ){
-                    $oldvalue = trim( $obj->$fieldname );
-                    if( isset( $data->$form_element_name ) ){
-                        $newvalue = trim( $data->$form_element_name );
-	                    if( $newvalue && $oldvalue != $newvalue ){
-	                        $obj->$fieldname = $newvalue;
-	                        $update = true;
-	                    }
+                    if($fieldname == 'icon'){
+                        $file_name = $DB->get_field_sql("SELECT filename FROM {files} where component = 'ilp' and filearea='icon' and itemid=$obj->id and filesize != 0");
+                        if($file_name){
+                            $newvalue = '';//???? get the icon file name
+                            $obj->$fieldname = $file_name;
+                            $update = true;
+                        }else {
+                            $obj->$fieldname = '';
+                            $update = true;
+                        }
+                    }else {
+                        $oldvalue = trim( $obj->$fieldname );
+                        if( isset( $data->$form_element_name ) ){
+                            $newvalue = trim( $data->$form_element_name );
+                            if( $newvalue && $oldvalue != $newvalue ){
+                                $obj->$fieldname = $newvalue;
+                                $update = true;
+                            }
+                        }
                     }
                 }
                 if( $update ){
@@ -298,12 +321,12 @@ class edit_status_item_mform extends ilp_moodleform {
         }
         return ILP_STATE_UNSET;
     }
-		/**
-     	 * TODO comment this
-     	 */
-    	function definition_after_data() {
-    		
-    	}
+    /**
+     * TODO comment this
+     */
+    function definition_after_data() {
+
+    }
 	
 }
 

@@ -185,6 +185,8 @@
 	$string['moverightone'] 		= 	'Move right 1';
 	$string['movetoend'] 			= 	'Move to end';
 	$string['moveup']		 		= 	'Move up';
+    $string['delete']               =   'Delete';
+    $string['edit']                 =   'Edit';
 	$string['mytutor']				=	'My Tutor:';
 	$string['mytutees']				=	'My Tutees';
 	$string['myilp']				=	'My ILP';
@@ -444,6 +446,13 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
 
 
     $string['ilp_element_plugin_error_minoptions']  = 'Minimum number of options that must be specified for this report is ';
+
+    $string['change_icon']      = 'Change icon';
+    $string['preview_icon']     = 'Previously uploaded icon';
+    $string['icon_not_found']   = 'There is nothing to preview!';
+    $string['display_option']       = 'Display option';
+    $string['status_description']   = 'Description';
+    $string['bg_colour']            = 'Background colour';
 
 	global $CFG;
 

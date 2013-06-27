@@ -384,15 +384,13 @@ class ilp_db_functions	extends ilp_logging {
 
     /**
      * Returns the position number a new report field should take
-     *
-     * @param int $report_id the id of the report that the new field will be in
+     * @internal param int $report_id the id of the report that the new field will be in
      * @return int the new fields position number
      */
 
     function get_new_report_position() {
 
-        $position =  $this->dbc->count_records("block_ilp_report");
-
+        $position =  $this->dbc->count_records_select("block_ilp_report", "position !='0'");
         return (empty($position)) ? 1 : $position+1;
     }
 
@@ -2142,11 +2140,15 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false) {
 
+        global $CFG, $DB;
         $select = "SELECT 		u.id as id,
         						u.idnumber as idnumber,
         						u.firstname as firstname,
         						u.lastname as lastname,
+        						si.id as u_status_id,
         						si.name	as u_status,
+        						si.icon	as u_status_icon,
+        						si.description	as u_status_description,
         						u.picture as picture,
         						u.imagealt as imagealt,
         						u.email as email ";
@@ -2198,12 +2200,14 @@ class ilp_db_functions	extends ilp_logging {
         // tell the table how many pages it needs
         $flextable->totalrows($count);
 
-        return $this->dbc->get_records_sql(
+        $results = $this->dbc->get_records_sql(
             $select.$from.$where.$sort,
             null,
             $flextable->get_page_start(),
             $flextable->get_page_size()
         );
+
+        return $results;
     }
 
     /**
@@ -2745,7 +2749,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return object containing $reportfield_id or false
      *
      */
-    function get_reportfield_id($entry_id){
+    function get_calevent_reportfield_id($entry_id){
 
         $sql    =   "SELECT     reportfield_id
                       FROM      {block_ilp_cal_events}

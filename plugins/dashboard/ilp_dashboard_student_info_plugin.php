@@ -40,7 +40,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG,$OUTPUT,$PAGE,$PARSER,$USER,$SESSION;
+		global	$CFG, $DB, $OUTPUT, $PAGE, $PARSER, $USER, $SESSION;
 
 		//set any variables needed by the display page	
 		
@@ -72,8 +72,8 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
 		if (!empty($student))	{ 
 			$studentname	=	fullname($student);
-			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true')); 
-			
+			$studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true'));
+
 			$tutors	=	$this->dbc->get_student_tutors($this->student_id);
 			$tutorslist	=	array();
 			if (!empty($tutors)) {
@@ -86,12 +86,13 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 			
 			//get the students current status
 			$studentstatus	=	$this->dbc->get_user_status($this->student_id);
+
 			if (!empty($studentstatus)) {
 				$statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->parent_id);
 			}   
 			
 			$userstatuscolor	=	get_config('block_ilp', 'passcolour');
-			 
+
 			if (!empty($statusitem))	{
 				if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
                 //that's all very well, but if the ilp is up to date, status hex colour is defined, so actually we should always do this...

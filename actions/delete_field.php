@@ -12,7 +12,7 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $DB;
 
 //include any neccessary files
 
@@ -29,13 +29,28 @@ $reportfield_id = $PARSER->required_param('reportfield_id' ,PARAM_INT);
 $dbc = new ilp_db();
 
 //get the report field record
+// this will look to he table called "block_ilp_report_field" where id = $reportfield_id
 $reportfield		=	$dbc->get_report_field_data($reportfield_id);
+/**
+ * we could delete this above record straight way. Need to find out why they didn't delete this.
+ * I guess, we need to delete or do something with those data, which was already entered for this field,
+ * which we are not doing here!
+ * Anyway this delete operation supposed to be very straight forward, like below:
+ */
 
+$deleted = $DB->delete_records('block_ilp_report_field', array('id'=>$reportfield_id));
+if($deleted){
+    //now we need to work to reset the position.
+    //I will do it later on
+    // normally it should work without changing the position according previous order
+}
+/*
 //check if the report field was found
 if (!empty($reportfield)) {
-	//get the plugin used for the report field
+	//get the related plugin information used for the report field
 	$pluginrecord	=	$dbc->get_plugin_by_id($reportfield->plugin_id);
-	
+
+    //assuming for status field, the plugin name will be "ilp_element_plugin_status"
 	$classname = $pluginrecord->name;
 	
 	// include the moodle form for this table
@@ -78,7 +93,7 @@ if (!empty($reportfield)) {
 } else {
 	$resulttext	=	get_string('formelementdeleteerror','block_ilp');	
 }
-
+*/
 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
-redirect($return_url, $resulttext, ILP_REDIRECT_DELAY);
+redirect($return_url);
 
