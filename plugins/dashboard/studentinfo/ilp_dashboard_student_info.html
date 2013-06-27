@@ -17,7 +17,7 @@
         <strong><?php echo get_string('mytutor','block_ilp');?></strong><span><?php echo implode(', ',$tutorslist); ?></span>
         </p>
         <?php } ?>
-        <p>
+
             <strong><?php echo get_string('studentstatus','block_ilp');?></strong>
             <?php
             if($statusitem->display_option == 'icon'){
@@ -32,21 +32,18 @@
                     //we found there is a icon, so we need to display it
                     echo '<div class="dashboard_status_icon">'. $this_file .'</div>';
                 }else{
-                    echo $statusitem->description;
+                    echo '<div class="dashboard_status_icon">'. html_entity_decode($statusitem->description) .'</div>';
                 }
+            }else{
+                echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
             }
+
+            if (!empty($can_editstatus)) {
+                echo '<div class="edit_status">' . $this->userstatus_select($statusitem->id) . '</div>';
+            }
+            echo "<img src='$CFG->wwwroot/blocks/ilp/pix/loading.gif' id='studentlistloadingicon' class='hiddenelement'>";
             ?>
-            <?php
-            if (empty($can_editstatus)) {
-                if($statusitem->display_option == 'text'){
-               ?>
-                <span id="user_status"  style="color: <?php echo $userstatuscolor; ?>" ><?php echo $statusitem->name; ?></span>
-            <?php }} else {?>
-                <span id="user_status" class="hidden" style="color: <?php echo $userstatuscolor; ?>"><?php echo $statusitem->name; ?></span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" class="hidden editicon" id="edit_userstatus_icon" />
-                <?php echo $this->userstatus_select($statusitem->id); ?>
-            <?php } ?>
-                <img src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/loading.gif" id="studentlistloadingicon" class="hiddenelement">
-        </p>
+
 
 
 

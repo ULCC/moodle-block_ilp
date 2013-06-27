@@ -11,92 +11,6 @@
 var editicon	= Y.one('#edit_userstatus_icon');
 var userstatus 	= Y.one('#user_status');
 
-
-M.ilp_dashboard_student_info = {
-		
-        /**
-         * When the edit icon is clicked, this will unhide the select thing and show the current DB grade.
-         * Needs to use two rules as some elements are hidden to start with and others are visible, so we need
-         * to cover both cases
-         */
-        showelement : function(element) {
-            ele     =   Y.one('#'+element);
-            ele.removeClass('hiddenelement');
-            ele.addClass('visbileelement');
-        },
-
-        /**
-         * hides the select again once the edit icon is clicked again. If event is a string, it is
-         * coming from the ajax call
-         */
-        hideelement : function(element) {
-            ele     =   Y.one('#'+element);
-            ele.removeClass('visbileelement');
-            ele.addClass('hiddenelement');
-        },
-		
-        
-        save_userstatus : function () {
-
-            sidelement  = Y.one('#student_id');
-            student_id  =   sidelement.get('value');
-
-            select_userstatus  = Y.one('#select_userstatus');
-            statusvalue  =   select_userstatus.get('value');
-
-            M.ilp_dashboard_student_info.showelement('studentlistloadingicon');
-
-            var cfg	=	{
-                on: {
-                    success: M.ilp_dashboard_student_info.callback.success,
-                    failure: M.ilp_dashboard_student_info.callback.failure
-                },
-                data:   'ajax=true&student_id='+student_id+'&select_userstatus='+statusvalue,
-                context: M.ilp_dashboard_student_info.callback
-            };
-
-            Y.io('save_userstatus.php',cfg);
-
-            ajaxinprogress = true;
-        },
-        
-        addselect : function () {
-
-            M.ilp_dashboard_student_info.hideelement('edit_userstatus_icon');
-            M.ilp_dashboard_student_info.hideelement('user_status');
-            M.ilp_dashboard_student_info.showelement('select_userstatus');
-
-            var studentstatussub    = Y.one('#studentstatussub');
-            studentstatussub.setStyle('visibility','hidden');
-        },
-        
-        callback	:	{
-        	success : function(id,o,args) {
-                //set the status to the new status
-                var statusdiv			=	Y.one('#user_status');
-
-
-                data    =   Y.JSON.parse(o.responseText);
-                statusdiv.setHTML(data.status);
-                statusdiv.setStyle('color',data.colour);
-
-                //show and hide the relevant elements
-        		M.ilp_dashboard_student_info.showelement('user_status');
-        		M.ilp_dashboard_student_info.showelement('edit_userstatus_icon');
-        		M.ilp_dashboard_student_info.hideelement('select_userstatus');
-                M.ilp_dashboard_student_info.hideelement('studentlistloadingicon');
-        	},
-        	
-        	failure : function() {
-        		
-        	}
-        }
-
-
-
-}   	
-
- 
 M.ilp_dashboard_student_info.init = function(Y,statusval) {
 	//hide select and submit button 
 
@@ -111,3 +25,91 @@ M.ilp_dashboard_student_info.init = function(Y,statusval) {
     Y.on('change',function () {M.ilp_dashboard_student_info.save_userstatus()},'#select_userstatus' );
 
 };
+
+
+
+M.ilp_dashboard_student_info = {
+
+    /**
+     * When the edit icon is clicked, this will unhide the select thing and show the current DB grade.
+     * Needs to use two rules as some elements are hidden to start with and others are visible, so we need
+     * to cover both cases
+     */
+    showelement : function(element) {
+        ele     =   Y.one('#'+element);
+        ele.removeClass('hiddenelement');
+        ele.addClass('visbileelement');
+    },
+
+    /**
+     * hides the select again once the edit icon is clicked again. If event is a string, it is
+     * coming from the ajax call
+     */
+    hideelement : function(element) {
+        ele     =   Y.one('#'+element);
+        ele.removeClass('visbileelement');
+        ele.addClass('hiddenelement');
+    },
+
+
+    save_userstatus : function () {
+
+        sidelement  = Y.one('#student_id');
+        student_id  =   sidelement.get('value');
+
+        select_userstatus  = Y.one('#select_userstatus');
+        statusvalue  =   select_userstatus.get('value');
+
+        M.ilp_dashboard_student_info.showelement('studentlistloadingicon');
+
+        var cfg	=	{
+            on: {
+                success: M.ilp_dashboard_student_info.callback.success,
+                failure: M.ilp_dashboard_student_info.callback.failure
+            },
+            data:   'ajax=true&student_id='+student_id+'&select_userstatus='+statusvalue,
+            context: M.ilp_dashboard_student_info.callback
+        };
+
+        Y.io('save_userstatus.php',cfg);
+
+        ajaxinprogress = true;
+    },
+
+    addselect : function () {
+
+        M.ilp_dashboard_student_info.hideelement('edit_userstatus_icon');
+        M.ilp_dashboard_student_info.hideelement('user_status');
+        M.ilp_dashboard_student_info.showelement('select_userstatus');
+
+        var studentstatussub    = Y.one('#studentstatussub');
+        studentstatussub.setStyle('visibility','hidden');
+    },
+
+    callback	:	{
+        success : function(id,o,args) {
+            //set the status to the new status
+            var statusdiv			=	Y.one('#user_status');
+
+
+            data    =   Y.JSON.parse(o.responseText);
+            statusdiv.setHTML(data.status);
+            statusdiv.setStyle('color',data.colour);
+
+            //show and hide the relevant elements
+            M.ilp_dashboard_student_info.showelement('user_status');
+            M.ilp_dashboard_student_info.showelement('edit_userstatus_icon');
+            M.ilp_dashboard_student_info.hideelement('select_userstatus');
+            M.ilp_dashboard_student_info.hideelement('studentlistloadingicon');
+        },
+
+        failure : function() {
+
+        }
+    }
+
+
+
+}
+
+
