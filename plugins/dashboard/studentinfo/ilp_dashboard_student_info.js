@@ -8,10 +8,6 @@
  * @version 2.0
  */
 
-var editicon	= Y.one('#edit_userstatus_icon');
-var userstatus 	= Y.one('#user_status');
-
-
 M.ilp_dashboard_student_info = {
 
         /**
@@ -72,18 +68,6 @@ M.ilp_dashboard_student_info = {
 
         callback	:	{
         	success : function(id,o,args) {
-                //set the status to the new status
-                var statusdiv			=	Y.one('#user_status');
-
-
-                data    =   Y.JSON.parse(o.responseText);
-                statusdiv.setHTML(data.status);
-                statusdiv.setStyle('color',data.colour);
-
-                //show and hide the relevant elements
-        		M.ilp_dashboard_student_info.showelement('user_status');
-        		M.ilp_dashboard_student_info.showelement('edit_userstatus_icon');
-        		M.ilp_dashboard_student_info.hideelement('select_userstatus');
                 M.ilp_dashboard_student_info.hideelement('studentlistloadingicon');
         	},
 
@@ -99,13 +83,6 @@ M.ilp_dashboard_student_info.init = function(Y,statusval) {
 	//hide select and submit button 
 
     M.ilp_dashboard_student_info.hideelement('studentstatussub');
-    
-    M.ilp_dashboard_student_info.showelement('user_status');
-    M.ilp_dashboard_student_info.showelement('edit_userstatus_icon');
-    
-    M.ilp_dashboard_student_info.hideelement('select_userstatus');
-
-    Y.on('click',function () {M.ilp_dashboard_student_info.addselect()},'#edit_userstatus_icon' );
     Y.on('change',function () {M.ilp_dashboard_student_info.save_userstatus()},'#select_userstatus' );
 
 };
