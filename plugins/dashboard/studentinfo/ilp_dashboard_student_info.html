@@ -23,7 +23,13 @@
             if($statusitem->display_option == 'icon'){
                 if($statusitem->icon){
                     $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
-                    $this_file = "<img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>";
+                    $this_file = "<a class='tooltip'>
+                                    <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>
+                                    $statusitem->description
+                                    </span>
+                                 </a>";
                     //we found there is a icon, so we need to display it
                     echo '<div class="dashboard_status_icon">'. $this_file .'</div>';
                 }else{

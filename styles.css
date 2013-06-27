@@ -81,7 +81,7 @@
     /*border-style: solid;*/
     width: 50px;
 }
-.ilp #middle-studentinfo .dashboard_status_icon img {
+.ilp #middle-studentinfo .dashboard_status_icon img.icon_file {
     width: 50px;
     height: 50px;
 }
@@ -593,3 +593,49 @@
 .ilp   .float-right {
     float:  right;
 }
+/* for tooltip*/
+a.tooltip {
+    outline:none;
+}
+a.tooltip strong {
+    line-height:30px;
+}
+a.tooltip:hover {
+    text-decoration:none;
+}
+a.tooltip span {
+    z-index:10;
+    display:none;
+    padding:10px 10px;
+    margin-left:20px;
+    line-height:16px;
+}
+a.tooltip:hover span{
+    display:inline;
+    position:absolute;
+    color:#111;
+    border:1px solid #DCA;
+    background:#fffAF0;
+}
+.callout {
+    border: 0 none;
+    height: 15px;
+    left: -12px;
+    position: absolute;
+    top: 7px;
+    width: 12px;
+    z-index: 20;
+}
+
+/*CSS3 extras*/
+a.tooltip span
+{
+    border-radius:4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+
+    -moz-box-shadow: 5px 5px 8px #CCC;
+    -webkit-box-shadow: 5px 5px 8px #CCC;
+    box-shadow: 5px 5px 8px #CCC;
+}
+/* tooltip finished */
