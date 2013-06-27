@@ -213,12 +213,13 @@ class edit_status_item_mform extends ilp_moodleform {
 
                 //keys correspond to field names, values correspond to element names from the form
                 $editable_fields = array(
-                    'value' => 'itemvalue_' . $obj->id,
-                    'hexcolour' => 'itemhexcolour_' . $obj->id,
-                    'name'  => 'itemname_' . $obj->id,
-                    'icon'  => $obj->id . '_file_filemanager',
+                    'value'         => 'itemvalue_' . $obj->id,
+                    'hexcolour'     => 'itemhexcolour_' . $obj->id,
+                    'name'          => 'itemname_' . $obj->id,
+                    'icon'          => $obj->id . '_file_filemanager',
                     'display_option'=> 'display_option_' . $obj->id,
-                    'description'  => 'description_' . $obj->id,
+                    'description'   => 'description_' . $obj->id,
+                    'bg_colour'     => 'bg_colour_' . $obj->id,
                 );
                 foreach( $editable_fields as $fieldname=>$form_element_name ){
                     if($fieldname == 'icon'){

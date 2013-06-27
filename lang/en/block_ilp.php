@@ -452,6 +452,7 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['icon_not_found']   = 'There is nothing to preview!';
     $string['display_option']       = 'Display option';
     $string['status_description']   = 'Description';
+    $string['bg_colour']            = 'Background colour';
 
 	global $CFG;
 
