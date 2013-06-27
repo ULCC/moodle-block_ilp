@@ -562,7 +562,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                 array('class' => 'form_input')
             );
 
-            $description->setValue( $option->description );
+            $description->setValue( html_entity_decode($option->description ));
 
             $status_display_option = array('text'=>'Text','icon'=>'Icon');
             $display_option = $mform->addElement('select', 'display_option_' . $option->id, get_string('display_option', 'block_ilp'), $status_display_option);

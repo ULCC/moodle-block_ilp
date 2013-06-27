@@ -26,10 +26,9 @@
                     $this_file = "<a class='tooltip'>
                                     <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
                                     <span>
-                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>
-                                    $statusitem->description
-                                    </span>
-                                 </a>";
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+                    $this_file .= html_entity_decode($statusitem->description);
+                    $this_file .="</span></a>";
                     //we found there is a icon, so we need to display it
                     echo '<div class="dashboard_status_icon">'. $this_file .'</div>';
                 }else{
