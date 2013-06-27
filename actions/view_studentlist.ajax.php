@@ -267,7 +267,7 @@ if (!empty($studentslist)) {
             //get the number of this report that have been created
             $createdentries = $dbc->count_report_entries($r->id, $student->id);
 
-            $reporttext = "{$createdentries} " . $r->name;
+            $reporttext = "{$createdentries} ";
 
             //TODO: abstract these out put a function within the ilp_element_plugin classes that allows a var to be passed
             //in and altered in a similar way to the entr_obj in the entry_data function
