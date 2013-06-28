@@ -85,6 +85,10 @@ global $USER, $CFG, $SESSION, $PARSER;
 			$si->value		=	$key;
 			$si->passfail	=	$passfail;
 			$si->parent_id	=	$id;
+            $si->icon       =   '';
+            $si->display_option = 'text';
+            $si->description    = '';
+            $si->bg_colour      = '#ffffff';
 			
 			$dbc->create_plugin_record('block_ilp_plu_sts_items',$si);
 		}
