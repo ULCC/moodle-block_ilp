@@ -25,7 +25,7 @@ class ilp_settings {
     * constructor class sets the values of all settings used
     */
    function __construct() {
-       $this->version = "2012102231";
+       $this->version = "2013062801";
 
        $this->component = 'ilp';
 

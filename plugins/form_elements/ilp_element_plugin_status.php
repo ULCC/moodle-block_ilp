@@ -215,6 +215,22 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         $table_hexcolour->$set_attributes(XMLDB_TYPE_CHAR, 255, null);
         $table->addField($table_hexcolour);
 
+        $table_hexcolour = new $this->xmldb_field('icon');
+        $table_hexcolour->$set_attributes(XMLDB_TYPE_CHAR, 45, null);
+        $table->addField($table_hexcolour);
+
+        $table_hexcolour = new $this->xmldb_field('display_option');
+        $table_hexcolour->$set_attributes(XMLDB_TYPE_CHAR, 4, null);
+        $table->addField($table_hexcolour);
+
+        $table_hexcolour = new $this->xmldb_field('description');
+        $table_hexcolour->$set_attributes(XMLDB_TYPE_CHAR, 255, null);
+        $table->addField($table_hexcolour);
+
+        $table_hexcolour = new $this->xmldb_field('bg_colour');
+        $table_hexcolour->$set_attributes(XMLDB_TYPE_CHAR, 45, null);
+        $table->addField($table_hexcolour);
+
         //special field to categorise states as pass or fail
         //0=unset,1=fail,2=pass
         $table_itempassfail = new $this->xmldb_field( 'passfail' );
