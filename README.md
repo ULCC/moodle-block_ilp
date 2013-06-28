@@ -16,4 +16,4 @@ We need to make sure that, the following field has been add to the table called 
 Please remember to clear the cache after you update the database, as this table is cached in moodle.
 
 
-I will update the script for the above change in near future.
+The upgrade script has been add, therefore please check your database, if you can see those fields, Please notify me (Abdul) if the upgrade script doesn't work.

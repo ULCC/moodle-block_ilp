@@ -677,6 +677,39 @@ function xmldb_block_ilp_upgrade($oldversion) {
         }
     }
 
+    // for student status
+    if($oldversion < 2013062801){
+
+        $table = new $xmldb_table( 'block_ilp_plu_sts_items' );
+
+        $xmlfield	=	new $xmldb_field('icon');
+        if (!$dbman->field_exists($table,$xmlfield)) {
+
+            $xmlfield->$set_attributes(XMLDB_TYPE_CHAR,'45',null);
+            $dbman->add_field($table,$xmlfield);
+        }
+
+        $xmlfield	=	new $xmldb_field('display_option');
+        if (!$dbman->field_exists($table,$xmlfield)) {
+
+            $xmlfield->$set_attributes(XMLDB_TYPE_CHAR,'4',null);
+            $dbman->add_field($table,$xmlfield);
+        }
+
+        $xmlfield	=	new $xmldb_field('description');
+        if (!$dbman->field_exists($table,$xmlfield)) {
+
+            $xmlfield->$set_attributes(XMLDB_TYPE_CHAR,'255',null);
+            $dbman->add_field($table,$xmlfield);
+        }
+
+        $xmlfield	=	new $xmldb_field('bg_colour');
+        if (!$dbman->field_exists($table,$xmlfield)) {
+
+            $xmlfield->$set_attributes(XMLDB_TYPE_CHAR,'45',null);
+            $dbman->add_field($table,$xmlfield);
+        }
+    }
 
     return true;
 }
