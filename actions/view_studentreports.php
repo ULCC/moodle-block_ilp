@@ -45,9 +45,6 @@ $displayuserentries  =	$PARSER->optional_param('userentries', 1, PARAM_INT);
 
 $displaynonuserentries  =	$PARSER->optional_param('nonuserentries', 1, PARAM_INT);
 
-
-
-
 // instantiate the db
 $dbc = new ilp_db();
 
