@@ -40,9 +40,9 @@ if (!empty($nextstudent)) {
                     $this_file .= html_entity_decode($statusitem->description);
                     $this_file .="</span></a>";
                     //we found there is a icon, so we need to display it
-                    echo '<div class="dashboard_status_icon">'. $this_file .'</div>';
+                    echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. $this_file .'</div>';
                 }else{
-                    echo '<div class="dashboard_status_icon">'. html_entity_decode($statusitem->description) .'</div>';
+                    echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. html_entity_decode($statusitem->description) .'</div>';
                 }
             }else{
                 echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
