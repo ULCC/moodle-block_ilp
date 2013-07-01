@@ -44,7 +44,7 @@ $flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist
 
 // set the basic details to dispaly in the table
 $headers = array(
-    get_string('userpicture', 'block_ilp'),
+    get_string('userpicture_studentlist', 'block_ilp'),
     get_string('name', 'block_ilp'),
     get_string('status', 'block_ilp')
 );

@@ -343,6 +343,7 @@
 
 
     $string['userpicture'] 						= 	'Student Picture';
+    $string['userpicture_studentlist'] 						= 	'';
     $string['usereportlock'] 					= 	'Use report lock edit';
     $string['updatestatus'] 					= 	'Update user status';
 
