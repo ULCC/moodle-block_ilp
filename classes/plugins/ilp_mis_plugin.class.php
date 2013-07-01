@@ -166,7 +166,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     /**
      * Force extending class to implement the plugin type function
      */
-    abstract static function plugin_type();
+//    abstract static function plugin_type(); //Abstract static is meaningless in PHP (but allowed syntactically)
 
     protected function set_params($params)  {
         $this->params = $params;
