@@ -77,8 +77,8 @@ class edit_report_preference_mform extends ilp_moodleform {
             "<div class='fitem'><div class='fitemtitle'> <label>".get_string('name').":</label> </div><div class='felement'> ".fullname($student)." </div></div>"
         );
 
-
-if (ilp_report_rules::can_add_extensions($this->report_id)) {
+        $reportrules    =   new ilp_report_rules($this->report_id,$this->user_id);
+if ($reportrules->can_add_extensions($this->report_id)) {
 
         if ($report->reporttype ==  ILP_RT_RECURRING_FINALDATE || $report->reporttype == ILP_RT_FINALDATE) {
 

@@ -73,7 +73,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
             $attendance_field = get_config('block_ilp', 'mis_plugin_attendance_percentbarpunctuality');
             $punctuality_field = get_config('block_ilp', 'mis_plugin_attendance_percentbarattendance');
 
-            $querydata = $this->dbquery($tablename, array($keyfield => array('=' => $student_id)), array($attendance_field, $punctuality_field));
+            $querydata = $this->cached_dbquery($tablename, array($keyfield => array('=' => $student_id)), array($attendance_field, $punctuality_field));
 
             $data = (is_array($querydata)) ? array_shift($querydata) : $querydata;
 
@@ -84,7 +84,7 @@ class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
     }
 
 
-    public function plugin_type()
+    public static function plugin_type()
     {
         return 'misc';
     }

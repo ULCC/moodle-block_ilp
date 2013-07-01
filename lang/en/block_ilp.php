@@ -454,6 +454,9 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['status_description']   = 'Description';
     $string['bg_colour']            = 'Background colour';
 
+    $string['studentreport_open']  = 'Open';
+    $string['studentreport_close'] = 'Close';
+
 	global $CFG;
 
 	// Include ilp db class

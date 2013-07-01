@@ -98,7 +98,7 @@ $reports = $dbc->get_reports(ILP_ENABLED);
 //get the mamximum reports that can be displayed on the screen in the list
 $maxreports = get_config('block_ilp', 'ilp_max_reports');
 
-//check if maxreports is empty if yes then set to 
+//check if maxreports is empty if yes then set to
 $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 
 //set the number of report columns to display
@@ -107,7 +107,7 @@ $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 //$reports	=	$flextable->limitcols($reports,$maxreports);
 
 
-//we are going to create headers and columns for all enabled reports 
+//we are going to create headers and columns for all enabled reports
 foreach ($reports as $r) {
     $headers[] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_studentreports.php?course_id={$course_id}&tutor={$tutor}&report_id={$r->id}&group_id={$group_id}'>".$r->name."</a>";
     $columns[] = $r->id;
@@ -140,7 +140,7 @@ $flextable->initialbars(true);
 $flextable->setup();
 
 if (!empty($course_id)) {
-    $users = $dbc->get_course_users($course_id,$group_id);  
+    $users = $dbc->get_course_users($course_id,$group_id);
 } else {
     $users = $dbc->get_user_tutees($USER->id);
 }
@@ -213,13 +213,23 @@ if(!empty($students))  {
 }
 
 $SESSION->ilp_prevnextstudents       =  serialize($prevnextstudents);
-
+$CACHE=cache::make('block_ilp','ilp_miscache');
 if (!empty($studentslist)) {
+
+   $studentids=array_keys($studentslist);
+
+   $cachekey='statelist:'.implode($studentids,'|');
+   if(($allStates=$CACHE->get($cachekey))===false)
+   {
+      $allStates=$dbc->fetch_all_report_entries_with_state($studentids);
+      $CACHE->set($cachekey,$allStates);
+   }
+
     foreach ($studentslist as $student) {
         $data = array();
-		
+
         $userprofile	=	'view.php' ;
-                
+
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
         $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
@@ -263,11 +273,12 @@ if (!empty($studentslist)) {
         }
 
         foreach ($reports as $r) {
-
             //get the number of this report that have been created
-            $createdentries = $dbc->count_report_entries($r->id, $student->id);
+           $datavalid=isset($allStates[$r->id][$student->id]);
 
-            $reporttext = "{$createdentries} " . $r->name;
+           $createdentries = $datavalid ? count($allStates[$r->id][$student->id]) : 0 ;
+
+            $reporttext = "{$createdentries} ";
 
             //TODO: abstract these out put a function within the ilp_element_plugin classes that allows a var to be passed
             //in and altered in a similar way to the entr_obj in the entry_data function
@@ -275,11 +286,18 @@ if (!empty($studentslist)) {
 
             //check if the report has a state field
             if ($dbc->has_plugin_field($r->id, 'ilp_element_plugin_state')) {
-
                 //count the number of entries with a pass state
-                $achievedentries = $dbc->count_report_entries_with_state($r->id, $student->id, ILP_STATE_PASS);
+
+                $achievedentries=$datavalid ? count(array_filter($allStates[$r->id][$student->id],
+                                                                 function($item){ return ($item->state==ILP_STATE_PASS);}))
+                   : 0 ;
+
                 //we need to count the number of entries that have a notcounted status
-                $notcountedentries = $dbc->count_report_entries_with_state($r->id, $student->id, ILP_STATE_NOTCOUNTED);
+
+                $notcountedentries=$datavalid? count(array_filter($allStates[$r->id][$student->id],
+                                                                  function($item){ return ($item->state==ILP_STATE_NOTCOUNTED);}))
+                   : 0 ;
+
                 $createdentries     =   $createdentries     -   $notcountedentries;
 
                 $reporttext         =   $achievedentries . "/" . $createdentries . " " . get_string('achieved', 'block_ilp');
@@ -287,20 +305,22 @@ if (!empty($studentslist)) {
 
 
             if ($dbc->has_plugin_field($r->id,'ilp_element_plugin_datefield')) {
-                $inprogressentries	=	$dbc->count_report_entries_with_state($r->id,$student->id,ILP_STATE_UNSET,false);
-                $inprogentries 		=	array();
+               $inprogressentries	= $datavalid?	array_filter($allStates[$r->id][$student->id],
+                                                                     function($item){return ($item->state==ILP_STATE_UNSET);})
+                  : array() ;
+               $inprogentries 		=	array();
 
-                if (!empty($inprogressentries)) {
-                    foreach ($inprogressentries as $e) {
-                        $inprogentries[]	=	$e->id;
-                    }
-                }
-                //get the number of entries that are overdue
-                $overdueentries			=	$dbc->count_overdue_report($r->id,$student->id,$inprogentries,time());
-                $reporttext				.=	(!empty($overdueentries))?  "<br />".$overdueentries." ".get_string('reportsoverdue','block_ilp') : "";
+               if (!empty($inprogressentries)) {
+                  foreach ($inprogressentries as $e) {
+                     $inprogentries[]	=	$e->id;
+                  }
+               }
+               //get the number of entries that are overdue
+               $overdueentries	=	$dbc->count_overdue_report($r->id,$student->id,$inprogentries,time());
+               $reporttext	.=	(!empty($overdueentries))?  "<br />".$overdueentries." ".get_string('reportsoverdue','block_ilp') : "";
 
-                $nextreview             =   $dbc->get_next_review($r->id,$student->id);
-                $reporttext				.=	(!empty($nextreview->review))?  "<br />".get_string('nextreview','block_ilp')." ".userdate($nextreview->review,'%d-%m-%Y') : "";
+               $nextreview     =   $dbc->get_next_review($r->id,$student->id);
+               $reporttext	.=	(!empty($nextreview->review))?  "<br />".get_string('nextreview','block_ilp')." ".userdate($nextreview->review,'%d-%m-%Y') : "";
             }
 
             $data[$r->id] = $reporttext;

@@ -250,7 +250,7 @@ class ilp_mis_misc_performance_ind extends ilp_mis_plugin	{
     }
 
     
-    function plugin_type()	{
+    static function plugin_type()	{
     	return 'learnerprofile';
     }
  	

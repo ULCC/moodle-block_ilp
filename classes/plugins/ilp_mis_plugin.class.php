@@ -75,12 +75,57 @@ abstract class ilp_mis_plugin extends ilp_plugin
     */
     protected function dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null) {
     	if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
-    	    	
+
         return ($this->tabletype == ILP_MIS_STOREDPROCEDURE)
                 ? $this->db->return_stored_values($table, $params)
                 : $this->db->return_table_values($table, $params, $fields, $addionalargs);
     }
 
+//See the extended comment at the end of this file about using the $T timer for testing
+/**
+ * Construct an sql query and use that as a cache-key to see if the data has been cached.
+ * Note that different caches can be passed in and that the default cache has a ttl of
+ * 6 hours at the moment. If you want shorter term caching, then define a new cache
+ * and pass it in.
+ */
+    protected function cached_dbquery($table, $params = null, $fields = '*', $addionalargs = null,$prelimcalls = null,$cachename='ilp_miscache')
+    {
+       global $CFG,$T;
+       if (!empty($prelimcalls))	$this->db->prelimcalls[]	=	$prelimcalls;
+
+       $CACHE=cache::make('block_ilp',$cachename);
+
+       if($this->tabletype == ILP_MIS_STOREDPROCEDURE)
+       {
+          $sql=$this->db->sql_for_stored_sql($table, $params);
+       }
+       else
+       {
+          $sql=$this->db->sql_for_table_values($table, $params, $fields, $addionalargs);
+       }
+
+       if(($r=$CACHE->get($sql))===false)
+       {
+          if(isset($CFG->mis_debug))
+          {
+             print "Cache Miss: running $sql<br>";
+             $T->lap();
+          }
+          ($r=$this->db->dbquery_sql($sql) or $r=array());
+          $CACHE->set($sql,$r);
+          if(isset($CFG->mis_debug))
+          {
+             $T->plap('Took ');
+             if($CFG->mis_debug>1)
+                print_object($r);
+          }
+       }
+       elseif(isset($CFG->mis_debug))
+       {
+          print "Cache hit on $sql<br>";
+       }
+       return $r;
+    }
 
     /**
      * Installs any new plugins
@@ -108,7 +153,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     function install($plugin_id)    {
         $misplugin = $this->dbc->get_mis_plugin_by_id($plugin_id);
 
-        $misplugin->type = $this->plugin_type();
+        $misplugin->type = static::plugin_type();
 
         $this->dbc->update_mis_plugin($misplugin);
     }
@@ -121,7 +166,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
     /**
      * Force extending class to implement the plugin type function
      */
-    abstract function plugin_type();
+    abstract static function plugin_type();
 
     protected function set_params($params)  {
         $this->params = $params;
@@ -143,6 +188,59 @@ abstract class ilp_mis_plugin extends ilp_plugin
     function tab_name() {
         return 'MIS Plugin';
     }
+}
+/**
+ * Stopwatch code. Put this at the start of config.php (immediately after the <?php
+ * tag) to allow the $T code above to work. $T is a global, so it can be used anywere
+ * if defined in this way.
+ *
+ * Then, after the unset($CFG); line add $CFG->mis_debug=1 (or 2)
 
+class Stopwatch
+{
+   private $t;
+   private $l;
+   private $e;
+   function __construct()
+   {
+      $this->start();
+   }
+
+   function start()
+   {
+      $this->e=0;
+      $this->t=$this->l=microtime(true);
+   }
+// Store the time since the last "lap" start, and
+// start a new lap
+   function lap()
+   {
+      $n=microtime(true)-$this->l;
+      $this->l=microtime(true);
+      return $n;
+   }
+
+//Store the time since the start.
+   function stop()
+   {
+      return $this->e=microtime(true)-$this->t;
+   }
+
+//Print messages followed by lap or final times.
+   function plap($message='')
+   {
+      print $message.' '.$this->lap().' ';
+   }
+
+   function pstop($message='')
+   {
+      $this->stop();
+      print $message.' '.$this->e.' ';
+   }
 
 }
+
+$T=new Stopwatch();
+$T->start();
+
+*/

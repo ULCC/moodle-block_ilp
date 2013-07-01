@@ -371,7 +371,7 @@ $string['ilp_mis_learner_causeforconcern_disp_ssuid']							= 'SSUID';
 $string['ilp_mis_learner_causeforconcern_disp_']							= '';
 $string['ilp_mis_learner_causeforconcern_tab_name']							= 'Cause for Concern';}
 
-                          function plugin_type()	{
+                          static function plugin_type()	{
                                 return 'learnerprofile';
                           }
                 

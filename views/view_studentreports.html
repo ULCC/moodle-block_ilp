@@ -14,7 +14,9 @@ $PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmo
 // js arguments
 $jsarguments = array(
     'open_image'   =>   $CFG->wwwroot.'/pix/t/expanded.png',
-    'closed_image' => 	$CFG->wwwroot.'/pix/t/collapsed.png'
+    'closed_image' => 	$CFG->wwwroot.'/pix/t/collapsed.png',
+    'open_text' => get_string('studentreport_open', 'block_ilp'),
+    'close_text' => get_string('studentreport_close', 'block_ilp')
 );
 
 
@@ -22,7 +24,7 @@ $jsarguments = array(
 $jsmodule = array(
     'name'     	=> 'ilp_view_studentreports',
     'fullpath' 	=> '/blocks/ilp/views/js/view_studentreports.js',
-	'requires'  	=> array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
+	'requires'  	=> array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim', 'node-event-simulate')
 );
 
 

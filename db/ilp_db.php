@@ -1578,6 +1578,50 @@ class ilp_db_functions	extends ilp_logging {
     	return	$this->dbc->count_records_sql($sql, $params);
     }
 
+/**
+ *
+ * @param array students optional array of students to limit result to
+ * @param int $timestart optional start timestamp
+ * @param int $timeend option end timestamp
+ *
+ * @return array $array[$reportid][$studentid]
+ */
+   public function count_all_report_entries($students=array(),$timestart=null,$timeend=null)
+   {
+
+      $timestartsql = "";
+      $timeendsql   = "";
+
+      if (!empty($timestart)){
+         $params['timestart'] = $timestart;
+         $timestartsql = " AND timecreated > :timestart";
+      }
+
+      if (!empty($timeend)){
+         $params['timeend'] = $timeend;
+         $timeendsql= " AND timecreated < :timeend ";
+      }
+
+      if(!empty($students))
+      {
+         $studentpart='and user_id in ('.implode(',',$students).')';
+      }
+
+      $sql = "SELECT  report_id, user_id, COUNT(*) number
+                      FROM  {block_ilp_entry}
+                                 where  1 {$studentpart} {$timestartsql}
+                                 {$timeendsql}
+                      GROUP BY report_id, user_id";
+
+      $r=array();
+      foreach($this->dbc->get_recordset_sql($sql, $params) as $item)
+      {
+         $r[$item->report_id][$item->user_id]=$item->number;
+      }
+
+      return $r;
+   }
+
     /**
      *
      * Returns whether the given report has a plugins field
@@ -1600,6 +1644,37 @@ class ilp_db_functions	extends ilp_logging {
 
 
 /**
+     * Fetch the id, report_id, user_id, and pass/fail state of all reports for the
+     * given users
+     *
+     * @param	array of int $users users to examine
+     *
+     * @return	array of objects (id, report_id, user_id, state)
+     */
+    public  function fetch_all_report_entries_with_state($users)	{
+
+       $r=array();
+       if(empty($users))
+       {
+          return $r;
+       }
+
+       $where=' where e.user_id in ('.implode($users,',').')';
+
+       $sql = "SELECT e.id, e.report_id, e.user_id, pi.passfail as state
+                 FROM {block_ilp_entry}  as e
+                   LEFT JOIN  ({block_ilp_plu_ste_ent} as pe
+                   JOIN   {block_ilp_plu_ste_items} as pi on pi.id=pe.parent_id)  on e.id=pe.entry_id $where";
+
+       foreach ($this->dbc->get_recordset_sql($sql) as $item)
+       {
+          $r[$item->report_id][$item->user_id][]=$item;
+       }
+
+       return $r;
+
+    }
+/**
      * Count the number of entries in the given report with a pass state
      *
      * @param	int $report_id	the id of the report whose entries will be counted
@@ -1610,7 +1685,7 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return	mixed int the number of entries or false
      */
-    public	function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
+    public  function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
 
 			$select	=	(!empty($count))	? "count(e.id)" : " e.* ";
             $params = array('report_id'=>$report_id, 'user_id'=>$user_id, 'state'=>$state);
@@ -1739,18 +1814,10 @@ class ilp_db_functions	extends ilp_logging {
     * @return	mixed object the  of entries or false
     */
     public function	get_lastupdatedentry($report_id,$user_id)	{
+        $sql='SELECT id, timemodified tm FROM {block_ilp_entry} e
+              WHERE report_id=:report_id AND user_id=:user_id ORDER BY timemodified desc';
 
-        //Getting the entry with the maximum timemodified is alittle more complicated than first thought
-
-        $sql	=	"SELECT e.id, MAX(timemodified) AS tm
-                     FROM {block_ilp_entry} AS e
-                     WHERE report_id = :report_id
-                     AND user_id = :user_id
-                     GROUP BY timemodified, e.id
-                     ORDER BY tm DESC
-                     ";
-
-        return $this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id, 0, 1));
+        return $this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'user_id'=>$user_id), 0, 1);
     }
 
     /**
@@ -2252,7 +2319,6 @@ class ilp_db_functions	extends ilp_logging {
 
     	return	$this->dbc->get_record_sql($sql, $params);
     }
-
 
      /**
      *
