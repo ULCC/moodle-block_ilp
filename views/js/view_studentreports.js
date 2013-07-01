@@ -1,7 +1,7 @@
 
 M.ilp_view_studentreports = {
 
-    // params from PHP
+    // params from PHP: Images and Title Text
     open_image : null,
     closed_image : null,
     Y : null,
