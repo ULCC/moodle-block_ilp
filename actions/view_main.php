@@ -12,7 +12,7 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER, $PAGE;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE, $DB;
 
 //include any neccessary files
 
@@ -69,7 +69,7 @@ $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_main.php",$PARSER->get_pa
 //get the enabled template
 $temp	=	$dbc->get_enabled_template();
 
-$classname	=	$temp->name;
+$classname	=	$temp->name; //possible class name = ilp_dashboard_default_template
 
 //include the class file for the enabled template
 require_once($CFG->dirroot."/blocks/ilp/plugins/dash_templates/{$classname}.php");
@@ -87,7 +87,7 @@ if (!$dbc->get_user_status($user_id)) {
 	$defaultconfiguserstatus	=	get_config('block_ilp','defaultstatusitem');
 	
 	$studentstatus->parent_id				=	(!empty($defaultconfiguserstatus)) ? $defaultconfiguserstatus : ILP_DEFAULT_USERSTATUS_RECORD;//ILP_DEFAULT_USERSTATUS_RECORD;
-	
+
 	$dbc->create_userstatus($studentstatus);
 }  
 

@@ -11,7 +11,7 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER, $PAGE;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE, $DB;
 
 //include any neccessary files
 
@@ -86,7 +86,27 @@ if (empty($report->comments))	{
 //require the entrycomment_mform so we can display the report
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_entrycomment_mform.php');
 
+
 $mform	= new	edit_entrycomment_mform($report_id,$entry_id,$user_id,$course_id,$comment_id,$selectedtab,$tabitem);
+/*
+if (!empty($comment_id)) {
+
+    $comment	=	$dbc->get_comment_by_id($comment_id);
+    //var_dump($comment);
+    if (!empty($comment)) {
+        //only the creator has the right to edit
+        if ($comment->creator_id == $USER->id) {
+            //set the form values to the current comment
+            $mform->set_data($comment);
+        } else {
+            print_error('commentmayonlybeeditedbyowner','block_ilp');
+        }
+    } else {
+        print_error('commentnotfound','block_ilp');
+    }
+}
+*/
+
 
 //was the form cancelled?
 if ($mform->is_cancelled()) {
@@ -147,23 +167,6 @@ if($mform->is_submitted()) {
 }
 
 
-if (!empty($comment_id)) {
-	
-	$comment	=	$dbc->get_comment_by_id($comment_id);
-	
-	if (!empty($comment)) {
-		//only the creator has the right to edit
-		if ($comment->creator_id == $USER->id) {
-			//set the form values to the current comment
-			$mform->set_data($comment);
-		} else {
-			print_error('commentmayonlybeeditedbyowner','block_ilp');
-		}
-	} else {
-		print_error('commentnotfound','block_ilp');
-	}
-}
-
 $plpuser	=	$dbc->get_user_by_id($user_id);
 
 
@@ -211,5 +214,16 @@ $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php",$PARSER
 $PAGE->navbar->add($title);
 
 //require edit_reportentry html
-require_once($CFG->dirroot.'/blocks/ilp/views/edit_entrycomment.html');
+//require_once($CFG->dirroot.'/blocks/ilp/views/edit_entrycomment.html');
+// removed unnecessary extra headaches
+
+echo $OUTPUT->header();
+
+echo '<div class="ilp yui-skin-sam">';
+
+//render the form
+$mform->display();
+echo '</div>';
+
+echo $OUTPUT->footer();
 

@@ -1,6 +1,9 @@
 <?php
 require_once('../configpath.php');
 
+$csslink = new moodle_url($CFG->wwwroot.'/blocks/ilp/css/style.css');
+$PAGE->requires->css($csslink);
+
 global $USER, $CFG, $SESSION, $PARSER;
 
 // Meta includes

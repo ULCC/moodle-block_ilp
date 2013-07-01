@@ -30,14 +30,14 @@ $columns[]	=	'delete';
 
 //setup the array holding the header texts
 $headers	=	array();
-$headers[]	=	'';
+$headers[]	=	get_string('label','block_ilp');
 $headers[]	=	get_string('type','block_ilp');
-$headers[]	=	'';
-$headers[]	=	'';
-$headers[]	=	'';
-$headers[]	=	'';
-$headers[]	=	'';
-$headers[]	=	'';
+$headers[]	=	get_string('moveup','block_ilp');
+$headers[]	=	get_string('movedown','block_ilp');
+$headers[]	=	get_string('edit','block_ilp');
+$headers[]	=	get_string('summary','block_ilp');
+$headers[]	=	get_string('required','block_ilp');
+$headers[]	=	get_string('delete','block_ilp');
 
 //pass the columns to the table
 $flextable->define_columns($columns);

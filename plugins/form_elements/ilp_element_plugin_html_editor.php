@@ -188,7 +188,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
 	*
     */
     public	function entry_form( &$mform ) {
-    	
+    	global $DB;
     	//create the fieldname
     	$fieldname	=	"{$this->reportfield_id}_field";
     	
@@ -199,17 +199,24 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
     	//text field for element label
    		$mform->addElement(
                // To solve the validation error 'htmleditor' should be replaced to 'editor'.
-	           'htmleditor',
+	           'editor',
 	            $fieldname,
 	            "$this->label",
 	            array('class' => 'form_input', 'canUseHtmlEditor'=>'detect', 'rows'=> '20', 'cols'=>'65')
 	    );
+        $my_entry = $DB->get_record('block_ilp_plu_hte',array('reportfield_id'=>$this->reportfield_id));
+        if($my_entry){
+            $my_entry_data = $DB->get_record('block_ilp_plu_hte_ent', array('parent_id'=>$my_entry->id, 'entry_id'=>$_GET['entry_id']));
+            if($my_entry_data){
+                $mform->setDefault($fieldname, array('text'=>html_entity_decode($my_entry_data->value), 'format'=>FORMAT_HTML));
+            }
+        }
 
         // Disable the min and max length to solve the validation issue for html editor and also
         // remove the same in mform
         // REF: http://tracker.moodle.org/browse/MDL-35402 is fixed as multiple rules is breaking it.
-        if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
-        if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
+        //if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
+        //if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
 
@@ -225,5 +232,45 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
 		*/
 		return $this->entry_process_data($reportfield_id,$entry_id,$data); 	
 	 }
+
+    /**
+     * This function saves the data entered on a entry form to the plugins _entry table
+     * the function expects the data object to contain the id of the entry (it should have been
+     * created before this function is called) in a param called id.
+     */
+    public	function entry_process_data($reportfield_id,$entry_id,$data) {
+
+        //check to see if a entry record already exists for the reportfield in this plugin
+
+        //create the fieldname
+        $fieldname =	$reportfield_id."_field";
+
+        //get the plugin table record that has the reportfield_id
+        $pluginrecord	=	$this->dbc->get_plugin_record($this->tablename,$reportfield_id);
+        if (empty($pluginrecord)) {
+            print_error('pluginrecordnotfound');
+        }
+
+        //get the _entry table record that has the pluginrecord id
+        $pluginentry 	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
+
+        $my_data = (object) $data->$fieldname;
+        //if no record has been created create the entry record
+        if (empty($pluginentry)) {
+            $pluginentry	=	new stdClass();
+            $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
+            $pluginentry->entry_id = $entry_id;
+            $pluginentry->value	=	$my_data->text;
+            $pluginentry->parent_id	=	$pluginrecord->id;
+            $result	= $this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
+        } else {
+            //update the current record
+            $pluginentry->audit_type = $this->audit_type(); //send the audit type through for logging purposes
+            $pluginentry->value	=	$my_data->text;
+            $result	= $this->dbc->update_plugin_entry($this->data_entry_tablename,$pluginentry);
+        }
+
+        return (!empty($result)) ? true: false;
+    }
 }
 

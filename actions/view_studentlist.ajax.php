@@ -176,7 +176,17 @@ $defaultstatusitem_id = get_config('block_ilp', 'defaultstatusitem');
 $defaultstatusitem = $dbc->get_status_item_by_id($defaultstatusitem_id);
 
 
-$status_item = (!empty($defaultstatusitem)) ? $defaultstatusitem->name : get_string('unknown', 'block_ilp');
+if(!empty($defaultstatusitem)){
+    if($defaultstatusitem->display_option == 'icon'){
+        $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$defaultstatusitem->id&f=",$defaultstatusitem->icon);
+        $this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+        $status_item = $this_file;
+    }else{
+        $status_item = $defaultstatusitem->name;
+    }
+}else {
+    $status_item = get_string('unknown', 'block_ilp');
+}
 
 //this is needed if the current user has capabilities in the course context, it allows view_main page to view the user
 //in the course context
@@ -224,7 +234,18 @@ if (!empty($studentslist)) {
         $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
-        $data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
+        //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
+        if(!empty($student->u_status)){
+            if($student->u_display_option == 'icon'){
+                $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$student->u_status_id&f=",$student->u_status_icon);
+                $this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+                $data['u_status'] = $this_file;
+            }else {
+                $data['u_status'] = $student->u_status;
+            }
+        }else {
+            $data['u_status'] = $status_item;
+        }
 
         $data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
 
@@ -257,7 +278,7 @@ if (!empty($studentslist)) {
 
            $createdentries = $datavalid ? count($allStates[$r->id][$student->id]) : 0 ;
 
-            $reporttext = "{$createdentries} " . $r->name;
+            $reporttext = "{$createdentries} ";
 
             //TODO: abstract these out put a function within the ilp_element_plugin classes that allows a var to be passed
             //in and altered in a similar way to the entr_obj in the entry_data function

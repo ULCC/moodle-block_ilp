@@ -2207,11 +2207,16 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false) {
 
+        global $CFG, $DB;
         $select = "SELECT 		u.id as id,
         						u.idnumber as idnumber,
         						u.firstname as firstname,
         						u.lastname as lastname,
+        						si.id as u_status_id,
         						si.name	as u_status,
+        						si.icon	as u_status_icon,
+        						si.display_option as u_display_option,
+        						si.description	as u_status_description,
         						u.picture as picture,
         						u.imagealt as imagealt,
         						u.email as email ";
@@ -2263,12 +2268,14 @@ class ilp_db_functions	extends ilp_logging {
         // tell the table how many pages it needs
         $flextable->totalrows($count);
 
-        return $this->dbc->get_records_sql(
+        $results = $this->dbc->get_records_sql(
             $select.$from.$where.$sort,
             null,
             $flextable->get_page_start(),
             $flextable->get_page_size()
         );
+
+        return $results;
     }
 
     /**

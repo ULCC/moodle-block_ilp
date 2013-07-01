@@ -14,8 +14,6 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_plugin.cla
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_percentage_bar.class.php');
 
-
-
 class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
    public		$student_id;
@@ -32,14 +30,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
    }
 
-
-
    /**
     * Returns the
     * @see ilp_dashboard_plugin::display()
     */
    function display()	{
-      global	$CFG,$OUTPUT,$PAGE,$PARSER,$USER,$SESSION;
+      global	$CFG, $DB, $OUTPUT, $PAGE, $PARSER, $USER, $SESSION;
 
       //set any variables needed by the display page
 
@@ -54,6 +50,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       if (isset($SESSION->ilp_prevnextstudents))   {
          $studentlist    =   unserialize($SESSION->ilp_prevnextstudents);
 
+
          if (!empty($studentlist))   {
             for($i = 0;$i < count($studentlist); $i++)   {
                if ($studentlist[$i] ==  $this->student_id) {
@@ -63,7 +60,6 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                   if (isset($studentlist[$i+1]))  {
                      $nextstudent    =   $studentlist[$i+1];
                   }
-                  break;
                }
             }
          }
@@ -85,6 +81,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
          //get the students current status
          $studentstatus	=	$this->dbc->get_user_status($this->student_id);
+
          if (!empty($studentstatus)) {
             $statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->parent_id);
          }
@@ -210,29 +207,35 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                if (file_exists($plugins.'/'.$plugin_file.".php")) {
                   require_once($plugins.'/'.$plugin_file.".php");
 
-                  //we only want mis plugins that are of type overview
-                  if ($plugin_file::plugin_type() == 'overview') {
-
                   // instantiate the object
-                     $pluginobj = new $plugin_file;
+                  $class = basename($plugin_file, ".php");
+                  $pluginobj = new $class();
+                  $method = array($pluginobj, 'plugin_type');
 
-                     //get the actual overview plugin
-                     $misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
+                  if (is_callable($method,true)) {
+                     //we only want mis plugins that are of type overview
+                     if ($pluginobj->plugin_type() == 'overview') {
 
-                     //if the admin of the moodle has done their job properly then only one overview mis plugin will be enabled
-                     //otherwise there may be more and they will all be displayed
+                        //get the actual overview plugin
+                        $misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
 
-                     $status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
+                        //if the admin of the moodle has done there job properly then only one overview mis plugin will be enabled
+                        //otherwise there may be more and they will all be displayed
 
-                     $status	=	(!empty($status)) ?  $status: ILP_DISABLED;
+                        $status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
 
-                     if (!empty($misplug) & $status == ILP_ENABLED ) {
-                        $misoverviewplugins[]	=	$pluginobj;
+                        $status	=	(!empty($status)) ?  $status: ILP_DISABLED;
+
+                        if (!empty($misplug) & $status == ILP_ENABLED ) {
+                           $misoverviewplugins[]	=	$pluginobj;
+                        }
                      }
                   }
                }
             }
          }
+
+
 
          //if the user has the capability to view others ilp and this ilp is not there own
          //then they may change the students status otherwise they can only view
@@ -240,24 +243,17 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
          //get all enabled reports in this ilp
          $reports		=	$this->dbc->get_reports(ILP_ENABLED);
 
-//Get all this user's report entries in one call
-         $allStates=$this->dbc->fetch_all_report_entries_with_state(array($this->student_id));
 
          //we are going to output the add any reports that have state fields to the percentagebar array
          if (!empty($reports) ) {
             foreach ($reports as $r) {
                if ($this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
 
-                  $reportinfo			=	new stdClass();
-                  $datavalid = isset($allStates[$r->id][$this->student_id]);
-                  $reportinfo->total		=	$datavalid ? count($allStates[$r->id][$this->student_id]): 0;
-                  $reportinfo->actual		=       $datavalid ? count(array_filter($allStates[$r->id][$this->student_id],
-                                                                                        function($item){ return ($item->state==ILP_STATE_PASS);}))
-                     : 0 ;
+                  $reportinfo				=	new stdClass();
+                  $reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
+                  $reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_PASS);
                   //retrieve the number of entries that have the not counted state
-                  $reportinfo->notcounted	=	$datavalid ? count(array_filter($allStates[$r->id][$this->student_id],
-                                                                                        function($item){ return ($item->state==ILP_STATE_NOTCOUNTED);}))
-                     : 0 ;
+                  $reportinfo->notcounted	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_NOTCOUNTED);
 
                   //if total_possible is empty then there will be nothing to report
                   if (!empty($reportinfo->total)) {
@@ -276,6 +272,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
          //instantiate the percentage bar class in case there are any percentage bars
          $pbar	=	new ilp_percentage_bar();
+
 
          //we need to buffer output to prevent it being sent straight to screen
          ob_start();
@@ -307,6 +304,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
     */
    function userstatus_select($selected_value =null)	{
       global	$USER, $CFG, $PARSER;
+
 
       $statusitems	=	$this->dbc->get_user_status_items();
 
@@ -346,9 +344,6 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
          $form 	.= '</span>';
 
       }
-
-
-
 
       return $form;
 

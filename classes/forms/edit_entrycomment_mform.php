@@ -47,7 +47,7 @@ class edit_entrycomment_mform extends ilp_moodleform {
      	 * TODO comment this
      	 */		
 		function definition() {
-			 global $USER, $CFG;
+			 global $USER, $CFG, $DB;
 
         	$dbc = new ilp_db;
 
@@ -62,7 +62,7 @@ class edit_entrycomment_mform extends ilp_moodleform {
        	 	$mform->addElement('hidden', 'course_id', $this->course_id);
         	$mform->setType('course_id', PARAM_INT);
         	
-        	$mform->addElement('hidden', 'id');
+        	$mform->addElement('hidden', 'id', $this->comment_id);
         	$mform->setType('id', PARAM_INT);
         	
         	$mform->addElement('hidden', 'creator_id', $USER->id);
@@ -83,13 +83,21 @@ class edit_entrycomment_mform extends ilp_moodleform {
 	        
 	        // DESCRIPTION element
 	        $mform->addElement(
-	            'htmleditor',
+	            'editor',
 	            'value',
 	            get_string('comment', 'block_ilp'),
 	            array('class' => 'form_input', 'rows'=> '10', 'cols'=>'65')
 	        );
+            if($this->comment_id){
+                $my_data = $DB->get_record('block_ilp_entry_comment', array('id'=>$this->comment_id));
+                if($my_data){
+                    $mform->setDefault('value', array('text'=>html_entity_decode($my_data->value), 'format'=>FORMAT_HTML));
+                }
+            }
+
+
 	        
-	        $mform->addRule('value', null, 'maxlength', 65535, 'client');
+	        //$mform->addRule('value', null, 'maxlength', 65535, 'client');
 	        $mform->addRule('value', null, 'required', null, 'client');
 	        $mform->setType('value', PARAM_RAW);
         	
@@ -109,11 +117,12 @@ class edit_entrycomment_mform extends ilp_moodleform {
      	 */		
 		function process_data($data) {
 			
-			if (empty($data->id)) {
+			if($data->id > 0){
+                $data->value = $data->value['text'];
+                $this->dbc->update_entry_comment($data);
+            }else {
+                $data->value = $data->value['text'];
             	$data->id = $this->dbc->create_entry_comment($data);
-            	
-        	} else {
-            	$this->dbc->update_entry_comment($data);
         	}
 	
     	    return $data->id;

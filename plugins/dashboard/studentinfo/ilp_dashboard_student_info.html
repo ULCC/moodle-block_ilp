@@ -23,28 +23,47 @@ if (!empty($nextstudent)) {
 			<?php echo $studentpicture; ?>
 	</div>
 	<div id="middle-studentinfo">
-				<?php  if (!empty($tutorslist)) {?>
-				<p>
-				<strong><?php echo get_string('mytutor','block_ilp');?></strong><span><?php echo implode(', ',$tutorslist); ?></span>
-				</p>
-				<?php } ?>
-				<p>
-					<strong><?php echo get_string('studentstatus','block_ilp');?></strong>
-					<?php  if (empty($can_editstatus)) { ?>
-						<span id="user_status"  style="color: <?php echo $userstatuscolor; ?>" ><?php echo $statusitem->name; ?></span>
-					<?php } else {?>
-						<span id="user_status" class="hidden" style="color: <?php echo $userstatuscolor; ?>"><?php echo $statusitem->name; ?></span><img src="<?php echo $OUTPUT->pix_url("/i/edit");?>" alt="<?php echo get_string('edit');?>" class="hidden editicon" id="edit_userstatus_icon" />
-						<?php echo $this->userstatus_select($statusitem->id); ?>
-					<?php } ?>
-                        <img src="<?php echo $CFG->wwwroot; ?>/blocks/ilp/pix/loading.gif" id="studentlistloadingicon" class="hiddenelement">
-				</p>
-				<?php
-				 if (!empty($percentagebars)) {
-							foreach($percentagebars	as $p) {
-								echo $pbar->display_bar($p->percentage,$p->name,$p->total);
-							?>
-					<?php }
-						  }?>
+        <?php  if (!empty($tutorslist)) {?>
+        <p>
+        <strong><?php echo get_string('mytutor','block_ilp');?></strong><span><?php echo implode(', ',$tutorslist); ?></span>
+        </p>
+        <?php } ?>
+            <strong><?php echo get_string('studentstatus','block_ilp');?></strong>
+            <?php
+            if($statusitem->display_option == 'icon'){
+                if($statusitem->icon){
+                    $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
+                    $this_file = "<a class='tooltip'>
+                                    <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+                    $this_file .= html_entity_decode($statusitem->description);
+                    $this_file .="</span></a>";
+                    //we found there is a icon, so we need to display it
+                    echo '<div class="dashboard_status_icon">'. $this_file .'</div>';
+                }else{
+                    echo '<div class="dashboard_status_icon">'. html_entity_decode($statusitem->description) .'</div>';
+                }
+            }else{
+                echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
+            }
+
+            if (!empty($can_editstatus)) {
+                echo '<div class="edit_status">' . $this->userstatus_select($statusitem->id) . '</div>';
+            }
+            echo "<img src='$CFG->wwwroot/blocks/ilp/pix/loading.gif' id='studentlistloadingicon' class='hiddenelement'>";
+            ?>
+
+        <?php
+
+         if (!empty($percentagebars)) {
+                    foreach($percentagebars	as $p) {
+
+                        echo $pbar->display_bar($p->percentage,$p->name,$p->total);
+                    ?>
+
+            <?php }
+                  }?>
 	</div>
 	<div id="right-studentinfo">
      <?php

@@ -77,6 +77,22 @@
 	width:20%;
 	padding:0 10px; 
 }
+.ilp #middle-studentinfo .dashboard_status_icon {
+    background: none repeat scroll 0 0 gray;
+    height: 60px;
+    margin: 0;
+    width: 80px;
+}
+.ilp #middle-studentinfo .dashboard_status_icon img.icon_file {
+    height: 50px;
+    left: 15px;
+    position: relative;
+    top: 5px;
+    width: 50px;
+}
+.ilp #middle-studentinfo .edit_status {
+    padding: 5px;
+}
 .ilp #right-studentinfo { 
 	float:right; 
 	width:60%;
@@ -429,6 +445,36 @@
 	margin: 0 0 10px 0;
 	height: 20px;
 }
+
+.ilp .view-comments .view_all_comments {
+    /*background: url([[pix:block_ilp|open]]) no-repeat;
+    position: relative;
+    top: -3px;
+    left: 110px;
+    width: 31px;
+    height: 25px;*/
+    font-weight: bolder;
+    left: 115px;
+    position: relative;
+    top: -15px;
+    width: 100px;
+    cursor: -moz-zoom-in;
+}
+.ilp .view-comments .hide_all_comments {
+    /*background: url([[pix:block_ilp|close]]) no-repeat;
+    position: relative;
+    top: -3px;
+    left: 110px;
+    width: 31px;
+    height: 25px;*/
+    font-weight: bolder;
+    left: 115px;
+    position: relative;
+    top: -15px;
+    width: 100px;
+    cursor: -moz-zoom-out;
+}
+
 .ilp .view-comments h3{
 	font-size: 1.3em; 
 	margin: 0; 
@@ -555,3 +601,49 @@
 .ilp   .float-right {
     float:  right;
 }
+/* for tooltip*/
+a.tooltip {
+    outline:none;
+}
+a.tooltip strong {
+    line-height:30px;
+}
+a.tooltip:hover {
+    text-decoration:none;
+}
+a.tooltip span {
+    z-index:10;
+    display:none;
+    padding:10px 10px;
+    margin-left:35px;
+    line-height:16px;
+}
+a.tooltip:hover span{
+    display:inline;
+    position:absolute;
+    color:#111;
+    border:1px solid #DCA;
+    background:#fffAF0;
+}
+.callout {
+    border: 0 none;
+    height: 15px;
+    left: -12px;
+    position: absolute;
+    top: 7px;
+    width: 12px;
+    z-index: 20;
+}
+
+/*CSS3 extras*/
+a.tooltip span
+{
+    border-radius:4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+
+    -moz-box-shadow: 5px 5px 8px #CCC;
+    -webkit-box-shadow: 5px 5px 8px #CCC;
+    box-shadow: 5px 5px 8px #CCC;
+}
+/* tooltip finished */
