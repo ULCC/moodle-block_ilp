@@ -300,7 +300,7 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
     }
 
     
-    function plugin_type()	{
+    static function plugin_type()	{
     	return 'learnerprofile';
     }
  	

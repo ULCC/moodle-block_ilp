@@ -168,7 +168,7 @@ abstract class ilp_graph_plugin extends ilp_plugin  {
     function install($plugin_id)    {
         $graphplugin = $this->dbc->get_graph_plugin_by_id($plugin_id);
 
-        $graphplugin->type = $this->plugin_type();
+        $graphplugin->type = static::plugin_type();
 
         $this->dbc->update_graph_plugin($graphplugin);
     }

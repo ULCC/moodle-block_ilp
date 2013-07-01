@@ -1,7 +1,7 @@
-<?php 
+<?php
 
 /**
- * Global config file for the ILP 
+ * Global config file for the ILP
  *
  * @copyright &copy; 2011 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -107,29 +107,22 @@ $options[0]	=	get_string('noplugin','block_ilp');
 
 foreach ($mis_plugins as $plugin_file) {
 
-	 if (file_exists($plugins . '/' . $plugin_file . ".php")) {
-	
-      	require_once($plugins . '/' . $plugin_file . ".php");
-        // instantiate the object
-        $class = basename($plugin_file, ".php");
-        $pluginobj = new $class();
-        $method = array($pluginobj, 'plugin_type');
+   if (file_exists($plugins . '/' . $plugin_file . ".php")) {
 
-        //check whether the config_settings method has been defined
-         if (is_callable($method, true)) {
-         	if ($pluginobj->plugin_type() == 'attendance' || $pluginobj->plugin_type() == 'overview') {
-         		
-         		//we only want to display plugins that are enabled (if they are enabled they should be configured)
-         		$pluginstatus	=	get_config('block_ilp',"{$plugin_file}_pluginstatus");
-         		if (!empty($pluginstatus)) {
-               		$mismisc = $dbc->get_mis_plugin_by_name($plugin_file);
-               		$options[$mismisc->name] = $pluginobj->tab_name();
-         		}
-            }
+      require_once($plugins . '/' . $plugin_file . ".php");
+
+      if ($plugin_file::plugin_type() == 'attendance' || $plugin_file::plugin_type() == 'overview') {
+         // instantiate the object
+         $class = basename($plugin_file, ".php");
+         $pluginobj = new $class();
+         //we only want to display plugins that are enabled (if they are enabled they should be configured)
+         $pluginstatus	=	get_config('block_ilp',"{$plugin_file}_pluginstatus");
+         if (!empty($pluginstatus)) {
+            $mismisc = $dbc->get_mis_plugin_by_name($plugin_file);
+            $options[$mismisc->name] = $pluginobj->tab_name();
          }
-	 } else	{
-	 	
-	 }
+      }
+   }
 }
 
 $attendplugin			= 	new admin_setting_configselect('block_ilp/attendplugin',get_string('attendaceplugin','block_ilp'),get_string('attendaceplugindesc','block_ilp'), '',$options);
@@ -175,12 +168,12 @@ $maxreports			=	new admin_setting_configtext('block_ilp/maxreports',get_string('
 $settings->add($maxreports);
 
 
-	
+
 	$options	=	array();
-	
+
 	for($i = 0;$i < 11 ;$i++)	{
 		$options[$i]	=	($i == 0) ? get_string('none','block_ilp') : " {$i} days";
-	} 		
+	}
 
 	$deadlinenotification			= 	new admin_setting_configselect('block_ilp/deadlinenotification',get_string('deadlinenotification','block_ilp'),get_string('deadlinenotificationconfig','block_ilp'), 7,$options);
 	$settings->add($deadlinenotification);
@@ -197,24 +190,24 @@ global $CFG;
 $plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
 
 if ($dbc->get_mis_plugins() !== false) {
-	
-	
+
+
 	$mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');
-	
+
 	foreach ($mis_plugins as $plugin_file) {
 		if (file_exists($plugins.'/'.$plugin_file.".php")) {
 		    require_once($plugins.'/'.$plugin_file.".php");
-		    
+
 		    // instantiate the object
 		    $class = basename($plugin_file, ".php");
 		    $pluginobj = new $class();
 		    $method = array($pluginobj, 'config_settings');
-			
+
 		    //check whether the config_settings method has been defined
-	
+
 		    if (is_callable($method,true)) {
 		        $pluginobj->config_settings($settings);
-		        
+
 		    }
 		}
 	}
@@ -232,21 +225,21 @@ global $CFG;
 $plugins = $CFG->dirroot.'/blocks/ilp/plugins/tabs';
 
 if ($dbc->get_tab_plugins() !== false) {
-	
-	
+
+
 	$tab_plugins = ilp_records_to_menu($dbc->get_tab_plugins(), 'id', 'name');
-	
+
 	foreach ($tab_plugins as $plugin_file) {
 		if (file_exists($plugins.'/'.$plugin_file.".php")) {
 		    require_once($plugins.'/'.$plugin_file.".php");
-		    
+
 		    // instantiate the object
 		    $class = basename($plugin_file, ".php");
 		    $pluginobj = new $class();
 		    $method = array($pluginobj, 'config_settings');
-			
+
 		    //check whether the config_settings method has been defined
-	
+
 		    if (is_callable($method,true)) {
 		        $pluginobj->config_settings($settings);
 		    }

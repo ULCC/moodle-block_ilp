@@ -301,7 +301,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
     }
 
 
-    public function plugin_type()
+    public static function plugin_type()
     {
         return 'attendance';
     }
@@ -619,7 +619,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
                 if (isset($this->fields['notified'])) $tempdata['notified'] = $d[$this->fields['notified']];
                 if (isset($this->fields['placement'])) $tempdata['placement'] = $d[$this->fields['placement']];
 
-                //fill the couse month array position with percentage for the month
+                //fill the course month array position with percentage for the month
                 $normdata[$dayid][] = $tempdata;
 
             }
