@@ -175,7 +175,7 @@
 	$string['midcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in the mid range';
 	$string['miscoptions']		 	= 	'Misc Options';
 	$string['miscconfig']		 	= 	'Misc Configuration';
-	$string['mis_pluginsettings']	= 	'MIS plugin settings';
+	$string['mis_pluginsettings']	= 	'External plugin settings';
 	$string['month']		 		= 	'Month';
 	$string['move']		 			= 	'Move';
 	$string['movedown'] 			= 	'Move down';
@@ -256,34 +256,34 @@
 
 
 	$string['req'] 					= 	'Required';
-	$string['reports'] 				= 	'Reports';
-	$string['reportconfiguration'] 				= 	'Report Configuration';
-	$string['reportconfigurationsection'] 		= 	'Report Configuration Section';
-    $string['reportfields'] 					= 	'Report Fields';
-    $string['reportgraph'] 					    = 	'Report Graph';
-    $string['reportgraphs'] 					= 	'Report Graphs';
-    $string['reporttype'] 					    = 	'Report type';
-	$string['reportconfigurationdesc'] 			= 	'The report configuration admininstration area allows you to create and edit reports. ';
-    $string['reportcreationsuc'] 				= 	'The report was successfully created';
-    $string['reportcreation'] 				= 	'Report creation';
-    $string['reportfield'] 					    = 	'Report Field';
-    $string['reportlocked'] 					    = 	'This report has been locked the final date for entries was {$a->expiredate}';
-    $string['reportlockdate'] 					    = 	'Report lock date';
-	$string['reportmustcontainfields'] 			= 	'The report must contain fields';
-	$string['reportname'] 						= 	'Report Name:';
-	$string['reportprompt']						= 	'Report Prompts';
-	$string['reportdeadline']					= 	'Report Deadline';
-	$string['reportdeleteerror']				= 	'Report delete error';
-    $string['reportdeleted']					= 	'Report deleted';
-    $string['reportentries']					= 	'report entries';
+	$string['reports'] 				= 	'Forms';
+	$string['reportconfiguration'] 				= 	'Forms Configuration';
+	$string['reportconfigurationsection'] 		= 	'Form Configuration Section';
+    $string['reportfields'] 					= 	'Form Fields';
+    $string['reportgraph'] 					    = 	'Form Graph';
+    $string['reportgraphs'] 					= 	'Form Graphs';
+    $string['reporttype'] 					    = 	'Form type';
+	$string['reportconfigurationdesc'] 			= 	'The form configuration admininstration area allows you to create and edit forms. ';
+    $string['reportcreationsuc'] 				= 	'The form was successfully created';
+    $string['reportcreation'] 				= 	'Form creation';
+    $string['reportfield'] 					    = 	'Form Field';
+    $string['reportlocked'] 					    = 	'This form has been locked the final date for entries was {$a->expiredate}';
+    $string['reportlockdate'] 					    = 	'Form lock date';
+	$string['reportmustcontainfields'] 			= 	'The form must contain fields';
+	$string['reportname'] 						= 	'Form Name:';
+	$string['reportprompt']						= 	'Form Prompts';
+	$string['reportdeadline']					= 	'Form Deadline';
+	$string['reportdeleteerror']				= 	'Form delete error';
+    $string['reportdeleted']					= 	'Form deleted';
+    $string['reportentries']					= 	'Form entries';
 
-	$string['reportsoverdue']					= 	'Report overdue';
-    $string['reportmovesuc']        			    =	'The report was successfully moved';
-    $string['reportmoveerror']        			    =	'An error has occurred the report was not move';
+	$string['reportsoverdue']					= 	'Form overdue';
+    $string['reportmovesuc']        			    =	'The form was successfully moved';
+    $string['reportmoveerror']        			    =	'An error has occurred the form was not move';
     $string['reportnojs']        			    =	'You do not have JavaScript enabled. Please note that the creation of reports is easier in a Javascript enabled browser. Some fields may be disregarded if they are not selected with the correct fields';
 
 	$string['required']	 						= 	'Required';
-	$string['reportpermissions']				= 	'Report Permissions';
+	$string['reportpermissions']				= 	'Form Permissions';
 	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
 	$string['reportpermissionsdescription']		= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
     $string['savechanges'] 						= 	'Save Changes';
@@ -368,7 +368,7 @@
 	$string['target']							=	'Targets';
 
     //Config Form DB Connection Section
-    $string[ 'mis_connection' ]                  =   'MIS Connection';
+    $string[ 'mis_connection' ]                  =   'External Connection';
     $string[ 'db_connection' ]                  =   'DB Connection';
     $string[ 'db_name' ]                        =   'DB Name';
     $string[ 'set_db_name' ]                    =   'set the name of the DB';
