@@ -28,7 +28,7 @@
 	$string['attendaceplugindesc']	= 	'The attendance plugin that will called to get attendance data in various areas of the ilp (the plugin must be enabled to appear in this list)';
     $string['attachedgraphs']		= 	'Attached Graphs';
 
-    $string['availablereports']		= 	'Available Reports';
+    $string['availablereports']		= 	'Available Forms';
     $string['average']      		= 	'Average';
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
@@ -36,9 +36,9 @@
 	$string['changecourse']			=	'Change Course';
 	$string['changegroup']			=	'Change Group';
 	$string['creator']				=	'Creator';
-    $string['createreport']			=	'Create Report';
+    $string['createreport']			=	'Create Forms';
     $string['creategraph']			=	'Create Graph';
-	$string['createnewreport']		=	'Create New Report';
+	$string['createnewreport']		=	'Create New Forms';
 	$string['cronemailsender'] 		= 	'ILP';
 	$string['cronemailsubject'] 	= 	'Reminder: {$a->reportname} is due on {$a->deadline}';
 	$string['cronemailhtml'] 		= 	'<p>Dear {$a->firstname} {$a->lastname},</p>
@@ -59,7 +59,7 @@
 	$string['configsuc']			=	'Configuration change saved';
     $string['course']				=	'Course';
     $string['courseentries']				=	'{$a->report} entries for students in {$a->course}';
-	$string['coursereports']		=	'Course Reports';
+	$string['coursereports']		=	'Course Forms';
     $string['day']	 		= 	'Daily';
     $string['dashboard']	 		= 	'Dashboard';
     $string['datacollection'] 		= 	'Data collected over:';
@@ -100,14 +100,14 @@
     $string['editgraphs']			=	'Edit Graphs';
 	$string['editprompt']			=	'Edit Prompt';
 	$string['editpermissions']		=	'Edit Permisssions';
-	$string['editreport']			=	'Edit Report';
-	$string['editreportfields']		=	'Edit Report Fields';
+	$string['editreport']			=	'Edit Forms';
+	$string['editreportfields']		=	'Edit Form Fields';
 	$string['edit_status_items']	=	'Edit Status Items';
     $string['editstatusitems']		=	'Edit Status Items';
-    $string['entrydeleted']		=	'The Report was successfully deleted';
-    $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this report';
+    $string['entrydeleted']		=	'The Forms was successfully deleted';
+    $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this form';
     $string['expandall']			=	'Expand all';
-	$string['enablereport'] 		= 	'Enable Report';
+	$string['enablereport'] 		= 	'Enable Form';
     $string['enabled'] 				= 	'Enabled';
     $string['expandentries']		=	'Expand entries';
     $string['numberentries']		= 	'{$a->entries} entries';
@@ -130,7 +130,7 @@
     $string['fieldchangeerror']		=	'A error has occurred the field change has not been applied';
     $string['fieldnoteditable']		=	'This field is not editable';
 
-	$string['returnreportprompt']	=	'Returning to report fields page';
+	$string['returnreportprompt']	=	'Returning to form fields page';
 	$string['formelementdeletesuc']	=	'The field was successfully deleted';
 	$string['for']					=	'for';
 	
@@ -152,7 +152,7 @@
 	$string['ilp_element_plugin_dd_optionlist_additional' ]	= 'Additional Options';
 	$string['intid']				=	'Int ID';
 	
-	$string['installedreports']		=	'Installed Reports';
+	$string['installedreports']		=	'Installed Forms';
     $string['installedelements']	=	'Installed Elements';
     $string['insummary']	        =	'In summary';
 	$string['warininglist']			=	'Warining List';
@@ -175,7 +175,7 @@
 	$string['midcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in the mid range';
 	$string['miscoptions']		 	= 	'Misc Options';
 	$string['miscconfig']		 	= 	'Misc Configuration';
-	$string['mis_pluginsettings']	= 	'MIS plugin settings';
+	$string['mis_pluginsettings']	= 	'External plugin settings';
 	$string['month']		 		= 	'Month';
 	$string['move']		 			= 	'Move';
 	$string['movedown'] 			= 	'Move down';
@@ -237,16 +237,16 @@
 	$string['print'] 				= 	'Print';
     $string['preview'] 				= 	'Preview';
     $string['previous'] 		    = 	'Previous';
-    $string['previewreport'] 		= 	'Preview Report';
-	$string['predefinedreports'] 	= 	'Predefined Reports';
-	$string['previewdescription']	= 	'Below is a preview of the report you are creating if you are happy with the report click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
+    $string['previewreport'] 		= 	'Preview Forms';
+	$string['predefinedreports'] 	= 	'Predefined Forms';
+	$string['previewdescription']	= 	'Below is a preview of the form you are creating if you are happy with the form click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
     $string['preferencecreationsuc'] 		= 	'Preference created';
     $string['previousstudent'] 		= 	'Prev student';
 	$string['punctuality']			= 	'Punctuality';
     $string['removefield']			= 	'Remove 1 field';
     $string['removesel']			= 	'Remove selected';
 	$string['removeall']			= 	'Remove all';
-    $string['recurexceededmaxentries']	=	'You have reached maximum number of {$a->maxentries} entries for this report in this period';
+    $string['recurexceededmaxentries']	=	'You have reached maximum number of {$a->maxentries} entries for this form in this period';
     $string['recurringrules']		    = 	'Recurring rules';
     $string['recurring']		    = 	'Recurring';
     $string['recurringfinaldate']		    = 	'Recurring with final date';
@@ -256,49 +256,49 @@
 
 
 	$string['req'] 					= 	'Required';
-	$string['reports'] 				= 	'Reports';
-	$string['reportconfiguration'] 				= 	'Report Configuration';
-	$string['reportconfigurationsection'] 		= 	'Report Configuration Section';
-    $string['reportfields'] 					= 	'Report Fields';
-    $string['reportgraph'] 					    = 	'Report Graph';
-    $string['reportgraphs'] 					= 	'Report Graphs';
-    $string['reporttype'] 					    = 	'Report type';
-	$string['reportconfigurationdesc'] 			= 	'The report configuration admininstration area allows you to create and edit reports. ';
-    $string['reportcreationsuc'] 				= 	'The report was successfully created';
-    $string['reportcreation'] 				= 	'Report creation';
-    $string['reportfield'] 					    = 	'Report Field';
-    $string['reportlocked'] 					    = 	'This report has been locked the final date for entries was {$a->expiredate}';
-    $string['reportlockdate'] 					    = 	'Report lock date';
-	$string['reportmustcontainfields'] 			= 	'The report must contain fields';
-	$string['reportname'] 						= 	'Report Name:';
-	$string['reportprompt']						= 	'Report Prompts';
-	$string['reportdeadline']					= 	'Report Deadline';
-	$string['reportdeleteerror']				= 	'Report delete error';
-    $string['reportdeleted']					= 	'Report deleted';
-    $string['reportentries']					= 	'report entries';
+	$string['reports'] 				= 	'Forms';
+	$string['reportconfiguration'] 				= 	'Forms Configuration';
+	$string['reportconfigurationsection'] 		= 	'Form Configuration Section';
+    $string['reportfields'] 					= 	'Form Fields';
+    $string['reportgraph'] 					    = 	'Form Graph';
+    $string['reportgraphs'] 					= 	'Form Graphs';
+    $string['reporttype'] 					    = 	'Form type';
+	$string['reportconfigurationdesc'] 			= 	'The form configuration admininstration area allows you to create and edit forms. ';
+    $string['reportcreationsuc'] 				= 	'The form was successfully created';
+    $string['reportcreation'] 				= 	'Form creation';
+    $string['reportfield'] 					    = 	'Form Field';
+    $string['reportlocked'] 					    = 	'This form has been locked the final date for entries was {$a->expiredate}';
+    $string['reportlockdate'] 					    = 	'Form lock date';
+	$string['reportmustcontainfields'] 			= 	'The form must contain fields';
+	$string['reportname'] 						= 	'Form Name:';
+	$string['reportprompt']						= 	'Form Prompts';
+	$string['reportdeadline']					= 	'Form Deadline';
+	$string['reportdeleteerror']				= 	'Form delete error';
+    $string['reportdeleted']					= 	'Form deleted';
+    $string['reportentries']					= 	'Form entries';
 
-	$string['reportsoverdue']					= 	'Report overdue';
-    $string['reportmovesuc']        			    =	'The report was successfully moved';
-    $string['reportmoveerror']        			    =	'An error has occurred the report was not move';
-    $string['reportnojs']        			    =	'You do not have JavaScript enabled. Please note that the creation of reports is easier in a Javascript enabled browser. Some fields may be disregarded if they are not selected with the correct fields';
+	$string['reportsoverdue']					= 	'Form overdue';
+    $string['reportmovesuc']        			    =	'The form was successfully moved';
+    $string['reportmoveerror']        			    =	'An error has occurred the form was not move';
+    $string['reportnojs']        			    =	'You do not have JavaScript enabled. Please note that the creation of forms is easier in a Javascript enabled browser. Some fields may be disregarded if they are not selected with the correct fields';
 
 	$string['required']	 						= 	'Required';
-	$string['reportpermissions']				= 	'Report Permissions';
-	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} report';
-	$string['reportpermissionsdescription']		= 	'Use the matrix below to assign permissions to the {$a->name} report. if you do not enter any permissions then default role permissions will be used on the report';
+	$string['reportpermissions']				= 	'Form Permissions';
+	$string['reportpermissionsuc']				= 	'The Permissions have been successfully assigned to the {$a->name} form';
+	$string['reportpermissionsdescription']		= 	'Use the matrix below to assign permissions to the {$a->name} form. if you do not enter any permissions then default role permissions will be used on the report';
     $string['savechanges'] 						= 	'Save Changes';
     $string['showall'] 						    = 	'Any';
     $string['showcomplete']					    = 	'Complete';
     $string['showoverdue'] 					    = 	'Overdue';
 
-	$string['statuschangesuc'] 					= 	'The reports status was successfully changed';
+	$string['statuschangesuc'] 					= 	'The forms status was successfully changed';
 	$string['statusitemupdatesuc'] 				= 	'The status items have been updated';
 	
 	$string['selecttype'] 						= 	'Select Field Type';
-	$string['selectedreports']					= 	'Selected Reports';
-    $string['selectedreportlist']				= 	'Select report list options';
+	$string['selectedreports']					= 	'Selected Forms';
+    $string['selectedreportlist']				= 	'Select form list options';
     $string['selectagraph']				        = 	'Select a graph';
-    $string['setallowmultipleerror']				        = 	'In order to have a recurring report type you must check allow multiple entries';
+    $string['setallowmultipleerror']				        = 	'In order to have a recurring form type you must check allow multiple entries';
 
 
 
@@ -333,8 +333,8 @@
 	$string['tabstatusdesc'] 					= 	'Select whether the tab is enabled or disabled';
     $string['total']                      		= 	'Total';
 
-    $string['viewreport']        				= 	'View Report';
-    $string['viewreportpreview'] 				= 	'View Report Preview';
+    $string['viewreport']        				= 	'View forms';
+    $string['viewreportpreview'] 				= 	'View Form Preview';
     $string['viewplp'] 							= 	'View';
     $string['viewilp'] 							= 	'View ILP';
     $string['viewextension'] 					= 	'View Extensions';
@@ -368,7 +368,7 @@
 	$string['target']							=	'Targets';
 
     //Config Form DB Connection Section
-    $string[ 'mis_connection' ]                  =   'MIS Connection';
+    $string[ 'mis_connection' ]                  =   'External Connection';
     $string[ 'db_connection' ]                  =   'DB Connection';
     $string[ 'db_name' ]                        =   'DB Name';
     $string[ 'set_db_name' ]                    =   'set the name of the DB';
@@ -380,12 +380,12 @@
     $string[ 'db_user' ]                        =   'DB Username';
 
 	//CAPABILITY STRINGS
-	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
-	$string['ilp:addreport'] 			= 	'Add a report entry';
-	$string['ilp:editreport'] 			= 	'Edit a report entry';
-	$string['ilp:deletereport'] 		= 	'Delete a report entry';
+	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete forms';
+	$string['ilp:addreport'] 			= 	'Add a form entry';
+	$string['ilp:editreport'] 			= 	'Edit a form entry';
+	$string['ilp:deletereport'] 		= 	'Delete a form entry';
 	$string['ilp:updatestatus'] 		= 	'Update Status';
-	$string['ilp:viewreport'] 			= 	'View a report';
+	$string['ilp:viewreport'] 			= 	'View a form';
 	$string['ilp:viewilp'] 				= 	'View my own ilp';
     $string['ilp:reviewee']       =   'Appear in student list for a course';
 	$string['ilp:viewotherilp'] 		= 	'View others ilp';
@@ -398,15 +398,15 @@
 $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial Assessments';
 
 	//ERROR MESSAGES CHANGING THESE IS NOT RECOMMENDED
-	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the report';
+	$string['reportcreationerror'] 			= 	'A error occurred whilst creating the form';
 	$string['fieldcreationerror'] 			= 	'A error occurred whilst creating the field';
 	$string['fieldmoveerror'] 				= 	'A has error occurred the field was not moved';
 	$string['formelementdeleteerror']		= 	'A error occurred whilst trying to delete the form element';
-	$string['reportnotfouund']				= 	'The report with the id given was not found';
-	$string['statuschangeerror'] 			= 	'A error occurred whilst changing the report status. The status was not changed';
+	$string['reportnotfouund']				= 	'The form with the id given was not found';
+	$string['statuschangeerror'] 			= 	'A error occurred whilst changing the form status. The status was not changed';
 	$string['fieldreqerror']				=	'A error occurred the required status was not updated';
 	$string['statusitemupdateerror']			=	'A error occurred whilst updating status items';
-    $string['labelexistserror']				=	"field label already exists in this report";
+    $string['labelexistserror']				=	"field label already exists in this form";
 	
 	//month strings
 	$string['jan']								=	'Jan';
@@ -436,14 +436,14 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
 	$string[ 'userstatus' ]						=	"User Status";
 
 	//ATENDENCE REPORT
-	$string[ 'attendenceconfiguration' ]		=	"MIS Report Configuration";	
+	$string[ 'attendenceconfiguration' ]		=	"External Form Configuration";
 
-	$string[ 'mis_configuration_settings' ]		=	"MIS Configuration Settings";	
+	$string[ 'mis_configuration_settings' ]		=	"External Configuration Settings";
 
 	$string[ 'not_applicable' ]		            =	"n/a";	
 
     //MESSAGE PROVIDER
-    $string['messageprovider:ilp_comment']      = 'New report comment';
+    $string['messageprovider:ilp_comment']      = 'New form comment';
 
 
     $string['ilp_element_plugin_error_minoptions']  = 'Minimum number of options that must be specified for this report is ';
