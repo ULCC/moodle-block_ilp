@@ -39,7 +39,7 @@ if ($user_id != $USER->id) {
 	} else {
 		$listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
 	}
-	
+
 	$PAGE->navbar->add(get_string('ilps', 'block_ilp'),$listurl,'title');
 	$PAGE->navbar->add(get_string('ilpname', 'block_ilp'),$dashboardurl,'title');
 } else {
@@ -85,11 +85,11 @@ if (!$dbc->get_user_status($user_id)) {
 	$studentstatus->user_id					=	$user_id;
 	$studentstatus->user_modified_id		=	$user_modified_id;
 	$defaultconfiguserstatus	=	get_config('block_ilp','defaultstatusitem');
-	
+
 	$studentstatus->parent_id				=	(!empty($defaultconfiguserstatus)) ? $defaultconfiguserstatus : ILP_DEFAULT_USERSTATUS_RECORD;//ILP_DEFAULT_USERSTATUS_RECORD;
 
 	$dbc->create_userstatus($studentstatus);
-}  
+}
 
 //require the view_main.html file
 require_once($CFG->dirroot."/blocks/ilp/views/view_main.html");

@@ -35,8 +35,29 @@
 		<div class="reports-comments">
 		<div class="view-comments">
                 <h3 id="entry_<?php echo $entry->id; ?>" class="commentheading"><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3>
-		<?php if (!empty($access_report_addcomment)) { ?><div class="add"><a style="float:right;margin: 0 0 0 200px;" href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&course_id={$this->course_id}"?>'  ><?php echo get_string('addcomment','block_ilp');?></a></div><?php } ?>
+		<?php if (!empty($access_report_addcomment)) { ?>
+                <div class="add">
+                    <?php
+                    $id_base = 'ajax_com-' . $entry->id;
+                    // $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&course_id={$this->course_id}
+                    ?>
+                    <div class="ajax-hidden-details" style="display: none;">
+                        <span class="<?php echo $id_base . '-report_id';?>"><?php echo $report_id;?></span>
+                        <span class="<?php echo $id_base . '-user_id';?>"><?php echo $entry_data->user_id;?></span>
+                        <span class="<?php echo $id_base . '-selectedtab';?>"><?php echo $this->selectedtab;?></span>
+                        <span class="<?php echo $id_base . '-tabitem';?>"><?php echo $this->tabitem;?></span>
+                        <span class="<?php echo $id_base . '-course_id';?>"><?php echo $this->course_id;?></span>
+                    </div>
+                    <span class="add-comment-ajax" id="<?php echo $id_base;?>" style="float:right;margin: 0 0 0 200px;">
+                        <?php echo get_string('addcomment','block_ilp');?>
+                    </span>
+                </div>
+
+            <?php } ?>
 		</div>
+            <div class="add-form add-form-<?php echo $id_base; ?>">
+
+            </div>
 		</div>
 		<?php
 		if (!empty($comments) && !empty($access_report_viewcomment) ) {

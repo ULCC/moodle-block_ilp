@@ -175,6 +175,18 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    function display($selectedtab=null)	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
+       $jsarguments = array(
+           'root' => $CFG->wwwroot
+       );
+
+       $jsmodule = array(
+           'name'     	=> 'ilp_ajax_addnew',
+           'fullpath' 	=> '/blocks/ilp/views/js/ajax_addnew.js',
+           'requires'  	=> array('io','io-form', 'json-parse', 'json-stringify', 'json', 'base', 'node')
+       );
+
+       $PAGE->requires->js_init_call('M.ilp_ajax_addnew.init', $jsarguments, true, $jsmodule);
+
       $pluginoutput	    =	"";
 
       if ($this->dbc->get_user_by_id($this->student_id)) {
