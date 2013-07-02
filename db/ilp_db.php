@@ -2204,6 +2204,7 @@ class ilp_db_functions	extends ilp_logging {
         						si.name	as u_status,
         						si.icon	as u_status_icon,
         						si.display_option as u_display_option,
+        						si.bg_colour as bg_colour,
         						si.description	as u_status_description,
         						u.picture as picture,
         						u.imagealt as imagealt,

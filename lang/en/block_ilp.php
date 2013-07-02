@@ -343,6 +343,7 @@
 
 
     $string['userpicture'] 						= 	'Student Picture';
+    $string['userpicture_studentlist'] 						= 	'';
     $string['usereportlock'] 					= 	'Use report lock edit';
     $string['updatestatus'] 					= 	'Update user status';
 
@@ -453,6 +454,9 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['display_option']       = 'Display option';
     $string['status_description']   = 'Description';
     $string['bg_colour']            = 'Background colour';
+
+    $string['studentreport_open']  = 'Open';
+    $string['studentreport_close'] = 'Close';
 
 	global $CFG;
 
