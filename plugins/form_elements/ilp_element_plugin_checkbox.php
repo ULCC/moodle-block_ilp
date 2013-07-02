@@ -33,7 +33,7 @@ class ilp_element_plugin_checkbox extends ilp_element_plugin_itemlist {
      */
     static function language_strings(&$string) {
         $string['ilp_element_plugin_checkbox'] 		= 'Check boxes ';
-        $string['ilp_element_plugin_checkbox_type'] 		= 'check boxes';
+        $string['ilp_element_plugin_checkbox_type'] 		= 'Check boxes';
         $string['ilp_element_plugin_checkbox_description'] 	= 'A checkboxes group';
         $string['ilp_element_plugin_checkbox_optionlist'] = 'Option list';
         $string['ilp_element_plugin_checkbox_existing_options'] = 'Existing options';
