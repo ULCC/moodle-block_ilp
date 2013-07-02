@@ -224,33 +224,6 @@ class ilp_ajax_table extends ilp_flexible_table {
             } else {
                 // Show this column
                 $this->sess->collapse[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_SHOW]]] = false;
-
-                //save the latest changes to db for later use
-                $user_choice = array();
-                //$my_table = $SESSION->flextable;
-                $data = new stdClass();
-                $data->user_id = $USER->id;
-                $data->element_id = $this->uniqueid;
-
-                foreach($this->sess->collapse as $key=>$value){
-                    if($value == true){
-                        $user_choice[] = $key;
-                    }
-                }
-
-                if($user_choice){
-                    $data->choice = implode(',',$user_choice);
-                }else{
-                    $data->choice = '';
-                }
-
-                $Existing_data = $DB->get_record('block_ilp_user_choice', array('user_id'=>$USER->id, 'element_id'=>$data->element_id));
-                if($Existing_data){
-                    $data->id = $Existing_data->id;
-                    $DB->update_record('block_ilp_user_choice', $data);
-                }else {
-                    $DB->insert_record('block_ilp_user_choice',$data);
-                }
             }
         } else if(!empty($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]) && (isset($this->columns[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]]) ||  $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]] == "collapseall")) {
             $hidecolumn   =   $_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]];
@@ -268,33 +241,34 @@ class ilp_ajax_table extends ilp_flexible_table {
                 if(array_key_exists($_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]], $this->sess->sortby)) {
                     unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]]);
                 }
-                //save the latest changes to db for later use
-                $user_choice = array();
-                //$my_table = $SESSION->flextable;
-                $data = new stdClass();
-                $data->user_id = $USER->id;
-                $data->element_id = $this->uniqueid;
-
-                foreach($this->sess->collapse as $key=>$value){
-                    if($value == true){
-                        $user_choice[] = $key;
-                    }
-                }
-
-                if($user_choice){
-                    $data->choice = implode(',',$user_choice);
-                }else{
-                    $data->choice = '';
-                }
-
-                $Existing_data = $DB->get_record('block_ilp_user_choice', array('user_id'=>$USER->id, 'element_id'=>$data->element_id));
-                if($Existing_data){
-                    $data->id = $Existing_data->id;
-                    $DB->update_record('block_ilp_user_choice', $data);
-                }else {
-                    $DB->insert_record('block_ilp_user_choice',$data);
-                }
             }
+        }
+
+        //save the latest changes to db for later use
+        $user_choice = array();
+        //$my_table = $SESSION->flextable;
+        $data = new stdClass();
+        $data->user_id = $USER->id;
+        $data->element_id = $this->uniqueid;
+
+        foreach($this->sess->collapse as $key=>$value){
+            if($value == true){
+                $user_choice[] = $key;
+            }
+        }
+
+        if($user_choice){
+            $data->choice = implode(',',$user_choice);
+        }else{
+            $data->choice = '';
+        }
+
+        $Existing_data = $DB->get_record('block_ilp_user_choice', array('user_id'=>$USER->id, 'element_id'=>$data->element_id));
+        if($Existing_data){
+            $data->id = $Existing_data->id;
+            $DB->update_record('block_ilp_user_choice', $data);
+        }else {
+            $DB->insert_record('block_ilp_user_choice',$data);
         }
         
         // Now, update the column attributes for collapsed columns
