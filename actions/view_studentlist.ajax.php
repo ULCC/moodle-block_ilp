@@ -44,15 +44,14 @@ $flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist
 
 // set the basic details to dispaly in the table
 $headers = array(
-    get_string('userpicture_studentlist', 'block_ilp'),
+    '',
     get_string('name', 'block_ilp'),
     get_string('status', 'block_ilp')
 );
 
 $columns = array('picture', 'fullname', 'u_status');
 
-$headers[] = '';
-$columns[] = 'view';
+
 $nosorting = array('picture', 'u_status','view');
 $expandcollapse =   array('picture', 'u_status');
 //we need to check if the mis plugin has been setup if it has we will get the attendance and punctuality figures
@@ -231,7 +230,8 @@ if (!empty($studentslist)) {
         $userprofile	=	'view.php' ;
 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
-        $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
+
+        $data['fullname'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
         //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
@@ -247,7 +247,7 @@ if (!empty($studentslist)) {
             $data['u_status'] = $status_item;
         }
 
-        $data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
+        //$data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
 
 		//we will only attempt to get MIS data if an attendace plugin has been selected in the settings page
 
