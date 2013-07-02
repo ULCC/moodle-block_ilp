@@ -46,10 +46,6 @@ class ilp_moodleform extends moodleform {
         if (!$editable){
             $this->_form->hardFreeze();
         }
-        
-        
-        //TODO find a way to emulate moodle 2 functionality in 1.9 and check if file manager 
-        //$this->set_upload_manager(new upload_manager());
 
         $this->definition();
 
