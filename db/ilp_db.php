@@ -76,10 +76,7 @@ class ilp_db {
             $data = ilp_db::decode_htmlchars($data, ENT_QUOTES);
 
             // purify all data (e.g. validate html, remove js and other bad stuff)
-
-            //I have had to remove the purify call as it was causing pages to timeout in 1.9
-            //this should be put back in once the ilp is moodle 2.0 only
-           	$data = purify_html($data);
+            $data = purify_html($data);
 
             // encode the purified string
             $data = trim(preg_replace('/\\\/', '&#92;', htmlentities($data, ENT_QUOTES, 'utf-8', false)));
@@ -157,13 +154,7 @@ class ilp_db_functions	extends ilp_logging {
     function __construct() {
         global $CFG, $DB;
 
-        // if this is empty then we're using Moodle 1.9.x, so we need the 2.0 emulator
-        if(empty($DB)) {
-            require_once($CFG->dirroot.'/blocks/ilp/db/moodle2_emulator.php');
-            $this->dbc = new moodle2_db_emulator();
-        } else {
-            $this->dbc = $DB;
-        }
+        $this->dbc = $DB;
 
         // include the static constants
         require_once($CFG->dirroot.'/blocks/ilp/constants.php');

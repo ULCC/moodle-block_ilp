@@ -13,9 +13,6 @@
  * @version 2.0
  */
 
-
-
-// TODO moodle 2.0 complains that this should be $capabilities
 $capabilities = array(
 
 
