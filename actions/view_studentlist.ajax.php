@@ -230,7 +230,8 @@ if (!empty($studentslist)) {
         $userprofile	=	'view.php' ;
 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
-        $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
+
+        $data['fullname'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
         //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
@@ -246,7 +247,7 @@ if (!empty($studentslist)) {
             $data['u_status'] = $status_item;
         }
 
-        $data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
+        //$data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
 
 		//we will only attempt to get MIS data if an attendace plugin has been selected in the settings page
 
