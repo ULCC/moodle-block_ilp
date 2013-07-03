@@ -100,11 +100,11 @@ class block_ilp extends block_list {
             }
          }
 
-         if($found_currrent_course and $access_viewilp)
+         if($found_current_course and $access_viewilp)
             break;  //Nothing more to be learnt
       }
 
-      $usertutees	=	$dbc->get_user_tutees($USER->id);
+      $usertutees=$dbc->get_user_tutees($USER->id);
 
       $this->content = new stdClass;
       $this->content->footer = '';
