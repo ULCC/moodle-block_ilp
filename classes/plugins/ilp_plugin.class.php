@@ -87,7 +87,6 @@ class ilp_plugin {
 
         $this->dbman = $DB->get_manager();
 
-        // if 2.0 classes are available then use them
         $this->xmldb_table = class_exists('xmldb_table') ? 'xmldb_table' : 'XMLDBTable';
         $this->xmldb_field = class_exists('xmldb_field') ? 'xmldb_field' : 'XMLDBField';
         $this->xmldb_key   = class_exists('xmldb_key')   ? 'xmldb_key'   : 'XMLDBKey';

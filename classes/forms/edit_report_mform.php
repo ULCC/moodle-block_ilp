@@ -85,13 +85,8 @@ class edit_report_mform extends ilp_moodleform {
             $mform->setType('description', PARAM_RAW);
 
             //TODO add the elements to implement the frequency functionlaity
-          if (stripos($CFG->release,"2.") !== false) {
-                $mform->addElement('filepicker', 'binary_icon',get_string('binary_icon', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
-            } else {
-                $this->set_upload_manager(new upload_manager('binary_icon', false, false, 0, false, ILP_MAXFILE_SIZE, true, true, false));
-                $mform->addElement('file', 'binary_icon', get_string('binary_icon', 'block_ilp'));
-            }
 
+            $mform->addElement('filepicker', 'binary_icon',get_string('binary_icon', 'block_ilp'), null, array('maxbytes' => ILP_MAXFILE_SIZE, 'accepted_types' => ILP_ICON_TYPES));
 
 	        $mform->addElement('checkbox', 'maxedit',get_String('maxedit','block_ilp'),null);
 	        
@@ -290,16 +285,7 @@ class edit_report_mform extends ilp_moodleform {
             }
 
 
-			if (empty($data->id)) {
-				
-				if (!empty($data->binary_icon)) {
-					//moodle 1.9 doesnt add slashes so we need to do this
-					if (stripos($CFG->release,"2.") === false) {
-						$data->binary_icon = addslashes($data->binary_icon);
-					}
-				}
-
-
+            if (empty($data->id)) {
 
             	$data->id = $this->dbc->create_report($data);
             	
@@ -352,12 +338,6 @@ class edit_report_mform extends ilp_moodleform {
 				//any data that is currently present from being overwritten
 				if (empty($data->binary_icon)) unset($data->binary_icon); 
 
-				if (!empty($data->binary_icon)) {
-					//moodle 1.9 doesnt add slashes so we need to do this
-					if (stripos($CFG->release,"2.") === false) {
-						$data->binary_icon = addslashes($data->binary_icon);
-					}
-				}
 				
             	$this->dbc->update_report($data);
         	}

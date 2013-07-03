@@ -36,30 +36,20 @@ $report		=	$dbc->get_report_by_id($report_id);
 
 
 if (!empty($report))	{	
-			if (!empty($report->binary_icon)) {
+   if (!empty($report->binary_icon)) {
 				
-				header("Content-Type: image/jpeg");
-				//header("Content-Length: 90000");
-				header("Content-Disposition: attachment; filename=icon.jpeg");				
-                // Print data
+      header("Content-Type: image/jpeg");
+      //header("Content-Length: 90000");
+      header("Content-Disposition: attachment; filename=icon.jpeg");				
+      // Print data
                 
-				//we have to use the raw moodle functions at this point and avoid the extra validation carried out by the sql classes 
-				//as this breaks the export of reports
-				if (stripos($CFG->release,"2.") !== false) {
-					$generic_report	=	$DB->get_record('block_ilp_report',array('id'=>$report_id));
-					
+      //we have to use the raw moodle functions at this point and avoid the extra validation carried out by the sql classes 
+      //as this breaks the export of reports
+      $generic_report	=	$DB->get_record('block_ilp_report',array('id'=>$report_id));
 
-				}
-				else {
-					$generic_report	=	get_record('block_ilp_report','id',$report_id);
-					
-					
-				}
-                echo $generic_report->binary_icon;
-                
-                
-                
+      echo $generic_report->binary_icon;
+
 	            exit;
 	}
-} 
+}
 ?>
