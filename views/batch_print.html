@@ -4,15 +4,13 @@ require_once("$CFG->dirroot/blocks/ilp/classes/forms/batch_print_setup_mform.php
 
 $mform=new batch_print_setup_mform($baseurl,$tutor);
 
-
-
-if($mform->if_cancelled())
+if($mform->is_cancelled())
 {
    redirect($CFG->wwwroot);
 }
-elseif($data=$setup->get_data())
+elseif($data=$mform->get_data())
 {
-   pritn_object($data);
+   print_object($data);
 }
 
 print $OUPUT->header();
