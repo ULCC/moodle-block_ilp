@@ -45,9 +45,6 @@ $displayuserentries  =	$PARSER->optional_param('userentries', 1, PARAM_INT);
 
 $displaynonuserentries  =	$PARSER->optional_param('nonuserentries', 1, PARAM_INT);
 
-
-
-
 // instantiate the db
 $dbc = new ilp_db();
 
@@ -134,11 +131,8 @@ if (!empty($course_id)) {
     $temp->report   =   $report->name;
     $pagetitle	=	get_string('courseentries','block_ilp',$temp);
 
-    if (stripos($CFG->release,"2.") !== false) {
-        $ucourses	=	enrol_get_users_courses($USER->id, false,NULL,'shortname ASC');
-    } else {
-        $ucourses	=	$dbc->get_user_courses($USER->id);
-    }
+    $ucourses	=	enrol_get_users_courses($USER->id, false,NULL,'shortname ASC');
+
     $user_courses	=	array();
 
 

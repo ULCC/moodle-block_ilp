@@ -76,10 +76,7 @@ class ilp_db {
             $data = ilp_db::decode_htmlchars($data, ENT_QUOTES);
 
             // purify all data (e.g. validate html, remove js and other bad stuff)
-
-            //I have had to remove the purify call as it was causing pages to timeout in 1.9
-            //this should be put back in once the ilp is moodle 2.0 only
-           	$data = purify_html($data);
+            $data = purify_html($data);
 
             // encode the purified string
             $data = trim(preg_replace('/\\\/', '&#92;', htmlentities($data, ENT_QUOTES, 'utf-8', false)));
@@ -157,13 +154,7 @@ class ilp_db_functions	extends ilp_logging {
     function __construct() {
         global $CFG, $DB;
 
-        // if this is empty then we're using Moodle 1.9.x, so we need the 2.0 emulator
-        if(empty($DB)) {
-            require_once($CFG->dirroot.'/blocks/ilp/db/moodle2_emulator.php');
-            $this->dbc = new moodle2_db_emulator();
-        } else {
-            $this->dbc = $DB;
-        }
+        $this->dbc = $DB;
 
         // include the static constants
         require_once($CFG->dirroot.'/blocks/ilp/constants.php');
@@ -228,10 +219,7 @@ class ilp_db_functions	extends ilp_logging {
         global $CFG;
 
         // check for the presence of a table to determine which query to run
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-               in_array('block_ilp_plugin',$this->dbc->get_tables())
-            :
-                $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_plugin}'");
+        $tableexists =  in_array('block_ilp_plugin',$this->dbc->get_tables());
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_plugin', array()) : false;
@@ -264,10 +252,7 @@ class ilp_db_functions	extends ilp_logging {
         global $CFG;
 
         // check for the presence of a table to determine which query to run
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_dash_plugin',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_plugin}'");
+        $tableexists =  in_array('block_ilp_dash_plugin',$this->dbc->get_tables());
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_plugin', array()) : false;
@@ -281,10 +266,7 @@ class ilp_db_functions	extends ilp_logging {
     function get_dashboard_tabs() {
         global $CFG;
 
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_dash_tab',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_tab}'");
+        $tableexists = in_array('block_ilp_dash_tab',$this->dbc->get_tables());
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
@@ -298,10 +280,7 @@ class ilp_db_functions	extends ilp_logging {
     function get_dashboard_templates() {
         global $CFG;
 
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_dash_temp',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_temp}'");
+        $tableexists = in_array('block_ilp_dash_temp',$this->dbc->get_tables());
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_temp', array()) : false;
@@ -2216,6 +2195,7 @@ class ilp_db_functions	extends ilp_logging {
         						si.name	as u_status,
         						si.icon	as u_status_icon,
         						si.display_option as u_display_option,
+        						si.bg_colour as bg_colour,
         						si.description	as u_status_description,
         						u.picture as picture,
         						u.imagealt as imagealt,
@@ -2331,11 +2311,7 @@ class ilp_db_functions	extends ilp_logging {
     function get_user_courses($user_id)	{
     	global $CFG;
 
-    	if (stripos($CFG->release,"2.") !== false) {
-    		$courses	=	enrol_get_users_courses($user_id, false,NULL,'fullname DESC');
-    	} else {
-    		$courses	=	get_my_courses($user_id);
-    	}
+        $courses	=	enrol_get_users_courses($user_id, false,NULL,'fullname DESC');
 
     	return $courses;
     }
@@ -2350,10 +2326,7 @@ class ilp_db_functions	extends ilp_logging {
     function get_mis_plugins() 	{
         global $CFG;
 
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_mis_plugin',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_mis_plugin}'");
+        $tableexists =  in_array('block_ilp_mis_plugin',$this->dbc->get_tables());
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_mis_plugin', array()) : false;
@@ -2427,10 +2400,7 @@ class ilp_db_functions	extends ilp_logging {
     function get_tab_plugins() 	{
         global $CFG;
 
-        $tableexists =  (stripos($CFG->release,"2.") !== false) ?
-            in_array('block_ilp_dash_tab',$this->dbc->get_tables())
-            :
-            $this->dbc->get_records_sql("SHOW TABLES LIKE '{block_ilp_dash_tab}'");
+        $tableexists =  in_array('block_ilp_dash_tab',$this->dbc->get_tables());
 
 
 
@@ -2576,23 +2546,17 @@ class ilp_db_functions	extends ilp_logging {
     function save_event($event)	{
 
     	//we can not user add_event in moodle 2.0 as it requires the user to have persmissions to add events to the
-    	//calendar however this capability check can be bypassed if we use the calendar event class so we will use add_event in
-    	//1.9 and calendar_event class in 2.0
+    	//calendar however this capability check can be bypassed if we use the calendar event class
     	global $CFG, $USER;
 
 
-    	if (stripos($CFG->release,"2.") !== false) {
-    	    require_once($CFG->dirroot.'/calendar/lib.php');
-    		$calevent = new calendar_event($event);
-	    	$calevent->update($event,false);
+        require_once($CFG->dirroot.'/calendar/lib.php');
+        $calevent = new calendar_event($event);
+        $calevent->update($event,false);
 
-    		if ($calevent !== false) {
-        		return $calevent->id;
-	    	}
-
-    	} else {
-    		return add_event($event);
-    	}
+        if ($calevent !== false) {
+           return $calevent->id;
+        }
     }
 
     /**
@@ -2602,18 +2566,11 @@ class ilp_db_functions	extends ilp_logging {
      */
     function update_event($event)	{
 
-		global $CFG, $USER;
+       global $CFG, $USER;
 
-    	if (stripos($CFG->release,"2.") !== false) {
-    	    require_once($CFG->dirroot.'/calendar/lib.php');
-    		$calevent = calendar_event::load($event->id);
-	    	return $calevent->update($event,false);
-    	} else {
-    		return update_event($event);
-    	}
-
-
-
+       require_once($CFG->dirroot.'/calendar/lib.php');
+       $calevent = calendar_event::load($event->id);
+       return $calevent->update($event,false);
     }
 
     /**

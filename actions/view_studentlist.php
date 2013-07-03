@@ -104,11 +104,8 @@ if (!empty($course_id)) {
 
    $pagetitle	=	$course->shortname;
 
-   if (stripos($CFG->release,"2.") !== false) {
-      $ucourses	=	enrol_get_users_courses($USER->id, false,NULL,'shortname ASC');
-   } else {
-      $ucourses	=	$dbc->get_user_courses($USER->id);
-   }
+   $ucourses	=	enrol_get_users_courses($USER->id, false,NULL,'shortname ASC');
+
    $user_courses	=	array();
 
 
@@ -119,8 +116,6 @@ if (!empty($course_id)) {
          $user_courses[]	=	$uc;
       }
    }
-
-
 
 } else {
    //get the list of tutees for this user

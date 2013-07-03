@@ -68,7 +68,7 @@ if($mform->is_submitted()) {
 
 //siteadmin or modules
 //we need to determine which moodle we are in and give the correct area name
-$sectionname	=	(stripos($CFG->release,"2.") !== false) ? get_string('administrationsite') : get_string('administration');
+$sectionname	=	get_string('administrationsite');
 
 $pagetitle = get_string( 'edit_status_items', 'block_ilp' );
 $PAGE->navbar->add($sectionname,null,'title');
@@ -76,7 +76,7 @@ $PAGE->navbar->add($sectionname,null,'title');
 
 //plugins or modules
 //we need to determine which moodle we are in and give the correct area name
-$sectionname	=	(stripos($CFG->release,"2.") !== false) ? get_string('plugins','admin') : get_string('managemodules');
+$sectionname	=	get_string('plugins','admin');
 
 $PAGE->navbar->add($sectionname,null,'title');
 

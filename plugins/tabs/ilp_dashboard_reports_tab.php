@@ -97,12 +97,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
          $contextset = false;
 
-         if (stripos($CFG->release,"2.") !== false) {
-            $contextset	= !is_null($PAGE->context);
-         } else {
-            $contextset	=  isset($PAGE->context);
-         }
-
+         $contextset	= !is_null($PAGE->context);
 
          if (!empty($contextset))	{
 
