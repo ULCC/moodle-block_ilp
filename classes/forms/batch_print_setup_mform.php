@@ -43,7 +43,7 @@ class batch_print_setup_mform extends ilp_moodleform
 
          foreach($allcourses as $id=>$c)
          {
-            $courseoptions[$id]=$c->name;
+            $courseoptions[$id]=$c->fullname;
 
             $groups = groups_get_all_groups($id);
             foreach($groups as $g)
@@ -56,11 +56,13 @@ class batch_print_setup_mform extends ilp_moodleform
          asort($courseoptions);
          $mform->addElement('select','course',get_string('course'),$courseoptions);
 
+         if(!empty($groupoptions))
+         {
 //Put the groups in to name order and create drop down
-         asort($groupoptions);
-         $mform->addElement('select','group',get_string('group'),$groupoptions);
+            asort($groupoptions);
+            $mform->addElement('select','group',get_string('group'),$groupoptions);
+         }
       }
-
 
       if(true)
       {
