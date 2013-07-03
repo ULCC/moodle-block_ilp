@@ -1,0 +1,22 @@
+<?php
+
+require_once("$CFG->dirroot/blocks/ilp/classes/forms/batch_print_setup_mform.php");
+
+$mform=new batch_print_setup_mform($baseurl,$tutor);
+
+
+
+if($mform->if_cancelled())
+{
+   redirect($CFG->wwwroot);
+}
+elseif($data=$setup->get_data())
+{
+   pritn_object($data);
+}
+
+print $OUPUT->header();
+
+$mform->display();
+
+print $OUTPUT->footer();
