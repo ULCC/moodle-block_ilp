@@ -59,53 +59,52 @@ class block_ilp extends block_list {
       }
 
       //get all course that the current user is enrolled in
-      $my_courses				=	$dbc->get_user_courses($USER->id);
-      $access_viewilp			=	false;
+      $my_courses		=	$dbc->get_user_courses($USER->id);
+      $access_viewilp		=	false;
       $access_viewotherilp	= 	false;
 
       if (empty($my_courses))	{
-         $c			=	new stdClass();
+         $c		=	new stdClass();
          $c->id		=	$course_id;
          $my_courses	=	array($c);
       }
 
       //we are going to loop through all the courses the user is enrolled in so that we can
       //choose which display they will see
-      $found_current_course = false;
-      foreach($my_courses	as $c) {
 
-         $sitecontext = get_context_instance(CONTEXT_SYSTEM);
+      $found_current_course = false;
+      $sitecontext = get_context_instance(CONTEXT_SYSTEM);
+      $viewall=(has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) or ilp_is_siteadmin($USER));
+      $initial_course_id=0;
+
+      foreach($my_courses as $c) {
          $coursecontext = get_context_instance(CONTEXT_COURSE, $c->id);
          $set_course_groups_link = false;
 
          //we need to get the capabilites of the current user so we can deceide what to display in the block
          if (!empty($coursecontext) && has_capability('block/ilp:viewilp', $coursecontext,$USER->id,false) ) {
             $access_viewilp		=	true;
-            //I have removed the var below as we dont want the my course groups link to contain
-            //the id of a  course which the user is not a teacher in
-            //$set_course_groups_link = true;
          }
 
-         if (!empty($coursecontext) && has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false) || has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) || ilp_is_siteadmin($USER)) {
+         if ($viewall or (!empty($coursecontext) and has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false))) {
             $access_viewotherilp	=	true;
             $set_course_groups_link = true;
          }
 
-         if( $set_course_groups_link ){
-            if( !$found_current_course ){
-               $intial_course_id	=	$c->id;
-               if( $c->id == $current_course_id ){
-                  //current course is part of my_courses, so this should be the preselection for the linked page
-                  //so stop changing the value for the link
-                  $found_current_course = true;
-               }
+         if( $set_course_groups_link and !$found_current_course ){
+            $initial_course_id	=	$c->id;
+            if( $c->id == $current_course_id ){
+               //current course is part of my_courses, so this should be the preselection for the linked page
+               //so stop changing the value for the link
+               $found_current_course = true;
             }
          }
+
+         if($found_currrent_course and $access_viewilp)
+            break;  //Nothing more to be learnt
       }
 
-      //
       $usertutees	=	$dbc->get_user_tutees($USER->id);
-
 
       $this->content = new stdClass;
       $this->content->footer = '';
@@ -115,7 +114,7 @@ class block_ilp extends block_list {
 
          if (!empty($access_viewotherilp)) {
             $label = get_string('mycoursegroups', 'block_ilp');
-            $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$intial_course_id}";
+            $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$initial_course_id}";
             $this->content->items[] = "<a href='{$url}'>{$label}</a>";
             $this->content->icons[] = "";
          }
@@ -127,10 +126,7 @@ class block_ilp extends block_list {
             $this->content->icons[] = "";
          }
 
-
       } else {
-
-
 
          //additional check to stop users from being able to access the ilp in course context
          //from the front page
@@ -142,16 +138,7 @@ class block_ilp extends block_list {
          $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}$courseurl";
          $this->content->items[] = "<p><a href='{$url}'>{$label}</a><p/>";
          $this->content->icons[] = "";
-
-
-
-
-
-
       }
-
-
-
 
       return $this->content;
    }
