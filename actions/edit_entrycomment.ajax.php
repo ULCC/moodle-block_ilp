@@ -101,121 +101,123 @@ if ($mform->is_cancelled()) {
 //was the form submitted?
 // has the form been submitted?
 if($mform->is_submitted()) {
-    // check the validation rules
-    if($mform->is_validated()) {
+    // process the data
+    $formdata = $mform->get_data();
 
-        //get the form data submitted
-        $formdata = $mform->get_data();
+    if (true) {
 
-        // process the data
-        $success = $mform->process_data($formdata);
+        // check the validation rules
+        if($mform->is_validated()) {
 
-        //if saving the data was not successful
-        if(!$success) {
-            //print an error message
-            print_error('commentcreationerror', 'block_ilp');
-        }
+            //get the form data submitted
+            $formdata = $mform->get_data();
 
-        if (!isset($formdata->saveanddisplaybutton)) {
 
-            //notify the user that a comment has been made on one of their report entries
-            if ($USER->id != $entry->user_id)   {
-                $reportsviewtab             =   $dbc->get_tab_plugin_by_name('ilp_dashboard_reports_tab');
-                $reportstaburl              =   (!empty($reportsviewtab)) ?  "&selectedtab={$reportsviewtab->id}&tabitem={$reportsviewtab->id}:{$report->id}" : "";
+            $success = $mform->process_data($formdata);
 
-                $message                    =   new stdClass();
-                $message->component         =   'block_ilp';
-                $message->name              =   'ilp_comment';
-                $message->subject           =   get_string('newreportcomment','block_ilp',$report);;
-                $message->userfrom          =   $dbc->get_user_by_id($USER->id);
-                $message->userto            =   $dbc->get_user_by_id($entry->user_id);
-                $message->fullmessage       =   get_string('newreportcomment','block_ilp',$report);
-                $message->fullmessageformat =   FORMAT_PLAIN;
-                $message->contexturl        =   $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$entry->user_id}&course_id={$course_id}{$reportstaburl}";
-                $message->contexturlname    =   get_string('viewreport','block_ilp');
-
-                if (stripos($CFG->release,"2.") !== false) {
-                    message_send($message);
-                }   else {
-                    require_once($CFG->dirroot.'/message/lib.php');
-                    message_post_message($message->userfrom, $message->userto,$message->fullmessage,$message->fullmessageformat,'direct');
-                }
+            //if saving the data was not successful
+            if(!$success) {
+                //print an error message
+                print_error('commentcreationerror', 'block_ilp');
             }
 
-            $return_url = $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&selectedtab={$selectedtab}&tabitem={$tabitem}&course_id={$course_id}";
-            redirect($return_url, get_string("commentcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
+            if (!isset($formdata->saveanddisplaybutton)) {
+
+                //notify the user that a comment has been made on one of their report entries
+                if ($USER->id != $entry->user_id)   {
+                    $reportsviewtab             =   $dbc->get_tab_plugin_by_name('ilp_dashboard_reports_tab');
+                    $reportstaburl              =   (!empty($reportsviewtab)) ?  "&selectedtab={$reportsviewtab->id}&tabitem={$reportsviewtab->id}:{$report->id}" : "";
+
+                    $message                    =   new stdClass();
+                    $message->component         =   'block_ilp';
+                    $message->name              =   'ilp_comment';
+                    $message->subject           =   get_string('newreportcomment','block_ilp',$report);;
+                    $message->userfrom          =   $dbc->get_user_by_id($USER->id);
+                    $message->userto            =   $dbc->get_user_by_id($entry->user_id);
+                    $message->fullmessage       =   get_string('newreportcomment','block_ilp',$report);
+                    $message->fullmessageformat =   FORMAT_PLAIN;
+                    $message->contexturl        =   $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$entry->user_id}&course_id={$course_id}{$reportstaburl}";
+                    $message->contexturlname    =   get_string('viewreport','block_ilp');
+
+                    if (stripos($CFG->release,"2.") !== false) {
+                        message_send($message);
+                    }   else {
+                        require_once($CFG->dirroot.'/message/lib.php');
+                        message_post_message($message->userfrom, $message->userto,$message->fullmessage,$message->fullmessageformat,'direct');
+                    }
+                }
+            }
         }
     }
-}
+} else {
+    $plpuser	=	$dbc->get_user_by_id($user_id);
 
 
-$plpuser	=	$dbc->get_user_by_id($user_id);
+    $dashboardurl	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&course_id={$course_id}";
 
+    $userprofileurl	=	(stripos($CFG->release,"2.") === false) ? $CFG->wwwroot."/user/view.php?id={$user_id}" : $CFG->wwwroot."/user/profile.php?id={$user_id}";
 
-$dashboardurl	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&course_id={$course_id}";
+    if ($user_id != $USER->id) {
+        if (!empty($access_viewotherilp) && !empty($course_id)) {
+            $listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$course_id}";
+        } else {
+            $listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
+        }
 
-$userprofileurl	=	(stripos($CFG->release,"2.") === false) ? $CFG->wwwroot."/user/view.php?id={$user_id}" : $CFG->wwwroot."/user/profile.php?id={$user_id}";
-
-if ($user_id != $USER->id) {
-    if (!empty($access_viewotherilp) && !empty($course_id)) {
-        $listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$course_id}";
+        $PAGE->navbar->add(get_string('ilps', 'block_ilp'),$listurl,'title');
+        $PAGE->navbar->add(get_string('ilpname', 'block_ilp'),$dashboardurl,'title');
     } else {
-        $listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
+        $PAGE->navbar->add(get_string('myilp', 'block_ilp'),$dashboardurl,'title');
     }
 
-    $PAGE->navbar->add(get_string('ilps', 'block_ilp'),$listurl,'title');
-    $PAGE->navbar->add(get_string('ilpname', 'block_ilp'),$dashboardurl,'title');
-} else {
-    $PAGE->navbar->add(get_string('myilp', 'block_ilp'),$dashboardurl,'title');
+    //user intials
+    $PAGE->navbar->add(fullname($plpuser),$userprofileurl,'title');
+
+
+
+
+    //section name
+    $PAGE->navbar->add(get_string('dashboard','block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&selectedtab={$selectedtab}&tabitem={$tabitem}",'title');
+
+    //user intials
+    $PAGE->navbar->add($report->name,null,'title');
+
+
+    $title	=	(empty($comment_id))?	get_string('addcomment','block_ilp')	:	get_string('editcomment','block_ilp');
+
+    // setup the page specific variables
+    // setup the page title and heading
+    $SITE	=	$dbc->get_course_by_id(SITEID);
+    $PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp')." : ".fullname($plpuser));
+    $PAGE->set_heading($SITE->fullname);
+    $PAGE->set_pagetype('ilp-entry');
+    //$PAGE->set_pagelayout('ilp');
+    $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php",$PARSER->get_params());
+    //section name
+    $PAGE->navbar->add($title);
+
+    ob_start();
+    $mform->display();
+    $formhtml = ob_get_clean();
+
+    // AJAX Includes for normal mform Javascript code
+    // ... First we get the script generated by the Form API
+    if (strpos($formhtml, '</script>') !== false) {
+        $outputparts = explode('</script>', $formhtml);
+        $html = $outputparts[1];
+        $script = str_replace('<script type="text/javascript">', '', $outputparts[0]);
+    } else {
+        $html = $formhtml;
+    }
+    // Next we get the M.yui.loader call which includes the Javascript libraries
+    $headcode = $PAGE->requires->get_head_code($PAGE, $OUTPUT);
+    $loadpos = strpos($headcode, 'M.yui.loader');
+    $cfgpos = strpos($headcode, 'M.cfg');
+
+    $script .= substr($headcode, $loadpos, $cfgpos-$loadpos);
+    // And finally the initalisation calls for those libraries
+    $endcode = $PAGE->requires->get_end_code();
+    $script .= preg_replace('/<\/?(script|link)[^>]*>/', '', $endcode);
+
+    echo json_encode(array('html' => $formhtml, 'script' => $script));
 }
-
-//user intials
-$PAGE->navbar->add(fullname($plpuser),$userprofileurl,'title');
-
-
-
-
-//section name
-$PAGE->navbar->add(get_string('dashboard','block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$user_id}&selectedtab={$selectedtab}&tabitem={$tabitem}",'title');
-
-//user intials
-$PAGE->navbar->add($report->name,null,'title');
-
-
-$title	=	(empty($comment_id))?	get_string('addcomment','block_ilp')	:	get_string('editcomment','block_ilp');
-
-// setup the page specific variables
-// setup the page title and heading
-$SITE	=	$dbc->get_course_by_id(SITEID);
-$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp')." : ".fullname($plpuser));
-$PAGE->set_heading($SITE->fullname);
-$PAGE->set_pagetype('ilp-entry');
-//$PAGE->set_pagelayout('ilp');
-$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php",$PARSER->get_params());
-//section name
-$PAGE->navbar->add($title);
-
-ob_start();
-$mform->display();
-$formhtml = ob_get_clean();
-
-// AJAX Includes for normal mform Javascript code
-// ... First we get the script generated by the Form API
-if (strpos($formhtml, '</script>') !== false) {
-    $outputparts = explode('</script>', $formhtml);
-    $html = $outputparts[1];
-    $script = str_replace('<script type="text/javascript">', '', $outputparts[0]);
-} else {
-    $html = $formhtml;
-}
-// Next we get the M.yui.loader call which includes the Javascript libraries
-$headcode = $PAGE->requires->get_head_code($PAGE, $OUTPUT);
-$loadpos = strpos($headcode, 'M.yui.loader');
-$cfgpos = strpos($headcode, 'M.cfg');
-
-$script .= substr($headcode, $loadpos, $cfgpos-$loadpos);
-// And finally the initalisation calls for those libraries
-$endcode = $PAGE->requires->get_end_code();
-$script .= preg_replace('/<\/?(script|link)[^>]*>/', '', $endcode);
-
-echo json_encode(array('html' => $formhtml, 'script' => $script));

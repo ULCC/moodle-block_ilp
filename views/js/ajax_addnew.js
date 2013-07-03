@@ -35,7 +35,7 @@ M.ilp_ajax_addnew = {
                             YUI().use('event', function (Y) {
                                 Y.one('#mform1').on('submit', function (e) {
                                     // Whatever else you want to do goes here
-                                    M.ilp_ajax_addnew.submit_form(e, this.node);
+                                    M.ilp_ajax_addnew.submit_form(e, this._node, formarea);
                                 });
                             });
                         }
@@ -47,22 +47,27 @@ M.ilp_ajax_addnew = {
         });
         /**/
     },
-    submit_form: function(e, mform) {
+    submit_form: function(e, mform, formarea) {
         var Y = this.Y;
 
         // Stop the form submitting normally
         e.preventDefault();
 
+        // Form serialisation works best if we get the form using getElementById, for some reason
+        var form = Y.one('#mform1')._node;
+        var formwrapper =new Object();
+        formwrapper.id = 'mform1';
+
         // Send the request
-        Y.io(this.root + '/blocks/ilp/actions/edit_entrycomment.ajax.php', {
+        Y.io(this.root + '/blocks/ilp/actions/edit_entrycomment.ajax.php?entry_id=4&report_id=1&user_id=202&selectedtab=7&tabitem=7&courseid=3&process=1', {
             method: "POST",
             on: {
                 success: function(id, o) {
-                    response = Y.JSON.parse(o.responseText);
-                    // Display some feedback to the user
+                    console.log(o);
+                    formarea.setHTML("");
                 }
             },
-            form: mform,
+            form: formwrapper,
             context: this
         });
 
