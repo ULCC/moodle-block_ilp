@@ -600,7 +600,7 @@
 .ilp   .float-right {
     float:  right;
 }
-/* for tooltip*/
+/* for tooltip, applied to element <a>*/
 a.tooltip {
     outline:none;
 }
@@ -636,6 +636,64 @@ a.tooltip:hover span{
 
 /*CSS3 extras*/
 a.tooltip span
+{
+    border-radius:4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+
+    -moz-box-shadow: 5px 5px 8px #CCC;
+    -webkit-box-shadow: 5px 5px 8px #CCC;
+    box-shadow: 5px 5px 8px #CCC;
+}
+/* tooltip finished */
+
+
+.ilp_user_status {
+    width: 60px;
+    height: 55px;
+    padding: 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* for tooltip, applied to element tooltip */
+tooltip.tooltip {
+    outline:none;
+}
+tooltip.tooltip strong {
+    line-height:30px;
+}
+tooltip.tooltip:hover {
+    text-decoration:none;
+}
+tooltip.tooltip span {
+    z-index:10;
+    display:none;
+    padding:10px 10px;
+    margin-left:22px;
+    line-height:16px;
+    font-size: 12px;
+    font-weight: normal;
+}
+tooltip.tooltip:hover span{
+    display:inline;
+    position:absolute;
+    color:#111;
+    border:1px solid #DCA;
+    background:#fffAF0;
+}
+tooltip.callout {
+    border: 0 none;
+    height: 15px;
+    left: -12px;
+    position: absolute;
+    top: 7px;
+    width: 12px;
+    z-index: 20;
+}
+
+/*CSS3 extras*/
+tooltip.tooltip span
 {
     border-radius:4px;
     -moz-border-radius: 4px;
