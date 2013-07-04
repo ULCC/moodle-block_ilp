@@ -62,7 +62,7 @@ $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot.
 //get string for create report
 $PAGE->navbar->add(get_string('reportfields', 'block_ilp'),null,'title');
 
-$pagetitle	=	(!empty($reportfield_id)) ? get_string('editfield','block_ilp') : get_string('addfield','block_ilp');
+$pagetitle	=	get_string('addfield','block_ilp');
 
 //get string for page
 $PAGE->navbar->add($pagetitle,null,'title');
