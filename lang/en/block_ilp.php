@@ -23,7 +23,7 @@
 	$string['apply'] 				= 	'Apply';
 	$string['applyfilter'] 				= 	'Apply Filter';
 	$string['attendance']			= 	'Attendance';
-	
+$string['showattendance']='Attendance Information';
 	$string['attendaceplugin']		= 	'Attendance Plugin';
 	$string['attendaceplugindesc']	= 	'The attendance plugin that will called to get attendance data in various areas of the ilp (the plugin must be enabled to appear in this list)';
     $string['attachedgraphs']		= 	'Attached Graphs';
@@ -244,6 +244,7 @@ $string['noreports']='No reports available';
     $string['preferencecreationsuc'] 		= 	'Preference created';
     $string['previousstudent'] 		= 	'Prev student';
 	$string['punctuality']			= 	'Punctuality';
+$string['showpunctuality']='Punctuality Information'
     $string['removefield']			= 	'Remove 1 field';
     $string['removesel']			= 	'Remove selected';
 	$string['removeall']			= 	'Remove all';
