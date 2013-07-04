@@ -34,10 +34,8 @@ class batch_print_setup_mform extends ilp_moodleform
       $mform=&$this->_form;
 
 //get all enabled reports in this ilp
-      $reports = $dbc->get_reports(ILP_ENABLED);
-
       $reportoptions=array();
-      foreach($reports as $r)
+      foreach($dbc->get_reports(ILP_ENABLED) as $r)
       {
          $reportoptions[$r->id]=$r->name;
       }
@@ -53,14 +51,11 @@ class batch_print_setup_mform extends ilp_moodleform
 
          $courseoptions=$groupoptions=array();
 
-         $allcourses = $dbc->get_user_courses($USER->id);
-
-         foreach($allcourses as $id=>$c)
+         foreach($dbc->get_user_courses($USER->id) as $id=>$c)
          {
             $courseoptions[$id]=$c->fullname;
 
-            $groups = groups_get_all_groups($id);
-            foreach($groups as $g)
+            foreach(groups_get_all_groups($id) as $g)
             {
                $groupoptions[$g->id]=$g->name;
             }
