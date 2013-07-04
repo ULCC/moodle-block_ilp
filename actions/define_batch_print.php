@@ -46,9 +46,7 @@ if (empty($access_viewotherilp)  && !empty($course_id)) {
 // setup the navigation breadcrumbs
 
 //add the page title
-$PAGE->navbar->add(get_string('print'),"{$CFG->wwwroot}/blocks/ilp/actions/define_batch_print.php",'title');
-
-$title = get_string('print');
+$title = get_string('print','block_ilp');
 
 //block name
 $PAGE->navbar->add($title,null,'title');
