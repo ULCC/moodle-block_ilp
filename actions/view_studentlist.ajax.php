@@ -178,10 +178,22 @@ $defaultstatusitem = $dbc->get_status_item_by_id($defaultstatusitem_id);
 if(!empty($defaultstatusitem)){
     if($defaultstatusitem->display_option == 'icon'){
         $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$defaultstatusitem->id&f=",$defaultstatusitem->icon);
-        $this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
-        $status_item = $this_file;
+        //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+        $this_file = "<tooltip class='tooltip'>
+                                    <img src=\"$path\" alt=\"$defaultstatusitem->description\"  width='50px'/>
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+        $this_file .= html_entity_decode($defaultstatusitem->description);
+        $this_file .="</span></tooltip>";
+        $status_item = '<div align="center" style="background: '. $defaultstatusitem->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
     }else{
-        $status_item = $defaultstatusitem->name;
+        $this_file = "<tooltip class='tooltip'>
+                                    $defaultstatusitem->name
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+        $this_file .= html_entity_decode($defaultstatusitem->description);
+        $this_file .="</span></tooltip>";
+        $status_item = '<div align="center" style="background: '. $defaultstatusitem->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
     }
 }else {
     $status_item = get_string('unknown', 'block_ilp');
@@ -238,10 +250,22 @@ if (!empty($studentslist)) {
         if(!empty($student->u_status)){
             if($student->u_display_option == 'icon'){
                 $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$student->u_status_id&f=",$student->u_status_icon);
-                $this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
-                $data['u_status'] = $this_file;
+                //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+                $this_file = "<tooltip class='tooltip'>
+                                    <img src=\"$path\" alt=\"$student->u_status_description\"  width='50px'/>
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+                $this_file .= html_entity_decode($student->u_status_description);
+                $this_file .="</span></tooltip>";
+                $data['u_status'] = '<div align="center" style="background: '. $student->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
             }else {
-                $data['u_status'] = $student->u_status;
+                $this_file = "<tooltip class='tooltip'>";
+                $this_file .= $student->u_status;
+                $this_file .="<span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+                $this_file .= html_entity_decode($student->u_status_description);
+                $this_file .="</span></tooltip>";
+                $data['u_status'] = '<div align="center" style="background: '. $student->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
             }
         }else {
             $data['u_status'] = $status_item;
