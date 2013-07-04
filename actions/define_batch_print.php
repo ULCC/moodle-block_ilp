@@ -52,7 +52,7 @@ elseif($data=$mform->get_data())
    }
 
    print_object($data);
-   include("$CFG->dirroor/blocks/ilp/views/print_preview.php");
+   include("$CFG->dirroot/blocks/ilp/views/print_preview.php");
    exit;
 }
 
