@@ -59,3 +59,30 @@ foreach ($ucourses as $uc)
       $user_courses[]=$uc;
    }
 }
+
+// setup the navigation breadcrumbs
+if (!empty($course_id)) {
+   $listurl="{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$course_id}";
+} else {
+   $listurl="{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
+}
+
+//add the page title
+$PAGE->navbar->add(get_string('ilps','block_ilp'),$listurl,'title');
+
+//add the page title
+$title = get_string('print','block_ilp');
+
+//block name
+$PAGE->navbar->add($title,null,'title');
+
+// setup the page title and heading
+
+$SITE = $dbc->get_course_by_id(SITEID);
+$PAGE->set_title($SITE->fullname." : ".get_string('blockname','block_ilp'));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagetype('ilp-reportlist');
+$PAGE->set_pagelayout('embedded');
+$PAGE->set_url($baseurl);
+
+print "!!!";
