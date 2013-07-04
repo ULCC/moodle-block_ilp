@@ -71,7 +71,7 @@ if (isset($tutor)) {
 	<input id='coursesubmit' type='submit' value='<?php echo get_string('applyfilter','block_ilp');?>'>
 	</form>
 
-<div class="entry_floatright"><a href='<?php echo "$CFG->wwwroot/blocks/ilp/actions/define_batch_print.php"; ?>'><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
+<div class="entry_floatright"><a href='<?php echo "$CFG->wwwroot/blocks/ilp/actions/define_batch_print.php?course_id=$course_id&tutor=$tutor&status_id=$status_id&group_id=$group_id"; ?>'><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
 <div class='clearer'></div>
 	<div class="centable" id='student_list<?php echo "course_id{$course_id}tutor{$tutor}status_id{$status_id}_container"; ?>'>
 	<?php

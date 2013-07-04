@@ -33,6 +33,8 @@ class batch_print_setup_mform extends ilp_moodleform
 
       $mform=&$this->_form;
 
+      $imports=$this->_customdata;
+
 //get all enabled reports in this ilp
       $reportoptions=array();
       foreach($dbc->get_reports(ILP_ENABLED) as $r)
@@ -63,13 +65,15 @@ class batch_print_setup_mform extends ilp_moodleform
 
 //Sort courses by name and create drop down.
          asort($courseoptions);
-         $mform->addElement('select','course',get_string('course'),$courseoptions);
+         $mform->addElement('select','course_id',get_string('course'),$courseoptions);
+         $mform->setDefault('course_id',$imports['course_id']);
 
          if(!empty($groupoptions))
          {
 //Put the groups in to name order and create drop down
             asort($groupoptions);
-            $mform->addElement('select','group',get_string('group'),$groupoptions);
+            $mform->addElement('select','group_id',get_string('group'),$groupoptions);
+            $mform->setDefault('group_id',$imports['group_id']);
          }
       }
 
@@ -92,7 +96,8 @@ class batch_print_setup_mform extends ilp_moodleform
 
       if(!empty($status))
       {
-         $mform->addElement('select','userstatus',get_string('status','block_ilp'),$status);
+         $mform->addElement('select','status_id',get_string('status','block_ilp'),$status);
+         $mform->setDefault('status_id',$imports['status_id']);
       }
 
       asort($reportoptions);
