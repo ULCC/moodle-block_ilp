@@ -67,13 +67,13 @@ class ilp_ajax_table extends ilp_flexible_table {
      * @todo Document properly
      */
     function __construct($uniqueid, $displayperpage=true) {
-        global $CFG, $SESSION;
+        global $CFG, $SESSION, $DB, $USER;
 
 
         $this->uniqueid = $uniqueid;
         $this->displayperpage = $displayperpage;
         $hozsize = get_config('block_ilp', 'defaulthozsize');
-        $pagesize = get_config('block_ilp', 'defaultverticalperpage');
+        $this->pagesize = get_config('block_ilp', 'display');
         $this->request = array(
             ILP_TABLE_VAR_SORT      => 'tsort',
             ILP_TABLE_VAR_HIDE      => 'thide',
@@ -93,7 +93,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         if (!isset($SESSION->flextable)) {
             $SESSION->flextable = array();
         }
-
+        // if session is not set for the flex table, then need to set.
         if(!isset($SESSION->flextable[$this->uniqueid])) {
             $SESSION->flextable[$this->uniqueid] = new stdClass;
             $SESSION->flextable[$this->uniqueid]->uniqueid = $this->uniqueid;
@@ -105,6 +105,15 @@ class ilp_ajax_table extends ilp_flexible_table {
             $SESSION->flextable[$this->uniqueid]->currpage = $this->currpage;
             $SESSION->flextable[$this->uniqueid]->currhoz  = $this->currhoz;
             $SESSION->flextable[$this->uniqueid]->filters  = $this->filters;
+            // now let's load the hidden column info from db
+            $Existing_data = $DB->get_record('block_ilp_user_choice', array('user_id'=>$USER->id, 'element_id'=>$uniqueid));
+            if($Existing_data){
+                //load them
+                $user_choice = explode(',',$Existing_data->choice);
+                foreach($user_choice as $choice){
+                    $SESSION->flextable[$this->uniqueid]->collapse[$choice] = true;
+                }
+            }
         }
 
         
@@ -198,7 +207,7 @@ class ilp_ajax_table extends ilp_flexible_table {
      * @return type?
      */
     function setup() {
-        global $SESSION, $CFG;
+        global $SESSION, $CFG, $DB, $USER;
 
         if(empty($this->columns) || empty($this->uniqueid)) {
             return false;
@@ -233,6 +242,33 @@ class ilp_ajax_table extends ilp_flexible_table {
                     unset($this->sess->sortby[$_GET[$this->uniqueid][$this->request[ILP_TABLE_VAR_HIDE]]]);
                 }
             }
+        }
+
+        //save the latest changes to db for later use
+        $user_choice = array();
+        //$my_table = $SESSION->flextable;
+        $data = new stdClass();
+        $data->user_id = $USER->id;
+        $data->element_id = $this->uniqueid;
+
+        foreach($this->sess->collapse as $key=>$value){
+            if($value == true){
+                $user_choice[] = $key;
+            }
+        }
+
+        if($user_choice){
+            $data->choice = implode(',',$user_choice);
+        }else{
+            $data->choice = '';
+        }
+
+        $Existing_data = $DB->get_record('block_ilp_user_choice', array('user_id'=>$USER->id, 'element_id'=>$data->element_id));
+        if($Existing_data){
+            $data->id = $Existing_data->id;
+            $DB->update_record('block_ilp_user_choice', $data);
+        }else {
+            $DB->insert_record('block_ilp_user_choice',$data);
         }
         
         // Now, update the column attributes for collapsed columns

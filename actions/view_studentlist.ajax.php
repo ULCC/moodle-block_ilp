@@ -44,15 +44,14 @@ $flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentlist
 
 // set the basic details to dispaly in the table
 $headers = array(
-    get_string('userpicture_studentlist', 'block_ilp'),
+    '',
     get_string('name', 'block_ilp'),
     get_string('status', 'block_ilp')
 );
 
 $columns = array('picture', 'fullname', 'u_status');
 
-$headers[] = '';
-$columns[] = 'view';
+
 $nosorting = array('picture', 'u_status','view');
 $expandcollapse =   array('picture', 'u_status');
 //we need to check if the mis plugin has been setup if it has we will get the attendance and punctuality figures
@@ -179,10 +178,22 @@ $defaultstatusitem = $dbc->get_status_item_by_id($defaultstatusitem_id);
 if(!empty($defaultstatusitem)){
     if($defaultstatusitem->display_option == 'icon'){
         $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$defaultstatusitem->id&f=",$defaultstatusitem->icon);
-        $this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
-        $status_item = $this_file;
+        //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+        $this_file = "<tooltip class='tooltip'>
+                                    <img src=\"$path\" alt=\"$defaultstatusitem->description\"  width='50px'/>
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+        $this_file .= html_entity_decode($defaultstatusitem->description);
+        $this_file .="</span></tooltip>";
+        $status_item = '<div align="center" style="background: '. $defaultstatusitem->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
     }else{
-        $status_item = $defaultstatusitem->name;
+        $this_file = "<tooltip class='tooltip'>
+                                    $defaultstatusitem->name
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+        $this_file .= html_entity_decode($defaultstatusitem->description);
+        $this_file .="</span></tooltip>";
+        $status_item = '<div align="center" style="background: '. $defaultstatusitem->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
     }
 }else {
     $status_item = get_string('unknown', 'block_ilp');
@@ -231,23 +242,36 @@ if (!empty($studentslist)) {
         $userprofile	=	'view.php' ;
 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
-        $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
+
+        $data['fullname'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' class=\"userlink\">" . fullname($student) . "</a>";
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
         //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
         if(!empty($student->u_status)){
             if($student->u_display_option == 'icon'){
                 $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$student->u_status_id&f=",$student->u_status_icon);
-                $this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
-                $data['u_status'] = $this_file;
+                //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+                $this_file = "<tooltip class='tooltip'>
+                                    <img src=\"$path\" alt=\"$student->u_status_description\"  width='50px'/>
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+                $this_file .= html_entity_decode($student->u_status_description);
+                $this_file .="</span></tooltip>";
+                $data['u_status'] = '<div align="center" style="background: '. $student->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
             }else {
-                $data['u_status'] = $student->u_status;
+                $this_file = "<tooltip class='tooltip'>";
+                $this_file .= $student->u_status;
+                $this_file .="<span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+                $this_file .= html_entity_decode($student->u_status_description);
+                $this_file .="</span></tooltip>";
+                $data['u_status'] = '<div align="center" style="background: '. $student->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
             }
         }else {
             $data['u_status'] = $status_item;
         }
 
-        $data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
+        //$data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewplp', 'block_ilp') . "</a>";
 
 		//we will only attempt to get MIS data if an attendace plugin has been selected in the settings page
 
