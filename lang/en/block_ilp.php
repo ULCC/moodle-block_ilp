@@ -138,6 +138,9 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
+
+$string['gotoprintpreview']='Generate';
+
     $string['graph_pluginsettings']	= 	'Graph Plugin Settings';
     $string['graphcreationsuc'] 	= 	'Graph successfully created';
     $string['graphcreationerror'] 	= 	'Error whilst creating graph';
