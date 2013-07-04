@@ -2186,18 +2186,28 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false)
     {
-       $data=$this->get_studentlist($student_ids,$status_id, $includenull,
-                                    $flextable->get_sql_where(), $flextable->get_sql_sort(),
-                                    $flextable->get_page_start(), $flextable->get_page_size()
-          );
+       $data=array();
+       $count=0;
+       $start=$flextable->get_page_start();
+       $end=$flextable->get_page_size()+$start;
+
+       foreach($this->get_studentlist($student_ids,$status_id, $includenull,
+                                      $flextable->get_sql_where(), $flextable->get_sql_sort())
+               as $item)
+       {
+          if(++$count>=$start and $count<$end)
+          {
+             $data[$item->id]=$item;
+          }
+       }
 
        // tell the table how many pages it needs
-       $flextable->totalrows(count($data));
+       $flextable->totalrows($count);
 
        return $data;
     }
 
-    function get_studentlist($student_ids,$status_id, $includenull=false,$sql_where='',$sql_sort='',$from=0,$size=1e9)
+    function get_studentlist($student_ids,$status_id, $includenull=false,$sql_where='',$sql_sort='')
     {
         global $CFG, $DB;
         $select = "SELECT 		u.id as id,
@@ -2252,7 +2262,7 @@ class ilp_db_functions	extends ilp_logging {
             $sort = ' ORDER BY '.$sql_sort;
         }
 
-        return $this->dbc->get_records_sql($select.$from.$where.$sort,null,$from,$size);
+        return $this->dbc->get_records_sql($select.$from.$where.$sort,null);
     }
 
     /**
