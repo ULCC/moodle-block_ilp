@@ -43,7 +43,7 @@ class batch_print_setup_mform extends ilp_moodleform
          print $reportoptions[$r->id]=$r->name;
       }
 
-      if(empty($reportsoptions))
+      if(empty($reportoptions))
       {
          print_error(get_string('noreports','block_ilp'));
       }
