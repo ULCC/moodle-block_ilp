@@ -11,6 +11,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    public 		$selectedtab;
    public		$role_ids;
    public 		$capability;
+   static       $access_report_editcomment;
+   static       $access_report_deletecomment;
 
 
    function __construct($student_id=null,$course_id=null)	{
@@ -36,6 +38,54 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
 
+    public function get_loader_icon($container_classes, $eltype = 'div') {
+        global $CFG;
+        $src = $CFG->wwwroot . '/blocks/ilp/pix/loading.gif';
+        $loadericon = html_writer::tag('img', '', array('class'=>'ajaxloadicon hiddenelement', 'src'=>$src));
+        return html_writer::tag($eltype, $loadericon, array('class'=>$container_classes));
+    }
+
+    public function generate_comments($comments, $ajax, $url_params, $entry_id = null, $access = array()) {
+        global $OUTPUT, $USER, $CFG;
+        $o  = '';
+
+        if ($ajax) {
+            $comments =	$this->dbc->get_entry_comments($entry_id);
+            $access = array('access_report_editcomment' => self::$access_report_editcomment,'access_report_deletecomment'=>self::$access_report_deletecomment);
+        }
+
+        if ($comments) {
+            foreach ($comments as $c) {
+                $comment_creator = $this->dbc->get_user_by_id($c->creator_id);
+                $commentval	= html_entity_decode($c->value);
+                $o .= html_writer::start_tag('div', array('class'=>'comment', 'id'=>'comment-id-' . $c->id));
+                $o .= html_writer::tag('p', $commentval);
+                $o .= html_writer::tag('div','', array('class'=>'editarea editarea-' . $c->id));
+                $o .= html_writer::start_tag('div', array('class'=>'info'));
+                $o .= get_string('creator','block_ilp') . ": " . fullname($comment_creator) . ' | ';
+                $o .= get_string('date') . ": " . userdate($c->timemodified, get_string('strftimedate')) . ' | ';
+                if ($c->creator_id == $USER->id && !empty($access['access_report_editcomment'])) {
+                    $edit_link = $CFG->wwwroot . '/blocks/ilp/actions/edit_entrycomment.ajax.php?' . $url_params . '&comment_id=' . $c->id;
+                    $edit_link_content = get_string('edit') . html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/i/edit"), 'alt'=>get_string('edit')));
+                    //$o .= html_writer::link($edit_link, $edit_link_content, array('class'=>'edit-comment-ajax', 'id'=>'edit-comment-ajax-' . $c->id));
+                    $o .= html_writer::tag('span', $edit_link_content,
+                        array('class'=>'edit-comment-ajax', 'id'=>'edit-comment-ajax-' . $c->id, 'data-link'=>$edit_link, 'data-entry'=>$entry_id));
+                    $o .= $this->get_loader_icon('editcomment-loader-icon-' . $c->id, 'span');
+                }
+                if (!empty($access['access_report_deletecomment'])) {
+                    $delete_link = $CFG->wwwroot . '/blocks/ilp/actions/delete_reportcomment.ajax.php?' . $url_params . '&comment_id=' . $c->id;
+                    $delete_link_content = get_string('delete') . html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/t/delete"), 'alt'=>get_string('delete')));
+                    $o .= html_writer::tag('span', $delete_link_content,
+                        array('class'=>'delete-comment-ajax', 'id'=>'delete-comment-ajax-' . $c->id, 'data-link'=>$delete_link, 'data-entry'=>$entry_id));
+                    $o .= $this->get_loader_icon('deletecomment-loader-icon-' . $c->id, 'span');
+                }
+                $o .= html_writer::end_tag('div');
+                $o .= html_writer::end_tag('div');
+            }
+        }
+
+        return $o;
+    }
    /**
     * Return the text to be displayed on the tab
     */
@@ -163,6 +213,119 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       return "<h2>{$icon}{$headertext}</h2></div>";
    }
 
+    /**
+     * Returns the content to be displayed
+     *
+     * @param	string $selectedtab the tab that has been selected this variable
+     * this variable should be used to determined what to display
+     *
+     * @return none
+     */
+    function get_capabilites($selectedtab=null)	{
+        global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+
+        if ($this->dbc->get_user_by_id($this->student_id)) {
+
+            //get the selecttab param if has been set
+            $this->selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
+
+            //get the tabitem param if has been set
+            $this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_CLEAN);
+
+            $displaysummary     =	$PARSER->optional_param('summary', 0, PARAM_INT);
+
+            //start buffering output
+            ob_start();
+
+            //split the selected tab id on up 3 ':'
+            $seltab	=	explode(':',$selectedtab);
+
+            //if the seltab is empty then the highest level tab has been selected
+            if (empty($seltab))	$seltab	=	array($selectedtab);
+
+            $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
+            $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
+
+            if ($report	=	$this->dbc->get_report_by_id($report_id)) {
+
+                //get all of the users roles in the current context and save the id of the roles into
+                //an array
+                $role_ids	=	 array();
+
+                $authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
+                if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
+
+                if ($roles = get_user_roles($PAGE->context, $USER->id)) {
+                    foreach ($roles as $role) {
+                        $role_ids[]	= $role->roleid;
+                    }
+                }
+
+                $access_report_viewreports	= false;
+                $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
+                if (!empty($capability)) $access_report_viewreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+
+                if ($report->status == ILP_ENABLED && !empty($access_report_viewreports)) {
+                    $reportname	=	$report->name;
+                    //get all of the fields in the current report, they will be returned in order as
+                    //no position has been specified
+                    $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+
+                    $reporticon	= (!empty($report->iconfile)) ? '' : '';
+
+                    //does this report give user the ability to add comments
+                    $has_comments	=	!empty($report->comments);
+
+                    //this will hold the ids of fields that we dont want to display
+                    $dontdisplay	=	 array();
+
+                    //does this report allow users to say it is related to a particular course
+                    $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? true : false;
+
+                    if (!empty($has_courserelated))	{
+                        $courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
+                        //the should not be anymore than one of these fields in a report
+                        foreach ($courserelated as $cr) {
+                            $dontdisplay[] 	=	$cr->id;
+                            $courserelatedfield_id	=	$cr->id;
+                        }
+                    }
+
+                    //find if the current user can add reports
+                    $access_report_addreports	= false;
+                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:addreport');
+                    if (!empty($capability)) $access_report_addreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+
+                    //find out if the current user has the edit report capability for the report
+                    $access_report_editreports	= false;
+                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:editreport');
+                    if (!empty($capability)) $access_report_editreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+
+                    //find out if the current user has the delete report capability for the report
+                    $access_report_deletereports	=	false;
+                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
+                    if (!empty($capability))	$access_report_deletereports	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+
+                    //find out if the current user has the add comment capability for the report
+                    $access_report_addcomment	= false;
+                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:addcomment');
+                    if (!empty($capability)) $access_report_addcomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+
+                    //find out if the current user has the edit comment capability for the report
+                    $access_report_editcomment	=	false;
+                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:editcomment');
+                    if (!empty($capability))	$access_report_editcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                    self::$access_report_editcomment = $access_report_editcomment;
+
+                    //find out if the current user has the add comment capability for the report
+                    $access_report_deletecomment	= false;
+                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletecomment');
+                    if (!empty($capability)) $access_report_deletecomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                    self::$access_report_deletecomment = $access_report_deletecomment;
+                }
+            }
+        }
+    }
 
    /**
     * Returns the content to be displayed

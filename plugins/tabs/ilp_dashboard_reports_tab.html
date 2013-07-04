@@ -13,7 +13,9 @@
 				</p>
 			<?php
 				}
-			} ?>
+			}
+			 $id_base = 'ajax_com-' . $entry->id;
+			 ?>
 			</div>
 			<div class="commands">
 				<?php if (!empty($access_report_editreports)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}"?>'><?php echo get_string('edit');?>
@@ -34,7 +36,10 @@
             <?php if (!empty($has_comments)) {?>
 		<div class="reports-comments">
 		<div class="view-comments">
-                <h3 id="entry_<?php echo $entry->id; ?>" class="commentheading"><?php echo (!empty($comments)) ? count($comments)." ".get_string('comments','block_ilp'): "0 ".get_string('comments','block_ilp');  ?></h3>
+                <h3 id="entry_<?php echo $entry->id; ?>" class="commentheading">
+                    <span class="numcomments-<?php echo $id_base; ?>"><?php echo (!empty($comments)) ? count($comments) : 0; ?></span>
+                    <?php echo  " ".get_string('comments','block_ilp');  ?>
+                </h3>
 		<?php if (!empty($access_report_addcomment)) { ?>
                 <div class="add">
                     <?php
@@ -49,35 +54,25 @@
                         <span class="<?php echo $id_base . '-course_id';?>"><?php echo $this->course_id;?></span>
                     </div>
                     <span class="add-comment-ajax" id="<?php echo $id_base;?>" style="float:right;margin: 0 0 0 200px;">
-                        <?php echo get_string('addcomment','block_ilp');?>
+                        <?php echo get_string('addcomment','block_ilp');?> <?php echo $this->get_loader_icon('loader-icon-' . $id_base, 'span'); ?>
                     </span>
                 </div>
 
             <?php } ?>
 		</div>
-            <div class="add-form add-form-<?php echo $id_base; ?>">
 
-            </div>
+        <div class="add-form add-form-<?php echo $id_base; ?>"></div>
 		</div>
 		<?php
-		if (!empty($comments) && !empty($access_report_viewcomment) ) {
+		if (!empty($access_report_viewcomment) ) {
 		?>
-		<div id="entry_<?php echo $entry->id; ?>_container">
-			<?php foreach ($comments as $c) {
-			$comment_creator	=	$this->dbc->get_user_by_id($c->creator_id);
-			?>
-			<div class="comment">
-				<p><?php  $commentval	=	 html_entity_decode($c->value);
-					  echo	$commentval;
-					?></p>
-				<div class="info">
-				<?php echo get_string('creator','block_ilp').": ".fullname($comment_creator);?> |
-				<?php echo get_string('date').": ".userdate($c->timemodified, get_string('strftimedate'));?> |
-				<?php if ($c->creator_id == $USER->id && !empty($access_report_editcomment)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&comment_id={$c->id}&course_id={$this->course_id}"?>'><?php echo get_string('edit'); ?> <img src='<?php echo $OUTPUT->pix_url("/i/edit");?>' alt='<?php echo get_string('edit'); ?>'></a><?php } ?>|
-				<?php if (!empty($access_report_deletereports)) { ?><a href='<?php echo $CFG->wwwroot."/blocks/ilp/actions/delete_reportcomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&comment_id={$c->id}&course_id={$this->course_id}" ?>'><?php echo get_string('delete'); ?> <img src='<?php echo $OUTPUT->pix_url("/t/delete");?>' alt='<?php echo get_string('delete'); ?>'></a><?php } ?>
-				</div>
-			</div>
-			<?php } ?>
+		<div id="entry_<?php echo $entry->id; ?>_container" <?php if (empty($comments)) echo 'style="display:none;"';?>>
+            <?php
+            $access = array('access_report_editcomment' => $access_report_editcomment,'access_report_deletecomment'=>$access_report_deletecomment);
+            $comment_params = "report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&course_id={$this->course_id}";
+
+            echo $this->generate_comments($comments, null, $comment_params, $entry->id, $access);
+            ?>
 		</div>
 		<?php }
 		}

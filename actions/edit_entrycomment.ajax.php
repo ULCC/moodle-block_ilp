@@ -104,51 +104,58 @@ if($mform->is_submitted()) {
     // process the data
     $formdata = $mform->get_data();
 
-    if (true) {
+    // check the validation rules
+    if($mform->is_validated()) {
 
-        // check the validation rules
-        if($mform->is_validated()) {
-
-            //get the form data submitted
-            $formdata = $mform->get_data();
+        //get the form data submitted
+        $formdata = $mform->get_data();
 
 
-            $success = $mform->process_data($formdata);
+        $success = $mform->process_data($formdata);
 
-            //if saving the data was not successful
-            if(!$success) {
-                //print an error message
-                print_error('commentcreationerror', 'block_ilp');
-            }
+        //if saving the data was not successful
+        if(!$success) {
+            //print an error message
+            print_error('commentcreationerror', 'block_ilp');
+        }
 
-            if (!isset($formdata->saveanddisplaybutton)) {
+        if (!isset($formdata->saveanddisplaybutton)) {
 
-                //notify the user that a comment has been made on one of their report entries
-                if ($USER->id != $entry->user_id)   {
-                    $reportsviewtab             =   $dbc->get_tab_plugin_by_name('ilp_dashboard_reports_tab');
-                    $reportstaburl              =   (!empty($reportsviewtab)) ?  "&selectedtab={$reportsviewtab->id}&tabitem={$reportsviewtab->id}:{$report->id}" : "";
+            //notify the user that a comment has been made on one of their report entries
+            if ($USER->id != $entry->user_id)   {
+                $reportsviewtab             =   $dbc->get_tab_plugin_by_name('ilp_dashboard_reports_tab');
+                $reportstaburl              =   (!empty($reportsviewtab)) ?  "&selectedtab={$reportsviewtab->id}&tabitem={$reportsviewtab->id}:{$report->id}" : "";
 
-                    $message                    =   new stdClass();
-                    $message->component         =   'block_ilp';
-                    $message->name              =   'ilp_comment';
-                    $message->subject           =   get_string('newreportcomment','block_ilp',$report);;
-                    $message->userfrom          =   $dbc->get_user_by_id($USER->id);
-                    $message->userto            =   $dbc->get_user_by_id($entry->user_id);
-                    $message->fullmessage       =   get_string('newreportcomment','block_ilp',$report);
-                    $message->fullmessageformat =   FORMAT_PLAIN;
-                    $message->contexturl        =   $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$entry->user_id}&course_id={$course_id}{$reportstaburl}";
-                    $message->contexturlname    =   get_string('viewreport','block_ilp');
+                $message                    =   new stdClass();
+                $message->component         =   'block_ilp';
+                $message->name              =   'ilp_comment';
+                $message->subject           =   get_string('newreportcomment','block_ilp',$report);;
+                $message->userfrom          =   $dbc->get_user_by_id($USER->id);
+                $message->userto            =   $dbc->get_user_by_id($entry->user_id);
+                $message->fullmessage       =   get_string('newreportcomment','block_ilp',$report);
+                $message->fullmessageformat =   FORMAT_PLAIN;
+                $message->contexturl        =   $CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$entry->user_id}&course_id={$course_id}{$reportstaburl}";
+                $message->contexturlname    =   get_string('viewreport','block_ilp');
 
-                    if (stripos($CFG->release,"2.") !== false) {
-                        message_send($message);
-                    }   else {
-                        require_once($CFG->dirroot.'/message/lib.php');
-                        message_post_message($message->userfrom, $message->userto,$message->fullmessage,$message->fullmessageformat,'direct');
-                    }
+                $message->smallmessage       =   get_string('newreportcomment','block_ilp',$report);
+                $message->fullmessagehtml       =   get_string('newreportcomment','block_ilp',$report);
+
+                if (stripos($CFG->release,"2.") !== false) {
+                    message_send($message);
+                }   else {
+                    require_once($CFG->dirroot.'/message/lib.php');
+                    message_post_message($message->userfrom, $message->userto,$message->fullmessage,$message->fullmessageformat,'direct');
                 }
             }
         }
     }
+
+    require_once($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
+    $comment_params = "report_id={$report_id}&user_id={$user_id}&entry_id={$entry_id}&selectedtab={$selectedtab}&tabitem={$tabitem}&course_id={$course_id}";
+    $ilp_dashboard_reports_tab_instance = new ilp_dashboard_reports_tab($user_id, $report_id);
+    $ilp_dashboard_reports_tab_instance->get_capabilites($selectedtab);
+    echo $ilp_dashboard_reports_tab_instance->generate_comments(null, true, $comment_params, $entry_id);
+
 } else {
     $plpuser	=	$dbc->get_user_by_id($user_id);
 
@@ -196,8 +203,11 @@ if($mform->is_submitted()) {
     //section name
     $PAGE->navbar->add($title);
 
+    require_once($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
+    $ilp_dashboard_reports_tab_instance = new ilp_dashboard_reports_tab($user_id, $report_id);
     ob_start();
     $mform->display();
+    echo $ilp_dashboard_reports_tab_instance->get_loader_icon('ajaxloadicon-editingwrapper', 'span');
     $formhtml = ob_get_clean();
 
     // AJAX Includes for normal mform Javascript code
