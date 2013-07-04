@@ -33,6 +33,21 @@ class batch_print_setup_mform extends ilp_moodleform
 
       $mform=&$this->_form;
 
+//get all enabled reports in this ilp
+      $reports = $dbc->get_reports(ILP_ENABLED);
+
+      $reportoptions=array();
+
+      foreach($reports as $r)
+      {
+         print $reportoptions[$r->id]=$r->name;
+      }
+
+      if(empty($reportsoptions))
+      {
+         print_error(get_string('noreports','block_ilp'));
+      }
+
       if(!$this->tutor)
       {
 //get all courses that the current user is enrolled in
@@ -73,9 +88,18 @@ class batch_print_setup_mform extends ilp_moodleform
          $pagetitle = get_string('mytutees','block_ilp');
       }
 
-      $states = $dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);
+//      $states = $dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);
 
-      print_object($states);
+//      print_object($states);
+
+      asort($reportoptions);
+      $s=$mform->addElement('select','reportselect',get_string('printreports','block_ilp'),$reportoptions);
+      $s->setMultiple(true);
+      $mform->addHelpButton('reportselect','batchreportselect','block_ilp');
+
+      $mform->addElement('checkbox','showattendance',get_string('showattendance','block_ilp'));
+
+      $mform->addElement('checkbox','showpuntuality',get_string('showpunctuality','block_ilp'));
 
       $this->add_action_buttons();
 
