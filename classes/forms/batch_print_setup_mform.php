@@ -44,7 +44,7 @@ class batch_print_setup_mform extends ilp_moodleform
          print_error(get_string('noreports','block_ilp'));
       }
 
-      if(!$this->tutor)
+      if(!$imports['tutor'])
       {
 //get all courses that the current user is enrolled in
 
