@@ -52,7 +52,7 @@ class batch_print_setup_mform extends ilp_moodleform
 
          foreach($dbc->get_user_courses($USER->id) as $id=>$c)
          {
-            $courseoptions[$id]=$c->fullname;
+            $courseoptions[$id]=$c->shortname;
 
             foreach(groups_get_all_groups($id) as $g)
             {
