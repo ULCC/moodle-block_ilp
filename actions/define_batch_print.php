@@ -1,6 +1,6 @@
 <?php
 /**
- * Allows the user to view a list of students
+ * Allows the user to print a list of students' reports
  *
  * @copyright &copy; 2011 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -11,7 +11,29 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER, $PAGE;
+require_once("$CFG->dirroot/blocks/ilp/classes/forms/batch_print_setup_mform.php");
+
+$mform=new batch_print_setup_mform($PAGE->url,array('course_id'=>optional_param('course_id',0,PARAM_INT),
+                                                    'tutor'=>optional_param('tutor',0,PARAM_INT),
+                                                    'group_id'=>optional_param('group_id',0,PARAM_INT),
+                                                    'status_id'=>optional_param('status_id',0,PARAM_INT)));
+
+if($mform->is_cancelled())
+{
+   redirect("$CFG->wwwroot");
+}
+elseif($data=$mform->get_data())
+{
+//Only possible if url has been twiddled, so slap them back to the front page
+   if(empty($data->course_id))
+   {
+      redirect($CFG->wwwroot);
+   }
+
+   print_object($data);
+   include("$CFG->dirroor/blocks/ilp/views/print_preview.php");
+   exit;
+}
 
 //include any necessary files
 
