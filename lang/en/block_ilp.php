@@ -30,6 +30,8 @@ $string['showattendance']='Attendance Information';
 
     $string['availablereports']		= 	'Available Forms';
     $string['average']      		= 	'Average';
+$string['batchreportselect']='Selecting Reports';
+$string['batchreportselect_help']='To select a single file to print, simply click on it. To select additional reports, click on them while holding down the Alt-key (Windows or Linux) or the Cmd-key (Apple). You can also select a range of reports by also holding down the shift key.';
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
 	$string['binary_icon']			=	'Icon File';
@@ -243,6 +245,7 @@ $string['noreports']='No reports available';
 	$string['previewdescription']	= 	'Below is a preview of the form you are creating if you are happy with the form click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
     $string['preferencecreationsuc'] 		= 	'Preference created';
     $string['previousstudent'] 		= 	'Prev student';
+$string['printreports']='Reports';
 	$string['punctuality']			= 	'Punctuality';
 $string['showpunctuality']='Punctuality Information'
     $string['removefield']			= 	'Remove 1 field';
