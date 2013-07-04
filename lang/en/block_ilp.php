@@ -218,6 +218,7 @@
     $string['openend']			=	'Open end';
 	$string['notapplicable']		=	'N/A';
 
+$string['noreports']='No reports available';
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
 
