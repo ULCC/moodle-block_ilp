@@ -128,6 +128,17 @@ foreach ($mis_plugins as $plugin_file) {
 $attendplugin			= 	new admin_setting_configselect('block_ilp/attendplugin',get_string('attendaceplugin','block_ilp'),get_string('attendaceplugindesc','block_ilp'), '',$options);
 $settings->add($attendplugin);
 
+$options = array(
+    5   => 5,
+    10  => 10,
+    20  => 20,
+    50  => 50,
+    100 => 100
+);
+
+$display			= 	new admin_setting_configselect('block_ilp/display',get_string('display','block_ilp'),get_string('displaydesc','block_ilp'), '',$options);
+$settings->add($display);
+
 
 $mis_settings 	= new admin_setting_heading('block_ilp/mis_connection', get_string('mis_connection', 'block_ilp'), '');
 $settings->add($mis_settings);
