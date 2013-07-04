@@ -17,7 +17,6 @@ $group_id=$data->group_id;
 $status_id=$data->status_id;
 
 //get all of the students in this class
-$students=$dbc->get_course_users($course_id,$group_id);
 $course=$dbc->get_course_by_id($course_id);
 
 $groups=groups_get_all_groups($course->id);
@@ -47,18 +46,7 @@ else
       $group_id = 0;
 }
 
-$ucourses=enrol_get_users_courses($USER->id, false,NULL,'shortname ASC');
-
-$user_courses=array();
-
-foreach ($ucourses as $uc)
-{
-   $coursecontext = get_context_instance(CONTEXT_COURSE, $uc->id);
-   //if the user has the capability to view the course then add it to the array
-   if (has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false)){
-      $user_courses[]=$uc;
-   }
-}
+$students=$dbc->get_course_users($course_id,$group_id);
 
 // setup the navigation breadcrumbs
 if (!empty($course_id)) {
@@ -85,4 +73,8 @@ $PAGE->set_pagetype('ilp-reportlist');
 $PAGE->set_pagelayout('embedded');
 $PAGE->set_url($baseurl);
 
-print "!!!";
+print $OUTPUT->header();
+
+print_object($students);
+
+print $OUTPUT->footer();
