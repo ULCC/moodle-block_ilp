@@ -37,7 +37,6 @@ class batch_print_setup_mform extends ilp_moodleform
       $reports = $dbc->get_reports(ILP_ENABLED);
 
       $reportoptions=array();
-
       foreach($reports as $r)
       {
          $reportoptions[$r->id]=$r->name;
@@ -88,9 +87,16 @@ class batch_print_setup_mform extends ilp_moodleform
          $pagetitle = get_string('mytutees','block_ilp');
       }
 
-//      $states = $dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);
+      $states=array();
+      foreach($dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD) as $s)
+      {
+         $states[$s->id]=$s->name;
+      }
 
-//      print_object($states);
+      if(!empty($states))
+      {
+         $mform->addElement('select','userstate',get_string('state','block_ilp'),$states);
+      }
 
       asort($reportoptions);
       $s=$mform->addElement('select','reportselect',get_string('printreports','block_ilp'),$reportoptions);
@@ -101,7 +107,11 @@ class batch_print_setup_mform extends ilp_moodleform
 
       $mform->addElement('checkbox','showpuntuality',get_string('showpunctuality','block_ilp'));
 
-      $this->add_action_buttons();
+      $buttonarray=array();
+      $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('gotoprintpreview','block_ilp'));
+      $buttonarray[] = &$mform->createElement('cancel');
+      $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+      $mform->closeHeaderBefore('buttonar');
 
    }
 }
