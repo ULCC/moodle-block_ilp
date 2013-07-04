@@ -40,7 +40,7 @@ class batch_print_setup_mform extends ilp_moodleform
 
       foreach($reports as $r)
       {
-         print $reportoptions[$r->id]=$r->name;
+         $reportoptions[$r->id]=$r->name;
       }
 
       if(empty($reportoptions))
