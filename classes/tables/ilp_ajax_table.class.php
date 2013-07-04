@@ -73,7 +73,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         $this->uniqueid = $uniqueid;
         $this->displayperpage = $displayperpage;
         $hozsize = get_config('block_ilp', 'defaulthozsize');
-        $pagesize = get_config('block_ilp', 'defaultverticalperpage');
+        $this->pagesize = get_config('block_ilp', 'display');
         $this->request = array(
             ILP_TABLE_VAR_SORT      => 'tsort',
             ILP_TABLE_VAR_HIDE      => 'thide',
