@@ -37,7 +37,7 @@ class ilp_element_plugin_state extends ilp_element_plugin_itemlist{
 
     static function language_strings(&$string) {
         $string['ilp_element_plugin_state'] 			= 'Select';
-        $string['ilp_element_plugin_state_type'] 		= 'state select';
+        $string['ilp_element_plugin_state_type'] 		= 'State select';
         $string['ilp_element_plugin_state_description'] 	= 'A state selector';
 		$string[ 'ilp_element_plugin_state_optionlist' ] 	= 'Option List';
 		$string[ 'ilp_element_plugin_state_single' ] 		= 'Single select';

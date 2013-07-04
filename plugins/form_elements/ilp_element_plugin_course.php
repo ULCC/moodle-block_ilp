@@ -25,7 +25,7 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 
     static function language_strings(&$string) {
         $string['ilp_element_plugin_course'] 			= 'Select';
-        $string['ilp_element_plugin_course_type'] 		= 'course select';
+        $string['ilp_element_plugin_course_type'] 		= 'Course select';
         $string['ilp_element_plugin_course_description'] 	= 'A course selector';
 		$string[ 'ilp_element_plugin_course_optionlist' ] 	= 'Option List';
 		$string[ 'ilp_element_plugin_course_single' ] 		= 'Single select';
