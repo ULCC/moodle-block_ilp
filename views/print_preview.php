@@ -1,0 +1,61 @@
+<?php
+
+//Coming in from an include in batch_print.html
+//which itself is included from define_batch_print.php
+//The important in-scope variables are:
+// $dbc database connection
+// $mform the submitted print definition form
+// $data the data from that form.
+
+// $data->course_id has already been tested for content
+
+//This is a prelude to moving this code into a central function
+//to remove duplication between here and view_studentlist.php
+
+$course_id=$data->course_id;
+$group_id=$data->group_id;
+$status_id=$data->status_id;
+
+//get all of the students in this class
+$students=$dbc->get_course_users($course_id,$group_id);
+$course=$dbc->get_course_by_id($course_id);
+
+$groups=groups_get_all_groups($course->id);
+
+if (!empty($groups))
+{
+   $groupmode = groups_get_course_groupmode($course);   // Groups are being used
+   $isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
+                        !has_capability('moodle/site:accessallgroups', $context));
+}
+else
+{
+   $group_id=0;
+}
+
+$groupexists=groups_get_group($group_id);
+
+if (empty($groupexists))
+{
+   $group_id=0;
+}
+else
+{
+   $groupincourse=groups_get_group_by_name($course_id,$groupexists->name);
+
+   if (empty($groupincourse))
+      $group_id = 0;
+}
+
+$ucourses=enrol_get_users_courses($USER->id, false,NULL,'shortname ASC');
+
+$user_courses=array();
+
+foreach ($ucourses as $uc)
+{
+   $coursecontext = get_context_instance(CONTEXT_COURSE, $uc->id);
+   //if the user has the capability to view the course then add it to the array
+   if (has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false)){
+      $user_courses[]=$uc;
+   }
+}
