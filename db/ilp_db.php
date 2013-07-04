@@ -2188,7 +2188,7 @@ class ilp_db_functions	extends ilp_logging {
     {
        $data=$this->get_studentlist($student_ids,$status_id, $includenull,
                                     $flextable->get_sql_where(), $flextable->get_sql_sort(),
-                                    $flextable->get_page_start(), $flextable->get_page_size(),
+                                    $flextable->get_page_start(), $flextable->get_page_size()
           );
 
        // tell the table how many pages it needs
