@@ -10,13 +10,12 @@
  */
 
 require_once('../configpath.php');
-
-require_once("$CFG->dirroot/blocks/ilp/classes/forms/batch_print_setup_mform.php");
-
 //include any necessary files
 
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
+
+require_once("$CFG->dirroot/blocks/ilp/classes/forms/batch_print_setup_mform.php");
 
 //get the id of the course that is currently being used
 $course_id  = $PARSER->optional_param('course_id', 0, PARAM_INT);
