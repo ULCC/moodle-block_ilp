@@ -14,15 +14,12 @@
 class batch_print_setup_mform extends ilp_moodleform
 {
    protected $dbc;
-   protected $tutor;
 
-   function __construct($url,$tutor=false)
+   function __construct($url,$imports=array())
    {
       $this->dbc=new ilp_db();
 
-      $this->tutor=$tutor;
-
-      parent::__construct($url);
+      parent::__construct($url,$imports);
    }
 
    function definition()
