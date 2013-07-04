@@ -82,15 +82,17 @@ class batch_print_setup_mform extends ilp_moodleform
          $pagetitle = get_string('mytutees','block_ilp');
       }
 
-      $states=array();
+      $status=array();
       foreach($dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD) as $s)
       {
-         $states[$s->id]=$s->name;
+         $status[$s->id]=$s->name;
       }
 
-      if(!empty($states))
+      $status=array(0=>get_string('anystatus','block_ilp'))+$status;
+
+      if(!empty($status))
       {
-         $mform->addElement('select','userstate',get_string('state','block_ilp'),$states);
+         $mform->addElement('select','userstatus',get_string('status','block_ilp'),$status);
       }
 
       asort($reportoptions);
