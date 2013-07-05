@@ -212,7 +212,7 @@ $coursearg      = ( $course_id ) ? "&course=$course_id" : '' ;
 //this is possible a good place to use a caching class
 if(!empty($students))  {
     $pagesize = $flextable->pagesize;
-    $flextable->pagesize = 100;
+    $flextable->pagesize = $pagesize + 1;
     $temp_student_list = $dbc->get_students_matrix($flextable, $students, $status_id, $notstatus_ids);
     $flextable->pagesize = $pagesize;
 
