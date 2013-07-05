@@ -154,7 +154,8 @@ if($mform->is_submitted()) {
     $comment_params = "report_id={$report_id}&user_id={$user_id}&entry_id={$entry_id}&selectedtab={$selectedtab}&tabitem={$tabitem}&course_id={$course_id}";
     $ilp_dashboard_reports_tab_instance = new ilp_dashboard_reports_tab($user_id, $report_id);
     $ilp_dashboard_reports_tab_instance->get_capabilites($selectedtab);
-    echo $ilp_dashboard_reports_tab_instance->generate_comments(null, true, $comment_params, $entry_id);
+    $toreturn = $ilp_dashboard_reports_tab_instance->generate_comments(null, true, $comment_params, $entry_id);
+    echo json_encode($toreturn);
 
 } else {
     $plpuser	=	$dbc->get_user_by_id($user_id);

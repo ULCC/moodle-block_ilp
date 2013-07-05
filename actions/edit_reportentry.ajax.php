@@ -181,7 +181,8 @@ if($mform->is_submitted()) {
         echo json_encode($toreturn);
         exit;
     } else {
-        echo $ilp_dashboard_reports_tab_instance->display(null, $ajax_settings);
+        $toreturn = $ilp_dashboard_reports_tab_instance->display(null, $ajax_settings);
+        echo json_encode($toreturn);
     }
 
 }
