@@ -370,13 +370,13 @@ class ilp_ajax_table extends ilp_flexible_table {
         // added header class instead of flexible
     /// No attributes, add flexible class
         if (empty($this->attributes)) {
-            $this->attributes['class'] = 'header';
+            $this->attributes['class'] = 'flexible';
     /// No classes, add flexible class
         } else if (!isset($this->attributes['class'])) {
-            $this->attributes['class'] = 'header';
+            $this->attributes['class'] = 'flexible';
     /// No flexible class in passed classes, add flexible class
-        } else if (!in_array('', explode('header', $this->attributes['class']))) {
-            $this->attributes['class'] = trim('header' . $this->attributes['class']);
+        } else if (!in_array('flexible', explode('', $this->attributes['class']))) {
+            $this->attributes['class'] = trim('flexible' . $this->attributes['class']);
         }
 
     }
