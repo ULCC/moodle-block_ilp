@@ -45,13 +45,13 @@ M.ilp_dashboard_reports_tab = {
     },
     show_hide: function(my_el,my_container){
         if(my_container._isHidden()){
-            my_el.classList.add('hide_all_comments');
-            my_el.classList.remove('view_all_comments');
+            my_el.className += ' hide_all_comments';
+            my_el.className.replace('view_all_comments', '');
             my_el.innerHTML = 'Hide Comments';
             my_container._show();
         }else{
-            my_el.classList.add('view_all_comments');
-            my_el.classList.remove('hide_all_comments');
+            my_el.className += ' view_all_comments';
+            my_el.className.replace('hide_all_comments', '');
             my_el.innerHTML = 'Show Comments';
             my_container._hide();
         }
