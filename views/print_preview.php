@@ -75,6 +75,6 @@ $PAGE->set_url($baseurl);
 
 print $OUTPUT->header();
 
-print_object($students);
+print_object($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastname asc'));
 
 print $OUTPUT->footer();

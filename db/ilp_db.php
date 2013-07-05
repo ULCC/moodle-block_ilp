@@ -2191,8 +2191,9 @@ class ilp_db_functions	extends ilp_logging {
        ($start=$flextable->get_page_start() or $start=0);
        ($end=$flextable->get_page_size()+$start or $end=1e9);
 
-       foreach($this->get_studentlist_details($student_ids,$status_id, $includenull,
-                                              $flextable->get_sql_where(), $flextable->get_sql_sort())
+       foreach($this->get_studentlist_details($student_ids,$status_id,
+                                              $flextable->get_sql_where(), $flextable->get_sql_sort(),
+                                              $includenull)
                as $item)
        {
           if($count>=$start and $count<$end)
@@ -2208,7 +2209,7 @@ class ilp_db_functions	extends ilp_logging {
        return $data;
     }
 
-    function get_studentlist_details($student_ids,$status_id, $includenull=false,$sql_where='',$sql_sort='')
+    function get_studentlist_details($student_ids,$status_id, $sql_where='',$sql_sort='',$includenull=false)
     {
         global $CFG, $DB;
         $select = "SELECT 		u.id as id,
