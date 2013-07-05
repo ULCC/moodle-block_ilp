@@ -179,7 +179,8 @@ M.ilp_ajax_addnew = {
                 success: function(id, o) {
                     formarea.setHTML("");
                     var comments_container = Y.one('#entry_' + entry_id + '_container');
-                    comments_container.setHTML(o.response);
+                    var content = Y.JSON.parse(o.responseText);
+                    comments_container.setHTML(content);
                     // The entry's comments have been re-loaded to capture the new changes; these need the seem script attached.
                     M.ilp_ajax_addnew.prepare_edits_for_ajax();
                     M.ilp_ajax_addnew.prepare_deletes_for_ajax();
@@ -273,7 +274,8 @@ M.ilp_ajax_addnew = {
                 success: function(id, o) {
                     submitbuttonloadericon.addClass('hiddenelement');
                     formarea.setHTML("");
-                    var newentry = Y.Node.create(o.response);
+                    var content = Y.JSON.parse(o.responseText);
+                    var newentry = Y.Node.create(content);
                     Y.one('.reports-container-container').prepend(newentry);
                     Y.one('.reports-container-container').one('.view-comments').addClass('new-entry');
                     M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
