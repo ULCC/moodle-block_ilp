@@ -319,7 +319,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      */
     static function language_strings(&$string) {
         $string['ilp_element_plugin_datefield'] 		        = 'Date field';
-        $string['ilp_element_plugin_datefield_type'] 	        = 'date field';
+        $string['ilp_element_plugin_datefield_type'] 	        = 'Date field';
         $string['ilp_element_plugin_datefield_description'] 	= 'A date field element';
         $string['ilp_element_plugin_datefield_date']            = 'Date';
         $string['ilp_element_plugin_datefield_deadline']        = 'Deadline';

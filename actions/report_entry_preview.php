@@ -55,7 +55,7 @@ $PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
 $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php",'title');
 
 //get string for create report
-$PAGE->navbar->add(get_string('previewreport', 'block_ilp'),null,'title');
+$PAGE->navbar->add(get_string('createreport', 'block_ilp'),null,'title');
 
 // setup the page title and heading
 $SITE	=	$dbc->get_course_by_id(SITEID);

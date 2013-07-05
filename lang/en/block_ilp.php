@@ -85,6 +85,7 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
     $string['deletesuccess']			=	'The record was successfully deleted';
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
+	$string['displaydesc'] 				= 	'Default number of learners to display on the view student list page';
 	$string['displayingreports'] 				= 	'Display Reports';
 
 	$string['description']			        =	'Description';

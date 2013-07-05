@@ -28,7 +28,7 @@ class ilp_element_plugin_category extends ilp_element_plugin_itemlist{
 
     static function language_strings(&$string) {
         $string['ilp_element_plugin_category'] 			= 'Category Select';
-        $string['ilp_element_plugin_category_type'] 		= 'category select';
+        $string['ilp_element_plugin_category_type'] 		= 'Category select';
         $string['ilp_element_plugin_category_description'] 	= 'A category selector';
 		$string[ 'ilp_element_plugin_category_optionlist' ] 	= 'Option List';
 		$string[ 'ilp_element_plugin_category_single' ] 	= 'Single select';

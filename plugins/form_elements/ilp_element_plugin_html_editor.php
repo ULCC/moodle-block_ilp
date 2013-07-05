@@ -166,7 +166,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
     */
     static function language_strings(&$string) {
         $string['ilp_element_plugin_html_editor'] 		= 'Htmleditor';
-        $string['ilp_element_plugin_html_editor_type'] = 'Html editor';
+        $string['ilp_element_plugin_html_editor_type'] = 'HTML editor';
         $string['ilp_element_plugin_html_editor_description'] = 'A html editor';
         $string['ilp_element_plugin_html_editor_minimumlength'] = 'Minimum Length';
         $string['ilp_element_plugin_html_editor_maximumlength'] = 'Maximum Length';

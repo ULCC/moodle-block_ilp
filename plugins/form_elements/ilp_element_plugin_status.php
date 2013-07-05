@@ -295,7 +295,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
 
     static function language_strings(&$string) {
         $string['ilp_element_plugin_status'] 			= 'Select';
-        $string['ilp_element_plugin_status_type'] 		= 'status select';
+        $string['ilp_element_plugin_status_type'] 		= 'Status select';
         $string['ilp_element_plugin_status_description'] 	= 'A status selector';
         $string[ 'ilp_element_plugin_status_optionlist' ] 	= 'Option List';
         $string[ 'ilp_element_plugin_status_single' ] 		= 'Single select';
