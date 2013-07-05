@@ -53,7 +53,14 @@ M.ilp_ajax_addnew = {
                             comment_send_params.selectedtab = selectedtab;
                             comment_send_params.tabitem = tabitem;
                             comment_send_params.course_id = course_id;
-                            Y.one('.add-form-' + entryid + ' ' + '#id_cancel').set('disabled', 'disabled');
+                            var cancel = Y.one('.add-form-' + entryid + ' ' + '#id_cancel');
+                            cancel.setAttribute('type', 'button');
+
+                            cancel.on('click', function(){
+                                formarea.setHTML('');
+                            });
+
+
                             YUI().use('event', function (Y) {
                                 Y.one('#mform1').on('submit', function (e) {
                                     var loadericon = Y.one('.add-form-' + entryid + ' .ajaxloadicon');
@@ -133,7 +140,12 @@ M.ilp_ajax_addnew = {
                             scriptel.textContent = response.script;
                             document.body.appendChild(scriptel);
 
-                            Y.one('.editarea-' + comment_id + ' ' + '#id_cancel').set('disabled', 'disabled');
+                            var cancel = Y.one('.editarea-' + comment_id + ' ' + '#id_cancel');
+                            cancel.setAttribute('type', 'button');
+                            cancel.on('click', function(){
+                                formarea.setHTML('');
+                            });
+
                             YUI().use('event', function (Y) {
                                 Y.one('.editarea-' + comment_id + ' #mform1').on('submit', function (e) {
                                     var loadericon = Y.one('.editarea-' + comment_id + ' .ajaxloadicon');
@@ -227,7 +239,13 @@ M.ilp_ajax_addnew = {
                         scriptel = document.createElement('script');
                         scriptel.textContent = response.script;
                         document.body.appendChild(scriptel);
-                        Y.one('._addnewentryarea #id_cancel').set('disabled', 'disabled');
+
+                        var cancel = Y.one('._addnewentryarea #id_cancel');
+                        cancel.setAttribute('type', 'button');
+                        cancel.on('click', function(){
+                            newentryarea.setHTML('');
+                        });
+
                         YUI().use('event', function (Y) {
                             Y.one('#mform1').on('submit', function (e) {
                                 var submitbuttonloadericon = Y.one('._addnewentryarea .ajaxloadicon');
@@ -257,9 +275,12 @@ M.ilp_ajax_addnew = {
                     formarea.setHTML("");
                     var newentry = Y.Node.create(o.response);
                     Y.one('.reports-container-container').prepend(newentry);
+                    Y.one('.reports-container-container').one('.view-comments').addClass('new-entry');
                     M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
                     M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
                     M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+                    M.ilp_dashboard_reports_tab.init(Y, null, null, '.view-comments.new-entry');
+                    Y.one('.reports-container-container').one('.view-comments').removeClass('new-entry');
                 }
             },
             form: formwrapper,
@@ -321,7 +342,11 @@ M.ilp_ajax_addnew = {
                             scriptel.textContent = response.script;
                             document.body.appendChild(scriptel);
 
-                            Y.one('.edit-entry-area-' + edit_id + ' ' + '#id_cancel').set('disabled', 'disabled');
+                            var cancel = Y.one('.edit-entry-area-' + edit_id + ' ' + '#id_cancel');
+                            cancel.setAttribute('type', 'button');
+                            cancel.on('click', function(){
+                                formarea.setHTML('');
+                            });
                             YUI().use('event', function (Y) {
                                 Y.one('.edit-entry-area-' + edit_id + ' #mform1').on('submit', function (e) {
                                     var loadericon = Y.one('.edit-entry-area-' + edit_id + ' .ajaxloadicon');

@@ -9,13 +9,18 @@ M.ilp_dashboard_reports_tab = {
     //closed_image : null,
     Y : null,
 
-    init : function(Y) {
+    init : function(Y, openimage, closedimage, alternative_selector) {
         this.Y  =   Y;
 
         var my_container = '_container';
 
         var heights = new Array();
-        var all_comments = Y.all('.view-comments'); //get all the comments div
+        var all_selector = '.view-comments';
+
+        if (alternative_selector !== undefined) {
+            all_selector = alternative_selector;
+        }
+        var all_comments = Y.all(all_selector); //get all the comments div
         for(var i = 0; i < all_comments._nodes.length; i++){
             var my_el = all_comments._nodes[i];
             var my_header = my_el.getElementsByClassName('commentheading');
