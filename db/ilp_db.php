@@ -2189,7 +2189,7 @@ class ilp_db_functions	extends ilp_logging {
        $data=array();
        $count=0;
        ($start=$flextable->get_page_start() or $start=0);
-       $end=$flextable->get_page_size()+$start;
+       ($end=$flextable->get_page_size()+$start or $end=1e9);
 
        foreach($this->get_studentlist_details($student_ids,$status_id, $includenull,
                                               $flextable->get_sql_where(), $flextable->get_sql_sort())
