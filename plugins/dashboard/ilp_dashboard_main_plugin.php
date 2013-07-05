@@ -95,7 +95,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			        if(!class_exists($classname)) {
 			            print_error('pluginclassnotfound', 'block_ilp', '', $classname);
 			        }
-			        
+
 					$dasttab	=	new $classname($this->student_id,$this->course_id);
 					
 					$tabrows[]	=	new tabobject($dt->id,$linkurl."&selectedtab={$dt->id}&tabitem={$dt->id}",$dasttab->display_name());
@@ -133,7 +133,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 									
 			//pass the output instead to the output var
 			$pluginoutput = ob_get_contents();
-			
+
 			//add the content if  
 			
 			ob_end_clean();
