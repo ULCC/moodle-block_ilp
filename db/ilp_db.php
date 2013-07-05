@@ -2188,17 +2188,18 @@ class ilp_db_functions	extends ilp_logging {
     {
        $data=array();
        $count=0;
-       $start=$flextable->get_page_start();
+       ($start=$flextable->get_page_start() or $start=0);
        $end=$flextable->get_page_size()+$start;
 
-       foreach($this->get_studentlist($student_ids,$status_id, $includenull,
-                                      $flextable->get_sql_where(), $flextable->get_sql_sort())
+       foreach($this->get_studentlist_details($student_ids,$status_id, $includenull,
+                                              $flextable->get_sql_where(), $flextable->get_sql_sort())
                as $item)
        {
-          if(++$count>=$start and $count<$end)
+          if($count>=$start and $count<$end)
           {
              $data[$item->id]=$item;
           }
+          $count++;
        }
 
        // tell the table how many pages it needs
@@ -2207,7 +2208,7 @@ class ilp_db_functions	extends ilp_logging {
        return $data;
     }
 
-    function get_studentlist($student_ids,$status_id, $includenull=false,$sql_where='',$sql_sort='')
+    function get_studentlist_details($student_ids,$status_id, $includenull=false,$sql_where='',$sql_sort='')
     {
         global $CFG, $DB;
         $select = "SELECT 		u.id as id,
