@@ -123,7 +123,7 @@ foreach($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastn
    {
       $misclass->set_data($student->id);
 
-      if($misattendavailable)
+      if($misclass->has_data())
          print $misclass->display();
    }
 }
