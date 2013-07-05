@@ -135,6 +135,7 @@ $flextable->set_attribute('id', "student_listcourse_id={$course_id}tutor={$tutor
 $flextable->use_expandcollapselinks(true);
 $flextable->define_expandcollapse($expandcollapse);
 $flextable->initialbars(true);
+$flextable->pageable(true);
 
 $flextable->setup();
 
