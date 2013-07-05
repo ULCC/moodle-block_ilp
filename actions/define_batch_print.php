@@ -51,7 +51,6 @@ elseif($data=$mform->get_data())
       redirect($CFG->wwwroot);
    }
 
-   print_object($data);
    include("$CFG->dirroot/blocks/ilp/views/print_preview.php");
    exit;
 }
