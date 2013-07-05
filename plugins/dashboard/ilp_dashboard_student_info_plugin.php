@@ -34,7 +34,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
     * Returns the
     * @see ilp_dashboard_plugin::display()
     */
-   function display()	{
+   function display($template='ilp_dashboard_student_info.html')	{
       global	$CFG, $DB, $OUTPUT, $PAGE, $PARSER, $USER, $SESSION;
 
       //set any variables needed by the display page
@@ -75,6 +75,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       $studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true'));
 
       $tutors	=	$this->dbc->get_student_tutors($this->student_id);
+
       $tutorslist	=	array();
       if (!empty($tutors)) {
          foreach ($tutors as $t) {
@@ -282,7 +283,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       //we need to buffer output to prevent it being sent straight to screen
       ob_start();
 
-      include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/'.$this->directory.'/ilp_dashboard_student_info.html');
+      include("$CFG->dirroot/blocks/ilp/plugins/dashboard/$this->directory/$template");
 
       //$learnercontact->set_data(1);
 
