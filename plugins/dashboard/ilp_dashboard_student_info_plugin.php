@@ -34,7 +34,8 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
     * Returns the
     * @see ilp_dashboard_plugin::display()
     */
-   function display($template='ilp_dashboard_student_info.html')	{
+   function display($template='ilp_dashboard_student_info.html')
+   {
       global	$CFG, $DB, $OUTPUT, $PAGE, $PARSER, $USER, $SESSION;
 
       //set any variables needed by the display page

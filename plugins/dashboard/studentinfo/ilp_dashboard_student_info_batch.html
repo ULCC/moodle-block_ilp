@@ -30,26 +30,20 @@
       }else{
       echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
       }
-      ?>
-      <?php
-
          if (!empty($percentagebars)) {
          foreach($percentagebars	as $p) {
 
          echo $pbar->display_bar($p->percentage,$p->name,$p->total);
-      ?>
-
-      <?php }
-            }?>
+      }?>
     </div>
     <div id="right-studentinfo">
       <?php
-         if (!empty($misoverviewplugins)) {
-         foreach ($misoverviewplugins as $mp)	{
-         $mp->set_data($student->idnumber);
-      echo $mp->display();
-      }
-      }
+            if (!empty($misoverviewplugins)) {
+               foreach ($misoverviewplugins as $mp)	{
+                  $mp->set_data($student->idnumber);
+                  echo $mp->display();
+               }
+            }
       ?>
     </div>
   </div>
