@@ -86,6 +86,51 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
         return $o;
     }
+
+    public function generate_left_reports($reportfields, $dontdisplay, $displaysummary, $entry_data) {
+        $content = '';
+        foreach ($reportfields as $field) {
+            if (!in_array($field->id,$dontdisplay) && ((!empty($displaysummary) && !empty($field->summary) || empty($displaysummary)))) {
+                $fieldname	=	$field->id."_field";
+                $fieldcontent = '';
+                $fieldcontent = '<strong>' . $field->label . ':</strong>' . (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
+                $content .= html_writer::tag('p', $fieldcontent);
+            }
+        }
+        return html_writer::tag('div', $content, array('class'=>'left-reports'));
+    }
+
+    public function generate_right_reports($has_courserelated, $has_deadline, $entry_data) {
+        $content = '';
+        $fieldcontent = array(
+            get_string('addedby','block_ilp')." : ".$entry_data->creator,
+        );
+        if (!empty($has_courserelated)) {
+            $fieldcontent[] = get_string('course','block_ilp')." : ".$entry_data->coursename;
+        }
+        if (!empty($has_deadline)) {
+            $fieldcontent[] = get_string('deadline','block_ilp') . ': date';
+        }
+        $fieldcontent[] = get_string('date')." : ".$entry_data->modified;
+        foreach ($fieldcontent as $fieldcontent_item) {
+            $content .= html_writer::tag('p', $fieldcontent_item);
+        }
+
+        return html_writer::tag('div', $content, array('class'=>'right-reports'));
+    }
+
+    /*
+     * Generates a form so that page has JS to handle AJAX forms that are used
+     */
+    public function generate_unused_form() {
+        global $CFG;
+        require_once($CFG->dirroot . '/blocks/ilp/classes/forms/js_loader_mform.php');
+        $js_loader = new js_loader_mform();
+        echo '<div class="hiddenelement">';
+        $loader_form = $js_loader->display();
+        echo '</div>';
+    }
+
    /**
     * Return the text to be displayed on the tab
     */
@@ -214,10 +259,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    }
 
     /**
-     * Returns the content to be displayed
-     *
-     * @param	string $selectedtab the tab that has been selected this variable
-     * this variable should be used to determined what to display
+     * Sets the capabilities in static variables; used by scripts called in the AJAX add/edit features which are outside this class.
      *
      * @return none
      */
@@ -331,11 +373,12 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     * Returns the content to be displayed
     *
     * @param	string $selectedtab the tab that has been selected this variable
+    * @param	array $ajax_settings Some settings used to dynamically update after performing ajax edits.
     * this variable should be used to determined what to display
     *
     * @return none
     */
-   function display($selectedtab=null)	{
+   public function display($selectedtab=null, $ajax_settings = array())	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
        $jsarguments = array(
@@ -347,6 +390,17 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
            'fullpath' 	=> '/blocks/ilp/views/js/ajax_addnew.js',
            'requires'  	=> array('io','io-form', 'json-parse', 'json-stringify', 'json', 'base', 'node')
        );
+       $return_only_newest = (!empty($ajax_settings) && (isset($ajax_settings['return_only_newest_entry']))
+               && $ajax_settings['return_only_newest_entry'] ) ? true : false;
+
+       $return_refreshed_list = (!empty($ajax_settings) && (isset($ajax_settings['return_refreshed_entry_list']))
+           && $ajax_settings['return_refreshed_entry_list'] ) ? true : false;
+
+       $return_left_report_only = (!empty($ajax_settings) && (isset($ajax_settings['return_left_reports_for_single_entry']))
+           && $ajax_settings['return_left_reports_for_single_entry'] ) ? $ajax_settings['return_left_reports_for_single_entry'] : false;
+
+       $return_right_report_only = (!empty($ajax_settings) && (isset($ajax_settings['return_right_reports_for_single_entry']))
+           && $ajax_settings['return_right_reports_for_single_entry'] ) ? $ajax_settings['return_right_reports_for_single_entry'] : false;
 
        $PAGE->requires->js_init_call('M.ilp_ajax_addnew.init', $jsarguments, true, $jsmodule);
 
@@ -485,10 +539,15 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $reportavailable =   $reportrules->report_availabilty();
 
                echo "<div id='report-entries'>";
+               $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}";
+
+               $addnew_span = html_writer::tag('span', get_string('addnew','block_ilp'), array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry'));
+               $addnew_area = html_writer::tag('div','', array('class'=>'_addnewentryarea'));
+               $loader_icon = $this->get_loader_icon('addnewentry-loader', 'span');
                if (!empty($access_report_addreports)   && !empty($multiple_entries) && !empty($reportavailable['result'])) {
                   echo    "<div class='add' style='float :left'>
-                                            <a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('addnew','block_ilp')."</a>&nbsp;
-                                        </div>";
+                                     $loader_icon $addnew_span
+                                        </div> $addnew_area";
                }
 
                if (!empty($access_report_viewothers)) {
@@ -521,8 +580,19 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 //Mini caches for items that are looked at repeatedly in the loops below
                   $creators=$pluginRecords=$pluginInstances=array();
 
+                   echo html_writer::start_tag('div', array('class'=>'reports-container-container'));
+                  if ($return_refreshed_list) {
+                      ob_end_clean();
+                      ob_start();
+                  }
                   foreach ($reportentries as $entry)	{
 
+                      if ($return_left_report_only && $return_left_report_only != $entry->id) {
+                          continue;
+                      }
+                      if ($return_right_report_only && $return_right_report_only != $entry->id) {
+                          continue;
+                      }
                      //TODO: is there a better way of doing this?
                      //I am currently looping through each of the fields in the report and get the data for it
                      //by using the plugin class. I do this for two reasons it may lock the database for less time then
@@ -607,9 +677,37 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                      }
 
+                      if ($return_only_newest) {
+                          ob_end_clean();
+                          ob_start();
+                      }
+                      if ($return_left_report_only || $return_right_report_only) {
+                          ob_end_clean();
+                          ob_start();
+                          if ($return_left_report_only) {
+                              echo $this->generate_left_reports($reportfields, $dontdisplay, $displaysummary, $entry_data);
+                          } else if ($return_right_report_only) {
+                              $has_deadline = (isset($has_deadline)) ? $has_deadline : null;
+                              echo $this->generate_right_reports($has_courserelated, $has_deadline, $entry_data);
+                          }
+                          $pluginoutput = ob_get_contents();
+                          ob_end_clean();
+                          return $pluginoutput;
+                      }
                      include($CFG->dirroot.'/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.html');
+                      if ($return_only_newest) {
+                          $pluginoutput = ob_get_contents();
+                          ob_end_clean();
+                          return $pluginoutput;
+                      }
 
                   }
+                   if ($return_refreshed_list) {
+                       $pluginoutput = ob_get_contents();
+                       ob_end_clean();
+                       return $pluginoutput;
+                   }
+                   echo html_writer::end_tag('div');
                } else {
 
                   echo get_string('nothingtodisplay');
@@ -636,6 +734,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          // initialise the js for the page
          $PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
 
+          $this->generate_unused_form();
 
          $pluginoutput = ob_get_contents();
 
