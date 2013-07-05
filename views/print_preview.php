@@ -79,53 +79,12 @@ print $OUTPUT->header();
 
 require_once("$CFG->dirroot/blocks/ilp/plugins/dashboard/ilp_dashboard_student_info_plugin.php");
 
-$attendanceclass				=	get_config('block_ilp','attendplugin');
-$misavailable 					= 	false;
-$misattendavailable				=	false;
-$mispunctualityavailable		=	false;
-
-if (!empty($attendanceclass)) {
-   $misclassfile = $CFG->dirroot . "/blocks/ilp/plugins/mis/{$attendanceclass}.php";
-   if (file_exists($misclassfile)) {
-      include_once $misclassfile;
-
-      $misavailable	=	true;
-
-      //create an instance of the MIS class
-      $misclass = new $attendanceclass();
-
-      //check if the methods exists
-      if (method_exists($misclass, 'getAttendance'))	{
-         $headers[] = get_string('attendance', 'block_ilp');
-         $columns[] = 'u_attendcance';
-         $expandcollapse[]   = 'u_attendcance';
-         $nosorting[] = 'u_attendcance';
-         $misattendavailable = true;
-      }
-
-      //check if the methods exists
-      if (method_exists($misclass, 'getPunctuality'))	{
-         $headers[] = get_string('punctuality', 'block_ilp');
-         $columns[] = 'u_punctuality';
-         $expandcollapse[]   = 'u_punctuality';
-         $nosorting[] = 'u_punctuality';
-         $mispunctualityavailable = true;
-      }
-   }
-}
-
 foreach($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastname asc') as $student)
 {
    $info=new ilp_dashboard_student_info_plugin($student->id);
+
    print $info->display('ilp_dashboard_student_info_batch.html');
 
-   if($misattendavailable or $mispunctualityavailable)
-   {
-      $misclass->set_data($student->id);
-
-      if($misclass->has_data())
-         print $misclass->display();
-   }
 }
 
 print $OUTPUT->footer();
