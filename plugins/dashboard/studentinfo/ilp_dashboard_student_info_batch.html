@@ -30,11 +30,12 @@
       }else{
       echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
       }
-         if (!empty($percentagebars)) {
-         foreach($percentagebars	as $p) {
-
-         echo $pbar->display_bar($p->percentage,$p->name,$p->total);
-      }?>
+if (!empty($percentagebars)) {
+   foreach($percentagebars	as $p) {
+      echo $pbar->display_bar($p->percentage,$p->name,$p->total);
+   }
+}
+?>
     </div>
     <div id="right-studentinfo">
       <?php

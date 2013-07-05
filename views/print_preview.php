@@ -121,7 +121,7 @@ foreach($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastn
 
    if($misattendavailable or $mispunctualityavailable)
    {
-      $misclass->setData($student->id);
+      $misclass->set_data($student->id);
 
       if($misattendavailable)
          print $misclass->display();
