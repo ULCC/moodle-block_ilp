@@ -374,22 +374,20 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       //instantiate the percentage bar class in case there are any percentage bars
       $pbar	=	new ilp_percentage_bar();
 
-          if ($display_only_middle_studentinfo) {
-              $toreturn = '';
-              $toreturn .= $this->generate_ajax_updatable($statusitem, $userstatuscolor);
-              return $toreturn;
-          } else {
+      if ($display_only_middle_studentinfo) {
+         $toreturn = '';
+         $toreturn .= $this->generate_ajax_updatable($statusitem, $userstatuscolor);
+         return $toreturn;
+      } else {
          //we need to buffer output to prevent it being sent straight to screen
          ob_start();
 
-      //we need to buffer output to prevent it being sent straight to screen
-      ob_start();
+         //we need to buffer output to prevent it being sent straight to screen
+         ob_start();
 
-      include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/'.$this->directory.'/ilp_dashboard_student_info.html');
+         include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/'.$this->directory.'/ilp_dashboard_student_info.html');
 
-      //$learnercontact->set_data(1);
-
-      //echo $learnercontact->display();
+         $pluginoutput=ob_get_contents();
 
          ob_end_clean();
       }
