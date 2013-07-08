@@ -152,6 +152,8 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
       include("$CFG->dirroot/blocks/ilp/plugins/dashboard/$this->directory/ilp_dashboard_student_info_batch.html");
 
+      $pluginoutput=ob_get_contents();
+
       ob_end_clean();
 
       return $pluginoutput;
