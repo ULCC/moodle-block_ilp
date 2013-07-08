@@ -83,7 +83,7 @@ foreach($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastn
 {
    $info=new ilp_dashboard_student_info_plugin($student->id);
 
-   print $info->display('ilp_dashboard_student_info_batch.html');
+   print $info->display();
 
 }
 
