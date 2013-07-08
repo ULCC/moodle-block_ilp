@@ -159,7 +159,7 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
       foreach($reports as $r)
       {
-         print $reporter->display("-1:$r->id");
+         print $reporter->display("-1:$r->id",array(),true);
       }
 
    }
