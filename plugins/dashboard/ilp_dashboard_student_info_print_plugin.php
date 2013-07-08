@@ -12,6 +12,7 @@
 
 require_once($CFG->dirroot.'/blocks/ilp/plugins/dashboard/ilp_dashboard_student_info_plugin.php');
 require_once("$CFG->dirroot/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php");
+require_once("$CFG->dirroot/blocks/ilp/classes/ilp_report_rules.class.php");
 
 class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info_plugin {
 
@@ -158,7 +159,7 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
       foreach($reports as $r)
       {
-         print $reporter->display($r->id);
+         print $reporter->display("-1:$r->id");
       }
 
    }

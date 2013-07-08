@@ -404,7 +404,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       if ($this->dbc->get_user_by_id($this->student_id)) {
 
          //get the selecttab param if has been set
-         $this->selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
+         $this->selectedtab = $PARSER->optional_param('selectedtab', $selectedtab, PARAM_INT);
 
          //get the tabitem param if has been set
          $this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_CLEAN);
