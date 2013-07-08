@@ -1,5 +1,5 @@
 <?php
-require_once($CFG->dirroot . '/blocks/ilp/classes/plugins/ilp_mis_attendance_plugin.class.php');
+@require_once($CFG->dirroot . '/blocks/ilp/classes/plugins/ilp_mis_attendance_plugin.class.php');
 
 require_once($CFG->dirroot . '/blocks/ilp/classes/tables/ilp_mis_ajax_table.class.php');
 

@@ -68,7 +68,10 @@ M.ilp_dashboard_student_info = {
 
         callback	:	{
         	success : function(id,o,args) {
+                var response = Y.JSON.parse(o.responseText);
+                Y.one('.ajaxstatuschange_wrapper').setHTML(response.middle_studentinfo_block);
                 M.ilp_dashboard_student_info.hideelement('studentlistloadingicon');
+                M.ilp_dashboard_student_info.init(Y);
         	},
 
         	failure : function() {

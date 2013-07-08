@@ -29,13 +29,105 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       parent::__construct();
 
    }
+/*
+ * <div id="middle-studentinfo">
+        <?php  if (!empty($tutorslist)) {?>
+        <p>
+        <strong><?php echo get_string('mytutor','block_ilp');?></strong><span><?php echo implode(', ',$tutorslist); ?></span>
+        </p>
+        <?php } ?>
+            <strong><?php echo get_string('studentstatus','block_ilp');?></strong>
+            <?php
+            if($statusitem->display_option == 'icon'){
+                if($statusitem->icon){
+                    $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
+                    $this_file = "<a class='tooltip'>
+                                    <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+                    $this_file .= html_entity_decode($statusitem->description);
+                    $this_file .="</span></a>";
+                    //we found there is a icon, so we need to display it
+                    echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. $this_file .'</div>';
+                }else{
+                    echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. html_entity_decode($statusitem->description) .'</div>';
+                }
+            }else{
+                echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
+            }
+
+            if (!empty($can_editstatus)) {
+                echo '<div class="edit_status">' . $this->userstatus_select($statusitem->id) . '</div>';
+            }
+            echo "<img src='$CFG->wwwroot/blocks/ilp/pix/loading.gif' id='studentlistloadingicon' class='hiddenelement'>";
+            ?>
+
+        <?php
+
+         if (!empty($percentagebars)) {
+                    foreach($percentagebars	as $p) {
+
+                        echo $pbar->display_bar($p->percentage,$p->name,$p->total);
+                    ?>
+
+            <?php }
+                  }?>
+	</div>
+ */
+    function generate_middle_studentinfo_content($tutorslist, $statusitem, $can_editstatus, $percentagebars, $pbar, $userstatuscolor) {
+        global $CFG;
+        $o = '';
+        if (!empty($tutorslist)) {
+            $mytutor = '<strong>' .  get_string('mytutor','block_ilp') . '</strong><span>' . implode(', ',$tutorslist) . '</span>';
+            $o .= html_writer::tag('p', $mytutor);
+        }
+        $o .= '<strong>' . get_string('studentstatus','block_ilp') . '</strong>';
+        $o .= '<div class="ajaxstatuschange_wrapper">' . $this->generate_ajax_updatable($statusitem, $userstatuscolor) . '</div>';
+        if (!empty($can_editstatus)) {
+            $o .= html_writer::tag('div', $this->userstatus_select($statusitem->id), array('class'=>'edit_status'));
+        }
+
+        $o .= html_writer::tag('img', '',
+            array('src'=>$CFG->wwwroot . '/blocks/ilp/pix/loading.gif', 'id'=>'studentlistloadingicon', 'class'=>'hiddenelement'));
+        if (!empty($percentagebars)) {
+            foreach($percentagebars	as $p) {
+                $o .= $pbar->display_bar($p->percentage,$p->name,$p->total);
+            }
+        }
+        return $o;
+    }
+
+    function generate_ajax_updatable($statusitem, $userstatuscolor) {
+        global $CFG;
+        $o = '';
+        if($statusitem->display_option == 'icon'){
+            if($statusitem->icon){
+                $path = file_encode_url($CFG->wwwroot . "/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
+                $this_file = "<a class='tooltip'>
+                                    <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
+                                    <span>
+                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
+                $this_file .= html_entity_decode($statusitem->description);
+                $this_file .="</span></a>";
+                //we found there is a icon, so we need to display it
+                $o .= html_writer::tag('div', $this_file, array('class'=>'dashboard_status_icon ajaxstatuschange',
+                    'style'=>'background: '. $statusitem->bg_colour));
+            } else {
+                $o .= html_writer::tag('div', html_entity_decode($statusitem->description), array('class'=>'dashboard_status_icon ajaxstatuschange',
+                    'style'=>'background: '. $statusitem->bg_colour));
+            }
+        } else {
+            $userstatus = html_writer::tag('span', $statusitem->name, array('id'=>'user_status', 'style'=>'color: ' . $userstatuscolor));
+            $o .= html_writer::tag('div', $userstatus);
+        }
+        return $o;
+    }
 
    /**
     * Returns the
     * @see ilp_dashboard_plugin::display()
     */
-   function display($template='ilp_dashboard_student_info.html')
-   {
+   function display($ajax_settings = array())	{
       global	$CFG, $DB, $OUTPUT, $PAGE, $PARSER, $USER, $SESSION;
 
       //set any variables needed by the display page
@@ -47,6 +139,8 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
          print_error('studentnotfound','block_ilp');
       }
 
+      $display_only_middle_studentinfo = (!empty($ajax_settings) && isset($ajax_settings['middle_studentinfo'])
+          && $ajax_settings['middle_studentinfo']) ? true : false;
       $nextstudent    =   false;
       $prevstudent    =   false;
 
@@ -149,7 +243,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
       if (file_exists($misclassfile)) {
 
-         include_once $misclassfile;
+            include_once @$misclassfile;
 
          //create an instance of the MIS class
          $misclass	=	new ilp_mis_attendance_percentbar_plugin();
@@ -280,18 +374,25 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       //instantiate the percentage bar class in case there are any percentage bars
       $pbar	=	new ilp_percentage_bar();
 
+          if ($display_only_middle_studentinfo) {
+              $toreturn = '';
+              $toreturn .= $this->generate_ajax_updatable($statusitem, $userstatuscolor);
+              return $toreturn;
+          } else {
+         //we need to buffer output to prevent it being sent straight to screen
+         ob_start();
 
       //we need to buffer output to prevent it being sent straight to screen
       ob_start();
 
-      include("$CFG->dirroot/blocks/ilp/plugins/dashboard/$this->directory/$template");
+      include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/'.$this->directory.'/ilp_dashboard_student_info.html');
 
       //$learnercontact->set_data(1);
 
       //echo $learnercontact->display();
 
-      //pass the output instead to the output var
-      $pluginoutput = ob_get_contents();
+         ob_end_clean();
+      }
 
       ob_end_clean();
 
