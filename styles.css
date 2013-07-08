@@ -217,7 +217,9 @@
     display             : inline;
     visibility			: visible;
 }
+header {
 
+}
 .ilp .hiddenelement {
     display             : none;
     visibility			: hidden;
