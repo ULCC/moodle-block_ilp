@@ -53,9 +53,10 @@ if (empty($student)) {
 	
 }
 
-//
-$stausitem	=		$dbc->get_status_item_by_id($status_id);
 
+
+//
+$statusitem	=		$dbc->get_status_item_by_id($status_id);
 
 $userstatus	=	$dbc->get_user_status($student_id);
 
@@ -69,17 +70,24 @@ if ($dbc->update_userstatus($userstatus)) {
 		 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$student_id.'&course_id='.$course_id.'&tabitem='.$tabitem.'&selectedtab='.$selecttedtab;
          redirect($return_url, get_string("stausupdated", 'block_ilp'), ILP_REDIRECT_DELAY); 
 	} else {
+
+        require_once($CFG->dirroot . '/blocks/ilp/plugins/dashboard/ilp_dashboard_student_info_plugin.php');
+        $student_info_plugin = new ilp_dashboard_student_info_plugin($student_id);
+
+        $ajax_settings = array('middle_studentinfo'=>1);
+
+        $middle_studentinfo_block = $student_info_plugin->display($ajax_settings);
 		
 		$userstatuscolor	=	get_config('block_ilp', 'midcolour');
 
         if ($statusitem->passfail == 2) $userstatuscolor	=	get_config('block_ilp', 'passcolour');
         if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
 
-        echo json_encode(array('status'=>$stausitem->name,'colour'=>str_replace('#','',$userstatuscolor)));
+       echo json_encode(array('status'=>$statusitem->name,'colour'=>str_replace('#','',$userstatuscolor),
+            'middle_studentinfo_block'=>$middle_studentinfo_block));
 	}
 
 } else {
-	
 	//output an error 
 }
 

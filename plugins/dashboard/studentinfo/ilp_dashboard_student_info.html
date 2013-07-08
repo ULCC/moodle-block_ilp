@@ -9,7 +9,7 @@ if (!empty($nextstudent)) {
    $jsmodule = array(
       'name'  => 'ilp_standard_functions',
       'fullpath'  => '/blocks/ilp/views/js/lib.js',
-      'requires'  => array('event','dom','node','io-form')
+      'requires'  => array('event','dom','node','io-form','json-parse', 'json-stringify', 'json')
       );
 
    $PAGE->requires->js_init_call('M.ilp_standard_functions.init',null,true,$jsmodule);
@@ -22,49 +22,13 @@ if (!empty($nextstudent)) {
 	<div id="left-studentinfo">
 			<?php echo $studentpicture; ?>
 	</div>
-	<div id="middle-studentinfo">
-        <?php  if (!empty($tutorslist)) {?>
-        <p>
-        <strong><?php echo get_string('mytutor','block_ilp');?></strong><span><?php echo implode(', ',$tutorslist); ?></span>
-        </p>
-        <?php } ?>
-            <strong><?php echo get_string('studentstatus','block_ilp');?></strong>
-            <?php
-            if($statusitem->display_option == 'icon'){
-                if($statusitem->icon){
-                    $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
-                    $this_file = "<a class='tooltip'>
-                                    <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
-                                    <span>
-                                    <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
-                    $this_file .= html_entity_decode($statusitem->description);
-                    $this_file .="</span></a>";
-                    //we found there is a icon, so we need to display it
-                    echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. $this_file .'</div>';
-                }else{
-                    echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. html_entity_decode($statusitem->description) .'</div>';
-                }
-            }else{
-                echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
-            }
 
-            if (!empty($can_editstatus)) {
-                echo '<div class="edit_status">' . $this->userstatus_select($statusitem->id) . '</div>';
-            }
-            echo "<img src='$CFG->wwwroot/blocks/ilp/pix/loading.gif' id='studentlistloadingicon' class='hiddenelement'>";
-            ?>
+	<?php
+	echo '<div id="middle-studentinfo">';
+	echo $this->generate_middle_studentinfo_content($tutorslist, $statusitem, $can_editstatus, $percentagebars, $pbar, $userstatuscolor);
+    echo '</div>';
+        ?>
 
-        <?php
-
-         if (!empty($percentagebars)) {
-                    foreach($percentagebars	as $p) {
-
-                        echo $pbar->display_bar($p->percentage,$p->name,$p->total);
-                    ?>
-
-            <?php }
-                  }?>
-	</div>
 	<div id="right-studentinfo">
      <?php
 		if (!empty($misoverviewplugins)) {
