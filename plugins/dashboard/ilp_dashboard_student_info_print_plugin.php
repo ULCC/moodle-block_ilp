@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-require_once($CFG->dirroot.'/blocks/ilp/dashboard/ilp_dashboard_student_info_plugin.php');
+require_once($CFG->dirroot.'/blocks/ilp/plugins/dashboard/ilp_dashboard_student_info_plugin.php');
 
 class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info_plugin {
 
@@ -104,7 +104,7 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
                      $status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
 
-                     $status	=	(!empty($status)) ?  $status: ILP_DISABLED;
+                     $status	=(!empty($status)) ?  $status: ILP_DISABLED;
 
                      if (!empty($misplug) & $status == ILP_ENABLED ) {
                         $misoverviewplugins[]	=	$pluginobj;
