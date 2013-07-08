@@ -154,7 +154,7 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
       include("$CFG->dirroot/blocks/ilp/plugins/dashboard/$this->directory/ilp_dashboard_student_info_batch.html");
 
-      $reporter=new ilp_dashboard_reports_tab();
+      $reporter=new ilp_dashboard_reports_tab($this->student_id);
 
       foreach($reports as $r)
       {
