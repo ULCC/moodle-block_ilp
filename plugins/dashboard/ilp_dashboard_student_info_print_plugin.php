@@ -11,6 +11,7 @@
  */
 
 require_once($CFG->dirroot.'/blocks/ilp/plugins/dashboard/ilp_dashboard_student_info_plugin.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report_rules.class.php');
 
 class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info_plugin {
 
@@ -218,7 +219,7 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
             if (!empty($capability))	$access_report_addviewextension	 =	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
             //get all of the entries for this report
-            $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
+            $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id);
 
             //does the current report allow multiple entries
             $multiple_entries   =   !empty($report->frequency);
@@ -230,39 +231,12 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
             $icon=(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
 
-            echo $this->get_header($report->name,$icon);
+//            echo $this->get_header($report->name,$icon);
 
-            $stateselector=$this->stateselector($report_id);
+//            $stateselector=$this->stateselector($report_id);
 
             //find out if the rules set on this report allow a new entry to be created
             $reportavailable =   $reportrules->report_availabilty();
-
-            echo "<div id='report-entries'>";
-            $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}";
-
-            $addnew_span = html_writer::tag('span', get_string('addnew','block_ilp'), array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry'));
-            $addnew_area = html_writer::tag('div','', array('class'=>'_addnewentryarea'));
-            $loader_icon = $this->get_loader_icon('addnewentry-loader', 'span');
-            if (!empty($access_report_addreports)   && !empty($multiple_entries) && !empty($reportavailable['result'])) {
-               echo    "<div class='add' style='float :left'>
-                                     $loader_icon $addnew_span
-                                        </div> $addnew_area";
-            }
-
-            if (!empty($access_report_viewothers)) {
-               if (!empty($access_report_addviewextension) && $reportrules->can_add_extensions()) {
-                  echo "<div class='add' style='float :left'>
-                                        <a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_preference.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('addextension','block_ilp')."</a>&nbsp;
-                                      </div>
-
-                                    <div class='add' style='float :left'>
-                                        <a href='{$CFG->wwwroot}/blocks/ilp/actions/view_extensionlist.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}' >".get_string('viewextension','block_ilp')."</a>
-                                    </div>";
-               }
-
-            }
-            echo "</div>
-                            <br />";
 
             //output the print icon
             echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
@@ -405,4 +379,3 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
       }
    }
 }
-
