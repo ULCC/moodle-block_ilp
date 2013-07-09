@@ -16,14 +16,22 @@ require_once("$CFG->dirroot/blocks/ilp/classes/ilp_report_rules.class.php");
 
 class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info_plugin {
 
-   function display($ajax_settings = array(),$formdata=array())	{
+   protected $formdata;
+
+   function __construct($student_id,$formdata)
+   {
+      parent::__construct($student_id);
+      $this->formdata=$formdata;
+   }
+
+   function display($ajax_settings = array())	{
       global	$CFG, $DB, $OUTPUT, $PAGE, $PARSER, $USER, $SESSION;
 
       //set any variables needed by the display page
 
-      $courseid=(isset($formdata->courseid))?$formdata->courseid: 0;
+      $courseid=(isset($formdata->courseid))?$this->formdata->courseid: 0;
 
-      $reportselect=(isset($formdata->reportselect))? array_flip($formdata->reportselect) : array();
+      $reportselect=(isset($this->formdata->reportselect))? array_flip($this->formdata->reportselect) : array();
 
       //get students full name
       if(!$student	=	$this->dbc->get_user_by_id($this->student_id))
