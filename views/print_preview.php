@@ -16,37 +16,45 @@ $course_id=$data->course_id;
 $group_id=$data->group_id;
 $status_id=$data->status_id;
 
-//get all of the students in this class
-$course=$dbc->get_course_by_id($course_id);
+//get all of the students
 
-$groups=groups_get_all_groups($course->id);
-
-if (!empty($groups))
+if($course_id)
 {
-   $groupmode = groups_get_course_groupmode($course);   // Groups are being used
-   $isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
-                        !has_capability('moodle/site:accessallgroups', $context));
+   $course=$dbc->get_course_by_id($course_id);
+
+   $groups=groups_get_all_groups($course->id);
+
+   if (!empty($groups))
+   {
+      $groupmode = groups_get_course_groupmode($course);   // Groups are being used
+      $isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
+                           !has_capability('moodle/site:accessallgroups', $context));
+   }
+   else
+   {
+      $group_id=0;
+   }
+
+   $groupexists=groups_get_group($group_id);
+
+   if (empty($groupexists))
+   {
+      $group_id=0;
+   }
+   else
+   {
+      $groupincourse=groups_get_group_by_name($course_id,$groupexists->name);
+
+      if (empty($groupincourse))
+         $group_id = 0;
+   }
+
+   $students=$dbc->get_course_users($course_id,$group_id);
 }
 else
 {
-   $group_id=0;
+   $students=$usertutees;
 }
-
-$groupexists=groups_get_group($group_id);
-
-if (empty($groupexists))
-{
-   $group_id=0;
-}
-else
-{
-   $groupincourse=groups_get_group_by_name($course_id,$groupexists->name);
-
-   if (empty($groupincourse))
-      $group_id = 0;
-}
-
-$students=$dbc->get_course_users($course_id,$group_id);
 
 // setup the navigation breadcrumbs
 if (!empty($course_id)) {

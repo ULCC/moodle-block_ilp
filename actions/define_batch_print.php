@@ -45,8 +45,9 @@ if($mform->is_cancelled())
 }
 elseif($data=$mform->get_data())
 {
+   ($tutor and $usertutees=$dbc->get_user_tutees($USER->id));
 //Only possible if url has been twiddled, so slap them back to the front page
-   if(empty($data->course_id))
+   if(empty($data->course_id) and !$usertutees)
    {
       redirect($CFG->wwwroot);
    }
