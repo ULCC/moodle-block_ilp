@@ -1,6 +1,6 @@
 <?php
 /**
- * A class used to display information on a particular student in the ilp
+ * A class used to batch display information on a particular student in the ilp
  *
  *  *
  * @copyright &copy; 2013 University of London Computer Centre
@@ -16,10 +16,14 @@ require_once("$CFG->dirroot/blocks/ilp/classes/ilp_report_rules.class.php");
 
 class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info_plugin {
 
-   function display($ajax_settings = array())	{
+   function display($ajax_settings = array(),$formdata=array())	{
       global	$CFG, $DB, $OUTPUT, $PAGE, $PARSER, $USER, $SESSION;
 
       //set any variables needed by the display page
+
+      $courseid=(isset($formdata->courseid))?$formdata->courseid: 0;
+
+      $reportselect=(isset($formdata->reportselect))? array_flip($formdata->reportselect) : array();
 
       //get students full name
       if(!$student	=	$this->dbc->get_user_by_id($this->student_id))
@@ -155,12 +159,14 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
       include("$CFG->dirroot/blocks/ilp/plugins/dashboard/$this->directory/ilp_dashboard_student_info_batch.html");
 
-      $reporter=new ilp_dashboard_reports_tab($this->student_id);
+      $reporter=new ilp_dashboard_reports_tab($this->student_id,$courseid);
 
       foreach($reports as $r)
       {
-         print $reporter->display("-1:$r->id",array(),true);
+         if(isset($reportselect[$r->id]))
+         {
+            print $reporter->display("-1:$r->id",array(),true);
+         }
       }
-
    }
 }
