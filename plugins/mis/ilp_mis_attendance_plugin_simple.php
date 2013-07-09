@@ -21,10 +21,13 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
         if (!empty($this->data)) {
 	        // set up the flexible table for displaying the data
 
+	        //buffer out as flextable sends its data straight to the screen we dont want this
+                ob_start();
+
 	        //instantiate the ilp_ajax_table class
 	        $flextable = new ilp_mis_ajax_table( 'attendance_plugin_simple',true ,'ilp_mis_attendance_plugin_simple');
 
-            $flextable->set_attribute('class', 'flexible generaltable');
+                $flextable->set_attribute('class', 'flexible generaltable');
 	        //create headers
 	        $headers = array( get_string('ilp_mis_attendance_plugin_simple_attendance','block_ilp') , get_string('ilp_mis_attendance_plugin_simple_punctuality','block_ilp') );
 	        //create columns
@@ -42,8 +45,6 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	        //setup the flextable
 	        $flextable->setup();
 
-
-
 	        //add the row to table
 	        foreach( $this->data as $row ){
 	            $data = array();
@@ -54,13 +55,9 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
 	            $flextable->add_data_keyed( $data );
 	        }
 
-	        //buffer out as flextable sends its data straight to the screen we dont want this
-			ob_start();
+                $flextable->finish_html();
 
-			//call the html file for the plugin which has the flextable print statement
-			require_once($CFG->dirroot.'/blocks/ilp/plugins/mis/ilp_mis_attendance_plugin_simple.html');
-
-			$pluginoutput = ob_get_contents();
+                $pluginoutput = ob_get_contents();
 	        ob_end_clean();
 
 	        //echo the output
