@@ -373,7 +373,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     *
     * @return none
     */
-    public function display($selectedtab=null, $ajax_settings = array(),$readonly=false)	{
+    public function display($selectedtab=null, $ajax_settings = array(),$readonly=false,$showcomments=true)	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
        $jsarguments = array(
@@ -501,7 +501,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                //find out if the current user has the edit comment capability for the report
                $access_report_viewcomment	=	false;
                $capability=$this->dbc->get_capability_by_name('block/ilp:viewcomment');
-               if (!$readonly and !empty($capability))	$access_report_viewcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               if ($showcomments and !empty($capability))	$access_report_viewcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                // Check to see whether the user can delete the reports entry either single entry or multiple entry.
                $candelete =	(!$readonly and !empty($access_report_deletereports));
