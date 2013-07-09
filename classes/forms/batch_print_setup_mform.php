@@ -105,7 +105,7 @@ class batch_print_setup_mform extends ilp_moodleform
 
       $mform->addElement('checkbox','showattendance',get_string('showattendance','block_ilp'));
 
-      $mform->addElement('checkbox','showpuntuality',get_string('showpunctuality','block_ilp'));
+      $mform->addElement('checkbox','showcomments',get_string('showcomments','block_ilp'));
 
       $buttonarray=array();
       $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('gotoprintpreview','block_ilp'));
