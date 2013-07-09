@@ -16,8 +16,6 @@ $course_id=$data->course_id;
 $group_id=$data->group_id;
 $status_id=$data->status_id;
 
-print_object($data);
-
 //get all of the students in this class
 $course=$dbc->get_course_by_id($course_id);
 
