@@ -81,15 +81,16 @@ require_once("$CFG->dirroot/blocks/ilp/plugins/dashboard/ilp_dashboard_student_i
 
 print '<div class="ilp">';
 
-print '<div class="batchprint">';
 foreach($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastname asc') as $student)
 {
-   $info=new ilp_dashboard_student_info_print_plugin($student->id,$data);
+   print '<div class="batchprint">';
 
+   $info=new ilp_dashboard_student_info_print_plugin($student->id,$data);
    $info->display(array());
 
+   print '</div>';
 }
-print '</div>';
+
 print '</div>';
 print '</div>';
 
