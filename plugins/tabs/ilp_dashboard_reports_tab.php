@@ -709,12 +709,18 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                    }
                    echo html_writer::end_tag('div');
                } else {
-
-                  echo get_string('nothingtodisplay');
+                  if(!$readonly)
+                  {
+                     echo get_string('nothingtodisplay');
+                  }
+                  else
+                  {
+                     ob_clean();
+                  }
 
                }
 
-            }//end new if
+            }
 
          }
 
