@@ -49,7 +49,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
         if (!empty($this->data)) {
 
             //set up the flexible table for displaying
-
+            ob_start();
             //instantiate the ilp_ajax_table class
             $flextable = new ilp_mis_ajax_table('hcc_attendance', true, '');
 
@@ -99,8 +99,7 @@ class ilp_mis_attendance_plugin_hcc_attendance extends ilp_mis_attendance_plugin
             	$flextable->add_data_keyed($data);	
 			}
 
-            ob_start();
-            $flextable->print_html();
+            $flextable->finish_html();
             $output = ob_get_contents();
             ob_end_clean();
 
