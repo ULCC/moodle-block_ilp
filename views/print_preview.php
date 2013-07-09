@@ -77,8 +77,11 @@ $PAGE->set_url($baseurl);
 
 print $OUTPUT->header();
 
+print'<div style="text-align:left">';
+
 require_once("$CFG->dirroot/blocks/ilp/plugins/dashboard/ilp_dashboard_student_info_print_plugin.php");
 
+print '<div class="ilp">';
 foreach($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastname asc') as $student)
 {
    $info=new ilp_dashboard_student_info_print_plugin($student->id,$data);
@@ -86,5 +89,8 @@ foreach($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastn
    $info->display(array());
 
 }
+
+print '</div>';
+print '</div>';
 
 print $OUTPUT->footer();
