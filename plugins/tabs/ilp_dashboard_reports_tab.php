@@ -528,7 +528,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                echo $this->get_header($report->name,$icon);
 
-               $stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
+               $stateselector	=	(isset($report_id) and !$readonly) ?	$this->stateselector($report_id) :	"";
 
                //find out if the rules set on this report allow a new entry to be created
                $reportavailable =   $reportrules->report_availabilty();
@@ -729,11 +729,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          // initialise the js for the page
          $PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
 
-          $this->generate_unused_form();
+         if(!$readonly)
+            $this->generate_unused_form();
 
          $pluginoutput = ob_get_contents();
-
-
 
          ob_end_clean();
 
