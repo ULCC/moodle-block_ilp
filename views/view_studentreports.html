@@ -16,7 +16,9 @@ $jsarguments = array(
     'open_image'   =>   $CFG->wwwroot.'/pix/t/expanded.png',
     'closed_image' => 	$CFG->wwwroot.'/pix/t/collapsed.png',
     'open_text' => get_string('studentreport_open', 'block_ilp'),
-    'close_text' => get_string('studentreport_close', 'block_ilp')
+    'close_text' => get_string('studentreport_close', 'block_ilp'),
+    'open_comments' => get_string('show_comments', 'block_ilp'),
+    'close_comments' => get_string('hide_comments', 'block_ilp')
 );
 
 
@@ -29,6 +31,20 @@ $jsmodule = array(
 
 
 $PAGE->requires->js_init_call('M.ilp_view_studentreports.init', $jsarguments, true, $jsmodule);
+
+$jsarguments = array(
+    'root' => $CFG->wwwroot,
+    'pagename' => 'view_studentreports'
+);
+
+$jsmodule = array(
+'name'     	=> 'ilp_ajax_addnew',
+'fullpath' 	=> '/blocks/ilp/views/js/ajax_addnew.js',
+'requires'  	=> array('io','io-form', 'json-parse', 'json-stringify', 'json', 'base', 'node')
+);
+
+
+$PAGE->requires->js_init_call('M.ilp_ajax_addnew.init', $jsarguments, true, $jsmodule);
 
 
 
@@ -139,13 +155,17 @@ if ($dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
 
 <div class="entry_floatright"><a href='#' onclick="M.ilp_standard_functions.printfunction()"><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
 <div class='clearer'></div>
-    <span id='expandcollapselinks' ><a href="#" id="studentreport_expandall"><?php echo get_string('expandentries','block_ilp'); ?></a>&nbsp;/&nbsp;<a href="#" id="studentreport_collapseall"><?php echo get_string('collapseentries','block_ilp'); ?></a></span>
+    <span id='expandcollapselinks' class="float-right"><a href="#" id="studentreport_expandall"><?php echo get_string('expandentries','block_ilp'); ?></a>&nbsp;/&nbsp;<a href="#" id="studentreport_collapseall"><?php echo get_string('collapseentries','block_ilp'); ?></a></span>
 	<div class="centable" id='student_list<?php echo "course_id{$course_id}tutor{$tutor}status_id{$status_id}report_id{$report_id}_container"; ?>'">
 	<?php
 	   // display the table
 	   require_once($CFG->dirroot.'/blocks/ilp/actions/view_studentreports.ajax.php');
 	?>
 	</div>
+<div class="hiddenelement pre-load-icons">
+    <div class="expand_icon"></div>
+    <div class="collapse_icon"></div>
+</div>
 </div>
 <?php
 

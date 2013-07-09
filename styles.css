@@ -704,3 +704,57 @@ tooltip.tooltip span
     box-shadow: 5px 5px 8px #CCC;
 }
 /* tooltip finished */
+
+.expand_icon {
+    background: url([[pix:block_ilp|icons/collapse_lrg]]) no-repeat left center;
+    height: 70px;
+}
+.collapse_icon {
+    background: url([[pix:block_ilp|icons/expand_lrg]]) no-repeat left center;
+    height: 70px;
+}
+
+.entry_toggle {
+    cursor: pointer;
+    padding-left: 45px;
+    vertical-align:middle;
+    text-align: center;
+    display: table-cell;
+}
+
+.float-right {
+    float:right;
+}
+
+.comment_toggle {
+    color: blue;
+    cursor: pointer;
+}
+
+.comment_toggle:hover {
+    text-decoration: underline;
+}
+
+.add-comment-ajax {
+    float:right;
+    margin: 0 0 0 200px;
+    cursor: pointer;
+}
+
+.sreport-table-container {
+    position: relative;
+}
+
+.sreport-table-container .add-comment-ajax {
+    position: absolute;
+    top:5px;
+    right: 0;
+}
+
+#page-ilp-reportlist table.flexiblegeneraltable {
+    width: 100%;
+}
+
+.report-entry-grey {
+    background-color: #D3D3D3;
+}

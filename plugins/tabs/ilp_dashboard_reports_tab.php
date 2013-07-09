@@ -377,7 +377,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
        $jsarguments = array(
-           'root' => $CFG->wwwroot
+           'root' => $CFG->wwwroot,
+           'pagename' => 'view_main/reports_tab'
        );
 
        $jsmodule = array(

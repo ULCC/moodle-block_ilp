@@ -5,22 +5,27 @@ M.ilp_ajax_addnew = {
     Y : null,
     root : null,
 
-    init: function(Y, root) {
+    init: function(Y, root, pagename) {
         this.Y  =   Y;
         this.root = root;
-        M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
-        M.ilp_ajax_addnew.prepare_edits_for_ajax();
-        M.ilp_ajax_addnew.prepare_deletes_for_ajax();
-        M.ilp_ajax_addnew.prepare_addnewentry_for_ajax();
-        M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
-        M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+        if (pagename == 'view_studentreports') {
+            M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
+            M.ilp_ajax_addnew.prepare_edits_for_ajax();
+            M.ilp_ajax_addnew.prepare_deletes_for_ajax();
+        } else {
+            M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
+            M.ilp_ajax_addnew.prepare_edits_for_ajax();
+            M.ilp_ajax_addnew.prepare_deletes_for_ajax();
+            M.ilp_ajax_addnew.prepare_addnewentry_for_ajax();
+            M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
+            M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+        }
     },
     prepare_addcomments_for_ajax: function() {
         var Y = this.Y;
         var root = this.root;
         var commentadds = Y.all('.add-comment-ajax');
         commentadds.each( function (commentadd) {
-            commentadd.setStyle('cursor', 'pointer');
             commentadd.on('click', function() {
                 var entryid = commentadd.get('id');
                 var formarea_icon = Y.one('.loader-icon-' + entryid + ' .ajaxloadicon');
@@ -100,7 +105,8 @@ M.ilp_ajax_addnew = {
                     var formarea_icon = Y.one('.loader-icon-' + comment_send_params.dom_entryid + ' .ajaxloadicon');
                     formarea_icon.addClass('hiddenelement');
                     var comments_container = Y.one('#entry_' + comment_send_params.entryid + '_container');
-                    comments_container.setHTML(o.response);
+                    var response=Y.JSON.parse(o.responseText);
+                    comments_container.setHTML(response);
                     var numcomments = Y.one('span.numcomments-' + comment_send_params.dom_entryid);
                     numcomments.set('text', parseInt(numcomments.get('text')) + 1);
                     loadericon.addClass('hiddenelement');
