@@ -104,6 +104,7 @@ class batch_print_setup_mform extends ilp_moodleform
       $mform->addHelpButton('reportselect','batchreportselect','block_ilp');
 
       $mform->addElement('checkbox','showattendance',get_string('showattendance','block_ilp'));
+      $mform->setDefault('showattendance',true);
 
       $mform->addElement('checkbox','showcomments',get_string('showcomments','block_ilp'));
 
