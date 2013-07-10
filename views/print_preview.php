@@ -13,7 +13,7 @@
 //to remove duplication between here and view_studentlist.php
 
 $course_id=$data->course_id;
-$group_id=$data->group_id;
+$group_id=(isset($data->group_id))?  $group_id=$data->group_id : 0 ;
 $status_id=$data->status_id;
 
 //get all of the students
