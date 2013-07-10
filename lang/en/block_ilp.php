@@ -54,6 +54,7 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
 	$string['comment']				=	'Comment';
 	$string['commeentdeleted']		=	'Comment deleted';
 	$string['commentcreationsuc']	=	'Comment was successfully created';
+$string['showcomments']='Show Comments';
 	$string['continue']				=	'Continue';
 	$string['contextcourse']		=	'Context Course';
 	$string['contextuser']			=	'Continue User';
