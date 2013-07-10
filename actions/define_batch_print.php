@@ -12,6 +12,14 @@
 require_once('../configpath.php');
 //include any necessary files
 
+$jsmodule = array(
+   'name'     	=> 'ilp_view_print_preview',
+   'fullpath' 	=> '/blocks/ilp/views/js/print_preview.js',
+   'requires'  => array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
+);
+
+$PAGE->requires->js_init_call('M.ilp_view_print_preview.init', null, true, $jsmodule);
+
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
