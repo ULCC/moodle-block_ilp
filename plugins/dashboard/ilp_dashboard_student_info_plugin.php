@@ -117,8 +117,15 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                     'style'=>'background: '. $statusitem->bg_colour));
             }
         } else {
-            $userstatus = html_writer::tag('span', $statusitem->name, array('id'=>'user_status', 'style'=>'color: ' . $userstatuscolor));
-            $o .= html_writer::tag('div', $userstatus);
+            $o .= html_writer::tag(
+                'div', $statusitem->name, array(
+                    'class'=>'dashboard_status_icon ajaxstatuschange',
+                    'style'=>'background:' . $statusitem->bg_colour . '; color:' . $statusitem->name
+                )
+            );
+
+            //$userstatus = html_writer::tag('span', $statusitem->name, array('id'=>'user_status', 'style'=>'color: ' . $userstatuscolor));
+            //$o .= html_writer::tag('div', $userstatus);
         }
         return $o;
     }
