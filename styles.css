@@ -400,6 +400,12 @@
 
 /* Reports section */
 
+.ilp .batchprint{
+        border: 3px solid black;
+        padding: 1em;
+        margin-bottom:1em;
+}
+
 .ilp .report_state{
 	width: 80%;
 	display:block; 

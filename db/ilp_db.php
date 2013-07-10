@@ -2139,7 +2139,7 @@ class ilp_db_functions	extends ilp_logging {
  	}
 
  	/**
-     * Returns the user records of all users enrolled into the given course
+     * Returns the user ids of all users enrolled into the given course
      *
      * @param int $course_id the id of the course whose enrolled users
      * we want to retrieve
@@ -2184,22 +2184,47 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return mixed array of object containing all students in a course or false
      */
-    function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false) {
+    function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false)
+    {
+       $data=array();
+       $count=0;
+       ($start=$flextable->get_page_start() or $start=0);
+       ($end=$flextable->get_page_size()+$start or $end=1e9);
 
+       foreach($this->get_studentlist_details($student_ids,$status_id,
+                                              $flextable->get_sql_where(), $flextable->get_sql_sort(),
+                                              $includenull)
+               as $item)
+       {
+          if($count>=$start and $count<$end)
+          {
+             $data[$item->id]=$item;
+          }
+          $count++;
+       }
+
+       // tell the table how many pages it needs
+       $flextable->totalrows($count);
+
+       return $data;
+    }
+
+    function get_studentlist_details($student_ids,$status_id, $sql_where='',$sql_sort='',$includenull=false)
+    {
         global $CFG, $DB;
         $select = "SELECT 		u.id as id,
-        						u.idnumber as idnumber,
-        						u.firstname as firstname,
-        						u.lastname as lastname,
-        						si.id as u_status_id,
-        						si.name	as u_status,
-        						si.icon	as u_status_icon,
-        						si.display_option as u_display_option,
-        						si.bg_colour as bg_colour,
-        						si.description	as u_status_description,
-        						u.picture as picture,
-        						u.imagealt as imagealt,
-        						u.email as email ";
+        				u.idnumber as idnumber,
+        				u.firstname as firstname,
+        				u.lastname as lastname,
+        				si.id as u_status_id,
+        				si.name	as u_status,
+        				si.icon	as u_status_icon,
+        				si.display_option as u_display_option,
+        				si.bg_colour as bg_colour,
+        				si.description	as u_status_description,
+        				u.picture as picture,
+        				u.imagealt as imagealt,
+        				u.email as email ";
 
         $from = " FROM 			{user} as u LEFT JOIN {block_ilp_user_status} as us on (u.id = us.user_id) LEFT JOIN
         						{block_ilp_plu_sts_items} as si on (us.parent_id = si.id)";
@@ -2207,55 +2232,39 @@ class ilp_db_functions	extends ilp_logging {
         $where = "";
 
         if (!empty($student_ids) || !empty($status_id)) {
-        	    $where = " WHERE ";
-        	    $and = '';
+           $where = " WHERE ";
+           $and = '';
 
-        	    $studentssql	=	 (!empty($student_ids)) ? " u.id IN (".implode(",",$student_ids).")" : "" ;
-    			$statussql		=	 (!empty($status_id)) ? " si.id = {$status_id} " : '';
+           $studentssql	=	 (!empty($student_ids)) ? " u.id IN (".implode(",",$student_ids).")" : "" ;
+           $statussql		=	 (!empty($status_id)) ? " si.id = {$status_id} " : '';
 
-    			//if the
-    			$statussql		=	 (!empty($includenull)) ? " ( si.id = {$status_id} OR si.id IS NULL)"  : $statussql;
+           //if the
+           $statussql		=	 (!empty($includenull)) ? " ( si.id = {$status_id} OR si.id IS NULL)"  : $statussql;
 
-        		if (!empty($student_ids)) {
-        	    	$where .= " {$studentssql} ";
-        	    	$and = 'AND';
-        	    }
+           if (!empty($student_ids)) {
+              $where .= " {$studentssql} ";
+              $and = 'AND';
+           }
 
-        		if (!empty($status_id)) {
-	       	    	$where .= " {$and} {$statussql} ";
-        	    }
+           if (!empty($status_id)) {
+              $where .= " {$and} {$statussql} ";
+           }
         }
 
 
         $sort = "";
 
-        // fetch any additional filters provided by the table
-        $sql_where = $flextable->get_sql_where();
+        // fetch any additional filters provided by the caller
         if(!empty($sql_where)) {
             $where .= ' AND '.$sql_where;
         }
 
-        // fetch any sort keys provided by the table
-        $sql_sort = $flextable->get_sql_sort();
-
+        // fetch any extra sort keys provided by the caller
         if(!empty($sql_sort)) {
             $sort = ' ORDER BY '.$sql_sort;
         }
 
-        // get a count of all the records for the pagination links
-        $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
-
-        // tell the table how many pages it needs
-        $flextable->totalrows($count);
-
-        $results = $this->dbc->get_records_sql(
-            $select.$from.$where.$sort,
-            null,
-            $flextable->get_page_start(),
-            $flextable->get_page_size()
-        );
-
-        return $results;
+        return $this->dbc->get_records_sql($select.$from.$where.$sort,null);
     }
 
     /**

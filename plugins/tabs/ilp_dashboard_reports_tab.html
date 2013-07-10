@@ -37,7 +37,7 @@
         ?>
 
 <div class="clearfix"> </div>
-            <?php if (!empty($has_comments)) {?>
+            <?php if (!empty($has_comments) and $showcomments) {?>
 		<div class="reports-comments">
 		<div class="view-comments">
                 <h3 id="entry_<?php echo $entry->id; ?>" class="commentheading">

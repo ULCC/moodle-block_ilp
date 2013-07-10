@@ -23,13 +23,15 @@
 	$string['apply'] 				= 	'Apply';
 	$string['applyfilter'] 				= 	'Apply Filter';
 	$string['attendance']			= 	'Attendance';
-	
+$string['showattendance']='Attendance Information';
 	$string['attendaceplugin']		= 	'Attendance Plugin';
 	$string['attendaceplugindesc']	= 	'The attendance plugin that will called to get attendance data in various areas of the ilp (the plugin must be enabled to appear in this list)';
     $string['attachedgraphs']		= 	'Attached Graphs';
 
     $string['availablereports']		= 	'Available Forms';
     $string['average']      		= 	'Average';
+$string['batchreportselect']='Selecting Reports';
+$string['batchreportselect_help']='To select a single file to print, simply click on it. To select additional reports, click on them while holding down the Alt-key (Windows or Linux) or the Cmd-key (Apple). You can also select a range of reports by holding down the shift key when clicking on a second report.';
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
 	$string['binary_icon']			=	'Icon File';
@@ -52,6 +54,7 @@
 	$string['comment']				=	'Comment';
 	$string['commeentdeleted']		=	'Comment deleted';
 	$string['commentcreationsuc']	=	'Comment was successfully created';
+$string['showcomments']='Show Comments';
 	$string['continue']				=	'Continue';
 	$string['contextcourse']		=	'Context Course';
 	$string['contextuser']			=	'Continue User';
@@ -137,6 +140,9 @@
 	
 	$string['fieldmovesuc']			=	'The field was successfully moved';
 	$string['fieldreqsuc']			=	'The field was required status was successfully changed';
+
+$string['gotoprintpreview']='Generate';
+
     $string['graph_pluginsettings']	= 	'Graph Plugin Settings';
     $string['graphcreationsuc'] 	= 	'Graph successfully created';
     $string['graphcreationerror'] 	= 	'Error whilst creating graph';
@@ -219,6 +225,7 @@
     $string['openend']			=	'Open end';
 	$string['notapplicable']		=	'N/A';
 
+$string['noreports']='No reports available';
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
 
@@ -243,7 +250,9 @@
 	$string['previewdescription']	= 	'Below is a preview of the form you are creating if you are happy with the form click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
     $string['preferencecreationsuc'] 		= 	'Preference created';
     $string['previousstudent'] 		= 	'Prev student';
+$string['printreports']='Reports';
 	$string['punctuality']			= 	'Punctuality';
+$string['showpunctuality']='Punctuality Information';
     $string['removefield']			= 	'Remove 1 field';
     $string['removesel']			= 	'Remove selected';
 	$string['removeall']			= 	'Remove all';

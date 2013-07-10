@@ -78,7 +78,7 @@ $template	=	new $classname();
 
 //check if the student has a user status record if not create one
 if (!$dbc->get_user_status($user_id)) {
-	//the user can not change there own status so we must set the modifying user to 
+	//the user can not change their own status so we must set the modifying user to 
 	//the default user
 	$user_modified_id	=	($user_id != $USER->id) ? $USER->id : ILP_DEFAULT_USER_ID;
 	$studentstatus	=	new stdClass();
