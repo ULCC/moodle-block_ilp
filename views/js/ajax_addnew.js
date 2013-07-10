@@ -224,42 +224,44 @@ M.ilp_ajax_addnew = {
     prepare_addnewentry_for_ajax: function() {
         var newentrylink = Y.one('._addnewentry');
         var newentryarea = Y.one('._addnewentryarea');
-        newentrylink.setStyle('cursor', 'pointer');
-        newentrylink.on('click', function(){
-            var loadericon = Y.one('.addnewentry-loader .ajaxloadicon');
-            loadericon.removeClass('hiddenelement');
-            var url = newentrylink.getData('link');
-            var cfg = {
-                method: "POST",
-                on: {
-                    success : function(id, o, args) {
-                        loadericon.addClass('hiddenelement');
-                        var response = Y.JSON.parse(o.responseText);
-                        var form = Y.Node.create(response.html);
-                        newentryarea.setHTML(form);
-                        scriptel = document.createElement('script');
-                        scriptel.textContent = response.script;
-                        document.body.appendChild(scriptel);
+        if(newentrylink){
+            newentrylink.setStyle('cursor', 'pointer');
+            newentrylink.on('click', function(){
+                var loadericon = Y.one('.addnewentry-loader .ajaxloadicon');
+                loadericon.removeClass('hiddenelement');
+                var url = newentrylink.getData('link');
+                var cfg = {
+                    method: "POST",
+                    on: {
+                        success : function(id, o, args) {
+                            loadericon.addClass('hiddenelement');
+                            var response = Y.JSON.parse(o.responseText);
+                            var form = Y.Node.create(response.html);
+                            newentryarea.setHTML(form);
+                            scriptel = document.createElement('script');
+                            scriptel.textContent = response.script;
+                            document.body.appendChild(scriptel);
 
-                        var cancel = Y.one('._addnewentryarea #id_cancel');
-                        cancel.setAttribute('type', 'button');
-                        cancel.on('click', function(){
-                            newentryarea.setHTML('');
-                        });
-
-                        YUI().use('event', function (Y) {
-                            Y.one('#mform1').on('submit', function (e) {
-                                var submitbuttonloadericon = Y.one('._addnewentryarea .ajaxloadicon');
-                                submitbuttonloadericon.removeClass('hiddenelement');
-                                Y.one('._addnewentryarea .fitem_actionbuttons .felement.fgroup').prepend(submitbuttonloadericon);
-                                M.ilp_ajax_addnew.submit_addnewentry_form(e, url, newentryarea, submitbuttonloadericon);
+                            var cancel = Y.one('._addnewentryarea #id_cancel');
+                            cancel.setAttribute('type', 'button');
+                            cancel.on('click', function(){
+                                newentryarea.setHTML('');
                             });
-                        });
+
+                            YUI().use('event', function (Y) {
+                                Y.one('#mform1').on('submit', function (e) {
+                                    var submitbuttonloadericon = Y.one('._addnewentryarea .ajaxloadicon');
+                                    submitbuttonloadericon.removeClass('hiddenelement');
+                                    Y.one('._addnewentryarea .fitem_actionbuttons .felement.fgroup').prepend(submitbuttonloadericon);
+                                    M.ilp_ajax_addnew.submit_addnewentry_form(e, url, newentryarea, submitbuttonloadericon);
+                                });
+                            });
+                        }
                     }
-                }
-            };
-            Y.io(url, cfg);
-        });
+                };
+                Y.io(url, cfg);
+            });
+        }
     },
     submit_addnewentry_form: function(e, url, formarea, submitbuttonloadericon) {
         var Y = this.Y;

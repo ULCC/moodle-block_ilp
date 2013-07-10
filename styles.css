@@ -80,11 +80,13 @@
 .ilp #middle-studentinfo .dashboard_status_icon {
     height: 60px;
     margin: 0;
-    width: 80px;
+    width: 70px;
+    padding: 5px;
+    font-size: 20px;
 }
 .ilp #middle-studentinfo .dashboard_status_icon img.icon_file {
     height: 50px;
-    left: 15px;
+    left: 10px;
     position: relative;
     top: 5px;
     width: 50px;
