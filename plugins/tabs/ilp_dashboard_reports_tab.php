@@ -90,12 +90,18 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     public function generate_left_reports($reportfields, $dontdisplay, $displaysummary, $entry_data) {
         $content = '';
         foreach ($reportfields as $field) {
-            if (!in_array($field->id,$dontdisplay) && ((!empty($displaysummary) && !empty($field->summary) || empty($displaysummary)))) {
-                $fieldname	=	$field->id."_field";
-                $fieldcontent = '';
-                $fieldcontent = '<strong>' . $field->label . ':</strong>' . (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
-                $content .= html_writer::tag('p', $fieldcontent);
-            }
+           $fieldname	=	$field->id."_field";
+
+           if (!in_array($field->id,$dontdisplay) &&
+               isset($entry_data->$fieldname) &&
+               ((!empty($displaysummary) &&
+                 !empty($field->summary) ||
+                 empty($displaysummary))))
+           {
+              $fieldcontent = '';
+              $fieldcontent = '<strong>' . $field->label . ':</strong>' . (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
+              $content .= html_writer::tag('p', $fieldcontent);
+           }
         }
         return html_writer::tag('div', $content, array('class'=>'left-reports'));
     }
