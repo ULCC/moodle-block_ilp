@@ -34,10 +34,10 @@ $dbc = new ilp_db();
 
 $baseurl = new moodle_url($CFG->wwwroot."/blocks/ilp/actions/define_batch_print.php",$PARSER->get_params());
 
-$mform=new batch_print_setup_mform($baseurl->out(),array('course_id'=>optional_param('course_id',0,PARAM_INT),
-                                                         'tutor'=>optional_param('tutor',0,PARAM_INT),
-                                                         'group_id'=>optional_param('group_id',0,PARAM_INT),
-                                                         'status_id'=>optional_param('status_id',0,PARAM_INT)));
+$mform=new batch_print_setup_mform($baseurl->out(false),array('course_id'=>optional_param('course_id',0,PARAM_INT),
+                                                              'tutor'=>optional_param('tutor',0,PARAM_INT),
+                                                              'group_id'=>optional_param('group_id',0,PARAM_INT),
+                                                              'status_id'=>optional_param('status_id',0,PARAM_INT)));
 
 if($mform->is_cancelled())
 {
