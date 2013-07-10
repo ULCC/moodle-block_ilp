@@ -46,8 +46,9 @@ class batch_print_setup_mform extends ilp_moodleform
 
       if(!$imports['tutor'])
       {
-//get all courses that the current user is enrolled in
+         $courseid=isset($imports['course_id'])? $imports['course_id'] : 0 ;
 
+//get all courses that the current user is enrolled in
          $courseoptions=$groupoptions=array();
 
          foreach($dbc->get_user_courses($USER->id) as $id=>$c)
@@ -56,7 +57,10 @@ class batch_print_setup_mform extends ilp_moodleform
 
             foreach(groups_get_all_groups($id) as $g)
             {
-               $groupoptions[$g->id]=$g->name;
+               if(!$courseid or $courseid===$g->courseid)
+               {
+                  $groupoptions[$g->id]=$g->name;
+               }
             }
          }
 
