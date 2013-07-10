@@ -57,7 +57,7 @@ class batch_print_setup_mform extends ilp_moodleform
 
             foreach(groups_get_all_groups($id) as $g)
             {
-               if(!$courseid or $courseid===$g->courseid)
+               if(!$courseid or $courseid==$g->courseid)
                {
                   $groupoptions[$g->id]=$g->name;
                }
