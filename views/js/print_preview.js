@@ -38,7 +38,7 @@ M.ilp_view_print_preview=
                                  {
                                      if(sbox.options.length==0)
                                      {
-                                         sbox.options[0]=newOption(M.ilp_view_print_preview.defaultText,0);
+                                         sbox.options[0]=new Option(M.ilp_view_print_preview.defaultText,0);
                                      }
                                      sbox.options[sbox.options.length]=new Option(val,key);
                                  }
