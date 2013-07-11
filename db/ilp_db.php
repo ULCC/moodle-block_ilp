@@ -1904,7 +1904,7 @@ class ilp_db_functions	extends ilp_logging {
     *
     * @param	int $parent_id	the id of the state item record that is the parent of the item
     * @param	int $itemvalue the actual value of the field
-    * @param	string $keyfield field from $itemtable to use as key
+    * @param	string $keyfield field from $itemtable to use as key
     * @param	string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
     *
     * @return	mixed object or false
@@ -2212,6 +2212,12 @@ class ilp_db_functions	extends ilp_logging {
     function get_studentlist_details($student_ids,$status_id, $sql_where='',$sql_sort='',$includenull=false)
     {
         global $CFG, $DB;
+
+        if(empty($student_ids))
+        {
+           return array();
+        }
+
         $select = "SELECT 		u.id as id,
         				u.idnumber as idnumber,
         				u.firstname as firstname,
