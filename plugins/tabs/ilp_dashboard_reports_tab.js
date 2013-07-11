@@ -28,7 +28,7 @@ M.ilp_dashboard_reports_tab = {
             var my_selector = '#';
             my_selector = my_selector.concat(my_item,my_container);
             headercontainer  =  Y.one(my_selector);
-            if(headercontainer){
+            if(headercontainer._node.childElementCount> 0){
                 var new_el = my_el.appendChild(M.ilp_dashboard_reports_tab.get_view_comments(my_item,headercontainer));
                 headercontainer._hide();
             }
