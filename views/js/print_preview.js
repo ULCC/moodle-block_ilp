@@ -31,7 +31,7 @@ M.ilp_view_print_preview=
                 Y.JSON.parse(text,
                              function(key,val)
                              {
-                                 if(val!='')
+                                 if(val!='' && key!='')
                                      sbox.options[sbox.options.length]=new Option(val,key);
                              }
                             );

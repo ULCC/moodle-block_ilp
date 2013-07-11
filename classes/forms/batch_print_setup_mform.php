@@ -72,8 +72,7 @@ class batch_print_setup_mform extends ilp_moodleform
 
 //Put the groups in to name order and create drop down
          asort($groupoptions);
-         $mform->addElement('select','group_id',get_string('group'),$groupoptions,
-                            array('style'=>'display:none'));
+         $mform->addElement('select','group_id',get_string('group'),$groupoptions);
          $mform->setDefault('group_id',$imports['group_id']);
 
       }

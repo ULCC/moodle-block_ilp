@@ -28,10 +28,7 @@ function groups_in_course()
    $r=array();
    foreach(groups_get_all_groups($id) as $group)
    {
-      if(!$courseid or $courseid==$group->courseid)
-      {
-         $r[$group->id]=$group->name;
-      }
+      $r[$group->id]=$group->name;
    }
 
    print json_encode($r);
