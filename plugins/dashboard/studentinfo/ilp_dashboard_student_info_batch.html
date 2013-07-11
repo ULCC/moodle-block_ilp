@@ -13,26 +13,26 @@
 
       <strong><?php echo get_string('studentstatus','block_ilp');?></strong>
       <?php
-         if($statusitem->display_option == 'icon'){
+         if(!empty($statusitem))
+         {
+            if($statusitem->display_option == 'icon'){
 
-            if($statusitem->icon){
+               if($statusitem->icon){
 
-               $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
-               $this_file = "<a class='tooltip'><img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
+                  $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
+                  $this_file = "<a class='tooltip'><img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
                 <span><img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
-               $this_file .= html_entity_decode($statusitem->description)."</span></a>";
-               //we found there is a icon, so we need to display it
-               echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. $this_file .'</div>';
+                  $this_file .= html_entity_decode($statusitem->description)."</span></a>";
+                  //we found there is a icon, so we need to display it
+                  echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. $this_file .'</div>';
 
+               }else{
+
+                  echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. html_entity_decode($statusitem->description) .'</div>';
+               }
             }else{
-
-               echo '<div style="background: '. $statusitem->bg_colour .'" class="dashboard_status_icon">'. html_entity_decode($statusitem->description) .'</div>';
+               echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
             }
-
-         }else{
-
-            echo '<div><span id="user_status"  style="color: ' . $userstatuscolor . ';" >'. $statusitem->name . '</span></div>';
-
          }
 if (!empty($percentagebars)) {
    foreach($percentagebars	as $p) {
