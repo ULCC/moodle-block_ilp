@@ -1,7 +1,10 @@
 M.ilp_view_print_preview=
     {
-        init: function()
+        init: function(Y,defaultText)
         {
+
+            M.ilp_view_print_preview.defaultText=defaultText;
+
             if(Y.one('#id_course_id') !=null &&
                Y.one('#id_group_id') != null)
             {
@@ -32,7 +35,13 @@ M.ilp_view_print_preview=
                              function(key,val)
                              {
                                  if(typeof val =='string')
+                                 {
+                                     if(sbox.options.length==0)
+                                     {
+                                         sbox.options[0]=newOption(M.ilp_view_print_preview.defaultText,0);
+                                     }
                                      sbox.options[sbox.options.length]=new Option(val,key);
+                                 }
                              }
                             );
 

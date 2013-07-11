@@ -18,7 +18,7 @@ $jsmodule = array(
    'requires'  => array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
 );
 
-$PAGE->requires->js_init_call('M.ilp_view_print_preview.init', null, true, $jsmodule);
+$PAGE->requires->js_init_call('M.ilp_view_print_preview.init', array(get_string('any')), true, $jsmodule);
 
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
