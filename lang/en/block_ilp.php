@@ -230,7 +230,6 @@ $string['noreports']='No reports available';
     $string['onemonthdata']		    =	'past 1 months data';
 
     $string['notinsummary']	        =	'Not in summary';
-	$string['nothingtodisplay']		=	'Nothing to display';
 
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';

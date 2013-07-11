@@ -89,14 +89,21 @@ require_once("$CFG->dirroot/blocks/ilp/plugins/dashboard/ilp_dashboard_student_i
 
 print '<div class="ilp">';
 
-foreach($dbc->get_studentlist_details(array_keys($students),$status_id,'','lastname asc') as $student)
+if($fullstudents=$dbc->get_studentlist_details(array_keys($students),$status_id,'','lastname asc'))
 {
-   print '<div class="batchprint">';
+   foreach($fullstudents as $student)
+   {
+      print '<div class="batchprint">';
 
-   $info=new ilp_dashboard_student_info_print_plugin($student->id,$data);
-   $info->display(array());
+      $info=new ilp_dashboard_student_info_print_plugin($student->id,$data);
+      $info->display(array());
 
-   print '</div>';
+      print '</div>';
+   }
+}
+else
+{
+   print get_string('nothingtodisplay','block_ilp');
 }
 
 print '</div>';
