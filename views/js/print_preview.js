@@ -31,17 +31,18 @@ M.ilp_view_print_preview=
                 Y.JSON.parse(text,
                              function(key,val)
                              {
-                                 sbox.options[sbox.options.length]=new Option(val,key);
+                                 if(val!='')
+                                     sbox.options[sbox.options.length]=new Option(val,key);
                              }
                             );
 
                 if(sbox.options.length==0)
                 {
-                    Y.one('id_group_id').hide();
+                    Y.one('#fitem_id_group_id').hide();
                 }
                 else
                 {
-                    Y.one('id_group_id').show();
+                    Y.one('#fitem_id_group_id').show();
                 }
             }
         }
