@@ -1,24 +1,27 @@
 M.ilp_view_print_preview=
 {
-    init()
+    init: function()
     {
-        if(Y.one('#select_course_id') !=null &&
-           Y.one('#select_group_id') != null)
+        if(Y.one('#id_course_id') !=null &&
+           Y.one('#id_group_id') != null)
         {
-            Y.on('change',function())
-            {
-                var index = Y.get("#select_course_id").get('selectedIndex');
-                var value = Y.get("#select_course_id").get("options").item(index).getAttribute('value');
-                M.ilp_view_print_preview.update_groups(value);
-            }
+            Y.on('change',function()
+                 {
+                     var index = Y.get("#id_course_id").get('selectedIndex');
+                     var value = Y.get("#id_course_id").get("options").item(index).getAttribute('value');
+                     M.ilp_view_print_preview.update_groups(value);
+                 }
+                );
+            var value = Y.get("#id_course_id").get("options").item(index).getAttribute('value');
+            M.ilp_view_print_preview.update_groups(value);
         }
     },
 
-    update_groups(courseid)
+    update_groups: function(courseid)
     {
-        if(Y.one('#select_group_id') != null)
+        if(Y.one('#id_group_id') != null)
         {
-            sbox=document.getElementById('select_group_id');
+            var sbox=document.getElementById('id_group_id');
             sbox.options.length=0;
             sbox.selectedIndex=0;
 
