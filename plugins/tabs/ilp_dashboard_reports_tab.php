@@ -391,17 +391,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
            'fullpath' 	=> '/blocks/ilp/views/js/ajax_addnew.js',
            'requires'  	=> array('io','io-form', 'json-parse', 'json-stringify', 'json', 'base', 'node')
        );
-       $return_only_newest = (!empty($ajax_settings) && (isset($ajax_settings['return_only_newest_entry']))
-               && $ajax_settings['return_only_newest_entry'] ) ? true : false;
 
-       $return_refreshed_list = (!empty($ajax_settings) && (isset($ajax_settings['return_refreshed_entry_list']))
-           && $ajax_settings['return_refreshed_entry_list'] ) ? true : false;
+       $return_only_newest = !empty($ajax_settings['return_only_newest_entry']);
 
-       $return_left_report_only = (!empty($ajax_settings) && (isset($ajax_settings['return_left_reports_for_single_entry']))
-           && $ajax_settings['return_left_reports_for_single_entry'] ) ? $ajax_settings['return_left_reports_for_single_entry'] : false;
+       $return_refreshed_list = !empty($ajax_settings['return_refreshed_entry_list']);
 
-       $return_right_report_only = (!empty($ajax_settings) && (isset($ajax_settings['return_right_reports_for_single_entry']))
-           && $ajax_settings['return_right_reports_for_single_entry'] ) ? $ajax_settings['return_right_reports_for_single_entry'] : false;
+       $return_left_report_only = !empty($ajax_settings['return_left_reports_for_single_entry']) ?
+          $ajax_settings['return_left_reports_for_single_entry'] : false;
+
+       $return_right_report_only = !empty($ajax_settings['return_right_reports_for_single_entry']) ?
+          $ajax_settings['return_right_reports_for_single_entry'] : false;
 
        $PAGE->requires->js_init_call('M.ilp_ajax_addnew.init', $jsarguments, true, $jsmodule);
 
