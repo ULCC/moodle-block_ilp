@@ -5,15 +5,15 @@ M.ilp_view_print_preview=
             if(Y.one('#id_course_id') !=null &&
                Y.one('#id_group_id') != null)
             {
-                Y.on('change',function()
-                     {
-                         var sbox=document.getElementById('id_course_id');
-                         var index = sbox.selectedIndex;
-                         var value = sbox.options[index].value;
+                Y.one('#id_course_id').on('change',function()
+                                          {
+                                              var sbox=document.getElementById('id_course_id');
+                                              var index = sbox.selectedIndex;
+                                              var value = sbox.options[index].value;
 
-                         M.ilp_view_print_preview.update_groups(value);
-                     }
-                    );
+                                              M.ilp_view_print_preview.update_groups(value);
+                                          }
+                                         );
                 var sbox=document.getElementById('id_course_id');
                 M.ilp_view_print_preview.update_groups(sbox.options[sbox.selectedIndex].value);
             }
@@ -31,7 +31,7 @@ M.ilp_view_print_preview=
                 Y.JSON.parse(text,
                              function(key,val)
                              {
-                                 if(val!='' && key!='')
+                                 if(typeof val =='string')
                                      sbox.options[sbox.options.length]=new Option(val,key);
                              }
                             );
