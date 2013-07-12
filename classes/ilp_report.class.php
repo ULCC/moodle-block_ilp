@@ -26,7 +26,8 @@ class ilp_report
    static function from_id($id)
    {
       $dbc=new ilp_db();
-      $r=$dbc->get_report_by_id($id);
+
+      $r=$dbc->get_record('block_ilp_report', array('id' => $id));
 
       $report=new self();
 
