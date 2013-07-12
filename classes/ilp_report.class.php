@@ -25,9 +25,9 @@ class ilp_report
 //
    static function from_id($id)
    {
-      $dbc=new ilp_db();
+      global $DB;
 
-      $r=$dbc->get_record('block_ilp_report', array('id' => $id));
+      $r=$DB->get_record('block_ilp_report', array('id' => $id));
 
       $report=new self();
 
