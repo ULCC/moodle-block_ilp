@@ -46,7 +46,7 @@ class ilp_report
  */
    static function userchanged($data)
    {
-      $cache=cache::make('ilp_block','user_capability_cache');
+      $cache=cache::make('block_ilp','user_capability_cache');
       $cache->delete($data->userid);
       return true;
    }
@@ -56,7 +56,7 @@ class ilp_report
    function __construct()
    {
       $this->dbc=new ilp_db();
-      $this->cache=cache::make('ilp_block','user_capability_cache');
+      $this->cache=cache::make('block_ilp','user_capability_cache');
    }
 
 
