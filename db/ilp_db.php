@@ -10,6 +10,7 @@
  * @version 2.0
  */
 require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_logging.class.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report.class.php');
 
 /**
  * Main database class, with functions to encode and decode stuff to and from the DB
@@ -594,7 +595,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object or false if no record found
      */
 	function get_report_by_id($id) {
-		return $this->dbc->get_record('block_ilp_report', array('id' => $id));
+           return ilp_class::from_id($id);
 	}
 
      /**
@@ -2957,6 +2958,3 @@ function checkpositions($pos, $possarr) {
         return false;
     }
 }
-
-
-?>

@@ -2,6 +2,7 @@
 
 //require the ilp_plugin.php class
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report.class.php');
 
 class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
