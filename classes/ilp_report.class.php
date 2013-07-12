@@ -38,45 +38,99 @@ class ilp_report
       return $report;
    }
 
+/**
+ * Something has happened to the user; clear them from
+ * the capability cache.
+ *
+ * @param $data an object of some kind, depending on event
+ */
+   static function userchanged($data)
+   {
+      $cache=cache::make('ilp_block','user_capability_cache');
+      $cache->delete($data->userid);
+      return true;
+   }
+
 ///Instance
 
    function __construct()
    {
       $this->dbc=new ilp_db();
+      $this->cache=cache::make('ilp_block','user_capability_cache');
    }
 
-   function can_view($context,$user)
-   {
-      static $cached=array();
 
-      if($this->status!=ILP_ENABLED)
-         return false;
+/**
+ * Roles and caps are slow, so we'll cache the results.
+ * The cache key is just $userid
+ * and the value is a 3d array of [$contextid][$roleid][$cap]
+ * This way we can invalidate a user in one easy step if role
+ * assignment is detected.
+ *
+ * @param $user either user object or just id
+ * @param $context a full context object
+ * @param $cap a string representing a capability
+ * @return boolean
+ */
+   function has_cap($user,$context,$cap)
+   {
+      static $userroles=array();
+
+      $site=context_system::instance();
 
       if(is_object($user))
          $user=$user->id;
 
-      if(isset($cached[$context->id][$user]))
-         return $cached[$context->id][$user];
-
-      $role_ids= array();
-
-      $authuserrole=$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
-      if (!empty($authuserrole)) $role_ids[]=$authuserrole->id;
-
-      if ($roles = get_user_roles($context, $user))
+      if(ilp_is_siteadmin($user) or has_capability('block/ilp:ilpviewall',$site))
       {
-         foreach ($roles as $role)
-         {
-            $role_ids[]= $role->roleid;
-         }
+         return true;
       }
 
-      $access_report_viewreports= false;
-      $capability=$this->dbc->get_capability_by_name('block/ilp:viewreport');
+      $cacheline=$this->cache->get($user);
+      if($cacheline!==false and isset($cacheline[$user][$context->id][$cap]))
+      {
+         return $cacheline[$user][$context->id][$cap];
+      }
 
+// Not in cache, try the mini-cache for roles
+      if(isset($useroles[$user]))
+      {
+         $role_ids=$userroles[$user];
+      }
+      else
+      {
+// Nope, so we do it the hard way
+         $role_ids= array();
+         $cacheline=array();
+
+         $authuserrole=$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
+         if (!empty($authuserrole)) $role_ids[]=$authuserrole->id;
+
+         if ($roles = get_user_roles($context, $user))
+         {
+            foreach ($roles as $role)
+            {
+               $role_ids[]= $role->roleid;
+            }
+         }
+
+         $userroles[$user]=$role_ids;
+      }
+
+      $capability=$this->dbc->get_capability_by_name($cap);
       if (!empty($capability))
-         $access_report_viewreports=$this->dbc->has_report_permission($this->id,$role_ids,$capability->id);
+      {
+         $flag=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+      }
+      else
+      {
+         $flag=false;
+      }
 
-      return $cached[$context->id][$user]=!empty($access_report_viewreports);
+      $cacheline[$user][$context->id][$cap]=$flag;
+
+      $cache->set($user,$cacheline);
+
+      return $flag;
    }
 }

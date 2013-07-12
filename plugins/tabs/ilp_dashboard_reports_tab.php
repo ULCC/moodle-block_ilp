@@ -2,7 +2,6 @@
 
 //require the ilp_plugin.php class
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
-require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report.class.php');
 
 class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
@@ -290,83 +289,53 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
             $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
-            if ($report	=	$this->dbc->get_report_by_id($report_id)) {
+            if ($report	=$this->dbc->get_report_by_id($report_id)) {
 
-                //get all of the users roles in the current context and save the id of the roles into
-                //an array
-                $role_ids	=	 array();
+               if($report->status==ILP_ENABLED and $report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
+               {
+                  $reportname	=	$report->name;
+                  //get all of the fields in the current report, they will be returned in order as
+                  //no position has been specified
+                  $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
 
-                $authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
-                if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
+                  $reporticon	= (!empty($report->iconfile)) ? '' : '';
 
-                if ($roles = get_user_roles($PAGE->context, $USER->id)) {
-                    foreach ($roles as $role) {
-                        $role_ids[]	= $role->roleid;
-                    }
-                }
+                  //does this report give user the ability to add comments
+                  $has_comments	=	!empty($report->comments);
 
-                $access_report_viewreports	= false;
-                $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
-                if (!empty($capability)) $access_report_viewreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                  //this will hold the ids of fields that we dont want to display
+                  $dontdisplay	=	 array();
 
-                if ($report->status == ILP_ENABLED && !empty($access_report_viewreports)) {
-                    $reportname	=	$report->name;
-                    //get all of the fields in the current report, they will be returned in order as
-                    //no position has been specified
-                    $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+                  //does this report allow users to say it is related to a particular course
+                  $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? true : false;
 
-                    $reporticon	= (!empty($report->iconfile)) ? '' : '';
+                  if (!empty($has_courserelated))	{
+                     $courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
+                     //the should not be anymore than one of these fields in a report
+                     foreach ($courserelated as $cr) {
+                        $dontdisplay[] 	=	$cr->id;
+                        $courserelatedfield_id	=	$cr->id;
+                     }
+                  }
 
-                    //does this report give user the ability to add comments
-                    $has_comments	=	!empty($report->comments);
+                  //find if the current user can add reports
+                  self::$access_report_addreports= $report->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
 
-                    //this will hold the ids of fields that we dont want to display
-                    $dontdisplay	=	 array();
+                  //find out if the current user has the edit report capability for the report
+                  self::$access_report_editreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
 
-                    //does this report allow users to say it is related to a particular course
-                    $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? true : false;
+                  //find out if the current user has the delete report capability for the report
+                  self::$access_report_deletereports=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletereport');
 
-                    if (!empty($has_courserelated))	{
-                        $courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
-                        //the should not be anymore than one of these fields in a report
-                        foreach ($courserelated as $cr) {
-                            $dontdisplay[] 	=	$cr->id;
-                            $courserelatedfield_id	=	$cr->id;
-                        }
-                    }
+                  //find out if the current user has the add comment capability for the report
+                  self::$access_report_addcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:addcomment');
 
-                    //find if the current user can add reports
-                    $access_report_addreports	= false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:addreport');
-                    if (!empty($capability)) $access_report_addreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                  //find out if the current user has the edit comment capability for the report
+                  self::$access_report_editcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:editcomment');
 
-                    //find out if the current user has the edit report capability for the report
-                    $access_report_editreports	= false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:editreport');
-                    if (!empty($capability)) $access_report_editreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-                    //find out if the current user has the delete report capability for the report
-                    $access_report_deletereports	=	false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
-                    if (!empty($capability))	$access_report_deletereports	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-                    //find out if the current user has the add comment capability for the report
-                    $access_report_addcomment	= false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:addcomment');
-                    if (!empty($capability)) $access_report_addcomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-                    //find out if the current user has the edit comment capability for the report
-                    $access_report_editcomment	=	false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:editcomment');
-                    if (!empty($capability))	$access_report_editcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-                    self::$access_report_editcomment = $access_report_editcomment;
-
-                    //find out if the current user has the add comment capability for the report
-                    $access_report_deletecomment	= false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletecomment');
-                    if (!empty($capability)) $access_report_deletecomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-                    self::$access_report_deletecomment = $access_report_deletecomment;
-                }
+                  //find out if the current user has the delete comment capability for the report
+                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletecomment');
+               }
             }
         }
     }
@@ -475,50 +444,17 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   }
                }
 
-               //find if the current user can add reports
-               $access_report_addreports	= false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:addreport');
-               if (!$readonly and !empty($capability)) $access_report_addreports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               foreach(array('addreport','editreport','deletereport','addcomment','editcomment',
+                             'deletecomment','viewcomment','viewotherilp','addviewextension') as $capname)
+               {
+                  $varname='access_report_'.$capname;
+                  $$varname=$report->has_cap($USER->id,$PAGE->context,"block/ilp:$capname");
+               }
 
-               //find out if the current user has the edit report capability for the report
-               $access_report_editreports	= false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:editreport');
-               if (!$readonly and !empty($capability)) $access_report_editreports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the delete report capability for the report
-               $access_report_deletereports	=	false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
-               if (!$readonly and !empty($capability))	$access_report_deletereports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the add comment capability for the report
-               $access_report_addcomment= false;
-               $capability=$this->dbc->get_capability_by_name('block/ilp:addcomment');
-               if (!$readonly and !empty($capability)) $access_report_addcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the edit comment capability for the report
-               $access_report_editcomment	=	false;
-               $capability=$this->dbc->get_capability_by_name('block/ilp:editcomment');
-               if (!$readonly and !empty($capability))	$access_report_editcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the add comment capability for the report
-               $access_report_deletecomment	= false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletecomment');
-               if (!$readonly and !empty($capability)) $access_report_deletecomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the edit comment capability for the report
-               $access_report_viewcomment	=	false;
-               $capability=$this->dbc->get_capability_by_name('block/ilp:viewcomment');
-               if ($showcomments and !empty($capability))	$access_report_viewcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               $access_report_viewcomment=$access_report_viewcomment && $showcomments;
 
                // Check to see whether the user can delete the reports entry either single entry or multiple entry.
-               $candelete =	(!$readonly and !empty($access_report_deletereports));
-
-               $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
-               if (!empty($capability))	$access_report_viewothers=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //check to see whether the user can add/view extension for the specific report
-               $capability		=	$this->dbc->get_capability_by_name('block/ilp:addviewextension');
-               if (!empty($capability))	$access_report_addviewextension = $this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               $candelete = (!$readonly and $access_report_deletereports);
 
                //get all of the entries for this report
                $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
@@ -531,7 +467,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                //output html elements to screen
 
-               $icon				=	(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
+               $icon = (!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
 
                echo $this->get_header($report->name,$icon);
 
