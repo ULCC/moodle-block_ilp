@@ -595,7 +595,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object or false if no record found
      */
 	function get_report_by_id($id) {
-           return ilp_class::from_id($id);
+           return ilp_report::from_id($id);
 	}
 
      /**
