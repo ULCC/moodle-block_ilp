@@ -749,41 +749,6 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 	/**
-     * Returns a list of all reports currently enabled in a course
-     *
-     * @param int 	$course_id the id of the course who we want to
-     * get report for
-     *  @param int $report_id the id of the report
-     * @return mixed array containing recordset objects or false
-     */
-    function get_coursereports($course_id,$report_id=null,$status=null) {
-
-        $report_sql = "";
-        $status_sql = "";
-
-        $params = array('course_id'=>$course_id);
-
-        if(!empty($report_id)){
-            $params['report_id'] = $report_id;
-            $report_sql = " AND report_id = :report_id ";
-        }
-        if(!empty($status)){
-            $params['status'] = $status;
-            $status_sql = " AND cr.status = :status ";
-        }
-
-    	$sql	=	"SELECT		*, cr.id as cr_id
-    				 FROM 		{block_ilp_coursereports} as cr,
-    				 			{block_ilp_report} as r
-    				 WHERE		cr.report_id	=	r.id
-    				 AND		course_id 	=  :course_id
-    				{$report_sql}
-    				{$status_sql}";
-
-        return	$this->dbc->get_records_sql($sql, $params);
-    }
-
-	/**
      * Returns a list of all ilp reports with an enabled status
      *
      * @param array $reports a array contain the ids of reports that
@@ -801,30 +766,6 @@ class ilp_db_functions	extends ilp_logging {
 
     	return	$this->dbc->get_records_sql($sql);
     }
-
-    /**
-     * Creates a record in the block_ilp_coursereports table that allows
-     * a report to be shown in a course
-     *
-     * @param object $record the record that will be created
-     *
-     * @return mixed int the id of the record or false
-     */
-    function create_coursereport($record) {
-    	return $this->insert_record("block_ilp_coursereports",$record);
-    }
-
-	/**
-     * Updates the given coursereport record
-     *
-     * @param object $record the record that will be updated
-     *
-     * @return bool true or false
-     */
-    function update_coursereport($record) {
-    	return $this->update_record("block_ilp_coursereports",$record);
-    }
-
 
     /**
      * returns any reportpermission records that match the given
