@@ -5,12 +5,12 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.
 
 class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
-   public		$student_id;
-   public 		$filepath;
-   public		$linkurl;
-   public 		$selectedtab;
-   public		$role_ids;
-   public 		$capability;
+   public	$student_id;
+   public 	$filepath;
+   public	$linkurl;
+   public 	$selectedtab;
+   public	$role_ids;
+   public 	$capability;
    static       $access_report_editcomment;
    static       $access_report_deletecomment;
 
@@ -325,7 +325,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   self::$access_report_editreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
 
                   //find out if the current user has the delete report capability for the report
-                  self::$access_report_deletereports=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletereport');
+                  self::$access_report_deletereport=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletereport');
 
                   //find out if the current user has the add comment capability for the report
                   self::$access_report_addcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:addcomment');
@@ -432,7 +432,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $dontdisplay	=	 array();
 
                //does this report allow users to say it is related to a particular course
-               $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? true : false;
+               $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course'));
 
                if (!empty($has_courserelated))	{
                   $courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
@@ -450,10 +450,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   $$varname=$report->has_cap($USER->id,$PAGE->context,"block/ilp:$capname");
                }
 
-               $access_report_viewcomment=$access_report_viewcomment && $showcomments;
+               foreach(array('addreport','editreport','deletereport','addcomment','editcomment',
+                             'deletecomment','addviewextension') as $capname)
+               {
+                  $varname='access_report_'.$capname;
+                  $$varname=($$varname and !$readonly);
+               }
 
-               // Check to see whether the user can delete the reports entry either single entry or multiple entry.
-               $candelete = (!$readonly and $access_report_deletereports);
+               $access_report_viewcomment=($access_report_viewcomment && $showcomments);
 
                //get all of the entries for this report
                $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
@@ -511,8 +515,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
 								 ";
                }
-
-
 
                //create the entries list var that will hold the entry information
                $entrieslist	=	array();
