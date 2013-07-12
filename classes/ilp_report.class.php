@@ -120,7 +120,7 @@ class ilp_report
       $capability=$this->dbc->get_capability_by_name($cap);
       if (!empty($capability))
       {
-         $flag=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+         $flag=$this->dbc->has_report_permission($this->id,$role_ids,$capability->id);
       }
       else
       {
@@ -129,7 +129,7 @@ class ilp_report
 
       $cacheline[$user][$context->id][$cap]=$flag;
 
-      $cache->set($user,$cacheline);
+      $this->cache->set($user,$cacheline);
 
       return $flag;
    }
