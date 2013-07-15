@@ -198,14 +198,12 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                      //the tabitem and selectedtab query string params are added to the linkurl in the
                      //second_row() function
                      $this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
-                  }
-
                }
+
             }
          }
       }
    }
-
 
    /**
     * Override this to define the third tab row should be defined in this function
@@ -372,8 +370,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
          $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
-         if ($report=$this->dbc->get_report_by_id($report_id)) {
-            if ($report->status == ILP_ENABLED && !$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport') {
+         if ($report=ilp_report::from_id($report_id)) {
+            if ($report->status == ILP_ENABLED && !$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport')) {
                $reportname	=	$report->name;
                //get all of the fields in the current report, they will be returned in order as
                //no position has been specified
