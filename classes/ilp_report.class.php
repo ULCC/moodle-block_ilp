@@ -285,62 +285,68 @@ class ilp_report
        return $DB->get_records_sql($sql, $params);
     }
 
-    function export_all_entries($userid)
+    function export_all_entries($users)
     {
        global $DB,$CFG;
 
-       $creators=$pluginRecords=$pluginInstances=$pluginFieldsLoaded=array();
+       $rows=array();
 
-       foreach($this->get_user_report_entries($userid) as $report_entry)
+       foreach($user as $userid)
        {
-          $row=new stdClass;
-          foreach ($this->get_all_fields() as $field) {
-             //get the plugin record that for the plugin, with cacheing
-             if(!isset($pluginRecords[$field->plugin_id]))
-             {
-                $pluginRecords[$field->plugin_id]=$this->dbc->get_plugin_by_id($field->plugin_id);
-             }
+          $creators=$pluginRecords=$pluginInstances=$pluginFieldsLoaded=array();
 
-             $pluginrecord=$pluginRecords[$field->plugin_id];
-
-             $tablename=$pluginrecord->tablename;
-
-             //Get the data from table name for the current entry
-/*
-             $sql="SELECT * FROM {$table}_ent ent join {$table} p on p.id=ent.parent_id
-                            WHERE p.reportfield_id=:fieldid and ent.entry_id=:entryid";
-
-             $data=$DB->get_record_sql($sql,array('fieldid'=>$field->id,
-                                                  'entryid'=>$report_entry->id));
-*/
-
-             //take the name field from the plugin as it will be used to call the instantiate the plugin class
-             $classname = $pluginrecord->name;
-
-//More caching
-             if(!isset($pluginInstances[$classname]))
-             {
-                // include the class for the plugin
-                include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
-
-                if(!class_exists($classname)) {
-                   print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+          foreach($this->get_user_report_entries($userid) as $report_entry)
+          {
+             $row=new stdClass;
+             foreach ($this->get_all_fields() as $field) {
+                //get the plugin record that for the plugin, with cacheing
+                if(!isset($pluginRecords[$field->plugin_id]))
+                {
+                   $pluginRecords[$field->plugin_id]=$this->dbc->get_plugin_by_id($field->plugin_id);
                 }
 
-                //instantiate the plugin class
+                $pluginrecord=$pluginRecords[$field->plugin_id];
 
-                $pluginInstances[$classname]=new $classname;
-                $pluginFieldsLoaded[$classname]=array();
+                $tablename=$pluginrecord->tablename;
+
+                //Get the data from table name for the current entry
+/*
+  $sql="SELECT * FROM {$table}_ent ent join {$table} p on p.id=ent.parent_id
+  WHERE p.reportfield_id=:fieldid and ent.entry_id=:entryid";
+
+  $data=$DB->get_record_sql($sql,array('fieldid'=>$field->id,
+  'entryid'=>$report_entry->id));
+*/
+
+                //take the name field from the plugin as it will be used to call the instantiate the plugin class
+                $classname = $pluginrecord->name;
+
+//More caching
+                if(!isset($pluginInstances[$classname]))
+                {
+                   // include the class for the plugin
+                   include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
+
+                   if(!class_exists($classname)) {
+                      print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+                   }
+
+                   //instantiate the plugin class
+
+                   $pluginInstances[$classname]=new $classname;
+                   $pluginFieldsLoaded[$classname]=array();
+                }
+
+                $pluginclass=$pluginInstances[$classname];
+
+                if ($pluginclass->is_viewable() != false)
+                {
+                   $pluginclass->view_data($field->id,$report_entry->id,$row);
+                }
              }
-
-             $pluginclass=$pluginInstances[$classname];
-
-             if ($pluginclass->is_viewable() != false)
-             {
-                $pluginclass->view_data($field->id,$report_entry->id,$row);
-             }
+             $rows[]=(array($rows));
           }
-          print_object($row);
        }
+       print_object($rows);
     }
 }
