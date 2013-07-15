@@ -625,7 +625,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
 //If we're in read only mode with showcomments then don't allow
 //comments to be hidden
-         if($readonly and $showcomments)
+         if(!($readonly and $showcomments))
          {
             // initialise the js for the page
             $PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
