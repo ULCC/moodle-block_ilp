@@ -2,6 +2,7 @@
 
 //require the ilp_plugin.php class
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report.class.php');
 
 class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
@@ -182,44 +183,17 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             }
          }
 
-
-         //get all of the users roles in the current context and save the id of the roles into
-         //an array
-         $role_ids	=	 array();
-
-         $authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
-         if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
-
-
-
-         //TODO: strange but isset does not seem to work correctly in moodle 2.0
-         //it doesn't return true when testing for $PAGE->context even when it is set
-         //so I will do different tests depending on moodle version
-
-         $contextset = false;
-
-         $contextset	= !is_null($PAGE->context);
-
-         if (!empty($contextset))	{
-
-            if ($roles = get_user_roles($PAGE->context, $USER->id)) {
-               foreach ($roles as $role) {
-                  $role_ids[]	= $role->roleid;
-               }
-            }
-
-            $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
+         if (!empty($PAGE->context))	{
 
             $this->secondrow	=	array();
 
-
             //get all reports
-            $reports	=	$this->dbc->get_reports_by_position(null,null,false);
+            $reports	= ilp_report::get_all_reports();
             if (!empty($reports)) {
                //create a tab for each enabled report
                foreach($reports as $r)	{
 
-                  if ($this->dbc->has_report_permission($r->id,$role_ids,$capability->id)) {
+                  if ($r->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
 
                      //the tabitem and selectedtab query string params are added to the linkurl in the
                      //second_row() function

@@ -39,6 +39,47 @@ class ilp_report
    }
 
 /**
+ * Return an array of all the currently known reports
+ * whether enabled or not
+ * @param boolean includeDeleted
+ *
+ * @return array of report *objects*; may be empty
+ */
+   static function get_all_reports($includeDeleted=false)
+   {
+      global $DB;
+
+      $r=array();
+
+      foreach($DB->get_fieldset_select('block_ilp_report','id') as $rid)
+      {
+         if($r->deleted or $includeDeleted)
+            $r[$id]=static::from_id($id);
+      }
+
+      return $r;
+   }
+
+/**
+ * Get all the enabled reports except the ones passed in
+ * @param array of ints $not_wanted the reports not to return
+ *
+ * @return array of report objects
+ */
+   static function get_enabledreports($not_wanted=array())
+   {
+      $all=static::get_all_reports();
+
+      if(empty($all))
+         return $all;
+
+      return array_filter($all,function($report) use($not_wanted)
+                          {
+                             return (!in_array($report->id,$not_wanted) and $report->status==ILP_ENABLED);
+                          });
+   }
+
+/**
  * Something has happened to the user; clear them from
  * the capability cache.
  *
@@ -52,6 +93,9 @@ class ilp_report
    }
 
 ///Instance
+
+   protected $report_fields;
+   protected $plugins;
 
    function __construct()
    {
@@ -133,4 +177,68 @@ class ilp_report
 
       return $flag;
    }
+
+   protected function set_my_report_fields()
+   {
+      $this->fields=$this->db->get_records('block_ilp_report_field',array('report_id'=>$this->id));
+   }
+
+
+   function get_report_fields_by_position($position=false,$type=false)
+   {
+       if(!isset($this->report_fields))
+          $this->set_my_report_fields();
+
+
+      if(!$position)
+         return $this->fields;
+
+      $otherfield=$type ? $position-1 : $position+1;
+
+      return array_filter($this->fields,function($item) use($position,$otherfield)
+                          {
+                             return ($position===false or
+                                     ($item->position==$position or $item->position==$otherfield));
+                          });
+   }
+
+    /**
+     *
+     * Returns whether the given report has a plugins field
+     * @param int $report_id the id of the report that we will
+     * check if it has a the plugins field
+     *
+     * @return	bool true or false
+     */
+    protected function set_plugin_fields()
+    {
+
+       $sql = "SELECT   *
+         FROM   {block_ilp_plugin} as p,
+             {block_ilp_report_field} as rf
+         WHERE   rf.plugin_id = p.id
+         AND   rf.report_id = :report_id";
+
+       foreach($this->dbc->get_records_sql($sql, array('report_id'=>$this->id)) as $item)
+       {
+          $this->plugins[$item->name]=$item;
+       }
+    }
+
+    public function has_plugin_field($name)
+    {
+       if(!isset($this->plugins))
+          $this->set_plugin_fields();
+
+       if(isset($this->plugins[$name]))
+       {
+          return $this->plugins[$name];
+       }
+       return false;
+    }
+
+    public function get_user_entries($user_id,$state_id)
+    {
+    }
+
 }
