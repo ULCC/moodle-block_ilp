@@ -623,8 +623,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             'closed_image' => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_plus.gif",
             );
 
-//If we're in read only mode with showcomments then don't allow
-//comments to be hidden
+         //Only activate JS hide/show code if not in read-only/show comment modes
          if(!($readonly and $showcomments))
          {
             // initialise the js for the page
