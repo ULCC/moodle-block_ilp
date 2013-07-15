@@ -21,6 +21,8 @@ require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 // Include the report permissions file
 require_once($CFG->dirroot.'/blocks/ilp/report_permissions.php');
 
+require_once($CFG->dirroot . '/blocks/ilp/classes/ilp_report_rules.class.php');
+
 //if set get the id of the report 
 $report_id	= $PARSER->required_param('report_id',PARAM_INT);
 

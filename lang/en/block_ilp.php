@@ -115,6 +115,7 @@ $string['showcomments']='Show Comments';
     $string['enabled'] 				= 	'Enabled';
     $string['expandentries']		=	'Expand entries';
     $string['numberentries']		= 	'{$a->entries} entries';
+    $string['numberentriestxt']		= 	'entries';
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';
     $string['firstentry']		    =	'First entry';
@@ -466,6 +467,9 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
 
     $string['studentreport_open']  = 'Open';
     $string['studentreport_close'] = 'Close';
+
+    $string['show_comments'] = 'Show comments';
+    $string['hide_comments'] = 'Hide comments';
 
 	global $CFG;
 
