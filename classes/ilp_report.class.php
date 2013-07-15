@@ -53,8 +53,9 @@ class ilp_report
 
       foreach($DB->get_fieldset_select('block_ilp_report','id') as $rid)
       {
-         if($r->deleted or $includeDeleted)
-            $r[$id]=static::from_id($id);
+         $report=static::from_id($rid);
+         if(!$report->deleted or $includeDeteted)
+            $r[$rid]=$report;
       }
 
       return $r;
@@ -180,7 +181,7 @@ class ilp_report
 
    protected function set_my_report_fields()
    {
-      $this->fields=$this->db->get_records('block_ilp_report_field',array('report_id'=>$this->id));
+      $this->fields=$this->dbc->get_records('block_ilp_report_field',array('report_id'=>$this->id));
    }
 
 
