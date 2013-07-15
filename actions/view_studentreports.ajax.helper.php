@@ -2,9 +2,7 @@
 
 class studentreports_ajax_helper {
 
-    function __construct() {
-
-    }
+    function __construct() {}
 
     public function generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student) {
         global $CFG, $OUTPUT;
