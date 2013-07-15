@@ -123,7 +123,7 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
             $sixtermformat = get_config('block_ilp', 'mis_plugin_term_termformat');
 
             //set up the flexible table for displaying
-
+            ob_start();
             //instantiate the ilp_ajax_table class
             $flextable = new ilp_mis_ajax_table('monthly_breakdown', true, 'ilp_mis_attendance_plugin_term');
 
@@ -202,9 +202,7 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
 
             $flextable->add_data_keyed($data);
 
-
-            ob_start();
-            $flextable->print_html();
+            $flextable->finish_html();
             $output = ob_get_contents();
             ob_end_clean();
 

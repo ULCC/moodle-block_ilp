@@ -117,8 +117,15 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                     'style'=>'background: '. $statusitem->bg_colour));
             }
         } else {
-            $userstatus = html_writer::tag('span', $statusitem->name, array('id'=>'user_status', 'style'=>'color: ' . $userstatuscolor));
-            $o .= html_writer::tag('div', $userstatus);
+            $o .= html_writer::tag(
+                'div', $statusitem->name, array(
+                    'class'=>'dashboard_status_icon ajaxstatuschange',
+                    'style'=>'background:' . $statusitem->bg_colour . '; color:' . $statusitem->name
+                )
+            );
+
+            //$userstatus = html_writer::tag('span', $statusitem->name, array('id'=>'user_status', 'style'=>'color: ' . $userstatuscolor));
+            //$o .= html_writer::tag('div', $userstatus);
         }
         return $o;
     }
@@ -133,7 +140,11 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       //set any variables needed by the display page
 
       //get students full name
-      $student	=	$this->dbc->get_user_by_id($this->student_id);
+      if(!$student	=	$this->dbc->get_user_by_id($this->student_id))
+      {
+         //the student was not found display and error
+         print_error('studentnotfound','block_ilp');
+      }
 
       $display_only_middle_studentinfo = (!empty($ajax_settings) && isset($ajax_settings['middle_studentinfo'])
           && $ajax_settings['middle_studentinfo']) ? true : false;
@@ -145,256 +156,252 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       if (isset($SESSION->ilp_prevnextstudents))   {
          $studentlist    =   unserialize($SESSION->ilp_prevnextstudents);
 
-
          if (!empty($studentlist))   {
-            for($i = 0;$i < count($studentlist); $i++)   {
-               if ($studentlist[$i] ==  $this->student_id) {
-                  if (isset($studentlist[$i-1]))  {
-                     $prevstudent    =   $studentlist[$i-1];
-                  }
-                  if (isset($studentlist[$i+1]))  {
-                     $nextstudent    =   $studentlist[$i+1];
-                  }
-               }
+
+            $byid=array_flip($studentlist);
+
+            if(isset($studentlist[$byid[$student->id]+1]))
+            {
+               $nextstudent    =   $studentlist[$byid[$student->id]+1];
+            }
+
+            if(isset($studentlist[$byid[$student->id]-1]))
+            {
+               $prevstudent    =   $studentlist[$byid[$student->id]-1];
+            }
+
+         }
+      }
+
+      $studentname	=	fullname($student);
+      $studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true'));
+
+      $tutors	=	$this->dbc->get_student_tutors($this->student_id);
+
+      $tutorslist	=	array();
+      if (!empty($tutors)) {
+         foreach ($tutors as $t) {
+            $tutorslist[]	=	fullname($t);
+         }
+      } else {
+         $tutorslist		=	"";
+      }
+
+      //get the students current status
+      $studentstatus	=	$this->dbc->get_user_status($this->student_id);
+
+      if (!empty($studentstatus)) {
+         $statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->parent_id);
+      }
+
+      $userstatuscolor	=	get_config('block_ilp', 'passcolour');
+
+      if (!empty($statusitem))	{
+         if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
+         //that's all very well, but if the ilp is up to date, status hex colour is defined, so actually we should always do this...
+         //the above logic only allows 2 colours, so is inadequate to the task
+         if( !empty( $statusitem->hexcolour ) ){
+            $userstatuscolor = $statusitem->hexcolour;
+         }
+         //ah that's better
+      }
+
+      //TODO place percentage bar code into a class
+
+      $percentagebars	=	array();
+
+      //set the display attendance flag to false
+      $displayattendance	= false;
+
+      /****
+       * This code is in place as moodle insists on calling the settings functions on normal pages
+       *
+       */
+
+      $course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
+      $user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
+
+      //check if the set_context method exists
+      if (!isset($PAGE->context) === false) {
+         if ($course_id != SITEID && !empty($course_id))	{
+            if (method_exists($PAGE,'set_context')) {
+               //check if the siteid has been set if not
+               $PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
+            }	else {
+               $PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);
+            }
+         } else {
+            if (method_exists($PAGE,'set_context')) {
+               //check if the siteid has been set if not
+               $PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
+            }	else {
+               $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
             }
          }
       }
 
-      if (!empty($student))	{
-         $studentname	=	fullname($student);
-         $studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true'));
+      $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $PAGE->context);
 
-         $tutors	=	$this->dbc->get_student_tutors($this->student_id);
-         $tutorslist	=	array();
-         if (!empty($tutors)) {
-            foreach ($tutors as $t) {
-               $tutorslist[]	=	fullname($t);
-            }
-         } else {
-            $tutorslist		=	"";
-         }
+      //can the current user change the users status
+      $can_editstatus	=	(!empty($access_viewotherilp) && $USER->id != $student->id) ? true : false;
 
-         //get the students current status
-         $studentstatus	=	$this->dbc->get_user_status($this->student_id);
+      //include the attendance
+      $misclassfile	=	$CFG->dirroot.'/blocks/ilp/plugins/mis/ilp_mis_attendance_percentbar_plugin.php';
 
-         if (!empty($studentstatus)) {
-            $statusitem		=	$this->dbc->get_status_item_by_id($studentstatus->parent_id);
-         }
-
-         $userstatuscolor	=	get_config('block_ilp', 'passcolour');
-
-         if (!empty($statusitem))	{
-            if ($statusitem->passfail == 1) $userstatuscolor	=	get_config('block_ilp', 'failcolour');
-            //that's all very well, but if the ilp is up to date, status hex colour is defined, so actually we should always do this...
-            //the above logic only allows 2 colours, so is inadequate to the task
-            if( !empty( $statusitem->hexcolour ) ){
-               $userstatuscolor = $statusitem->hexcolour;
-            }
-            //ah that's better
-         }
-
-         //TODO place percentage bar code into a class
-
-         $percentagebars	=	array();
-
-         //set the display attendance flag to false
-         $displayattendance	= false;
-
-         /****
-          * This code is in place as moodle insists on calling the settings functions on normal pages
-          *
-          */
-
-         $course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
-         $user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
-
-         //check if the set_context method exists
-         if (!isset($PAGE->context) === false) {
-            if ($course_id != SITEID && !empty($course_id))	{
-               if (method_exists($PAGE,'set_context')) {
-                  //check if the siteid has been set if not
-                  $PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
-               }	else {
-                  $PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);
-               }
-            } else {
-               if (method_exists($PAGE,'set_context')) {
-                  //check if the siteid has been set if not
-                  $PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
-               }	else {
-                  $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
-               }
-            }
-         }
-
-         $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $PAGE->context);
-
-         //can the current user change the users status
-         $can_editstatus	=	(!empty($access_viewotherilp) && $USER->id != $student->id) ? true : false;
-
-         //include the attendance
-         $misclassfile	=	$CFG->dirroot.'/blocks/ilp/plugins/mis/ilp_mis_attendance_percentbar_plugin.php';
-
-         if (file_exists($misclassfile)) {
+      if (file_exists($misclassfile)) {
 
             include_once @$misclassfile;
 
-            //create an instance of the MIS class
-            $misclass	=	new ilp_mis_attendance_percentbar_plugin();
+         //create an instance of the MIS class
+         $misclass	=	new ilp_mis_attendance_percentbar_plugin();
 
-            //set the data for the student in question
-            $misclass->set_data($this->student_id);
-
-
-            $punch_method1 = array($misclass, 'get_student_punctuality');
-            $attend_method1 = array($misclass, 'get_student_attendance');
+         //set the data for the student in question
+         $misclass->set_data($this->student_id);
 
 
-            //check whether the necessary functions have been defined
-            if (is_callable($punch_method1,true)) {
-               $misinfo	=	new stdClass();
+         $punch_method1 = array($misclass, 'get_student_punctuality');
+         $attend_method1 = array($misclass, 'get_student_attendance');
 
 
-               if ($misclass->get_student_punctuality() != false) {
-                  //calculate the percentage
+         //check whether the necessary functions have been defined
+         if (is_callable($punch_method1,true)) {
+            $misinfo	=	new stdClass();
 
-                  $misinfo->percentage	=	$misclass->get_student_punctuality();
 
-                  $misinfo->name	=	get_string('punctuality','block_ilp');
+            if ($misclass->get_student_punctuality() != false) {
+               //calculate the percentage
 
-                  //pass the object to the percentage bars array
-                  $percentagebars[]	=	$misinfo;
-               }
+               $misinfo->percentage	=	$misclass->get_student_punctuality();
+
+               $misinfo->name	=	get_string('punctuality','block_ilp');
+
+               //pass the object to the percentage bars array
+               $percentagebars[]	=	$misinfo;
             }
+         }
 
-            //check whether the necessary functions have been defined
-            if (is_callable($attend_method1,true) ) {
-               $misinfo	=	new stdClass();
+         //check whether the necessary functions have been defined
+         if (is_callable($attend_method1,true) ) {
+            $misinfo	=	new stdClass();
 
-               //if total_possible is empty then there will be nothing to report
-               if ($misclass->get_student_attendance() != false) {
-                  //calculate the percentage
-                  $misinfo->percentage	=	$misclass->get_student_attendance();
+            //if total_possible is empty then there will be nothing to report
+            if ($misclass->get_student_attendance() != false) {
+               //calculate the percentage
+               $misinfo->percentage	=	$misclass->get_student_attendance();
 
-                  $misinfo->name	=	get_string('attendance','block_ilp');
+               $misinfo->name	=	get_string('attendance','block_ilp');
 
-                  $percentagebars[]	=	$misinfo;
-               }
-
+               $percentagebars[]	=	$misinfo;
             }
 
          }
 
+      }
 
-         $misoverviewplugins	=	false;
 
-         if ($this->dbc->get_mis_plugins() !== false) {
+      $misoverviewplugins	=	false;
 
-            $misoverviewplugins	=	array();
+      if ($this->dbc->get_mis_plugins() !== false) {
 
-            //get all plugins that mis plugins
-            $plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
+         $misoverviewplugins	=	array();
 
-            $mis_plugins = ilp_records_to_menu($this->dbc->get_mis_plugins(), 'id', 'name');
+         //get all plugins that mis plugins
+         $plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
 
-            foreach ($mis_plugins as $plugin_file) {
+         $mis_plugins = ilp_records_to_menu($this->dbc->get_mis_plugins(), 'id', 'name');
 
-               if (file_exists($plugins.'/'.$plugin_file.".php")) {
-                  require_once($plugins.'/'.$plugin_file.".php");
+         foreach ($mis_plugins as $plugin_file) {
 
-                  // instantiate the object
-                  $class = basename($plugin_file, ".php");
-                  $pluginobj = new $class();
-                  $method = array($pluginobj, 'plugin_type');
+            if (file_exists($plugins.'/'.$plugin_file.".php")) {
+               require_once($plugins.'/'.$plugin_file.".php");
 
-                  if (is_callable($method,true)) {
-                     //we only want mis plugins that are of type overview
-                     if ($pluginobj->plugin_type() == 'overview') {
+               // instantiate the object
+               $class = basename($plugin_file, ".php");
+               $pluginobj = new $class();
+               $method = array($pluginobj, 'plugin_type');
 
-                        //get the actual overview plugin
-                        $misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
+               if (is_callable($method,true)) {
+                  //we only want mis plugins that are of type overview
+                  if ($pluginobj->plugin_type() == 'overview') {
 
-                        //if the admin of the moodle has done there job properly then only one overview mis plugin will be enabled
-                        //otherwise there may be more and they will all be displayed
+                     //get the actual overview plugin
+                     $misplug	=	$this->dbc->get_mis_plugin_by_name($plugin_file);
 
-                        $status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
+                     //if the admin of the moodle has done there job properly then only one overview mis plugin will be enabled
+                     //otherwise there may be more and they will all be displayed
 
-                        $status	=	(!empty($status)) ?  $status: ILP_DISABLED;
+                     $status =	get_config('block_ilp',$plugin_file.'_pluginstatus');
 
-                        if (!empty($misplug) & $status == ILP_ENABLED ) {
-                           $misoverviewplugins[]	=	$pluginobj;
-                        }
+                     $status	=	(!empty($status)) ?  $status: ILP_DISABLED;
+
+                     if (!empty($misplug) & $status == ILP_ENABLED ) {
+                        $misoverviewplugins[]	=	$pluginobj;
                      }
                   }
                }
             }
          }
+      }
 
 
 
-         //if the user has the capability to view others ilp and this ilp is not there own
-         //then they may change the students status otherwise they can only view
+      //if the user has the capability to view others ilp and this ilp is not there own
+      //then they may change the students status otherwise they can only view
 
-         //get all enabled reports in this ilp
-         $reports		=	$this->dbc->get_reports(ILP_ENABLED);
+      //get all enabled reports in this ilp
+      $reports		=	$this->dbc->get_reports(ILP_ENABLED);
 
 
-         //we are going to output the add any reports that have state fields to the percentagebar array
-         if (!empty($reports) ) {
-            foreach ($reports as $r) {
-               if ($this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
+      //we are going to output the add any reports that have state fields to the percentagebar array
+      if (!empty($reports) ) {
+         foreach ($reports as $r) {
+            if ($this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
 
-                  $reportinfo				=	new stdClass();
-                  $reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
-                  $reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_PASS);
-                  //retrieve the number of entries that have the not counted state
-                  $reportinfo->notcounted	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_NOTCOUNTED);
+               $reportinfo				=	new stdClass();
+               $reportinfo->total		=	$this->dbc->count_report_entries($r->id,$this->student_id);
+               $reportinfo->actual		=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_PASS);
+               //retrieve the number of entries that have the not counted state
+               $reportinfo->notcounted	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_NOTCOUNTED);
 
-                  //if total_possible is empty then there will be nothing to report
-                  if (!empty($reportinfo->total)) {
-                     $reportinfo->total     =   $reportinfo->total -  $reportinfo->notcounted;
-                     //calculate the percentage
-                     $reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
+               //if total_possible is empty then there will be nothing to report
+               if (!empty($reportinfo->total)) {
+                  $reportinfo->total     =   $reportinfo->total -  $reportinfo->notcounted;
+                  //calculate the percentage
+                  $reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
 
-                     $reportinfo->name	=	$r->name;
+                  $reportinfo->name	=	$r->name;
 
-                     $percentagebars[]	=	$reportinfo;
-                  }
-
+                  $percentagebars[]	=	$reportinfo;
                }
+
             }
          }
+      }
 
-         //instantiate the percentage bar class in case there are any percentage bars
-         $pbar	=	new ilp_percentage_bar();
+      //instantiate the percentage bar class in case there are any percentage bars
+      $pbar	=	new ilp_percentage_bar();
 
-
-          if ($display_only_middle_studentinfo) {
-              $toreturn = '';
-              $toreturn .= $this->generate_ajax_updatable($statusitem, $userstatuscolor);
-              return $toreturn;
-          } else {
+      if ($display_only_middle_studentinfo) {
+         $toreturn = '';
+         $toreturn .= $this->generate_ajax_updatable($statusitem, $userstatuscolor);
+         return $toreturn;
+      } else {
          //we need to buffer output to prevent it being sent straight to screen
          ob_start();
 
-         require_once($CFG->dirroot.'/blocks/ilp/plugins/dashboard/'.$this->directory.'/ilp_dashboard_student_info.html');
+         //we need to buffer output to prevent it being sent straight to screen
+         ob_start();
 
-         //$learnercontact->set_data(1);
+         include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/'.$this->directory.'/ilp_dashboard_student_info.html');
 
-         //echo $learnercontact->display();
-
-         //pass the output instead to the output var
-         $pluginoutput = ob_get_contents();
+         $pluginoutput=ob_get_contents();
 
          ob_end_clean();
       }
 
-         return $pluginoutput;
+      ob_end_clean();
 
-      } else {
-         //the student was not found display and error
-         print_error('studentnotfound','block_ilp');
-      }
+      return $pluginoutput;
    }
 
    /**

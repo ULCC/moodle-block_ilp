@@ -47,7 +47,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
             $this->init_bgcolours();
 
             //set up the flexible table for displaying
-
+            ob_start();
             //instantiate the ilp_ajax_table class
             $flextable = new ilp_mis_ajax_table('attendance_byclass', true, 'ilp_mis_attendance_plugin_byclass_container');
 
@@ -149,8 +149,7 @@ class ilp_mis_attendance_plugin_byclass extends ilp_mis_attendance_plugin
                 }
             }
 
-            ob_start();
-            $flextable->print_html();
+            $flextable->finish_html();
             $pluginoutput = ob_get_contents();
             ob_end_clean();
 

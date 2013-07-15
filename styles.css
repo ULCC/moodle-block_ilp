@@ -80,11 +80,13 @@
 .ilp #middle-studentinfo .dashboard_status_icon {
     height: 60px;
     margin: 0;
-    width: 80px;
+    width: 70px;
+    padding: 5px;
+    font-size: 20px;
 }
 .ilp #middle-studentinfo .dashboard_status_icon img.icon_file {
     height: 50px;
-    left: 15px;
+    left: 10px;
     position: relative;
     top: 5px;
     width: 50px;
@@ -217,7 +219,6 @@
     display             : inline;
     visibility			: visible;
 }
-
 .ilp .hiddenelement {
     display             : none;
     visibility			: hidden;
@@ -400,6 +401,12 @@
 }
 
 /* Reports section */
+
+.ilp .batchprint{
+        border: 3px solid black;
+        padding: 1em;
+        margin-bottom:1em;
+}
 
 .ilp .report_state{
 	width: 80%;

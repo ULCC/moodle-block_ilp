@@ -176,6 +176,11 @@ abstract class ilp_mis_plugin extends ilp_plugin
 
     }
 
+    public function has_data()
+    {
+       return !empty($this->data);
+    }
+
     function config_settings(&$settings)    {
         return $settings;
     }

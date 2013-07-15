@@ -73,20 +73,20 @@ if (!empty($attendanceclass)) {
 
     	//check if the methods exists
     	if (method_exists($misclass, 'getAttendance'))	{
-   		    $headers[] = get_string('attendance', 'block_ilp');
-   			$columns[] = 'u_attendcance';
-            $expandcollapse[]   = 'u_attendcance';
-   			$nosorting[] = 'u_attendcance';
-   			$misattendavailable = true;
+           $headers[] = get_string('attendance', 'block_ilp');
+           $columns[] = 'u_attendcance';
+           $expandcollapse[]   = 'u_attendcance';
+           $nosorting[] = 'u_attendcance';
+           $misattendavailable = true;
     	}
 
     	//check if the methods exists
-	    if (method_exists($misclass, 'getAttendance'))	{
-    		$headers[] = get_string('punctuality', 'block_ilp');
-    		$columns[] = 'u_punctuality';
-            $expandcollapse[]   = 'u_punctuality';
-    		$nosorting[] = 'u_punctuality';
-    		$mispunctualityavailable = true;
+        if (method_exists($misclass, 'getPunctuality'))	{
+           $headers[] = get_string('punctuality', 'block_ilp');
+           $columns[] = 'u_punctuality';
+           $expandcollapse[]   = 'u_punctuality';
+           $nosorting[] = 'u_punctuality';
+           $mispunctualityavailable = true;
     	}
 	}
 }
@@ -135,6 +135,7 @@ $flextable->set_attribute('id', "student_listcourse_id={$course_id}tutor={$tutor
 $flextable->use_expandcollapselinks(true);
 $flextable->define_expandcollapse($expandcollapse);
 $flextable->initialbars(true);
+$flextable->pageable(true);
 
 $flextable->setup();
 

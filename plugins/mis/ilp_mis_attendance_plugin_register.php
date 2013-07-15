@@ -485,7 +485,7 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
             $table->add_data_keyed($class);
         }
 
-        $table->print_html();
+        $table->finish_html();
     }
 
 

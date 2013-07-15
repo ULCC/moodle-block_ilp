@@ -119,12 +119,18 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     public function generate_left_reports($reportfields, $dontdisplay, $displaysummary, $entry_data) {
         $content = '';
         foreach ($reportfields as $field) {
-            if (!in_array($field->id,$dontdisplay) && ((!empty($displaysummary) && !empty($field->summary) || empty($displaysummary)))) {
-                $fieldname	=	$field->id."_field";
-                $fieldcontent = '';
-                $fieldcontent = '<strong>' . $field->label . ':</strong>' . (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
-                $content .= html_writer::tag('p', $fieldcontent);
-            }
+           $fieldname	=	$field->id."_field";
+
+           if (!in_array($field->id,$dontdisplay) &&
+               isset($entry_data->$fieldname) &&
+               ((!empty($displaysummary) &&
+                 !empty($field->summary) ||
+                 empty($displaysummary))))
+           {
+              $fieldcontent = '';
+              $fieldcontent = '<strong>' . $field->label . ':</strong>' . (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
+              $content .= html_writer::tag('p', $fieldcontent);
+           }
         }
         return html_writer::tag('div', $content, array('class'=>'left-reports'));
     }
@@ -279,7 +285,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       //setup the icon
       $icon 	=	 "<img id='reporticon' class='icon_med' alt='$headertext ".get_string('reports','block_ilp')."' src='$icon' />";
 
-      return "<h2>{$icon}{$headertext}</h2></div>";
+      return "<h2>{$icon}{$headertext}</h2>";
    }
 
     /**
@@ -434,7 +440,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     *
     * @return none
     */
-   public function display($selectedtab=null, $ajax_settings = array())	{
+    public function display($selectedtab=null, $ajax_settings = array(),$readonly=false,$showcomments=true)	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
        $jsarguments = array(
@@ -447,17 +453,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
            'fullpath' 	=> '/blocks/ilp/views/js/ajax_addnew.js',
            'requires'  	=> array('io','io-form', 'json-parse', 'json-stringify', 'json', 'base', 'node')
        );
-       $return_only_newest = (!empty($ajax_settings) && (isset($ajax_settings['return_only_newest_entry']))
-               && $ajax_settings['return_only_newest_entry'] ) ? true : false;
 
-       $return_refreshed_list = (!empty($ajax_settings) && (isset($ajax_settings['return_refreshed_entry_list']))
-           && $ajax_settings['return_refreshed_entry_list'] ) ? true : false;
+       $return_only_newest = !empty($ajax_settings['return_only_newest_entry']);
 
-       $return_left_report_only = (!empty($ajax_settings) && (isset($ajax_settings['return_left_reports_for_single_entry']))
-           && $ajax_settings['return_left_reports_for_single_entry'] ) ? $ajax_settings['return_left_reports_for_single_entry'] : false;
+       $return_refreshed_list = !empty($ajax_settings['return_refreshed_entry_list']);
 
-       $return_right_report_only = (!empty($ajax_settings) && (isset($ajax_settings['return_right_reports_for_single_entry']))
-           && $ajax_settings['return_right_reports_for_single_entry'] ) ? $ajax_settings['return_right_reports_for_single_entry'] : false;
+       $return_left_report_only = !empty($ajax_settings['return_left_reports_for_single_entry']) ?
+          $ajax_settings['return_left_reports_for_single_entry'] : false;
+
+       $return_right_report_only = !empty($ajax_settings['return_right_reports_for_single_entry']) ?
+          $ajax_settings['return_right_reports_for_single_entry'] : false;
 
        $PAGE->requires->js_init_call('M.ilp_ajax_addnew.init', $jsarguments, true, $jsmodule);
 
@@ -466,7 +471,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       if ($this->dbc->get_user_by_id($this->student_id)) {
 
          //get the selecttab param if has been set
-         $this->selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
+         $this->selectedtab = $PARSER->optional_param('selectedtab', $selectedtab, PARAM_INT);
 
          //get the tabitem param if has been set
          $this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_CLEAN);
@@ -533,47 +538,47 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                //find if the current user can add reports
                $access_report_addreports	= false;
                $capability	=	$this->dbc->get_capability_by_name('block/ilp:addreport');
-               if (!empty($capability)) $access_report_addreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               if (!$readonly and !empty($capability)) $access_report_addreports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                //find out if the current user has the edit report capability for the report
                $access_report_editreports	= false;
                $capability	=	$this->dbc->get_capability_by_name('block/ilp:editreport');
-               if (!empty($capability)) $access_report_editreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               if (!$readonly and !empty($capability)) $access_report_editreports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                //find out if the current user has the delete report capability for the report
                $access_report_deletereports	=	false;
                $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
-               if (!empty($capability))	$access_report_deletereports	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               if (!$readonly and !empty($capability))	$access_report_deletereports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                //find out if the current user has the add comment capability for the report
-               $access_report_addcomment	= false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:addcomment');
-               if (!empty($capability)) $access_report_addcomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               $access_report_addcomment= false;
+               $capability=$this->dbc->get_capability_by_name('block/ilp:addcomment');
+               if (!$readonly and !empty($capability)) $access_report_addcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                //find out if the current user has the edit comment capability for the report
                $access_report_editcomment	=	false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:editcomment');
-               if (!empty($capability))	$access_report_editcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               $capability=$this->dbc->get_capability_by_name('block/ilp:editcomment');
+               if (!$readonly and !empty($capability))	$access_report_editcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                //find out if the current user has the add comment capability for the report
                $access_report_deletecomment	= false;
                $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletecomment');
-               if (!empty($capability)) $access_report_deletecomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               if (!$readonly and !empty($capability)) $access_report_deletecomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                //find out if the current user has the edit comment capability for the report
                $access_report_viewcomment	=	false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewcomment');
-               if (!empty($capability))	$access_report_viewcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               $capability=$this->dbc->get_capability_by_name('block/ilp:viewcomment');
+               if ($showcomments and !empty($capability))	$access_report_viewcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                // Check to see whether the user can delete the reports entry either single entry or multiple entry.
-               $candelete =	!empty($access_report_deletereports);
+               $candelete =	(!$readonly and !empty($access_report_deletereports));
 
                $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
-               if (!empty($capability))	$access_report_viewothers		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               if (!empty($capability))	$access_report_viewothers=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                //check to see whether the user can add/view extension for the specific report
                $capability		=	$this->dbc->get_capability_by_name('block/ilp:addviewextension');
-               if (!empty($capability))	$access_report_addviewextension	 =	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               if (!empty($capability))	$access_report_addviewextension = $this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
 
                //get all of the entries for this report
                $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
@@ -590,7 +595,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                echo $this->get_header($report->name,$icon);
 
-               $stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
+               $stateselector	=	(isset($report_id) and !$readonly) ?	$this->stateselector($report_id) :	"";
 
                //find out if the rules set on this report allow a new entry to be created
                $reportavailable =   $reportrules->report_availabilty();
@@ -617,9 +622,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                echo "</div>
                             <br />";
 
-               //output the print icon
-               echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
+               if(!$readonly)
+               {
+                  //This is dubious - readonly is being assumed to mean "batch mode"
+                  //But the whole class needs seriously re-written anyway.
+                  //output the print icon
+                  echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
 								 ";
+               }
 
 
 
@@ -721,7 +731,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                            }
 
                            //call the plugin class entry data method
-                           $pluginclass->view_data($field->id,$entry->id,$entry_data);
+                           $pluginclass->view_data($field->id,$entry->id,$entry_data,!$readonly);
                         } else	{
                            $dontdisplay[]	=	$field->id;
                         }
@@ -760,12 +770,18 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                    }
                    echo html_writer::end_tag('div');
                } else {
-
-                  echo get_string('nothingtodisplay');
+                  if(!$readonly)
+                  {
+                     echo get_string('nothingtodisplay');
+                  }
+                  else
+                  {
+                     ob_clean();
+                  }
 
                }
 
-            }//end new if
+            }
 
          }
 
@@ -785,11 +801,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          // initialise the js for the page
          $PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
 
-          $this->generate_unused_form();
+         if(!$readonly)
+            $this->generate_unused_form();
 
          $pluginoutput = ob_get_contents();
-
-
 
          ob_end_clean();
 
