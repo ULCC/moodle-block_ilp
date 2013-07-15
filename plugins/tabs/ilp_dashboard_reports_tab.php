@@ -398,32 +398,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
          $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
-         if ($report	=	$this->dbc->get_report_by_id($report_id)) {
-
-            //get all of the users roles in the current context and save the id of the roles into
-            //an array
-            $role_ids	=	 array();
-
-            $authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
-            if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
-
-            if ($roles = get_user_roles($PAGE->context, $USER->id)) {
-               foreach ($roles as $role) {
-                  $role_ids[]	= $role->roleid;
-               }
-            }
-
-            $access_report_viewreports	= false;
-            $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
-            if (!empty($capability)) $access_report_viewreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-            if ($report->status == ILP_ENABLED && !empty($access_report_viewreports)) {
+         if ($report=$this->dbc->get_report_by_id($report_id)) {
+            if ($report->status == ILP_ENABLED && !$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport') {
                $reportname	=	$report->name;
                //get all of the fields in the current report, they will be returned in order as
                //no position has been specified
-               $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+               $reportfields=$report->get_report_fields_by_position($report_id);
 
-               $reporticon	= (!empty($report->iconfile)) ? '' : '';
+               $reporticon = (!empty($report->iconfile)) ? '' : '';
 
                //does this report give user the ability to add comments
                $has_comments	=	!empty($report->comments);
@@ -432,10 +414,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $dontdisplay	=	 array();
 
                //does this report allow users to say it is related to a particular course
-               $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course'));
+               $has_courserelated	=	($report->has_plugin_field('ilp_element_plugin_course'));
 
                if (!empty($has_courserelated))	{
-                  $courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
+                  $courserelated	=	$report->has_plugin_field('ilp_element_plugin_course');
                   //the should not be anymore than one of these fields in a report
                   foreach ($courserelated as $cr) {
                      $dontdisplay[] 	=	$cr->id;
@@ -458,6 +440,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                }
 
                $access_report_viewcomment=($access_report_viewcomment && $showcomments);
+               $access_report_addcomment=($access_report_addcomment && !$readonly);
 
                //get all of the entries for this report
                $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
@@ -638,7 +621,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                           ob_end_clean();
                           return $pluginoutput;
                       }
-                     include($CFG->dirroot.'/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.html');
+                      include($CFG->dirroot.'/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.html');
                       if ($return_only_newest) {
                           $pluginoutput = ob_get_contents();
                           ob_end_clean();
@@ -681,11 +664,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             'closed_image' => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_plus.gif",
             );
 
-         // initialise the js for the page
-         $PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
-
-         if(!$readonly)
+//If we're in read only mode with showcomments then don't allow
+//comments to be hidden
+         if($readonly and $showcomments)
+         {
+            // initialise the js for the page
+            $PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
             $this->generate_unused_form();
+         }
 
          $pluginoutput = ob_get_contents();
 
