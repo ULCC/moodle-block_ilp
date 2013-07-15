@@ -20,6 +20,9 @@ require_once($CFG->dirroot . '/blocks/ilp/actions_includes.php');
 //include the default class
 require_once($CFG->dirroot . '/blocks/ilp/classes/tables/ilp_hiddenrow_ajax_table.class.php');
 
+require_once $CFG->dirroot . '/blocks/ilp/actions/view_studentreports.ajax.helper.php';
+$helper = new studentreports_ajax_helper();
+
 //get the id of the course that is currently being used if set
 $report_id = $PARSER->required_param('report_id',  PARAM_INT);
 
@@ -41,6 +44,14 @@ $state_id = $PARSER->optional_param('state_id', 0, PARAM_INT);
 //get the deadline_id if set
 $deadline_id    =	$PARSER->optional_param('deadline_id', 0, PARAM_INT);
 
+$gen_new_entry    =	$PARSER->optional_param('gen_new_entry', 0, PARAM_INT);
+
+$single_user    =	$PARSER->optional_param('single_user', 0, PARAM_INT);
+
+if ($single_user) {
+    ob_start();
+    require_once($CFG->dirroot . '/blocks/ilp/classes/ilp_report_rules.class.php');
+}
 
 
 //get the summary param if set
@@ -59,8 +70,11 @@ $dbc = new ilp_db();
 $flextable = new ilp_hiddenrow_ajax_table("student_listcourse_id{$course_id}tutor{$tutor}status_id{$status_id}report_id{$report_id}");
 
 $flextable->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentreports.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
-$flextable->define_ajaxurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentreports.ajax.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
+$ajax_url = $CFG->wwwroot . "/blocks/ilp/actions/view_studentreports.ajax.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}";
+$flextable->define_ajaxurl($ajax_url);
 
+$output = '';
+$output .= '<div class="hiddenelement thisurl">' . $ajax_url . '</div>';
 // set the basic details to dispaly in the table
 $headers = array(
     get_string('userpicture', 'block_ilp'),
@@ -207,6 +221,10 @@ $reportfields		=	$dbc->get_report_fields_by_position($report_id);
 
 if (!empty($studentslist)) {
     foreach ($studentslist as $student) {
+        if ($single_user && $student->id != $single_user) {
+            continue;
+        }
+        $addnewentry = '';
         $data = array();
         $hiddenrowdata = array();
 
@@ -215,6 +233,7 @@ if (!empty($studentslist)) {
                 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
         $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
+
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
         if(!empty($student->u_status)){
@@ -282,13 +301,26 @@ if (!empty($studentslist)) {
         $temp   =   new stdClass();
         $temp->entries = count($reportentries);
 
-        $data[$report_id] = (empty($temp->entries)) ? get_string('numberentries', 'block_ilp',$temp) : "<div id='row{$report_id}{$student->id}' class='entry_toggle'>".get_string('numberentries', 'block_ilp',$temp)."</div>";
+        $data[$report_id] = (empty($temp->entries)) ? get_string('numberentries', 'block_ilp',$temp) : "<div id='row{$report_id}{$student->id}' class='entry_toggle'><span class='numentries-" . $student->id . "'>". $temp->entries . "</span> " . get_string('numberentriestxt', 'block_ilp')."</div>";
 
         $reportentry    =  "";
 
         if (!empty($reportentries)) {
-            $reportentry    .=   '<div class="left-reports,hidden-entry"  id="row'.$report_id.''.$student->id.'_entry">';
+            $next_entry_colour = 'grey';
+            $reportentry    .=   '<div class="left-reports,hidden-entry reports-container-container next-entry-' . $next_entry_colour . '"  id="row'.$report_id.''.$student->id.'_entry">';
             $report_entries_tables = array();
+
+            require_once ($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
+
+            $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
+            $dashboard_reports_tab = new ilp_dashboard_reports_tab($student->id, $courseid);
+
+            $dashboard_reports_tab->get_capabilites();
+            $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$student->id}&report_id={$report_id}&course_id={$courseid}";
+
+            $addnewentry = $dashboard_reports_tab->generate_addnewentry($addnewentry_url, null, null, null, $student->id);
+            $data['fullname'] .= html_writer::tag('div', $addnewentry, array('class'=>'sid' . $student->id));
+
             foreach ($reportentries as $entry)	{
 
                 //TODO: is there a better way of doing this?
@@ -305,9 +337,6 @@ if (!empty($studentslist)) {
                 //get comments for this entry
                 $comments				=	$dbc->get_entry_comments($entry->id);
 
-                require_once ($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
-                $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
-                $dashboard_reports_tab = new ilp_dashboard_reports_tab($student->id, $courseid);
                 $comment_params = "report_id={$report_id}&user_id={$student->id}&entry_id={$entry->id}&course_id={$courseid}";
                 $dashboard_reports_tab->get_capabilites();
                 $comments_html = $dashboard_reports_tab->generate_comments($comments, true, $comment_params, $entry->id);
@@ -362,49 +391,14 @@ if (!empty($studentslist)) {
 
                 }
 
-                if (!empty($reportfields)) {
-                    $id_base = 'ajax_com-' . $entry->id;
-                    $add_comment_link_html = '
-<div class="ajax-hidden-details" style="display: none;">
-<span class="' . $id_base . '-report_id' . '">'  . $report_id . '</span>
-<span class="' . $id_base . '-user_id' . '">' . $entry_data->user_id . '</span>
-<span class="' . $id_base . '-selectedtab' . '">' . '' . '</span>
-<span class="' . $id_base . '-tabitem' . '">' . '' . '</span>
-<span class="' . $id_base . '-course_id' . '">' . ((isset($courserelatedfield_id)) ? $courserelatedfield_id : '')  . '</span>
-</div>
-<span class="add-comment-ajax" id="' . $id_base . '">
-' . get_string('addcomment','block_ilp') . $dashboard_reports_tab->get_loader_icon('loader-icon-' . $id_base, 'span') . '</span>
-<div class="add-form add-form-' . $id_base . '"></div>';
-
-                    $reportentry_table = '<div class="sreport-table-container">
-                    <table class="report-entry-table" columns="2"><tbody>';
-                    foreach ($reportfields as $field) 	{
-                        if (!in_array($field->id,$dontdisplay) && ((!empty($displaysummary) && !empty($field->summary) || empty($displaysummary)))) {
-                            $fieldname	=	$field->id."_field";
-                            $reportentry_table .= "<tr>";
-                            $reportentry_table .= "<td><strong>$field->label: </strong></td>";
-                            $reportentry_table .= "<td>";
-                            $reportentry_table .= (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '&nbsp;';
-                            $reportentry_table .= "</td>";
-                            $reportentry_table .= "</tr>";
-                        }
-                    }
-
-                    if (empty($displaysummary)) {
-                        if (!empty($has_courserelated)) {
-                            $reportentry_table .=  "<tr><td><strong>".get_string('course','block_ilp')."</strong>:</td><td>".$entry_data->coursename."</td></tr>";
-                        }
-                        $reportentry_table .=  "<tr><td><strong>".get_string('addedby','block_ilp')."</strong>:</td><td>".$entry_data->creator."</td></tr>";
-                        $reportentry_table .=  "<tr><td><strong>".get_string('date')."</strong>:</td><td>".$entry_data->modified."</td></tr>";
-                        $comments_toggle = ' <span class="comment_toggle" data-identifier="' . $entry->id . '-' . $student->id . '">' . get_string('show_comments', 'block_ilp') . '</span>';
-                        $reportentry_table .=  "<tr><td><strong>".get_string('comments')."</strong>:</td><td><span class='numcomments-$id_base'>" . count($comments) . "</span>" . $comments_toggle."</td></tr>";
-                    }
-                    $reportentry_table .= '</tbody></table>';
+                $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
+                $access_report_editreports = $dashboard_reports_tab;
+                $reportentry_table = $helper->generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student);
+                if ($single_user) {
+                    ob_get_clean();
+                    echo json_encode($reportentry_table);
+                    exit;
                 }
-                $reportentry_table .= html_writer::tag('div', $comments_html, array(
-                    'class'=>'hiddenelement comments-' . $entry->id . '-' . $student->id, 'id'=>'entry_' . $entry->id . '_container'));
-                $reportentry_table .= $add_comment_link_html;
-                $reportentry_table .= '</div>';
                 $report_entries_tables[] = $reportentry_table;
             }
             $count = 0;
@@ -423,8 +417,13 @@ if (!empty($studentslist)) {
     }
 }
 
-$flextable->print_html();
+if (!$single_user) {
+    echo $output;
+    $flextable->print_html();
+}
 
-if (isset($dashboard_reports_tab) && is_a($dashboard_reports_tab, 'ilp_dashboard_reports_tab')) {
+if (isset($dashboard_reports_tab) && is_a($dashboard_reports_tab, 'ilp_dashboard_reports_tab') && !$single_user) {
     $dashboard_reports_tab->generate_unused_form();
+    echo $helper->get_strings_for_ajax_to_dom('show_comments');
+    echo $helper->get_strings_for_ajax_to_dom('hide_comments');
 }

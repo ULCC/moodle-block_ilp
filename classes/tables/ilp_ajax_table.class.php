@@ -375,7 +375,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         } else if (!isset($this->attributes['class'])) {
             $this->attributes['class'] = 'flexible';
     /// No flexible class in passed classes, add flexible class
-        } else if (!in_array('flexible', explode('', $this->attributes['class']))) {
+        } else if (!@in_array('flexible', @explode('', $this->attributes['class']))) {
             $this->attributes['class'] = trim('flexible' . $this->attributes['class']);
         }
 

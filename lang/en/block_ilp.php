@@ -112,6 +112,7 @@
     $string['enabled'] 				= 	'Enabled';
     $string['expandentries']		=	'Expand entries';
     $string['numberentries']		= 	'{$a->entries} entries';
+    $string['numberentriestxt']		= 	'entries';
 	$string['entrycreator'] 		= 	'Tutor';
 	$string['existing_options']		=	'Existing options (not editable)';
     $string['firstentry']		    =	'First entry';

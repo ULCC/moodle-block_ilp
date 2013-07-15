@@ -4,14 +4,18 @@ M.ilp_ajax_addnew = {
     // params from PHP
     Y : null,
     root : null,
+    pagename : null,
+    addnew_clicked : null,
 
     init: function(Y, root, pagename) {
         this.Y  =   Y;
         this.root = root;
+        this.pagename =  pagename;
         if (pagename == 'view_studentreports') {
             M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
             M.ilp_ajax_addnew.prepare_edits_for_ajax();
             M.ilp_ajax_addnew.prepare_deletes_for_ajax();
+            M.ilp_ajax_addnew.prepare_addnewentries_for_ajax();
         } else {
             M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
             M.ilp_ajax_addnew.prepare_edits_for_ajax();
@@ -232,6 +236,7 @@ M.ilp_ajax_addnew = {
         var newentryarea = Y.one('._addnewentryarea');
         newentrylink.setStyle('cursor', 'pointer');
         newentrylink.on('click', function(){
+            M.ilp_ajax_addnew.addnew_clicked = this;
             var loadericon = Y.one('.addnewentry-loader .ajaxloadicon');
             loadericon.removeClass('hiddenelement');
             var url = newentrylink.getData('link');
@@ -267,6 +272,52 @@ M.ilp_ajax_addnew = {
             Y.io(url, cfg);
         });
     },
+    prepare_addnewentries_for_ajax: function() {
+        var newentrylink = Y.all('._addnewentry');
+        //
+        newentrylink.setStyle('cursor', 'pointer');
+        newentrylink.each( function(current_entry) {
+            var studentid = current_entry.getData('studentid');
+            var newentryarea = Y.one('.sid' + studentid + ' ._addnewentryarea');
+            var loadericon = Y.one('.sid' + studentid + ' .addnewentry-loader .ajaxloadicon');
+            current_entry.on('click', function(){
+                M.ilp_ajax_addnew.addnew_clicked = this;
+                loadericon.removeClass('hiddenelement');
+                var url = current_entry.getData('link');
+                var cfg = {
+                    method: "POST",
+                    on: {
+                        success : function(id, o, args) {
+                            loadericon.addClass('hiddenelement');
+                            var response = Y.JSON.parse(o.responseText);
+                            var form = Y.Node.create(response.html);
+                            newentryarea.setHTML(form);
+                            scriptel = document.createElement('script');
+                            scriptel.textContent = response.script;
+                            document.body.appendChild(scriptel);
+
+                            var cancel = Y.one('._addnewentryarea #id_cancel');
+                            cancel.setAttribute('type', 'button');
+                            cancel.on('click', function(){
+                                newentryarea.setHTML('');
+                            });
+
+                            YUI().use('event', function (Y) {
+                                Y.one('#mform1').on('submit', function (e) {
+                                    var submitbuttonloadericon = Y.one('._addnewentryarea .ajaxloadicon');
+                                    submitbuttonloadericon.removeClass('hiddenelement');
+                                    Y.one('._addnewentryarea .fitem_actionbuttons .felement.fgroup').prepend(submitbuttonloadericon);
+                                    M.ilp_ajax_addnew.submit_addnewentry_form(e, url, newentryarea, submitbuttonloadericon);
+                                });
+                            });
+                        }
+                    }
+                };
+                Y.io(url, cfg);
+            });
+        });
+
+    },
     submit_addnewentry_form: function(e, url, formarea, submitbuttonloadericon) {
         var Y = this.Y;
         e.preventDefault();
@@ -280,15 +331,69 @@ M.ilp_ajax_addnew = {
                 success: function(id, o) {
                     submitbuttonloadericon.addClass('hiddenelement');
                     formarea.setHTML("");
-                    var content = Y.JSON.parse(o.responseText);
-                    var newentry = Y.Node.create(content);
-                    Y.one('.reports-container-container').prepend(newentry);
-                    Y.one('.reports-container-container').one('.view-comments').addClass('new-entry');
-                    M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
-                    M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
-                    M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
-                    M.ilp_dashboard_reports_tab.init(Y, null, null, '.view-comments.new-entry');
-                    Y.one('.reports-container-container').one('.view-comments').removeClass('new-entry');
+                    if (this.pagename == 'view_studentreports') {
+                        var studentid = M.ilp_ajax_addnew.addnew_clicked.getData('studentid');
+                        var newentry_url = Y.one('.thisurl').get('text') + '&gen_new_entry=1&single_user=' + studentid;
+                        var cfg = {
+                            method: "POST",
+                            on: {
+                                success : function(id, o, args) {
+                                    var user_id;
+                                    var report_id;
+                                    var response = Y.JSON.parse(o.responseText);
+                                    var userid_check = /[?&]user_id=([^&]+)/i;
+                                    var match = userid_check.exec(url);
+                                    if (match != null) {
+                                        user_id = match[1];
+                                    } else {
+                                        user_id = "";
+                                    }
+                                    var reportid_check = /[?&]report_id=([^&]+)/i;
+                                    var match_report = reportid_check.exec(url);
+                                    if (match_report != null) {
+                                        reportid = match_report[1];
+                                    } else {
+                                        reportid = "";
+                                    }
+                                    var entrycontainer = Y.one('.reports-container-container#row' + reportid + user_id + '_entry');
+                                    var reportentrycolour = '';
+
+                                    if (entrycontainer.hasClass('next-entry-grey')) {
+                                        reportentrycolour += 'grey';
+                                        entrycontainer.replaceClass('next-entry-grey', 'next-entry-white');
+                                    } else {
+                                        reportentrycolour += 'white';
+                                        entrycontainer.replaceClass('next-entry-white', 'next-entry-grey');
+                                    }
+                                    var responsehtml = '<div class="report-entry report-entry-' + reportentrycolour + '">' + response + '</div>';
+                                    var newentry = Y.Node.create(responsehtml);
+
+                                    entrycontainer.prepend(newentry);
+                                    var numentries_dom = Y.one('.numentries-' + user_id);
+                                    var numentries_int = parseInt(numentries_dom.get('text'));
+                                    numentries_int ++;
+                                    numentries_dom.set('text', numentries_int);
+                                    M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
+                                    M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
+                                    M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+                                    M.ilp_view_studentreports.prepare_comment_showhide('Show', 'Hide');
+                                }
+                            }
+                        };
+                        Y.io(newentry_url, cfg);
+
+                    } else {
+                        var content = Y.JSON.parse(o.responseText);
+                        var newentry = Y.Node.create(content);
+                        var entrycontainer = Y.one('.reports-container-container');
+                        entrycontainer.prepend(newentry);
+                        entrycontainer.one('.view-comments').addClass('new-entry');
+                        M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
+                        M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
+                        M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+                        M.ilp_dashboard_reports_tab.init(Y, null, null, '.view-comments.new-entry');
+                        Y.one('.reports-container-container').one('.view-comments').removeClass('new-entry');
+                    }
                 }
             },
             form: formwrapper,

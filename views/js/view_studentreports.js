@@ -6,10 +6,10 @@ M.ilp_view_studentreports = {
     closed_image : null,
     Y : null,
 
-    init: function(Y,open_image, closed_image, open_text, close_text, show_comments, hide_comments) {
+    init: function(Y,open_image, closed_image, open_text, close_text) {
         this.Y  =   Y;
         M.ilp_view_studentreports.prepare_entry_showhide(Y,open_image, closed_image, open_text, close_text);
-        M.ilp_view_studentreports.prepare_comment_showhide(show_comments, hide_comments);
+        M.ilp_view_studentreports.prepare_comment_showhide();
     },
     prepare_entry_showhide: function(Y,open_image, closed_image, open_text, close_text) {
         var toggle = Y.all('.entry_toggle');
@@ -58,7 +58,9 @@ M.ilp_view_studentreports = {
             });
         });
     },
-    prepare_comment_showhide: function(show_comments, hide_comments) {
+    prepare_comment_showhide: function() {
+        var show_comments = Y.one('.string-show_comments').get('text');
+        var hide_comments = Y.one('.string-hide_comments').get('text');
         var toggle = Y.all('.comment_toggle');
         toggle.each( function (tog) {
             tog.on('click', function() {
