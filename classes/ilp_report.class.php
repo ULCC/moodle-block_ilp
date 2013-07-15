@@ -51,10 +51,10 @@ class ilp_report
 
       $r=array();
 
-      foreach($DB->get_fieldset_select('block_ilp_report','id') as $rid)
+      foreach($DB->get_fieldset_select('block_ilp_report','id','1') as $rid)
       {
          $report=static::from_id($rid);
-         if(!$report->deleted or $includeDeteted)
+         if(!$report->deleted or $includeDeleted)
             $r[$rid]=$report;
       }
 
@@ -100,7 +100,7 @@ class ilp_report
 
    function __construct()
    {
-      $this->dbc=new ilp_db();
+      $this->dbc=$DB;
       $this->cache=cache::make('block_ilp','user_capability_cache');
    }
 
@@ -187,9 +187,8 @@ class ilp_report
 
    function get_report_fields_by_position($position=false,$type=false)
    {
-       if(!isset($this->report_fields))
-          $this->set_my_report_fields();
-
+      if(!isset($this->report_fields))
+         $this->set_my_report_fields();
 
       if(!$position)
          return $this->fields;

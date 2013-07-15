@@ -181,9 +181,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
                }
             }
-         }
-
-         if (!empty($PAGE->context))	{
 
             $this->secondrow	=	array();
 
@@ -365,7 +362,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
          if ($report=ilp_report::from_id($report_id)) {
-            if ($report->status == ILP_ENABLED && !$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport')) {
+            if ($report->status == ILP_ENABLED and $report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport')) {
                $reportname	=	$report->name;
                //get all of the fields in the current report, they will be returned in order as
                //no position has been specified
