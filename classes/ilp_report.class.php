@@ -344,7 +344,7 @@ class ilp_report
                    $pluginclass->view_data($field->id,$report_entry->id,$row);
                 }
              }
-             $rows[]=(array)($rows);
+             $rows[]=(array)($row);
           }
        }
        print_object($rows);
