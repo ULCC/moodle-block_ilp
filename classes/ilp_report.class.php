@@ -291,7 +291,7 @@ class ilp_report
 
        $rows=array();
 
-       foreach($user as $userid)
+       foreach($users as $userid)
        {
           $creators=$pluginRecords=$pluginInstances=$pluginFieldsLoaded=array();
 
@@ -344,7 +344,7 @@ class ilp_report
                    $pluginclass->view_data($field->id,$report_entry->id,$row);
                 }
              }
-             $rows[]=(array($rows));
+             $rows[]=(array)($rows);
           }
        }
        print_object($rows);
