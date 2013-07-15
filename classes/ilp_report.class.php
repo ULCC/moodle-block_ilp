@@ -100,8 +100,7 @@ class ilp_report
 
    function __construct()
    {
-      global $DB;
-      $this->dbc=$DB;
+      $this->dbc=new ilp_db();
       $this->cache=cache::make('block_ilp','user_capability_cache');
    }
 
@@ -182,7 +181,8 @@ class ilp_report
 
    protected function set_my_report_fields()
    {
-      $this->fields=$this->dbc->get_records('block_ilp_report_field',array('report_id'=>$this->id));
+      global $DB;
+      $this->fields=$DB->get_records('block_ilp_report_field',array('report_id'=>$this->id));
    }
 
 
@@ -213,6 +213,7 @@ class ilp_report
      */
     protected function set_plugin_fields()
     {
+       global $DB;
 
        $this->plugins=array();
 
@@ -222,7 +223,7 @@ class ilp_report
          WHERE   rf.plugin_id = p.id
          AND   rf.report_id = :report_id";
 
-       foreach($this->dbc->get_records_sql($sql, array('report_id'=>$this->id)) as $item)
+       foreach($DB->get_records_sql($sql, array('report_id'=>$this->id)) as $item)
        {
           $this->plugins[$item->name]=$item;
        }
