@@ -161,7 +161,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
           *
           */
          //check if the set_context method exists
-         if (!isset($PAGE->context) === false) {
+         if (!empty($PAGE->context->id)) {
 
             $course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
             $user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
@@ -187,19 +187,13 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
             $this->secondrow	=	array();
 
-            //get all reports
-            $reports	= ilp_report::get_all_reports();
-            if (!empty($reports)) {
-               //create a tab for each enabled report
-               foreach($reports as $r)	{
+            //create a tab for each enabled report
+            foreach(ilp_report::get_enabledreports() as $r)	{
+               if ($r->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
 
-                  if ($r->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
-
-                     //the tabitem and selectedtab query string params are added to the linkurl in the
-                     //second_row() function
-                     $this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
-               }
-
+                  //the tabitem and selectedtab query string params are added to the linkurl in the
+                  //second_row() function
+                  $this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
             }
          }
       }
