@@ -100,6 +100,7 @@ class ilp_report
 
    function __construct()
    {
+      global $DB;
       $this->dbc=$DB;
       $this->cache=cache::make('block_ilp','user_capability_cache');
    }
@@ -212,6 +213,8 @@ class ilp_report
      */
     protected function set_plugin_fields()
     {
+
+       $this->plugins=array();
 
        $sql = "SELECT   *
          FROM   {block_ilp_plugin} as p,

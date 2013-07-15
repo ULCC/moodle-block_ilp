@@ -380,12 +380,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $has_courserelated	=	($report->has_plugin_field('ilp_element_plugin_course'));
 
                if (!empty($has_courserelated))	{
-                  $courserelated	=	$report->has_plugin_field('ilp_element_plugin_course');
-                  //the should not be anymore than one of these fields in a report
-                  foreach ($courserelated as $cr) {
-                     $dontdisplay[] 	=	$cr->id;
-                     $courserelatedfield_id	=	$cr->id;
-                  }
+                  $dontdisplay[] =	$has_courserelated->id;
+                  $courserelatedfield_id  =$has_courserelated->id;
                }
 
                foreach(array('addreport','editreport','deletereport','addcomment','editcomment',
