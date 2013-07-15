@@ -396,16 +396,18 @@ if (!empty($studentslist)) {
                 $reportentry_table = $helper->generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student);
                 if ($single_user) {
                     ob_get_clean();
-                    echo json_encode($reportentry_table);
+                    echo json_encode(array('html'=>$reportentry_table, 'entryid'=>$entry->id));
                     exit;
                 }
-                $report_entries_tables[] = $reportentry_table;
+                $report_entries_tables[$entry->id] = $reportentry_table;
             }
             $count = 0;
-            foreach($report_entries_tables as $report_entries_table) {
+            foreach($report_entries_tables as $entryid => $report_entries_table) {
                 $colour_class = ($count % 2) ? 'grey' : 'white';
                 $count ++;
-                $reportentry .= html_writer::tag('div', $report_entries_table, array('class'=>'report-entry report-entry-' . $colour_class));
+                $reportentry .= html_writer::tag('div', $report_entries_table,
+                    array('class'=>'report-entry reports-container-' . $entryid . ' report-entry-' . $colour_class,
+                    'data-studentid' => $student->id));
             }
             $hiddenrowdata[] = $reportentry;
         }

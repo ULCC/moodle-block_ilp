@@ -61,18 +61,19 @@ M.ilp_view_studentreports = {
     prepare_comment_showhide: function() {
         var show_comments = Y.one('.string-show_comments').get('text');
         var hide_comments = Y.one('.string-hide_comments').get('text');
-        var toggle = Y.all('.comment_toggle');
+        var toggle = Y.all('.comment_toggle.new');
         toggle.each( function (tog) {
-            tog.on('click', function() {
-                var dom_id = tog.getData('identifier');
-                var comments = Y.one('.comments-' + dom_id);
-                comments.toggleClass('hiddenelement');
-                if (comments.hasClass('hiddenelement')) {
-                    tog.set('text', show_comments);
-                } else {
-                    tog.set('text', hide_comments);
-                }
-            });
+                tog.on('click', function() {
+                    var dom_id = tog.getData('identifier');
+                    var comments = Y.one('.comments-' + dom_id);
+                    comments.toggleClass('hiddenelement');
+                    if (comments.hasClass('hiddenelement')) {
+                        tog.set('text', show_comments);
+                    } else {
+                        tog.set('text', hide_comments);
+                    }
+                });
+                tog.removeClass('new');
         });
     }
 

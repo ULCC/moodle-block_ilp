@@ -706,17 +706,17 @@ tooltip.tooltip span
 /* tooltip finished */
 
 .expand_icon {
-    background: url([[pix:block_ilp|icons/collapse_lrg]]) no-repeat left center;
+    background: url([[pix:block_ilp|icons/hide]]) no-repeat left center;
     height: 70px;
 }
 .collapse_icon {
-    background: url([[pix:block_ilp|icons/expand_lrg]]) no-repeat left center;
+    background: url([[pix:block_ilp|icons/show]]) no-repeat left center;
     height: 70px;
 }
 
 .entry_toggle {
     cursor: pointer;
-    padding-left: 45px;
+    padding-left: 15px;
     vertical-align:middle;
     text-align: center;
     display: table-cell;
@@ -748,7 +748,19 @@ tooltip.tooltip span
 .sreport-table-container .add-comment-ajax {
     position: absolute;
     top:5px;
-    right: 0;
+    right: 10px;
+}
+
+.sreport-table-container .deletion-of-entry {
+    position: absolute;
+    top:25px;
+    right: 10px;
+}
+
+.sreport-table-container .edition-of-entry {
+    position: absolute;
+    top:45px;
+    right: 10px;
 }
 
 #page-ilp-reportlist table.flexiblegeneraltable {
