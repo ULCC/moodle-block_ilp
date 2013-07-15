@@ -203,6 +203,11 @@ class ilp_report
                           });
    }
 
+   function get_all_fields()
+   {
+      return $this->get_report_fields_by_position();
+   }
+
     /**
      *
      * Returns whether the given report has a plugins field
@@ -241,8 +246,101 @@ class ilp_report
        return false;
     }
 
-    public function get_user_entries($user_id,$state_id)
+    function get_user_report_entries($user_id,$state_id=null,$createdby=null)
     {
+       global $DB;
+       $tables  = "";
+       $where  = "";
+
+       //if the the id of a status has been given then we need to add more conditions to
+       //find the reports in this state
+
+       $params = array('report_id'=>$this->id, 'user_id'=>$user_id);
+
+       if (!empty($state_id)) {
+          $tables  = ", {block_ilp_plu_ste_ent} as se";
+          $params['state_id'] = $state_id;
+          $where  = "  AND e.id = se.entry_id
+           AND se.parent_id = :state_id";
+       }
+
+       if (!empty($createdby)) {
+          if ($createdby  ==  ILP_CREATED_BY_USER)    {
+             $params['user_id1'] = $user_id;
+             $where .= "AND creator_id = :user_id1";
+          } else if ($createdby  ==  ILP_NOTCREATED_BY_USER)    {
+             $params['user_id1'] = $user_id;
+             $where .= "AND creator_id != :user_id1";
+          }
+       }
+
+       $sql="SELECT  e.*
+                     FROM  {block_ilp_entry} as e
+                           {$tables}
+                     WHERE  e.report_id  = :report_id
+                            AND   e.user_id     = :user_id
+                            {$where}
+                     ORDER BY   e.timemodified DESC";
+
+       return $DB->get_records_sql($sql, $params);
     }
 
+    function export_all_entries($userid)
+    {
+       global $DB;
+
+       $creators=$pluginRecords=$pluginInstances=$pluginFieldsLoaded=array();
+
+       foreach($this->get_user_report_entries($userid) as $report_entry)
+       {
+          $row=new stdClass;
+          foreach ($this->get_all_fields() as $field) {
+             //get the plugin record that for the plugin, with cacheing
+             if(!isset($pluginRecords[$field->plugin_id]))
+             {
+                $pluginRecords[$field->plugin_id]=$this->dbc->get_plugin_by_id($field->plugin_id);
+             }
+
+             $pluginrecord=$pluginRecords[$field->plugin_id];
+
+             $tablename=$pluginrecord->tablename;
+
+             //Get the data from table name for the current entry
+/*
+             $sql="SELECT * FROM {$table}_ent ent join {$table} p on p.id=ent.parent_id
+                            WHERE p.reportfield_id=:fieldid and ent.entry_id=:entryid";
+
+             $data=$DB->get_record_sql($sql,array('fieldid'=>$field->id,
+                                                  'entryid'=>$report_entry->id));
+*/
+
+             //take the name field from the plugin as it will be used to call the instantiate the plugin class
+             $classname = $pluginrecord->name;
+
+//More caching
+             if(!isset($pluginInstances[$classname]))
+             {
+                // include the class for the plugin
+                include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
+
+                if(!class_exists($classname)) {
+                   print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
+                }
+
+                //instantiate the plugin class
+
+                $pluginInstances[$classname]=new $classname;
+                $pluginFieldsLoaded[$classname]=array();
+             }
+
+             $pluginclass=$pluginInstances[$classname];
+
+             if ($pluginclass->is_viewable() != false)
+             {
+                $pluginclass->view_data($field->id,$report_entry->id,$row);
+             }
+          }
+          print_object($row);
+       }
+    }
 }

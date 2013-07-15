@@ -402,7 +402,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $access_report_addcomment=($access_report_addcomment && !$readonly);
 
                //get all of the entries for this report
-               $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
+               $reportentries	=	$this->get_user_report_entries($this->student_id,$state_id);
 
                //does the current report allow multiple entries
                $multiple_entries   =   !empty($report->frequency);
@@ -479,6 +479,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                       if ($return_right_report_only && $return_right_report_only != $entry->id) {
                           continue;
                       }
+
                      //TODO: is there a better way of doing this?
                      //I am currently looping through each of the fields in the report and get the data for it
                      //by using the plugin class. I do this for two reasons it may lock the database for less time then
@@ -492,6 +493,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                      {
                         $creators[$entry->creator_id]          =       $this->dbc->get_user_by_id($entry->creator_id);
                      }
+
                      $creator=$creators[$entry->creator_id];
 
                      //get comments for this entry
