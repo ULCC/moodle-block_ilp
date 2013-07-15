@@ -287,7 +287,7 @@ class ilp_report
 
     function export_all_entries($userid)
     {
-       global $DB;
+       global $DB,$CFG;
 
        $creators=$pluginRecords=$pluginInstances=$pluginFieldsLoaded=array();
 

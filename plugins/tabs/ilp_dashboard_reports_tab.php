@@ -402,7 +402,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $access_report_addcomment=($access_report_addcomment && !$readonly);
 
                //get all of the entries for this report
-               $reportentries	=	$this->get_user_report_entries($this->student_id,$state_id);
+               $reportentries	=	$report->get_user_report_entries($this->student_id,$state_id);
 
                //does the current report allow multiple entries
                $multiple_entries   =   !empty($report->frequency);
