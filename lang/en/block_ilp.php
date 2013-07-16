@@ -111,6 +111,7 @@ $string['showcomments']='Show Comments';
     $string['entrydeleted']		=	'The Forms was successfully deleted';
     $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this form';
     $string['expandall']			=	'Expand all';
+$string['export']='Export';
 	$string['enablereport'] 		= 	'Enable Form';
     $string['enabled'] 				= 	'Enabled';
     $string['expandentries']		=	'Expand entries';
