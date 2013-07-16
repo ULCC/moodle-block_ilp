@@ -97,11 +97,13 @@ class batch_export_setup_mform extends ilp_moodleform
       asort($reportoptions);
       $s=$mform->addElement('select','reportselect',get_string('report','block_ilp'),$reportoptions);
 
+/*
       $mform->addElement('checkbox','showattendance',get_string('showattendance','block_ilp'));
       $mform->setDefault('showattendance',true);
 
       $mform->addElement('checkbox','showcomments',get_string('showcomments','block_ilp'));
       $mform->setDefault('showcomments',true);
+*/
 
       $buttonarray=array();
       $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('gotoprintpreview','block_ilp'));
