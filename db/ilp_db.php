@@ -894,7 +894,7 @@ class ilp_db_functions	extends ilp_logging {
           $user=$USER;
        }
 
-       if(is_siteadmin($USER->id))
+       if(is_siteadmin($user->id))
           return true;
 
        //check for the ilpviewall capability at site level this gives the user rights to view all
