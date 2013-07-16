@@ -875,21 +875,30 @@ class ilp_db_functions	extends ilp_logging {
     function has_report_permission($report_id,$role_id,$capability_id)	{
         global $USER, $CFG;
 
+        if($this->ilp_admin($USER))
+           return true;
+
         require_once($CFG->dirroot."/blocks/ilp/lib.php");
         //adding addtional lines that return true if the user is either a site admin or has the ilpviewall capabilty at site level
-
-        //get sote context
-        $sitecontext	=	get_context_instance(CONTEXT_SYSTEM);
-
-        //check for the ilpviewall capability at site level this gives the user rights to view all
-        $ilpadmin				=	has_capability('block/ilp:ilpviewall',$sitecontext);
-
-        $is_admin				=	(ilp_is_siteadmin($USER->id) || $ilpadmin) ? true : false;
-
 
         //if permissions where returned from then the role (or one of the roles given) has the permission in the course
         $permissions	=	$this->get_reportpermissions_by_criteria($report_id,$role_id,$capability_id);
         return 	(!empty($permissions) || !empty($is_admin)) ? true	:	false;
+    }
+
+    function ilp_admin($user=0)
+    {
+       if(empty($user))
+       {
+          global $USER;
+          $user=$USER;
+       }
+
+       if(is_siteadmin($USER->id))
+          return true;
+
+       //check for the ilpviewall capability at site level this gives the user rights to view all
+       return has_capability('block/ilp:ilpviewall',context_system::instance());
     }
 
     /**

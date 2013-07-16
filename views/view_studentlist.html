@@ -72,7 +72,7 @@ if (isset($tutor)) {
 	</form>
 
 <div class="entry_floatright"><?php
-if(is_siteadmin())
+if($dbc->ilp_admin())
 {
    print "<a href='$CFG->wwwroot/blocks/ilp/actions/define_batch_export.php?course_id=$course_id&tutor=$tutor&status_id=$status_id&group_id=$group_id'>Export</a>&nbsp;";
 }
