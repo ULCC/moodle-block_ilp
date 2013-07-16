@@ -46,12 +46,16 @@ M.ilp_view_studentreports = {
         var expandall = Y.one('#studentreport_expandall');
         var collapseall = Y.one('#studentreport_collapseall');
         expandall.on('click', function() {
+            this.addClass('hiddenelement');
+            collapseall.removeClass('hiddenelement');
             toggle.each(function(tog) {
                 tog.addClass('entry-hidden');
                 tog.simulate('click');
             });
         });
         collapseall.on('click', function() {
+            this.addClass('hiddenelement');
+            expandall.removeClass('hiddenelement');
             toggle.each(function(tog) {
                 tog.removeClass('entry-hidden');
                 tog.simulate('click');

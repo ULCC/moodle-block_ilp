@@ -84,8 +84,6 @@ $headers = array(
 
 $columns = array('picture', 'fullname', 'u_status');
 
-$headers[] = '';
-$columns[] = 'view';
 $nosorting = array('picture', 'u_status','view');
 
 
@@ -232,7 +230,7 @@ if (!empty($studentslist)) {
         $userprofile	=	'profile.php';
                 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
-        $data['fullname'] = "<a href='{$CFG->wwwroot}/user/{$userprofile}?id={$student->id}{$coursearg}' class=\"userlink\">" . fullname($student) . "</a>";
+        $data['fullname'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' class=\"userlink\">" . fullname($student) . "</a>";
 
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
@@ -259,8 +257,6 @@ if (!empty($studentslist)) {
         }else {
             $data['u_status'] = $status_item;
         }
-
-        $data['view'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' >" . get_string('viewilp', 'block_ilp') . "</a>";
 
         $temp   =   new stdClass();
         $temp->entries = $dbc->count_report_entries($report_id, $student->id);
