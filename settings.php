@@ -294,6 +294,13 @@ if ($dbc->get_graph_plugins() !== false) {
     }
 }
 
+
+$block_items_settings 	= new admin_setting_heading('block_ilp/block_items', get_string('tab_block_items', 'block_ilp'), '');
+$settings->add($block_items_settings);
+
+$link = '<a href="' . $CFG->wwwroot . '/blocks/ilp/actions/edit_plugin_blockitem_config.php">' . get_string('tab_block_items_cfg', 'block_ilp') . '</a>';
+$settings->add(new admin_setting_heading('block_ilp_block_items', '', $link));
+
 /********************************
  * Misc config
  */

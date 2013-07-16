@@ -476,6 +476,9 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['show_comments'] = 'Show comments';
     $string['hide_comments'] = 'Hide comments';
 
+    $string['tab_block_items'] = 'Block Items';
+    $string['tab_block_items_cfg'] = 'Block Items Configuration';
+
 	global $CFG;
 
 	// Include ilp db class
