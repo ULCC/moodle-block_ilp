@@ -10,6 +10,7 @@
  * @version 2.0
  */
 
+include_once(__DIR__.'../../lib/tablelib.php');
 
 class batch_export_setup_mform extends ilp_moodleform
 {
@@ -32,6 +33,9 @@ class batch_export_setup_mform extends ilp_moodleform
 
       $imports=$this->_customdata;
 
+//We just include this to be able to get the download list
+      $table=new flexible_table();
+
 //get all enabled reports in this ilp
       $reportoptions=array();
       foreach($dbc->get_reports(ILP_ENABLED) as $r)
@@ -44,31 +48,28 @@ class batch_export_setup_mform extends ilp_moodleform
          print_error(get_string('noreports','block_ilp'));
       }
 
-      if(!$imports['tutor'])
-      {
-         $courseid=isset($imports['course_id'])? $imports['course_id'] : 0 ;
+      $courseid=isset($imports['course_id'])? $imports['course_id'] : 0 ;
 
 //get all courses that the current user is enrolled in
-         $courseoptions=$groupoptions=array();
+      $courseoptions=$groupoptions=array();
 
-         foreach($dbc->get_user_courses($USER->id) as $id=>$c)
+      foreach($dbc->get_courses() as $id=>$c)
+      {
+         $courseoptions[$id]=$c->shortname;
+
+         foreach(groups_get_all_groups($id) as $g)
          {
-            $courseoptions[$id]=$c->shortname;
-
-            foreach(groups_get_all_groups($id) as $g)
+            if(!$courseid or $courseid==$g->courseid)
             {
-               if(!$courseid or $courseid==$g->courseid)
-               {
-                  $groupoptions[$g->id]=$g->name;
-               }
+               $groupoptions[$g->id]=$g->name;
             }
          }
+
 
 //Sort courses by name and create drop down.
          asort($courseoptions);
          $mform->addElement('select','course_id',get_string('course'),$courseoptions);
          $mform->setDefault('course_id',$imports['course_id']);
-
 
 //Put the groups in to name order and create drop down
          asort($groupoptions);
@@ -77,14 +78,8 @@ class batch_export_setup_mform extends ilp_moodleform
 
       }
 
-      if(true)
-      {
-      } else {
-         //get the list of tutees for this user
-         $student = $dbc->get_user_tutees($USER->id);
-
-         $pagetitle = get_string('mytutees','block_ilp');
-      }
+      $mform->addElement('select','format',get_string('format'),$table->get_download_menu());
+      $mform->setDefault('format',$table->defaultdownloadformat);
 
       $status=array();
       foreach($dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD) as $s)
