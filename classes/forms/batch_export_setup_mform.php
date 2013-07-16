@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-include_once(__DIR__.'../../lib/tablelib.php');
+include_once("$CFG->libdir/lib/tablelib.php");
 
 class batch_export_setup_mform extends ilp_moodleform
 {
@@ -34,7 +34,7 @@ class batch_export_setup_mform extends ilp_moodleform
       $imports=$this->_customdata;
 
 //We just include this to be able to get the download list
-      $table=new flexible_table();
+      $table=new flexible_table('dummy');
 
 //get all enabled reports in this ilp
       $reportoptions=array();
@@ -64,19 +64,17 @@ class batch_export_setup_mform extends ilp_moodleform
                $groupoptions[$g->id]=$g->name;
             }
          }
-
+      }
 
 //Sort courses by name and create drop down.
-         asort($courseoptions);
-         $mform->addElement('select','course_id',get_string('course'),$courseoptions);
-         $mform->setDefault('course_id',$imports['course_id']);
+      asort($courseoptions);
+      $mform->addElement('select','course_id',get_string('course'),$courseoptions);
+      $mform->setDefault('course_id',$imports['course_id']);
 
 //Put the groups in to name order and create drop down
-         asort($groupoptions);
-         $mform->addElement('select','group_id',get_string('group'),$groupoptions);
-         $mform->setDefault('group_id',$imports['group_id']);
-
-      }
+      asort($groupoptions);
+      $mform->addElement('select','group_id',get_string('group'),$groupoptions);
+      $mform->setDefault('group_id',$imports['group_id']);
 
       $mform->addElement('select','format',get_string('format'),$table->get_download_menu());
       $mform->setDefault('format',$table->defaultdownloadformat);
