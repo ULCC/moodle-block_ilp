@@ -50,9 +50,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         global $CFG;
         if ($ajax) {
             // If not being called from 'display' of this class
-            $access_report_addreports = self::$access_report_addreports;
-            $multiple_entries = self::$multiple_entries;
-            $reportavailable = self::$reportavailable;
+            $access_report_addreports = static::$access_report_addreports;
+            $multiple_entries = static::$multiple_entries;
+            $reportavailable = static::$reportavailable;
         }
 
         $addnew_attrs = array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry');
@@ -84,7 +84,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
         if ($ajax) {
             $comments =	$this->dbc->get_entry_comments($entry_id);
-            $access = array('access_report_editcomment' => self::$access_report_editcomment,'access_report_deletecomment'=>self::$access_report_deletecomment);
+            $access = array('access_report_editcomment' => static::$access_report_editcomment,'access_report_deletecomment'=>static::$access_report_deletecomment);
         }
 
         if ($comments) {
