@@ -66,6 +66,10 @@ class batch_export_setup_mform extends ilp_moodleform
          }
       }
 
+//Get list of possible export formats
+      $mform->addElement('select','format',get_string('format'),$table->get_download_menu());
+      $mform->setDefault('format',$table->defaultdownloadformat);
+
 //Sort courses by name and create drop down.
       asort($courseoptions);
       $mform->addElement('select','course_id',get_string('course'),$courseoptions);
@@ -75,9 +79,6 @@ class batch_export_setup_mform extends ilp_moodleform
       asort($groupoptions);
       $mform->addElement('select','group_id',get_string('group'),$groupoptions);
       $mform->setDefault('group_id',$imports['group_id']);
-
-      $mform->addElement('select','format',get_string('format'),$table->get_download_menu());
-      $mform->setDefault('format',$table->defaultdownloadformat);
 
       $status=array();
       foreach($dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD) as $s)

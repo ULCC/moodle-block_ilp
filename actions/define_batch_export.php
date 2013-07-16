@@ -61,7 +61,7 @@ elseif($data=$mform->get_data())
       redirect($CFG->wwwroot);
    }
 
-   include("$CFG->dirroot/blocks/ilp/views/print_preview.php");
+   include("$CFG->dirroot/blocks/ilp/views/batch_export.php");
    exit;
 }
 
