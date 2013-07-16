@@ -124,12 +124,10 @@ class ilp_report
    {
       static $userroles=array();
 
-      $site=context_system::instance();
-
       if(is_object($user))
          $user=$user->id;
 
-      if(ilp_is_siteadmin($user) or has_capability('block/ilp:ilpviewall',$site))
+      if($this->dbc->ilp_admin())
       {
          return true;
       }
