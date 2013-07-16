@@ -436,14 +436,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   $courserelatedfield_id  =$has_courserelated->id;
                }
 
-               foreach(array('addreport','editreport','deletereport','addcomment','editcomment',
+               foreach(array('addreports','editreport','deletereport','addcomment','editcomment',
                              'deletecomment','viewcomment','viewotherilp','addviewextension') as $capname)
                {
                   $varname='access_report_'.$capname;
                   $$varname=$report->has_cap($USER->id,$PAGE->context,"block/ilp:$capname");
                }
 
-               foreach(array('addreport','editreport','deletereport','addcomment','editcomment',
+               foreach(array('addreports','editreport','deletereport','addcomment','editcomment',
                              'deletecomment','addviewextension') as $capname)
                {
                   $varname='access_report_'.$capname;
