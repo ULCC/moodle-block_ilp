@@ -182,7 +182,7 @@ class ilp_report
    protected function set_my_report_fields()
    {
       global $DB;
-      $this->fields=$DB->get_records('block_ilp_report_field',array('report_id'=>$this->id));
+      $this->fields=$DB->get_records('block_ilp_report_field',array('report_id'=>$this->id),'position');
    }
 
 
@@ -289,7 +289,11 @@ class ilp_report
     {
        global $DB,$CFG;
 
-       $rows=array();
+       include_once("$CFG->libdir/tablelib.php");
+
+       $rows=$headers=array();
+
+       $headers['userid']='User id';
 
        foreach($users as $userid)
        {
@@ -297,7 +301,7 @@ class ilp_report
 
           foreach($this->get_user_report_entries($userid) as $report_entry)
           {
-             $row=new stdClass;
+             $row=array('userid'=>$userid);
              foreach ($this->get_all_fields() as $field) {
                 //get the plugin record that for the plugin, with cacheing
                 if(!isset($pluginRecords[$field->plugin_id]))
@@ -308,15 +312,6 @@ class ilp_report
                 $pluginrecord=$pluginRecords[$field->plugin_id];
 
                 $tablename=$pluginrecord->tablename;
-
-                //Get the data from table name for the current entry
-/*
-  $sql="SELECT * FROM {$table}_ent ent join {$table} p on p.id=ent.parent_id
-  WHERE p.reportfield_id=:fieldid and ent.entry_id=:entryid";
-
-  $data=$DB->get_record_sql($sql,array('fieldid'=>$field->id,
-  'entryid'=>$report_entry->id));
-*/
 
                 //take the name field from the plugin as it will be used to call the instantiate the plugin class
                 $classname = $pluginrecord->name;
@@ -339,14 +334,91 @@ class ilp_report
 
                 $pluginclass=$pluginInstances[$classname];
 
-                if ($pluginclass->is_viewable() != false)
+                if ($pluginclass->is_viewable())// and $pluginclass->is_exportable())
                 {
-                   $pluginclass->view_data($field->id,$report_entry->id,$row);
+                   $item=new stdClass;
+                   $itemname=$field->id.'_field';
+                   $headers[$itemname]=$this->strip_word_html($field->label);
+
+                   $item->$itemname='';
+                   $pluginclass->view_data($field->id,$report_entry->id,$item);
+
+                   foreach((array)$item as $fieldname=>$value)
+                   {
+                      $row[$fieldname]=$this->strip_word_html($value);
+                   }
                 }
              }
-             $rows[]=(array)($row);
+             $rows[]=$row;
           }
        }
-       print_object($rows);
+
+       $table=new flexible_table('exporter');
+
+       $table->setup();
+       $table->define_columns(array_keys($headers));
+       $table->define_headers($headers);
+
+       $exname="table_csv_export_format";
+
+       $ex=new $exname($table);
+
+       $ex->start_document('Test export');
+       $ex->start_table('Sheet1');
+
+       $ex->output_headers($headers);
+
+       foreach($rows as $row)
+       {
+          $ex->add_data($table->get_row_from_keyed($row));
+       }
+
+       $ex->finish_table();
+
+       $ex->finish_document();
     }
+
+//From php.net
+    function strip_word_html($text, $allowed_tags = '')
+    {
+       mb_regex_encoding('UTF-8');
+
+       //replace MS special characters first
+       $search = array('/&lsquo;/u', '/&rsquo;/u', '/&ldquo;/u', '/&rdquo;/u', '/&mdash;/u');
+       $replace = array('\'', '\'', '"', '"', '-');
+       $text = preg_replace($search, $replace, $text);
+
+       //make sure _all_ html entities are converted to the plain ascii equivalents - it appears
+       //in some MS headers, some html entities are encoded and some aren't
+       $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
+
+       //try to strip out any C style comments first, since these, embedded in html comments, seem to
+       //prevent strip_tags from removing html comments (MS Word introduced combination)
+       if(mb_stripos($text, '/*') !== FALSE){
+          $text = mb_eregi_replace('#/\*.*?\*/#s', '', $text, 'm');
+       }
+
+       //introduce a space into any arithmetic expressions that could be caught by strip_tags so that they won't be
+       //'<1' becomes '< 1'(note: somewhat application specific)
+       $text = preg_replace(array('/<([0-9]+)/'), array('< $1'), $text);
+       $text = strip_tags($text, $allowed_tags);
+
+       //eliminate extraneous whitespace from start and end of line, or anywhere there are two or more spaces, convert it to one
+       $text = preg_replace(array('/^\s\s+/', '/\s\s+$/', '/\s\s+/u'), array('', '', ' '), $text);
+
+       //strip out inline css and simplify style tags
+       $search = array('#<(strong|b)[^>]*>(.*?)</(strong|b)>#isu', '#<(em|i)[^>]*>(.*?)</(em|i)>#isu', '#<u[^>]*>(.*?)</u>#isu');
+       $replace = array('<b>$2</b>', '<i>$2</i>', '<u>$1</u>');
+       $text = preg_replace($search, $replace, $text);
+
+       //on some of the ?newer MS Word exports, where you get conditionals of the form 'if gte mso 9', etc., it appears
+       //that whatever is in one of the html comments prevents strip_tags from eradicating the html comment that contains
+       //some MS Style Definitions - this last bit gets rid of any leftover comments */
+       $num_matches = preg_match_all("/\<!--/u", $text, $matches);
+       if($num_matches){
+          $text = preg_replace('/\<!--(.)*--\>/isu', '', $text);
+       }
+       return $text;
+    }
+
 }
