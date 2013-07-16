@@ -18,6 +18,7 @@ $jsmodule = array(
    'requires'  => array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
 );
 
+//Uses the same ajax call to populate groups
 $PAGE->requires->js_init_call('M.ilp_view_print_preview.init', array(get_string('any')), true, $jsmodule);
 
 // Meta includes
@@ -40,12 +41,12 @@ $group_id = $PARSER->optional_param('group_id', 0, PARAM_INT);
 // instantiate the db
 $dbc = new ilp_db();
 
-$baseurl = new moodle_url($CFG->wwwroot."/blocks/ilp/actions/define_batch_print.php",$PARSER->get_params());
+$baseurl = new moodle_url($CFG->wwwroot."/blocks/ilp/actions/define_batch_export.php",$PARSER->get_params());
 
-$mform=new batch_print_setup_mform($baseurl->out(false),array('course_id'=>optional_param('course_id',0,PARAM_INT),
-                                                              'tutor'=>optional_param('tutor',0,PARAM_INT),
-                                                              'group_id'=>optional_param('group_id',0,PARAM_INT),
-                                                              'status_id'=>optional_param('status_id',0,PARAM_INT)));
+$mform=new batch_export_setup_mform($baseurl->out(false),array('course_id'=>optional_param('course_id',0,PARAM_INT),
+                                                               'tutor'=>optional_param('tutor',0,PARAM_INT),
+                                                               'group_id'=>optional_param('group_id',0,PARAM_INT),
+                                                               'status_id'=>optional_param('status_id',0,PARAM_INT)));
 
 if($mform->is_cancelled())
 {
