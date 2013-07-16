@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-include_once("$CFG->libdir/lib/tablelib.php");
+include_once("$CFG->libdir/tablelib.php");
 
 class batch_export_setup_mform extends ilp_moodleform
 {
