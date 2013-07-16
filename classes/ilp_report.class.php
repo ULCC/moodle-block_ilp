@@ -291,13 +291,20 @@ class ilp_report
 
        include_once("$CFG->libdir/tablelib.php");
 
-       $userheaders=array('userid','firstname','lastname');
+       $userheaders=array('userid'=>'id','firstname','lastname');
 
        $rows=$headers=array();
 
-       foreach($userheaders as $h)
+       foreach($userheaders as $alt=>$h)
        {
-          $headers[$h]=get_string($h);
+          if(!is_numeric($alt))
+          {
+             $headers[$h]=get_string($alt);
+          }
+          else
+          {
+             $headers[$h]=get_string($h);
+          }
        }
 
        foreach($users as $user)
