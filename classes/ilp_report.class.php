@@ -334,7 +334,7 @@ class ilp_report
 
                 $pluginclass=$pluginInstances[$classname];
 
-                if ($pluginclass->is_viewable())// and $pluginclass->is_exportable())
+                if ($pluginclass->is_viewable() and $pluginclass->is_exportable())
                 {
                    $item=new stdClass;
                    $itemname=$field->id.'_field';
