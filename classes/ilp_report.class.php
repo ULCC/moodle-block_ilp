@@ -388,7 +388,7 @@ class ilp_report
 
        $ex=new $exname($table);
 
-       $ex->start_document('Test export');
+       $ex->start_document($this->name);
        $ex->start_table('Sheet1');
 
        $ex->output_headers($headers);
