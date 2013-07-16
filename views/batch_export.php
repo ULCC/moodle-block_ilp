@@ -42,12 +42,11 @@ else
       $group_id = 0;
 }
 
-$students=$dbc->get_course_users($course_id,$group_id,true);
-if($students->valid())
+if($fullstudents=$dbc->get_studentlist_details(array_keys($dbc->get_course_users($course_id,$group_id)),$status_id,'','lastname asc'))
 {
    $report=ilp_report::from_id($data->reportselect);
 
-   $report->export_all_entries($students,$data->format);
+   $report->export_all_entries($fullstudents,$data->format);
 }
 else
 {
