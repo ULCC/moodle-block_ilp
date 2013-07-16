@@ -566,5 +566,10 @@ class ilp_element_plugin {
         return true;
     }
 
+    public function is_exportable()
+    {
+       return true;
+    }
+
 }
 ?>
