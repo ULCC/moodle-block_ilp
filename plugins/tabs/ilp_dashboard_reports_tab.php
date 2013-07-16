@@ -436,7 +436,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   $courserelatedfield_id  =$has_courserelated->id;
                }
 
-               foreach(array('addreport','editreport','deletereport','addcomment','editcomment',
+               foreach(array('addreports','editreport','deletereport','addcomment','editcomment',
                              'deletecomment','viewcomment','viewotherilp','addviewextension') as $capname)
                {
                   $varname='access_report_'.$capname;
@@ -477,7 +477,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}";
 
                echo $this->generate_addnewentry($addnewentry_url, $access_report_addreports, $multiple_entries, $reportavailable);
-
 
                if (!empty($access_report_viewothers)) {
 
