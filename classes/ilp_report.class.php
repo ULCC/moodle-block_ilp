@@ -285,23 +285,41 @@ class ilp_report
        return $DB->get_records_sql($sql, $params);
     }
 
-    function export_all_entries($users)
+    function export_all_entries($users,$format='excel')
     {
        global $DB,$CFG;
 
        include_once("$CFG->libdir/tablelib.php");
 
+       $userheaders=array('userid','firstname','lastname');
+
        $rows=$headers=array();
 
-       $headers['userid']='User id';
-
-       foreach($users as $userid)
+       foreach($userheaders as $h)
        {
+          $headers[$h]=get_string($h);
+       }
+
+       foreach($users as $user)
+       {
+          if(is_numeric($user))
+          {
+             $user=$DB->get_record('user',array('id'=>$user));
+          }
+
+          $userid=$user->id;
+
           $creators=$pluginRecords=$pluginInstances=$pluginFieldsLoaded=array();
 
           foreach($this->get_user_report_entries($userid) as $report_entry)
           {
-             $row=array('userid'=>$userid);
+             $row=array();
+
+             foreach($userheaders as $h)
+             {
+                $row[$h]=$user->$h;
+             }
+
              foreach ($this->get_all_fields() as $field) {
                 //get the plugin record that for the plugin, with cacheing
                 if(!isset($pluginRecords[$field->plugin_id]))
