@@ -42,14 +42,13 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
 
-    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null) {
+    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null) {
         global $CFG;
-        $backtrace = debug_backtrace();
-        if (empty($backtrace[0]) || empty($backtrace[1]) || $backtrace[0]['file'] !=  __FILE__ || $backtrace[1]['function'] != 'display') {
-            // If not being called from 'display' in self
-            $access_report_addreports = self::$access_report_addreports;
-            $multiple_entries = self::$multiple_entries;
-            $reportavailable = self::$reportavailable;
+        if ($ajax) {
+            // If not being called from 'display' of this class
+            $access_report_addreports = static::$access_report_addreports;
+            $multiple_entries = static::$multiple_entries;
+            $reportavailable = static::$reportavailable;
         }
 
         $addnew_attrs = array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry');
