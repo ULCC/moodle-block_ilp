@@ -384,7 +384,7 @@ class ilp_report
        $table->define_columns(array_keys($headers));
        $table->define_headers($headers);
 
-       $exname="table_csv_export_format";
+       $exname="table_{$format}_export_format";
 
        $ex=new $exname($table);
 
