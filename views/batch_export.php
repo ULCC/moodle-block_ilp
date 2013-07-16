@@ -8,8 +8,6 @@
 
 // $data->course_id has already been tested for content
 
-print_object($data);
-
 $course_id=$data->course_id;
 $group_id=(isset($data->group_id))?  $group_id=$data->group_id : 0 ;
 $status_id=$data->status_id;
@@ -44,8 +42,15 @@ else
       $group_id = 0;
 }
 
-$students=$dbc->get_course_users($course_id,$group_id,true);
+if($students=$dbc->get_course_users($course_id,$group_id,true))
+{
+   $report=ilp_report::from_id($data->reportselect);
 
-
+   $report->export_all_entries($students,$data->format);
+}
+else
+{
+   print_string('nothingtodisplay','block_ilp');
+}
 
 exit;

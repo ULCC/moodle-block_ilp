@@ -1,6 +1,6 @@
 <?php
 /**
- * Allows the user to print a list of students' reports
+ * Allows the user to export a list of students' reports
  *
  * @copyright &copy; 2013 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -12,13 +12,14 @@
 require_once('../configpath.php');
 //include any necessary files
 
+
+//Uses the same ajax call to populate groups as batch print
 $jsmodule = array(
    'name'     	=> 'ilp_view_print_preview',
    'fullpath' 	=> '/blocks/ilp/views/js/print_preview.js',
    'requires'  => array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim')
 );
 
-//Uses the same ajax call to populate groups
 $PAGE->requires->js_init_call('M.ilp_view_print_preview.init', array(get_string('any')), true, $jsmodule);
 
 // Meta includes
@@ -86,7 +87,7 @@ if (!empty($course_id)) {
 $PAGE->navbar->add(get_string('ilps','block_ilp'),$listurl,'title');
 
 //add the page title
-$title = get_string('print','block_ilp');
+$title = get_string('export','block_ilp');
 
 //block name
 $PAGE->navbar->add($title,null,'title');
@@ -100,4 +101,4 @@ $PAGE->set_pagetype('ilp-reportlist');
 $PAGE->set_pagelayout('ilp');
 $PAGE->set_url($baseurl);
 
-require_once($CFG->dirroot.'/blocks/ilp/views/batch_print.html');
+require_once($CFG->dirroot.'/blocks/ilp/views/batch_export.html');

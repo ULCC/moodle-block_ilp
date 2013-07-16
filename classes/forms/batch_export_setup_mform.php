@@ -95,7 +95,7 @@ class batch_export_setup_mform extends ilp_moodleform
       }
 
       asort($reportoptions);
-      $s=$mform->addElement('select','reportselect',get_string('printreports','block_ilp'),$reportoptions);
+      $s=$mform->addElement('select','reportselect',get_string('report','block_ilp'),$reportoptions);
 
       $mform->addRule('reportselect',get_string('required'),'required',null,'client');
       $mform->addHelpButton('reportselect','batchreportselect','block_ilp');
