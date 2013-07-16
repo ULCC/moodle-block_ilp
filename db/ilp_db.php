@@ -2089,7 +2089,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of object containing all users enrolled in the course
      * or bool false
      */
-    function get_course_users($course_id,$group_id=null) {
+        function get_course_users($course_id,$group_id=null,$fullrecords=false) {
 
         $grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
         $groupwhere = "";
@@ -2104,13 +2104,18 @@ class ilp_db_functions	extends ilp_logging {
             $groupwhere = "AND gm.groupid = :group_id ";
         }
 
-        $sql	=	"SELECT		distinct(u.id)
+        $fields= $fullrecords ? 'distinct u.*' : ' distinct u.id' ;
+
+        $sql	=	"SELECT		$fields
 	 					  FROM		{user} u
 	 					            LEFT JOIN ($esql) eu ON eu.id=u.id
 	 					  			{$grouptable}
 	 					  WHERE		u.deleted = 0
 	 					  AND       eu.id=u.id
 	 					  			{$groupwhere}";
+
+        if($fullrecords)
+           return $this->dbc->get_recordset_sql($sql, $params);
 
         return $this->dbc->get_records_sql($sql, $params);
     }
