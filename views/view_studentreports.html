@@ -157,7 +157,14 @@ if ($dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
 
 <div class="entry_floatright"><a href='#' onclick="M.ilp_standard_functions.printfunction()"><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
 <div class='clearer'></div>
-    <span id='expandcollapselinks' class="float-right"><a href="#" id="studentreport_expandall"><?php echo get_string('expandentries','block_ilp'); ?></a>&nbsp;/&nbsp;<a href="#" id="studentreport_collapseall"><?php echo get_string('collapseentries','block_ilp'); ?></a></span>
+    <span id='expandcollapselinks' class="float-right">
+        <a href="#" id="studentreport_expandall">
+            <?php echo get_string('expandentries','block_ilp'); ?>
+        </a>
+        <a href="#" id="studentreport_collapseall" class="hiddenelement">
+            <?php echo get_string('collapseentries','block_ilp'); ?>
+        </a>
+    </span>
 	<div class="centable" id='student_list<?php echo "course_id{$course_id}tutor{$tutor}status_id{$status_id}report_id{$report_id}_container"; ?>'">
 	<?php
 	   // display the table

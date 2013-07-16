@@ -17,9 +17,13 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    static       $access_report_addreports;
    static       $multiple_entries;
    static       $reportavailable;
+   static       $access_report_editreports;
+   static       $access_report_deletereport;
+   static       $access_report_addcomment;
+   static       $access_report_viewcomment;
 
 
-   function __construct($student_id=null,$course_id=null)	{
+    function __construct($student_id=null,$course_id=null)	{
       global 	$CFG,$USER,$PAGE;
 
       //$this->linkurl				=	$CFG->wwwroot.$_SERVER["SCRIPT_NAME"]."?user_id=".$student_id."&course_id={$course_id}";
@@ -80,7 +84,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
         if ($ajax) {
             $comments =	$this->dbc->get_entry_comments($entry_id);
-            $access = array('access_report_editcomment' => self::$access_report_editcomment,'access_report_deletecomment'=>self::$access_report_deletecomment);
+            $access = array('access_report_editcomment' => static::$access_report_editcomment,'access_report_deletecomment'=>static::$access_report_deletecomment);
         }
 
         if ($comments) {
@@ -334,7 +338,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                   self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
 
-                  $candelete =	$access_report_deletereports;
+                  $candelete =	self::$access_report_deletereport;
 
                   //get all of the entries for this report
                   $reportentries=$report->get_user_report_entries($this->student_id,$state_id);
@@ -364,6 +368,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     */
     public function display($selectedtab=null, $ajax_settings = array(),$readonly=false,$showcomments=true)	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+
+       $this->get_capabilites();
+
+       $access_report_viewcomment = static::$access_report_viewcomment;
+       $access_report_addcomment = static::$access_report_addcomment;
+       $access_report_deletecomment = static::$access_report_deletecomment;
+       $access_report_editcomment = static::$access_report_editcomment;
+       $access_report_addreports = static::$access_report_addreports;
+       $access_report_editreports = static::$access_report_editreports;
+       $access_report_deletereport = static::$access_report_deletereport;
 
        $jsarguments = array(
            'root' => $CFG->wwwroot,
