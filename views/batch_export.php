@@ -42,7 +42,8 @@ else
       $group_id = 0;
 }
 
-if($students=$dbc->get_course_users($course_id,$group_id,true))
+$students=$dbc->get_course_users($course_id,$group_id,true);
+if($students->valid())
 {
    $report=ilp_report::from_id($data->reportselect);
 
