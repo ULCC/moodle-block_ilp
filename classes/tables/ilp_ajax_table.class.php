@@ -369,6 +369,7 @@ class ilp_ajax_table extends ilp_flexible_table {
     /// Always introduce the "flexible" class for the table if not specified
         // added header class instead of flexible
     /// No attributes, add flexible class
+
         if (empty($this->attributes)) {
             $this->attributes['class'] = 'flexible';
     /// No classes, add flexible class

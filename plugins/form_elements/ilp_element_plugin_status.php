@@ -112,6 +112,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
      * @param int $reportfield_id the id of the reportfield that the entry is attached to
      * @param int $entry_id the id of the entry
      * @param object $entryobj an object that will add parameters to
+     * @param bool returnvalue should a label or value be returned
      */
     public function view_data( $reportfield_id,$entry_id,&$entryobj, $returnvalue=false ){
         $fieldname	=	$reportfield_id."_field";
@@ -640,6 +641,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             array('class' => 'form_input')
         );
         $F->setValue( $info[ 'fail' ] );
+        $mform->setType('fail', PARAM_TEXT);
 
         $G = $mform->addElement(
             'textarea',
@@ -648,6 +650,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             array('class' => 'form_input')
         );
         $G->setValue( $info[ 'pass' ] );
+        $mform->setType('pass', PARAM_TEXT);
 
 
         //$mform->addRule('optionlist', null, 'minlength', 1, 'client');

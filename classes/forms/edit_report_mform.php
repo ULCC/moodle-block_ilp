@@ -122,7 +122,7 @@ class edit_report_mform extends ilp_moodleform {
                 get_string('maxentries', 'block_ilp'),
                 array('class' => 'form_input')
             );
-
+            $mform->setType('reportmaxentries', PARAM_INT);
 
             //specific date selector
             $mform->addElement(
@@ -166,7 +166,7 @@ class edit_report_mform extends ilp_moodleform {
                 get_string('recurringmax', 'block_ilp'),
                 array('class' => 'recurring')
             );
-
+            $mform->setType('recurmax', PARAM_INT);
             $radioarray         =   array();
             $radioarray[]       =&  $mform->createElement( 'radio', 'recurstart', '', get_string('reportcreation','block_ilp'), ILP_RECURRING_REPORTCREATION ,array('class'=>'recurring')); ;
             $radioarray[]       =&  $mform->createElement( 'radio', 'recurstart', '', get_string('firstentry','block_ilp') , ILP_RECURRING_FIRSTENTRY ,array('class'=>'recurring'));

@@ -14,6 +14,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    public 	$capability;
    static       $access_report_editcomment;
    static       $access_report_deletecomment;
+   static       $access_report_addreports;
+   static       $multiple_entries;
+   static       $reportavailable;
 
 
    function __construct($student_id=null,$course_id=null)	{
@@ -38,6 +41,32 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       parent::__construct();
 
    }
+
+    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null) {
+        global $CFG;
+        $backtrace = debug_backtrace();
+        if (empty($backtrace[0]) || empty($backtrace[1]) || $backtrace[0]['file'] !=  __FILE__ || $backtrace[1]['function'] != 'display') {
+            // If not being called from 'display' in self
+            $access_report_addreports = self::$access_report_addreports;
+            $multiple_entries = self::$multiple_entries;
+            $reportavailable = self::$reportavailable;
+        }
+
+        $addnew_attrs = array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry');
+
+        if ($studentid) {
+            $addnew_attrs['data-studentid'] = $studentid;
+        }
+        $addnew_span = html_writer::tag('span', get_string('addnew','block_ilp'), $addnew_attrs);
+        $addnew_area = html_writer::tag('div','', array('class'=>'_addnewentryarea'));
+        $loader_icon = $this->get_loader_icon('addnewentry-loader', 'span');
+        if (!empty($access_report_addreports)   && !empty($multiple_entries) && !empty($reportavailable['result'])) {
+            return    "<div class='add' style='float :left'>
+                                     $loader_icon $addnew_span
+                                        </div> $addnew_area";
+        }
+        return '';
+    }
 
     public function get_loader_icon($container_classes, $eltype = 'div') {
         global $CFG;
@@ -298,6 +327,28 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                   //find out if the current user has the delete comment capability for the report
                   self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletecomment');
+
+                  // view comment
+                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewcomment');
+
+                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
+
+                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
+
+                  $candelete =	$access_report_deletereports;
+
+                  //get all of the entries for this report
+                  $reportentries=$report->get_user_report_entries($this->student_id,$state_id);
+
+                  //does the current report allow multiple entries
+                  self::$multiple_entries = !empty($report->frequency);
+
+                  //instantiate the report rules class
+                  $reportrules    =   new ilp_report_rules($report_id,$this->student_id);
+
+                  $stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
+
+                  self::$reportavailable = $reportrules->report_availabilty();
                }
             }
         }
@@ -316,7 +367,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
        $jsarguments = array(
-           'root' => $CFG->wwwroot
+           'root' => $CFG->wwwroot,
+           'pagename' => 'view_main/reports_tab'
        );
 
        $jsmodule = array(
@@ -424,14 +476,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                echo "<div id='report-entries'>";
                $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}";
 
-               $addnew_span = html_writer::tag('span', get_string('addnew','block_ilp'), array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry'));
-               $addnew_area = html_writer::tag('div','', array('class'=>'_addnewentryarea'));
-               $loader_icon = $this->get_loader_icon('addnewentry-loader', 'span');
-               if (!empty($access_report_addreports)   && !empty($multiple_entries) && !empty($reportavailable['result'])) {
-                  echo    "<div class='add' style='float :left'>
-                                     $loader_icon $addnew_span
-                                        </div> $addnew_area";
-               }
+               echo $this->generate_addnewentry($addnewentry_url, $access_report_addreports, $multiple_entries, $reportavailable);
+
 
                if (!empty($access_report_viewothers)) {
 
@@ -676,9 +722,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                                       <input id='summary' type='checkbox' name='summary' value='1' {$summarychecked} >
                                       <p>
 					                  <input type='submit' value='Apply Filter' id='stateselectorsubmit' />
-					                  </p></div></form>";
-      return $stateselector;
-   }
+					                  </p></form></div>";
+			return $stateselector;
+	}
 
 
 

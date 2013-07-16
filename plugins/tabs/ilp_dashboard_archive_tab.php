@@ -534,8 +534,8 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 	
 	function get_student_concern_posts($student_id,$reporttype_id=false,$sortorder='DESC')	{
 		global 	$CFG;
-		
-		$statussql	=	(!empty($reporttype_id))	? "AND 		status = {$reporttype_id}"	: "";		
+
+        $statussql  =  ($reporttype_id !== false) ? "AND status = {$reporttype_id}"	: "";
 		
 		$sql	=	"SELECT		{$CFG->prefix}ilpconcern_posts.*, up.username
 					 FROM 		{$CFG->prefix}ilpconcern_posts, {$CFG->prefix}user up

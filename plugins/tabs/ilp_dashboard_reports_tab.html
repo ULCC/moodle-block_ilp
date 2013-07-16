@@ -48,16 +48,15 @@
                 <div class="add">
                     <?php
                     $id_base = 'ajax_com-' . $entry->id;
-                    // $CFG->wwwroot."/blocks/ilp/actions/edit_entrycomment.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&course_id={$this->course_id}
                     ?>
-                    <div class="ajax-hidden-details" style="display: none;">
+                    <div class="ajax-hidden-details hiddenelement">
                         <span class="<?php echo $id_base . '-report_id';?>"><?php echo $report_id;?></span>
                         <span class="<?php echo $id_base . '-user_id';?>"><?php echo $entry_data->user_id;?></span>
                         <span class="<?php echo $id_base . '-selectedtab';?>"><?php echo $this->selectedtab;?></span>
                         <span class="<?php echo $id_base . '-tabitem';?>"><?php echo $this->tabitem;?></span>
                         <span class="<?php echo $id_base . '-course_id';?>"><?php echo $this->course_id;?></span>
                     </div>
-                    <span class="add-comment-ajax" id="<?php echo $id_base;?>" style="float:right;margin: 0 0 0 200px;">
+                    <span class="add-comment-ajax" id="<?php echo $id_base;?>">
                         <?php echo get_string('addcomment','block_ilp');?> <?php echo $this->get_loader_icon('loader-icon-' . $id_base, 'span'); ?>
                     </span>
                 </div>
@@ -70,7 +69,7 @@
 		<?php
 		if (!empty($access_report_viewcomment) ) {
 		?>
-		<div id="entry_<?php echo $entry->id; ?>_container" <?php if (empty($comments)) echo 'style="display:none;"';?>>
+		<div id="entry_<?php echo $entry->id; ?>_container" <?php if (empty($comments)) echo 'class="hiddenelement"';?>>
             <?php
             $access = array('access_report_editcomment' => $access_report_editcomment,'access_report_deletecomment'=>$access_report_deletecomment);
             $comment_params = "report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&course_id={$this->course_id}";
