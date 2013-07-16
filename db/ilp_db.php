@@ -10,6 +10,7 @@
  * @version 2.0
  */
 require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_logging.class.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report.class.php');
 
 /**
  * Main database class, with functions to encode and decode stuff to and from the DB
@@ -62,10 +63,10 @@ class ilp_db {
             if(!is_a($data, 'ilp_flexible_table')) {
                 foreach($data as $index => &$datum) {
 
-                	//we will skip any index with the prefix binary
-                	if (substr($index, 0,7) != 'binary_') {
-		                $datum = ilp_db::encode($datum);
-                	}
+                    //we will skip any index with the prefix binary
+                    if (substr($index, 0,7) != 'binary_') {
+                        $datum = ilp_db::encode($datum);
+                    }
                 }
 
             }
@@ -95,10 +96,10 @@ class ilp_db {
     static function decode(&$data) {
         if(is_object($data) || is_array($data)) {
             foreach($data as $index => &$datum) {
-            	//skip any fields with prefix binary_
-            	if (substr($index, 0,7) != 'binary_') {
-                	$datum = ilp_db::decode($datum);
-            	}
+                //skip any fields with prefix binary_
+                if (substr($index, 0,7) != 'binary_') {
+                    $datum = ilp_db::decode($datum);
+                }
             }
             return $data;
         } else {
@@ -115,10 +116,10 @@ class ilp_db {
     static function decode_htmlchars(&$data) {
         if(is_object($data) || is_array($data)) {
             foreach($data as $index => &$datum) {
-            	//skip any fields with prefix binary_
-            	if (substr($index, 0,7) != 'binary_') {
-                	$datum = ilp_db::decode_htmlchars($datum);
-            	}
+                //skip any fields with prefix binary_
+                if (substr($index, 0,7) != 'binary_') {
+                    $datum = ilp_db::decode_htmlchars($datum);
+                }
             }
             return $data;
         } else {
@@ -160,17 +161,17 @@ class ilp_db_functions	extends ilp_logging {
         require_once($CFG->dirroot.'/blocks/ilp/constants.php');
     }
 
-     /**
+    /**
      * Returns the ilp_report_field record with the id given
      *
      * @param int    $reportfield_id the id of the report field that you want to get the data on
      * @return object containing data from the report field record that matches criteria
      */
     function get_report_field_data($reportfield_id) {
-    	return $this->dbc->get_record("block_ilp_report_field",array("id"=>$reportfield_id));
+        return $this->dbc->get_record("block_ilp_report_field",array("id"=>$reportfield_id));
     }
 
-     /**
+    /**
      * Returns the record from the given ilp form element plugin table with the id given
      *
      * @param int    $form_element_id the id of the element in the given table
@@ -178,10 +179,10 @@ class ilp_db_functions	extends ilp_logging {
      * @return object containing plugin record that matches criteria
      */
     function get_form_element_data($tablename,$form_element_id) {
-    	return $this->dbc->get_record($tablename,array("id"=>$form_element_id));
+        return $this->dbc->get_record($tablename,array("id"=>$form_element_id));
     }
 
-	/**
+    /**
      * Returns all report field records for the report with the given id
      *
      * @param int    $report_id the id of the report whose fields will be retrieved
@@ -189,7 +190,7 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_report_fields($report_id,$orderbyposition=false) {
 
-    	$order = (!empty($orderbyposition)) ? "ORDER BY position DESC": "";
+        $order = (!empty($orderbyposition)) ? "ORDER BY position DESC": "";
 
         $sql	=	"SELECT		*
     				 FROM 		{block_ilp_report_field}
@@ -206,7 +207,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed the id of the inserted record or false
      */
     function get_form_element_plugin($plugin_id){
-    	return	$this->dbc->get_record("block_ilp_plugin",array('id'=>$plugin_id));
+        return	$this->dbc->get_record("block_ilp_plugin",array('id'=>$plugin_id));
     }
 
 
@@ -243,7 +244,7 @@ class ilp_db_functions	extends ilp_logging {
         return $this->insert_record('block_ilp_plugin', $type);
     }
 
-/**
+    /**
      * Gets the full list of dashboard plugins already installed
      *
      * @return array Result objects
@@ -256,7 +257,7 @@ class ilp_db_functions	extends ilp_logging {
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_plugin', array()) : false;
-	}
+    }
 
     /**
      * Gets the full list of dashboard plugins already installed
@@ -270,7 +271,7 @@ class ilp_db_functions	extends ilp_logging {
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
-	}
+    }
 
     /**
      * Gets the full list of dashboard templates already installed
@@ -284,7 +285,7 @@ class ilp_db_functions	extends ilp_logging {
 
         // return resource types or false
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_temp', array()) : false;
-	}
+    }
 
 
     /**
@@ -322,7 +323,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return array containing a course object that matches the outcomes
      */
     function get_course($course_id) {
-       return $this->dbc->get_record('course', array('id' => $course_id));
+        return $this->dbc->get_record('course', array('id' => $course_id));
     }
 
     /**
@@ -332,7 +333,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return array containing a course object that matches the outcomes
      */
     function get_course_by_id($course_id) {
-       return $this->get_course($course_id);
+        return $this->get_course($course_id);
     }
 
 
@@ -344,7 +345,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed the id of the inserted record or false
      */
     function create_report($report) {
-       return $this->insert_record("block_ilp_report",$report);
+        return $this->insert_record("block_ilp_report",$report);
     }
 
     /**
@@ -356,9 +357,9 @@ class ilp_db_functions	extends ilp_logging {
 
     function get_new_report_field_position($report_id) {
 
-    	$position =  $this->dbc->count_records("block_ilp_report_field",array("report_id"=>$report_id));
+        $position =  $this->dbc->count_records("block_ilp_report_field",array("report_id"=>$report_id));
 
-    	return (empty($position)) ? 1 : $position+1;
+        return (empty($position)) ? 1 : $position+1;
     }
 
     /**
@@ -382,7 +383,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed the id of the inserted record or false
      */
     function create_plugin_record($tablename,$pluginrecord) {
-    	return $this->insert_record($tablename,$pluginrecord);
+        return $this->insert_record($tablename,$pluginrecord);
     }
 
     /**
@@ -393,20 +394,20 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false depending on result of query
      */
     function update_plugin_record($tablename,$pluginrecord) {
-    	return $this->update_record($tablename,$pluginrecord);
+        return $this->update_record($tablename,$pluginrecord);
     }
 
-	/**
+    /**
      * Creates a new report field record
      *
      * @param object $reportfield an object containing the data to be saved
      * @return mixed the id of the inserted record or false
      */
     function create_report_field($reportfield) {
-    	return $this->insert_record("block_ilp_report_field",$reportfield);
+        return $this->insert_record("block_ilp_report_field",$reportfield);
     }
 
-     /**
+    /**
      * Updates the record in the report field table with a id matching the one
      * in the given object
      *
@@ -414,10 +415,10 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false depending on result of query
      */
     function update_report_field($reportfield) {
-    	return $this->update_record('block_ilp_report_field',$reportfield);
+        return $this->update_record('block_ilp_report_field',$reportfield);
     }
 
-     /**
+    /**
      * Get the plugin instance record that has the reportfield_id given
      *
      * @param string $tablename the name of the table that will be updated
@@ -425,10 +426,10 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object containing the plugin instance record or false
      */
     function get_plugin_record($tablename,$reportfield_id) {
-    	return $this->dbc->get_record($tablename, array('reportfield_id' => $reportfield_id));
+        return $this->dbc->get_record($tablename, array('reportfield_id' => $reportfield_id));
     }
 
-     /**
+    /**
      * This is the same as get_form_element_plugin() above
      * @todo refactor calls to this function
      * Returns the plugin record that has the matching id
@@ -437,17 +438,17 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object containing the plugin record or false
      */
     function get_plugin_by_id($plugin_id) {
-    	return $this->dbc->get_record('block_ilp_plugin',array('id'=>$plugin_id));
+        return $this->dbc->get_record('block_ilp_plugin',array('id'=>$plugin_id));
     }
 
-   	/**
+    /**
      * Sets the new position of a field
      *
      * @param int $reportfield_id the id of the reportfield whose position will be changed
      * @return mixed object containing the plugin record or false
      */
     function set_new_position($reportfield_id,$newposition) {
-    	return $this->dbc->set_field('block_ilp_report_field',"position",$newposition,array('id'=>$reportfield_id));
+        return $this->dbc->set_field('block_ilp_report_field',"position",$newposition,array('id'=>$reportfield_id));
     }
 
     /**
@@ -526,30 +527,30 @@ class ilp_db_functions	extends ilp_logging {
      * 		or less than position. move up = 1 move down 0
      * @return mixed object containing the plugin record or false
      */
-	function get_report_fields_by_position($report_id,$position=null,$type=null) {
+    function get_report_fields_by_position($report_id,$position=null,$type=null) {
 
-		$positionsql	=	"";
-		//the operand that will be used
+        $positionsql	=	"";
+        //the operand that will be used
 
         $params = array('report_id'=>$report_id);
-		if (!empty($position)) {
+        if (!empty($position)) {
             $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
             $params['position'] = $position;
             $params['otherfield'] = $otherfield;
             $positionsql 	=  "AND (position = :position ||  position = :otherfield)";
-		}
+        }
 
-       		$sql	=	"SELECT		*
+        $sql	=	"SELECT		*
 				    	 FROM		{block_ilp_report_field}
 					     WHERE		report_id	= :report_id
 					    {$positionsql}
 					     ORDER BY 	position";
 
-          return		$this->dbc->get_records_sql($sql, $params);
-	}
+        return		$this->dbc->get_records_sql($sql, $params);
+    }
 
 
-/**
+    /**
      * Delete the record from the given table with the reportfield_id matching the given id
      *
      * @param string $tablename the table that you want to delete the record from
@@ -557,11 +558,11 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return bool true or false
      */
-	function delete_form_element_by_reportfield( $tablename,$id, $extraparams=array() ) {
-		return $this->delete_records($tablename, array('reportfield_id' => $id), $extraparams );
-	}
+    function delete_form_element_by_reportfield( $tablename,$id, $extraparams=array() ) {
+        return $this->delete_records($tablename, array('reportfield_id' => $id), $extraparams );
+    }
 
-	/**
+    /**
      * Generic delete function used to delete items from the items table
      *
      * @param string $tablename the table that you want to delete the record from
@@ -569,35 +570,35 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return bool true or false
      */
-	function delete_items($tablename,$parent_id, $extraparams=array() ) {
-		return $this->delete_records( $tablename, array('parent_id' => $parent_id), $extraparams );
-	}
+    function delete_items($tablename,$parent_id, $extraparams=array() ) {
+        return $this->delete_records( $tablename, array('parent_id' => $parent_id), $extraparams );
+    }
 
 
-	/**
+    /**
      * Delete a report field record
      *
      * @param int $id the id of the record that you want to delete
      *
      * @return bool true or false
      */
-	function delete_report_field( $id, $extraparams=array() ) {
-		return $this->delete_records('block_ilp_report_field', array( 'id' => $id ), $extraparams );
-	}
+    function delete_report_field( $id, $extraparams=array() ) {
+        return $this->delete_records('block_ilp_report_field', array( 'id' => $id ), $extraparams );
+    }
 
 
-	/**
+    /**
      * get a report record using the id given
      *
      * @param int $id the id of the record that you want to retrieve
      *
      * @return mixed object or false if no record found
      */
-	function get_report_by_id($id) {
-		return $this->dbc->get_record('block_ilp_report', array('id' => $id));
-	}
+    function get_report_by_id($id) {
+       return ilp_report::from_id($id);
+    }
 
-     /**
+    /**
      * Updates the report record with the data in the given object
      * the object must contain a id param with the id of the record
      * to be updated
@@ -606,30 +607,30 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false depending on result of query
      */
     function update_report($report) {
-    	return $this->update_record('block_ilp_report',$report);
+        return $this->update_record('block_ilp_report',$report);
     }
 
-     /**
+    /**
      * returns an array containing all of the capabilities for the ilp block
      *
      * @return mixed array of objects or false depending on result of query
      */
     function get_block_capabilities() {
 
-    	$sql	=	"SELECT	*
+        $sql	=	"SELECT	*
     				 FROM	{capabilities}
     				 WHERE	name	LIKE	'block/ilp:%'";
 
-    	return $this->dbc->get_records_sql($sql);
+        return $this->dbc->get_records_sql($sql);
     }
 
-     /**
+    /**
      * returns whether any permission exists for the given report
      *
      * @return bool true or false
      */
     function permissions_exist($report_id) {
-    	return $this->dbc->record_exists("block_ilp_reportpermissions",array("report_id"=>$report_id));
+        return $this->dbc->record_exists("block_ilp_reportpermissions",array("report_id"=>$report_id));
     }
 
     /**
@@ -640,28 +641,28 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false
      */
     function delete_permissions_by_report_id($report_id) {
-    	return $this->dbc->delete_records('block_ilp_reportpermissions', array('report_id' => $report_id));
+        return $this->dbc->delete_records('block_ilp_reportpermissions', array('report_id' => $report_id));
     }
 
 
 
-   	/**
+    /**
      * Creates a new report permission
      *
      * @param object $permission an object containing the data to be saved
      * @return mixed the id of the inserted record or false
      */
     function create_permisssion($permission) {
-    	return $this->insert_record("block_ilp_reportpermissions", $permission);
+        return $this->insert_record("block_ilp_reportpermissions", $permission);
     }
 
-	/**
+    /**
      * Returns permissions for the report with the given id
      *
      * @return mixed object containing all permissions records or false
      */
     function get_report_permissions($report_id)	{
-    	return $this->dbc->get_records("block_ilp_reportpermissions",array('report_id'=>$report_id));
+        return $this->dbc->get_records("block_ilp_reportpermissions",array('report_id'=>$report_id));
     }
 
 
@@ -675,21 +676,21 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_reports_table($flextable,$deleted=false)	{
 
-    	$select	=	"SELECT		* ";
+        $select	=	"SELECT		* ";
 
-    	$from	=	"FROM 		{block_ilp_report}";
+        $from	=	"FROM 		{block_ilp_report}";
 
-    	$where	=	(empty($deleted)) ? " WHERE deleted != 1 " : "";
+        $where	=	(empty($deleted)) ? " WHERE deleted != 1 " : "";
 
         $order  =   " order by position";
 
-    	// get a count of all the records for the pagination links
+        // get a count of all the records for the pagination links
         $count = $this->dbc->count_records_sql('SELECT COUNT(*) '.$from.$where);
 
         // tell the table how many pages it needs
         //$flextable->totalrows($count);
 
-    	$data = $this->dbc->get_records_sql(
+        $data = $this->dbc->get_records_sql(
             $select.$from.$where. $order,
             null,
             $flextable->get_page_start(),
@@ -699,22 +700,22 @@ class ilp_db_functions	extends ilp_logging {
         return $data;
     }
 
-	/**
+    /**
      * Returns all courses in the current moodle
      *
      * @return mixed object containing all course records or false
      */
     function get_courses()	{
-    	return $this->dbc->get_records("course", array(), 'fullname ASC');
+        return $this->dbc->get_records("course", array(), 'fullname ASC');
     }
 
-	 /**
+    /**
      * Returns all roles
      *
      * @return mixed object containing all role records or false
      */
     function get_roles()	{
-    	return $this->dbc->get_records("role");
+        return $this->dbc->get_records("role");
     }
 
     /**
@@ -725,29 +726,29 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object containing role record or false
      */
     function get_role_by_name($rolename)	{
-    	return $this->dbc->get_record("role",array('name'=>$rolename));
+        return $this->dbc->get_record("role",array('name'=>$rolename));
     }
 
-	/**
+    /**
      * Create a plugin entry in the table given
      *
      * @return mixed int id of new reocrd or false
      */
     function create_plugin_entry($tablename,$pluginentry)	{
-    	return $this->insert_record($tablename, $pluginentry);
+        return $this->insert_record($tablename, $pluginentry);
     }
 
 
-	/**
+    /**
      * Update a plugin entry record in the table given
      *
      * @return bool true or false
      */
     function update_plugin_entry($tablename,$pluginentry)	{
-    	return $this->update_record($tablename, $pluginentry);
+        return $this->update_record($tablename, $pluginentry);
     }
 
-	/**
+    /**
      * Returns a list of all reports currently enabled in a course
      *
      * @param int 	$course_id the id of the course who we want to
@@ -771,7 +772,7 @@ class ilp_db_functions	extends ilp_logging {
             $status_sql = " AND cr.status = :status ";
         }
 
-    	$sql	=	"SELECT		*, cr.id as cr_id
+        $sql	=	"SELECT		*, cr.id as cr_id
     				 FROM 		{block_ilp_coursereports} as cr,
     				 			{block_ilp_report} as r
     				 WHERE		cr.report_id	=	r.id
@@ -782,7 +783,7 @@ class ilp_db_functions	extends ilp_logging {
         return	$this->dbc->get_records_sql($sql, $params);
     }
 
-	/**
+    /**
      * Returns a list of all ilp reports with an enabled status
      *
      * @param array $reports a array contain the ids of reports that
@@ -791,14 +792,14 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_enabledreports($report_ids=null)	{
 
-    	$unwantedcourses	=	(!empty($report_ids)) ? " AND id NOT IN (".implode(',',$report_ids).")": "";
+        $unwantedcourses	=	(!empty($report_ids)) ? " AND id NOT IN (".implode(',',$report_ids).")": "";
 
-    	$sql	=	"SELECT		*
+        $sql	=	"SELECT		*
     				 FROM		{block_ilp_report}
     				 WHERE		status	=	".ILP_ENABLED.
-    				 $unwantedcourses;
+            $unwantedcourses;
 
-    	return	$this->dbc->get_records_sql($sql);
+        return	$this->dbc->get_records_sql($sql);
     }
 
     /**
@@ -810,10 +811,10 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed int the id of the record or false
      */
     function create_coursereport($record) {
-    	return $this->insert_record("block_ilp_coursereports",$record);
+        return $this->insert_record("block_ilp_coursereports",$record);
     }
 
-	/**
+    /**
      * Updates the given coursereport record
      *
      * @param object $record the record that will be updated
@@ -821,7 +822,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false
      */
     function update_coursereport($record) {
-    	return $this->update_record("block_ilp_coursereports",$record);
+        return $this->update_record("block_ilp_coursereports",$record);
     }
 
 
@@ -839,13 +840,13 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_reportpermissions_by_criteria($report_id,$role_id,$capability_id) {
 
-    	if (!is_array($role_id)) {
-    		$role_id	=	array($role_id);
-    	}
+        if (!is_array($role_id)) {
+            $role_id	=	array($role_id);
+        }
 
-       $params = array('report_id'=>$report_id, 'capability_id'=>$capability_id);
+        $params = array('report_id'=>$report_id, 'capability_id'=>$capability_id);
 
-    	$sql	=	"SELECT 	c.id, r.*, rp.*
+        $sql	=	"SELECT 	c.id, r.*, rp.*
   					 FROM 		{block_ilp_reportpermissions} AS rp,
 					 			{role} AS r,
 								{capabilities} AS c
@@ -855,7 +856,7 @@ class ilp_db_functions	extends ilp_logging {
 					 AND		r.id IN (".implode(',',$role_id).")
 					 AND		c.id = :capability_id";
 
-    	return 	(!empty($role_id)) ? $this->dbc->get_records_sql($sql, $params) : false;
+        return 	(!empty($role_id)) ? $this->dbc->get_records_sql($sql, $params) : false;
     }
 
 
@@ -872,26 +873,35 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array with recordset objects or false
      */
     function has_report_permission($report_id,$role_id,$capability_id)	{
-    	global $USER, $CFG;
+        global $USER, $CFG;
+
+        if($this->ilp_admin($USER))
+           return true;
 
         require_once($CFG->dirroot."/blocks/ilp/lib.php");
-    	//adding addtional lines that return true if the user is either a site admin or has the ilpviewall capabilty at site level
+        //adding addtional lines that return true if the user is either a site admin or has the ilpviewall capabilty at site level
 
-    	//get sote context
-    	$sitecontext	=	get_context_instance(CONTEXT_SYSTEM);
-
-    	//check for the ilpviewall capability at site level this gives the user rights to view all
-		$ilpadmin				=	has_capability('block/ilp:ilpviewall',$sitecontext);
-
-		$is_admin				=	(ilp_is_siteadmin($USER->id) || $ilpadmin) ? true : false;
-
-
-		//if permissions where returned from then the role (or one of the roles given) has the permission in the course
-    	$permissions	=	$this->get_reportpermissions_by_criteria($report_id,$role_id,$capability_id);
-    	return 	(!empty($permissions) || !empty($is_admin)) ? true	:	false;
+        //if permissions where returned from then the role (or one of the roles given) has the permission in the course
+        $permissions	=	$this->get_reportpermissions_by_criteria($report_id,$role_id,$capability_id);
+        return 	(!empty($permissions) || !empty($is_admin)) ? true	:	false;
     }
 
-/**
+    function ilp_admin($user=0)
+    {
+       if(empty($user))
+       {
+          global $USER;
+          $user=$USER;
+       }
+
+       if(is_siteadmin($user->id))
+          return true;
+
+       //check for the ilpviewall capability at site level this gives the user rights to view all
+       return has_capability('block/ilp:ilpviewall',context_system::instance());
+    }
+
+    /**
      * Get the a users record based on the id given
      *
      * @param int $user_id the id of the user
@@ -899,10 +909,10 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed objects containing user record or false
      */
     function get_user_by_id($user_id) {
-    	return	$this->dbc->get_record("user",array("id"=>$user_id));
+        return	$this->dbc->get_record("user",array("id"=>$user_id));
     }
 
-	/**
+    /**
      * return the capability record for the capability with the
      * given name
      *
@@ -911,33 +921,33 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed objects containing capability record or false
      */
     function get_capability_by_name($capability) {
-    	return	$this->dbc->get_record("capabilities",array("name"=>$capability));
+        return	$this->dbc->get_record("capabilities",array("name"=>$capability));
     }
 
-/**
-	 * Create a entry record
+    /**
+     * Create a entry record
      *
      * @param object $entry the entry that you want to insert
      *
      * @return mixed int the id of the entry or false
      */
     function create_entry($entry) {
-    	return	$this->insert_record("block_ilp_entry", $entry);
+        return	$this->insert_record("block_ilp_entry", $entry);
     }
 
-	/**
-	 * Updates an entry record
+    /**
+     * Updates an entry record
      *
      * @param object entry the object that we want to update
      *
      * @return bool true or false
      */
     function update_entry($entry) {
-    	return	$this->update_record("block_ilp_entry", $entry);
+        return	$this->update_record("block_ilp_entry", $entry);
     }
 
     /**
-	 * get the data entry record with the id given
+     * get the data entry record with the id given
      *
      * @param string tablename the name of the table that will be interrogated
      * @param int 	$entry_id the entry id of the records that will be returned
@@ -947,17 +957,17 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object the entry record or false
      */
     function get_pluginentry($tablename,$entry_id,$reportfield_id,$multiple=false) {
-		global	$CFG;
+        global	$CFG;
 
-		$entrytable		=	"{$CFG->prefix}{$tablename}_ent";
-		$parenttable	=	"{$CFG->prefix}{$tablename}";
+        $entrytable		=	"{$CFG->prefix}{$tablename}_ent";
+        $parenttable	=	"{$CFG->prefix}{$tablename}";
 
-		$itemtable		=	(!empty($multiple)) ? "{$CFG->prefix}{$tablename}_items as i," : '';
-		$where			=	(!empty($multiple)) ? "e.parent_id	=	i.id AND i.parent_id	=	p.id" : "e.parent_id	=	p.id";
+        $itemtable		=	(!empty($multiple)) ? "{$CFG->prefix}{$tablename}_items as i," : '';
+        $where			=	(!empty($multiple)) ? "e.parent_id	=	i.id AND i.parent_id	=	p.id" : "e.parent_id	=	p.id";
 
         $params = array('entry_id'=>$entry_id, 'reportfield_id'=>$reportfield_id);
 
-		$sql	=	"SELECT		*
+        $sql	=	"SELECT		*
 					 FROM 		{$parenttable} as p,
 					 			{$itemtable}
 					 			{$entrytable} as e
@@ -966,12 +976,12 @@ class ilp_db_functions	extends ilp_logging {
 					 AND		p.reportfield_id	=	:reportfield_id
 					 ";
 
-		return (empty($multiple)) ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
-	}
+        return (empty($multiple)) ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
+    }
 
 
     /**
-	 * get the status of the
+     * get the status of the
      *
      * @param int 	$entry_id the entry id of the records that will be returned
      * @param int 	$reportfield_id the id of the report field
@@ -994,27 +1004,27 @@ class ilp_db_functions	extends ilp_logging {
 
 
     /**
-    * check if any user data has been uploaded to a particular list-type reportfield
-    * if it has then admin should not be allowed to delete any existing
-    * options
-    * @param string tablename
-    * @param int reportfield_id
-    * @param string item_table - use this item_table if item_table name is not simply $tablename . "_items"
-    * @param string item_key - use this foreign key if specific item_table has been sent as arg. Send empty string to simply get all rows from the item table
-    * @param string item_value_field - field from the item table to use as the value submitted to the user entry table
-    * @return mixed array of objects or false
-    */
+     * check if any user data has been uploaded to a particular list-type reportfield
+     * if it has then admin should not be allowed to delete any existing
+     * options
+     * @param string tablename
+     * @param int reportfield_id
+     * @param string item_table - use this item_table if item_table name is not simply $tablename . "_items"
+     * @param string item_key - use this foreign key if specific item_table has been sent as arg. Send empty string to simply get all rows from the item table
+     * @param string item_value_field - field from the item table to use as the value submitted to the user entry table
+     * @return mixed array of objects or false
+     */
     function plugin_data_item_exists( $tablename, $reportfield_id, $item_table=false, $item_key=false, $item_value_field=false ){
-		global $CFG;
+        global $CFG;
 
-		$tablename 		= $CFG->prefix . $tablename;
+        $tablename 		= $CFG->prefix . $tablename;
         if( !$item_table ){
-		    $item_table 	= $tablename . "_items";
+            $item_table 	= $tablename . "_items";
         }
         if( false === $item_key ){
-		    $item_key 	= 'parent_id';
+            $item_key 	= 'parent_id';
         }
-		$entry_table 	= $tablename . "_ent";
+        $entry_table 	= $tablename . "_ent";
 
         $item_on_clause = '';
         if( $item_key ){
@@ -1025,20 +1035,20 @@ class ilp_db_functions	extends ilp_logging {
             $item_value_field = 'value';
         }
 
-       		$sql = "SELECT *
+        $sql = "SELECT *
 				FROM {$tablename} ele
 				JOIN {$item_table} item  $item_on_clause
 				JOIN {$entry_table} entry ON entry.value = item.$item_value_field
 				WHERE ele.reportfield_id = :reportfield_id";
 
-		return	$this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id),0,10);
-	}
+        return	$this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id),0,10);
+    }
 
-	/*
-	* special version of plugin_data_item_exists for gradebook tracker
-	* @param string $tablename
-	* @param int $reportfield_id
-	*/
+    /*
+    * special version of plugin_data_item_exists for gradebook tracker
+    * @param string $tablename
+    * @param int $reportfield_id
+    */
     function plugin_data_item_exists_gradebooktracker( $tablename, $reportfield_id ){
         global $CFG;
         $tablename 		= $CFG->prefix . $tablename;
@@ -1050,120 +1060,120 @@ class ilp_db_functions	extends ilp_logging {
 		JOIN {$tablename}_items item ON item.parent_id = entry.id
 		WHERE ele.reportfield_id = :reportfield_id";
 
-	    return	$this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id));
+        return	$this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id));
     }
 
 
 
 
-	/**
-	* delete option items for a plugin list-type element
-	* $tablename is the element table eg block_ilp_plu_category
-	* @param string tablename
-	* @param int reportfield_id
-	*
-	* @return boolean true or false
-	*/
+    /**
+     * delete option items for a plugin list-type element
+     * $tablename is the element table eg block_ilp_plu_category
+     * @param string tablename
+     * @param int reportfield_id
+     *
+     * @return boolean true or false
+     */
     function delete_element_listitems( $tablename, $reportfield_id , $extraparams=array() ){
 
 
 
-		$real_tablename =  $tablename;
-		$element_table = $tablename;
-		$item_table = $tablename . "_items";
-		$entry_table = $tablename . "_ent";
-		//get parent_id
-		$parent_id = $this->get_element_id_from_reportfield_id( $tablename, $reportfield_id );
+        $real_tablename =  $tablename;
+        $element_table = $tablename;
+        $item_table = $tablename . "_items";
+        $entry_table = $tablename . "_ent";
+        //get parent_id
+        $parent_id = $this->get_element_id_from_reportfield_id( $tablename, $reportfield_id );
 
-    	return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
+        return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
     }
 
-	/**
-	* delete option items for a plugin list-type element referenced by element_id (parent_id) instead of reportfield_id
-	* $tablename is the element table eg block_ilp_plu_category
-	* @param string tablename
-	* @param int reportfield_id
-	*
-	* @return boolean true or false
-	*/
+    /**
+     * delete option items for a plugin list-type element referenced by element_id (parent_id) instead of reportfield_id
+     * $tablename is the element table eg block_ilp_plu_category
+     * @param string tablename
+     * @param int reportfield_id
+     *
+     * @return boolean true or false
+     */
     function delete_element_listitems_by_parent_id( $tablename, $parent_id , $extraparams=array() ){
 
 
 
-		$real_tablename = $tablename;
-		$element_table = $tablename;
-		$item_table = $tablename . "_items";
-		$entry_table = $tablename . "_ent";
-		//get parent_id
+        $real_tablename = $tablename;
+        $element_table = $tablename;
+        $item_table = $tablename . "_items";
+        $entry_table = $tablename . "_ent";
+        //get parent_id
 
-    	//return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
-    	return $this->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
+        //return $this->dbc->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
+        return $this->delete_records( $item_table, array( 'parent_id' => $parent_id ) , $extraparams );
     }
 
     /**
-    * @param string tablename
-    * @param int reportfieldid
-    * @return int or false
-    */
+     * @param string tablename
+     * @param int reportfieldid
+     * @return int or false
+     */
     public function get_element_id_from_reportfield_id( $tablename, $reportfield_id ){
         $records    =   $this->dbc->get_records( $tablename , array( 'reportfield_id' => $reportfield_id ));
 
-		$element_record = array_shift( $records  );
-		if( !empty( $element_record ) ){
-			return $element_record->id;
-		}
-			return false;
-	    }
+        $element_record = array_shift( $records  );
+        if( !empty( $element_record ) ){
+            return $element_record->id;
+        }
+        return false;
+    }
 
 
     /**
-    * the full data from listelement_item_exists is used by ilp_element_plugin_status::get_option_list(),
-    * so please do not change the return type
-    * @param string tablename
-    * @param array for where clause
-    * @return array of objects
-    */
-	public function listelement_item_exists( $item_tablename, $conditionlist ){
-		return $this->dbc->get_records( $item_tablename, $conditionlist );
+     * the full data from listelement_item_exists is used by ilp_element_plugin_status::get_option_list(),
+     * so please do not change the return type
+     * @param string tablename
+     * @param array for where clause
+     * @return array of objects
+     */
+    public function listelement_item_exists( $item_tablename, $conditionlist ){
+        return $this->dbc->get_records( $item_tablename, $conditionlist );
     }
 
     /**
-    * find user input in a particular data entry table
-    * @param string - element table
-    * @param string - record id
-    * @param string - entry_id (use for finding multiple records from a multi-select submit)
-    * @return array of objects or false
-    */
+     * find user input in a particular data entry table
+     * @param string - element table
+     * @param string - record id
+     * @param string - entry_id (use for finding multiple records from a multi-select submit)
+     * @return array of objects or false
+     */
     //public function get_data_entry_record( $tablename, $pluginrecord_id, $entry_id ){
     public function get_data_entry_record( $tablename, $entry_id ){
 
 
-		$entry_tablename = $tablename . '_ent';
-		$entry = array_shift( $this->dbc->get_records( $entry_tablename , array( 'id' => $entry_id ) ) );
+        $entry_tablename = $tablename . '_ent';
+        $entry = array_shift( $this->dbc->get_records( $entry_tablename , array( 'id' => $entry_id ) ) );
 
-		//but are there other entries with the same parent_id and entry_id ?
-		if( !empty( $entry ) ){
-			$parent_id = $entry->parent_id;
-			$entry_id = $entry->entry_id;
-			$wider_condition = array( 'parent_id' => $parent_id, 'entry_id' => $entry_id );
-			return $this->dbc->get_records( $entry_tablename, $wider_condition );
-		}
-		//no records - return false
-	return false;
+        //but are there other entries with the same parent_id and entry_id ?
+        if( !empty( $entry ) ){
+            $parent_id = $entry->parent_id;
+            $entry_id = $entry->entry_id;
+            $wider_condition = array( 'parent_id' => $parent_id, 'entry_id' => $entry_id );
+            return $this->dbc->get_records( $entry_tablename, $wider_condition );
+        }
+        //no records - return false
+        return false;
     }
 
     /**
-    * supply a reportfield id for a dropdown type element
-    * dropdown options are returned
-    * @param int
-    * @param string
-    * @return array of objects
-    */
+     * supply a reportfield id for a dropdown type element
+     * dropdown options are returned
+     * @param int
+     * @param string
+     * @return array of objects
+     */
     function get_optionlist( $reportfield_id, $tablename, $field=false ){
-		global $CFG;
-		$tablename = $CFG->prefix . $tablename;
-		$item_table = $tablename . "_items";
-		$plugin_table = $tablename;
+        global $CFG;
+        $tablename = $CFG->prefix . $tablename;
+        $item_table = $tablename . "_items";
+        $plugin_table = $tablename;
 
         $fieldlist = array( "$item_table.id", 'value', 'name' );
         if( $field ){
@@ -1174,13 +1184,13 @@ class ilp_db_functions	extends ilp_logging {
             "$plugin_table.reportfield_id = $reportfield_id"
         );
 
-		$sql = "SELECT " . implode( ',' , $fieldlist ) . "
+        $sql = "SELECT " . implode( ',' , $fieldlist ) . "
 				FROM  	{block_ilp_report_field} rptf
 				JOIN 	{$plugin_table} ON $plugin_table.reportfield_id = rptf.id
 				JOIN 	{$item_table} ON $item_table.parent_id = $plugin_table.id
 				WHERE 	$plugin_table.reportfield_id = :reportfield_id
 		";
-    	return $this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id));
+        return $this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id));
     }
 
 
@@ -1193,7 +1203,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object the entry record or false
      */
     function get_entry_by_id($entry_id) {
-    	return $this->dbc->get_record("block_ilp_entry",array('id'=>$entry_id));
+        return $this->dbc->get_record("block_ilp_entry",array('id'=>$entry_id));
     }
 
     /**
@@ -1206,7 +1216,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed true or false
      */
     function delete_element_record_by_id ( $tablename,$id, $extraparams=array() ) {
-    	return $this->delete_records( $tablename, array('id'=>$id), $extraparams );
+        return $this->delete_records( $tablename, array('id'=>$id), $extraparams );
     }
 
     /**
@@ -1217,7 +1227,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed true or false
      */
     function delete_entryfield($tablename,$entry_id, $extraparams=array())	{
-    	return $this->delete_records( $tablename, array('id'=>$entry_id), $extraparams );
+        return $this->delete_records( $tablename, array('id'=>$entry_id), $extraparams );
     }
 
     /**
@@ -1228,7 +1238,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed true or false
      */
     function delete_entry_by_id($entry_id)	{
-    	return $this->delete_records( 'block_ilp_entry', array('id'=>$entry_id),array());
+        return $this->delete_records( 'block_ilp_entry', array('id'=>$entry_id),array());
     }
 
     /**
@@ -1239,7 +1249,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed true or false
      */
     function delete_comment_by_id($entry_id)	{
-    	return $this->delete_records( 'block_ilp_entry_comment', array('id'=>$entry_id),array());
+        return $this->delete_records( 'block_ilp_entry_comment', array('id'=>$entry_id),array());
     }
 
     /**
@@ -1256,24 +1266,24 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_user_report_entries($report_id,$user_id,$state_id=null,$createdby=null)	{
 
-    	$tables		=	"";
-    	$where		=	"";
+        $tables		=	"";
+        $where		=	"";
 
-    	//if the the id of a status has been given then we need to add mroe contitions to
-    	//find the reports in this state
+        //if the the id of a status has been given then we need to add mroe contitions to
+        //find the reports in this state
 
 
         $params = array('report_id'=>$report_id, 'user_id'=>$user_id);
 
         if (!empty($state_id)) {
-    		$tables		=	", {block_ilp_plu_ste_ent} as se";
+            $tables		=	", {block_ilp_plu_ste_ent} as se";
             $params['state_id'] = $state_id;
-    		$where		=	" 	AND e.id	=	se.entry_id
+            $where		=	" 	AND e.id	=	se.entry_id
     							AND	se.parent_id	=	:state_id";
-    	}
+        }
 
 
-    	 if (!empty($createdby)) {
+        if (!empty($createdby)) {
             if ($createdby  ==  ILP_CREATED_BY_USER)    {
                 $params['user_id1'] = $user_id;
                 $where .= "AND creator_id = :user_id1";
@@ -1284,7 +1294,7 @@ class ilp_db_functions	extends ilp_logging {
         }
 
 
-    	$sql	=	"SELECT		e.*
+        $sql	=	"SELECT		e.*
     				 FROM		{block_ilp_entry} as e
     				 			{$tables}
     				 WHERE		e.report_id		=	:report_id
@@ -1315,15 +1325,15 @@ class ilp_db_functions	extends ilp_logging {
         //if the the id of a status has been given then we need to add mroe contitions to
         //find the reports in this state
 
-       if (!empty($start)){
-       $params['start'] = $start;
-       $where		.=	" 	AND e.timemodified	>   :start";
-       }
+        if (!empty($start)){
+            $params['start'] = $start;
+            $where		.=	" 	AND e.timemodified	>   :start";
+        }
 
-         if (!empty($end)){
-       $params['end'] = $end;
-       $where		.=	" 	AND e.timemodified	<   :end";
-       }
+        if (!empty($end)){
+            $params['end'] = $end;
+            $where		.=	" 	AND e.timemodified	<   :end";
+        }
 
 
         $sql	=	"SELECT		e.*
@@ -1361,9 +1371,9 @@ class ilp_db_functions	extends ilp_logging {
 
         $entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
 
-       if(empty($time)){
-        $params['time'] = time();
-       }
+        if(empty($time)){
+            $params['time'] = time();
+        }
 
 
         $sql	=	"SELECT		e.*
@@ -1383,7 +1393,7 @@ class ilp_db_functions	extends ilp_logging {
                      {$entriessql}";
 
 
-    	return $this->dbc->get_records_sql($sql, $params);
+        return $this->dbc->get_records_sql($sql, $params);
 
     }
 
@@ -1397,7 +1407,7 @@ class ilp_db_functions	extends ilp_logging {
     function get_report_stateitems($report_id)	{
 
 
-    	$sql	=	"SELECT		*
+        $sql	=	"SELECT		*
     	 			 FROM 		{block_ilp_report_field} as rf,
     	 						{block_ilp_plugin} as p,
     	 						{block_ilp_plu_ste} as s,
@@ -1408,18 +1418,18 @@ class ilp_db_functions	extends ilp_logging {
     	 			AND			rf.report_id	=	:report_id
     	 			AND			p.name			=	'ilp_element_plugin_state'";
 
-    	 return		$this->dbc->get_records_sql($sql, array('report_id'=>$report_id));
+        return		$this->dbc->get_records_sql($sql, array('report_id'=>$report_id));
     }
 
     /**
-    * see if an element of a particular type already exists in a report
-    * @param int $report_id
-    * @param string $tablename
-    * @return int
-    */
+     * see if an element of a particular type already exists in a report
+     * @param int $report_id
+     * @param string $tablename
+     * @return int
+     */
     public function element_type_exists( $report_id , $tablename ){
 
-            $sql = "
+        $sql = "
             SELECT COUNT( rpt.id ) n
             FROM {block_ilp_report} rpt
             JOIN {block_ilp_report_field} rptf ON rptf.report_id = rpt.id
@@ -1432,7 +1442,7 @@ class ilp_db_functions	extends ilp_logging {
 
 
     public	function get_enabled_template()	{
-    	return $this->dbc->get_record('block_ilp_dash_temp',array('status'=>'1'));
+        return $this->dbc->get_record('block_ilp_dash_temp',array('status'=>'1'));
     }
 
 
@@ -1445,7 +1455,7 @@ class ilp_db_functions	extends ilp_logging {
      */
     public	function get_template_plugins($templatename)	{
 
-    	$sql	=	"SELECT 	tr.name as region_name,
+        $sql	=	"SELECT 	tr.name as region_name,
     							p.name as plugin_name,
     							tr.id as region_id,
     							p.id as plugin_id
@@ -1460,9 +1470,9 @@ class ilp_db_functions	extends ilp_logging {
     				 ";
 
         return	$this->dbc->get_records_sql($sql, array('templatename'=>$templatename));
-       }
+    }
 
-     /**
+    /**
      * Returns the record from the given ilp form element plugin table with the reportfield_id given
      *
      * @param int    $reportfield_id the id of the element in the given table
@@ -1470,18 +1480,18 @@ class ilp_db_functions	extends ilp_logging {
      * @return object containing plugin record that matches criteria
      */
     function get_form_element_by_reportfield($tablename,$reportfield_id) {
-    	return $this->dbc->get_record($tablename,array("reportfield_id"=>$reportfield_id));
+        return $this->dbc->get_record($tablename,array("reportfield_id"=>$reportfield_id));
     }
 
 
     /**
-    * gets max position for a report and returns 1 more
-    * if no entries yet, returns 1
-    * @param int $report_id
-    * @return int
-    */
+     * gets max position for a report and returns 1 more
+     * if no entries yet, returns 1
+     * @param int $report_id
+     * @return int
+     */
     public function get_next_position( $report_id, $tablename ){
-    	global $CFG;
+        global $CFG;
 
         $tablename = $CFG->prefix . $tablename;
         $sql = "SELECT MAX( position ) n FROM  {$tablename} WHERE report_id = :report_id";  //gregp - records should be counted not the position #
@@ -1493,7 +1503,7 @@ class ilp_db_functions	extends ilp_logging {
         return 1;
     }
 
-     /**
+    /**
      * returns whether any record already exists given a table, field and value
      *
      * @param string $table
@@ -1502,7 +1512,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return bool true or false
      */
     function record_exists($table, $field, $value ) {
-    	return $this->dbc->record_exists( $table, array( $field => $value ) );
+        return $this->dbc->record_exists( $table, array( $field => $value ) );
     }
 
 
@@ -1515,7 +1525,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return	mixed array of recordsets or false
      */
     public function	get_reports($status)	{
-    	return $this->dbc->get_records('block_ilp_report',array('status'=>$status));
+        return $this->dbc->get_records('block_ilp_report',array('status'=>$status));
     }
 
 
@@ -1529,7 +1539,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return	mixed int the number of entries or false
      */
 
-   public function count_report_entries($report_id,$user_id,$timestart=null,$timeend=null)	{
+    public function count_report_entries($report_id,$user_id,$timestart=null,$timeend=null)	{
 
         $params = array('user_id'=>$user_id, 'report_id'=>$report_id);
 
@@ -1537,69 +1547,69 @@ class ilp_db_functions	extends ilp_logging {
         $timeendsql   = "";
 
         if (!empty($timestart)){
-        $params['timestart'] = $timestart;
-        $timestartsql = " AND timecreated > :timestart";
+            $params['timestart'] = $timestart;
+            $timestartsql = " AND timecreated > :timestart";
         }
 
-          if (!empty($timeend)){
-        $params['timeend'] = $timeend;
-        $timeendsql= " AND timecreated < :timeend ";
+        if (!empty($timeend)){
+            $params['timeend'] = $timeend;
+            $timeendsql= " AND timecreated < :timeend ";
         }
 
 
-    	$sql	=	"SELECT		COUNT(*)
+        $sql	=	"SELECT		COUNT(*)
     				 FROM		{block_ilp_entry}	as 	e
     				 WHERE		user_id			=	:user_id
     				 AND		report_id		=	:report_id
     				           {$timestartsql}
     				           {$timeendsql} ";
 
-    	return	$this->dbc->count_records_sql($sql, $params);
+        return	$this->dbc->count_records_sql($sql, $params);
     }
 
-/**
- *
- * @param array students optional array of students to limit result to
- * @param int $timestart optional start timestamp
- * @param int $timeend option end timestamp
- *
- * @return array $array[$reportid][$studentid]
- */
-   public function count_all_report_entries($students=array(),$timestart=null,$timeend=null)
-   {
+    /**
+     *
+     * @param array students optional array of students to limit result to
+     * @param int $timestart optional start timestamp
+     * @param int $timeend option end timestamp
+     *
+     * @return array $array[$reportid][$studentid]
+     */
+    public function count_all_report_entries($students=array(),$timestart=null,$timeend=null)
+    {
 
-      $timestartsql = "";
-      $timeendsql   = "";
+        $timestartsql = "";
+        $timeendsql   = "";
 
-      if (!empty($timestart)){
-         $params['timestart'] = $timestart;
-         $timestartsql = " AND timecreated > :timestart";
-      }
+        if (!empty($timestart)){
+            $params['timestart'] = $timestart;
+            $timestartsql = " AND timecreated > :timestart";
+        }
 
-      if (!empty($timeend)){
-         $params['timeend'] = $timeend;
-         $timeendsql= " AND timecreated < :timeend ";
-      }
+        if (!empty($timeend)){
+            $params['timeend'] = $timeend;
+            $timeendsql= " AND timecreated < :timeend ";
+        }
 
-      if(!empty($students))
-      {
-         $studentpart='and user_id in ('.implode(',',$students).')';
-      }
+        if(!empty($students))
+        {
+            $studentpart='and user_id in ('.implode(',',$students).')';
+        }
 
-      $sql = "SELECT  report_id, user_id, COUNT(*) number
+        $sql = "SELECT  report_id, user_id, COUNT(*) number
                       FROM  {block_ilp_entry}
                                  where  1 {$studentpart} {$timestartsql}
                                  {$timeendsql}
                       GROUP BY report_id, user_id";
 
-      $r=array();
-      foreach($this->dbc->get_recordset_sql($sql, $params) as $item)
-      {
-         $r[$item->report_id][$item->user_id]=$item->number;
-      }
+        $r=array();
+        foreach($this->dbc->get_recordset_sql($sql, $params) as $item)
+        {
+            $r[$item->report_id][$item->user_id]=$item->number;
+        }
 
-      return $r;
-   }
+        return $r;
+    }
 
     /**
      *
@@ -1611,7 +1621,7 @@ class ilp_db_functions	extends ilp_logging {
      */
     public function	has_plugin_field($report_id,$pluginname)	{
 
-    	$sql	=	"SELECT			*
+        $sql	=	"SELECT			*
     				 FROM			{block_ilp_plugin} as p,
     				 				{block_ilp_report_field} as rf
     				 WHERE			rf.plugin_id	=	p.id
@@ -1622,7 +1632,7 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 
-/**
+    /**
      * Fetch the id, report_id, user_id, and pass/fail state of all reports for the
      * given users
      *
@@ -1632,28 +1642,28 @@ class ilp_db_functions	extends ilp_logging {
      */
     public  function fetch_all_report_entries_with_state($users)	{
 
-       $r=array();
-       if(empty($users))
-       {
-          return $r;
-       }
+        $r=array();
+        if(empty($users))
+        {
+            return $r;
+        }
 
-       $where=' where e.user_id in ('.implode($users,',').')';
+        $where=' where e.user_id in ('.implode($users,',').')';
 
-       $sql = "SELECT e.id, e.report_id, e.user_id, pi.passfail as state
+        $sql = "SELECT e.id, e.report_id, e.user_id, pi.passfail as state
                  FROM {block_ilp_entry}  as e
                    LEFT JOIN  ({block_ilp_plu_ste_ent} as pe
                    JOIN   {block_ilp_plu_ste_items} as pi on pi.id=pe.parent_id)  on e.id=pe.entry_id $where";
 
-       foreach ($this->dbc->get_recordset_sql($sql) as $item)
-       {
-          $r[$item->report_id][$item->user_id][]=$item;
-       }
+        foreach ($this->dbc->get_recordset_sql($sql) as $item)
+        {
+            $r[$item->report_id][$item->user_id][]=$item;
+        }
 
-       return $r;
+        return $r;
 
     }
-/**
+    /**
      * Count the number of entries in the given report with a pass state
      *
      * @param	int $report_id	the id of the report whose entries will be counted
@@ -1666,16 +1676,16 @@ class ilp_db_functions	extends ilp_logging {
      */
     public  function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
 
-			$select	=	(!empty($count))	? "count(e.id)" : " e.* ";
-            $params = array('report_id'=>$report_id, 'user_id'=>$user_id, 'state'=>$state);
-            $entrysql = "";
+        $select	=	(!empty($count))	? "count(e.id)" : " e.* ";
+        $params = array('report_id'=>$report_id, 'user_id'=>$user_id, 'state'=>$state);
+        $entrysql = "";
 
-            if(!empty($entry_id)){
-                $params['entry_id'] = $entry_id;
-                $entrysql =  " AND e.id = $entry_id ";
-            }
+        if(!empty($entry_id)){
+            $params['entry_id'] = $entry_id;
+            $entrysql =  " AND e.id = $entry_id ";
+        }
 
-    		$sql	=	"SELECT		$select
+        $sql	=	"SELECT		$select
     					 FROM 		{block_ilp_entry}  as e,
     					 			{block_ilp_plu_ste_ent} as pe,
     					 			{block_ilp_plu_ste_items} as pi
@@ -1686,7 +1696,7 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		pi.passfail		=	:state
     					            $entrysql";
 
-    		return 		(!empty($count)) ? $this->dbc->count_records_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
+        return 		(!empty($count)) ? $this->dbc->count_records_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
     }
 
 
@@ -1704,17 +1714,17 @@ class ilp_db_functions	extends ilp_logging {
      */
     public	function count_overdue_report($report_id,$user_id,$entries,$time)	{
 
-            $params = array('report_id'=>$report_id,
-                            'user_id'=>$user_id,
-                            'time'=>$time,
-                            'state'=>ILP_STATE_UNSET,
-                            'deadline'=>ILP_DATEFIELD_DEADLINE);
+        $params = array('report_id'=>$report_id,
+            'user_id'=>$user_id,
+            'time'=>$time,
+            'state'=>ILP_STATE_UNSET,
+            'deadline'=>ILP_DATEFIELD_DEADLINE);
 
-          	$entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
+        $entriessql	= 	(!empty($entries))	? "AND e.id IN (".implode($entries,',').")" : "";
 
 
-    		//$sql	=	"SELECT		count(e.id)
-            $sql	=	"SELECT		e.id
+        //$sql	=	"SELECT		count(e.id)
+        $sql	=	"SELECT		e.id
     					 FROM 		{block_ilp_entry}  as e,
     					 			{block_ilp_plu_datf_ent} as	datfent,
     					 			{block_ilp_plu_datf}    as	datf,
@@ -1732,22 +1742,22 @@ class ilp_db_functions	extends ilp_logging {
     					            {$entriessql}";
 
         $rst = $this->dbc->get_records_sql($sql, $params);
-    		$c = count( $rst );
-    		return	$c;
-    					 
+        $c = count( $rst );
+        return	$c;
+
     }
 
 
     /**
      * Returns a list of reports that have deadline dates that fall between the given timestamps
-     * and are in 
-     * 
+     * and are in
+     *
      * @param	$ltimestamp	lower time stamp for the records that will be retrieved
-     * @param	$utimestamp	upper time stamp for the records that will be retrieved 
+     * @param	$utimestamp	upper time stamp for the records that will be retrieved
      */
     public	function get_reports_in_period($ltimestamp,$utimestamp)	{
 
-    	$sql	=	"SELECT 		e.*, r.*,datfent.value as deadline, datfent.id AS id
+        $sql	=	"SELECT 		e.*, r.*,datfent.value as deadline, datfent.id AS id
 					   FROM			{block_ilp_entry} 			AS e,
 									{block_ilp_plu_datf_ent}	AS datfent,
 									{block_ilp_plu_datf}    	AS datf,
@@ -1766,8 +1776,8 @@ class ilp_db_functions	extends ilp_logging {
 						  AND       datfent.emailsent = 0
 						  AND       datf.reminder = 1
 						  AND       r.deleted     = 0";
-    	
-    	return 		$this->dbc->get_records_sql($sql, array('ltimestamp'=>$ltimestamp, 'utimestamp'=>$utimestamp));
+
+        return 		$this->dbc->get_records_sql($sql, array('ltimestamp'=>$ltimestamp, 'utimestamp'=>$utimestamp));
     }
 
 
@@ -1784,14 +1794,14 @@ class ilp_db_functions	extends ilp_logging {
 
 
 
-   /**
-    * Returns the last updated entry for the given student in the given report
-    *
-    * @param	int $report_id	the id of the report whose entry will be returned
-    * @param	int $user_id the id of the user whose entry will be returned
-    *
-    * @return	mixed object the  of entries or false
-    */
+    /**
+     * Returns the last updated entry for the given student in the given report
+     *
+     * @param	int $report_id	the id of the report whose entry will be returned
+     * @param	int $user_id the id of the user whose entry will be returned
+     *
+     * @return	mixed object the  of entries or false
+     */
     public function	get_lastupdatedentry($report_id,$user_id)	{
         $sql='SELECT id, timemodified tm FROM {block_ilp_entry} e
               WHERE report_id=:report_id AND user_id=:user_id ORDER BY timemodified desc';
@@ -1855,7 +1865,7 @@ class ilp_db_functions	extends ilp_logging {
 
 
 
-     /**
+    /**
      * Returns the plugin record that has the matching name in the given table
      *
      * @param string $tablename the name of the plugin table that willbe queried
@@ -1863,7 +1873,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object containing the plugin record or false
      */
     function get_plugin_by_name($tablename,$pluginname) {
-    	return $this->dbc->get_record($tablename,array('name'=>$pluginname));
+        return $this->dbc->get_record($tablename,array('name'=>$pluginname));
     }
 
 
@@ -1879,7 +1889,7 @@ class ilp_db_functions	extends ilp_logging {
     public	function get_report_state_items($report_id,$pluginname)	{
 
 
-			$sql	=	"SELECT		i.name as name,
+        $sql	=	"SELECT		i.name as name,
     								i.value as value,
     								i.id as id
     					 FROM 		{block_ilp_report_field} as rf,
@@ -1894,171 +1904,172 @@ class ilp_db_functions	extends ilp_logging {
     					 AND		p.name			=	:pluginname
     					 ";
 
-             return 		$this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'pluginname'=>$pluginname));
+        return 		$this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'pluginname'=>$pluginname));
     }
 
 
 
-   /**
-    * Returns the id of the item with the given value
-    *
-    * @param	int $parent_id	the id of the state item record that is the parent of the item
-    * @param	int $itemvalue the actual value of the field
-    * @param	string $keyfield field from $itemtable to use as key
-    * @param	string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
-    *
-    * @return	mixed object or false
-    */
-   public function get_state_item_id($tablename,$parent_id,$itemvalue, $keyfield='id', $itemtable=false )	{
+    /**
+     * Returns the id of the item with the given value
+     *
+     * @param	int $parent_id	the id of the state item record that is the parent of the item
+     * @param	int $itemvalue the actual value of the field
+     * @param	string $keyfield field from $itemtable to use as key
 
-       	$tablename              =	( !empty($itemtable) ) ? $itemtable : $tablename."_items";
+     * @param	string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
+     *
+     * @return	mixed object or false
+     */
+    public function get_state_item_id($tablename,$parent_id,$itemvalue, $keyfield='id', $itemtable=false )	{
+
+        $tablename              =	( !empty($itemtable) ) ? $itemtable : $tablename."_items";
         $params[$keyfield]      =   $itemvalue;
 
         if( !$itemtable )	{
             $params['parent_id']  =   $parent_id;
         }
 
-   		return 		$this->dbc->get_record($tablename, $params);
-   }
+        return 		$this->dbc->get_record($tablename, $params);
+    }
 
-   /**
-    * Creates a entry comment record in the database
-    *
-    * @param	object	$comment an object contain the information to be saved to the database
-    *
-    * @return	mixed int the id of the created record or false
-    */
-   function  create_entry_comment($comment)	{
-   		return $this->insert_record('block_ilp_entry_comment', $comment);
-  	}
+    /**
+     * Creates a entry comment record in the database
+     *
+     * @param	object	$comment an object contain the information to be saved to the database
+     *
+     * @return	mixed int the id of the created record or false
+     */
+    function  create_entry_comment($comment)	{
+        return $this->insert_record('block_ilp_entry_comment', $comment);
+    }
 
-   /**
-    * Updates a entry comment record in the database
-    *
-    * @param	object	$comment an object contain the information to be saved to the database
-    *
-    * @return	bool true or false
-    */
-  	function  update_entry_comment($comment)	{
-   		return $this->update_record('block_ilp_entry_comment', $comment);
-  	}
-
-
-  	/**
-    * Returns all comments attached to a entry
-    *
-    * @param	int	$entry_id	the id of the entry whose comments we are retrieving
-    *
-    * @return	mixed  array of recordset objects or bool false if nothing found
-    */
-  	function  get_entry_comments($entry_id)	{
- 		return	$this->dbc->get_records('block_ilp_entry_comment',array('entry_id'=>$entry_id));
-  	}
-
-  	/**
-    * Returns the entry comment with the given id
-    *
-    * @param	int	$commnet_id	the id of the comment being retrieved
-    *
-    * @return	mixed  object containing the record or bool false
-    */
-  	function get_comment_by_id($comment_id)	{
-  		return 	$this->dbc->get_record('block_ilp_entry_comment',array('id'=>$comment_id));
-  	}
-
-  	/**
-    * Returns the items that can be used for user status, note this should always be the first status field
-    * created so item parent ids should have a value of 1
-    *
-    * @return	mixed  object containing the record or bool false
-    */
-  	function get_user_status_items($parent_id=1)	{
-  		return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$parent_id));
-  	}
-
-  	/**
-    * This function sets the status of a report enabled or disabled
-    *
-    * @return	mixed  object containing the record or bool false
-    */
-  	function set_report_status ($report_id,$status)	{
-  		//return $this->dbc->set_field('block_ilp_report',array('status'=>$status),array('id'=>$report_id));
-  		return $this->dbc->set_field('block_ilp_report','status', $status, array('id'=>$report_id));
-  	}
+    /**
+     * Updates a entry comment record in the database
+     *
+     * @param	object	$comment an object contain the information to be saved to the database
+     *
+     * @return	bool true or false
+     */
+    function  update_entry_comment($comment)	{
+        return $this->update_record('block_ilp_entry_comment', $comment);
+    }
 
 
-  	/**
-    * This function sets the delete field of a reportd
-    *
-    * @return	mixed  object containing the record or bool false
-    */
-  	function delete_report($report_id,$deleted)	{
-  		return $this->dbc->set_field('block_ilp_report','deleted', $deleted, array('id'=>$report_id));
-  	}
+    /**
+     * Returns all comments attached to a entry
+     *
+     * @param	int	$entry_id	the id of the entry whose comments we are retrieving
+     *
+     * @return	mixed  array of recordset objects or bool false if nothing found
+     */
+    function  get_entry_comments($entry_id)	{
+        return	$this->dbc->get_records('block_ilp_entry_comment',array('entry_id'=>$entry_id));
+    }
 
-  	function create_statusfield($statusfield)	{
-  		$this->insert_record('block_ilp_plu_sts', $statusfield);
-  	}
+    /**
+     * Returns the entry comment with the given id
+     *
+     * @param	int	$commnet_id	the id of the comment being retrieved
+     *
+     * @return	mixed  object containing the record or bool false
+     */
+    function get_comment_by_id($comment_id)	{
+        return 	$this->dbc->get_record('block_ilp_entry_comment',array('id'=>$comment_id));
+    }
+
+    /**
+     * Returns the items that can be used for user status, note this should always be the first status field
+     * created so item parent ids should have a value of 1
+     *
+     * @return	mixed  object containing the record or bool false
+     */
+    function get_user_status_items($parent_id=1)	{
+        return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$parent_id));
+    }
+
+    /**
+     * This function sets the status of a report enabled or disabled
+     *
+     * @return	mixed  object containing the record or bool false
+     */
+    function set_report_status ($report_id,$status)	{
+        //return $this->dbc->set_field('block_ilp_report',array('status'=>$status),array('id'=>$report_id));
+        return $this->dbc->set_field('block_ilp_report','status', $status, array('id'=>$report_id));
+    }
+
+
+    /**
+     * This function sets the delete field of a reportd
+     *
+     * @return	mixed  object containing the record or bool false
+     */
+    function delete_report($report_id,$deleted)	{
+        return $this->dbc->set_field('block_ilp_report','deleted', $deleted, array('id'=>$report_id));
+    }
+
+    function create_statusfield($statusfield)	{
+        $this->insert_record('block_ilp_plu_sts', $statusfield);
+    }
 
 
 
-  	/**
-    * Creates a user status record
-    *
-    * @param $userstatus object containing data to saved
-    *
-    * @return	mixed  int the new record id or bool false
-    */
-  	function create_userstatus($userstatus)	{
-  		$this->insert_record('block_ilp_user_status',$userstatus);
-  	}
+    /**
+     * Creates a user status record
+     *
+     * @param $userstatus object containing data to saved
+     *
+     * @return	mixed  int the new record id or bool false
+     */
+    function create_userstatus($userstatus)	{
+        $this->insert_record('block_ilp_user_status',$userstatus);
+    }
 
 
-  	/**
-    * updates a user status record
-    *
-    * @param $userstatus object containing data to saved
-    *
-    * @return	bool true if update successful false if not
-    */
-  	function update_userstatus($userstatus)	{
-  		return $this->update_record('block_ilp_user_status',$userstatus);
-  	}
+    /**
+     * updates a user status record
+     *
+     * @param $userstatus object containing data to saved
+     *
+     * @return	bool true if update successful false if not
+     */
+    function update_userstatus($userstatus)	{
+        return $this->update_record('block_ilp_user_status',$userstatus);
+    }
 
-  	 /**
+    /**
      * Returns the status of the user in the ilp of the user with the given user id
      *
      * @param int $user_id the users whose status you want to retrieve
      *
      * @return mixed object contain the status of the user or false
      */
-  	function get_user_status($user_id)	{
-  		return $this->dbc->get_record('block_ilp_user_status',array('user_id'=>$user_id));
-  	}
+    function get_user_status($user_id)	{
+        return $this->dbc->get_record('block_ilp_user_status',array('user_id'=>$user_id));
+    }
 
-  	/**
+    /**
      * Returns the regions for a template
      *
      * @param int $template_id the id of the template whose regions you want to retrieve
      *
      * @return mixed array of objects containing the regions or false
      */
-  	function get_template_regions($template_id) {
-  		return $this->dbc->get_records('block_ilp_dash_temp_region',array('template_id'=>$template_id));
-  	}
+    function get_template_regions($template_id) {
+        return $this->dbc->get_records('block_ilp_dash_temp_region',array('template_id'=>$template_id));
+    }
 
-  	/**
+    /**
      * Gets the dashboard plugin record for the
      *
      * @param string $plugin_name the name of the template
      *
      * @return mixed array of objects containing the regions or false
      */
-  	function get_dashboard_plugin_by_name($name)	{
-  		return $this->dbc->get_record('block_ilp_dash_plugin',array('name'=>$name));
-  	}
+    function get_dashboard_plugin_by_name($name)	{
+        return $this->dbc->get_record('block_ilp_dash_plugin',array('name'=>$name));
+    }
 
-  	/**
+    /**
      * Create a record in the block_ilp_dash_region_plugin table
      *
      * @param object $regionplugin the record to be saved to the
@@ -2066,34 +2077,34 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return mixed int the id of the new record or false
      */
-  	function create_region_plugin($regionplugin) {
-  		return $this->insert_record('block_ilp_dash_region_plugin', $regionplugin);
-  	}
+    function create_region_plugin($regionplugin) {
+        return $this->insert_record('block_ilp_dash_region_plugin', $regionplugin);
+    }
 
-/**
+    /**
      * Returns all items with a parent id matching the one given
      *
      * @param int $id the parent id the items returned should have
-          *
+     *
      * @return mixed array of recordset objects or false
      */
-  	function get_status_items($id)	{
-  		return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$id));
-  	}
+    function get_status_items($id)	{
+        return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$id));
+    }
 
 
-	/**
+    /**
      * Returns the status item with the id given
      *
      * @param int $id the id of the status item we want to return
-          *
+     *
      * @return mixed object containing recordset with matching id or false
      */
-  	function get_status_item_by_id($id)	{
-  		return $this->dbc->get_record('block_ilp_plu_sts_items',array('id'=>$id));
-  	}
+    function get_status_item_by_id($id)	{
+        return $this->dbc->get_record('block_ilp_plu_sts_items',array('id'=>$id));
+    }
 
-  	/**
+    /**
      * Returns the tutor of the user with the given id
      *
      * @param int $user_id the id of the user whose tutor we want to fid
@@ -2101,9 +2112,9 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of objects containing recordsets of user who
      * tutor the given user or bool false
      */
-  	function get_student_tutors($user_id)	{
+    function get_student_tutors($user_id)	{
 
-  		$sql	=	"SELECT 	tu.*
+        $sql	=	"SELECT 	tu.*
                        FROM 	{role_assignments} AS ra,
                        			{context} AS c,
                        			{user} AS u,
@@ -2114,10 +2125,10 @@ class ilp_db_functions	extends ilp_logging {
                         AND		ra.userid = tu.id
                         AND 	c.contextlevel = ".CONTEXT_USER;
 
-  		return $this->dbc->get_records_sql($sql, array('user_id'=>$user_id));
-  	}
+        return $this->dbc->get_records_sql($sql, array('user_id'=>$user_id));
+    }
 
-  	/**
+    /**
      * Returns the all tutees for the given user
      *
      * @param int $user_id the id of the user whose tutee we want to find
@@ -2125,20 +2136,20 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of object containing all users who are tutored
      * by the given user or bool false
      */
-  	function get_user_tutees($user_id) {
+    function get_user_tutees($user_id) {
 
-  		$sql	=	"SELECT 	u.id
+        $sql	=	"SELECT 	u.id
                        FROM 	{role_assignments} ra, {context} c, {user} u
                       WHERE 	ra.userid = :user_id
                         AND 	ra.contextid = c.id
                         AND 	c.instanceid = u.id
                         AND 	c.contextlevel = ".CONTEXT_USER
-  						." GROUP BY u.id";
+            ." GROUP BY u.id";
 
-  		return	$this->dbc->get_records_sql($sql, array('user_id'=>$user_id));
- 	}
+        return	$this->dbc->get_records_sql($sql, array('user_id'=>$user_id));
+    }
 
- 	/**
+    /**
      * Returns the user ids of all users enrolled into the given course
      *
      * @param int $course_id the id of the course whose enrolled users
@@ -2147,7 +2158,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of object containing all users enrolled in the course
      * or bool false
      */
-    function get_course_users($course_id,$group_id=null) {
+        function get_course_users($course_id,$group_id=null,$fullrecords=false) {
 
         $grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
         $groupwhere = "";
@@ -2162,13 +2173,18 @@ class ilp_db_functions	extends ilp_logging {
             $groupwhere = "AND gm.groupid = :group_id ";
         }
 
-        $sql	=	"SELECT		distinct(u.id)
+        $fields= $fullrecords ? 'distinct u.*' : ' distinct u.id' ;
+
+        $sql	=	"SELECT		$fields
 	 					  FROM		{user} u
 	 					            LEFT JOIN ($esql) eu ON eu.id=u.id
 	 					  			{$grouptable}
 	 					  WHERE		u.deleted = 0
 	 					  AND       eu.id=u.id
 	 					  			{$groupwhere}";
+
+        if($fullrecords)
+           return $this->dbc->get_recordset_sql($sql, $params);
 
         return $this->dbc->get_records_sql($sql, $params);
     }
@@ -2186,27 +2202,27 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_students_matrix($flextable,$student_ids,$status_id, $includenull=false)
     {
-       $data=array();
-       $count=0;
-       ($start=$flextable->get_page_start() or $start=0);
-       ($end=$flextable->get_page_size()+$start or $end=1e9);
+        $data=array();
+        $count=0;
+        ($start=$flextable->get_page_start() or $start=0);
+        ($end=$flextable->get_page_size()+$start or $end=1e9);
 
-       foreach($this->get_studentlist_details($student_ids,$status_id,
-                                              $flextable->get_sql_where(), $flextable->get_sql_sort(),
-                                              $includenull)
-               as $item)
-       {
-          if($count>=$start and $count<$end)
-          {
-             $data[$item->id]=$item;
-          }
-          $count++;
-       }
+        foreach($this->get_studentlist_details($student_ids,$status_id,
+            $flextable->get_sql_where(), $flextable->get_sql_sort(),
+            $includenull)
+                as $item)
+        {
+            if($count>=$start and $count<$end)
+            {
+                $data[$item->id]=$item;
+            }
+            $count++;
+        }
 
-       // tell the table how many pages it needs
-       $flextable->totalrows($count);
+        // tell the table how many pages it needs
+        $flextable->totalrows($count);
 
-       return $data;
+        return $data;
     }
 
     function get_studentlist_details($student_ids,$status_id, $sql_where='',$sql_sort='',$includenull=false)
@@ -2215,7 +2231,7 @@ class ilp_db_functions	extends ilp_logging {
 
         if(empty($student_ids))
         {
-           return array();
+            return array();
         }
 
         $select = "SELECT 		u.id as id,
@@ -2238,23 +2254,23 @@ class ilp_db_functions	extends ilp_logging {
         $where = "";
 
         if (!empty($student_ids) || !empty($status_id)) {
-           $where = " WHERE ";
-           $and = '';
+            $where = " WHERE ";
+            $and = '';
 
-           $studentssql	=	 (!empty($student_ids)) ? " u.id IN (".implode(",",$student_ids).")" : "" ;
-           $statussql		=	 (!empty($status_id)) ? " si.id = {$status_id} " : '';
+            $studentssql	=	 (!empty($student_ids)) ? " u.id IN (".implode(",",$student_ids).")" : "" ;
+            $statussql		=	 (!empty($status_id)) ? " si.id = {$status_id} " : '';
 
-           //if the
-           $statussql		=	 (!empty($includenull)) ? " ( si.id = {$status_id} OR si.id IS NULL)"  : $statussql;
+            //if the
+            $statussql		=	 (!empty($includenull)) ? " ( si.id = {$status_id} OR si.id IS NULL)"  : $statussql;
 
-           if (!empty($student_ids)) {
-              $where .= " {$studentssql} ";
-              $and = 'AND';
-           }
+            if (!empty($student_ids)) {
+                $where .= " {$studentssql} ";
+                $and = 'AND';
+            }
 
-           if (!empty($status_id)) {
-              $where .= " {$and} {$statussql} ";
-           }
+            if (!empty($status_id)) {
+                $where .= " {$and} {$statussql} ";
+            }
         }
 
 
@@ -2284,9 +2300,9 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_lastupdate($user_id) {
 
-      $params = array('user_id1'=>$user_id, 'user_id2'=>$user_id, 'user_id3'=>$user_id);
+        $params = array('user_id1'=>$user_id, 'user_id2'=>$user_id, 'user_id3'=>$user_id);
 
-    	$sql	=	"SELECT MAX(timemodified) AS timemodified
+        $sql	=	"SELECT MAX(timemodified) AS timemodified
                      FROM (
                             (
                                 SELECT MAX(timemodified) AS timemodified
@@ -2311,10 +2327,10 @@ class ilp_db_functions	extends ilp_logging {
 			            ) AS lastreportupdate";
 
 
-    	return	$this->dbc->get_record_sql($sql, $params);
+        return	$this->dbc->get_record_sql($sql, $params);
     }
 
-     /**
+    /**
      *
      * Returns all courses that the user with the given id is enrolled
      * in
@@ -2324,11 +2340,11 @@ class ilp_db_functions	extends ilp_logging {
      * @return  array of recordset objects or bool false
      */
     function get_user_courses($user_id)	{
-    	global $CFG;
+        global $CFG;
 
         $courses	=	enrol_get_users_courses($user_id, false,NULL,'fullname DESC');
 
-    	return $courses;
+        return $courses;
     }
 
 
@@ -2348,28 +2364,28 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 
-  	/**
+    /**
      * Returns the mis plugin with the id given
      *
      * @param int $plugin_id
      *
      * @return mixed object containing the plugin record selected
      */
-  	function get_mis_plugin_by_id($plugin_id)	{
-  		return $this->dbc->get_record('block_ilp_mis_plugin',array('id'=>$plugin_id));
-  	}
+    function get_mis_plugin_by_id($plugin_id)	{
+        return $this->dbc->get_record('block_ilp_mis_plugin',array('id'=>$plugin_id));
+    }
 
 
-  	/**
+    /**
      * Returns the mis plugin with the name given
      *
      * @param int $pluginname
      *
      * @return mixed object containing the plugin record selected
      */
-  	function get_mis_plugin_by_name($pluginname)	{
-  		return $this->dbc->get_record('block_ilp_mis_plugin',array('name'=>$pluginname));
-  	}
+    function get_mis_plugin_by_name($pluginname)	{
+        return $this->dbc->get_record('block_ilp_mis_plugin',array('name'=>$pluginname));
+    }
 
     /**
      * Returns all currently installed stats plugins
@@ -2377,10 +2393,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return array of recordset objects or bool false
      */
     function get_graph_plugins() 	{
-        global $CFG;
-
-        // return stats or false
-        return $this->dbc->get_records('block_ilp_graph_plugin');
+        global $DB;
+        $dbman = $DB->get_manager();
+        if ($dbman->table_exists('block_ilp_graph_plugin')) {
+            return $DB->get_records('block_ilp_graph_plugin');
+        }
+        return array();
     }
 
 
@@ -2424,133 +2442,131 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 
-  	/**
+    /**
      * Returns the tab plugin with the id given
      *
      * @param int $plugin_id
      *
      * @return mixed object containing the plugin record selected
      */
-  	function get_tab_plugin_by_id($plugin_id)	{
-  		return $this->dbc->get_record('block_ilp_dash_tab',array('id'=>$plugin_id));
-  	}
+    function get_tab_plugin_by_id($plugin_id)	{
+        return $this->dbc->get_record('block_ilp_dash_tab',array('id'=>$plugin_id));
+    }
 
 
-  	/**
+    /**
      * Returns the tab plugin with the name given
      *
      * @param int $pluginname
      *
      * @return mixed object containing the plugin record selected
      */
-  	function get_tab_plugin_by_name($pluginname)	{
-  		return $this->dbc->get_record('block_ilp_dash_tab',array('name'=>$pluginname));
-  	}
+    function get_tab_plugin_by_name($pluginname)	{
+        return $this->dbc->get_record('block_ilp_dash_tab',array('name'=>$pluginname));
+    }
 
 
-  	/**
-  	 * Updates the given mis plugin record
-  	 *
-  	 * @param object $misrecord
-  	 *
-  	 * @return bool true or false
-  	 */
-  	function update_mis_plugin($misrecord) {
-  		return $this->update_record('block_ilp_mis_plugin',$misrecord);
-  	}
+    /**
+     * Updates the given mis plugin record
+     *
+     * @param object $misrecord
+     *
+     * @return bool true or false
+     */
+    function update_mis_plugin($misrecord) {
+        return $this->update_record('block_ilp_mis_plugin',$misrecord);
+    }
 
-  	/**
-  	 * Used to check if a report field with the given label already exists in the report
-  	 * with the given report_id
-  	 *
-  	 * @param	string $label	the label that is being test to see if it exists
-  	 * @param	int $report_id the id of the report that will be checked
-  	 *
-  	 * @return	mixed array of recordsets or bool false
-  	 */
-  	function label_exists($label,$report_id,$field_id)	{
+    /**
+     * Used to check if a report field with the given label already exists in the report
+     * with the given report_id
+     *
+     * @param	string $label	the label that is being test to see if it exists
+     * @param	int $report_id the id of the report that will be checked
+     *
+     * @return	mixed array of recordsets or bool false
+     */
+    function label_exists($label,$report_id,$field_id)	{
 
-  		$label	=	mysql_real_escape_string($label);
-
-  		//thsi code is needed due to a substr_count in the
-  		//moodle_database.php file (line 666 :-( ) it causes
-  		//an error whenever a label has an ? in it
-		$label = str_replace('?', '.', $label);
+        //thsi code is needed due to a substr_count in the
+        //moodle_database.php file (line 666 :-( ) it causes
+        //an error whenever a label has an ? in it
+        $label = str_replace('?', '.', $label);
 
 
         $params = array('label'=>$label,'report_id'=>$report_id);
 
-          $currentfieldsql = '';
+        $currentfieldsql = '';
 
-          if(!empty($field_id)){
-              $params['field_id'] = $field_id;
-              $currentfieldsql = "AND id != :field_id";
+        if(!empty($field_id)){
+            $params['field_id'] = $field_id;
+            $currentfieldsql = "AND id != :field_id";
 
-          }
+        }
 
-  		$sql	=	'SELECT		*
+        $sql	=	'SELECT		*
   					 FROM		{block_ilp_report_field}
   					 WHERE		label		=	:label
   					 AND		report_id	=	:report_id
   					  '.$currentfieldsql;
 
-  		return $this->dbc->get_records_sql($sql, $params);
-  	}
+        return $this->dbc->get_records_sql($sql, $params);
+    }
 
 
 
-  	 /**
-  	 * Returns the record with a tablename matching the one given
-  	 *
-  	 * @param	string $tablename	the tablename that will be used to match
-  	 *
-  	 * @return	mixed object recordset or bool false
-  	 */
-  	function get_plugin_by_tablename($tablename)	{
-  		return $this->dbc->get_record('block_ilp_plugin',array('tablename'=>$tablename));
-  	}
+    /**
+     * Returns the record with a tablename matching the one given
+     *
+     * @param	string $tablename	the tablename that will be used to match
+     *
+     * @return	mixed object recordset or bool false
+     */
+    function get_plugin_by_tablename($tablename)	{
+        return $this->dbc->get_record('block_ilp_plugin',array('tablename'=>$tablename));
+    }
 
 
-  	 /**
-  	 * Returns the record with a class name matching the one given in the given table
-  	 *
-  	 * @param	string 	$name the name of the plugin that we want to match
-  	 * @param	string 	$tablename the name of the table that will be queried
-  	 *
-  	 * @return	mixed object recordset or bool false
-  	 */
-  	function get_plugin_record_by_classname($tablename,$classname) {
-  		return $this->dbc->get_record($tablename,array('name'=>$classname));
-  	}
+    /**
+     * Returns the record with a class name matching the one given in the given table
+     *
+     * @param	string 	$name the name of the plugin that we want to match
+     * @param	string 	$tablename the name of the table that will be queried
+     *
+     * @return	mixed object recordset or bool false
+     */
+    function get_plugin_record_by_classname($tablename,$classname) {
+        return $this->dbc->get_record($tablename,array('name'=>$classname));
+    }
 
     function setting_exists($name)	{
-    	return $this->dbc->get_record('config_plugins',array('name'=>$name,'plugin'=>'block_ilp'));
+        return $this->dbc->get_record('config_plugins',array('name'=>$name,'plugin'=>'block_ilp'));
     }
 
     function insert_config_setting($name,$value) {
-    	$setting	=	new stdClass();
-    	$setting->plugin	=	'block_ilp';
-    	$setting->name		=	$name;
-    	$setting->value		=	$value;
+        $setting	=	new stdClass();
+        $setting->plugin	=	'block_ilp';
+        $setting->name		=	$name;
+        $setting->value		=	$value;
 
-    	return $this->dbc->insert_record('config_plugins',$setting);
+        return $this->dbc->insert_record('config_plugins',$setting);
     }
 
     function update_config_setting($setting) {
-		return $this->dbc->update_record('config_plugins',$setting);
+        return $this->dbc->update_record('config_plugins',$setting);
     }
 
 
     function get_report_coursefield($entry_id,$reportfield_id)	{
 
-    	$sql	=	"SELECT 	*
+        $sql	=	"SELECT 	*
     				 FROM		{block_ilp_plu_crs} as c,
     				 			{block_ilp_plu_crs_ent} as ce
     				 WHERE		c.id = ce.parent_id
     				 AND		c.reportfield_id 	= 	:reportfield_id
     				 AND		entry_id			=	:entry_id ";
 
-    	return 	$this->dbc->get_record_sql($sql, array('reportfield_id'=>$reportfield_id, 'entry_id'=>$entry_id));
+        return 	$this->dbc->get_record_sql($sql, array('reportfield_id'=>$reportfield_id, 'entry_id'=>$entry_id));
     }
 
     /**
@@ -2560,9 +2576,9 @@ class ilp_db_functions	extends ilp_logging {
      */
     function save_event($event)	{
 
-    	//we can not user add_event in moodle 2.0 as it requires the user to have persmissions to add events to the
-    	//calendar however this capability check can be bypassed if we use the calendar event class
-    	global $CFG, $USER;
+        //we can not user add_event in moodle 2.0 as it requires the user to have persmissions to add events to the
+        //calendar however this capability check can be bypassed if we use the calendar event class
+        global $CFG, $USER;
 
 
         require_once($CFG->dirroot.'/calendar/lib.php');
@@ -2570,7 +2586,7 @@ class ilp_db_functions	extends ilp_logging {
         $calevent->update($event,false);
 
         if ($calevent !== false) {
-           return $calevent->id;
+            return $calevent->id;
         }
     }
 
@@ -2581,11 +2597,11 @@ class ilp_db_functions	extends ilp_logging {
      */
     function update_event($event)	{
 
-       global $CFG, $USER;
+        global $CFG, $USER;
 
-       require_once($CFG->dirroot.'/calendar/lib.php');
-       $calevent = calendar_event::load($event->id);
-       return $calevent->update($event,false);
+        require_once($CFG->dirroot.'/calendar/lib.php');
+        $calevent = calendar_event::load($event->id);
+        return $calevent->update($event,false);
     }
 
     /**
@@ -2603,17 +2619,17 @@ class ilp_db_functions	extends ilp_logging {
     				 AND		ce.reportfield_id	=	:reportfield_id
     				 AND		ce.entry_id			=	:entry_id ";
 
-    	return $this->dbc->get_record_sql($sql, array('reportfield_id'=>$reportfield_id, 'entry_id'=>$entry_id));
+        return $this->dbc->get_record_sql($sql, array('reportfield_id'=>$reportfield_id, 'entry_id'=>$entry_id));
     }
 
 
     function get_reportfield_by_id($reportfield_id)	{
-    	return $this->dbc->get_record('block_ilp_report_field',array('id'=>$reportfield_id));
+        return $this->dbc->get_record('block_ilp_report_field',array('id'=>$reportfield_id));
     }
 
 
     function create_event_cross_reference($record) {
-    	return $this->insert_record('block_ilp_cal_events',$record);
+        return $this->insert_record('block_ilp_cal_events',$record);
     }
 
     /**
@@ -2924,9 +2940,9 @@ class ilp_db_functions	extends ilp_logging {
     function get_next_review($report_id,$student_id)  {
 
         $params =   array('report_id'=>$report_id,
-                          'student_id'=>$student_id,
-                          'reviewtype'=>ILP_DATEFIELD_REVIEWDATE,
-                          'time'=>time());
+            'student_id'=>$student_id,
+            'reviewtype'=>ILP_DATEFIELD_REVIEWDATE,
+            'time'=>time());
 
         $sql	=	    "SELECT		max(datfent.value) as review
     					 FROM 		{block_ilp_entry}  as e,
@@ -2957,6 +2973,3 @@ function checkpositions($pos, $possarr) {
         return false;
     }
 }
-
-
-?>

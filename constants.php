@@ -140,6 +140,14 @@ define('ILP_DATEFIELD_DATE', 0);
 define('ILP_DATEFIELD_DEADLINE', 1);
 define('ILP_DATEFIELD_REVIEWDATE', 2);
 
+try { // ILP does some dodgy lang string includes during install so we need try/catch in case config tables don't exist yet
+    $pagelayout = get_config('block_ilp', 'pagelayout');
+} catch (dml_exception $e) {
+    $pagelayout = '';
+}
 
-
-?>
+if (!empty($pagelayout)) {
+    define('ILP_PAGELAYOUT', $pagelayout);
+} else {
+    define('ILP_PAGELAYOUT', 'standard');
+}
