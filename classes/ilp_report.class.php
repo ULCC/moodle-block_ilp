@@ -49,7 +49,10 @@ class ilp_report
    {
       global $DB;
 
-      $r=array();
+      static $r;
+
+      if(isset($r))
+         return $r;
 
       foreach($DB->get_fieldset_select('block_ilp_report','id','1') as $rid)
       {
