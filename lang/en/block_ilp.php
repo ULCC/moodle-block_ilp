@@ -231,7 +231,9 @@ $string['noreports']='No reports available';
     $string['onemonthdata']		    =	'past 1 months data';
 
     $string['notinsummary']	        =	'Not in summary';
-
+	$string['nothingtodisplay']		=	'Nothing to display';
+    $string['pagelayout']           =   'Page Layout';
+    $string['pagelayoutconfig']     =   'Allows you to define a custom page layout for ilp';
 	$string['passpercent']			=	'Pass Percentage';
 	$string['progressbarcolour']	=	'Progress Bar colour';
 	$string['passpercentconfig']	=	'The percentage that should be considered a pass (all percentages equal to and above this)';
@@ -390,12 +392,14 @@ $string['showpunctuality']='Punctuality Information';
     $string[ 'db_user' ]                        =   'DB Username';
 
 	//CAPABILITY STRINGS
-	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete forms';
-	$string['ilp:addreport'] 			= 	'Add a form entry';
-	$string['ilp:editreport'] 			= 	'Edit a form entry';
-	$string['ilp:deletereport'] 		= 	'Delete a form entry';
+    $string['ilp:addinstance']          =   'Add a new ILP block';
+	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
+	$string['ilp:addreport'] 			= 	'Add a report entry';
+	$string['ilp:editreport'] 			= 	'Edit a report entry';
+	$string['ilp:deletereport'] 		= 	'Delete a report entry';
 	$string['ilp:updatestatus'] 		= 	'Update Status';
-	$string['ilp:viewreport'] 			= 	'View a form';
+    $string['ilp:ilpviewall']              =   'View everything';
+    $string['ilp:viewreport'] 			= 	'View a report';
 	$string['ilp:viewilp'] 				= 	'View my own ilp';
     $string['ilp:reviewee']       =   'Appear in student list for a course';
 	$string['ilp:viewotherilp'] 		= 	'View others ilp';

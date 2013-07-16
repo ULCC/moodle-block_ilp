@@ -442,7 +442,7 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
      /*
       * user's input.
       */
-     public function view_data($reportfield_id, $entry_id, &$entryobj) {
+     public function view_data($reportfield_id, $entry_id, &$entryobj, $returnvalue = false) {
 	  $entry = $this->dbc->get_pluginentry($this->tablename, $entry_id, $reportfield_id);
 
 	  $fieldname	=	$reportfield_id."_field";
