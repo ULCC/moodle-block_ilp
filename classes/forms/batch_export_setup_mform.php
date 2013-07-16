@@ -97,9 +97,6 @@ class batch_export_setup_mform extends ilp_moodleform
       asort($reportoptions);
       $s=$mform->addElement('select','reportselect',get_string('report','block_ilp'),$reportoptions);
 
-      $mform->addRule('reportselect',get_string('required'),'required',null,'client');
-      $mform->addHelpButton('reportselect','batchreportselect','block_ilp');
-
       $mform->addElement('checkbox','showattendance',get_string('showattendance','block_ilp'));
       $mform->setDefault('showattendance',true);
 
