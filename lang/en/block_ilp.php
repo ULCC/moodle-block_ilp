@@ -467,6 +467,8 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['studentreport_open']  = 'Open';
     $string['studentreport_close'] = 'Close';
 
+$string['userid']='User id';
+
 	global $CFG;
 
 	// Include ilp db class

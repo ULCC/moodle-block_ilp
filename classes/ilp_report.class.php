@@ -295,11 +295,11 @@ class ilp_report
 
        $rows=$headers=array();
 
-       foreach($userheaders as $alt=>$h)
+       foreach($userheaders as $altstring=>$h)
        {
-          if(!is_numeric($alt))
+          if(!is_numeric($altstring))
           {
-             $headers[$h]=get_string($alt);
+             $headers[$h]=get_string($altstring,'block_ilp');
           }
           else
           {
