@@ -393,6 +393,7 @@ $string['showpunctuality']='Punctuality Information';
 
 	//CAPABILITY STRINGS
     $string['ilp:addinstance']          =   'Add a new ILP block';
+    $string['ilp:myaddinstance']          =   'Add a new ILP block to My Home';
 	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
 	$string['ilp:addreport'] 			= 	'Add a report entry';
 	$string['ilp:editreport'] 			= 	'Edit a report entry';

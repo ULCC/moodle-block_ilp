@@ -178,6 +178,7 @@ class block_ilp extends block_list {
       return array(
          'site-index'  => true,
          'course-view' => true,
+         'my' => true
          );
    }
 
