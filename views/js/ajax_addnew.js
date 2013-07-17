@@ -119,6 +119,7 @@ M.ilp_ajax_addnew = {
                     loadericon.addClass('hiddenelement');
                     M.ilp_ajax_addnew.prepare_edits_for_ajax();
                     M.ilp_ajax_addnew.prepare_deletes_for_ajax();
+                    M.ilp_dashboard_reports_tab.init(Y);
                 }
             },
             form: formwrapper,
@@ -396,7 +397,7 @@ M.ilp_ajax_addnew = {
                         M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
                         M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
                         M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
-                        M.ilp_dashboard_reports_tab.init(Y, null, null, '.view-comments.new-entry');
+                        M.ilp_dashboard_reports_tab.init(Y);
                         Y.one('.reports-container-container').one('.view-comments').removeClass('new-entry');
                     }
                 }

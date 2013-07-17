@@ -17,9 +17,13 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    static       $access_report_addreports;
    static       $multiple_entries;
    static       $reportavailable;
+   static       $access_report_editreports;
+   static       $access_report_deletereport;
+   static       $access_report_addcomment;
+   static       $access_report_viewcomment;
 
 
-   function __construct($student_id=null,$course_id=null)	{
+    function __construct($student_id=null,$course_id=null)	{
       global 	$CFG,$USER,$PAGE;
 
       //$this->linkurl				=	$CFG->wwwroot.$_SERVER["SCRIPT_NAME"]."?user_id=".$student_id."&course_id={$course_id}";
@@ -42,14 +46,13 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
 
-    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null) {
+    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null) {
         global $CFG;
-        $backtrace = debug_backtrace();
-        if (empty($backtrace[0]) || empty($backtrace[1]) || $backtrace[0]['file'] !=  __FILE__ || $backtrace[1]['function'] != 'display') {
-            // If not being called from 'display' in self
-            $access_report_addreports = self::$access_report_addreports;
-            $multiple_entries = self::$multiple_entries;
-            $reportavailable = self::$reportavailable;
+        if ($ajax) {
+            // If not being called from 'display' of this class
+            $access_report_addreports = static::$access_report_addreports;
+            $multiple_entries = static::$multiple_entries;
+            $reportavailable = static::$reportavailable;
         }
 
         $addnew_attrs = array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry');
@@ -81,7 +84,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
         if ($ajax) {
             $comments =	$this->dbc->get_entry_comments($entry_id);
-            $access = array('access_report_editcomment' => self::$access_report_editcomment,'access_report_deletecomment'=>self::$access_report_deletecomment);
+            $access = array('access_report_editcomment' => static::$access_report_editcomment,'access_report_deletecomment'=>static::$access_report_deletecomment);
         }
 
         if ($comments) {
@@ -311,44 +314,42 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   }
 
                   //find if the current user can add reports
-                  self::$access_report_addreports= $report->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
+                  static::$access_report_addreports= $report->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
 
                   //find out if the current user has the edit report capability for the report
-                  self::$access_report_editreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
+                  static::$access_report_editreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
 
                   //find out if the current user has the delete report capability for the report
-                  self::$access_report_deletereport=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletereport');
+                  static::$access_report_deletereport=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletereport');
 
                   //find out if the current user has the add comment capability for the report
-                  self::$access_report_addcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:addcomment');
+                  static::$access_report_addcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:addcomment');
 
                   //find out if the current user has the edit comment capability for the report
-                  self::$access_report_editcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:editcomment');
+                  static::$access_report_editcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:editcomment');
 
                   //find out if the current user has the delete comment capability for the report
-                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletecomment');
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletecomment');
 
                   // view comment
-                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewcomment');
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewcomment');
 
-                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
 
-                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
-
-                  $candelete =	$access_report_deletereports;
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
 
                   //get all of the entries for this report
                   $reportentries=$report->get_user_report_entries($this->student_id,$state_id);
 
                   //does the current report allow multiple entries
-                  self::$multiple_entries = !empty($report->frequency);
+                  static::$multiple_entries = !empty($report->frequency);
 
                   //instantiate the report rules class
                   $reportrules    =   new ilp_report_rules($report_id,$this->student_id);
 
                   $stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
 
-                  self::$reportavailable = $reportrules->report_availabilty();
+                  static::$reportavailable = $reportrules->report_availabilty();
                }
             }
         }
@@ -365,6 +366,17 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     */
     public function display($selectedtab=null, $ajax_settings = array(),$readonly=false,$showcomments=true)	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+
+       $this->get_capabilites();
+
+       $access_report_viewcomment = static::$access_report_viewcomment;
+       $access_report_addcomment = static::$access_report_addcomment;
+       $access_report_deletecomment = static::$access_report_deletecomment;
+       $access_report_editcomment = static::$access_report_editcomment;
+       $access_report_addreports = static::$access_report_addreports;
+       $access_report_editreports = static::$access_report_editreports;
+       $access_report_deletereport = static::$access_report_deletereport;
+       $candelete = $access_report_deletereport;
 
        $jsarguments = array(
            'root' => $CFG->wwwroot,
@@ -436,14 +448,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   $courserelatedfield_id  =$has_courserelated->id;
                }
 
-               foreach(array('addreport','editreport','deletereport','addcomment','editcomment',
+               foreach(array('addreports','editreport','deletereport','addcomment','editcomment',
                              'deletecomment','viewcomment','viewotherilp','addviewextension') as $capname)
                {
                   $varname='access_report_'.$capname;
                   $$varname=$report->has_cap($USER->id,$PAGE->context,"block/ilp:$capname");
                }
 
-               foreach(array('addreport','editreport','deletereport','addcomment','editcomment',
+               foreach(array('addreports','editreport','deletereport','addcomment','editcomment',
                              'deletecomment','addviewextension') as $capname)
                {
                   $varname='access_report_'.$capname;
@@ -477,7 +489,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}";
 
                echo $this->generate_addnewentry($addnewentry_url, $access_report_addreports, $multiple_entries, $reportavailable);
-
 
                if (!empty($access_report_viewothers)) {
 
