@@ -92,22 +92,13 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 
 	 		$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,false);
 
-
-
-			if (!empty($entry)) {
-		 		$fielddata	=	array();
-		 		$comma	= "";
-
-			 	//loop through all of the data for this entry in the particular entry
-			 	foreach($entry as $e) {
-			 		if (!empty($e->value)) {
-			 			$course	=	$this->dbc->get_course($e->value);
-			 			$entryobj->$fieldname	.=	"{$comma}{$course->shortname}";
-			 			$comma	=	",";
-			 		}
-			 	}
-	 		}
-	  }
+            if (!empty($entry->value)) {
+               if($course	=	$this->dbc->get_course($entry->value))
+               {
+                  $entryobj->$fieldname	.=	$course->shortname;
+               }
+            }
+    }
 	 /**
 	  * places entry data for the report field given into the entryobj given by the user
 	  *
