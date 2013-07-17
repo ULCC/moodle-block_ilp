@@ -976,7 +976,7 @@ class ilp_db_functions	extends ilp_logging {
 					 AND		p.reportfield_id	=	:reportfield_id
 					 ";
 
-        return $multiple ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
+        return !$multiple ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
     }
 
 
