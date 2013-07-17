@@ -65,13 +65,13 @@ class batch_print_setup_mform extends ilp_moodleform
          }
 
 //Sort courses by name and create drop down.
-         asort($courseoptions);
+         natsort($courseoptions);
          $mform->addElement('select','course_id',get_string('course'),$courseoptions);
          $mform->setDefault('course_id',$imports['course_id']);
 
 
 //Put the groups in to name order and create drop down
-         asort($groupoptions);
+         natsort($groupoptions);
          $mform->addElement('select','group_id',get_string('group'),$groupoptions);
          $mform->setDefault('group_id',$imports['group_id']);
 
@@ -100,7 +100,7 @@ class batch_print_setup_mform extends ilp_moodleform
          $mform->setDefault('status_id',$imports['status_id']);
       }
 
-      asort($reportoptions);
+      natsort($reportoptions);
       $s=$mform->addElement('select','reportselect',get_string('printreports','block_ilp'),$reportoptions);
       $s->setMultiple(true);
       $mform->addRule('reportselect',get_string('required'),'required',null,'client');
