@@ -559,16 +559,5 @@ global $CFG;
 
     }
 
-    function export_data( $reportfield_id,$entry_id,&$entryobj, $returnvalue, $format='')
-    {
-       global $CFG;
-       $fieldname=$reportfield_id."_field";
 
-       $entry=$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
-       if (!empty($entry))
-       {
-//Format for Excel
-          $entryobj->$fieldname=date(html_entity_decode($entry->value,'m/d/Y H:i:s'));
-       }
-    }
 }
