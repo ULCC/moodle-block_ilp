@@ -367,7 +367,7 @@ class ilp_report
                    $headers[$itemname]=$this->strip_word_html($field->label);
 
                    $item->$itemname='';
-                   $pluginclass->view_data($field->id,$report_entry->id,$item);
+                   $pluginclass->export_data($field->id,$report_entry->id,$item);
 
                    foreach((array)$item as $fieldname=>$value)
                    {

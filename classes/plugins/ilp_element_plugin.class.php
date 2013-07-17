@@ -572,5 +572,10 @@ class ilp_element_plugin {
        return true;
     }
 
+    public function export_data($fieldid,$report_entry_id,&$item)
+    {
+       return $this->view_data($fieldid,$report_entry_id,$item);
+    }
+
 }
 ?>
