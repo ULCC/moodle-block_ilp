@@ -140,7 +140,7 @@ class block_ilp extends block_list {
          $this->content->icons[] = "";
       }
 
-      if($this->dbc->ilp_admin())
+      if($dbc->ilp_admin())
       {
          $label=get_string('export','block_ilp');
          $this->content->items[] = "<a href='$CFG->wwwroot/blocks/ilp/actions/define_batch_export.php?course_id=$course_id'>$label</a>";
