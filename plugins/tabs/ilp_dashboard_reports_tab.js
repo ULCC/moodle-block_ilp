@@ -23,8 +23,8 @@ M.ilp_dashboard_reports_tab = {
         var all_comments = Y.all(all_selector); //get all the comments div
         for(var i = 0; i < all_comments._nodes.length; i++){
             var my_el = all_comments._nodes[i];
-
-            if (my_el.className.match(/\comment-js-added\b/)) {
+            var my_yui_el = Y.one(my_el);
+            if (my_yui_el.hasClass('comment-js-added')) {
                 continue;
             }
             var my_header = my_el.getElementsByClassName('commentheading');
