@@ -8,6 +8,11 @@
 
 // $data->course_id has already been tested for content
 
+if(!$dbc->ilp_admin())
+{
+   print_error(get_string('nopermission'));
+}
+
 $course_id=$data->course_id;
 $group_id=(isset($data->group_id))?  $group_id=$data->group_id : 0 ;
 $status_id=$data->status_id;
