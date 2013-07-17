@@ -13,24 +13,50 @@ global $USER, $CFG, $SESSION, $PARSER;
 
 require_once($CFG->dirroot . '/blocks/ilp/db/admin_accesscheck.php');
 
-$sectionname	=	get_string('administrationsite');
+require_once($CFG->dirroot . '/blocks/ilp/constants.php');
 
-$PAGE->navbar->add($sectionname,null,'title');
+require_once($CFG->dirroot . '/blocks/ilp/actions/edit_plugin_blockitem_config_mform.php');
 
 $sectionname = get_string('tab_block_items', 'block_ilp');
-
-$PAGE->navbar->add($sectionname,null,'title');
 
 $url	=	$CFG->wwwroot."/admin/settings.php?section=blocksettingilp";
 
 $PAGE->set_url(new moodle_url($url));
 
-$PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
+$PAGE->navbar->add($sectionname);
+
+$PAGE->set_pagelayout(ILP_PAGELAYOUT);
 
 echo $OUTPUT->header();
 
 echo $OUTPUT->heading(get_string('pluginconfig', 'block_ilp'));
 
-//$mform->display();
+$mform = new blockitem_config_form();
+
+if ($mform->is_submitted()) {
+    $data = $mform->get_data();
+
+    $name = 'show_current_status';
+    $value = $data->currentstatus_yesno;
+    set_config($name, $value, 'block_ilp');
+
+    $name = 'show_progressbar';
+    $value = $data->progressbar_yesno;
+    set_config($name, $value, 'block_ilp');
+
+    $name = 'show_linked_name';
+    $value = $data->linked_name_yesno;
+    set_config($name, $value, 'block_ilp');
+
+    $name = 'show_userpicture';
+    $value = $data->userpicture_yesno;
+    set_config($name, $value, 'block_ilp');
+
+    $name = 'show_attendancepunctuality';
+    $value = $data->attendancepunctuality_yesno;
+    set_config($name, $value, 'block_ilp');
+
+}
+$mform->display();
 
 echo $OUTPUT->footer();

@@ -479,6 +479,13 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['tab_block_items'] = 'Block Items';
     $string['tab_block_items_cfg'] = 'Block Items Configuration';
 
+    // BLOCKITEM CONFIG
+    $string['config_currentstatus'] = 'Show current status';
+    $string['config_progressbar'] = 'Show Progress bar';
+    $string['config_userpicture'] = 'Show user picture';
+    $string['config_linked_name'] = 'Show name with a link to profile page';
+    $string['config_attendancepunctuality'] = 'Show Attendance and Punctuality Information';
+
 	global $CFG;
 
 	// Include ilp db class

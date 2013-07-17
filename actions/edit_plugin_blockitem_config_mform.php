@@ -12,12 +12,64 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/lib/formslib.php');
 
-/**
- * Form for filtering the strings to customize
- */
-class tool_customlang_filter_form extends moodleform {
+class blockitem_config_form extends moodleform {
 
     function definition() {
+        $mform = $this->_form; // Don't forget the underscore!
+
+        $mform->addElement('header', 'currentstatus', get_string('config_currentstatus', 'block_ilp'));
+
+        $attributes = array();
+
+        $radioarray=array();
+        $radioarray[] =& $mform->createElement('radio', 'currentstatus_yesno', '', get_string('yes'), 1, $attributes);
+        $radioarray[] =& $mform->createElement('radio', 'currentstatus_yesno', '', get_string('no'), 0, $attributes);
+        $mform->addGroup($radioarray, 'currentstatus_radio', '', array(' '), false);
+
+        $mform->addElement('header', 'progressbar', get_string('config_progressbar', 'block_ilp'));
+
+        $show_progressbar = get_config('block_ilp', 'show_progressbar');
+        $attributes = array();
+
+        $radioarray=array();
+        $radioarray[] =& $mform->createElement('radio', 'progressbar_yesno', '', get_string('yes'), 1, $attributes);
+        $radioarray[] =& $mform->createElement('radio', 'progressbar_yesno', '', get_string('no'), 0, $attributes);
+        $mform->addGroup($radioarray, 'progressbar_radio', '', array(' '), false);
+
+        $mform->addElement('header', 'userpicture', get_string('config_userpicture', 'block_ilp'));
+
+        $attributes = array();
+
+        $radioarray=array();
+        $radioarray[] =& $mform->createElement('radio', 'userpicture_yesno', '', get_string('yes'), 1, $attributes);
+        $radioarray[] =& $mform->createElement('radio', 'userpicture_yesno', '', get_string('no'), 0, $attributes);
+        $mform->addGroup($radioarray, 'userpicture_radio', '', array(' '), false);
+
+        $mform->addElement('header', 'linked_name', get_string('config_linked_name', 'block_ilp'));
+
+        $attributes = array();
+
+        $radioarray=array();
+        $radioarray[] =& $mform->createElement('radio', 'linked_name_yesno', '', get_string('yes'), 1, $attributes);
+        $radioarray[] =& $mform->createElement('radio', 'linked_name_yesno', '', get_string('no'), 0, $attributes);
+        $mform->addGroup($radioarray, 'linked_name_radio', '', array(' '), false);
+
+        $mform->addElement('header', 'attpunct', get_string('config_attendancepunctuality', 'block_ilp'));
+
+        $attributes = array();
+
+        $radioarray=array();
+        $radioarray[] =& $mform->createElement('radio', 'attendancepunctuality_yesno', '', get_string('yes'), 1, $attributes);
+        $radioarray[] =& $mform->createElement('radio', 'attendancepunctuality_yesno', '', get_string('no'), 0, $attributes);
+        $mform->addGroup($radioarray, 'attendancepunctuality_radio', '', array(' '), false);
+
+        $mform->setDefault('currentstatus_yesno', (int) get_config('block_ilp', 'show_current_status'));
+        $mform->setDefault('progressbar_yesno', (int) get_config('block_ilp', 'show_progressbar'));
+        $mform->setDefault('linked_name_yesno', (int) get_config('block_ilp', 'show_linked_name'));
+        $mform->setDefault('userpicture_yesno', (int) get_config('block_ilp', 'show_userpicture'));
+        $mform->setDefault('attendancepunctuality_yesno', (int) get_config('block_ilp', 'show_attendancepunctuality'));
+
+        $this->add_action_buttons();
 
     }
 

@@ -307,11 +307,11 @@ function summary_data($data, $term = 0)
 
         global $CFG;
 
-        $cidfield = get_config('block_ilp', 'mis_plugin_register_courseid');
-        $cdatefield = get_config('block_ilp', 'mis_plugin_register_datetime');
-        $markfield = get_config('block_ilp', 'mis_plugin_register_mark');
-        $timefield = get_config('block_ilp', 'mis_plugin_register_datetime');
-        $cnamefield = get_config('block_ilp', 'mis_plugin_register_coursename');
+        $cidfield = get_config('block_ilp', 'mis_plugin_registerterm_courseid');
+        $cdatefield = get_config('block_ilp', 'mis_plugin_registerterm_datetime');
+        $markfield = get_config('block_ilp', 'mis_plugin_registerterm_mark');
+        $timefield = get_config('block_ilp', 'mis_plugin_registerterm_datetime');
+        $cnamefield = get_config('block_ilp', 'mis_plugin_registerterm_coursename');
 
         if (!empty($term)) {
             $yearstart = $this->terms[0]['start'];
