@@ -20,34 +20,34 @@ $status_id=$data->status_id;
 //get all of the students
 if($course_id)
 {
-$course=$dbc->get_course_by_id($course_id);
+   $course=$dbc->get_course_by_id($course_id);
 
-$groups=groups_get_all_groups($course->id);
+   $groups=groups_get_all_groups($course->id);
 
-if (!empty($groups))
-{
-   $groupmode = groups_get_course_groupmode($course);   // Groups are being used
-   $isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
-                        !has_capability('moodle/site:accessallgroups', $context));
-}
-else
-{
-   $group_id=0;
-}
+   if (!empty($groups))
+   {
+      $groupmode = groups_get_course_groupmode($course);   // Groups are being used
+      $isseparategroups = ($course->groupmode == SEPARATEGROUPS &&
+                           !has_capability('moodle/site:accessallgroups', $context));
+   }
+   else
+   {
+      $group_id=0;
+   }
 
-$groupexists=groups_get_group($group_id);
+   $groupexists=groups_get_group($group_id);
 
-if (empty($groupexists))
-{
-   $group_id=0;
-}
-else
-{
-   $groupincourse=groups_get_group_by_name($course_id,$groupexists->name);
+   if (empty($groupexists))
+   {
+      $group_id=0;
+   }
+   else
+   {
+      $groupincourse=groups_get_group_by_name($course_id,$groupexists->name);
 
-   if (empty($groupincourse))
-      $group_id = 0;
-}
+      if (empty($groupincourse))
+         $group_id = 0;
+   }
 }
 
 if($fullstudents=$dbc->get_studentlist_details(array_keys($dbc->get_course_users($course_id,$group_id)),$status_id,'','lastname asc'))
