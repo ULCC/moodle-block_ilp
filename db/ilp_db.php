@@ -962,8 +962,8 @@ class ilp_db_functions	extends ilp_logging {
         $entrytable		=	"{$CFG->prefix}{$tablename}_ent";
         $parenttable	=	"{$CFG->prefix}{$tablename}";
 
-        $itemtable		=	(!empty($multiple)) ? "{$CFG->prefix}{$tablename}_items as i," : '';
-        $where			=	(!empty($multiple)) ? "e.parent_id	=	i.id AND i.parent_id	=	p.id" : "e.parent_id	=	p.id";
+        $itemtable		=      $multiple ? "{$CFG->prefix}{$tablename}_items as i," : '';
+        $where			=      $multiple ? "e.parent_id	=	i.id AND i.parent_id	=	p.id" : "e.parent_id	=	p.id";
 
         $params = array('entry_id'=>$entry_id, 'reportfield_id'=>$reportfield_id);
 
@@ -976,7 +976,7 @@ class ilp_db_functions	extends ilp_logging {
 					 AND		p.reportfield_id	=	:reportfield_id
 					 ";
 
-        return (empty($multiple)) ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
+        return $multiple ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
     }
 
 
