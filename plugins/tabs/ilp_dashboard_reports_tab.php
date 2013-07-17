@@ -338,8 +338,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                   static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
 
-                  $candelete =	static::$access_report_deletereport;
-
                   //get all of the entries for this report
                   $reportentries=$report->get_user_report_entries($this->student_id,$state_id);
 
@@ -378,6 +376,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
        $access_report_addreports = static::$access_report_addreports;
        $access_report_editreports = static::$access_report_editreports;
        $access_report_deletereport = static::$access_report_deletereport;
+       $candelete = $access_report_deletereport;
 
        $jsarguments = array(
            'root' => $CFG->wwwroot,
