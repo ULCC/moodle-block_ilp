@@ -292,7 +292,7 @@ class ilp_report
 
        include_once("$CFG->libdir/tablelib.php");
 
-       $userheaders=array('userid'=>'id','firstname','lastname','status'=>'u_status');
+       $userheaders=array('idnumber','firstname','lastname','email','status'=>'u_status','userid'=>'id');
 
        $rows=$headers=array();
 
