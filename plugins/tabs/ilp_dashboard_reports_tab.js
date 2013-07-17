@@ -23,9 +23,8 @@ M.ilp_dashboard_reports_tab = {
         var all_comments = Y.all(all_selector); //get all the comments div
         for(var i = 0; i < all_comments._nodes.length; i++){
             var my_el = all_comments._nodes[i];
-            console.log(all_comments);
 
-            if (my_el.classList.contains('comment-js-added')) {
+            if (my_el.className.match(/\comment-js-added\b/)) {
                 continue;
             }
             var my_header = my_el.getElementsByClassName('commentheading');
@@ -36,7 +35,7 @@ M.ilp_dashboard_reports_tab = {
             if(headercontainer._node.childElementCount> 0){
                 var new_el = my_el.appendChild(M.ilp_dashboard_reports_tab.get_view_comments(my_item,headercontainer));
                 headercontainer._hide();
-                my_el.classList.add('comment-js-added');
+                my_el.className += ' comment-js-added';
             }
         }
 	},
