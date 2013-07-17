@@ -69,7 +69,7 @@
 		<?php
 		if (!empty($access_report_viewcomment) ) {
 		?>
-		<div id="entry_<?php echo $entry->id; ?>_container" <?php if (empty($comments)) echo 'class="hiddenelement"';?>>
+		<div id="entry_<?php echo $entry->id; ?>_container">
             <?php
             $access = array('access_report_editcomment' => $access_report_editcomment,'access_report_deletecomment'=>$access_report_deletecomment);
             $comment_params = "report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&course_id={$this->course_id}";
