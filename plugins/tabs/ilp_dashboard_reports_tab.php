@@ -314,42 +314,42 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   }
 
                   //find if the current user can add reports
-                  self::$access_report_addreports= $report->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
+                  static::$access_report_addreports= $report->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
 
                   //find out if the current user has the edit report capability for the report
-                  self::$access_report_editreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
+                  static::$access_report_editreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
 
                   //find out if the current user has the delete report capability for the report
-                  self::$access_report_deletereport=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletereport');
+                  static::$access_report_deletereport=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletereport');
 
                   //find out if the current user has the add comment capability for the report
-                  self::$access_report_addcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:addcomment');
+                  static::$access_report_addcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:addcomment');
 
                   //find out if the current user has the edit comment capability for the report
-                  self::$access_report_editcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:editcomment');
+                  static::$access_report_editcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:editcomment');
 
                   //find out if the current user has the delete comment capability for the report
-                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletecomment');
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletecomment');
 
                   // view comment
-                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewcomment');
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewcomment');
 
-                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
 
-                  self::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
 
                   //get all of the entries for this report
                   $reportentries=$report->get_user_report_entries($this->student_id,$state_id);
 
                   //does the current report allow multiple entries
-                  self::$multiple_entries = !empty($report->frequency);
+                  static::$multiple_entries = !empty($report->frequency);
 
                   //instantiate the report rules class
                   $reportrules    =   new ilp_report_rules($report_id,$this->student_id);
 
                   $stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
 
-                  self::$reportavailable = $reportrules->report_availabilty();
+                  static::$reportavailable = $reportrules->report_availabilty();
                }
             }
         }
