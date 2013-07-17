@@ -2160,6 +2160,11 @@ class ilp_db_functions	extends ilp_logging {
      */
         function get_course_users($course_id,$group_id=null,$fullrecords=false) {
 
+	if(empty($course_id))
+	{
+	    return $this->dbc->get_records('user',array('deleted'=>0),'lastname','id');
+	}
+
         $grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
         $groupwhere = "";
 

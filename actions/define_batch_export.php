@@ -57,7 +57,7 @@ elseif($data=$mform->get_data())
 {
    ($tutor and $usertutees=$dbc->get_user_tutees($USER->id));
 //Only possible if url has been twiddled, so slap them back to the front page
-   if(empty($data->course_id) and !$usertutees)
+   if(!isset($data->course_id) and empty($usertutees))
    {
       redirect($CFG->wwwroot);
    }

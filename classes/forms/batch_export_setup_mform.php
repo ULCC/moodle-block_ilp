@@ -72,6 +72,7 @@ class batch_export_setup_mform extends ilp_moodleform
 
 //Sort courses by name and create drop down.
       natcasesort($courseoptions);
+      $courseoptions[0]=get_string('any');
       $mform->addElement('select','course_id',get_string('course'),$courseoptions);
       $mform->setDefault('course_id',$imports['course_id']);
 

@@ -18,6 +18,8 @@ $group_id=(isset($data->group_id))?  $group_id=$data->group_id : 0 ;
 $status_id=$data->status_id;
 
 //get all of the students
+if($course_id)
+{
 $course=$dbc->get_course_by_id($course_id);
 
 $groups=groups_get_all_groups($course->id);
@@ -45,6 +47,7 @@ else
 
    if (empty($groupincourse))
       $group_id = 0;
+}
 }
 
 if($fullstudents=$dbc->get_studentlist_details(array_keys($dbc->get_course_users($course_id,$group_id)),$status_id,'','lastname asc'))
