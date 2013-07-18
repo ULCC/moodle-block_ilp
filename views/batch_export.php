@@ -56,7 +56,7 @@ if(isset($data->showattendance) and $fullstudents)
 {
    include_once("$CFG->dirroot/blocks/ilp/classes/plugins/ilp_mis_attendance_plugin.class.php");
 
-   $userheaders=array('idnumber','username','firstname','lastname','email','status'=>'u_status','userid'=>'id','punctuality','attendance');
+   $userheaders=array('idnumber','username','firstname','lastname','email','status'=>'u_status','userid'=>'id');
 
    $rows=$headers=array();
 
@@ -72,19 +72,23 @@ if(isset($data->showattendance) and $fullstudents)
       }
    }
 
+   $headers['punctuality']=get_string('punctuality','block_ilp');
+   $headers['attendance']=get_string('attendance','block_ilp');
+
    $rows=array();
    foreach($fullstudents as $user)
    {
       if($t=ilp_mis_attendance_plugin::get_summary($user->idnumber))
       {
          $row=array();
-
+//print_object($t);
          foreach($userheaders as $h)
          {
             $row[$h]=$user->$h;
          }
          $row['punctuality']=$t['punctuality'];
          $row['attendance']=$t['attendance'];
+	$rows[]=$row;
       }
    }
 
@@ -94,11 +98,11 @@ if(isset($data->showattendance) and $fullstudents)
    $table->define_columns(array_keys($headers));
    $table->define_headers($headers);
 
-   $exname="table_{$format}_export_format";
+   $exname="table_{$data->format}_export_format";
 
    $ex=new $exname($table);
 
-   $ex->start_document(config('block_ilp','attendance'));
+   $ex->start_document(get_string('attendance','block_ilp'));
    $ex->start_table('Sheet1');
 
    $ex->output_headers($headers);
