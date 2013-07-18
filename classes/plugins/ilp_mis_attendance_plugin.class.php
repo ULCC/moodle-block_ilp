@@ -22,9 +22,78 @@ require_once($CFG->dirroot . '/blocks/ilp/db/ilp_mis_connection.php');
 
 abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
 
-	public function __construct($params = array())	{
-        parent::__construct($params);
-    }
+   static function active_subclasses()
+   {
+      $r=array();
+      foreach(get_config('block_ilp') as $name=>$value)
+      {
+         if(strpos($name,'ilp_mis_attendance_plugin_')===0 and $value)
+         {
+//Strip off '_pluginstatus
+            $r[]=substr($name,0,-13);
+         }
+      }
+      return $r;
+   }
+
+/**
+ * @return array : array('attendance'=>.12,'punctuality'=>.8)
+ */
+   static function get_summary($student_id)
+   {
+      global $CFG;
+      $r=array();
+      foreach(static::active_subclasses() as $plugin)
+      {
+         $inst=null;
+
+         include_once("$CFG->dirroot/blocks/ilp/plugins/mis/{$plugin}.php");
+
+         if(method_exists($plugin,'get_student_punctuality'))
+         {
+            $inst=new $plugin();
+            $inst->set_data($student_id);
+            $r['punctuality']=$inst->get_student_punctuality();
+         }
+         elseif(method_exists($plugin,'getPunctuality'))
+         {
+            $inst=new $plugin();
+            $inst->set_data($student_id);
+
+            $r['punctuality']=$inst->getPunctuality();
+         }
+
+         if(method_exists($plugin,'get_student_attendance'))
+         {
+            if(!isset($inst))
+            {
+               $inst=new $plugin();
+               $inst->set_data($student_id);
+            }
+            $r['attendance']=$inst->get_student_attendance();
+         }
+         elseif(method_exists($plugin,'getAttendance'))
+         {
+            if(!isset($inst))
+            {
+               $inst=new $plugin();
+               $inst->set_data($student_id);
+            }
+
+            $r['attendance']=$inst->getAttendance();
+         }
+
+         if(!empty($r['attendance']) and !empty($r['punctuality']))
+         {
+            break;
+         }
+      }
+      return $r;
+   }
+
+   public function __construct($params = array())	{
+      parent::__construct($params);
+   }
 
     /*
     * go to status item table to  get the background colours for table cells
