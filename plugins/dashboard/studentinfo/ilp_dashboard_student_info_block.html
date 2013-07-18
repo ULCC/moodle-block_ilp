@@ -1,0 +1,36 @@
+<!-- Student info area -->
+    <div>
+    <?php if (!empty($prevstudent)) {
+?>
+
+<span class="float-left">
+    <a href="<?php echo $CFG->wwwroot; ?>/blocks/ilp/actions/view_main.php?user_id=<?php echo $prevstudent; ?>&course_id=<?php echo $course_id; ?>">
+        <?php echo get_string('previousstudent','block_ilp'); ?>
+    </a>
+</span><?php
+
+}
+if (!empty($nextstudent)) {
+
+?><span class="float-right">
+        <a href="<?php echo $CFG->wwwroot; ?>/blocks/ilp/actions/view_main.php?user_id=<?php echo $nextstudent; ?>&course_id=<?php echo $course_id; ?>">
+            <?php echo get_string('nextstudent','block_ilp'); ?>
+        </a>
+ </span><?php } ?>
+    </div>
+
+	<div id="studentinfo-container">
+
+	<?php
+	echo '<div id="middle-studentinfo">';
+	echo $this->generate_middle_studentinfo_content($tutorslist, $statusitem, $can_editstatus, null, $pbar, $userstatuscolor, false);
+    echo '</div>';
+        ?>
+
+	<div id="right-studentinfo">
+     <?php
+
+		?>
+    </div>
+	</div>
+<div class="clearfix"> </div>

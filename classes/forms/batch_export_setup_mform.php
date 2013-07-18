@@ -71,12 +71,14 @@ class batch_export_setup_mform extends ilp_moodleform
       $mform->setDefault('format',$table->defaultdownloadformat);
 
 //Sort courses by name and create drop down.
-      natsort($courseoptions);
+      natcasesort($courseoptions);
+      $courseoptions=array(0=>'Any')+$courseoptions;
+      unset($courseoptions[SITEID]);
       $mform->addElement('select','course_id',get_string('course'),$courseoptions);
       $mform->setDefault('course_id',$imports['course_id']);
 
 //Put the groups in to name order and create drop down
-      natsort($groupoptions);
+      natcasesort($groupoptions);
       $mform->addElement('select','group_id',get_string('group'),$groupoptions);
       $mform->setDefault('group_id',$imports['group_id']);
 
@@ -94,7 +96,7 @@ class batch_export_setup_mform extends ilp_moodleform
          $mform->setDefault('status_id',$imports['status_id']);
       }
 
-      natsort($reportoptions);
+      natcasesort($reportoptions);
       $s=$mform->addElement('select','reportselect',get_string('report','block_ilp'),$reportoptions);
 
 /*

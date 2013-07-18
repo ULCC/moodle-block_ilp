@@ -2160,6 +2160,11 @@ class ilp_db_functions	extends ilp_logging {
      */
         function get_course_users($course_id,$group_id=null,$fullrecords=false) {
 
+	if(empty($course_id))
+	{
+	    return $this->dbc->get_records('user',array('deleted'=>0),'lastname','id');
+	}
+
         $grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
         $groupwhere = "";
 
@@ -2238,6 +2243,7 @@ class ilp_db_functions	extends ilp_logging {
         				u.idnumber as idnumber,
         				u.firstname as firstname,
         				u.lastname as lastname,
+                                        u.username as username,
         				si.id as u_status_id,
         				si.name	as u_status,
         				si.icon	as u_status_icon,

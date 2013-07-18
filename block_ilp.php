@@ -126,17 +126,59 @@ class block_ilp extends block_list {
             $this->content->icons[] = "";
          }
 
-      } else {
+      } else if(isloggedin()) {
+         // Show additional items (current status, progress bar etc. based on config
+         require_once($CFG->dirroot . '/blocks/ilp/plugins/dashboard/ilp_dashboard_student_info_plugin.php');
+         $student_info_plugin = new ilp_dashboard_student_info_plugin($USER->id);
+         $blockitems = $student_info_plugin->display(null, true);
+
+          $courseurl	=	(!empty($course_id) && $course_id != 1) ? "&course_id={$course_id}" : '';
+          $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}$courseurl";
+
+          if (get_config('block_ilp', 'show_userpicture')) {
+              $this->content->items[] = html_writer::link($url, $blockitems['picture']);
+          }
+
+          if (get_config('block_ilp', 'show_linked_name')) {
+              $this->content->items[] = html_writer::link($url, $blockitems['name']);
+          }
 
          //additional check to stop users from being able to access the ilp in course context
          //from the front page
-         $courseurl	=	(!empty($course_id) && $course_id != 1) ? "&course_id={$course_id}" : '';
+
 
          $this->content->text	= "";
 
          $label = get_string('mypersonallearningplan', 'block_ilp');
-         $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}$courseurl";
+
          $this->content->items[] = "<p><a href='{$url}'>{$label}</a><p/>";
+         $this->content->icons[] = "";
+
+          if (get_config('block_ilp', 'show_current_status')) {
+              $this->content->items[] = $blockitems['status'];
+          }
+
+          if (get_config('block_ilp', 'show_progressbar')) {
+              $this->content->items[] = $blockitems['progress'];
+          }
+
+          if (get_config('block_ilp', 'show_attendancepunctuality')) {
+              if ($blockitems['att_percent']) {
+                  $att_line = get_string('attendance', 'block_ilp') . ': ' . $blockitems['att_percent'];
+                  $this->content->items[] = $att_line;
+              }
+              if ($blockitems['pun_percent']) {
+                  $pun_line = get_string('punctuality', 'block_ilp') . ': ' . $blockitems['pun_percent'];
+                  $this->content->items[] = $pun_line;
+              }
+
+          }
+      }
+
+      if($dbc->ilp_admin())
+      {
+         $label=get_string('export','block_ilp');
+         $this->content->items[] = "<a href='$CFG->wwwroot/blocks/ilp/actions/define_batch_export.php?course_id=$course_id'>$label</a>";
          $this->content->icons[] = "";
       }
 
@@ -178,6 +220,7 @@ class block_ilp extends block_list {
       return array(
          'site-index'  => true,
          'course-view' => true,
+         'my' => true
          );
    }
 

@@ -178,6 +178,15 @@ $capabilities = array(
             'user' => CAP_PREVENT
         )
     ),
+    'block/ilp:myaddinstance' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'user' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+    ),
     'block/ilp:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
 

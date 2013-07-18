@@ -200,13 +200,38 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     function getAttendance()
     {
         return (!empty($this->data)) ? $this->percent_format( $this->data[0][0] ) : 0;
-
     }
 
     function getPunctuality()
     {
-        return (!empty($this->data)) ? $this->percent_format( $this->data[0][1] ) : 0;
+       return (!empty($this->data)) ? $this->percent_format( $this->data[0][1] ) : 0;
     }
 
+    /**
+     *
+     * return the punctuality
+     * @return int
+     */
+    public function get_student_punctuality()
+    {
+       if(isset($this->data[0][1]))
+       {
+          return $this->data[0][1]*100;
+       }
+       return 0;
+    }
 
+    /**
+     *
+     * return the attendance
+     * @return int
+     */
+    public function get_student_attendance()
+    {
+       if(isset($this->data[0][0]))
+       {
+          return $this->data[0][0]*100;
+       }
+       return 0;
+    }
 }
