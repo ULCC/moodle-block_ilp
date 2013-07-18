@@ -6,13 +6,16 @@ require_once($CFG->dirroot . '/blocks/ilp/classes/tables/ilp_mis_ajax_table.clas
 class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
 {
 
-    public function __construct($params = array())
+   public function __construct($params = array(),$student_id=0,$user_id=0)
     {
         parent::__construct($params);
 
         //find out whether a table or stored procedure is used in queries 
         $this->tabletype = get_config('block_ilp', 'mis_plugin_attendance_percentbartabletype');
         $this->data = false;
+
+        if($student_id)
+           $this->set_data($student_id,$user_id);
     }
 
 
