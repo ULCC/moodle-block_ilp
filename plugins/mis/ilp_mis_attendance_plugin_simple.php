@@ -216,7 +216,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     {
        if(isset($this->data[0][1]))
        {
-          return $this->data[0][1]*100;
+          return $this->data[0][1];
        }
        return 0;
     }
@@ -230,7 +230,7 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
     {
        if(isset($this->data[0][0]))
        {
-          return $this->data[0][0]*100;
+          return $this->data[0][0];
        }
        return 0;
     }
