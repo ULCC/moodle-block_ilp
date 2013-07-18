@@ -518,12 +518,13 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                //create the entries list var that will hold the entry information
                $entrieslist	=	array();
 
+               $container_dom_id = 'reports-container-container';
                if (!empty($reportentries)) {
 
 //Mini caches for items that are looked at repeatedly in the loops below
                   $creators=$pluginRecords=$pluginInstances=array();
 
-                   echo html_writer::start_tag('div', array('class'=>'reports-container-container'));
+                  echo html_writer::start_tag('div', array('class'=>$container_dom_id));
                   if ($return_refreshed_list) {
                       ob_end_clean();
                       ob_start();
@@ -654,9 +655,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                    }
                    echo html_writer::end_tag('div');
                } else {
+                  echo html_writer::tag('div', '', array('class'=>$container_dom_id));
                   if(!$readonly)
                   {
-                     echo get_string('nothingtodisplay');
+                     echo html_writer::tag('p', get_string('nothingtodisplay'), array('class'=>'nothingtodisplay'));
                   }
                   else
                   {
