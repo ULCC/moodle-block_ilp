@@ -6,7 +6,7 @@ require_once($CFG->dirroot . '/blocks/ilp/classes/tables/ilp_mis_ajax_table.clas
 class ilp_mis_attendance_percentbar_plugin extends ilp_mis_attendance_plugin
 {
 
-    public function __construct($params = array())
+   public function __construct($params = array())
     {
         parent::__construct($params);
 

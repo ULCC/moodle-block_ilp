@@ -10,8 +10,9 @@
  * @version 2.0
  */
 
+include_once("$CFG->libdir/tablelib.php");
 
-class batch_print_setup_mform extends ilp_moodleform
+class batch_export_setup_mform extends ilp_moodleform
 {
    protected $dbc;
 
@@ -32,6 +33,9 @@ class batch_print_setup_mform extends ilp_moodleform
 
       $imports=$this->_customdata;
 
+//We just include this to be able to get the download list
+      $table=new flexible_table('dummy');
+
 //get all enabled reports in this ilp
       $reportoptions=array();
       foreach($dbc->get_reports(ILP_ENABLED) as $r)
@@ -44,47 +48,39 @@ class batch_print_setup_mform extends ilp_moodleform
          print_error(get_string('noreports','block_ilp'));
       }
 
-      if(!$imports['tutor'])
-      {
-         $courseid=isset($imports['course_id'])? $imports['course_id'] : 0 ;
+      $courseid=isset($imports['course_id'])? $imports['course_id'] : 0 ;
 
 //get all courses that the current user is enrolled in
-         $courseoptions=$groupoptions=array();
+      $courseoptions=$groupoptions=array();
 
-         foreach($dbc->get_user_courses($USER->id) as $id=>$c)
+      foreach($dbc->get_courses() as $id=>$c)
+      {
+         $courseoptions[$id]=$c->shortname;
+
+         foreach(groups_get_all_groups($id) as $g)
          {
-            $courseoptions[$id]=$c->shortname;
-
-            foreach(groups_get_all_groups($id) as $g)
+            if(!$courseid or $courseid==$g->courseid)
             {
-               if(!$courseid or $courseid==$g->courseid)
-               {
-                  $groupoptions[$g->id]=$g->name;
-               }
+               $groupoptions[$g->id]=$g->name;
             }
          }
+      }
+
+//Get list of possible export formats
+      $mform->addElement('select','format',get_string('format'),$table->get_download_menu());
+      $mform->setDefault('format',$table->defaultdownloadformat);
 
 //Sort courses by name and create drop down.
-         natcasesort($courseoptions);
-         $mform->addElement('select','course_id',get_string('course'),$courseoptions);
-         $mform->setDefault('course_id',$imports['course_id']);
-
+      natcasesort($courseoptions);
+      $courseoptions=array(0=>'Any')+$courseoptions;
+      unset($courseoptions[SITEID]);
+      $mform->addElement('select','course_id',get_string('course'),$courseoptions);
+      $mform->setDefault('course_id',$imports['course_id']);
 
 //Put the groups in to name order and create drop down
-         natcasesort($groupoptions);
-         $mform->addElement('select','group_id',get_string('group'),$groupoptions);
-         $mform->setDefault('group_id',$imports['group_id']);
-
-      }
-
-      if(true)
-      {
-      } else {
-         //get the list of tutees for this user
-         $student = $dbc->get_user_tutees($USER->id);
-
-         $pagetitle = get_string('mytutees','block_ilp');
-      }
+      natcasesort($groupoptions);
+      $mform->addElement('select','group_id',get_string('group'),$groupoptions);
+      $mform->setDefault('group_id',$imports['group_id']);
 
       $status=array();
       foreach($dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD) as $s)
@@ -101,16 +97,15 @@ class batch_print_setup_mform extends ilp_moodleform
       }
 
       natcasesort($reportoptions);
-      $s=$mform->addElement('select','reportselect',get_string('printreports','block_ilp'),$reportoptions);
-      $s->setMultiple(true);
-      $mform->addRule('reportselect',get_string('required'),'required',null,'client');
-      $mform->addHelpButton('reportselect','batchreportselect','block_ilp');
+      $s=$mform->addElement('select','reportselect',get_string('report','block_ilp'),$reportoptions);
 
+/*
       $mform->addElement('checkbox','showattendance',get_string('showattendance','block_ilp'));
       $mform->setDefault('showattendance',true);
 
       $mform->addElement('checkbox','showcomments',get_string('showcomments','block_ilp'));
       $mform->setDefault('showcomments',true);
+*/
 
       $buttonarray=array();
       $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('gotoprintpreview','block_ilp'));

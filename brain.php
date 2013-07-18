@@ -21,8 +21,6 @@ else
 
 function groups_in_course()
 {
-   global $USER;
-
    $id=optional_param('id',0,PARAM_INT);
 
    $r=array();

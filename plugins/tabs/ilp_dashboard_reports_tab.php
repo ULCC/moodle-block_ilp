@@ -2,23 +2,28 @@
 
 //require the ilp_plugin.php class
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report.class.php');
 
 class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
-   public		$student_id;
-   public 		$filepath;
-   public		$linkurl;
-   public 		$selectedtab;
-   public		$role_ids;
-   public 		$capability;
+   public	$student_id;
+   public 	$filepath;
+   public	$linkurl;
+   public 	$selectedtab;
+   public	$role_ids;
+   public 	$capability;
    static       $access_report_editcomment;
    static       $access_report_deletecomment;
    static       $access_report_addreports;
    static       $multiple_entries;
    static       $reportavailable;
+   static       $access_report_editreports;
+   static       $access_report_deletereport;
+   static       $access_report_addcomment;
+   static       $access_report_viewcomment;
 
 
-   function __construct($student_id=null,$course_id=null)	{
+    function __construct($student_id=null,$course_id=null)	{
       global 	$CFG,$USER,$PAGE;
 
       //$this->linkurl				=	$CFG->wwwroot.$_SERVER["SCRIPT_NAME"]."?user_id=".$student_id."&course_id={$course_id}";
@@ -41,14 +46,13 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
 
-    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null) {
+    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null) {
         global $CFG;
-        $backtrace = debug_backtrace();
-        if (empty($backtrace[0]) || empty($backtrace[1]) || $backtrace[0]['file'] !=  __FILE__ || $backtrace[1]['function'] != 'display') {
-            // If not being called from 'display' in self
-            $access_report_addreports = self::$access_report_addreports;
-            $multiple_entries = self::$multiple_entries;
-            $reportavailable = self::$reportavailable;
+        if ($ajax) {
+            // If not being called from 'display' of this class
+            $access_report_addreports = static::$access_report_addreports;
+            $multiple_entries = static::$multiple_entries;
+            $reportavailable = static::$reportavailable;
         }
 
         $addnew_attrs = array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry');
@@ -80,7 +84,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
         if ($ajax) {
             $comments =	$this->dbc->get_entry_comments($entry_id);
-            $access = array('access_report_editcomment' => self::$access_report_editcomment,'access_report_deletecomment'=>self::$access_report_deletecomment);
+            $access = array('access_report_editcomment' => static::$access_report_editcomment,'access_report_deletecomment'=>static::$access_report_deletecomment);
         }
 
         if ($comments) {
@@ -189,7 +193,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
           *
           */
          //check if the set_context method exists
-         if (!isset($PAGE->context) === false) {
+         if (!empty($PAGE->context->id)) {
 
             $course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
             $user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
@@ -209,58 +213,20 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
                }
             }
-         }
-
-
-         //get all of the users roles in the current context and save the id of the roles into
-         //an array
-         $role_ids	=	 array();
-
-         $authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
-         if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
-
-
-
-         //TODO: strange but isset does not seem to work correctly in moodle 2.0
-         //it doesn't return true when testing for $PAGE->context even when it is set
-         //so I will do different tests depending on moodle version
-
-         $contextset = false;
-
-         $contextset	= !is_null($PAGE->context);
-
-         if (!empty($contextset))	{
-
-            if ($roles = get_user_roles($PAGE->context, $USER->id)) {
-               foreach ($roles as $role) {
-                  $role_ids[]	= $role->roleid;
-               }
-            }
-
-            $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
 
             $this->secondrow	=	array();
 
+            //create a tab for each enabled report
+            foreach(ilp_report::get_enabledreports() as $r)	{
+               if ($r->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
 
-            //get all reports
-            $reports	=	$this->dbc->get_reports_by_position(null,null,false);
-            if (!empty($reports)) {
-               //create a tab for each enabled report
-               foreach($reports as $r)	{
-
-                  if ($this->dbc->has_report_permission($r->id,$role_ids,$capability->id)) {
-
-                     //the tabitem and selectedtab query string params are added to the linkurl in the
-                     //second_row() function
-                     $this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
-                  }
-
-               }
+                  //the tabitem and selectedtab query string params are added to the linkurl in the
+                  //second_row() function
+                  $this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
             }
          }
       }
    }
-
 
    /**
     * Override this to define the third tab row should be defined in this function
@@ -318,115 +284,73 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
             $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
-            if ($report	=	$this->dbc->get_report_by_id($report_id)) {
+            if ($report	=$this->dbc->get_report_by_id($report_id)) {
 
-                //get all of the users roles in the current context and save the id of the roles into
-                //an array
-                $role_ids	=	 array();
+               if($report->status==ILP_ENABLED and $report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
+               {
+                  $reportname	=	$report->name;
+                  //get all of the fields in the current report, they will be returned in order as
+                  //no position has been specified
+                  $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
 
-                $authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
-                if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
+                  $reporticon	= (!empty($report->iconfile)) ? '' : '';
 
-                if ($roles = get_user_roles($PAGE->context, $USER->id)) {
-                    foreach ($roles as $role) {
-                        $role_ids[]	= $role->roleid;
-                    }
-                }
+                  //does this report give user the ability to add comments
+                  $has_comments	=	!empty($report->comments);
 
-                $access_report_viewreports	= false;
-                $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
-                if (!empty($capability)) $access_report_viewreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                  //this will hold the ids of fields that we dont want to display
+                  $dontdisplay	=	 array();
 
-                if ($report->status == ILP_ENABLED && !empty($access_report_viewreports)) {
-                    $reportname	=	$report->name;
-                    //get all of the fields in the current report, they will be returned in order as
-                    //no position has been specified
-                    $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+                  //does this report allow users to say it is related to a particular course
+                  $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? true : false;
 
-                    $reporticon	= (!empty($report->iconfile)) ? '' : '';
+                  if (!empty($has_courserelated))	{
+                     $courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
+                     //the should not be anymore than one of these fields in a report
+                     foreach ($courserelated as $cr) {
+                        $dontdisplay[] 	=	$cr->id;
+                        $courserelatedfield_id	=	$cr->id;
+                     }
+                  }
 
-                    //does this report give user the ability to add comments
-                    $has_comments	=	!empty($report->comments);
+                  //find if the current user can add reports
+                  static::$access_report_addreports= $report->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
 
-                    //this will hold the ids of fields that we dont want to display
-                    $dontdisplay	=	 array();
+                  //find out if the current user has the edit report capability for the report
+                  static::$access_report_editreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
 
-                    //does this report allow users to say it is related to a particular course
-                    $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? true : false;
+                  //find out if the current user has the delete report capability for the report
+                  static::$access_report_deletereport=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletereport');
 
-                    if (!empty($has_courserelated))	{
-                        $courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
-                        //the should not be anymore than one of these fields in a report
-                        foreach ($courserelated as $cr) {
-                            $dontdisplay[] 	=	$cr->id;
-                            $courserelatedfield_id	=	$cr->id;
-                        }
-                    }
+                  //find out if the current user has the add comment capability for the report
+                  static::$access_report_addcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:addcomment');
 
-                    //find if the current user can add reports
-                    $access_report_addreports	= false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:addreport');
-                    if (!empty($capability)) $access_report_addreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-                    self::$access_report_addreports = $access_report_addreports;
+                  //find out if the current user has the edit comment capability for the report
+                  static::$access_report_editcomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:editcomment');
 
-                    //find out if the current user has the edit report capability for the report
-                    $access_report_editreports	= false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:editreport');
-                    if (!empty($capability)) $access_report_editreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                  //find out if the current user has the delete comment capability for the report
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:deletecomment');
 
-                    //find out if the current user has the delete report capability for the report
-                    $access_report_deletereports	=	false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
-                    if (!empty($capability))	$access_report_deletereports	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                  // view comment
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewcomment');
 
-                    //find out if the current user has the add comment capability for the report
-                    $access_report_addcomment	= false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:addcomment');
-                    if (!empty($capability)) $access_report_addcomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
 
-                    //find out if the current user has the edit comment capability for the report
-                    $access_report_editcomment	=	false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:editcomment');
-                    if (!empty($capability))	$access_report_editcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-                    self::$access_report_editcomment = $access_report_editcomment;
+                  static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
 
-                    //find out if the current user has the add comment capability for the report
-                    $access_report_deletecomment	= false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletecomment');
-                    if (!empty($capability)) $access_report_deletecomment		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-                    self::$access_report_deletecomment = $access_report_deletecomment;
+                  //get all of the entries for this report
+                  $reportentries=$report->get_user_report_entries($this->student_id,$state_id);
 
-                    //find out if the current user has the edit comment capability for the report
-                    $access_report_viewcomment	=	false;
-                    $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewcomment');
-                    if (!empty($capability))	$access_report_viewcomment	=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                  //does the current report allow multiple entries
+                  static::$multiple_entries = !empty($report->frequency);
 
-                    // Check to see whether the user can delete the reports entry either single entry or multiple entry.
-                    $candelete =	!empty($access_report_deletereports);
+                  //instantiate the report rules class
+                  $reportrules    =   new ilp_report_rules($report_id,$this->student_id);
 
-                    $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
-                    if (!empty($capability))	$access_report_viewothers		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+                  $stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
 
-                    //check to see whether the user can add/view extension for the specific report
-                    $capability		=	$this->dbc->get_capability_by_name('block/ilp:addviewextension');
-                    if (!empty($capability))	$access_report_addviewextension	 =	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-                    //get all of the entries for this report
-                    $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
-
-                    //does the current report allow multiple entries
-                    $multiple_entries   =   !empty($report->frequency);
-                    self::$multiple_entries = $multiple_entries;
-
-                    //instantiate the report rules class
-                    $reportrules    =   new ilp_report_rules($report_id,$this->student_id);
-
-                    $stateselector	=	(isset($report_id)) ?	$this->stateselector($report_id) :	"";
-
-                    //find out if the rules set on this report allow a new entry to be created
-                    $reportavailable =   $reportrules->report_availabilty();
-                    self::$reportavailable = $reportavailable;
-                }
+                  static::$reportavailable = $reportrules->report_availabilty();
+               }
             }
         }
     }
@@ -442,6 +366,17 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     */
     public function display($selectedtab=null, $ajax_settings = array(),$readonly=false,$showcomments=true)	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+
+       $this->get_capabilites();
+
+       $access_report_viewcomment = static::$access_report_viewcomment;
+       $access_report_addcomment = static::$access_report_addcomment;
+       $access_report_deletecomment = static::$access_report_deletecomment;
+       $access_report_editcomment = static::$access_report_editcomment;
+       $access_report_addreports = static::$access_report_addreports;
+       $access_report_editreports = static::$access_report_editreports;
+       $access_report_deletereport = static::$access_report_deletereport;
+       $candelete = $access_report_deletereport;
 
        $jsarguments = array(
            'root' => $CFG->wwwroot,
@@ -490,32 +425,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
          $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
-         if ($report	=	$this->dbc->get_report_by_id($report_id)) {
-
-            //get all of the users roles in the current context and save the id of the roles into
-            //an array
-            $role_ids	=	 array();
-
-            $authuserrole	=	$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
-            if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
-
-            if ($roles = get_user_roles($PAGE->context, $USER->id)) {
-               foreach ($roles as $role) {
-                  $role_ids[]	= $role->roleid;
-               }
-            }
-
-            $access_report_viewreports	= false;
-            $capability	=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
-            if (!empty($capability)) $access_report_viewreports		=	$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-            if ($report->status == ILP_ENABLED && !empty($access_report_viewreports)) {
+         if ($report=ilp_report::from_id($report_id)) {
+            if ($report->status == ILP_ENABLED and $report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport')) {
                $reportname	=	$report->name;
                //get all of the fields in the current report, they will be returned in order as
                //no position has been specified
-               $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+               $reportfields=$report->get_report_fields_by_position($report_id);
 
-               $reporticon	= (!empty($report->iconfile)) ? '' : '';
+               $reporticon = (!empty($report->iconfile)) ? '' : '';
 
                //does this report give user the ability to add comments
                $has_comments	=	!empty($report->comments);
@@ -524,64 +441,32 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $dontdisplay	=	 array();
 
                //does this report allow users to say it is related to a particular course
-               $has_courserelated	=	($this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course')) ? true : false;
+               $has_courserelated	=	($report->has_plugin_field('ilp_element_plugin_course'));
 
                if (!empty($has_courserelated))	{
-                  $courserelated	=	$this->dbc->has_plugin_field($report_id,'ilp_element_plugin_course');
-                  //the should not be anymore than one of these fields in a report
-                  foreach ($courserelated as $cr) {
-                     $dontdisplay[] 	=	$cr->id;
-                     $courserelatedfield_id	=	$cr->id;
-                  }
+                  $dontdisplay[] =	$has_courserelated->id;
+                  $courserelatedfield_id  =$has_courserelated->id;
                }
 
-               //find if the current user can add reports
-               $access_report_addreports	= false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:addreport');
-               if (!$readonly and !empty($capability)) $access_report_addreports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               foreach(array('addreports','editreport','deletereport','addcomment','editcomment',
+                             'deletecomment','viewcomment','viewotherilp','addviewextension') as $capname)
+               {
+                  $varname='access_report_'.$capname;
+                  $$varname=$report->has_cap($USER->id,$PAGE->context,"block/ilp:$capname");
+               }
 
-               //find out if the current user has the edit report capability for the report
-               $access_report_editreports	= false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:editreport');
-               if (!$readonly and !empty($capability)) $access_report_editreports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               foreach(array('addreports','editreport','deletereport','addcomment','editcomment',
+                             'deletecomment','addviewextension') as $capname)
+               {
+                  $varname='access_report_'.$capname;
+                  $$varname=($$varname and !$readonly);
+               }
 
-               //find out if the current user has the delete report capability for the report
-               $access_report_deletereports	=	false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletereport');
-               if (!$readonly and !empty($capability))	$access_report_deletereports=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the add comment capability for the report
-               $access_report_addcomment= false;
-               $capability=$this->dbc->get_capability_by_name('block/ilp:addcomment');
-               if (!$readonly and !empty($capability)) $access_report_addcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the edit comment capability for the report
-               $access_report_editcomment	=	false;
-               $capability=$this->dbc->get_capability_by_name('block/ilp:editcomment');
-               if (!$readonly and !empty($capability))	$access_report_editcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the add comment capability for the report
-               $access_report_deletecomment	= false;
-               $capability	=	$this->dbc->get_capability_by_name('block/ilp:deletecomment');
-               if (!$readonly and !empty($capability)) $access_report_deletecomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //find out if the current user has the edit comment capability for the report
-               $access_report_viewcomment	=	false;
-               $capability=$this->dbc->get_capability_by_name('block/ilp:viewcomment');
-               if ($showcomments and !empty($capability))	$access_report_viewcomment=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               // Check to see whether the user can delete the reports entry either single entry or multiple entry.
-               $candelete =	(!$readonly and !empty($access_report_deletereports));
-
-               $capability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
-               if (!empty($capability))	$access_report_viewothers=$this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
-
-               //check to see whether the user can add/view extension for the specific report
-               $capability		=	$this->dbc->get_capability_by_name('block/ilp:addviewextension');
-               if (!empty($capability))	$access_report_addviewextension = $this->dbc->has_report_permission($report_id,$role_ids,$capability->id);
+               $access_report_viewcomment=($access_report_viewcomment && $showcomments);
+               $access_report_addcomment=($access_report_addcomment && !$readonly);
 
                //get all of the entries for this report
-               $reportentries	=	$this->dbc->get_user_report_entries($report_id,$this->student_id,$state_id);
+               $reportentries	=	$report->get_user_report_entries($this->student_id,$state_id);
 
                //does the current report allow multiple entries
                $multiple_entries   =   !empty($report->frequency);
@@ -591,7 +476,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                //output html elements to screen
 
-               $icon				=	(!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
+               $icon = (!empty($report->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$report->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
 
                echo $this->get_header($report->name,$icon);
 
@@ -604,7 +489,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}";
 
                echo $this->generate_addnewentry($addnewentry_url, $access_report_addreports, $multiple_entries, $reportavailable);
-
 
                if (!empty($access_report_viewothers)) {
 
@@ -631,8 +515,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 								 ";
                }
 
-
-
                //create the entries list var that will hold the entry information
                $entrieslist	=	array();
 
@@ -654,6 +536,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                       if ($return_right_report_only && $return_right_report_only != $entry->id) {
                           continue;
                       }
+
                      //TODO: is there a better way of doing this?
                      //I am currently looping through each of the fields in the report and get the data for it
                      //by using the plugin class. I do this for two reasons it may lock the database for less time then
@@ -667,6 +550,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                      {
                         $creators[$entry->creator_id]          =       $this->dbc->get_user_by_id($entry->creator_id);
                      }
+
                      $creator=$creators[$entry->creator_id];
 
                      //get comments for this entry
@@ -755,7 +639,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                           ob_end_clean();
                           return $pluginoutput;
                       }
-                     include($CFG->dirroot.'/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.html');
+                      include($CFG->dirroot.'/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.html');
                       if ($return_only_newest) {
                           $pluginoutput = ob_get_contents();
                           ob_end_clean();
@@ -798,11 +682,13 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             'closed_image' => $CFG->wwwroot."/blocks/ilp/pix/icons/switch_plus.gif",
             );
 
-         // initialise the js for the page
-         $PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
-
-         if(!$readonly)
+         //Only activate JS hide/show code if not in read-only/show comment modes
+         if(!($readonly and $showcomments))
+         {
+            // initialise the js for the page
+            $PAGE->requires->js_init_call('M.ilp_dashboard_reports_tab.init', $jsarguments, true, $module);
             $this->generate_unused_form();
+         }
 
          $pluginoutput = ob_get_contents();
 

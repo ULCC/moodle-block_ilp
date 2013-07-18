@@ -10,6 +10,7 @@
  * @version 2.0
  */
 require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_logging.class.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report.class.php');
 
 /**
  * Main database class, with functions to encode and decode stuff to and from the DB
@@ -594,7 +595,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed object or false if no record found
      */
     function get_report_by_id($id) {
-        return $this->dbc->get_record('block_ilp_report', array('id' => $id));
+       return ilp_report::from_id($id);
     }
 
     /**
@@ -874,21 +875,30 @@ class ilp_db_functions	extends ilp_logging {
     function has_report_permission($report_id,$role_id,$capability_id)	{
         global $USER, $CFG;
 
+        if($this->ilp_admin($USER))
+           return true;
+
         require_once($CFG->dirroot."/blocks/ilp/lib.php");
         //adding addtional lines that return true if the user is either a site admin or has the ilpviewall capabilty at site level
-
-        //get sote context
-        $sitecontext	=	get_context_instance(CONTEXT_SYSTEM);
-
-        //check for the ilpviewall capability at site level this gives the user rights to view all
-        $ilpadmin				=	has_capability('block/ilp:ilpviewall',$sitecontext);
-
-        $is_admin				=	(ilp_is_siteadmin($USER->id) || $ilpadmin) ? true : false;
-
 
         //if permissions where returned from then the role (or one of the roles given) has the permission in the course
         $permissions	=	$this->get_reportpermissions_by_criteria($report_id,$role_id,$capability_id);
         return 	(!empty($permissions) || !empty($is_admin)) ? true	:	false;
+    }
+
+    function ilp_admin($user=0)
+    {
+       if(empty($user))
+       {
+          global $USER;
+          $user=$USER;
+       }
+
+       if(is_siteadmin($user->id))
+          return true;
+
+       //check for the ilpviewall capability at site level this gives the user rights to view all
+       return has_capability('block/ilp:ilpviewall',context_system::instance());
     }
 
     /**
@@ -952,8 +962,8 @@ class ilp_db_functions	extends ilp_logging {
         $entrytable		=	"{$CFG->prefix}{$tablename}_ent";
         $parenttable	=	"{$CFG->prefix}{$tablename}";
 
-        $itemtable		=	(!empty($multiple)) ? "{$CFG->prefix}{$tablename}_items as i," : '';
-        $where			=	(!empty($multiple)) ? "e.parent_id	=	i.id AND i.parent_id	=	p.id" : "e.parent_id	=	p.id";
+        $itemtable		=      $multiple ? "{$CFG->prefix}{$tablename}_items as i," : '';
+        $where			=      $multiple ? "e.parent_id	=	i.id AND i.parent_id	=	p.id" : "e.parent_id	=	p.id";
 
         $params = array('entry_id'=>$entry_id, 'reportfield_id'=>$reportfield_id);
 
@@ -966,7 +976,7 @@ class ilp_db_functions	extends ilp_logging {
 					 AND		p.reportfield_id	=	:reportfield_id
 					 ";
 
-        return (empty($multiple)) ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
+        return !$multiple ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
     }
 
 
@@ -2148,7 +2158,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed array of object containing all users enrolled in the course
      * or bool false
      */
-    function get_course_users($course_id,$group_id=null) {
+        function get_course_users($course_id,$group_id=null,$fullrecords=false) {
+
+	if(empty($course_id))
+	{
+	    return $this->dbc->get_records('user',array('deleted'=>0),'lastname','id');
+	}
 
         $grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
         $groupwhere = "";
@@ -2163,13 +2178,18 @@ class ilp_db_functions	extends ilp_logging {
             $groupwhere = "AND gm.groupid = :group_id ";
         }
 
-        $sql	=	"SELECT		distinct(u.id)
+        $fields= $fullrecords ? 'distinct u.*' : ' distinct u.id' ;
+
+        $sql	=	"SELECT		$fields
 	 					  FROM		{user} u
 	 					            LEFT JOIN ($esql) eu ON eu.id=u.id
 	 					  			{$grouptable}
 	 					  WHERE		u.deleted = 0
 	 					  AND       eu.id=u.id
 	 					  			{$groupwhere}";
+
+        if($fullrecords)
+           return $this->dbc->get_recordset_sql($sql, $params);
 
         return $this->dbc->get_records_sql($sql, $params);
     }
@@ -2223,6 +2243,7 @@ class ilp_db_functions	extends ilp_logging {
         				u.idnumber as idnumber,
         				u.firstname as firstname,
         				u.lastname as lastname,
+                                        u.username as username,
         				si.id as u_status_id,
         				si.name	as u_status,
         				si.icon	as u_status_icon,
@@ -2958,6 +2979,3 @@ function checkpositions($pos, $possarr) {
         return false;
     }
 }
-
-
-?>

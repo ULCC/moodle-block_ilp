@@ -111,6 +111,7 @@ $string['showcomments']='Show Comments';
     $string['entrydeleted']		=	'The Forms was successfully deleted';
     $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this form';
     $string['expandall']			=	'Expand all';
+$string['export']='Export';
 	$string['enablereport'] 		= 	'Enable Form';
     $string['enabled'] 				= 	'Enabled';
     $string['expandentries']		=	'Expand entries';
@@ -269,6 +270,7 @@ $string['showpunctuality']='Punctuality Information';
 
 	$string['req'] 					= 	'Required';
 	$string['reports'] 				= 	'Forms';
+$string['report']='Report';
 	$string['reportconfiguration'] 				= 	'Forms Configuration';
 	$string['reportconfigurationsection'] 		= 	'Form Configuration Section';
     $string['reportfields'] 					= 	'Form Fields';
@@ -473,6 +475,7 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['studentreport_open']  = 'Open';
     $string['studentreport_close'] = 'Close';
 
+$string['userid']='User id';
     $string['show_comments'] = 'Show comments';
     $string['hide_comments'] = 'Hide comments';
 

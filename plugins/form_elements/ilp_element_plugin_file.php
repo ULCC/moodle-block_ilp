@@ -340,6 +340,8 @@ class ilp_element_plugin_file extends ilp_element_plugin {
         }
     }
 
-
-	 
+    public function is_exportable()
+    {
+       return false;
+    }
 }
