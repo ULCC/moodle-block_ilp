@@ -345,7 +345,6 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       } else {
          //we need to buffer output to prevent it being sent straight to screen
          ob_start();
-         ob_start();
 
          if ($fromblock) {
              include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/' . $this->directory . '/ilp_dashboard_student_info_block.html');
@@ -393,7 +392,6 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
          $pluginoutput=ob_get_contents();
 
-         ob_end_clean();
       }
 
       ob_end_clean();
