@@ -399,6 +399,10 @@ M.ilp_ajax_addnew = {
                         M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
                         M.ilp_dashboard_reports_tab.init(Y);
                         Y.one('.reports-container-container').one('.view-comments').removeClass('new-entry');
+                        var nothingtodisplay = Y.one('.nothingtodisplay');
+                        if (nothingtodisplay) {
+                            nothingtodisplay.addClass('hiddenelement');
+                        }
                     }
                 }
             },
