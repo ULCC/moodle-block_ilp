@@ -27,7 +27,7 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
       $r=array();
       foreach(get_config('block_ilp') as $name=>$value)
       {
-         if(strstr($name,'ilp_mis_attendance_plugin_')===0 and $value)
+         if(strpos($name,'ilp_mis_attendance_plugin_')===0 and $value)
          {
 //Strip off '_pluginstatus
             $r[]=substr($name,0,-13);
