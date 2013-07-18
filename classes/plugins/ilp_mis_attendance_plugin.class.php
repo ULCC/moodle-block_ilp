@@ -24,13 +24,23 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
 
    static function active_subclasses()
    {
+      $preferred=get_config('block_ilp','attendplugin');
+
       $r=array();
       foreach(get_config('block_ilp') as $name=>$value)
       {
          if(strpos($name,'ilp_mis_attendance_plugin_')===0 and $value)
          {
 //Strip off '_pluginstatus
-            $r[]=substr($name,0,-13);
+            $clipped=substr($name,0,-13);
+            if($clipped===$preferred)
+            {
+               array_unshift($r,$clipped);
+            }
+            else
+            {
+               array_push($r,$clipped);
+            }
          }
       }
       return $r;
