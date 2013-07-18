@@ -777,3 +777,29 @@ tooltip.tooltip span
 .report-entry-grey {
     background-color: #D3D3D3;
 }
+
+.block.block_ilp .content .userpicture {
+    width: auto;
+    height: auto;
+}
+
+.block_ilp .percentagebar {
+    margin: 2px;
+    border: 1px solid #ccc;
+    width: 90%;
+    height: 10px;
+    float: left;
+    display: block;
+}
+
+.block_ilp .dashboard_status_icon img.icon_file {
+    height: 50px;
+    left: 10px;
+    position: relative;
+    top: 5px;
+    width: 50px;
+}
+
+.block_ilp .column.c1 {
+    width: 100%;
+}

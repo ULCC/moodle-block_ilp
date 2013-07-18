@@ -395,6 +395,7 @@ $string['report']='Report';
 
 	//CAPABILITY STRINGS
     $string['ilp:addinstance']          =   'Add a new ILP block';
+    $string['ilp:myaddinstance']          =   'Add a new ILP block to My Home';
 	$string['ilp:creeddelreport'] 		= 	'Create, edit & delete reports';
 	$string['ilp:addreport'] 			= 	'Add a report entry';
 	$string['ilp:editreport'] 			= 	'Edit a report entry';
@@ -477,6 +478,17 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
 $string['userid']='User id';
     $string['show_comments'] = 'Show comments';
     $string['hide_comments'] = 'Hide comments';
+
+    $string['tab_block_items'] = 'Block Items';
+    $string['tab_block_items_cfg'] = 'Block Items Configuration';
+
+    // BLOCKITEM CONFIG
+    $string['config_currentstatus'] = 'Show current status';
+    $string['config_progressbar'] = 'Show Progress bar';
+    $string['config_userpicture'] = 'Show user picture';
+    $string['config_linked_name'] = 'Show name with a link to profile page';
+    $string['config_attendancepunctuality'] = 'Show Attendance and Punctuality Information';
+$string['config_attendancepunctuality_misplugin'] = 'Which Attendance and Punctuality Plugin should be used?';
 
 	global $CFG;
 
