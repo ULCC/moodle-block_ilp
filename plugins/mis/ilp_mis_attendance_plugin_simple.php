@@ -214,7 +214,11 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
      */
     public function get_student_punctuality()
     {
-       return $this->return_percent_data('punctuality');
+       if(isset($this->data[0][1]))
+       {
+          $this->data[0][1]*100;
+       }
+       return 0;
     }
 
     /**
@@ -224,6 +228,10 @@ class ilp_mis_attendance_plugin_simple extends ilp_mis_attendance_plugin	{
      */
     public function get_student_attendance()
     {
-       return $this->return_percent_data('attendance');
+       if(isset($this->data[0][0]))
+       {
+          $this->data[0][0]*100;
+       }
+       return 0;
     }
 }
