@@ -68,14 +68,14 @@ if(isset($data->showattendance) and $fullstudents)
       }
       else
       {
-         $headers[$h]=get_string($h,'block_ilp');
+         $headers[$h]=get_string($h);
       }
    }
 
    $rows=array();
-   foreach($fullstudents as $student)
+   foreach($fullstudents as $user)
    {
-      if($t=ilp_mis_attendance_plugin::get_summary($student->idnumber))
+      if($t=ilp_mis_attendance_plugin::get_summary($user->idnumber))
       {
          $row=array();
 
