@@ -54,6 +54,8 @@ $fullstudents=$dbc->get_studentlist_details(array_keys($dbc->get_course_users($c
 
 if(isset($data->showattendance) and $fullstudents)
 {
+   include_once('blocks/ilp/classes/plugins/ilp_mis_attendance_plugin.class.php');
+
    $userheaders=array('idnumber','username','firstname','lastname','email','status'=>'u_status','userid'=>'id','punctuality','attendance');
 
    $rows=$headers=array();
@@ -66,7 +68,7 @@ if(isset($data->showattendance) and $fullstudents)
       }
       else
       {
-         $headers[$h]=get_string($h);
+         $headers[$h]=get_string($h,'block_ilp');
       }
    }
 
