@@ -41,6 +41,7 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
  */
    static function get_summary($student_id)
    {
+      global $CFG;
       $r=array();
       foreach(static::active_subclasses() as $plugin)
       {
@@ -48,7 +49,13 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
 
          include_once("$CFG->dirroot/blocks/ilp/plugins/mis/{$plugin}.php");
 
-         if(method_exists($plugin,'getPunctuality'))
+         if(method_exists($plugin,'get_student_punctuality'))
+         {
+            $inst=new $plugin();
+            $inst->set_data($student_id);
+            $r['punctuality']=$inst->get_student_punctuality();
+         }
+         elseif(method_exists($plugin,'getPunctuality'))
          {
             $inst=new $plugin();
             $inst->set_data($student_id);
@@ -56,7 +63,16 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
             $r['punctuality']=$inst->getPunctuality();
          }
 
-         if(method_exists($plugin,'getAttendance'))
+         if(method_exists($plugin,'get_student_attendance'))
+         {
+            if(!isset($inst))
+            {
+               $inst=new $plugin();
+               $inst->set_data($student_id);
+            }
+            $r['attendance']=$inst->get_student_attendance();
+         }
+         elseif(method_exists($plugin,'getAttendance'))
          {
             if(!isset($inst))
             {
@@ -67,7 +83,7 @@ abstract class ilp_mis_attendance_plugin extends ilp_mis_plugin	{
             $r['attendance']=$inst->getAttendance();
          }
 
-         if(isset($r['attendance']) and isset($r['punctuality']))
+         if(!empty($r['attendance']) and !empty($r['punctuality']))
          {
             break;
          }
