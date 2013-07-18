@@ -293,14 +293,13 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                      $status	=	(!empty($status)) ?  $status: ILP_DISABLED;
 
                      if (!empty($misplug) & $status == ILP_ENABLED ) {
-                        $misoverviewplugins[]	=	$pluginobj;
+                        $misoverviewplugins[$plugin_file]	=	$pluginobj;
                      }
                   }
                }
             }
          }
       }
-
 
 
       //if the user has the capability to view others ilp and this ilp is not there own
@@ -349,10 +348,8 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
          ob_start();
 
          if ($fromblock) {
-             include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/'.$this->directory.'/ilp_dashboard_student_info_block.html');
+             include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/' . $this->directory . '/ilp_dashboard_student_info_block.html');
              $status = ob_get_contents();
-
-             ob_end_clean();
 
              $pbarhtml = '';
              if (!empty($percentagebars)) {
@@ -360,12 +357,35 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                      $pbarhtml .= $pbar->display_bar($p->percentage,$p->name,$p->total);
                  }
              }
+
+             $att_percent = '';
+             $pun_percent = '';
+             if (!empty($misoverviewplugins) && isset($student->idnumber)) {
+                 $count = 0;
+                 foreach ($misoverviewplugins as $plugin_file => $mp)	{
+                     $att_punc_config = get_config('block_ilp', 'show_attendancepunctuality_mis_plugin');
+                     // Before accessing the blockitem config, show the first enabled plug in; otherwise, only show the selected mis plugin.
+                     $config_set_up_conditions = $att_punc_config && $plugin_file == $att_punc_config;
+                     $pre_config_set_up_conditions = !$att_punc_config && $count < 1;
+                     if (!$config_set_up_conditions && !$pre_config_set_up_conditions) {
+                         continue;
+                     }
+                     $mp->set_data($student->idnumber);
+                     $att_percent = $mp->getAttendance();
+                     $pun_percent = $mp->getPunctuality();
+                     $count ++;
+                 }
+             }
+
              $blockitems = array(
                  'status' => $status,
                  'picture' => $studentpicture,
                  'name' => $studentname,
-                 'progress' => $pbarhtml
+                 'progress' => $pbarhtml,
+                 'att_percent' => $att_percent,
+                 'pun_percent' => $pun_percent
              );
+             ob_end_clean();
              return $blockitems;
          } else {
              include($CFG->dirroot.'/blocks/ilp/plugins/dashboard/'.$this->directory.'/ilp_dashboard_student_info.html');

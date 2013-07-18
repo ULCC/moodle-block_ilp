@@ -485,6 +485,7 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['config_userpicture'] = 'Show user picture';
     $string['config_linked_name'] = 'Show name with a link to profile page';
     $string['config_attendancepunctuality'] = 'Show Attendance and Punctuality Information';
+$string['config_attendancepunctuality_misplugin'] = 'Which Attendance and Punctuality Plugin should be used?';
 
 	global $CFG;
 

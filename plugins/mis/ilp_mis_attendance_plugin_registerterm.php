@@ -420,7 +420,7 @@ function summary_data($data, $term = 0)
 	            }
         	}
         }
-     
+ 
         return array('total' => $total, 'present' => $present, 'late' => $late, 'absent' => $absent, 'att_prec' => $att_perc, 'pun_perc' => $pun_perc, 'att_class' => $att_class, 'pun_class' => $pun_class);
     }
 

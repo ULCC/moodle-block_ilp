@@ -126,7 +126,7 @@ class block_ilp extends block_list {
             $this->content->icons[] = "";
          }
 
-      } else {
+      } else if(isloggedin()) {
          // Show additional items (current status, progress bar etc. based on config
          require_once($CFG->dirroot . '/blocks/ilp/plugins/dashboard/ilp_dashboard_student_info_plugin.php');
          $student_info_plugin = new ilp_dashboard_student_info_plugin($USER->id);
@@ -163,6 +163,14 @@ class block_ilp extends block_list {
           }
 
           if (get_config('block_ilp', 'show_attendancepunctuality')) {
+              if ($blockitems['att_percent']) {
+                  $att_line = get_string('attendance', 'block_ilp') . ': ' . $blockitems['att_percent'];
+                  $this->content->items[] = $att_line;
+              }
+              if ($blockitems['pun_percent']) {
+                  $pun_line = get_string('punctuality', 'block_ilp') . ': ' . $blockitems['pun_percent'];
+                  $this->content->items[] = $pun_line;
+              }
 
           }
       }

@@ -56,6 +56,10 @@ if ($mform->is_submitted()) {
     $value = $data->attendancepunctuality_yesno;
     set_config($name, $value, 'block_ilp');
 
+    $name = 'show_attendancepunctuality_mis_plugin';
+    $value = $data->attendancepunctuality_mis_plugin;
+    set_config($name, $value, 'block_ilp');
+
 }
 $mform->display();
 

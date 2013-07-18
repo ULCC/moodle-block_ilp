@@ -791,3 +791,15 @@ tooltip.tooltip span
     float: left;
     display: block;
 }
+
+.block_ilp .dashboard_status_icon img.icon_file {
+    height: 50px;
+    left: 10px;
+    position: relative;
+    top: 5px;
+    width: 50px;
+}
+
+.block_ilp .column.c1 {
+    width: 100%;
+}
