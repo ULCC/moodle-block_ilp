@@ -186,6 +186,7 @@ $string['gotoprintpreview']='Generate';
 	$string['miscconfig']		 	= 	'Misc Configuration';
 	$string['mis_pluginsettings']	= 	'External plugin settings';
     $string['mis_key_title']	    = 	'MIS Key';
+    $string['mis_reg_key']	         = 	'Key';
     $string['mis_key_desc']	         = 	'Add an explanatory key to the MIS plugins';
     $string['term_chooser']	         = 	'Filter by term';
     $string['term_chooser_prompt']	 = 	'Please select a term';
