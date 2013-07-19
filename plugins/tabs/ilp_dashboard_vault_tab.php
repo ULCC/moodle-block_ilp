@@ -445,6 +445,8 @@ class ilp_dashboard_vault_tab extends ilp_dashboard_tab {
         $string['ilp_dashboard_vault_tab_name'] = 'Vault';
         $string['total_entry_found']            = 'Total entry found';
         $string['vault_entry_entry_not_found']  = 'No entry found in vault';
+        $string['send_to_vault']                = 'Send to vault';
+        $string['bring_from_vault']             = 'Bring from vault';
 
         return $string;
     }

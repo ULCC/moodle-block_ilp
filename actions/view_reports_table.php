@@ -27,11 +27,13 @@ $columns[]	=	'editprompts';
 $columns[]	=	'editgraphs';
 $columns[]	=	'editpermission';
 $columns[]	=	'changestatus';
+$columns[]	=	'send_to_vault';
 $columns[]	=	'delete';
 
 
 //setup the array holding the header texts
 $headers	=	array();
+$headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
@@ -68,10 +70,10 @@ $flextable->setup();
 $reports		=	$dbc->get_reports_table($flextable);
 $totalreportfields	=	count($reports);
 if (!empty($reports)) {
-	foreach ($reports as $row) {
-		$data = array();
-		
-		$data[] 		=	$row->name;
+    foreach ($reports as $row) {
+        $data = array();
+
+        $data[] 		=	$row->name;
 
         if ($row->position != 1) {
             //if the field is in any position except 1 it needs a up icon
@@ -92,52 +94,59 @@ if (!empty($reports)) {
             $icon	=	$OUTPUT->pix_url("/t/down");
             $movetype	=	"down";
 
-            $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/move_report.php?report_id={$row->id}&move=".ILP_MOVE_DOWN."&position={$row->position}'>
+            $data[] 			=	"<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/move_report.php?report_id={$row->id}&move=".ILP_MOVE_DOWN."&position={$row->position}'>
 									<img class='move' src='{$icon}' alt='{$title}' title='{$title}' />
-								 	</a>";
+								 	</a></div>";
         } else {
             $data[] 	=	"";
         }
 
-		//set the edit report link
-		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report.php?report_id={$row->id}'>
+        //set the edit report link
+        $data[] 		=	"<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report.php?report_id={$row->id}'>
 									<img class='edit' src='".$OUTPUT->pix_url("/i/edit")."' alt='".get_string('edit')."' title='".get_string('edit')."' />
-								 </a>";
-		
-		//set the edit report prompts link
-		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_prompt.php?report_id={$row->id}'>
+								 </a></div>";
+
+        //set the edit report prompts link
+        $data[] 		=	"<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_prompt.php?report_id={$row->id}'>
 									<img class='prompt' src='".$OUTPUT->pix_url('i/questions')."' alt='".get_string('editfields','block_ilp')."' title='".get_string('editfields','block_ilp')."' />
-								 </a>";
+								 </a></div>";
 
         //set the edit report graph link
-        $data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_graphs.php?report_id={$row->id}'>
+        $data[] 		=	"<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_graphs.php?report_id={$row->id}'>
 									<img class='graphs' src='{$CFG->wwwroot}/blocks/ilp/pix/graphicon.jpg' alt='".get_string('editgraphs','block_ilp')."' title='".get_string('editgraphs','block_ilp')."' height='20' width='20' />
-								 </a>";
-		
-		//set the edit report permissions link
-		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_permissions.php?report_id={$row->id}'>
-									<img class='permissions' src='".$OUTPUT->pix_url('i/roles')."' alt='".get_string('editpermissions','block_ilp')."' title='".get_string('editpermissions','block_ilp')."' />
-								 </a>";
+								 </a></div>";
 
-		//decide whether the report is enabled or disabled and set the image and link accordingly
-		$title 			= 	(!empty($row->status)) ? get_string('disablereport','block_ilp')  : get_string('enablereport','block_ilp');
-		
-		$icon	= 	(!empty($row->status)) ? "hide" : "show";
-		
-		$data[] 		=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_status.php?report_id={$row->id}'>
+        //set the edit report permissions link
+        $data[] 		=	"<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_permissions.php?report_id={$row->id}'>
+									<img class='permissions' src='".$OUTPUT->pix_url('i/roles')."' alt='".get_string('editpermissions','block_ilp')."' title='".get_string('editpermissions','block_ilp')."' />
+								 </a></div>";
+
+        //decide whether the report is enabled or disabled and set the image and link accordingly
+        $title 			= 	(!empty($row->status)) ? get_string('disablereport','block_ilp')  : get_string('enablereport','block_ilp');
+
+        $icon	= 	(!empty($row->status)) ? "hide" : "show";
+
+        $data[] 		=	"<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_status.php?report_id={$row->id}'>
 									<img class='status' src=".$OUTPUT->pix_url("/i/".$icon)." alt='".$title."' title='".$title."' />
-							</a>";
-		
-		
-		//set the delete field this is not enabled at the moment
-		$data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_report.php?report_id={$row->id}'>
+							</a></div>";
+
+        // set the send_to_vault field.
+        $title_vault    = 	(empty($row->vault)) ? get_string('send_to_vault','block_ilp')  : get_string('bring_from_vault','block_ilp');
+
+        $icon_vault	= 	(empty($row->vault)) ? $CFG->wwwroot."/blocks/ilp/pix/bring_from_vault.png" : $CFG->wwwroot."/blocks/ilp/pix/send_to_vault.png";
+        $data[] = "<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_status_vault.php?report_id={$row->id}'>
+									<img class='send_to_vault' src='". $icon_vault ."' alt='$title_vault' title='$title_vault' />
+								 </a></div>";
+
+        //set the delete field this is not enabled at the moment
+        $data[] 			=	"<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/delete_report.php?report_id={$row->id}'>
 									<img class='delete' src='".$OUTPUT->pix_url("/t/delete")."' alt='".get_string('delete')."' title='".get_string('delete')."' />
-								 </a>";
-		
-		
-		$flextable->add_data($data);
-		
-	}
+								 </a></div>";
+
+
+        $flextable->add_data($data);
+
+    }
 }
 
 
