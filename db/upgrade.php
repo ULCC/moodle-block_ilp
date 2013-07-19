@@ -720,6 +720,41 @@ function xmldb_block_ilp_upgrade($oldversion) {
             $xmlfield->$set_attributes(XMLDB_TYPE_INTEGER,null,0);
             $dbman->add_field($table,$xmlfield);
         }
+
+
+
+        //Add new table for user choice
+
+        // create the new table to store responses to fields
+        $table = new $xmldb_table( 'block_ilp_user_choice' );
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_user_id = new $xmldb_field('user_id');
+        $table_user_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_user_id);
+
+        $table_element_id = new $xmldb_field('element_id');
+        $table_element_id->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_element_id);
+
+        $table_choice = new $xmldb_field('choice');
+        $table_choice->$set_attributes(XMLDB_TYPE_TEXT, 150000, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_choice);
+
+        $table_modified = new $xmldb_field('modified');
+        $table_modified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_modified);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        if (!$dbman->table_exists($table)) $dbman->create_table($table);
+
+
     }
 
     return true;
