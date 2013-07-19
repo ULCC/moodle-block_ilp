@@ -515,6 +515,59 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /**
+     * Returns all reports which marked as vault with a position less than or greater than
+     * depending on type given. the results will include the position as well.
+     * if position and type are not specified all reports are returned ordered by
+     * position
+     *
+     * @param int $position the position of fields that will be returned
+     *      greater than or less than depending on $type
+     * @param  int $type determines whether fields returned will be greater than
+     *         or less than position. move up = 1 move down 0
+     * @param bool $disabled should disabled reports be returned
+     * @param bool $deleted
+     * @return mixed object containing the plugin record or false
+     */
+    function get_reports_vaulted($position=null,$type=null,$disabled=true,$deleted=true) {
+
+        $positionsql	=	"";
+        //the operand that will be used
+
+        $params = array();
+        $and = "";
+
+        if(!empty($deleted)) {
+            $deletedrec = "deleted = 0";
+            $and = "AND";
+        }
+
+        if (!empty($position)) {
+            $otherfield		=	(!empty($type)) ? $position-1 : $position+1;
+            $params['position'] =  $position;
+            $params['otherfield'] = $otherfield;
+            $positionsql 	=  "{$and} (position = :position ||  position = :otherfield) ";
+            $and = "AND";
+        }
+
+        $disabledsql    =   '';
+        if (empty($disabled)) {
+            $disabledsql    =   "{$and} status = 1 ";
+        }
+
+        $where = (!empty($position) ||empty($disabled) || !empty($deleted) ) ? " WHERE" : "";
+
+        //just overwriting the sql....
+        $sql	=	"SELECT		*
+					 FROM		{block_ilp_report}
+					 {$where}      {$deletedrec}
+                     {$disabledsql}
+					 {$positionsql} and vault = 1
+					 ORDER BY 	position";
+
+        return		$this->dbc->get_records_sql($sql, $params);
+    }
+
+    /**
      * Returns all fields in a report with a position less than or greater than
      * depending on type given. the results will include the position as well.
      * if position and type are not specified all fields are returned ordered by

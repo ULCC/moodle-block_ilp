@@ -709,6 +709,18 @@ function xmldb_block_ilp_upgrade($oldversion) {
             $dbman->add_field($table,$xmlfield);
         }
     }
+    // add a new filed to report table
+    if($oldversion < 2013071802){
+
+        $table = new $xmldb_table( 'block_ilp_report' );
+
+        $xmlfield	=	new $xmldb_field('vault');
+        if (!$dbman->field_exists($table,$xmlfield)) {
+
+            $xmlfield->$set_attributes(XMLDB_TYPE_INTEGER,null,0);
+            $dbman->add_field($table,$xmlfield);
+        }
+    }
 
     return true;
 }
