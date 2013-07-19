@@ -24,8 +24,8 @@ $columns[]	=	'type';
 $columns[]	=	'moveup';
 $columns[]	=	'movedown';
 $columns[]	=	'edit';
-$columns[]	=	'summary';
 $columns[]	=	'required';
+$columns[]	=	'summary';
 $columns[]	=	'delete';
 
 //setup the array holding the header texts
