@@ -54,7 +54,7 @@ M.ilp_dashboard_vault_tab = {
         my_new_element.name         = "Show Hide";
         my_new_element.className    = "vault_show_entries_comments";
         my_new_element.id           = 'vault_show_entries_comments_'+el;
-        my_new_element.innerHTML    = 'Show comments';
+        my_new_element.innerHTML    = 'Show';
         my_new_element.onclick      = function (){ M.ilp_dashboard_vault_tab.show_hide_comments(my_new_element, my_container);};
         return my_new_element;
     },
@@ -62,11 +62,11 @@ M.ilp_dashboard_vault_tab = {
         if(my_container._isHidden()){
             my_container._show();
             my_el.className = 'vault_hide_entries_comments';
-            my_el.innerHTML = 'Hide comments';
+            my_el.innerHTML = 'Hide';
         }else{
             my_container._hide();
             my_el.className = 'vault_show_entries_comments';
-            my_el.innerHTML = 'Show comments';
+            my_el.innerHTML = 'Show';
         }
     }
 
