@@ -24,8 +24,8 @@ $columns[]	=	'type';
 $columns[]	=	'moveup';
 $columns[]	=	'movedown';
 $columns[]	=	'edit';
-$columns[]	=	'required';
 $columns[]	=	'summary';
+$columns[]	=	'required';
 $columns[]	=	'delete';
 
 //setup the array holding the header texts
@@ -35,8 +35,8 @@ $headers[]	=	get_string('type','block_ilp');
 $headers[]	=	get_string('moveup','block_ilp');
 $headers[]	=	get_string('movedown','block_ilp');
 $headers[]	=	get_string('edit','block_ilp');
-$headers[]	=	get_string('summary','block_ilp');
 $headers[]	=	get_string('required','block_ilp');
+$headers[]	=	get_string('summary','block_ilp');
 $headers[]	=	get_string('delete','block_ilp');
 
 //pass the columns to the table
