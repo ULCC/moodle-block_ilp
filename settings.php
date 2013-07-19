@@ -190,7 +190,9 @@ $settings->add($maxreports);
 
 	$deadlinenotification			= 	new admin_setting_configselect('block_ilp/deadlinenotification',get_string('deadlinenotification','block_ilp'),get_string('deadlinenotificationconfig','block_ilp'), 7,$options);
 	$settings->add($deadlinenotification);
-
+$rows = 12;
+$mis_key 	= new admin_setting_confightmleditor('block_ilp/mis_key',get_string( 'mis_key_title', 'block_ilp' ), get_string( 'mis_key_desc', 'block_ilp' ),'',PARAM_RAW, null, $rows);
+$settings->add($mis_key);
 
 $misplugin_settings 	= new admin_setting_heading('block_ilp/mis_plugins', get_string('mis_pluginsettings', 'block_ilp'), '');
 // -----------------------------------------------------------------------------
