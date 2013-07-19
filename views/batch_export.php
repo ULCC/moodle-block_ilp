@@ -50,7 +50,74 @@ if($course_id)
    }
 }
 
-if($fullstudents=$dbc->get_studentlist_details(array_keys($dbc->get_course_users($course_id,$group_id)),$status_id,'','lastname asc'))
+$fullstudents=$dbc->get_studentlist_details(array_keys($dbc->get_course_users($course_id,$group_id)),$status_id,'','lastname asc');
+
+if(isset($data->showattendance) and $fullstudents)
+{
+   include_once("$CFG->dirroot/blocks/ilp/classes/plugins/ilp_mis_attendance_plugin.class.php");
+
+   $userheaders=array('idnumber','username','firstname','lastname','email','status'=>'u_status','userid'=>'id');
+
+   $rows=$headers=array();
+
+   foreach($userheaders as $altstring=>$h)
+   {
+      if(!is_numeric($altstring))
+      {
+         $headers[$h]=get_string($altstring,'block_ilp');
+      }
+      else
+      {
+         $headers[$h]=get_string($h);
+      }
+   }
+
+   $headers['punctuality']=get_string('punctuality','block_ilp');
+   $headers['attendance']=get_string('attendance','block_ilp');
+
+   $rows=array();
+   foreach($fullstudents as $user)
+   {
+      if($t=ilp_mis_attendance_plugin::get_summary($user->idnumber))
+      {
+         $row=array();
+//print_object($t);
+         foreach($userheaders as $h)
+         {
+            $row[$h]=$user->$h;
+         }
+         $row['punctuality']=$t['punctuality'];
+         $row['attendance']=$t['attendance'];
+	$rows[]=$row;
+      }
+   }
+
+   $table=new flexible_table('exporter');
+
+   $table->setup();
+   $table->define_columns(array_keys($headers));
+   $table->define_headers($headers);
+
+   $exname="table_{$data->format}_export_format";
+
+   $ex=new $exname($table);
+
+   $ex->start_document(get_string('attendance','block_ilp'));
+   $ex->start_table('Sheet1');
+
+   $ex->output_headers($headers);
+
+   foreach($rows as $row)
+   {
+      $ex->add_data($table->get_row_from_keyed($row));
+   }
+
+   $ex->finish_table();
+
+   $ex->finish_document();
+
+}
+elseif($fullstudents)
 {
    $report=ilp_report::from_id($data->reportselect);
 
