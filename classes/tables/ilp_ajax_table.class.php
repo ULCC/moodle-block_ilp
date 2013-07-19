@@ -250,6 +250,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         $data = new stdClass();
         $data->user_id = $USER->id;
         $data->element_id = $this->uniqueid;
+        $data->modified = time();
 
         foreach($this->sess->collapse as $key=>$value){
             if($value == true){
