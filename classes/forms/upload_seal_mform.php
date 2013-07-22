@@ -4,9 +4,11 @@ class upload_seal_mform extends ilp_moodleform
 
    static function seal_file_params()
    {
+      global $CFG;
+
       $r=new stdClass;
 
-      $r->seal_options = array('subdirs'=>0,
+      $r->form_options = array('subdirs'=>0,
                                'maxbytes'=>$CFG->userquota,
                                'maxfiles'=>1,
                                'accepted_types'=>array('*.png', '*.jpg', '*.gif', '*.jpeg'));
@@ -28,12 +30,13 @@ class upload_seal_mform extends ilp_moodleform
       $seal_params=static::seal_file_params();
 
       $data = new stdClass();
-      $data = file_prepare_standard_filemanager($data, 'seal_file', $seal_params->seal_options,
+      $data = file_prepare_standard_filemanager($data, 'seal_file', $seal_params->form_options,
                                                 $seal_params->context, $seal_params->component,
                                                 $seal_params->file_area,
                                                 $seal_params->item_id);
 
-      $uploader = $mform->addElement('filemanager', 'seal_file_filemanager', get_string('upload_seal', 'block_ilp'), null, $seal_options);
+      $uploader = $mform->addElement('filemanager', 'seal_file_filemanager', get_string('upload_seal', 'block_ilp'), null,
+                                     $seal_params->form_options);
       $uploader->setValue($data->{'seal_file_filemanager'});
 
       $this->add_action_buttons();
