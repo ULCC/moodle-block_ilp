@@ -494,6 +494,7 @@ $string['userid']='User id';
     $string['config_linked_name'] = 'Show name with a link to profile page';
     $string['config_attendancepunctuality'] = 'Show Attendance and Punctuality Information';
 $string['config_attendancepunctuality_misplugin'] = 'Which Attendance and Punctuality Plugin should be used?';
+$string['ilp_mis_attendance_plugin_registerprelimcalls'] = 'Preliminary database calls';
 
 	global $CFG;
 

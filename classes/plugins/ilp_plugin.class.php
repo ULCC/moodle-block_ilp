@@ -224,6 +224,26 @@ class ilp_plugin {
  	 	$mform->addElement('static', "{$elementname}_desc", NULL, $description);
  	 	$mform->setDefault("s_{$elementname}",$value);
  	 }
+
+    function config_htmleditor_element(&$mform,$elementname,$label,$description,$defaultvalue='') {
+
+        //check if the value is already in the config table
+        $configsetting	=	get_config('block_ilp',$elementname);
+
+        if (empty($configsetting)) {
+            //we need to check if the value is empty because the user set it that way so
+            //we will perform a query to see if the setting exists if it does then we will go
+            //with the config setting, if not set $value to default
+            $settingexists	= $this->dbc->setting_exists($elementname);
+            $value	=	(!empty($settingexists)) ? $configsetting : $defaultvalue;
+        }	else	{
+            $value	=	$configsetting;
+        }
+
+        $mform->addElement('editor',"s_{$elementname}",$label,array('class' => 'form_input'),$value);
+        $mform->addElement('static', "{$elementname}_desc", NULL, $description);
+        $mform->setDefault("s_{$elementname}",array('text'=>$value));
+    }
 	 
  	 
  	  /**
@@ -277,18 +297,21 @@ class ilp_plugin {
  	 	$mform->addElement('static', "{$elementname}_desc", NULL, $description);
  	 	$mform->setDefault("s_{$elementname}",$value);
 	 }
-	 
-	 
-	 
+
+
+
 	 function config_form(&$mform)	{
 	 	
 	 }
 	 
 	 function config_save($data)	{
 	 	global $CFG;
-	 	
-	 	
+
 	 	foreach ($data as $name => $value)	{
+            if (is_array($value) && isset($value['text'])) {
+                // HTML editor returns an array with text and format.
+                $value = $value['text'];
+            }
 	 		if ($name != 'saveanddisplaybutton') {
 	 			//removes the s_ from the front of the element name
 				$name	=	substr_replace($name,'',0,2);	 		
