@@ -1,24 +1,38 @@
 <?php
 class upload_seal_mform extends ilp_moodleform
 {
+
+   static function seal_file_params()
+   {
+      $r=new stdClass;
+
+      $r->seal_options = array('subdirs'=>0,
+                               'maxbytes'=>$CFG->userquota,
+                               'maxfiles'=>1,
+                               'accepted_types'=>array('*.png', '*.jpg', '*.gif', '*.jpeg'));
+
+      $r->context = context_system::instance();
+      $r->component = 'block_ilp';
+      $r->file_area = 'seal';
+      $r->item_id = 1;
+
+      return $r;
+   }
+
    function definition()
    {
       global $CFG;
 
       $mform=&$this->_form;
 
-      $seal_options = array('subdirs'=>0,
-                            'maxbytes'=>$CFG->userquota,
-                            'maxfiles'=>1,
-                            'accepted_types'=>array('*.png', '*.jpg', '*.gif', '*.jpeg'));
-
-      $context = context_system::instance();
-      $component = 'ilp';
-      $file_area = 'seal';
-      $item_id = 1;
+      $seal_params=static::seal_file_params();
 
       $data = new stdClass();
-      $data = file_prepare_standard_filemanager($data, 'seal_file', $seal_options, $context, $component, $file_area, $item_id);
+      $data = file_prepare_standard_filemanager($data, 'seal_file', $seal_params->seal_options,
+                                                $seal_params->context, $seal_params->component,
+                                                $seal_params->file_area,
+                                                $seal_params->item_id);
+
       $uploader = $mform->addElement('filemanager', 'seal_file_filemanager', get_string('upload_seal', 'block_ilp'), null, $seal_options);
       $uploader->setValue($data->{'seal_file_filemanager'});
 
