@@ -717,7 +717,7 @@ function xmldb_block_ilp_upgrade($oldversion) {
         $xmlfield	=	new $xmldb_field('vault');
         if (!$dbman->field_exists($table,$xmlfield)) {
 
-            $xmlfield->$set_attributes(XMLDB_TYPE_INTEGER,null,0);
+            $xmlfield->$set_attributes(XMLDB_TYPE_INTEGER,10,0);
             $dbman->add_field($table,$xmlfield);
         }
 
