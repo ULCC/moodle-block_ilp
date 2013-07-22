@@ -29,12 +29,6 @@ class upload_seal_mform extends ilp_moodleform
 
       $seal_params=static::seal_file_params();
 
-      $data = new stdClass();
-      $data = file_prepare_standard_filemanager($data, 'seal_file', $seal_params->form_options,
-                                                $seal_params->context, $seal_params->component,
-                                                $seal_params->file_area,
-                                                $seal_params->item_id);
-
       $uploader = $mform->addElement('filemanager', 'seal_file_filemanager', get_string('upload_seal', 'block_ilp'), null,
                                      $seal_params->form_options);
       $uploader->setValue($data->{'seal_file_filemanager'});

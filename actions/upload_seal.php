@@ -23,6 +23,11 @@ if($data=$mform->get_data())
    file_save_draft_area_files($data->seal_file_filemanager,$seal_params->context->id,$seal_params->component,
                               $seal_params->file_area,$seal_params->item_id,$seal_params->form_options);
 
+   $fs=get_file_storage();
+   $file = $fs->get_area_files(1, 'block_ilp', 'seal', 1);
+   $file=reset($file);
+   set_config('sealname',$file->get_filename(),'block_ilp');
+
    redirect("$CFG->wwwroot/admin/settings.php?section=blocksettingilp");
    exit;
 }
