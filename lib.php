@@ -279,6 +279,7 @@ function returnNextPosition($takenPos)   {
     return  $i;
 }
 
+//This is for form elements
 function ilp_pluginfile($context, $filearea, $args, $forcedownload) {
 
     if ($context->contextlevel != CONTEXT_SYSTEM) {
@@ -305,4 +306,25 @@ function ilp_pluginfile($context, $filearea, $args, $forcedownload) {
     send_stored_file($file, 60*60, 0, $forcedownload);
 }
 
-?>
+//This is for block-wide resources
+function block_ilp_pluginfile($course,$birecord,$context, $filearea, $args, $forcedownload) {
+
+    if ($context->contextlevel != CONTEXT_SYSTEM) {
+        send_file_not_found();
+    }
+
+    require_login();
+
+    $fs = get_file_storage();
+
+    $filename = array_pop($args);
+    $itemid   = array_pop($args);
+    $filepath = $args ? '/'.implode('/', $args).'/' : '/';
+
+    if (!$file = $fs->get_file($context->id, 'block_ilp', $filearea, $itemid, $filepath, $filename) or $file->is_directory()) {
+        send_file_not_found();
+    }
+
+    session_get_instance()->write_close();
+    send_stored_file($file, 60*60, 0, $forcedownload);
+}
