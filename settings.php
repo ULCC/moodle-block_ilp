@@ -309,6 +309,10 @@ $settings->add(new admin_setting_heading('block_ilp_block_items', '', $link));
 
 $globalsettings 	= new admin_setting_heading('block_ilp/miscconfig', get_string('miscconfig', 'block_ilp'), '');
 
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/upload_seal.php">'.get_string('config_uploadseal', 'block_ilp').'</a>';
+$settings->add(new admin_setting_heading('block_ilp_upload_seal', '', $link));
+
+
 $settings->add($globalsettings);
 
 

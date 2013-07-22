@@ -495,6 +495,8 @@ $string['userid']='User id';
     $string['config_attendancepunctuality'] = 'Show Attendance and Punctuality Information';
 $string['config_attendancepunctuality_misplugin'] = 'Which Attendance and Punctuality Plugin should be used?';
 
+$string['config_uploadseal']='Upload Institute Seal';
+
 	global $CFG;
 
 	// Include ilp db class
@@ -585,11 +587,3 @@ $string['config_attendancepunctuality_misplugin'] = 'Which Attendance and Punctu
             }
         }
     }
-
-
-	
-
-
-
-	
-	
