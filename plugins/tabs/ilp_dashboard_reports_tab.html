@@ -9,7 +9,7 @@
         $id_base = 'ajax_com-' . $entry->id; ?>
 			<div class="commands">
 			<?php if (!empty($access_report_editreports)) {
-				$edit_url = $CFG->wwwroot . "/blocks/ilp/actions/edit_reportentry.ajax.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}";
+				$edit_url = $CFG->wwwroot . "/blocks/ilp/actions/edit_reportentry.ajax.php?report_id={$report_id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}";
                 $edit_span = html_writer::tag('span', get_string('edit'), array('data-link'=>$edit_url, 'data-entry'=>$entry->id, 'class'=>'entry-edition entry-edition-' . $entry->id));
                 $loader_icon = $this->get_loader_icon('edit_entry-loader-' . $entry->id, 'span');
                 echo $edit_span;

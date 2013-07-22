@@ -176,7 +176,9 @@ class ilp_predefined_reports{
             //file_put_contents( $outfile, $this->generate_xml( $report ) );
 			$report_title = $report[ "title" ];
 			$report_description = $report[ "description" ];
-			$report_id = $this->create_report( $report_title, $report_description );
+            $report_type = isset($report[ "type" ]) ? $report[ "type" ] : null;
+
+			$report_id = $this->create_report( $report_title, $report_description, $report_type );
 			if( !empty($report_id )) {
 			//if(1){
 				$info[ 'reportlist' ][] = $report_title;
@@ -401,7 +403,7 @@ class ilp_predefined_reports{
 	* @param string $description
 	* @return int
 	*/
-	protected function create_report( $name, $description ){
+	protected function create_report( $name, $description, $report_type = null ){
 		//does this report exist already ?
 		//@todo return 0 if report already exists
 		if( $this->report_already_exists( $name ) ){
@@ -415,6 +417,7 @@ class ilp_predefined_reports{
 		$formdata->name = $name;
 		$formdata->description = $description;
 		$formdata->status = 1;
+        $formdata->reptype = $report_type;
 		$course_id = 0;	//not necessary for report creation, so just a dummy value
 		$mform	= new edit_report_mform( $course_id, null );
 	    	$report_id = $mform->process_data($formdata);

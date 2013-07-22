@@ -55,6 +55,12 @@ $processing    =   optional_param('processing',0,PARAM_INT);
 
 $editing    =   optional_param('editing',0,PARAM_INT);
 
+$selectedtab    =   optional_param('selectedtab',null,PARAM_TEXT);
+
+$selectedtab    =   optional_param('selectedtab',null,PARAM_TEXT);
+
+$tabitem    =   optional_param('tabitem',null,PARAM_INT);
+
 
 // instantiate the db
 $dbc = new ilp_db();
@@ -173,15 +179,15 @@ if($mform->is_submitted()) {
     if ($editing) {
         $ajax_settings['return_only_newest_entry'] = false;
         $ajax_settings['return_left_reports_for_single_entry'] = $entry_id;
-        $left_report = $ilp_dashboard_reports_tab_instance->display(null, $ajax_settings);
+        $left_report = $ilp_dashboard_reports_tab_instance->display($selectedtab, $ajax_settings, null, true, $tabitem, $report_id);
         unset($ajax_settings['return_left_reports_for_single_entry']);
         $ajax_settings['return_right_reports_for_single_entry'] = $entry_id;
-        $right_report = $ilp_dashboard_reports_tab_instance->display(null, $ajax_settings);
+        $right_report = $ilp_dashboard_reports_tab_instance->display($selectedtab, $ajax_settings, null, true, $tabitem, $report_id);
         $toreturn = array('left_report' => $left_report, 'right_report' => $right_report);
         echo json_encode($toreturn);
         exit;
     } else {
-        $toreturn = $ilp_dashboard_reports_tab_instance->display(null, $ajax_settings);
+        $toreturn = $ilp_dashboard_reports_tab_instance->display($selectedtab, $ajax_settings, null, true, $tabitem, $report_id);
         echo json_encode($toreturn);
     }
 

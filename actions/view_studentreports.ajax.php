@@ -308,7 +308,7 @@ if (!empty($studentslist)) {
         $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
         $dashboard_reports_tab = new ilp_dashboard_reports_tab($student->id, $courseid);
 
-        $dashboard_reports_tab->get_capabilites();
+        $dashboard_reports_tab->get_capabilites(null, $report_id);
         $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$student->id}&report_id={$report_id}&course_id={$courseid}";
 
         $addnewentry = $dashboard_reports_tab->generate_addnewentry($addnewentry_url, null, null, null, $student->id, 1);
@@ -335,7 +335,7 @@ if (!empty($studentslist)) {
                 $comments				=	$dbc->get_entry_comments($entry->id);
 
                 $comment_params = "report_id={$report_id}&user_id={$student->id}&entry_id={$entry->id}&course_id={$courseid}";
-                $dashboard_reports_tab->get_capabilites();
+                $dashboard_reports_tab->get_capabilites(null, $report_id);
                 $comments_html = $dashboard_reports_tab->generate_comments($comments, true, $comment_params, $entry->id);
 
                 //
