@@ -18,7 +18,7 @@ if($mform->is_cancelled())
 if($data=$mform->get_data())
 {
 
-   $seal_params=static::seal_file_params();
+   $seal_params=upload_seal_mform::seal_file_params();
 
    file_save_draft_area_files($data->attachments,$seal_params->context,$seal_params->component,
                               $seal_params->file_area,$seal_params->item_id,$seal_params->form_options);
