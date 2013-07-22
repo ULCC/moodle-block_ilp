@@ -270,7 +270,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         $Existing_data = $DB->get_record_select('block_ilp_user_choice',
                                                 "`user_id`=$USER->id and ".$DB->sql_compare_text('element_id').' = :element_id',
                                                 array('element_id'=>$data->element_id));
-        $Existing_data = $DB->get_record('block_ilp_user_choice', array('user_id'=>$USER->id, 'element_id'=>$data->element_id));
+
         if($Existing_data){
             $data->id = $Existing_data->id;
             $DB->update_record('block_ilp_user_choice', $data);
