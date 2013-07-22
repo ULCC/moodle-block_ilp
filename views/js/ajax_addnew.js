@@ -531,6 +531,7 @@ M.ilp_ajax_addnew = {
                         Y.io(newentry_url, cfg);
 
                     } else {
+                        console.log(o);
                         submitbuttonloadericon.addClass('hiddenelement');
                         formarea.setHTML("");
 

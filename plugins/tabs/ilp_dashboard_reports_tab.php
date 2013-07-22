@@ -259,7 +259,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      *
      * @return none
      */
-    function get_capabilites($selectedtab=null)	{
+    function get_capabilites($selectedtab=null, $report_id = null)	{
         global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
         if ($this->dbc->get_user_by_id($this->student_id)) {
@@ -281,7 +281,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             //if the seltab is empty then the highest level tab has been selected
             if (empty($seltab))	$seltab	=	array($selectedtab);
 
-            $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
+            if (!$report_id) {
+                $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id;
+            }
+
             $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
             if ($report	=$this->dbc->get_report_by_id($report_id)) {
@@ -364,10 +367,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     *
     * @return none
     */
-    public function display($selectedtab=null, $ajax_settings = array(),$readonly=false,$showcomments=true)	{
+    public function display($selectedtab=null, $ajax_settings = array(),$readonly=false,$showcomments=true, $tabitem = null, $report_id = null)	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
-       $this->get_capabilites();
+       $this->get_capabilites(null, $report_id);
 
        $access_report_viewcomment = static::$access_report_viewcomment;
        $access_report_addcomment = static::$access_report_addcomment;
@@ -409,7 +412,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          $this->selectedtab = $PARSER->optional_param('selectedtab', $selectedtab, PARAM_INT);
 
          //get the tabitem param if has been set
-         $this->tabitem = $PARSER->optional_param('tabitem', NULL, PARAM_CLEAN);
+         $this->tabitem = $PARSER->optional_param('tabitem', $tabitem, PARAM_CLEAN);
 
          $displaysummary     =	$PARSER->optional_param('summary', 0, PARAM_INT);
 
@@ -422,7 +425,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          //if the seltab is empty then the highest level tab has been selected
          if (empty($seltab))	$seltab	=	array($selectedtab);
 
-         $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
+         if (!$report_id) {
+             $report_id	= (!empty($seltab[1])) ? $seltab[1] : $this->default_tab_id ;
+         }
+
          $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
          if ($report=ilp_report::from_id($report_id)) {
@@ -486,7 +492,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $reportavailable =   $reportrules->report_availabilty();
 
                echo "<div id='report-entries'>";
-               $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&report_id={$report_id}&course_id={$this->course_id}";
+               $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&report_id={$report_id}&course_id={$this->course_id}";
 
                echo $this->generate_addnewentry($addnewentry_url, $access_report_addreports, $multiple_entries, $reportavailable);
 
