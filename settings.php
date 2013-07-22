@@ -191,7 +191,6 @@ $settings->add($maxreports);
 	$deadlinenotification			= 	new admin_setting_configselect('block_ilp/deadlinenotification',get_string('deadlinenotification','block_ilp'),get_string('deadlinenotificationconfig','block_ilp'), 7,$options);
 	$settings->add($deadlinenotification);
 
-
 $misplugin_settings 	= new admin_setting_heading('block_ilp/mis_plugins', get_string('mis_pluginsettings', 'block_ilp'), '');
 // -----------------------------------------------------------------------------
 // Get MIS plugin settings

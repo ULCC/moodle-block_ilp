@@ -323,5 +323,17 @@
         <KEY NAME="tempid" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
+      <TABLE NAME="block_ilp_user_choice" COMMENT="this table holds information for user choice for all tables" PREVIOUS="block_ilp_report" NEXT="block_ilp_report_field">
+          <FIELDS>
+              <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="user_id"/>
+              <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="element_id"/>
+              <FIELD NAME="element_id" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" PREVIOUS="user_id" NEXT="choice"/>
+              <FIELD NAME="choice" TYPE="char" LENGTH="255" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="element_id" NEXT="modified"/>
+              <FIELD NAME="modified" TYPE="int" NOTNULL="true" SEQUENCE="false" PREVIOUS="choice"/>
+          </FIELDS>
+          <KEYS>
+              <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+          </KEYS>
+      </TABLE>
   </TABLES>
 </XMLDB>

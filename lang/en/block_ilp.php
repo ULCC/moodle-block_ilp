@@ -185,6 +185,11 @@ $string['gotoprintpreview']='Generate';
 	$string['miscoptions']		 	= 	'Misc Options';
 	$string['miscconfig']		 	= 	'Misc Configuration';
 	$string['mis_pluginsettings']	= 	'External plugin settings';
+    $string['mis_reg_key_title']	    = 	'Registration Key';
+    $string['mis_reg_key']	         = 	'Key';
+    $string['mis_reg_key_desc']	         = 	'Add an explanatory key to the registration MIS plugin';
+    $string['term_chooser']	         = 	'Filter by term';
+    $string['term_chooser_prompt']	 = 	'Please select a term';
 	$string['month']		 		= 	'Month';
 	$string['move']		 			= 	'Move';
 	$string['movedown'] 			= 	'Move down';
@@ -489,6 +494,7 @@ $string['userid']='User id';
     $string['config_linked_name'] = 'Show name with a link to profile page';
     $string['config_attendancepunctuality'] = 'Show Attendance and Punctuality Information';
 $string['config_attendancepunctuality_misplugin'] = 'Which Attendance and Punctuality Plugin should be used?';
+$string['ilp_mis_attendance_plugin_registerprelimcalls'] = 'Preliminary database calls';
 
 	global $CFG;
 

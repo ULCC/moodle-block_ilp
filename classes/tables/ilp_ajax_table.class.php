@@ -106,7 +106,10 @@ class ilp_ajax_table extends ilp_flexible_table {
             $SESSION->flextable[$this->uniqueid]->currhoz  = $this->currhoz;
             $SESSION->flextable[$this->uniqueid]->filters  = $this->filters;
             // now let's load the hidden column info from db
-            $Existing_data = $DB->get_record('block_ilp_user_choice', array('user_id'=>$USER->id, 'element_id'=>$uniqueid));
+
+            $Existing_data = $DB->get_record_select('block_ilp_user_choice',
+                                                    "`user_id`=$USER->id and ".$DB->sql_compare_text('element_id').' = :element_id',
+                                                    array('element_id'=>$uniqueid));
             if($Existing_data){
                 //load them
                 $user_choice = explode(',',$Existing_data->choice);
@@ -264,7 +267,10 @@ class ilp_ajax_table extends ilp_flexible_table {
             $data->choice = '';
         }
 
-        $Existing_data = $DB->get_record('block_ilp_user_choice', array('user_id'=>$USER->id, 'element_id'=>$data->element_id));
+        $Existing_data = $DB->get_record_select('block_ilp_user_choice',
+                                                "`user_id`=$USER->id and ".$DB->sql_compare_text('element_id').' = :element_id',
+                                                array('element_id'=>$data->element_id));
+
         if($Existing_data){
             $data->id = $Existing_data->id;
             $DB->update_record('block_ilp_user_choice', $data);

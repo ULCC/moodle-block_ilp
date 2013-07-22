@@ -803,3 +803,112 @@ tooltip.tooltip span
 .block_ilp .column.c1 {
     width: 100%;
 }
+
+img.send_to_vault {
+    width: 16px;
+}
+
+/* styling for vault tab */
+#vault_entries-container {
+    border-bottom: 1px solid #DDDDDD;
+    display: inline-block;
+    margin: 0 auto;
+    width: 100%;
+}
+#vault_entries-container #middle-entries {
+    float: right;
+    width: 90%;
+    padding: 10px 10px 10px 0;
+}
+.vault_report_name {
+    float: left;
+    padding-bottom: 5px;
+    padding-top: 16px;
+}
+.vault_report_entry_count {
+    float: right;
+    padding-bottom: 5px;
+    width: 200px;
+    padding-top: 16px;
+}
+.vault_report_entries {
+    margin-top: 40px;
+}
+.vault_report_entries .report-entry{
+    margin-left: 0;
+    margin-top: 20px;
+    padding: 10px;
+    background: none repeat scroll 0 0 seashell;
+}
+.vault_report_entries .report-entry .added_by {
+    float: left;
+    width: 400px;
+}
+.vault_report_entries .report-entry .entry_date {
+
+}
+.vault_report_entries table {
+    background: none repeat scroll 0 0 threedface;
+}
+.vault_report_entries th {
+    width: 20%;
+}
+.vault_report_entries td {
+    width: 80%;
+}
+.vault_report_entry_count p{
+    float: left;
+}
+.vault_show_entries{
+    background: url([[pix:block_ilp|expand]]) no-repeat;
+    cursor: pointer;
+    float: right;
+    padding: 0px 10px 0 18px;
+    font-size: 14px;
+    font-weight: bolder;
+}
+.vault_hide_entries{
+    background: url([[pix:block_ilp|collapse]]) no-repeat;
+    cursor: pointer;
+    float: right;
+    padding: 0px 10px 0 18px;
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+.ilp #vault_left-entries {
+    float: left;
+    padding: 10px;
+    width: 6%;
+}
+
+.ilp .vault_comment {
+    border: thin ridge peachpuff;
+    padding: 10px 2%;
+}
+
+.ilp .vault_comment .info {
+    border-top: 1px solid #CCCCCC;
+    font-size: 0.9em;
+    padding: 5px 10px 10px;
+    text-align: right;
+}
+
+.vault_show_entries_comments{
+    background: url([[pix:block_ilp|expand]]) no-repeat;
+    cursor: pointer;
+    float: left;
+    padding: 0px 10px 0 18px;
+    font-size: 14px;
+    font-weight: bolder;
+}
+.vault_hide_entries_comments{
+    background: url([[pix:block_ilp|collapse]]) no-repeat;
+    cursor: pointer;
+    float: left;
+    padding: 0px 10px 0 18px;
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+/* vault styling is finished */
