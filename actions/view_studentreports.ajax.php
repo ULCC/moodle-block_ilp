@@ -299,7 +299,7 @@ if (!empty($studentslist)) {
         $temp   =   new stdClass();
         $temp->entries = count($reportentries);
 
-        $data[$report_id] = (empty($temp->entries) && false) ? get_string('numberentries', 'block_ilp',$temp) : "<div id='row{$report_id}{$student->id}' class='entry_toggle'><span class='numentries-" . $student->id . "'>". $temp->entries . "</span> " . get_string('numberentriestxt', 'block_ilp')."</div>";
+        $data[$report_id] = "<div id='row{$report_id}{$student->id}' class='entry_toggle'><span class='numentries-" . $student->id . "'>". $temp->entries . "</span> " . get_string('numberentriestxt', 'block_ilp')."</div>";
 
         $reportentry    =  "";
 
