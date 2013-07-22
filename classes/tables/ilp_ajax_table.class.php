@@ -253,8 +253,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         $data = new stdClass();
         $data->user_id = $USER->id;
         $data->element_id = $this->uniqueid;
-        // Changed from $data->modified = time(); the field expects a SQL Datetime.
-        $data->modified = $DB->get_field_sql("SELECT FROM_UNIXTIME(" . time() . ")");
+        $data->modified = time();
 
         foreach($this->sess->collapse as $key=>$value){
             if($value == true){
