@@ -733,6 +733,8 @@ class ilp_mis_attendance_plugin_register extends ilp_mis_attendance_plugin
 
         $this->config_select_element($mform, 'ilp_mis_attendance_plugin_register_pluginstatus', $options, get_string('ilp_mis_attendance_plugin_register_pluginstatus', 'block_ilp'), get_string('ilp_mis_attendance_plugin_register_pluginstatusdesc', 'block_ilp'), 0);
 
+        $this->config_htmleditor_element($mform, 'mis_plugin_register_key', get_string('mis_reg_key_title', 'block_ilp'), get_string('mis_reg_key_desc', 'block_ilp'));
+
     }
 
 
