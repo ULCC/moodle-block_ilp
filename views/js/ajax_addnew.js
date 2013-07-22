@@ -92,6 +92,7 @@ M.ilp_ajax_addnew = {
     submit_form: function(e, mform, formarea, comment_send_params, loadericon) {
         var Y = this.Y;
 
+        var pagename = this.pagename;
         // Stop the form submitting normally
         e.preventDefault();
 
@@ -119,7 +120,9 @@ M.ilp_ajax_addnew = {
                     loadericon.addClass('hiddenelement');
                     M.ilp_ajax_addnew.prepare_edits_for_ajax();
                     M.ilp_ajax_addnew.prepare_deletes_for_ajax();
-                    M.ilp_dashboard_reports_tab.init(Y);
+                    if (this.pagename !== 'view_studentreports') {
+                        M.ilp_dashboard_reports_tab.init(Y);
+                    }
                 }
             },
             form: formwrapper,

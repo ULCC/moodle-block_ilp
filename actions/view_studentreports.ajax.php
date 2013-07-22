@@ -192,6 +192,8 @@ if(!empty($defaultstatusitem)){
 //in the course context
 $course_param = (!empty($course_id)) ? "&course_id={$course_id}" : '';
 
+$report_param = (!empty($report_id)) ? "&report_id={$report_id}" : '';
+
 $coursearg = ( $course_id ) ? "&course=$course_id" : '' ;
 
 $dontdisplay    =   array();
@@ -230,7 +232,7 @@ if (!empty($studentslist)) {
         $userprofile	=	'profile.php';
                 
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
-        $data['fullname'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' class=\"userlink\">" . fullname($student) . "</a>";
+        $data['fullname'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}{$report_param}' class=\"userlink\">" . fullname($student) . "</a>";
 
         //if the student status has been set then show it else they have not had there ilp setup
         //thus there status is the default
@@ -297,26 +299,25 @@ if (!empty($studentslist)) {
         $temp   =   new stdClass();
         $temp->entries = count($reportentries);
 
-        $data[$report_id] = (empty($temp->entries)) ? get_string('numberentries', 'block_ilp',$temp) : "<div id='row{$report_id}{$student->id}' class='entry_toggle'><span class='numentries-" . $student->id . "'>". $temp->entries . "</span> " . get_string('numberentriestxt', 'block_ilp')."</div>";
+        $data[$report_id] = "<div id='row{$report_id}{$student->id}' class='entry_toggle'><span class='numentries-" . $student->id . "'>". $temp->entries . "</span> " . get_string('numberentriestxt', 'block_ilp')."</div>";
 
         $reportentry    =  "";
 
-        if (!empty($reportentries)) {
+        require_once ($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
+
+        $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
+        $dashboard_reports_tab = new ilp_dashboard_reports_tab($student->id, $courseid);
+
+        $dashboard_reports_tab->get_capabilites();
+        $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$student->id}&report_id={$report_id}&course_id={$courseid}";
+
+        $addnewentry = $dashboard_reports_tab->generate_addnewentry($addnewentry_url, null, null, null, $student->id, 1);
+        $data['fullname'] .= html_writer::tag('div', $addnewentry, array('class'=>'sid' . $student->id));
+
             $next_entry_colour = 'grey';
             $reportentry    .=   '<div class="left-reports,hidden-entry reports-container-container next-entry-' . $next_entry_colour . '"  id="row'.$report_id.''.$student->id.'_entry">';
             $report_entries_tables = array();
-
-            require_once ($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
-
-            $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
-            $dashboard_reports_tab = new ilp_dashboard_reports_tab($student->id, $courseid);
-
-            $dashboard_reports_tab->get_capabilites();
-            $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$student->id}&report_id={$report_id}&course_id={$courseid}";
-
-            $addnewentry = $dashboard_reports_tab->generate_addnewentry($addnewentry_url, null, null, null, $student->id, 1);
-            $data['fullname'] .= html_writer::tag('div', $addnewentry, array('class'=>'sid' . $student->id));
-
+        if (!empty($reportentries)) {
             foreach ($reportentries as $entry)	{
 
                 //TODO: is there a better way of doing this?
@@ -405,6 +406,9 @@ if (!empty($studentslist)) {
                     array('class'=>'report-entry reports-container-' . $entryid . ' report-entry-' . $colour_class,
                     'data-studentid' => $student->id));
             }
+            $hiddenrowdata[] = $reportentry;
+        } else {
+            $reportentry    .=   '</div>';
             $hiddenrowdata[] = $reportentry;
         }
 
