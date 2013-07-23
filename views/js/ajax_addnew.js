@@ -334,6 +334,7 @@ M.ilp_ajax_addnew = {
         var formwrapper =new Object();
         formwrapper.id = 'mform1';
 
+        var multiple_entries = M.ilp_ajax_addnew.addnew_clicked.getData('multiple_entries');
         Y.io(url + '&processing=1', {
             method: "POST",
             on: {
@@ -350,6 +351,7 @@ M.ilp_ajax_addnew = {
                                     var user_id;
                                     var report_id;
                                     var response = Y.JSON.parse(o.responseText);
+                                    // Get userid and reportid from url.
                                     var userid_check = /[?&]user_id=([^&]+)/i;
                                     var match = userid_check.exec(url);
                                     if (match != null) {
@@ -396,16 +398,23 @@ M.ilp_ajax_addnew = {
                         var newentry = Y.Node.create(content);
                         var entrycontainer = Y.one('.reports-container-container');
                         entrycontainer.prepend(newentry);
-                        entrycontainer.one('.view-comments').addClass('new-entry');
+                        var comments = entrycontainer.one('.view-comments');
+                        if (comments) {
+                            comments.addClass('new-entry');
+                            M.ilp_dashboard_reports_tab.init(Y);
+                            Y.one('.reports-container-container').one('.view-comments').removeClass('new-entry');
+                        }
                         M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
                         M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
                         M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
-                        M.ilp_dashboard_reports_tab.init(Y);
-                        Y.one('.reports-container-container').one('.view-comments').removeClass('new-entry');
+
                         var nothingtodisplay = Y.one('.nothingtodisplay');
                         if (nothingtodisplay) {
                             nothingtodisplay.addClass('hiddenelement');
                         }
+                    }
+                    if (multiple_entries == 0) {
+                        M.ilp_ajax_addnew.addnew_clicked.addClass('hiddenelement');
                     }
                 }
             },
@@ -414,6 +423,7 @@ M.ilp_ajax_addnew = {
         });
     },
     prepare_delete_entries_for_ajax: function() {
+        var pagename = this.pagename;
         var entrydeletes = Y.all('.entry-deletion');
         entrydeletes.each( function (entrydelete) {
             entrydelete.setStyle('cursor', 'pointer');
@@ -432,12 +442,20 @@ M.ilp_ajax_addnew = {
                         success : function(id, o, args) {
                             Y.one('.reports-container-' + entry_id).hide();
                             delete_loader_icon.addClass('hiddenelement');
-                            if (M.ilp_ajax_addnew.pagename == 'view_studentreports') {
+                            if (pagename == 'view_studentreports') {
                                 var studentid = Y.one('.reports-container-' + entry_id).getData('studentid');
                                 var numentries_dom = Y.one('.numentries-' + studentid);
                                 var numentries_int = parseInt(numentries_dom.get('text'));
                                 numentries_int = numentries_int - 1;
                                 numentries_dom.set('text', numentries_int);
+                                var addentry = Y.one('.sid' + studentid + ' ._addnewentry');
+                            } else {
+                                var addentry = Y.one('._addnewentry');
+                            }
+                            if (addentry) {
+                                if (addentry.hasClass('hiddenelement')) {
+                                    addentry.removeClass('hiddenelement');
+                                }
                             }
                         }
                     }

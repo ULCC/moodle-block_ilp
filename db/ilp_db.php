@@ -508,7 +508,7 @@ class ilp_db_functions	extends ilp_logging {
 					 FROM		{block_ilp_report}
 					 {$where}      {$deletedrec}
                      {$disabledsql}
-					 {$positionsql}
+					 {$positionsql} and vault = 0
 					 ORDER BY 	position";
 
         return		$this->dbc->get_records_sql($sql, $params);
@@ -2040,6 +2040,15 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$parent_id));
     }
 
+    /**
+     * This function sets the status of a report sending to vault or bringing back from valut
+     *
+     * @return	mixed  object containing the record or bool false
+     */
+    function set_report_vault_status ($report_id,$status)	{
+        return $this->dbc->set_field('block_ilp_report','vault', $status, array('id'=>$report_id));
+    }
+    
     /**
      * This function sets the status of a report enabled or disabled
      *
