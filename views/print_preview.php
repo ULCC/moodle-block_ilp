@@ -12,8 +12,8 @@
 //This is a prelude to moving this code into a central function
 //to remove duplication between here and view_studentlist.php
 
-$course_id=$data->course_id;
-$group_id=(isset($data->group_id))?  $group_id=$data->group_id : 0 ;
+$course_id=isset($data->course_id) ? $data->course_id : 0 ;
+$group_id=(isset($data->group_id)) ? $data->group_id  : 0 ;
 $status_id=$data->status_id;
 
 //get all of the students
@@ -93,11 +93,13 @@ if($fullstudents=$dbc->get_studentlist_details(array_keys($students),$status_id,
 {
    foreach($fullstudents as $student)
    {
-      print '<div class="batchprint">';
+      $date=userdate(time());
+      print "<div class='batchprint'>";
 
       $info=new ilp_dashboard_student_info_print_plugin($student->id,$data);
       $info->display(array());
 
+      print "<p align='right'> $student->firstname $student->lastname</p>";
       print '</div>';
    }
 }
