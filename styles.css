@@ -915,7 +915,7 @@ img.send_to_vault {
 
 /* Seal out put */
 
-img .seal_image
+img.seal_image
 {
     float: right;
     margin:8pt;
