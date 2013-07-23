@@ -33,14 +33,15 @@ M.ilp_dashboard_reports_tab = {
             my_selector = my_selector.concat(my_item,my_container);
             headercontainer  =  Y.one(my_selector);
             if(headercontainer._node.childElementCount> 0){
-                var new_el = my_el.appendChild(M.ilp_dashboard_reports_tab.get_view_comments(my_item,headercontainer));
+                console.log(my_yui_el.one('.heading-switch-parent'));
+                my_yui_el.one('.heading-switch-parent').prepend(M.ilp_dashboard_reports_tab.get_view_comments(my_item,headercontainer));
                 headercontainer._hide();
                 my_el.className += ' comment-js-added';
             }
         }
 	},
     get_view_comments: function(el,my_container){
-        var my_new_element          = document.createElement("div");
+        var my_new_element          = document.createElement("span");
         my_new_element.name         = "view_comments";
         my_new_element.className    = "view_all_comments";
         my_new_element.id           = el+'_view_comments';
@@ -50,13 +51,11 @@ M.ilp_dashboard_reports_tab = {
     },
     show_hide: function(my_el,my_container){
         if(my_container._isHidden()){
-            my_el.className += ' hide_all_comments';
-            my_el.className.replace('view_all_comments', '');
+            my_el.className = 'hide_all_comments';
             my_el.innerHTML = 'Hide Comments';
             my_container._show();
         }else{
-            my_el.className += ' view_all_comments';
-            my_el.className.replace('hide_all_comments', '');
+            my_el.className = 'view_all_comments';
             my_el.innerHTML = 'Show Comments';
             my_container._hide();
         }

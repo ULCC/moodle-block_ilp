@@ -445,40 +445,9 @@
 	margin: 3px 10px;
 }
 .ilp .view-comments{
-	background: #333333; 
-	color: #ffffff; 
 	padding: 5px 10px; 
 	margin: 0 0 10px 0;
 	height: 20px;
-}
-
-.ilp .view-comments .view_all_comments {
-    /*background: url([[pix:block_ilp|open]]) no-repeat;
-    position: relative;
-    top: -3px;
-    left: 110px;
-    width: 31px;
-    height: 25px;*/
-    font-weight: bolder;
-    left: 115px;
-    position: relative;
-    top: -15px;
-    width: 120px;
-    cursor: -moz-zoom-in;
-}
-.ilp .view-comments .hide_all_comments {
-    /*background: url([[pix:block_ilp|close]]) no-repeat;
-    position: relative;
-    top: -3px;
-    left: 110px;
-    width: 31px;
-    height: 25px;*/
-    font-weight: bolder;
-    left: 115px;
-    position: relative;
-    top: -15px;
-    width: 120px;
-    cursor: -moz-zoom-out;
 }
 
 .ilp .view-comments h3{
@@ -501,6 +470,7 @@
 }
 .ilp .comment {
 	padding: 10px 2%;
+    border: solid orange 1px;
 }
 .ilp .comment .info{
 	font-size: .9em; 
@@ -733,15 +703,6 @@ tooltip.tooltip span
     float:right;
 }
 
-.comment_toggle {
-    color: blue;
-    cursor: pointer;
-}
-
-.comment_toggle:hover {
-    text-decoration: underline;
-}
-
 .add-comment-ajax {
     float:right;
     margin: 0 0 0 200px;
@@ -834,7 +795,7 @@ img.send_to_vault {
 .vault_report_entries {
     margin-top: 40px;
 }
-.vault_report_entries .report-entry{
+.vault_report_entries .report-entry, .reports-container-container .report-entry, .reports-container-container .reports-container {
     margin-left: 0;
     margin-top: 20px;
     padding: 10px;
@@ -850,6 +811,12 @@ img.send_to_vault {
 .vault_report_entries table {
     background: none repeat scroll 0 0 threedface;
 }
+
+.left-reports {
+    background: none repeat scroll 0 0 threedface;
+    margin-right: 20px;
+}
+
 .vault_report_entries th {
     width: 20%;
 }
@@ -874,6 +841,31 @@ img.send_to_vault {
     padding: 0px 10px 0 18px;
     font-size: 14px;
     font-weight: bolder;
+}
+
+.ilp .view-comments .view_all_comments {
+    background: url([[pix:block_ilp|expand]]) no-repeat;
+    cursor: pointer;
+    padding: 0px 10px 0 18px;
+    font-size: 14px;
+    font-weight: bolder;
+}
+.ilp .view-comments .hide_all_comments {
+    background: url([[pix:block_ilp|collapse]]) no-repeat;
+    cursor: pointer;
+    padding: 0px 10px 0 18px;
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+.comment_toggle {
+    background: url([[pix:block_ilp|expand]]) no-repeat;
+    cursor: pointer;
+    padding: 0px 10px 0 18px;
+}
+
+.comment_toggle.being-shown {
+    background: url([[pix:block_ilp|collapse]]) no-repeat;
 }
 
 .ilp #vault_left-entries {
@@ -921,4 +913,16 @@ img.seal_image
     margin:8pt;
     width: 1.25in;
     height:auto;
+}
+
+.view_all_comments {
+    cursor: pointer;
+}
+
+.left-reports th {
+    width: 20%;
+}
+
+table.report-entry-table {
+    background: none repeat scroll 0 0 threedface;
 }

@@ -73,8 +73,10 @@ M.ilp_view_studentreports = {
                     comments.toggleClass('hiddenelement');
                     if (comments.hasClass('hiddenelement')) {
                         tog.set('text', show_comments);
+                        tog.removeClass('being-shown');
                     } else {
                         tog.set('text', hide_comments);
+                        tog.addClass('being-shown');
                     }
                 });
                 tog.removeClass('new');

@@ -22,6 +22,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    static       $access_report_addcomment;
    static       $access_report_viewcomment;
    static       $reportentries;
+   static       $reportfields;
 
 
     function __construct($student_id=null,$course_id=null)	{
@@ -47,7 +48,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
 
-    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null, $num_entries = false) {
+    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null, $num_entries = false, $displaysummary = null) {
         global $CFG;
         if ($ajax) {
             // If not being called from 'display' of this class
@@ -69,6 +70,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
         $addnew_attrs = array('data-link'=>$addnewentry_url, 'class'=>$classes, 'data-multiple_entries'=>$multiple_entries_switch);
 
+        if ($displaysummary !== null) {
+            $addnew_attrs['data-displaysummary'] = (int) $displaysummary;
+        }
         if ($studentid) {
             $addnew_attrs['data-studentid'] = $studentid;
         }
@@ -133,23 +137,29 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return $o;
     }
 
-    public function generate_left_reports($reportfields, $dontdisplay, $displaysummary, $entry_data) {
-        $content = '';
+    public function generate_left_reports($reportfields = null, $dontdisplay, $displaysummary, $entry_data) {
+        if (!$reportfields) {
+            $reportfields = static::$reportfields;
+        }
+
+        $displaysummary = (isset($displaysummary)) ? $displaysummary : 0;
+        $table = '<table><tbody>';
         foreach ($reportfields as $field) {
            $fieldname	=	$field->id."_field";
 
+            $summary_condition = $field->summary || !$displaysummary;
            if (!in_array($field->id,$dontdisplay) &&
                isset($entry_data->$fieldname) &&
-               ((!empty($displaysummary) &&
-                 !empty($field->summary) ||
-                 empty($displaysummary))))
+               $summary_condition)
            {
-              $fieldcontent = '';
-              $fieldcontent = '<strong>' . $field->label . ':</strong>' . (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
-              $content .= html_writer::tag('p', $fieldcontent);
+              $fieldcontent = html_writer::tag('th', '<strong>' . $field->label . '</strong>: ');
+              $fieldvalue = (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
+              $fieldcontent .= html_writer::tag('td', $fieldvalue);
+              $table .= html_writer::tag('tr', $fieldcontent);
            }
         }
-        return html_writer::tag('div', $content, array('class'=>'left-reports'));
+        $table .= '</tbody></table>';
+        return html_writer::tag('div', $table, array('class'=>'left-reports'));
     }
 
     public function generate_right_reports($has_courserelated, $has_deadline, $entry_data) {
@@ -309,7 +319,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   //get all of the fields in the current report, they will be returned in order as
                   //no position has been specified
                   $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
-
+                  static::$reportfields = $reportfields;
                   $reporticon	= (!empty($report->iconfile)) ? '' : '';
 
                   //does this report give user the ability to add comments
@@ -653,7 +663,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                           ob_end_clean();
                           ob_start();
                           if ($return_left_report_only) {
-                              echo $this->generate_left_reports($reportfields, $dontdisplay, $displaysummary, $entry_data);
+                              echo $this->generate_left_reports(null, $dontdisplay, $displaysummary, $entry_data);
                           } else if ($return_right_report_only) {
                               $has_deadline = (isset($has_deadline)) ? $has_deadline : null;
                               echo $this->generate_right_reports($has_courserelated, $has_deadline, $entry_data);

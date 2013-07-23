@@ -344,6 +344,8 @@ M.ilp_ajax_addnew = {
                     if (this.pagename == 'view_studentreports') {
                         var studentid = M.ilp_ajax_addnew.addnew_clicked.getData('studentid');
                         var newentry_url = Y.one('.thisurl').get('text') + '&gen_new_entry=1&single_user=' + studentid;
+                        var display_summary = M.ilp_ajax_addnew.addnew_clicked.getData('displaysummary');
+                        newentry_url += '&summary=' + display_summary;
                         var cfg = {
                             method: "POST",
                             on: {
@@ -533,6 +535,8 @@ M.ilp_ajax_addnew = {
                     if (this.pagename == 'view_studentreports') {
                         var studentid = M.ilp_ajax_addnew.edit_clicked.getData('studentid');
                         var newentry_url = Y.one('.thisurl').get('text') + '&gen_new_entry=1&single_user=' + studentid;
+                        var display_summary = M.ilp_ajax_addnew.edit_clicked.getData('displaysummary');
+                        newentry_url += '&summary=' + display_summary;
                         var cfg = {
                             method: "POST",
                             on: {
