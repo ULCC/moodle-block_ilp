@@ -12,7 +12,7 @@ $mform=new upload_seal_mform();
 
 if($mform->is_cancelled())
 {
-   print "Arse";
+   redirect("$CFG->wwwroot/admin/settings.php?section=blocksettingilp");
    exit;
 }
 if($data=$mform->get_data())
