@@ -477,6 +477,12 @@ $string['ilp_mis_learner_profile_assessments_disp_assessments']				= 'Initial As
     $string['status_description']   = 'Description';
     $string['bg_colour']            = 'Background colour';
 
+    $string['dashborddesc']      = 'Dashboard comment';
+
+    $string['dashboardtext']      = 'Dashboard text';
+
+    $string['dashboardtextconfig']      = 'A short configurable text to the dashboard page for user understanding';
+
     $string['studentreport_open']  = 'Open';
     $string['studentreport_close'] = 'Close';
 

@@ -155,7 +155,7 @@ if($mform->is_submitted()) {
     require_once($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
     $comment_params = "report_id={$report_id}&user_id={$user_id}&entry_id={$entry_id}&selectedtab={$selectedtab}&tabitem={$tabitem}&course_id={$course_id}";
     $ilp_dashboard_reports_tab_instance = new ilp_dashboard_reports_tab($user_id, $report_id);
-    $ilp_dashboard_reports_tab_instance->get_capabilites($selectedtab);
+    $ilp_dashboard_reports_tab_instance->get_capabilites($selectedtab, $report_id);
     $toreturn = $ilp_dashboard_reports_tab_instance->generate_comments(null, true, $comment_params, $entry_id);
     echo json_encode($toreturn);
 

@@ -173,6 +173,12 @@ $settings->add( $dbuser );
 $dbpass			=	new admin_setting_configtext('block_ilp/dbpass',get_string( 'db_pass', 'block_ilp' ), get_string( 'db_pass', 'block_ilp' ),'',PARAM_RAW);
 $settings->add($dbpass);
 
+$dashborddesc 	= new admin_setting_heading('block_ilp/dashborddesc', get_string('dashborddesc', 'block_ilp'), '');
+$settings->add($dashborddesc);
+
+$dashboardtext			= 	new admin_setting_confightmleditor('block_ilp/dashboardtext',get_string('dashboardtext','block_ilp'),get_string('dashboardtextconfig','block_ilp'),'',PARAM_RAW );
+$settings->add($dashboardtext);
+
 $miscsettings 	= new admin_setting_heading('block_ilp/miscoptions', get_string('miscoptions', 'block_ilp'), '');
 
 $settings->add($miscsettings);
