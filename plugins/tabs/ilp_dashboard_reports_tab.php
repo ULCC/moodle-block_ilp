@@ -219,10 +219,11 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             //create a tab for each enabled report
             foreach(ilp_report::get_enabledreports() as $r)	{
                if ($r->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
-
-                  //the tabitem and selectedtab query string params are added to the linkurl in the
-                  //second_row() function
-                  $this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
+                  if($r->vault == 0){ //if any report has been sent to vault, they should not be displayed here.
+                      //the tabitem and selectedtab query string params are added to the linkurl in the
+                      //second_row() function
+                      $this->secondrow[]	=	array('id'=>$r->id,'link'=>$this->linkurl,'name'=>$r->name);
+                  }
             }
          }
       }

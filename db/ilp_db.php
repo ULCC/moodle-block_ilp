@@ -508,7 +508,7 @@ class ilp_db_functions	extends ilp_logging {
 					 FROM		{block_ilp_report}
 					 {$where}      {$deletedrec}
                      {$disabledsql}
-					 {$positionsql}
+					 {$positionsql} and vault = 0
 					 ORDER BY 	position";
 
         return		$this->dbc->get_records_sql($sql, $params);
