@@ -53,7 +53,7 @@ class batch_print_setup_mform extends ilp_moodleform
 
          if($dbc->ilp_admin())
          {
-            $rawcourses=$DB->get_recordset('courses');
+            $rawcourses=$DB->get_recordset('course');
          }
          else
          {
