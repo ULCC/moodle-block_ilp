@@ -24,7 +24,7 @@ class batch_print_setup_mform extends ilp_moodleform
 
    function definition()
    {
-      global $USER,$CFG;
+      global $USER,$CFG,$DB;
 
       $dbc=$this->dbc;
 
@@ -51,7 +51,16 @@ class batch_print_setup_mform extends ilp_moodleform
 //get all courses that the current user is enrolled in
          $courseoptions=$groupoptions=array();
 
-         foreach($dbc->get_user_courses($USER->id) as $id=>$c)
+         if($dbc->ilp_admin())
+         {
+            $rawcourses=$DB->get_recordset('courses');
+         }
+         else
+         {
+            $rawcourses=$dbc->get_user_courses($USER->id);
+         }
+
+         foreach($rawcourses as $id=>$c)
          {
             $courseoptions[$id]=$c->shortname;
 
