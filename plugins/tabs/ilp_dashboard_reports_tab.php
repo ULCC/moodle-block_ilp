@@ -21,6 +21,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    static       $access_report_deletereport;
    static       $access_report_addcomment;
    static       $access_report_viewcomment;
+   static       $reportentries;
 
 
     function __construct($student_id=null,$course_id=null)	{
@@ -46,7 +47,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
 
-    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null) {
+    public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null, $num_entries = false) {
         global $CFG;
         if ($ajax) {
             // If not being called from 'display' of this class
@@ -55,7 +56,18 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $reportavailable = static::$reportavailable;
         }
 
-        $addnew_attrs = array('data-link'=>$addnewentry_url, 'class'=>'_addnewentry');
+        if ($num_entries === false) {
+            $num_entries = count(static::$reportentries);
+        }
+
+        $multiple_entries_switch = !empty($multiple_entries) ? '1' : '0';
+        $multiple_entries_check = (!empty($multiple_entries) || !$num_entries);
+        $classes = '_addnewentry';
+        if (!$multiple_entries_check) {
+            $classes .= " hiddenelement";
+        }
+
+        $addnew_attrs = array('data-link'=>$addnewentry_url, 'class'=>$classes, 'data-multiple_entries'=>$multiple_entries_switch);
 
         if ($studentid) {
             $addnew_attrs['data-studentid'] = $studentid;
@@ -63,7 +75,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         $addnew_span = html_writer::tag('span', get_string('addnew','block_ilp'), $addnew_attrs);
         $addnew_area = html_writer::tag('div','', array('class'=>'_addnewentryarea'));
         $loader_icon = $this->get_loader_icon('addnewentry-loader', 'span');
-        if (!empty($access_report_addreports)   && !empty($multiple_entries) && !empty($reportavailable['result'])) {
+
+        if (!empty($access_report_addreports) && !empty($reportavailable['result'])) {
             return    "<div class='add' style='float :left'>
                                      $loader_icon $addnew_span
                                         </div> $addnew_area";
@@ -343,7 +356,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
 
                   //get all of the entries for this report
-                  $reportentries=$report->get_user_report_entries($this->student_id,$state_id);
+
+                  static::$reportentries = $report->get_user_report_entries($this->student_id,$state_id);
 
                   //does the current report allow multiple entries
                   static::$multiple_entries = !empty($report->frequency);
@@ -475,7 +489,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                //get all of the entries for this report
                $reportentries	=	$report->get_user_report_entries($this->student_id,$state_id);
 
-               //does the current report allow multiple entries
+               static::$reportentries = $reportentries;
+                    //does the current report allow multiple entries
                $multiple_entries   =   !empty($report->frequency);
 
                //instantiate the report rules class
