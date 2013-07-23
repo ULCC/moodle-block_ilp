@@ -160,7 +160,7 @@ class ilp_dashboard_vault_tab extends ilp_dashboard_tab {
                     $detail					=	new stdClass();
                     $detail->report_id		=	$r->id;
 
-                    $detail->name			=	(empty($reporttab)) ? $r->name : "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}&tabitem={$reporttab->id}:{$r->id}&selectedtab={$reporttab->id}'>{$r->name}</a>";
+                    $detail->name           =   "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_studentreports.php?course_id={$this->course_id}&tutor=0&report_id={$r->id}&group_id=0'>".$r->name."</a>";
 
                     $binary_icon				=	(!empty($r->binary_icon)) ? $CFG->wwwroot."/blocks/ilp/iconfile.php?report_id=".$r->id : $CFG->wwwroot."/blocks/ilp/pix/icons/defaultreport.gif";
 
