@@ -24,9 +24,14 @@ if($data=$mform->get_data())
                               $seal_params->file_area,$seal_params->item_id,$seal_params->form_options);
 
    $fs=get_file_storage();
-   $file = $fs->get_area_files(1, 'block_ilp', 'seal', 1);
-   $file=reset($file);
-   set_config('sealname',$file->get_filename(),'block_ilp');
+   foreach($fs->get_area_files(1, 'block_ilp', 'seal', 1) as $file)
+   {
+      if($file->get_file_name()!='.')
+      {
+         set_config('sealname',$file->get_filename(),'block_ilp');
+         break;
+      }
+   }
 
    redirect("$CFG->wwwroot/admin/settings.php?section=blocksettingilp");
    exit;
