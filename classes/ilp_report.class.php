@@ -96,6 +96,27 @@ class ilp_report
       return true;
    }
 
+/**
+ * Return the url for the current institute seal
+ * @return string
+ *
+ */
+   static function seal_url()
+   {
+      global $CFG;
+
+      $filename=get_config('block_ilp','sealname');
+
+      if($filename)
+      {
+         $context=context_system::instance();
+         return "$CFG->wwwroot/pluginfile.php/$context->id/block_ilp/seal/1/$filename";
+      }
+
+      return '';
+   }
+
+
 ///Instance
 
    protected $report_fields;

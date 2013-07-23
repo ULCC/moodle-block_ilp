@@ -912,3 +912,13 @@ img.send_to_vault {
 }
 
 /* vault styling is finished */
+
+/* Seal out put */
+
+img .seal_image
+{
+    float: right;
+    margin:8pt;
+    width: 2in;
+    height:auto;
+}

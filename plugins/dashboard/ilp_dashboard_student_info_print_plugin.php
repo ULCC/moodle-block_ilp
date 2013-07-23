@@ -40,6 +40,11 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
          print_error('studentnotfound','block_ilp');
       }
 
+      if($seal=ilp_report::seal_url())
+      {
+         html_writer::empty_tag('img',array('src'=>$seal,'class'=>'seal_image'));
+      }
+
       $studentname	=	fullname($student);
       $studentpicture	=	$OUTPUT->user_picture($student,array('size'=>100,'return'=>'true'));
 

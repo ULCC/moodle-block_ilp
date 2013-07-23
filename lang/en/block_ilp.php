@@ -497,7 +497,7 @@ $string['config_attendancepunctuality_misplugin'] = 'Which Attendance and Punctu
 $string['ilp_mis_attendance_plugin_registerprelimcalls'] = 'Preliminary database calls';
 
 $string['config_uploadseal']='Upload Institute Seal';
-
+$string['upload_seal']='Image for institute seal';
 	global $CFG;
 
 	// Include ilp db class
