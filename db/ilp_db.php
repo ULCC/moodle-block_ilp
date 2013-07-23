@@ -2041,6 +2041,15 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /**
+     * This function sets the status of a report sending to vault or bringing back from valut
+     *
+     * @return	mixed  object containing the record or bool false
+     */
+    function set_report_vault_status ($report_id,$status)	{
+        return $this->dbc->set_field('block_ilp_report','vault', $status, array('id'=>$report_id));
+    }
+    
+    /**
      * This function sets the status of a report enabled or disabled
      *
      * @return	mixed  object containing the record or bool false
