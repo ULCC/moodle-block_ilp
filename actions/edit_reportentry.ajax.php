@@ -172,7 +172,7 @@ if($mform->is_submitted()) {
 
     require_once($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
     require_once($CFG->dirroot . '/blocks/ilp/classes/ilp_report_rules.class.php');
-    $ilp_dashboard_reports_tab_instance = new ilp_dashboard_reports_tab($user_id, $report_id);
+    $ilp_dashboard_reports_tab_instance = new ilp_dashboard_reports_tab($user_id, $course_id);
     $ajax_settings = array(
         'return_only_newest_entry' => true
     );
