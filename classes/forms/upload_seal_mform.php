@@ -9,7 +9,7 @@ class upload_seal_mform extends ilp_moodleform
       $r=new stdClass;
 
       $r->form_options = array('subdirs'=>0,
-                               'maxbytes'=>$CFG->userquota,
+                               'maxbytes'=>min($CFG->userquota,$CFG->maxbytes),
                                'maxfiles'=>1,
                                'accepted_types'=>array('*.png', '*.jpg', '*.gif', '*.jpeg'));
 
