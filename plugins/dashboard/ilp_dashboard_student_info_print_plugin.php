@@ -42,7 +42,7 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
       if($seal=ilp_report::seal_url())
       {
-         html_writer::empty_tag('img',array('src'=>$seal,'class'=>'seal_image'));
+         print html_writer::empty_tag('img',array('src'=>$seal,'class'=>'seal_image'));
       }
 
       $studentname	=	fullname($student);
@@ -178,7 +178,7 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
       {
          if(isset($reportselect[$r->id]))
          {
-            print $reporter->display("-1:$r->id",array(),true,$this->formdata->showcomments);
+            print $reporter->display("-1:$r->id",array(),true,isset($this->formdata->showcomments));
          }
       }
    }
