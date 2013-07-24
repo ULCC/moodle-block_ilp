@@ -11,7 +11,7 @@ class upload_seal_mform extends ilp_moodleform
       $r->form_options = array('subdirs'=>0,
                                'maxbytes'=>min($CFG->userquota,$CFG->maxbytes),
                                'maxfiles'=>1,
-                               'accepted_types'=>array('*.png', '*.jpg', '*.gif', '*.jpeg'));
+                               'accepted_types'=>array('*.png', '*.jpg', '*.gif', '*.jpeg','*.svg'));
 
       $r->context = context_system::instance();
       $r->component = 'block_ilp';
