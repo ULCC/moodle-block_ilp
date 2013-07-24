@@ -397,7 +397,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     public function display($selectedtab=null, $ajax_settings = array(),$readonly=false,$showcomments=true, $tabitem = null, $report_id = null)	{
       global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
-       $this->get_capabilites(null, $report_id);
+       $this->get_capabilites($selectedtab, $report_id);
 
        $access_report_viewcomment = static::$access_report_viewcomment;
        $access_report_addcomment = static::$access_report_addcomment;
