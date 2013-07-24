@@ -86,15 +86,6 @@ class batch_print_setup_mform extends ilp_moodleform
 
       }
 
-      if(true)
-      {
-      } else {
-         //get the list of tutees for this user
-         $student = $dbc->get_user_tutees($USER->id);
-
-         $pagetitle = get_string('mytutees','block_ilp');
-      }
-
       $status=array();
       foreach($dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD) as $s)
       {
