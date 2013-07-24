@@ -334,6 +334,10 @@ M.ilp_ajax_addnew = {
         var formwrapper =new Object();
         formwrapper.id = 'mform1';
 
+        if (this.pagename != 'view_studentreports') {
+            var display_summary = M.ilp_ajax_addnew.addnew_clicked.getData('displaysummary');
+            url += '&summary=' + display_summary;
+        }
         var multiple_entries = M.ilp_ajax_addnew.addnew_clicked.getData('multiple_entries');
         Y.io(url + '&processing=1', {
             method: "POST",
@@ -344,6 +348,8 @@ M.ilp_ajax_addnew = {
                     if (this.pagename == 'view_studentreports') {
                         var studentid = M.ilp_ajax_addnew.addnew_clicked.getData('studentid');
                         var newentry_url = Y.one('.thisurl').get('text') + '&gen_new_entry=1&single_user=' + studentid;
+                        var display_summary = M.ilp_ajax_addnew.addnew_clicked.getData('displaysummary');
+                        newentry_url += '&summary=' + display_summary;
                         var cfg = {
                             method: "POST",
                             on: {
@@ -524,6 +530,9 @@ M.ilp_ajax_addnew = {
         var pagename_param = '';
         if (this.pagename == 'view_studentreports') {
             pagename_param = '&pagename=' + this.pagename;
+        } else {
+            var display_summary = M.ilp_ajax_addnew.edit_clicked.getData('displaysummary');
+            url += '&summary=' + display_summary;
         }
 
         Y.io(url + '&processing=1&editing=1' + pagename_param, {
@@ -533,6 +542,8 @@ M.ilp_ajax_addnew = {
                     if (this.pagename == 'view_studentreports') {
                         var studentid = M.ilp_ajax_addnew.edit_clicked.getData('studentid');
                         var newentry_url = Y.one('.thisurl').get('text') + '&gen_new_entry=1&single_user=' + studentid;
+                        var display_summary = M.ilp_ajax_addnew.edit_clicked.getData('displaysummary');
+                        newentry_url += '&summary=' + display_summary;
                         var cfg = {
                             method: "POST",
                             on: {

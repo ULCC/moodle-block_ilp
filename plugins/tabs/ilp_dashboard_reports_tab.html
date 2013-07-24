@@ -3,27 +3,29 @@
 
         <?php
         echo '<div class="left-report-cont-' . $entry->id . '">';
-        echo $this->generate_left_reports($reportfields, $dontdisplay, $displaysummary, $entry_data);
+        echo $this->generate_left_reports(null, $dontdisplay, $displaysummary, $entry_data);
         echo '</div>';
 
         $id_base = 'ajax_com-' . $entry->id; ?>
 			<div class="commands">
 			<?php if (!empty($access_report_editreports)) {
 				$edit_url = $CFG->wwwroot . "/blocks/ilp/actions/edit_reportentry.ajax.php?report_id={$report_id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}";
-                $edit_span = html_writer::tag('span', get_string('edit'), array('data-link'=>$edit_url, 'data-entry'=>$entry->id, 'class'=>'entry-edition entry-edition-' . $entry->id));
+                $edit_icon = html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/i/edit"), 'alt'=>get_string('edit')));
+                $edit_span = html_writer::tag('span', get_string('edit') . ' ' . $edit_icon,
+                    array('data-link'=>$edit_url, 'data-entry'=>$entry->id, 'data-displaysummary'=>$displaysummary,
+                        'class'=>'entry-edition entry-edition-' . $entry->id));
                 $loader_icon = $this->get_loader_icon('edit_entry-loader-' . $entry->id, 'span');
                 echo $edit_span;
                 echo $loader_icon;
-                echo html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/i/edit"), 'alt'=>get_string('edit')));
                 ?> |
 			<?php } ?>
 			<?php if (!empty($candelete)) {
 				$delete_url = $CFG->wwwroot."/blocks/ilp/actions/delete_reportentry.ajax.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}&tabitem={$this->tabitem}&selectedtab={$this->selectedtab}";
-                $delete_span = html_writer::tag('span', get_string('delete'), array('data-link'=>$delete_url, 'data-entry'=>$entry->id, 'class'=>'entry-deletion entry-deletion-' . $entry->id));
+                $delete_icon = html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/t/delete"), 'alt'=>get_string('edit')));
+                $delete_span = html_writer::tag('span', get_string('delete') . ' ' . $delete_icon, array('data-link'=>$delete_url, 'data-entry'=>$entry->id, 'class'=>'entry-deletion entry-deletion-' . $entry->id));
                 $loader_icon = $this->get_loader_icon('delete_entry-loader-' . $entry->id, 'span');
                 echo $delete_span;
                 echo $loader_icon;
-                echo html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/t/delete"), 'alt'=>get_string('edit')));
 				 ?>
             <?php } ?>
 			</div>
@@ -39,11 +41,8 @@
 <div class="clearfix"> </div>
             <?php if (!empty($has_comments) and $showcomments) {?>
 		<div class="reports-comments">
-		<div class="view-comments">
-                <h3 id="entry_<?php echo $entry->id; ?>" class="commentheading">
-                    <span class="numcomments-<?php echo $id_base; ?>"><?php echo (!empty($comments)) ? count($comments) : 0; ?></span>
-                    <?php echo  " ".get_string('comments','block_ilp');  ?>
-                </h3>
+		<div class="view-comments" id="comments-<?php echo $entry->id; ?>">
+
 		<?php if (!empty($access_report_addcomment)) { ?>
                 <div class="add">
                     <?php
@@ -57,11 +56,18 @@
                         <span class="<?php echo $id_base . '-course_id';?>"><?php echo $this->course_id;?></span>
                     </div>
                     <span class="add-comment-ajax" id="<?php echo $id_base;?>">
-                        <?php echo get_string('addcomment','block_ilp');?> <?php echo $this->get_loader_icon('loader-icon-' . $id_base, 'span'); ?>
+                        <?php echo $this->get_loader_icon('loader-icon-' . $id_base, 'span'); ?>
+                        <?php echo get_string('addcomment','block_ilp');?>
                     </span>
                 </div>
 
             <?php } ?>
+            <div class="heading-switch-parent">
+                    <span id="entry_<?php echo $entry->id; ?>" class="commentheading">
+                        <span class="numcomments-<?php echo $id_base; ?>"><?php echo (!empty($comments)) ? count($comments) : 0; ?></span>
+                        <?php echo  " ".get_string('comments','block_ilp');  ?>
+                    </span>
+            </div>
 		</div>
 
         <div class="add-form add-form-<?php echo $id_base; ?>"></div>

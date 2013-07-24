@@ -311,7 +311,7 @@ if (!empty($studentslist)) {
         $dashboard_reports_tab->get_capabilites(null, $report_id);
         $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$student->id}&report_id={$report_id}&course_id={$courseid}";
 
-        $addnewentry = $dashboard_reports_tab->generate_addnewentry($addnewentry_url, null, null, null, $student->id, 1);
+        $addnewentry = $dashboard_reports_tab->generate_addnewentry($addnewentry_url, null, null, null, $student->id, 1, false, $displaysummary);
         $data['fullname'] .= html_writer::tag('div', $addnewentry, array('class'=>'sid' . $student->id));
 
             $next_entry_colour = 'grey';
