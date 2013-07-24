@@ -397,7 +397,7 @@ class ilp_dashboard_vault_tab extends ilp_dashboard_tab {
                             $comments      = $this->dbc->get_entry_comments($entry->id);
                             if($comments){
                                 $report_entry .= '<div id="'. $entry->id .'" class="comment_counter"> '. count($comments) .' comments</div>';
-                                $report_entry .= '<div = id="comment_for_'. $entry->id .'">' . $this->generate_comments($comments) . '</div>';
+                                $report_entry .= '<div id="comment_for_'. $entry->id .'">' . $this->generate_comments($comments) . '</div>';
                             }
                             $report_entry .= html_writer::end_tag('div');
 
