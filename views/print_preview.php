@@ -94,7 +94,7 @@ if($fullstudents=$dbc->get_studentlist_details(array_keys($students),$status_id,
    foreach($fullstudents as $student)
    {
       $date=userdate(time());
-      print "<div class='batchprint'>$date";
+      print "<div class='page-break'></div><div class='batchprint'>$date";
 
       $info=new ilp_dashboard_student_info_print_plugin($student->id,$data);
       $info->display(array());
