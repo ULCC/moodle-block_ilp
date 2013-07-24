@@ -926,3 +926,8 @@ img.seal_image
 table.report-entry-table {
     background: none repeat scroll 0 0 threedface;
 }
+
+.left-reports select,
+.left-reports input {
+
+}

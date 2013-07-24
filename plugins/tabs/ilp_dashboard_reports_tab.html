@@ -11,7 +11,9 @@
 			<?php if (!empty($access_report_editreports)) {
 				$edit_url = $CFG->wwwroot . "/blocks/ilp/actions/edit_reportentry.ajax.php?report_id={$report_id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}";
                 $edit_icon = html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/i/edit"), 'alt'=>get_string('edit')));
-                $edit_span = html_writer::tag('span', get_string('edit') . ' ' . $edit_icon, array('data-link'=>$edit_url, 'data-entry'=>$entry->id, 'class'=>'entry-edition entry-edition-' . $entry->id));
+                $edit_span = html_writer::tag('span', get_string('edit') . ' ' . $edit_icon,
+                    array('data-link'=>$edit_url, 'data-entry'=>$entry->id, 'data-displaysummary'=>$displaysummary,
+                        'class'=>'entry-edition entry-edition-' . $entry->id));
                 $loader_icon = $this->get_loader_icon('edit_entry-loader-' . $entry->id, 'span');
                 echo $edit_span;
                 echo $loader_icon;
@@ -40,12 +42,7 @@
             <?php if (!empty($has_comments) and $showcomments) {?>
 		<div class="reports-comments">
 		<div class="view-comments" id="comments-<?php echo $entry->id; ?>">
-                <div class="heading-switch-parent">
-                    <span id="entry_<?php echo $entry->id; ?>" class="commentheading">
-                        <span class="numcomments-<?php echo $id_base; ?>"><?php echo (!empty($comments)) ? count($comments) : 0; ?></span>
-                        <?php echo  " ".get_string('comments','block_ilp');  ?>
-                    </span>
-                </div>
+
 		<?php if (!empty($access_report_addcomment)) { ?>
                 <div class="add">
                     <?php
@@ -65,6 +62,12 @@
                 </div>
 
             <?php } ?>
+            <div class="heading-switch-parent">
+                    <span id="entry_<?php echo $entry->id; ?>" class="commentheading">
+                        <span class="numcomments-<?php echo $id_base; ?>"><?php echo (!empty($comments)) ? count($comments) : 0; ?></span>
+                        <?php echo  " ".get_string('comments','block_ilp');  ?>
+                    </span>
+            </div>
 		</div>
 
         <div class="add-form add-form-<?php echo $id_base; ?>"></div>

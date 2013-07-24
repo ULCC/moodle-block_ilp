@@ -33,7 +33,6 @@ M.ilp_dashboard_reports_tab = {
             my_selector = my_selector.concat(my_item,my_container);
             headercontainer  =  Y.one(my_selector);
             if(headercontainer._node.childElementCount> 0){
-                console.log(my_yui_el.one('.heading-switch-parent'));
                 my_yui_el.one('.heading-switch-parent').prepend(M.ilp_dashboard_reports_tab.get_view_comments(my_item,headercontainer));
                 headercontainer._hide();
                 my_el.className += ' comment-js-added';

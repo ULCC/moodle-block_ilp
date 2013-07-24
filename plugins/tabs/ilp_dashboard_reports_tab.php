@@ -148,6 +148,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
            $fieldname	=	$field->id."_field";
 
             $summary_condition = $field->summary || !$displaysummary;
+            if (!isset($entry_data->$fieldname)) {
+            }
            if (!in_array($field->id,$dontdisplay) &&
                isset($entry_data->$fieldname) &&
                $summary_condition)
@@ -461,7 +463,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                $reportname	=	$report->name;
                //get all of the fields in the current report, they will be returned in order as
                //no position has been specified
-               $reportfields=$report->get_report_fields_by_position($report_id);
+               $reportfields=static::$reportfields;
 
                $reporticon = (!empty($report->iconfile)) ? '' : '';
 
@@ -512,7 +514,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
                echo $this->get_header($report->name,$icon);
 
-               $stateselector	=	(isset($report_id) and !$readonly) ?	$this->stateselector($report_id) :	"";
+               $stateselector	=	(isset($report_id) and !$readonly) ?	$this->stateselector($report_id, $displaysummary) :	"";
 
                //find out if the rules set on this report allow a new entry to be created
                $reportavailable =   $reportrules->report_availabilty();
@@ -520,7 +522,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                echo "<div id='report-entries'>";
                $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$this->student_id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&report_id={$report_id}&course_id={$this->course_id}";
 
-               echo $this->generate_addnewentry($addnewentry_url, $access_report_addreports, $multiple_entries, $reportavailable);
+               echo $this->generate_addnewentry($addnewentry_url, $access_report_addreports, $multiple_entries, $reportavailable, null, null, false, $displaysummary);
 
                if (!empty($access_report_viewothers)) {
 
@@ -651,6 +653,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                            $pluginclass->view_data($field->id,$entry->id,$entry_data,!$readonly);
                         } else	{
                            $dontdisplay[]	=	$field->id;
+
                         }
 
                      }
@@ -736,7 +739,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       return $pluginoutput;
    }
 
-   function stateselector($report_id)	{
+   function stateselector($report_id, $displaysummary = null)	{
       $stateselector		=	"<div class='report_state'><form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
 			                                <input type='hidden' name='course_id' value='{$this->course_id}' />
 											<input type='hidden' name='user_id' value='{$this->student_id}' />
