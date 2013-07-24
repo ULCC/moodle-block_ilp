@@ -8,7 +8,7 @@
 
         $id_base = 'ajax_com-' . $entry->id; ?>
 			<div class="commands">
-			<?php if (!empty($access_report_editreports)) {
+			<?php if (!empty($access_report_editreports) && !$readonly) {
 				$edit_url = $CFG->wwwroot . "/blocks/ilp/actions/edit_reportentry.ajax.php?report_id={$report_id}&selectedtab={$this->selectedtab}&tabitem={$this->tabitem}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}";
                 $edit_icon = html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/i/edit"), 'alt'=>get_string('edit')));
                 $edit_span = html_writer::tag('span', get_string('edit') . ' ' . $edit_icon,
@@ -19,7 +19,7 @@
                 echo $loader_icon;
                 ?> |
 			<?php } ?>
-			<?php if (!empty($candelete)) {
+			<?php if (!empty($candelete) && !$readonly) {
 				$delete_url = $CFG->wwwroot."/blocks/ilp/actions/delete_reportentry.ajax.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$this->course_id}&tabitem={$this->tabitem}&selectedtab={$this->selectedtab}";
                 $delete_icon = html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/t/delete"), 'alt'=>get_string('edit')));
                 $delete_span = html_writer::tag('span', get_string('delete') . ' ' . $delete_icon, array('data-link'=>$delete_url, 'data-entry'=>$entry->id, 'class'=>'entry-deletion entry-deletion-' . $entry->id));
