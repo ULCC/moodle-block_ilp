@@ -650,7 +650,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                            }
 
                            //call the plugin class entry data method
-                           $pluginclass->view_data($field->id,$entry->id,$entry_data,!$readonly);
+                           $pluginclass->view_data($field->id,$entry->id,$entry_data,false);
                         } else	{
                            $dontdisplay[]	=	$field->id;
 
