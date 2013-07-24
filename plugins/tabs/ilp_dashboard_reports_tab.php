@@ -740,7 +740,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    }
 
    function stateselector($report_id, $displaysummary = null)	{
-      $stateselector		=	"<div class='report_state'><form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
+      $stateselector = "<div class='report_state'><form action='{$this->linkurl}&selectedtab={$this->plugin_id}' method='get' >
 			                                <input type='hidden' name='course_id' value='{$this->course_id}' />
 											<input type='hidden' name='user_id' value='{$this->student_id}' />
 											<input type='hidden' name='selectedtab' value='{$this->plugin_id}' />

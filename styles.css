@@ -445,10 +445,14 @@
 	margin: 3px 10px;
 }
 .ilp .view-comments{
-	padding: 5px 10px; 
+	padding: 5px 10px;
 	margin: 0 0 10px 0;
 	height: 20px;
 }
+.ilp .reports-container .view-comments{
+    margin: 0;
+}
+
 
 .ilp .view-comments h3{
 	font-size: 1.3em; 
@@ -927,7 +931,14 @@ table.report-entry-table {
     background: none repeat scroll 0 0 threedface;
 }
 
-.left-reports select,
-.left-reports input {
+.reports-container-container .reports-container {
+    position: relative;
+}
 
+.reports-container-container .reports-container .right-reports {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    font-size: 11px;
+    line-height: 13px;
 }
