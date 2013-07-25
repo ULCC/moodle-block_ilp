@@ -45,7 +45,7 @@ M.ilp_view_print_preview=
                              }
                             );
 
-                if(sbox.options.length==0)
+                if(sbox.options.length>0)
                 {
                     Y.one('#fitem_id_group_id').hide();
                 }
