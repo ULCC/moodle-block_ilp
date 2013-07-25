@@ -965,3 +965,21 @@ table.report-entry-table {
     font-size: 11px;
     line-height: 13px;
 }
+
+table.quals-course, table.quals-course td, table.quals-course th{
+    border: solid black 1px;
+}
+
+table.quals-course {
+    width: 90%;
+}
+
+table.quals-course th, table.quals-course td {
+    width: 33%;
+}
+
+#ilp_mis_learner_quals .intro {
+    width: 90%;
+    border: solid black 1px;
+    margin-bottom: 20px;
+}

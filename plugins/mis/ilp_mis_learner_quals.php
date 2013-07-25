@@ -181,7 +181,6 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
 
             $this->data = $this->dbquery($table, $keyfields, $this->fields, null, $prelimdbcalls);
             //we only need the first record so pass it back
-            $this->data = (!empty($this->data)) ? array_shift($this->data) : $this->data;
         }
     }
 
@@ -197,7 +196,7 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
 
         if (!empty($this->data)) {
 
-            $table = $this->generate_table();
+            $tables = $this->generate_tables();
 
             $pluginoutput = '';
             //buffer output
@@ -217,19 +216,25 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
         }
     }
 
-    public function generate_table() {
-        $table = '<table><tbody>';
-        foreach($this->fields as $fieldname => $data_offset) {
-            $entry_label = get_string('ilp_' . $fieldname . 'display', 'block_ilp');
-            $entry_help = get_config('block_ilp', $fieldname . '_help');
-            echo $entry_help;
-            $table_entry = html_writer::tag('td', $entry_label);
-            $table_entry .= html_writer::tag('td', $entry_help);
-            $table_entry .= html_writer::tag('td', $this->data[$data_offset]);
-            $table .= html_writer::tag('tr', $table_entry);
+    public function generate_tables() {
+        $tables = array();
+        foreach ($this->data as $coursedata) {
+            $table = '<table class="quals-course"><tbody>';
+            foreach($this->fields as $fieldname => $data_offset) {
+                $entry_label = get_string('ilp_' . $fieldname . 'display', 'block_ilp');
+                $entry_help = get_config('block_ilp', $fieldname . '_help');
+                $table_entry = html_writer::tag('th', $entry_label);
+                $table_entry .= html_writer::tag('td', $entry_help);
+                $table_entry .= html_writer::tag('td', $coursedata[$data_offset]);
+                $table .= html_writer::tag('tr', $table_entry);
+            }
+            $table .= '</tbody></table>';
+            $tables[] = $table;
         }
-        $table .= '</tbody></table>';
-        return $table;
+
+        $cleared_div = '<div class="clearfix"></div>';
+        $tables_html = implode($cleared_div, $tables);
+        return $tables_html;
     }
 
 
@@ -251,7 +256,7 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
         $string['ilp_mis_learner_quals_studentid'] = 'Student Id field';
         $string['ilp_mis_learner_quals_studentiddesc'] = 'The id field used to find the student data in the database table';
 
-        $string['ilp_mis_learner_quals_pluginname'] = 'Qualifications';
+        $string['ilp_mis_learner_quals_pluginname'] = 'My Qualifications';
         $string['ilp_mis_learner_quals_pluginnamesettings'] = 'Qualifications configuration';
 
         $string['ilp_mis_learner_quals_course_title'] = 'course_title data field';
@@ -303,7 +308,7 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
         $string['ilp_mis_learner_quals_qualification_leveldisplay'] = 'Qualification Level';
         $string['ilp_mis_learner_quals_delivered_bydisplay'] = 'Delivered By';
 
-        $string['ilp_mis_learner_quals_disp_tabname'] = 'Qualifications';
+        $string['ilp_mis_learner_quals_disp_tabname'] = 'My Qualifications';
         $string['ilp_mis_learner_quals_disp_course_title'] = 'Course Title';
         $string['ilp_mis_learner_quals_disp_award_in_employability'] = 'Award in Employability';
 
@@ -351,7 +356,7 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
      */
     function tab_name()
     {
-        return 'Qualifications';
+        return 'My Qualifications';
     }
 
 }
