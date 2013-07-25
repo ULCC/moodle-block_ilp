@@ -70,6 +70,33 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
         $this->config_text_element($mform, 'mis_learner_quals_delivered_by', get_string('ilp_mis_learner_quals_delivered_by', 'block_ilp'), get_string('ilp_mis_learner_quals_delivered_bydesc', 'block_ilp'), '');
 
 
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_course_title_help', get_string('ilp_mis_learner_quals_course_title_help', 'block_ilp'), get_string('ilp_mis_learner_quals_course_title_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_course_code_help', get_string('ilp_mis_learner_quals_course_code_help', 'block_ilp'), get_string('ilp_mis_learner_quals_course_code_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_occurence_help', get_string('ilp_mis_learner_quals_occurence_help', 'block_ilp'), get_string('ilp_mis_learner_quals_occurence_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_learning_aim_code_help', get_string('ilp_mis_learner_quals_learning_aim_code_help', 'block_ilp'), get_string('ilp_mis_learner_quals_learning_aim_code_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_learning_aim_title_help', get_string('ilp_mis_learner_quals_learning_aim_title_help', 'block_ilp'), get_string('ilp_mis_learner_quals_learning_aim_title_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_learning_awarding_body_name_help', get_string('ilp_mis_learner_quals_learning_awarding_body_name_help', 'block_ilp'), get_string('ilp_mis_learner_quals_learning_aim_title_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_learning_aim_start_date_help', get_string('ilp_mis_learner_quals_learning_aim_start_date_help', 'block_ilp'), get_string('ilp_mis_learner_quals_learning_aim_start_date_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_learning_aim_end_date_help', get_string('ilp_mis_learner_quals_learning_aim_end_date_help', 'block_ilp'), get_string('ilp_mis_learner_quals_learning_aim_end_date_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_completion_description_help', get_string('ilp_mis_learner_quals_completion_description_help', 'block_ilp'), get_string('ilp_mis_learner_quals_completion_description_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_planned_hours_help', get_string('ilp_mis_learner_quals_planned_hours_help', 'block_ilp'), get_string('ilp_mis_learner_quals_planned_hours_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_qualification_level_help', get_string('ilp_mis_learner_quals_qualification_level_help', 'block_ilp'), get_string('ilp_mis_learner_quals_qualification_level_helpdesc', 'block_ilp'), '');
+
+        $this->config_htmleditor_element($mform, 'mis_learner_quals_delivered_by_help', get_string('ilp_mis_learner_quals_delivered_by_help', 'block_ilp'), get_string('ilp_mis_learner_quals_delivered_by_helpdesc', 'block_ilp'), '');
+
+
+
+
         $options = array(
             ILP_IDTYPE_STRING => get_string('stringid', 'block_ilp'),
             ILP_IDTYPE_INT => get_string('intid', 'block_ilp')
@@ -194,8 +221,10 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
         $table = '<table><tbody>';
         foreach($this->fields as $fieldname => $data_offset) {
             $entry_label = get_string('ilp_' . $fieldname . 'display', 'block_ilp');
+            $entry_help = get_config('block_ilp', $fieldname . '_help');
+            echo $entry_help;
             $table_entry = html_writer::tag('td', $entry_label);
-            $table_entry .= html_writer::tag('td', 'Description');
+            $table_entry .= html_writer::tag('td', $entry_help);
             $table_entry .= html_writer::tag('td', $this->data[$data_offset]);
             $table .= html_writer::tag('tr', $table_entry);
         }
@@ -282,6 +311,31 @@ class ilp_mis_learner_quals extends ilp_mis_plugin
         $string['ilp_mis_learner_quals_introductiondesc'] = 'Introduction to display';
         $string['ilp_mis_learner_quals_introductiondisplay'] = 'Introduction';
 
+        $string['ilp_mis_learner_quals_course_title_help'] = 'Course Title Help';
+        $string['ilp_mis_learner_quals_course_code_help'] = 'Course Code Help';
+        $string['ilp_mis_learner_quals_occurence_help'] = 'Occurence Help';
+        $string['ilp_mis_learner_quals_learning_aim_code_help'] = 'Learning Aim Code Help';
+        $string['ilp_mis_learner_quals_learning_aim_title_help'] = 'Learning Aim Title Help';
+        $string['ilp_mis_learner_quals_learning_awarding_body_name_help'] = 'Awarding Body Name Help';
+        $string['ilp_mis_learner_quals_learning_aim_start_date_help'] = 'Learning Aim Start Date Help';
+        $string['ilp_mis_learner_quals_learning_aim_end_date_help'] = 'Learning Aim End Date Help';
+        $string['ilp_mis_learner_quals_completion_description_help'] = 'Completion Help';
+        $string['ilp_mis_learner_quals_planned_hours_help'] = 'Planned Hours Help';
+        $string['ilp_mis_learner_quals_qualification_level_help'] = 'Qualification Level Help';
+        $string['ilp_mis_learner_quals_delivered_by_help'] = 'Delivered By Help';
+
+        $string['ilp_mis_learner_quals_course_title_helpdesc'] = 'Course Title Help';
+        $string['ilp_mis_learner_quals_course_code_helpdesc'] = 'Course Code Help';
+        $string['ilp_mis_learner_quals_occurence_helpdesc'] = 'Occurence Help';
+        $string['ilp_mis_learner_quals_learning_aim_code_helpdesc'] = 'Learning Aim Code Help';
+        $string['ilp_mis_learner_quals_learning_aim_title_helpdesc'] = 'Learning Aim Title Help';
+        $string['ilp_mis_learner_quals_awarding_body_name_helpdesc'] = 'Awarding Body Name Help';
+        $string['ilp_mis_learner_quals_learning_aim_start_date_helpdesc'] = 'Learning Aim Start Date Help';
+        $string['ilp_mis_learner_quals_learning_aim_end_date_helpdesc'] = 'Learning Aim End Date Help';
+        $string['ilp_mis_learner_quals_completion_description_helpdesc'] = 'Completion Help';
+        $string['ilp_mis_learner_quals_planned_hours_helpdesc'] = 'Planned Hours Help';
+        $string['ilp_mis_learner_quals_qualification_level_helpdesc'] = 'Qualification Level Help';
+        $string['ilp_mis_learner_quals_delivered_by_helpdesc'] = 'Delivered By Help';
     }
 
     static function plugin_type()
