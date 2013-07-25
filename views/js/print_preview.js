@@ -29,7 +29,7 @@ M.ilp_view_print_preview=
                 var sbox=document.getElementById('id_group_id');
                 sbox.options.length=0;
                 sbox.selectedIndex=0;
-                var url= M.cfg.wwwroot + '/blocks/ilp/brain.php?fn=groups_in_course&id='+courseid;
+                var url=M.cfg.wwwroot+'/blocks/ilp/brain.php?fn=groups_in_course&id='+courseid;
                 var text=Y.io(url,{sync:'true'}).responseText;
                 Y.JSON.parse(text,
                              function(key,val)

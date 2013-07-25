@@ -100,7 +100,7 @@ if($fullstudents=$dbc->get_studentlist_details(array_keys($students),$status_id,
       $info->display(array());
 
       print "<p align='right'> $student->firstname $student->lastname</p>";
-      print '</div>';
+      print '</div><div class="page-break"></div>';
    }
 }
 else
