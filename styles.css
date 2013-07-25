@@ -822,6 +822,12 @@ img.send_to_vault {
     padding: 10px;
     background: none repeat scroll 0 0 seashell;
 }
+
+.batchprint .reports-container-container .reports-container
+{
+    padding:0px;
+}
+
 .vault_report_entries .report-entry .added_by {
     float: left;
     width: 400px;

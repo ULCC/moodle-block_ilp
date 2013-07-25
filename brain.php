@@ -21,10 +21,10 @@ else
 
 function groups_in_course()
 {
-   $id=optional_param('id',0,PARAM_INT);
+   $courseid=optional_param('id',0,PARAM_INT);
 
    $r=array();
-   foreach(groups_get_all_groups($id) as $group)
+   foreach(groups_get_all_groups($courseid) as $group)
    {
       $r[$group->id]=$group->name;
    }
