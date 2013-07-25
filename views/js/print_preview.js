@@ -47,11 +47,11 @@ M.ilp_view_print_preview=
 
                 if(sbox.options.length>0)
                 {
-                    Y.one('#fitem_id_group_id').hide();
+                    Y.one('#fitem_id_group_id').show();
                 }
                 else
                 {
-                    Y.one('#fitem_id_group_id').show();
+                    Y.one('#fitem_id_group_id').hide();
                 }
             }
         }
