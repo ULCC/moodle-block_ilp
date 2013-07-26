@@ -44,7 +44,10 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_forskills_id', get_string('ilp_mis_learner_skillsbuilder_forskills_id', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_forskills_iddesc', 'block_ilp'), '');
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_first_name', get_string('ilp_mis_learner_skillsbuilder_first_name', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_first_namedesc', 'block_ilp'), '');
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_last_name', get_string('ilp_mis_learner_skillsbuilder_last_name', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_last_namedesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_learner_ref', get_string('ilp_mis_learner_skillsbuilder_learner_ref', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_learner_refdesc', 'block_ilp'), '');
+        /*
+         * studentid does this.
+         * $this->config_text_element($mform, 'mis_learner_skillsbuilder_learner_ref', get_string('ilp_mis_learner_skillsbuilder_learner_ref', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_learner_refdesc', 'block_ilp'), '');
+         */
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_enrolled_engish', get_string('ilp_mis_learner_skillsbuilder_date_enrolled_engish', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_enrolled_engishdesc', 'block_ilp'), '');
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_completed_eng_ia', get_string('ilp_mis_learner_skillsbuilder_date_completed_eng_ia', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_completed_eng_iadesc', 'block_ilp'), '');
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_eng_ia_level', get_string('ilp_mis_learner_skillsbuilder_eng_ia_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_eng_ia_leveldesc', 'block_ilp'), '');
