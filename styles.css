@@ -965,3 +965,51 @@ table.report-entry-table {
     font-size: 11px;
     line-height: 13px;
 }
+
+.skills_builder_overall {
+    font-weight: 800;
+}
+
+#ilp_mis_learner_skillsbuilder h2 {
+    font-weight: normal;
+    text-decoration: underline;
+    font-size: 20px;
+}
+
+#ilp_mis_learner_skillsbuilder .skillsbuilder_subjects_table_holder {
+    width: 80%;
+    background-color: #EFEFEF;
+}
+
+#ilp_mis_learner_skillsbuilder table {
+    width: 100%;
+}
+
+#ilp_mis_learner_skillsbuilder th {
+    background-color: #6A83A8;
+}
+
+#ilp_mis_learner_skillsbuilder td {
+    background-color: #DEE6F3;
+}
+
+#ilp_mis_learner_skillsbuilder th, #ilp_mis_learner_skillsbuilder td {
+    border: solid #EFEFEF 2px;
+}
+
+#ilp_mis_learner_skillsbuilder .skillsbuilder_result {
+    font-weight: 700;
+    margin: 5px;
+    margin-right: 80px;
+}
+
+#ilp_mis_learner_skillsbuilder .result_container {
+    margin-top:10px;
+    background-color: #6A83A8;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#ilp_mis_learner_skillsbuilder .overall_result {
+    font-weight: 800;
+}

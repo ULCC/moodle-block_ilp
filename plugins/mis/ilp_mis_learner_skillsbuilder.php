@@ -221,6 +221,7 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
             $prelimdbcalls = get_config('block_ilp', 'mis_learner_skillsbuilder_prelimcalls');
 
             $this->data = $this->dbquery($table, $keyfields, $this->fields, null, $prelimdbcalls);
+
             //we only need the first record so pass it back
             $this->data = (!empty($this->data)) ? array_shift($this->data) : $this->data;
         }
@@ -240,6 +241,7 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
 
 
             $pluginoutput = '';
+            $subjects_html = $this->generate_subjects_html();
             //buffer output
             ob_start();
 
@@ -257,9 +259,116 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
         }
     }
 
+    public function generate_subjects_html() {
+        $field_ids = $this->fields;
+
+        $out = '';
+        $out .= html_writer::tag('h2', get_string('ilp_mis_learner_skillsbuilder_first_subject', 'block_ilp'));
+
+        $firsttable = $this->generate_first_table();
+        $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
+            array('class'=>'skillsbuilder_result'));
+        $overall_result = $this->data[$field_ids['eng ia level']];
+        $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+        $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+            array('class'=>'skills_builder_youareoverall'));
+        $firsttable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+
+        $out .= html_writer::tag('div', $firsttable, array('class'=>'skillsbuilder_subjects_table_holder'));
+
+        $out .= html_writer::tag('h2', get_string('ilp_mis_learner_skillsbuilder_second_subject', 'block_ilp'));
+        $secondtable = $this->generate_second_table();
+        $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
+            array('class'=>'skillsbuilder_result'));
+        $overall_result = $this->data[$field_ids['mat ia level']];
+        $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+        $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+            array('class'=>'skills_builder_youareoverall'));
+        $secondtable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+
+        $out .= html_writer::tag('div', $secondtable, array('class'=>'skillsbuilder_subjects_table_holder'));
+        return $out;
+    }
+
+    public function generate_first_table() {
+        $field_ids = $this->fields;
+        $table1 = '<table class="subject"><tbody>';
+        $heading = html_writer::tag('th', get_string('ilp_mis_learner_skillsbuilder_section', 'block_ilp'));
+        $heading .= html_writer::tag('th', get_string('ilp_mis_learner_skillsbuilder_workingtowards', 'block_ilp'));
+        $table1 .= html_writer::tag('tr', $heading);
+
+        $datarows = array();
+
+        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_1', 'block_ilp'));
+        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia reading level']]);
+        $datarows[1] = html_writer::tag('tr', $datarowcell);
+
+        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_2', 'block_ilp'));
+        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia punctuation level']]);
+        $datarows[2] = html_writer::tag('tr', $datarowcell);
+
+        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_3', 'block_ilp'));
+        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia grammar level']]);
+        $datarows[3] = html_writer::tag('tr', $datarowcell);
+
+        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_4', 'block_ilp'));
+        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia spelling level']]);
+        $datarows[4] = html_writer::tag('tr', $datarowcell);
+
+        $table1 .= implode('', $datarows);
+
+        $table1 .= '</tbody></table>';
+    return $table1;
+}
+
+    public function generate_second_table() {
+        $field_ids = $this->fields;
+        $table1 = '<table class="subject"><tbody>';
+        $heading = html_writer::tag('th', get_string('ilp_mis_learner_skillsbuilder_section', 'block_ilp'));
+        $heading .= html_writer::tag('th', get_string('ilp_mis_learner_skillsbuilder_workingtowards', 'block_ilp'));
+        $table1 .= html_writer::tag('tr', $heading);
+
+        $datarows = array();
+
+        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_1', 'block_ilp'));
+        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia numer level']]);
+        $datarows[1] = html_writer::tag('tr', $datarowcell);
+
+        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_2', 'block_ilp'));
+        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia mss level']]);
+        $datarows[2] = html_writer::tag('tr', $datarowcell);
+
+        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_3', 'block_ilp'));
+        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia hd level']]);
+        $datarows[3] = html_writer::tag('tr', $datarowcell);
+
+        $table1 .= implode('', $datarows);
+
+        $table1 .= '</tbody></table>';
+        return $table1;
+    }
+
 
     static function language_strings(&$string)
     {
+
+        $string['ilp_mis_learner_skillsbuilder_first_subject'] = 'English';
+        $string['ilp_mis_learner_skillsbuilder_second_subject'] = 'Maths';
+
+        $string['ilp_mis_learner_skillsbuilder_section'] = 'Section';
+        $string['ilp_mis_learner_skillsbuilder_workingtowards'] = 'Working Towards';
+
+        $string['ilp_mis_learner_skillsbuilder_first_subject_skill_1'] = 'Reading';
+        $string['ilp_mis_learner_skillsbuilder_first_subject_skill_2'] = 'Punctuation';
+        $string['ilp_mis_learner_skillsbuilder_first_subject_skill_3'] = 'Grammar';
+        $string['ilp_mis_learner_skillsbuilder_first_subject_skill_4'] = 'Spelling';
+
+        $string['ilp_mis_learner_skillsbuilder_second_subject_skill_1'] = 'Number';
+        $string['ilp_mis_learner_skillsbuilder_second_subject_skill_2'] = 'MSS';
+        $string['ilp_mis_learner_skillsbuilder_second_subject_skill_3'] = 'Handling Data';
+
+        $string['ilp_mis_learner_skillsbuilder_result'] = 'Result';
+        $string['ilp_mis_learner_skillsbuilder_youareoverall'] = 'You are <span class="skills_builder_overall">overall</span> working towards';
 
         $string['ilp_mis_learner_skillsbuilder_table'] = 'Database table';
         $string['ilp_mis_learner_skillsbuilder_tabledesc'] = 'The name of the database table where the data for this plugin is held';
