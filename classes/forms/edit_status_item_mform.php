@@ -185,7 +185,7 @@ class edit_status_item_mform extends ilp_moodleform {
             foreach( $this->dbc->listelement_item_exists( $this->items_tablename, array() ) as $obj ){
                 //below two lines is liable for saving icon files
                 $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
-                file_save_draft_area_files($data->{$obj->id.'_files_filemanager'}, $context->id, 'ilp', 'icon', $obj->id, $icon_options);
+                file_save_draft_area_files($data->{$obj->id.'_files_filemanager'}, $context->id, 'block_ilp', 'icon', $obj->id, $icon_options);
 
                 //if an element has been submitted with blank name and value, delete existing record
                 $itemid = $obj->id;
