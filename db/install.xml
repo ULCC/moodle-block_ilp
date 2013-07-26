@@ -34,8 +34,8 @@
         <FIELD NAME="recurstart" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="false" DEFAULT="1" SEQUENCE="false" COMMENT="when should the recurring rules start to be applied to this report" PREVIOUS="recurmax" NEXT="recurdate"/>
         <FIELD NAME="recurdate" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" COMMENT="the specific date that recurring rules should start from" PREVIOUS="recurstart" NEXT="timecreated"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the record was created" PREVIOUS="recurdate" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the report was last modified" PREVIOUS="timecreated"/>
-        <FIELD NAME="vault" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="Is the report included in the vault?" PREVIOUS="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the time at which the report was last modified" PREVIOUS="timecreated" NEXT="vault" />
+		<FIELD NAME="vault" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="vault" PREVIOUS="timemodified"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="report_creator"/>
@@ -312,7 +312,7 @@
         <KEY NAME="id" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="block_ilp_temp" COMMENT="block_ilp_temp table retrofitted from MySQL" PREVIOUS="block_ilp_preferences">
+    <TABLE NAME="block_ilp_temp" COMMENT="block_ilp_temp table retrofitted from MySQL" PREVIOUS="block_ilp_preferences" NEXT="block_ilp_plu_sts_items">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="misc"/>
         <FIELD NAME="misc" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" PREVIOUS="id" NEXT="data"/>
@@ -324,17 +324,39 @@
         <KEY NAME="tempid" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-      <TABLE NAME="block_ilp_user_choice" COMMENT="this table holds information for user choice for all tables" PREVIOUS="block_ilp_report" NEXT="block_ilp_report_field">
-          <FIELDS>
-              <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="user_id"/>
-              <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="element_id"/>
-              <FIELD NAME="element_id" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" PREVIOUS="user_id" NEXT="choice"/>
-              <FIELD NAME="choice" TYPE="char" LENGTH="255" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="element_id" NEXT="modified"/>
-              <FIELD NAME="modified" TYPE="int" NOTNULL="true" SEQUENCE="false" PREVIOUS="choice"/>
-          </FIELDS>
-          <KEYS>
-              <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-          </KEYS>
-      </TABLE>
+	<TABLE NAME="block_ilp_plu_sts_items" COMMENT="block_ilp_plu_sts_items table retrofitted from MySQL" PREVIOUS="block_ilp_temp" NEXT="block_ilp_user_choice">
+	<FIELDS>
+		<FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true" NEXT="parent_id"/>
+		<FIELD NAME="parent_id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="value"/>
+		<FIELD NAME="value" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="parent_id" NEXT="name"/>
+		<FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="" SEQUENCE="false" PREVIOUS="value" NEXT="hexcolour"/>
+		<FIELD NAME="hexcolour" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="name" NEXT="passfail"/>
+		<FIELD NAME="passfail" TYPE="int" LENGTH="2" NOTNULL="true" SEQUENCE="false" PREVIOUS="hexcolour" NEXT="timemodified"/>
+		<FIELD NAME="timemodified" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="passfail" NEXT="timecreated"/>
+		<FIELD NAME="timecreated" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="timemodified" NEXT="icon"/>
+		<FIELD NAME="icon" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="timecreated" NEXT="display_option"/>
+		<FIELD NAME="display_option" TYPE="char" LENGTH="4" NOTNULL="false" SEQUENCE="false" PREVIOUS="icon" NEXT="description"/>
+		<FIELD NAME="description" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="display_option" NEXT="bg_colour"/>
+		<FIELD NAME="bg_colour" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="description"/>
+	</FIELDS>
+	<INDEXES>
+		<INDEX NAME="mdl_blocilpplustsitem_par_ix" UNIQUE="false" FIELDS="parent_id"/>
+	</INDEXES>
+	<KEYS>
+        <KEY NAME="plu_sts_item_id" TYPE="primary" FIELDS="id"/>
+    </KEYS>
+	</TABLE>
+	<TABLE NAME="block_ilp_user_choice" COMMENT="block_ilp_user_choice table retrofitted from MySQL" PREVIOUS="block_ilp_plu_sts_items">
+		<FIELDS>
+			<FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true" NEXT="user_id"/>
+			<FIELD NAME="user_id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="element_id"/>
+			<FIELD NAME="element_id" TYPE="text" NOTNULL="true" SEQUENCE="false" PREVIOUS="user_id" NEXT="choice"/>
+			<FIELD NAME="choice" TYPE="text" NOTNULL="true" SEQUENCE="false" PREVIOUS="element_id" NEXT="modified"/>
+			<FIELD NAME="modified" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="choice"/>
+		</FIELDS>
+		<KEYS>
+			<KEY NAME="user_choice_id" TYPE="primary" FIELDS="id"/>
+		</KEYS>
+	</TABLE>
   </TABLES>
 </XMLDB>
