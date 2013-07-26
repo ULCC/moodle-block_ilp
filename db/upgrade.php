@@ -661,6 +661,14 @@ function xmldb_block_ilp_upgrade($oldversion) {
         require_once($CFG->dirroot.'/blocks/ilp/lib.php');
         $dbc                =   new ilp_db();
 
+        $table = new $xmldb_table( 'block_ilp_report' );
+        $xmlfield	=	new $xmldb_field('vault');
+        if (!$dbman->field_exists($table,$xmlfield)) {
+
+            $xmlfield->$set_attributes(XMLDB_TYPE_INTEGER,'10',null);
+            $dbman->add_field($table,$xmlfield);
+        }
+
         $reports    =   $dbc->get_reports_by_position(null,null,true,false);
         //first compile a list of all taken positions
         $position = 1;
