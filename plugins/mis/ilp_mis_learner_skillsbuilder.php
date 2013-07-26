@@ -393,7 +393,7 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
 
     static function plugin_type()
     {
-        return 'learnerprofile';
+        return 'skillsbuilder';
     }
 
 

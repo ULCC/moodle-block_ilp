@@ -128,7 +128,7 @@ class ilp_dashboard_mis_skillsbuilder_tab  extends ilp_dashboard_tab {
             //start buffering output
             ob_start();
 
-            if ((isset($seltab[1]) && !empty($seltab[1])) || !empty($this->secondrow))  {
+            if ((!empty($seltab[1])) || !empty($this->secondrow))  {
                 if (isset($seltab[1]) && !empty($seltab[1])) {
                     $misplugin	=	$this->dbc->get_mis_plugin_by_id($seltab[1]);
                 } else {
