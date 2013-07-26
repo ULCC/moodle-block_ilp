@@ -502,13 +502,16 @@ class ilp_db_functions	extends ilp_logging {
             $disabledsql    =   "{$and} status = 1 ";
         }
 
-        $where = (!empty($position) ||empty($disabled) || !empty($deleted) ) ? " WHERE" : "";
+        $vaultsql = $and . ' vault = 0 ';
+
+        $where = (!empty($position) ||empty($disabled) || !empty($deleted) || !empty($vaultsql) ) ? " WHERE" : "";
 
         $sql	=	"SELECT		*
 					 FROM		{block_ilp_report}
 					 {$where}      {$deletedrec}
                      {$disabledsql}
-					 {$positionsql} and vault = 0
+					 {$positionsql}
+					 {$vaultsql}
 					 ORDER BY 	position";
 
         return		$this->dbc->get_records_sql($sql, $params);
