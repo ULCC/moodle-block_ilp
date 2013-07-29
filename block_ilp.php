@@ -134,13 +134,14 @@ class block_ilp extends block_list {
 
           $courseurl	=	(!empty($course_id) && $course_id != 1) ? "&course_id={$course_id}" : '';
           $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}$courseurl";
+          $coreprofileurl  = "{$CFG->wwwroot}/user/profile.php?id={$USER->id}";
 
           if (get_config('block_ilp', 'show_userpicture')) {
-              $this->content->items[] = html_writer::link($url, $blockitems['picture']);
+              $this->content->items[] = $blockitems['picture'];
           }
 
           if (get_config('block_ilp', 'show_linked_name')) {
-              $this->content->items[] = html_writer::link($url, $blockitems['name']);
+              $this->content->items[] = html_writer::link($coreprofileurl, $blockitems['name']);
           }
 
          //additional check to stop users from being able to access the ilp in course context

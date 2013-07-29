@@ -48,6 +48,19 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
 
+    /**
+     * Generates the add-new-entry element.
+     * Gets the capabilites from static or as loaded in the display and shows the element accordingly.
+     * @param string url of script to be requested via AJAX
+     * @param bool $access_report_addreports
+     * @param bool $multiple_entries
+     * @param bool $reportavailable
+     * @param int $studentid
+     * @param int $ajax (0 or 1)
+     * @param int $num_entries the number of existing entries
+     * @param int $displaysummary displays only fields with summary flag
+     * @return string
+     */
     public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null, $num_entries = false, $displaysummary = null) {
         global $CFG;
         if ($ajax) {
@@ -88,6 +101,12 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return '';
     }
 
+    /**
+     * Generates the AJAX loader icon.
+     * @param string $container_classes used in Javascript selectors
+     * @param string $eltype
+     * @return string
+     */
     public function get_loader_icon($container_classes, $eltype = 'div') {
         global $CFG;
         $src = $CFG->wwwroot . '/blocks/ilp/pix/loading.gif';
@@ -95,6 +114,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return html_writer::tag($eltype, $loadericon, array('class'=>$container_classes));
     }
 
+    /**
+     * Generates the comments below each entry.
+     * When a new comment is added via AJAX, the full comment list for that entry is re-generated for display.
+     * @param array $comments
+     * @param int $ajax
+     * @param string $url_params
+     * @param int $entry_id
+     * @param array $access array of access requirements
+     * @return string
+     */
     public function generate_comments($comments, $ajax, $url_params, $entry_id = null, $access = array()) {
         global $OUTPUT, $USER, $CFG;
         $o  = '';
@@ -137,6 +166,15 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return $o;
     }
 
+    /**
+     * Generates the left-hand part of the content of a report entry.
+     * This is designed for use by the standard display and for newly added/edited reports via ajax.
+     * @param array $reportfields
+     * @param array $dontdisplay array of fields not to show
+     * @param int $displaysummary displays only fields with summary flag
+     * @param object $entry_data
+     * @return string
+     */
     public function generate_left_reports($reportfields = null, $dontdisplay, $displaysummary, $entry_data) {
         if (!$reportfields) {
             $reportfields = static::$reportfields;
@@ -164,6 +202,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return html_writer::tag('div', $table, array('class'=>'left-reports'));
     }
 
+    /**
+     * Generates the right-hand part of the content of a report entry.
+     * This is used by the standard display and for newly added/edited reports via ajax in the reports tab.
+     * @param bool $has_courserelated
+     * @param bool $has_deadline
+     * @param object $entry_data
+     * @return string
+     */
     public function generate_right_reports($has_courserelated, $has_deadline, $entry_data) {
         $content = '';
         $fieldcontent = array(
