@@ -4,6 +4,10 @@ class studentreports_ajax_helper {
 
     function __construct() {}
 
+    /**
+     * Generates the html for an entry. When a new entry is added or edited via AJAX, this provides the html or the added/edited
+     * entry. In this case, the first entry is used by the AJAX calls because modified entries are set to display first.
+     */
     public function generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student) {
         global $CFG, $OUTPUT;
         $delete_url = $CFG->wwwroot . "/blocks/ilp/actions/delete_reportentry.ajax.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$courseid}";
@@ -55,6 +59,9 @@ class studentreports_ajax_helper {
         return $reportentry_table;
     }
 
+    /**
+     * Generates the table containing the information for display for an entry.
+     */
     public function generate_fungible_table($reportfields, $dontdisplay, $displaysummary, $entry, $entry_data, $student, $id_base, $comments) {
         $reportentry_table_fungible = '<table class="report-entry-table report-entry-table-' . $entry->id . '" columns="2"><tbody>';
 
