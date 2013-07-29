@@ -8,6 +8,8 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
 
     protected $fields;
     protected $mis_user_id;
+    static $skillsbuilder_data;
+    static $skillsbuilder_fields;
 
     public function    __construct($params = array())
     {
@@ -117,117 +119,128 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
      */
     public function set_data($mis_user_id, $userid = null)
     {
+        if (!empty(static::$skillsbuilder_data) || static::$skillsbuilder_data === false) {
+            // Reload from static if set_data has been previously called.
+            $this->data = static::$skillsbuilder_data;
+            $this->fields = static::$skillsbuilder_fields;
+        } else {
+            $this->mis_user_id = $mis_user_id;
 
-        $this->mis_user_id = $mis_user_id;
+            $table = get_config('block_ilp', 'mis_learner_skillsbuilder_table');
 
-        $table = get_config('block_ilp', 'mis_learner_skillsbuilder_table');
+            if (!empty($table)) {
 
-        if (!empty($table)) {
+                $sidfield = get_config('block_ilp', 'mis_learner_skillsbuilder_studentid');
 
-            $sidfield = get_config('block_ilp', 'mis_learner_skillsbuilder_studentid');
+                //is the id a string or a int
+                $idtype = get_config('block_ilp', 'mis_learner_skillsbuilder_idtype');
+                $mis_user_id = (empty($idtype)) ? "'$mis_user_id'" : $mis_user_id;
 
-            //is the id a string or a int
-            $idtype = get_config('block_ilp', 'mis_learner_skillsbuilder_idtype');
-            $mis_user_id = (empty($idtype)) ? "'$mis_user_id'" : $mis_user_id;
+                $keyfields = array();
 
-            $keyfields = array();
+                $useyearfilter = get_config('block_ilp', 'mis_learner_skillsbuilder_yearfilter');
 
-            $useyearfilter = get_config('block_ilp', 'mis_learner_skillsbuilder_yearfilter');
+                if (!empty($useyearfilter)) {
 
-            if (!empty($useyearfilter)) {
+                    $yearfilterfield = get_config('block_ilp', 'mis_learner_skillsbuilder_yearfilter_field');
+                    $yearfilteryear = get_config('block_ilp', 'mis_learner_skillsbuilder_yearfilter_year');
 
-                $yearfilterfield = get_config('block_ilp', 'mis_learner_skillsbuilder_yearfilter_field');
-                $yearfilteryear = get_config('block_ilp', 'mis_learner_skillsbuilder_yearfilter_year');
+                    $keyfields[$yearfilterfield] = array('=' => $yearfilteryear);
+                }
 
-                $keyfields[$yearfilterfield] = array('=' => $yearfilteryear);
+                //create the key that will be used in sql query
+                $keyfields[$sidfield] = array('=' => $mis_user_id);
+
+
+                //check if the forskills id config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_forskills_id')) $this->fields['forskills id'] = get_config('block_ilp', 'mis_learner_skillsbuilder_forskills_id');
+
+                //check if the first name config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_first_name')) $this->fields['first name'] = get_config('block_ilp', 'mis_learner_skillsbuilder_first_name');
+
+                //check if the last name config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_last_name')) $this->fields['last name'] = get_config('block_ilp', 'mis_learner_skillsbuilder_last_name');
+
+                //check if the learner ref config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_learner_ref')) $this->fields['learner ref'] = get_config('block_ilp', 'mis_learner_skillsbuilder_learner_ref');
+
+                //check if the date enrolled engish config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_engish')) $this->fields['date enrolled engish'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_engish');
+
+                //check if the date completed eng ia config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_ia')) $this->fields['date completed eng ia'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_ia');
+
+                //check if the eng ia level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_level')) $this->fields['eng ia level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_level');
+
+                //check if the eng ia reading level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_reading_level')) $this->fields['eng ia reading level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_reading_level');
+
+                //check if the eng ia punctuation level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_punctuation_level')) $this->fields['eng ia punctuation level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_punctuation_level');
+
+                //check if the eng ia spelling level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_spelling_level')) $this->fields['eng ia spelling level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_spelling_level');
+
+                //check if the eng ia grammar level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_grammar_level')) $this->fields['eng ia grammar level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_grammar_level');
+
+                //check if the date enrolled maths config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_maths')) $this->fields['date enrolled maths'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_maths');
+
+                //check if the date completed mat ia config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_ia')) $this->fields['date completed mat ia'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_ia');
+
+                //check if the mat ia level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_level')) $this->fields['mat ia level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_level');
+
+                //check if the mat ia numer level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_numer_level')) $this->fields['mat ia numer level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_numer_level');
+
+                //check if the mat ia hd level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_hd_level')) $this->fields['mat ia hd level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_hd_level');
+
+                //check if the mat ia mss level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_mss_level')) $this->fields['mat ia mss level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_mss_level');
+
+                //check if the date completed eng diag config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_diag')) $this->fields['date completed eng diag'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_diag');
+
+                //check if the eng diag level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_diag_level')) $this->fields['eng diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_diag_level');
+
+                //check if the date completed mat diag config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_diag')) $this->fields['date completed mat diag'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_diag');
+
+                //check if the mat diag level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_diag_level')) $this->fields['mat diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_diag_level');
+
+                //check if the date enrolled ict config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_ict')) $this->fields['date enrolled ict'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_ict');
+
+                //check if the date completed ict config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_ict')) $this->fields['date completed ict'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_ict');
+
+                //check if the ict diag level config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_ict_diag_level')) $this->fields['ict diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_ict_diag_level');
+
+                //check if the enrolled to site config has been set and pass the value
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_enrolled_to_site')) $this->fields['enrolled to site'] = get_config('block_ilp', 'mis_learner_skillsbuilder_enrolled_to_site');
+
+                $prelimdbcalls = get_config('block_ilp', 'mis_learner_skillsbuilder_prelimcalls');
+
+                $this->data = $this->dbquery($table, $keyfields, $this->fields, null, $prelimdbcalls);
+
+                //we only need the first record so pass it back
+                $this->data = (!empty($this->data)) ? array_shift($this->data) : $this->data;
+                static::$skillsbuilder_data = $this->data;
+                static::$skillsbuilder_fields = $this->fields;
             }
-
-            //create the key that will be used in sql query
-            $keyfields[$sidfield] = array('=' => $mis_user_id);
-
-
-            //check if the forskills id config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_forskills_id')) $this->fields['forskills id'] = get_config('block_ilp', 'mis_learner_skillsbuilder_forskills_id');
-
-            //check if the first name config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_first_name')) $this->fields['first name'] = get_config('block_ilp', 'mis_learner_skillsbuilder_first_name');
-
-            //check if the last name config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_last_name')) $this->fields['last name'] = get_config('block_ilp', 'mis_learner_skillsbuilder_last_name');
-
-            //check if the learner ref config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_learner_ref')) $this->fields['learner ref'] = get_config('block_ilp', 'mis_learner_skillsbuilder_learner_ref');
-
-            //check if the date enrolled engish config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_engish')) $this->fields['date enrolled engish'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_engish');
-
-            //check if the date completed eng ia config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_ia')) $this->fields['date completed eng ia'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_ia');
-
-            //check if the eng ia level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_level')) $this->fields['eng ia level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_level');
-
-            //check if the eng ia reading level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_reading_level')) $this->fields['eng ia reading level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_reading_level');
-
-            //check if the eng ia punctuation level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_punctuation_level')) $this->fields['eng ia punctuation level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_punctuation_level');
-
-            //check if the eng ia spelling level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_spelling_level')) $this->fields['eng ia spelling level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_spelling_level');
-
-            //check if the eng ia grammar level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_grammar_level')) $this->fields['eng ia grammar level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_grammar_level');
-
-            //check if the date enrolled maths config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_maths')) $this->fields['date enrolled maths'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_maths');
-
-            //check if the date completed mat ia config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_ia')) $this->fields['date completed mat ia'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_ia');
-
-            //check if the mat ia level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_level')) $this->fields['mat ia level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_level');
-
-            //check if the mat ia numer level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_numer_level')) $this->fields['mat ia numer level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_numer_level');
-
-            //check if the mat ia hd level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_hd_level')) $this->fields['mat ia hd level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_hd_level');
-
-            //check if the mat ia mss level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_mss_level')) $this->fields['mat ia mss level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_mss_level');
-
-            //check if the date completed eng diag config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_diag')) $this->fields['date completed eng diag'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_diag');
-
-            //check if the eng diag level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_diag_level')) $this->fields['eng diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_diag_level');
-
-            //check if the date completed mat diag config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_diag')) $this->fields['date completed mat diag'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_diag');
-
-            //check if the mat diag level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_diag_level')) $this->fields['mat diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_diag_level');
-
-            //check if the date enrolled ict config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_ict')) $this->fields['date enrolled ict'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_ict');
-
-            //check if the date completed ict config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_ict')) $this->fields['date completed ict'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_ict');
-
-            //check if the ict diag level config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_ict_diag_level')) $this->fields['ict diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_ict_diag_level');
-
-            //check if the enrolled to site config has been set and pass the value
-            if (get_config('block_ilp', 'mis_learner_skillsbuilder_enrolled_to_site')) $this->fields['enrolled to site'] = get_config('block_ilp', 'mis_learner_skillsbuilder_enrolled_to_site');
-
-            $prelimdbcalls = get_config('block_ilp', 'mis_learner_skillsbuilder_prelimcalls');
-
-            $this->data = $this->dbquery($table, $keyfields, $this->fields, null, $prelimdbcalls);
-
-            //we only need the first record so pass it back
-            $this->data = (!empty($this->data)) ? array_shift($this->data) : $this->data;
         }
+    }
+
+    public function get_data() {
+        return $this->data;
     }
 
 
@@ -266,30 +279,39 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
         $field_ids = $this->fields;
 
         $out = '';
-        $out .= html_writer::tag('h2', get_string('ilp_mis_learner_skillsbuilder_first_subject', 'block_ilp'));
-
         $firsttable = $this->generate_first_table();
-        $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
-            array('class'=>'skillsbuilder_result'));
-        $overall_result = $this->data[$field_ids['eng ia level']];
-        $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
-        $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
-            array('class'=>'skills_builder_youareoverall'));
-        $firsttable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+        if ($firsttable || $this->data[$field_ids['eng ia level']]) {
+            $out .= html_writer::tag('h2', get_string('ilp_mis_learner_skillsbuilder_first_subject', 'block_ilp'));
 
-        $out .= html_writer::tag('div', $firsttable, array('class'=>'skillsbuilder_subjects_table_holder'));
+            $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
+                array('class'=>'skillsbuilder_result'));
+            $overall_result = $this->data[$field_ids['eng ia level']];
+            $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+            $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+                array('class'=>'skills_builder_youareoverall'));
+            if ($this->data[$field_ids['eng ia level']]) {
+                $firsttable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+            }
 
-        $out .= html_writer::tag('h2', get_string('ilp_mis_learner_skillsbuilder_second_subject', 'block_ilp'));
+            $out .= html_writer::tag('div', $firsttable, array('class'=>'skillsbuilder_subjects_table_holder'));
+        }
+
         $secondtable = $this->generate_second_table();
-        $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
-            array('class'=>'skillsbuilder_result'));
-        $overall_result = $this->data[$field_ids['mat ia level']];
-        $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
-        $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
-            array('class'=>'skills_builder_youareoverall'));
-        $secondtable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+        if ($secondtable || $this->data[$field_ids['mat ia level']]) {
+            $out .= html_writer::tag('h2', get_string('ilp_mis_learner_skillsbuilder_second_subject', 'block_ilp'));
 
-        $out .= html_writer::tag('div', $secondtable, array('class'=>'skillsbuilder_subjects_table_holder'));
+            $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
+                array('class'=>'skillsbuilder_result'));
+            $overall_result = $this->data[$field_ids['mat ia level']];
+            $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+            $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+                array('class'=>'skills_builder_youareoverall'));
+            if ($this->data[$field_ids['mat ia level']]) {
+                $secondtable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+            }
+
+            $out .= html_writer::tag('div', $secondtable, array('class'=>'skillsbuilder_subjects_table_holder'));
+        }
         return $out;
     }
 
@@ -304,20 +326,35 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
 
         $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_1', 'block_ilp'));
         $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia reading level']]);
-        $datarows[1] = html_writer::tag('tr', $datarowcell);
+
+        if ($this->data[$field_ids['eng ia reading level']]) {
+            $datarows[1] = html_writer::tag('tr', $datarowcell);
+        }
 
         $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_2', 'block_ilp'));
         $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia punctuation level']]);
-        $datarows[2] = html_writer::tag('tr', $datarowcell);
+
+        if ($this->data[$field_ids['eng ia punctuation level']]) {
+            $datarows[2] = html_writer::tag('tr', $datarowcell);
+        }
 
         $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_3', 'block_ilp'));
         $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia grammar level']]);
-        $datarows[3] = html_writer::tag('tr', $datarowcell);
+
+        if ($this->data[$field_ids['eng ia grammar level']]) {
+            $datarows[3] = html_writer::tag('tr', $datarowcell);
+        }
 
         $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_4', 'block_ilp'));
         $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia spelling level']]);
-        $datarows[4] = html_writer::tag('tr', $datarowcell);
 
+        if ($this->data[$field_ids['eng ia spelling level']]) {
+            $datarows[4] = html_writer::tag('tr', $datarowcell);
+        }
+
+        if (empty($datarows)) {
+            return '';
+        }
         $table1 .= implode('', $datarows);
 
         $table1 .= '</tbody></table>';
@@ -335,16 +372,25 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
 
         $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_1', 'block_ilp'));
         $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia numer level']]);
-        $datarows[1] = html_writer::tag('tr', $datarowcell);
+        if ($this->data[$field_ids['mat ia numer level']]) {
+            $datarows[1] = html_writer::tag('tr', $datarowcell);
+        }
 
         $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_2', 'block_ilp'));
         $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia mss level']]);
-        $datarows[2] = html_writer::tag('tr', $datarowcell);
+        if ($this->data[$field_ids['mat ia mss level']]) {
+            $datarows[2] = html_writer::tag('tr', $datarowcell);
+        }
 
         $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_3', 'block_ilp'));
         $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia hd level']]);
-        $datarows[3] = html_writer::tag('tr', $datarowcell);
+        if ($this->data[$field_ids['mat ia hd level']]) {
+            $datarows[3] = html_writer::tag('tr', $datarowcell);
+        }
 
+        if (empty($datarows)) {
+            return '';
+        }
         $table1 .= implode('', $datarows);
 
         $table1 .= '</tbody></table>';
