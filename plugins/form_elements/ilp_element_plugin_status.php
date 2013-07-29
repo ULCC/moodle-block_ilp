@@ -607,7 +607,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             //above code is for upload icon status.
             $mform->addElement( 'html', '<hr />');
 
-            if( !$data_exists ){
+            if (!$data_exists){
                 $deleteurl = $CFG->wwwroot . '/blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
                 $mform->addElement(
                     'static',
