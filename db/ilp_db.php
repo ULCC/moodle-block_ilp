@@ -2233,7 +2233,7 @@ class ilp_db_functions	extends ilp_logging {
         $grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
         $groupwhere = "";
 
-        $context = get_context_instance(CONTEXT_COURSE, $course_id);
+        $context = context_course::instance($course_id);
 
         /// Get all users that should appear in this list
         list($esql, $params) = get_enrolled_sql($context, 'block/ilp:reviewee', $group_id);
