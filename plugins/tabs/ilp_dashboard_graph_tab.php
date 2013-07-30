@@ -177,19 +177,10 @@ class ilp_dashboard_graph_tab  extends ilp_dashboard_tab {
             $user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
 
             if ($course_id != SITEID && !empty($course_id))	{
-                if (method_exists($PAGE,'set_context')) {
-                    //check if the siteid has been set if not
-                    $PAGE->set_context(context_course::instance(CONTEXT_COURSE,$course_id));
-                }	else {
-                    $PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);
-                }
+                //check if the siteid has been set if not
+                $PAGE->set_context(context_course::instance($course_id));
             } else {
-                if (method_exists($PAGE,'set_context')) {
-                    //check if the siteid has been set if not
-                    $PAGE->set_context(context_course::instance(CONTEXT_USER,$user_id));
-                }	else {
-                    $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
-                }
+                $PAGE->set_context(context_user::instance($user_id));
             }
         }
 

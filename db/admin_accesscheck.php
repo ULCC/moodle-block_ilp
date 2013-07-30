@@ -16,10 +16,10 @@ global $CFG, $PARSER,$USER,$PAGE;
 require_login(0, false);
 
 //get the user context of the current user
-$usercontext = get_context_instance(CONTEXT_USER, $USER->id);
+$usercontext = context_user::instance($USER->id);
 
 //get the system context
-$sitecontext = get_context_instance(CONTEXT_SYSTEM);
+$sitecontext = context_system::instance();
 
 //if there is no user context then throw an error
 if (!$usercontext) {

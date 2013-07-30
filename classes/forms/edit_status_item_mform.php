@@ -111,7 +111,7 @@ class edit_status_item_mform extends ilp_moodleform {
             global $CFG, $DB;
             require_once($CFG->dirroot.'/lib/filestorage/file_storage.php');
             require_once($CFG->dirroot.'/lib/filelib.php');
-            $context = get_context_instance(CONTEXT_SYSTEM);
+            $context = context_system::instance();
 			//if we are here, we can assume $data is valid
 			$optionlist = array();
 			if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){

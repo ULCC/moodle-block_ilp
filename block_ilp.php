@@ -73,12 +73,12 @@ class block_ilp extends block_list {
       //choose which display they will see
 
       $found_current_course = false;
-      $sitecontext = get_context_instance(CONTEXT_SYSTEM);
+      $sitecontext = context_system::instance();
       $viewall=(has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) or ilp_is_siteadmin($USER));
       $initial_course_id=0;
 
       foreach($my_courses as $c) {
-         $coursecontext = get_context_instance(CONTEXT_COURSE, $c->id);
+         $coursecontext = context_course::instance($c->id);
          $set_course_groups_link = false;
 
          //we need to get the capabilites of the current user so we can deceide what to display in the block

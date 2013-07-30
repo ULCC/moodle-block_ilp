@@ -595,7 +595,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             // below code is for upload icon for status
             $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
 
-            $context = get_context_instance(CONTEXT_SYSTEM);
+            $context = context_system::instance();
             $component = 'block_ilp';
             $file_area = 'icon';
             $item_id = $option->id;
