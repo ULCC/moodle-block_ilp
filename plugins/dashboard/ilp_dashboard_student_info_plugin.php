@@ -118,12 +118,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
             $byid=array_flip($studentlist);
 
-            if(isset($studentlist[$byid[$student->id]+1]))
+            if(isset($byid[$student->id]) && isset($studentlist[$byid[$student->id]+1]))
             {
                $nextstudent    =   $studentlist[$byid[$student->id]+1];
             }
 
-            if(isset($studentlist[$byid[$student->id]-1]))
+            if(isset($byid[$student->id]) && isset($studentlist[$byid[$student->id]-1]))
             {
                $prevstudent    =   $studentlist[$byid[$student->id]-1];
             }
@@ -182,20 +182,11 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       //check if the set_context method exists
       if (!isset($PAGE->context) === false) {
          if ($course_id != SITEID && !empty($course_id))	{
-            if (method_exists($PAGE,'set_context')) {
-               //check if the siteid has been set if not
-               $PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
-            }	else {
-               $PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);
-            }
+               $PAGE->set_context(context_course::instance($course_id));
          } else {
-            if (method_exists($PAGE,'set_context')) {
                //check if the siteid has been set if not
-               $PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
-            }	else {
-               $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
-            }
-         }
+               $PAGE->set_context(context_user::instance($user_id));
+        }
       }
 
       $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $PAGE->context);
