@@ -335,7 +335,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
         if ($this->dbc->get_user_by_id($this->student_id)) {
-           require_once("$CFG->dirroot/classes/ilp_report_rules.class.php");
+           require_once("$CFG->dirroot/blocks/ilp/classes/ilp_report_rules.class.php");
             //get the selecttab param if has been set
             $this->selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
 
