@@ -23,6 +23,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    static       $access_report_viewcomment;
    static       $reportentries;
    static       $reportfields;
+   static       $access_report_viewotherilp;
 
 
     function __construct($student_id=null,$course_id=null)	{
@@ -63,9 +64,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      */
     public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null, $num_entries = false, $displaysummary = null) {
         global $CFG;
+        $access_report_addreports = static::$access_report_addreports;
         if ($ajax) {
             // If not being called from 'display' of this class
-            $access_report_addreports = static::$access_report_addreports;
             $multiple_entries = static::$multiple_entries;
             $reportavailable = static::$reportavailable;
         }
@@ -269,22 +270,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
             $user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
 
-            if ($course_id != SITEID && !empty($course_id))	{
-               if (method_exists($PAGE,'set_context')) {
-                  //check if the siteid has been set if not
-                  $PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
-               }	else {
-                  $PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);
-               }
-            } else {
-               if (method_exists($PAGE,'set_context')) {
-                  //check if the siteid has been set if not
-                  $PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
-               }	else {
-                  $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
-               }
-            }
-
             $this->secondrow	=	array();
 
             //create a tab for each enabled report
@@ -360,9 +345,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
             if ($report	=$this->dbc->get_report_by_id($report_id)) {
-
-               if($report->status==ILP_ENABLED and $report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
+                $context = $PAGE->context;
+               if($report->status==ILP_ENABLED and $report->has_cap($USER->id,$context,'block/ilp:viewreport'))
                {
+
                   $reportname	=	$report->name;
                   //get all of the fields in the current report, they will be returned in order as
                   //no position has been specified
@@ -412,6 +398,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
 
                   static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
+
+                  static::$access_report_viewotherilp=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
+
+                   if (empty(static::$access_report_viewotherilp) && $USER->id != $this->student_id) {
+                       //the user doesnt have the capability to create this type of report entry
+                       print_error('accessnotallowed','block_ilp');
+
+                   }
 
                   //get all of the entries for this report
 

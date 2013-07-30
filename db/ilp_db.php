@@ -270,7 +270,7 @@ class ilp_db_functions	extends ilp_logging {
         $tableexists = in_array('block_ilp_dash_tab',$this->dbc->get_tables());
 
         // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
+        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array('status'=>1)) : false;
     }
 
     /**
