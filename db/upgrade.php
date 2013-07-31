@@ -729,8 +729,6 @@ function xmldb_block_ilp_upgrade($oldversion) {
             $dbman->add_field($table,$xmlfield);
         }
 
-
-
         //Add new table for user choice
 
         // create the new table to store responses to fields
@@ -765,6 +763,15 @@ function xmldb_block_ilp_upgrade($oldversion) {
 
     }
 
+    if ($oldversion < 2013073101){
+        $reports = $DB->get_records('block_ilp_report');
+        foreach ($reports as $report) {
+            if (!$report->vault) {
+                $report->vault = 0;
+                $DB->update_record('block_ilp_report', $report);
+            }
+        }
+    }
     return true;
 }
 
