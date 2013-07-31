@@ -63,6 +63,10 @@ if($mform->is_submitted()) {
     	$formdata->comments		=	(empty($formdata->comments)) ? 0 : $formdata->comments;
     	
     	$formdata->frequency	=	(empty($formdata->frequency)) ? 0 : $formdata->frequency;
+
+        if (!isset($formdata->vault)) {
+            $formdata->vault = 0;
+        }
     	
         // process the data
     	$success = $mform->process_data($formdata);
