@@ -763,6 +763,7 @@ function xmldb_block_ilp_upgrade($oldversion) {
 
     }
 
+    // Give legacy reports a value of zero.
     if ($oldversion < 2013073101){
         $reports = $DB->get_records('block_ilp_report');
         foreach ($reports as $report) {
