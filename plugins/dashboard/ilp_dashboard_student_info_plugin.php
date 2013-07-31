@@ -315,7 +315,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                if (!empty($reportinfo->total)) {
                   $reportinfo->total     =   $reportinfo->total -  $reportinfo->notcounted;
                   //calculate the percentage
-                  $reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
+                  $reportinfo->percentage	=	($reportinfo->actual) ? $reportinfo->actual/$reportinfo->total	* 100 : 0;
 
                   $reportinfo->name	=	$r->name;
 
