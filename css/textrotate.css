@@ -1,0 +1,13 @@
+table#ilppermissionstable {
+    table-layout: fixed;
+    width: 100%;
+}
+
+#ilppermissionstable .slimcell {
+    overflow: hidden;
+    width: 40px;
+}
+
+#ilppermissionstable .fcheckbox {
+    margin-left: 25px;
+}
