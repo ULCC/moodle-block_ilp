@@ -74,9 +74,10 @@ class edit_report_permissions_mform extends ilp_moodleform {
 			
 			//loop through capabilities and name columns based on the capability
 			foreach ($blockcapabilities as $cap) {
-				$mform->addElement('html','<td>');
+				$mform->addElement('html','<td class="flexiwidth">');
 				$langstring	=	str_ireplace('block/', '', $cap->name);
-				$mform->addElement('html',get_string($langstring,'block_ilp'));
+                $rotate_span = html_writer::tag('span', get_string($langstring,'block_ilp'), array('class'=>'capabilityname')) ;
+				$mform->addElement('html', $rotate_span);
 				$mform->addElement('html','</td>');
 			}
 			$mform->addElement('html','</tr>');
@@ -109,7 +110,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 						$capable[]	=	$cr->id;
 					}
 					$checkboxname	=	$r->id."_".$cap->id;
-					$mform->addElement('html','<td>');
+					$mform->addElement('html','<td class="flexiwidth">');
 					
 					//if the role doesnot have the capability at the system level it can not be assigned
 					//to the role at report level. we ensure this by checking if the id of the current role 

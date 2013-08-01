@@ -65,6 +65,12 @@ $PAGE->set_pagetype('ilp-configuration');
 $PAGE->set_pagelayout(ILP_PAGELAYOUT);
 $PAGE->set_url('/blocks/ilp/actions/edit_report_permissions.php', $PARSER->get_params());
 
+$svgcleverness = can_use_rotated_text();
+
+if ($svgcleverness) {
+    $csslink = new moodle_url($CFG->wwwroot . '/blocks/ilp/css/textrotate.css');
+    $PAGE->requires->css($csslink);
+}
 
 $blockcapabilities	=	$dbc->get_block_capabilities();
 
