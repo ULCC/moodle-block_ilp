@@ -825,11 +825,11 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
     * just need to simply add the plugins entries on to it
     */
    static function language_strings(&$string) {
-      $string['ilp_dashboard_reports_tab'] 					= 'entries tab';
-      $string['ilp_dashboard_reports_tab_name'] 				= 'Reports';
+      $string['ilp_dashboard_reports_tab'] 					= 'forms tab';
+      $string['ilp_dashboard_reports_tab_name'] 				= 'Forms';
       $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
       $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
-      $string['ilp_dashboard_reports_tab_default'] 			= 'Default report';
+      $string['ilp_dashboard_reports_tab_default'] 			= 'Default form';
 
       return $string;
    }
