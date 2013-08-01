@@ -3,7 +3,7 @@ table#ilppermissionstable {
     width: 100%;
 }
 
-#ilppermissionstable .flexiwidth {
+#ilppermissionstable .slimcell {
     overflow: hidden;
     width: 40px;
 }
