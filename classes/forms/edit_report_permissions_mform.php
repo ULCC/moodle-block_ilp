@@ -73,10 +73,12 @@ class edit_report_permissions_mform extends ilp_moodleform {
 			$mform->addElement('html','</td>');
 			
 			//loop through capabilities and name columns based on the capability
-			foreach ($blockcapabilities as $cap) {
+			foreach ($blockcapabilities as $id => $cap) {
 				$mform->addElement('html','<td class="slimcell">');
 				$langstring	=	str_ireplace('block/', '', $cap->name);
-                $rotate_span = html_writer::tag('span', get_string($langstring,'block_ilp'), array('class'=>'capabilityname')) ;
+                $cap_fullname = get_string($langstring,'block_ilp');
+                $blockcapabilities[$id]->fullname = $cap_fullname;
+                $rotate_span = html_writer::tag('span', $cap_fullname, array('class'=>'capabilityname')) ;
 				$mform->addElement('html', $rotate_span);
 				$mform->addElement('html','</td>');
 			}
@@ -100,7 +102,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 					$capable = array();				
 					//once we have an ilp for just one version of moodle it will be wise to 
 					//create a record_exists query to do the work that the code below is doing
-					
+
 					//get all roles with CAP_ALLOW for this capabilty
 					$capabilityroles	=	get_roles_with_capability($cap->name,CAP_ALLOW);
 					//put all the ids of the roles into an array which will be used to check if 
@@ -116,8 +118,9 @@ class edit_report_permissions_mform extends ilp_moodleform {
 					//to the role at report level. we ensure this by checking if the id of the current role 
 					//is in the $capabilityroles array. if it is then we do not disabled the checkbox if it isn't we 
 					//disable the checkbox
-					$disabled = (in_array($r->id,$capable)) ? null : array("disabled"=>"disabled"); 
-					$mform->addElement('checkbox', $checkboxname,null,null,$disabled);
+					$attrs = (in_array($r->id,$capable)) ? null : array("disabled"=>"disabled");
+                    $attrs['title'] = $cap->fullname;
+					$mform->addElement('checkbox', $checkboxname,null,null,$attrs);
 					$mform->addElement('html','</td>');
 				}
 				
