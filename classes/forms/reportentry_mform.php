@@ -70,7 +70,7 @@ class report_entry_mform extends ilp_moodleform {
 
 			$title	=	"{$report->name} ".get_string('for','block_ilp')." {$user->firstname} {$user->lastname}";
 			//create a new fieldset
-        	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
+        	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset"><div>');
             $mform->addElement('html', '<legend class="ftoggler">'.$title.'</legend>');
 
             $desc	=	html_entity_decode($report->description);
@@ -155,7 +155,7 @@ class report_entry_mform extends ilp_moodleform {
 
             $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
             //close the fieldset
-	        $mform->addElement('html', '</fieldset>');
+	        $mform->addElement('html', '</div></fieldset>');
 		}
 
 
