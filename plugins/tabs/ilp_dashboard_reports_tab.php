@@ -195,7 +195,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
            {
               $fieldcontent = html_writer::tag('th', '<strong>' . $field->label . '</strong>: ');
               $fieldvalue = (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
-              $fieldcontent .= html_writer::tag('td', $fieldvalue);
+              $attrs = array('class'=>$field->pluginname);
+              $fieldcontent .= html_writer::tag('td', $fieldvalue, $attrs);
               $table .= html_writer::tag('tr', $fieldcontent);
            }
         }
@@ -352,7 +353,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   $reportname	=	$report->name;
                   //get all of the fields in the current report, they will be returned in order as
                   //no position has been specified
-                  $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+                  $reportfields		=	$this->dbc->get_report_fields_by_position($report_id, null, null, true);
+
                   static::$reportfields = $reportfields;
                   $reporticon	= (!empty($report->iconfile)) ? '' : '';
 
