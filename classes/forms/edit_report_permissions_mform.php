@@ -90,10 +90,10 @@ class edit_report_permissions_mform extends ilp_moodleform {
 			foreach($roles as $r) {
 				//start new row
 				$mform->addElement('html','<tr>');
-				
+				$displayname = (!empty($r->name)) ? $r->name : $r->shortname;
 				//set the row title
 				$mform->addElement('html','<td calss="rowtitle">');
-				$mform->addElement('html',$r->name);
+				$mform->addElement('html',$displayname);
 				$mform->addElement('html','</td>');
 				
 				//create the checkboxes using the current context and capability id as 
