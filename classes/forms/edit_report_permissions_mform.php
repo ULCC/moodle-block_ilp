@@ -60,7 +60,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 			$mform->addElement('hidden', 'report_id', $this->report_id);
         	$mform->setType('report_id', PARAM_INT);
 			
-			$mform->addElement('html','<table id="ilppermissionstable">');
+			$mform->addElement('html','<table id="ilppermissionstable" class="generaltable">');
 			
 			$blockcapabilities	=	$this->dbc->get_block_capabilities();
 						
