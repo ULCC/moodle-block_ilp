@@ -91,9 +91,6 @@ class ilp_element_plugin_rdo extends ilp_element_plugin_itemlist{
         $fieldname	=	$reportfield_id."_field";
 
         $entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
-        if (!empty($entry)) {
-            $entryobj->$fieldname	=	html_entity_decode($entry->value);
-        }
 
         //loop through all of the data for this entry in the particular entry
         foreach($entry as $e) {
