@@ -226,10 +226,10 @@ class edit_status_item_mform extends ilp_moodleform {
                         $file_name = $DB->get_field_sql("SELECT filename FROM {files} where component = 'ilp' and filearea='icon' and itemid=$obj->id and filesize != 0");
                         if($file_name){
                             $newvalue = '';//???? get the icon file name
-                            $obj->$fieldname = $file_name;
+                            $obj->$fieldname = 'icon';
                             $update = true;
                         }else {
-                            $obj->$fieldname = '';
+                            $obj->$fieldname = 'icon';
                             $update = true;
                         }
                     }else {
