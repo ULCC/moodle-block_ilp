@@ -328,3 +328,18 @@ function block_ilp_pluginfile($course,$birecord,$context, $filearea, $args, $for
     session_get_instance()->write_close();
     send_stored_file($file, 60*60, 0, $forcedownload);
 }
+
+function ilp_get_status_icon($iconid)
+{
+   $context=context_system::instance();
+   $fs = get_file_storage();
+
+   foreach($fs->get_area_files($context->id, 'block_ilp', 'icon', $iconid) as $file)
+   {
+      if(!$file->is_directory())
+      {
+         return $file->get_filename();
+      }
+      return '';
+   }
+}

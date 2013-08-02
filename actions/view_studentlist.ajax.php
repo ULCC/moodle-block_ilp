@@ -178,7 +178,8 @@ $defaultstatusitem = $dbc->get_status_item_by_id($defaultstatusitem_id);
 
 if(!empty($defaultstatusitem)){
     if($defaultstatusitem->display_option == 'icon'){
-        $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$defaultstatusitem->id/$defaultstatusitem->icon";
+       $filename=ilp_get_status_icon($defaultstatusitem->id);
+        $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$defaultstatusitem->id/$filename";
         //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
         $this_file = "<tooltip class='tooltip'>
                                     <img src=\"$path\" alt=\"$defaultstatusitem->description\"  width='50px'/>
