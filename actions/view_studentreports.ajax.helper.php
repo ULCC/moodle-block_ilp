@@ -8,7 +8,7 @@ class studentreports_ajax_helper {
      * Generates the html for an entry. When a new entry is added or edited via AJAX, this provides the html or the added/edited
      * entry. In this case, the first entry is used by the AJAX calls because modified entries are set to display first.
      */
-    public function generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student) {
+    public function generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student, $readonly = false) {
         global $CFG, $OUTPUT;
         $delete_url = $CFG->wwwroot . "/blocks/ilp/actions/delete_reportentry.ajax.php?report_id={$report_id}&user_id={$entry_data->user_id}&entry_id={$entry->id}&course_id={$courseid}";
         $deletionicon = html_writer::tag('img', '', array('src'=>$OUTPUT->pix_url("/t/delete"), 'alt'=>get_string('edit')));
@@ -52,9 +52,12 @@ class studentreports_ajax_helper {
         $reportentry_table .= $reportentry_table_fungible;
         $reportentry_table .= html_writer::tag('div', $comments_html, array(
             'class'=>'hiddenelement comments-' . $entry->id . '-' . $student->id, 'id'=>'entry_' . $entry->id . '_container'));
-        $reportentry_table .= $add_comment_link_html;
-        $reportentry_table .= $delete_span_html;
-        $reportentry_table .= $edition_html;
+        if (!$readonly) {
+            $reportentry_table .= $add_comment_link_html;
+            $reportentry_table .= $delete_span_html;
+            $reportentry_table .= $edition_html;
+        }
+
         $reportentry_table .= '</div>';
         return $reportentry_table;
     }
