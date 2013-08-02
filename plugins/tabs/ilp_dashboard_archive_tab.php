@@ -188,56 +188,6 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 			
 		return $pluginoutput;
 	}
-
-	/**
-	 * Adds the string values from the tab to the language file
-	 *
-	 * @param	array &$string the language strings array passed by reference so we  
-	 * just need to simply add the plugins entries on to it
-	 */
-	 static function language_strings(&$string) {
-        $string['ilp_dashboard_archive_tab'] 					= 'Archive';
-        $string['ilp_dashboard_archive_tab_name'] 				= 'Archives';
-        
-        $string['ilp_dashboard_archive_tab_targetname'] 				= 'Name';
-        $string['ilp_dashboard_archive_tab_targetagreed'] 				= 'Target';
-        $string['ilp_dashboard_archive_tab_targetcategory'] 			= 'Category';
-        $string['ilp_dashboard_archive_tab_addedby'] 					= 'Set By';
-        $string['ilp_dashboard_archive_tab_targetset'] 					= 'Set';
-        $string['ilp_dashboard_archive_tab_targetdeadline'] 			= 'Deadline';
-        $string['ilp_dashboard_archive_tab_concername'] 				= '&nbsp;';     //requested for Coulsdon, but should do for everybody
-        $string['ilp_dashboard_archive_tab_report1']	 				= 'Report1';
-        $string['ilp_dashboard_archive_tab_report2']	 				= 'Report2';
-        $string['ilp_dashboard_archive_tab_report3']	 				= 'Report3';
-        $string['ilp_dashboard_archive_tab_report4']	 				= 'Report4';
-        $string['ilp_dashboard_archive_tab_report5']	 				= 'Report5';
-        $string['ilp_dashboard_archive_tab_target']		 				= 'Target';
-        $string['ilp_dashboard_archive_tab_student']	 				= 'Student';
-        $string['ilp_dashboard_archive_tab_teacher']	 				= 'Teacher';
-        $string['ilp_dashboard_archive_tab_tutor']		 				= 'Tutor';  
-
-        $string['ilp_dashboard_archive_tab_reportdesc']	 				= 'The title of this report';
-        
-        $string['ilp_dashboard_archive_tab_reportoneheader']	 				= 'Report 1';
-        $string['ilp_dashboard_archive_tab_reporttwoheader']	 				= 'Report 2';
-        $string['ilp_dashboard_archive_tab_reportthreeheader']	 				= 'Report 3';
-        $string['ilp_dashboard_archive_tab_reportfourheader']	 				= 'Report 4';
-        $string['ilp_dashboard_archive_tab_reportfiveheader']	 				= 'Report 5';
-        $string['ilp_dashboard_archive_tab_reportstudentheader']	 			= 'Student Info';
-        $string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
-        $string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
-        $string['ilp_dashboard_archive_tab_reportteacherheader']	 				= 'Teacher';
-        $string['ilp_dashboard_archive_tab_reporttutorheader']	 				= 'Tutor';
-        
-        
-        
-        $string['ilp_dashboard_archive_tab_studentinfo_student']	 				= 'Student text';
-        $string['ilp_dashboard_archive_tab_studentinfo_teacher']	 				= 'Teacher text';
-        $string['ilp_dashboard_archive_tab_studentinfo_shared']	 					= 'Shared text';
-        
-	    return $string;
-    }
- 
  	 
 	 /**
 	  * 
