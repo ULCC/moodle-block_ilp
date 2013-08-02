@@ -49,7 +49,7 @@ class edit_status_item_mform extends ilp_moodleform {
        		 	$fieldsettitle = get_string('edit_status_items', 'block_ilp');
         	
        		 	//create a new fieldset
-       		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
+       		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset"><div>');
        		    $mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
 
         	
@@ -73,7 +73,7 @@ class edit_status_item_mform extends ilp_moodleform {
 		        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        
 		        //close the fieldset
-		        $mform->addElement('html', '</fieldset>');
+		        $mform->addElement('html', '</div></fieldset>');
 		}
 		
 		/**
@@ -111,7 +111,7 @@ class edit_status_item_mform extends ilp_moodleform {
             global $CFG, $DB;
             require_once($CFG->dirroot.'/lib/filestorage/file_storage.php');
             require_once($CFG->dirroot.'/lib/filelib.php');
-            $context = get_context_instance(CONTEXT_SYSTEM);
+            $context = context_system::instance();
 			//if we are here, we can assume $data is valid
 			$optionlist = array();
 			if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
@@ -185,7 +185,7 @@ class edit_status_item_mform extends ilp_moodleform {
             foreach( $this->dbc->listelement_item_exists( $this->items_tablename, array() ) as $obj ){
                 //below two lines is liable for saving icon files
                 $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
-                file_save_draft_area_files($data->{$obj->id.'_files_filemanager'}, $context->id, 'ilp', 'icon', $obj->id, $icon_options);
+                file_save_draft_area_files($data->{$obj->id.'_files_filemanager'}, $context->id, 'block_ilp', 'icon', $obj->id, $icon_options);
 
                 //if an element has been submitted with blank name and value, delete existing record
                 $itemid = $obj->id;

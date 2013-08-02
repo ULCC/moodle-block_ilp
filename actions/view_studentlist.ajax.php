@@ -178,7 +178,7 @@ $defaultstatusitem = $dbc->get_status_item_by_id($defaultstatusitem_id);
 
 if(!empty($defaultstatusitem)){
     if($defaultstatusitem->display_option == 'icon'){
-        $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$defaultstatusitem->id&f=",$defaultstatusitem->icon);
+        $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$defaultstatusitem->id/$defaultstatusitem->icon";
         //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
         $this_file = "<tooltip class='tooltip'>
                                     <img src=\"$path\" alt=\"$defaultstatusitem->description\"  width='50px'/>
@@ -245,12 +245,12 @@ if (!empty($studentslist)) {
         $data['picture'] = $OUTPUT->user_picture($student, array('return' => true, 'size' => 50));
 
         $data['fullname'] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$student->id}{$course_param}' class=\"userlink\">" . fullname($student) . "</a>";
-        //if the student status has been set then show it else they have not had there ilp setup
-        //thus there status is the default
+        //if the student status has been set then show it else they have not had their ilp setup
+        //thus their status is the default
         //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
         if(!empty($student->u_status)){
             if($student->u_display_option == 'icon'){
-                $path = file_encode_url($CFG->wwwroot."/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$student->u_status_id&f=",$student->u_status_icon);
+                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$student->u_status_id/$student->u_status_icon";
                 //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
                 $this_file = "<tooltip class='tooltip'>
                                     <img src=\"$path\" alt=\"$student->u_status_description\"  width='50px'/>

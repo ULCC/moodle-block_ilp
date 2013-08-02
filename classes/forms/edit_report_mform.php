@@ -43,7 +43,7 @@ class edit_report_mform extends ilp_moodleform {
         	$fieldsettitle = (!empty($this->report_id)) ? get_string('editreport', 'block_ilp') : get_string('createreport', 'block_ilp');
         	
         	//create a new fieldset
-        	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
+        	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset"><div>');
            $mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
         	
         	$mform->addElement('hidden', 'id');
@@ -220,7 +220,7 @@ class edit_report_mform extends ilp_moodleform {
 	        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        
 	        //close the fieldset
-	        $mform->addElement('html', '</fieldset>');
+	        $mform->addElement('html', '</div></fieldset>');
 		}
 
 

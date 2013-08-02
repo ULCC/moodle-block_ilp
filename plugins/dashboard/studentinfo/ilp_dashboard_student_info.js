@@ -17,8 +17,10 @@ M.ilp_dashboard_student_info = {
          */
         showelement : function(element) {
             ele     =   Y.one('#'+element);
-            ele.removeClass('hiddenelement');
-            ele.addClass('visbileelement');
+            if (ele) {
+                ele.removeClass('hiddenelement');
+                ele.addClass('visbileelement');
+            }
         },
 
         /**
@@ -27,8 +29,10 @@ M.ilp_dashboard_student_info = {
          */
         hideelement : function(element) {
             ele     =   Y.one('#'+element);
-            ele.removeClass('visbileelement');
-            ele.addClass('hiddenelement');
+            if (ele) {
+                ele.removeClass('visbileelement');
+                ele.addClass('hiddenelement');
+            }
         },
 
 

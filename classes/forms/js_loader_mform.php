@@ -37,6 +37,9 @@ class js_loader_mform extends ilp_moodleform {
 	            array('class' => 'form_input', 'rows'=> '10', 'cols'=>'65')
 	        );
 
+            $mform->addElement('filemanager', 'loader_file_filemanager', 'loader_filemanager', null,
+                array());
+
 		}
 	
 }

@@ -661,6 +661,14 @@ function xmldb_block_ilp_upgrade($oldversion) {
         require_once($CFG->dirroot.'/blocks/ilp/lib.php');
         $dbc                =   new ilp_db();
 
+        $table = new $xmldb_table( 'block_ilp_report' );
+        $xmlfield	=	new $xmldb_field('vault');
+        if (!$dbman->field_exists($table,$xmlfield)) {
+
+            $xmlfield->$set_attributes(XMLDB_TYPE_INTEGER,'10',null);
+            $dbman->add_field($table,$xmlfield);
+        }
+
         $reports    =   $dbc->get_reports_by_position(null,null,true,false);
         //first compile a list of all taken positions
         $position = 1;
@@ -721,8 +729,6 @@ function xmldb_block_ilp_upgrade($oldversion) {
             $dbman->add_field($table,$xmlfield);
         }
 
-
-
         //Add new table for user choice
 
         // create the new table to store responses to fields
@@ -757,6 +763,16 @@ function xmldb_block_ilp_upgrade($oldversion) {
 
     }
 
+    // Give legacy reports a value of zero.
+    if ($oldversion < 2013073101){
+        $reports = $DB->get_records('block_ilp_report');
+        foreach ($reports as $report) {
+            if (!$report->vault) {
+                $report->vault = 0;
+                $DB->update_record('block_ilp_report', $report);
+            }
+        }
+    }
     return true;
 }
 

@@ -27,7 +27,7 @@ if ($USER->id != $user_id ) {
 	
 	if (!empty($course_id))	{
 
-		$currentcoursecontext	=	get_context_instance(CONTEXT_COURSE, $course_id);
+		$currentcoursecontext	=	context_course::instance($course_id);
 		
 		if ($context ==	$currentcoursecontext)	{
 			$dbc			=	new ilp_db();

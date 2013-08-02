@@ -595,8 +595,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             // below code is for upload icon for status
             $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
 
-            $context = get_context_instance(CONTEXT_SYSTEM);
-            $component = 'ilp';
+            $context = context_system::instance();
+            $component = 'block_ilp';
             $file_area = 'icon';
             $item_id = $option->id;
 
@@ -607,8 +607,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             //above code is for upload icon status.
             $mform->addElement( 'html', '<hr />');
 
-            if( !$data_exists ){
-                $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
+            if (!$data_exists){
+                $deleteurl = $CFG->wwwroot . '/blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
                 $mform->addElement(
                     'static',
                     'delete_link',

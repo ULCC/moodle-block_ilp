@@ -175,29 +175,29 @@ class ilp_mis_attendance_plugin_registerterm extends ilp_mis_attendance_plugin
             $terms = (empty($sixtermformat)) ? 4 : 7;
 
             $data['metric'] = get_string('ilp_mis_attendance_plugin_registerterm_disp_attendance', 'block_ilp');
-            $data['overall'] = $this->percent_format( $summarydata['att_prec'][0], true );
-            $data['one'] = $this->percent_format( $summarydata['att_prec'][1], true );
-            $data['two'] = $this->percent_format( $summarydata['att_prec'][2], true );
-            $data['three'] = $this->percent_format( $summarydata['att_prec'][3], true );
+            $data['overall'] = isset( $summarydata['att_prec'][0] ) ? $this->percent_format( $summarydata['att_prec'][0], true ): 0 ;
+            $data['one'] = isset( $summarydata['att_prec'][1] ) ? $this->percent_format( $summarydata['att_prec'][1], true ): 0 ;
+            $data['two'] = isset( $summarydata['att_prec'][2] ) ? $this->percent_format( $summarydata['att_prec'][2], true ): 0 ;
+            $data['three'] = isset( $summarydata['att_prec'][3] ) ? $this->percent_format( $summarydata['att_prec'][3], true ): 0 ;
 
             if (!empty($sixtermformat)) {
-                $data['four'] = $this->percent_format( $summarydata['att_prec'][4], true );
-                $data['five'] = $this->percent_format( $summarydata['att_prec'][5], true );
-                $data['six'] = $this->percent_format( $summarydata['att_prec'][6], true );
+                $data['four'] = isset( $summarydata['att_prec'][4] ) ? $this->percent_format( $summarydata['att_prec'][4], true ): 0 ;
+                $data['five'] = isset( $summarydata['att_prec'][5] ) ? $this->percent_format( $summarydata['att_prec'][5], true ): 0 ;
+                $data['six'] = isset( $summarydata['att_prec'][6] ) ? $this->percent_format( $summarydata['att_prec'][6], true ): 0 ;
             }
 
             $flextable->add_data_keyed($data);
 
             $data['metric'] = get_string('ilp_mis_attendance_plugin_registerterm_disp_punctuality', 'block_ilp');
-            $data['overall'] = $this->percent_format( $summarydata['pun_perc'][0], true );
-            $data['one'] = $this->percent_format( $summarydata['pun_perc'][1], true );
-            $data['two'] = $this->percent_format( $summarydata['pun_perc'][2], true );
-            $data['three'] = $this->percent_format( $summarydata['pun_perc'][3], true );
+            $data['overall'] = isset( $summarydata['pun_perc'][0] ) ? $this->percent_format( $summarydata['pun_perc'][0], true ): 0 ;
+            $data['one'] = isset( $summarydata['pun_perc'][1] ) ? $this->percent_format( $summarydata['pun_perc'][1], true ): 0 ;
+            $data['two'] = isset( $summarydata['pun_perc'][2] ) ? $this->percent_format( $summarydata['pun_perc'][2], true ): 0 ;
+            $data['three'] = isset( $summarydata['pun_perc'][3] ) ? $this->percent_format( $summarydata['pun_perc'][3], true ): 0 ;
 
             if (!empty($sixtermformat)) {
-                $data['four'] = $this->percent_format( $summarydata['pun_perc'][4], true );
-                $data['five'] = $this->percent_format( $summarydata['pun_perc'][5], true );
-                $data['six'] = $this->percent_format( $summarydata['pun_perc'][6], true );
+                $data['four'] = isset( $summarydata['pun_perc'][4] ) ? $this->percent_format( $summarydata['pun_perc'][4], true ): 0 ;
+                $data['five'] = isset( $summarydata['pun_perc'][5] ) ? $this->percent_format( $summarydata['pun_perc'][5], true ): 0 ;
+                $data['six'] = isset( $summarydata['pun_perc'][6] ) ? $this->percent_format( $summarydata['pun_perc'][6], true ): 0 ;
             }
 
             $flextable->add_data_keyed($data);

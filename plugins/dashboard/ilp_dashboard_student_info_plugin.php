@@ -60,7 +60,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
         $o = '';
         if($statusitem->display_option == 'icon'){
             if($statusitem->icon){
-                $path = file_encode_url($CFG->wwwroot . "/blocks/ilp/file.php?con=1&com=ilp&a=icon&i=$statusitem->id&f=",$statusitem->icon);
+                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$statusitem->id/$statusitem->icon";
                 $this_file = "<a class='tooltip'>
                                     <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
                                     <span>
@@ -118,12 +118,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
             $byid=array_flip($studentlist);
 
-            if(isset($studentlist[$byid[$student->id]+1]))
+            if(isset($byid[$student->id]) && isset($studentlist[$byid[$student->id]+1]))
             {
                $nextstudent    =   $studentlist[$byid[$student->id]+1];
             }
 
-            if(isset($studentlist[$byid[$student->id]-1]))
+            if(isset($byid[$student->id]) && isset($studentlist[$byid[$student->id]-1]))
             {
                $prevstudent    =   $studentlist[$byid[$student->id]-1];
             }
@@ -182,20 +182,11 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       //check if the set_context method exists
       if (!isset($PAGE->context) === false) {
          if ($course_id != SITEID && !empty($course_id))	{
-            if (method_exists($PAGE,'set_context')) {
-               //check if the siteid has been set if not
-               $PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
-            }	else {
-               $PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);
-            }
+               $PAGE->set_context(context_course::instance($course_id));
          } else {
-            if (method_exists($PAGE,'set_context')) {
                //check if the siteid has been set if not
-               $PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
-            }	else {
-               $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
-            }
-         }
+               $PAGE->set_context(context_user::instance($user_id));
+        }
       }
 
       $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $PAGE->context);
@@ -324,7 +315,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                if (!empty($reportinfo->total)) {
                   $reportinfo->total     =   $reportinfo->total -  $reportinfo->notcounted;
                   //calculate the percentage
-                  $reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
+                  $reportinfo->percentage	=	($reportinfo->actual) ? $reportinfo->actual/$reportinfo->total	* 100 : 0;
 
                   $reportinfo->name	=	$r->name;
 

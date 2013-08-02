@@ -673,7 +673,12 @@ tooltip.tooltip span {
     font-size: 12px;
     font-weight: normal;
 }
+
+tooltip.tooltip {
+    position: relative;
+}
 tooltip.tooltip:hover span{
+    top: -50%;
     display:inline;
     position:absolute;
     color:#111;
@@ -964,4 +969,9 @@ table.report-entry-table {
     right: 30px;
     font-size: 11px;
     line-height: 13px;
+}
+
+
+.ilp .left-reports td.ilp_element_plugin_state img {
+    display: block;
 }

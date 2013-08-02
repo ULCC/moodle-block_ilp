@@ -266,7 +266,7 @@ class ilp_element_plugin_file extends ilp_element_plugin {
              $fs = get_file_storage();
 
              //get the current users context as this is where the file will have been saved
-             $context = get_context_instance(CONTEXT_USER, $USER->id);
+             $context = context_user::instance($USER->id);
 
              //check if the file exists
              if ($files = $fs->get_area_files($context->id, 'user', 'draft', $draftid, 'id DESC', false)) {

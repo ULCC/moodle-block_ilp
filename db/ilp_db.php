@@ -270,7 +270,7 @@ class ilp_db_functions	extends ilp_logging {
         $tableexists = in_array('block_ilp_dash_tab',$this->dbc->get_tables());
 
         // return resource types or false
-        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array()) : false;
+        return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_tab', array('status'=>1)) : false;
     }
 
     /**
@@ -502,13 +502,16 @@ class ilp_db_functions	extends ilp_logging {
             $disabledsql    =   "{$and} status = 1 ";
         }
 
-        $where = (!empty($position) ||empty($disabled) || !empty($deleted) ) ? " WHERE" : "";
+        $vaultsql = $and . ' vault = 0 ';
+
+        $where = (!empty($position) ||empty($disabled) || !empty($deleted) || !empty($vaultsql) ) ? " WHERE" : "";
 
         $sql	=	"SELECT		*
 					 FROM		{block_ilp_report}
 					 {$where}      {$deletedrec}
                      {$disabledsql}
-					 {$positionsql} and vault = 0
+					 {$positionsql}
+					 {$vaultsql}
 					 ORDER BY 	position";
 
         return		$this->dbc->get_records_sql($sql, $params);
@@ -580,7 +583,7 @@ class ilp_db_functions	extends ilp_logging {
      * 		or less than position. move up = 1 move down 0
      * @return mixed object containing the plugin record or false
      */
-    function get_report_fields_by_position($report_id,$position=null,$type=null) {
+    function get_report_fields_by_position($report_id,$position=null,$type=null, $plugin_details = null) {
 
         $positionsql	=	"";
         //the operand that will be used
@@ -593,11 +596,21 @@ class ilp_db_functions	extends ilp_logging {
             $positionsql 	=  "AND (position = :position ||  position = :otherfield)";
         }
 
-        $sql	=	"SELECT		*
+        if ($plugin_details) {
+            $sql	=	"SELECT		reportfield.*, plugin.name as pluginname
+				    	 FROM		{block_ilp_report_field} reportfield
+				    	 INNER JOIN {block_ilp_plugin} plugin ON (reportfield.plugin_id = plugin.id)
+					     WHERE		report_id	= :report_id
+					    {$positionsql}
+					     ORDER BY 	position";
+        } else {
+            $sql	=	"SELECT		*
 				    	 FROM		{block_ilp_report_field}
 					     WHERE		report_id	= :report_id
 					    {$positionsql}
 					     ORDER BY 	position";
+        }
+
 
         return		$this->dbc->get_records_sql($sql, $params);
     }
@@ -2230,7 +2243,7 @@ class ilp_db_functions	extends ilp_logging {
         $grouptable		=	(!empty($group_id)) ? " INNER JOIN {groups_members} as gm on u.id = gm.userid " : "";
         $groupwhere = "";
 
-        $context = get_context_instance(CONTEXT_COURSE, $course_id);
+        $context = context_course::instance($course_id);
 
         /// Get all users that should appear in this list
         list($esql, $params) = get_enrolled_sql($context, 'block/ilp:reviewee', $group_id);

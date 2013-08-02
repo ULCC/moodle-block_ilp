@@ -205,7 +205,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
 	            array('class' => 'form_input', 'canUseHtmlEditor'=>'detect', 'rows'=> '20', 'cols'=>'65')
 	    );
         $my_entry = $DB->get_record('block_ilp_plu_hte',array('reportfield_id'=>$this->reportfield_id));
-        if($my_entry){
+        if ($my_entry && isset($_GET['entry_id'])){
             $my_entry_data = $DB->get_record('block_ilp_plu_hte_ent', array('parent_id'=>$my_entry->id, 'entry_id'=>$_GET['entry_id']));
             if($my_entry_data){
                 $mform->setDefault($fieldname, array('text'=>html_entity_decode($my_entry_data->value), 'format'=>FORMAT_HTML));
