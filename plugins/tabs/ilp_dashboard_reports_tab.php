@@ -125,7 +125,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      * @param array $access array of access requirements
      * @return string
      */
-    public function generate_comments($comments, $ajax, $url_params, $entry_id = null, $access = array()) {
+    public function generate_comments($comments, $ajax, $url_params, $entry_id = null, $access = array(), $readonly = false) {
         global $OUTPUT, $USER, $CFG;
         $o  = '';
 
@@ -134,6 +134,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $access = array('access_report_editcomment' => static::$access_report_editcomment,'access_report_deletecomment'=>static::$access_report_deletecomment);
         }
 
+        if ($readonly) {
+            $access = array();
+        }
         if ($comments) {
             foreach ($comments as $c) {
                 $comment_creator = $this->dbc->get_user_by_id($c->creator_id);

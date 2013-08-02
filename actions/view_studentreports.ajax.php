@@ -102,6 +102,10 @@ $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 //$reports	=	$flextable->limitcols($reports,$maxreports);
 
 $report        =            $dbc->get_report_by_id($report_id);
+$readonly = false;
+if ($report->vault) {
+    $readonly = true;
+}
 //we are going to create headers and columns for all enabled reports 
 $headers[] = $report->name;
 $columns[] = $report_id;
@@ -311,12 +315,14 @@ if (!empty($studentslist)) {
         $dashboard_reports_tab->get_capabilites(null, $report_id);
         $addnewentry_url = "{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.ajax.php?user_id={$student->id}&report_id={$report_id}&course_id={$courseid}";
 
-        $addnewentry = $dashboard_reports_tab->generate_addnewentry($addnewentry_url, null, null, null, $student->id, 1, false, $displaysummary);
-        $data['fullname'] .= html_writer::tag('div', $addnewentry, array('class'=>'sid' . $student->id));
+        if (!$readonly) {
+            $addnewentry = $dashboard_reports_tab->generate_addnewentry($addnewentry_url, null, null, null, $student->id, 1, false, $displaysummary);
+            $data['fullname'] .= html_writer::tag('div', $addnewentry, array('class'=>'sid' . $student->id));
+        }
 
-            $next_entry_colour = 'grey';
-            $reportentry    .=   '<div class="left-reports,hidden-entry reports-container-container next-entry-' . $next_entry_colour . '"  id="row'.$report_id.''.$student->id.'_entry">';
-            $report_entries_tables = array();
+        $next_entry_colour = 'grey';
+        $reportentry    .=   '<div class="left-reports,hidden-entry reports-container-container next-entry-' . $next_entry_colour . '"  id="row'.$report_id.''.$student->id.'_entry">';
+        $report_entries_tables = array();
         if (!empty($reportentries)) {
             foreach ($reportentries as $entry)	{
 
@@ -336,7 +342,7 @@ if (!empty($studentslist)) {
 
                 $comment_params = "report_id={$report_id}&user_id={$student->id}&entry_id={$entry->id}&course_id={$courseid}";
                 $dashboard_reports_tab->get_capabilites(null, $report_id);
-                $comments_html = $dashboard_reports_tab->generate_comments($comments, true, $comment_params, $entry->id);
+                $comments_html = $dashboard_reports_tab->generate_comments($comments, true, $comment_params, $entry->id, array(), $readonly);
 
                 //
                 $entry_data->creator		=	(!empty($creator)) ? fullname($creator)	: get_string('notfound','block_ilp');
@@ -390,7 +396,7 @@ if (!empty($studentslist)) {
 
                 $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
                 $access_report_editreports = $dashboard_reports_tab;
-                $reportentry_table = $helper->generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student);
+                $reportentry_table = $helper->generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student, $readonly);
                 if ($single_user) {
                     ob_get_clean();
                     echo json_encode(array('html'=>$reportentry_table, 'entryid'=>$entry->id));
