@@ -286,30 +286,6 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
         require_once($CFG->dirroot.'/blocks/ilp/plugins/tabs/ilp_dashboard_entries_tab.html');
     }
 
-
-
-
-
-	/**
-	 * Adds the string values from the tab to the language file
-	 *
-	 * @param	array &$string the language strings array passed by reference so we
-	 * just need to simply add the plugins entries on to it
-	 */
-	 static function language_strings(&$string) {
-        $string['ilp_dashboard_entries_tab'] 					= 'entries tab';
-        $string['ilp_dashboard_entries_tab_name'] 				= 'Entries';
-        $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
-        $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
-        $string['ilp_dashboard_entries_tab_graphstatusdesc'] 		= 'Should liniks to graphical stats be displayed on the entries tab if installed';
-        $string['ilp_dashboard_entries_tab_displaythumbs'] 		    = 'Display thumbnail links';
-         $string['ilp_dashboard_entries_tab_displaylinks'] 		    = 'Display text links';
-         $string['ilp_dashboard_entries_tab_graphs'] 		        = 'Graph(s):';
-         $string['ilp_dashboard_entries_tab_displayicons'] 		        = 'Display icon links';
-
-        return $string;
-    }
-
     /**
      * Adds config settings for the plugin to the given mform
      * by default this allows config option allows a tab to be enabled or dispabled
