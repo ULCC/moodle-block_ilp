@@ -340,6 +340,6 @@ function ilp_get_status_icon($iconid)
       {
          return $file->get_filename();
       }
-      return '';
    }
+   return '';
 }

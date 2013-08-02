@@ -182,7 +182,7 @@ if(!empty($defaultstatusitem)){
         $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$defaultstatusitem->id/$filename";
         //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
         $this_file = "<tooltip class='tooltip'>
-                                    <img src=\"$path\" alt=\"$defaultstatusitem->description\"  width='50px'/>
+                                    <img src='$path' alt='$defaultstatusitem->description'  width='50px'/>
                                     <span>
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
         $this_file .= html_entity_decode($defaultstatusitem->description);
@@ -200,7 +200,6 @@ if(!empty($defaultstatusitem)){
 }else {
     $status_item = get_string('unknown', 'block_ilp');
 }
-
 //this is needed if the current user has capabilities in the course context, it allows view_main page to view the user
 //in the course context
 $course_param   = (!empty($course_id)) ? "&course_id={$course_id}" : '';
@@ -251,7 +250,7 @@ if (!empty($studentslist)) {
         //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
         if(!empty($student->u_status)){
             if($student->u_display_option == 'icon'){
-                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$student->u_status_id/$student->u_status_icon";
+                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$student->u_status_id/".ilp_get_status_icon($student->u_status_id);
                 //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
                 $this_file = "<tooltip class='tooltip'>
                                     <img src=\"$path\" alt=\"$student->u_status_description\"  width='50px'/>
