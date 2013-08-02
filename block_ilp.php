@@ -112,6 +112,7 @@ class block_ilp extends block_list {
       //check if the user has the viewotherilp capability
       if (!empty($access_viewotherilp) || !empty($usertutees)) {
 
+         $tutor = 0;
          if (!empty($access_viewotherilp)) {
             $label = get_string('mycoursegroups', 'block_ilp');
             $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$initial_course_id}";
@@ -124,7 +125,13 @@ class block_ilp extends block_list {
             $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
             $this->content->items[] = "<a href='{$url}'>{$label}</a>";
             $this->content->icons[] = "";
+            $tutor = 1;
          }
+         global $COURSE;
+         $course_id = (!empty($COURSE->id)) ? $COURSE->id : '';
+         $printlink = '<a href="' . $CFG->wwwroot . '/blocks/ilp/actions/define_batch_print.php?course_id=' . $course_id . '&tutor=' . $tutor . '">';
+         $printicon = '<img src="' . $CFG->wwwroot . '/blocks/ilp/pix/icons/print_icon_med.png" alt="' . get_string("print","block_ilp") . '" class="ilp_print_icon"></a>';
+         $this->content->icons[] = $printlink . $printicon;
 
       } else if(isloggedin()) {
          // Show additional items (current status, progress bar etc. based on config
