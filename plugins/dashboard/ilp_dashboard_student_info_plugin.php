@@ -60,7 +60,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
         $o = '';
         if($statusitem->display_option == 'icon'){
             if($statusitem->icon){
-                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$statusitem->id/$statusitem->icon";
+                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$statusitem->id/".ilp_get_status_icon($statusitem->id);
                 $this_file = "<a class='tooltip'>
                                     <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
                                     <span>
