@@ -970,3 +970,8 @@ table.report-entry-table {
     font-size: 11px;
     line-height: 13px;
 }
+
+
+.ilp .left-reports td.ilp_element_plugin_state img {
+    display: block;
+}

@@ -583,7 +583,7 @@ class ilp_db_functions	extends ilp_logging {
      * 		or less than position. move up = 1 move down 0
      * @return mixed object containing the plugin record or false
      */
-    function get_report_fields_by_position($report_id,$position=null,$type=null) {
+    function get_report_fields_by_position($report_id,$position=null,$type=null, $plugin_details = null) {
 
         $positionsql	=	"";
         //the operand that will be used
@@ -596,11 +596,21 @@ class ilp_db_functions	extends ilp_logging {
             $positionsql 	=  "AND (position = :position ||  position = :otherfield)";
         }
 
-        $sql	=	"SELECT		*
+        if ($plugin_details) {
+            $sql	=	"SELECT		reportfield.*, plugin.name as pluginname
+				    	 FROM		{block_ilp_report_field} reportfield
+				    	 INNER JOIN {block_ilp_plugin} plugin ON (reportfield.plugin_id = plugin.id)
+					     WHERE		report_id	= :report_id
+					    {$positionsql}
+					     ORDER BY 	position";
+        } else {
+            $sql	=	"SELECT		*
 				    	 FROM		{block_ilp_report_field}
 					     WHERE		report_id	= :report_id
 					    {$positionsql}
 					     ORDER BY 	position";
+        }
+
 
         return		$this->dbc->get_records_sql($sql, $params);
     }

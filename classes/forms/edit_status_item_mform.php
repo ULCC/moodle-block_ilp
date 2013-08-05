@@ -49,7 +49,7 @@ class edit_status_item_mform extends ilp_moodleform {
        		 	$fieldsettitle = get_string('edit_status_items', 'block_ilp');
         	
        		 	//create a new fieldset
-       		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
+       		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset"><div>');
        		    $mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
 
         	
@@ -73,7 +73,7 @@ class edit_status_item_mform extends ilp_moodleform {
 		        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        
 		        //close the fieldset
-		        $mform->addElement('html', '</fieldset>');
+		        $mform->addElement('html', '</div></fieldset>');
 		}
 		
 		/**
@@ -226,10 +226,10 @@ class edit_status_item_mform extends ilp_moodleform {
                         $file_name = $DB->get_field_sql("SELECT filename FROM {files} where component = 'ilp' and filearea='icon' and itemid=$obj->id and filesize != 0");
                         if($file_name){
                             $newvalue = '';//???? get the icon file name
-                            $obj->$fieldname = $file_name;
+                            $obj->$fieldname = 'icon';
                             $update = true;
                         }else {
-                            $obj->$fieldname = '';
+                            $obj->$fieldname = 'icon';
                             $update = true;
                         }
                     }else {

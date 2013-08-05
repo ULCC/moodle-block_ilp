@@ -125,7 +125,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
      * @param array $access array of access requirements
      * @return string
      */
-    public function generate_comments($comments, $ajax, $url_params, $entry_id = null, $access = array()) {
+    public function generate_comments($comments, $ajax, $url_params, $entry_id = null, $access = array(), $readonly = false) {
         global $OUTPUT, $USER, $CFG;
         $o  = '';
 
@@ -134,6 +134,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $access = array('access_report_editcomment' => static::$access_report_editcomment,'access_report_deletecomment'=>static::$access_report_deletecomment);
         }
 
+        if ($readonly) {
+            $access = array();
+        }
         if ($comments) {
             foreach ($comments as $c) {
                 $comment_creator = $this->dbc->get_user_by_id($c->creator_id);
@@ -195,7 +198,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
            {
               $fieldcontent = html_writer::tag('th', '<strong>' . $field->label . '</strong>: ');
               $fieldvalue = (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
-              $fieldcontent .= html_writer::tag('td', $fieldvalue);
+              $attrs = array('class'=>$field->pluginname);
+              $fieldcontent .= html_writer::tag('td', $fieldvalue, $attrs);
               $table .= html_writer::tag('tr', $fieldcontent);
            }
         }
@@ -352,7 +356,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   $reportname	=	$report->name;
                   //get all of the fields in the current report, they will be returned in order as
                   //no position has been specified
-                  $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+                  $reportfields		=	$this->dbc->get_report_fields_by_position($report_id, null, null, true);
+
                   static::$reportfields = $reportfields;
                   $reporticon	= (!empty($report->iconfile)) ? '' : '';
 
@@ -813,24 +818,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 					                  </p></form></div>";
 			return $stateselector;
 	}
-
-
-
-   /**
-    * Adds the string values from the tab to the language file
-    *
-    * @param	array &$string the language strings array passed by reference so we
-    * just need to simply add the plugins entries on to it
-    */
-   static function language_strings(&$string) {
-      $string['ilp_dashboard_reports_tab'] 					= 'entries tab';
-      $string['ilp_dashboard_reports_tab_name'] 				= 'Reports';
-      $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
-      $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
-      $string['ilp_dashboard_reports_tab_default'] 			= 'Default report';
-
-      return $string;
-   }
 
 
    /**

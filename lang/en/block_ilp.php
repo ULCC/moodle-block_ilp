@@ -504,6 +504,74 @@ $string['ilp_mis_attendance_plugin_registerprelimcalls'] = 'Preliminary database
 
 $string['config_uploadseal']='Upload Institute Seal';
 $string['upload_seal']='Image for institute seal';
+
+// Strings moved from tab classes
+
+//Vault
+$string['ilp_dashboard_vault_tab'] 		= 'Vault';
+$string['ilp_dashboard_vault_tab_name'] = 'Vault';
+$string['total_entry_found']            = 'Total entry found';
+$string['vault_entry_entry_not_found']  = 'No entry found in vault';
+$string['send_to_vault']                = 'Send to vault';
+$string['bring_from_vault']             = 'Bring from vault';
+
+//Reports
+$string['ilp_dashboard_reports_tab'] 					= 'forms tab';
+$string['ilp_dashboard_reports_tab_name'] 				= 'Forms';
+$string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
+$string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
+$string['ilp_dashboard_reports_tab_default'] 			= 'Default form';
+
+// Entries
+$string['ilp_dashboard_entries_tab'] 					= 'entries tab';
+$string['ilp_dashboard_entries_tab_name'] 				= 'Entries';
+$string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
+$string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
+$string['ilp_dashboard_entries_tab_graphstatusdesc'] 		= 'Should liniks to graphical stats be displayed on the entries tab if installed';
+$string['ilp_dashboard_entries_tab_displaythumbs'] 		    = 'Display thumbnail links';
+$string['ilp_dashboard_entries_tab_displaylinks'] 		    = 'Display text links';
+$string['ilp_dashboard_entries_tab_graphs'] 		        = 'Graph(s):';
+$string['ilp_dashboard_entries_tab_displayicons'] 		        = 'Display icon links';
+
+// Archive
+
+$string['ilp_dashboard_archive_tab'] 					= 'Archive';
+$string['ilp_dashboard_archive_tab_name'] 				= 'Archives';
+
+$string['ilp_dashboard_archive_tab_targetname'] 				= 'Name';
+$string['ilp_dashboard_archive_tab_targetagreed'] 				= 'Target';
+$string['ilp_dashboard_archive_tab_targetcategory'] 			= 'Category';
+$string['ilp_dashboard_archive_tab_addedby'] 					= 'Set By';
+$string['ilp_dashboard_archive_tab_targetset'] 					= 'Set';
+$string['ilp_dashboard_archive_tab_targetdeadline'] 			= 'Deadline';
+$string['ilp_dashboard_archive_tab_concername'] 				= '&nbsp;';     //requested for Coulsdon, but should do for everybody
+$string['ilp_dashboard_archive_tab_report1']	 				= 'Report1';
+$string['ilp_dashboard_archive_tab_report2']	 				= 'Report2';
+$string['ilp_dashboard_archive_tab_report3']	 				= 'Report3';
+$string['ilp_dashboard_archive_tab_report4']	 				= 'Report4';
+$string['ilp_dashboard_archive_tab_report5']	 				= 'Report5';
+$string['ilp_dashboard_archive_tab_target']		 				= 'Target';
+$string['ilp_dashboard_archive_tab_student']	 				= 'Student';
+$string['ilp_dashboard_archive_tab_teacher']	 				= 'Teacher';
+$string['ilp_dashboard_archive_tab_tutor']		 				= 'Tutor';
+
+$string['ilp_dashboard_archive_tab_reportdesc']	 				= 'The title of this report';
+
+$string['ilp_dashboard_archive_tab_reportoneheader']	 				= 'Report 1';
+$string['ilp_dashboard_archive_tab_reporttwoheader']	 				= 'Report 2';
+$string['ilp_dashboard_archive_tab_reportthreeheader']	 				= 'Report 3';
+$string['ilp_dashboard_archive_tab_reportfourheader']	 				= 'Report 4';
+$string['ilp_dashboard_archive_tab_reportfiveheader']	 				= 'Report 5';
+$string['ilp_dashboard_archive_tab_reportstudentheader']	 			= 'Student Info';
+$string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
+$string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
+$string['ilp_dashboard_archive_tab_reportteacherheader']	 				= 'Teacher';
+$string['ilp_dashboard_archive_tab_reporttutorheader']	 				= 'Tutor';
+
+$string['ilp_dashboard_archive_tab_studentinfo_student']	 				= 'Student text';
+$string['ilp_dashboard_archive_tab_studentinfo_teacher']	 				= 'Teacher text';
+$string['ilp_dashboard_archive_tab_studentinfo_shared']	 					= 'Shared text';
+
 	global $CFG;
 
 	// Include ilp db class
@@ -538,10 +606,14 @@ $string['upload_seal']='Image for institute seal';
 	// get all the currently installed tab plugins plugins
 	$tab_plugins = ilp_records_to_menu($dbc->get_dashboard_tabs(), 'id', 'name');
 
+    // Get the list of tab plugins to skip
+    $core_tab_plugins = explode('|', ILP_CORE_TAB_PLUGINS);
 	//this section gets language strings for all tab plugins 
-	
+
 	foreach ($tab_plugins as $plugin_file) {
-		
+		if (in_array($plugin_file, $core_tab_plugins)) {
+            continue;
+        }
 	    if (file_exists($tabs.'/'.$plugin_file.".php")) 
 	    {
 	        require_once($tabs.'/'.$plugin_file.".php");

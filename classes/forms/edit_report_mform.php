@@ -220,7 +220,7 @@ class edit_report_mform extends ilp_moodleform {
 	        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        
 	        //close the fieldset
-	        $mform->addElement('html', '</fieldset>');
+	        $mform->addElement('html', '</div></fieldset>');
 		}
 
 
