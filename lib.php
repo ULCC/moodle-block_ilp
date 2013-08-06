@@ -18,6 +18,17 @@ function var_crap($var,$header="") {
 	
 }
 
+function print_ob_to_localfile($object_toprint, $filename = 'testFile.txt') {
+    global $CFG;
+    $myFile = $CFG->dirroot . "/local/" . $filename;
+    $fh = fopen($myFile, 'w') or die("can't open file");
+    ob_start();
+    print_object($object_toprint);
+    $stringData = ob_get_clean();
+    fwrite($fh, $stringData);
+    fclose($fh);
+}
+
 /**
  * Test whether the id is that of an admin user
  *

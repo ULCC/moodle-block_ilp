@@ -183,7 +183,7 @@ if(!empty($defaultstatusitem)){
         //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
         $this_file = "<tooltip class='tooltip'>
                                     <img src='$path' alt='$defaultstatusitem->description'  width='50px'/>
-                                    <span>
+                                    <span " . ((empty($defaultstatusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
         $this_file .= html_entity_decode($defaultstatusitem->description);
         $this_file .="</span></tooltip>";
@@ -191,7 +191,7 @@ if(!empty($defaultstatusitem)){
     }else{
         $this_file = "<tooltip class='tooltip'>
                                     $defaultstatusitem->name
-                                    <span>
+                                    <span " . ((empty($defaultstatusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
         $this_file .= html_entity_decode($defaultstatusitem->description);
         $this_file .="</span></tooltip>";
@@ -254,7 +254,7 @@ if (!empty($studentslist)) {
                 //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
                 $this_file = "<tooltip class='tooltip'>
                                     <img src=\"$path\" alt=\"$student->u_status_description\"  width='50px'/>
-                                    <span>
+                                    <span " . ((empty($student->u_status_description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
                 $this_file .= html_entity_decode($student->u_status_description);
                 $this_file .="</span></tooltip>";
@@ -262,7 +262,7 @@ if (!empty($studentslist)) {
             }else {
                 $this_file = "<tooltip class='tooltip'>";
                 $this_file .= $student->u_status;
-                $this_file .="<span>
+                $this_file .="<span " . ((empty($student->u_status_description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
                 $this_file .= html_entity_decode($student->u_status_description);
                 $this_file .="</span></tooltip>";

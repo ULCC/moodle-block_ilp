@@ -63,7 +63,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                 $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$statusitem->id/".ilp_get_status_icon($statusitem->id);
                 $this_file = "<a class='tooltip'>
                                     <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
-                                    <span>
+                                    <span " . ((empty($statusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
                 $this_file .= html_entity_decode($statusitem->description);
                 $this_file .="</span></a>";
