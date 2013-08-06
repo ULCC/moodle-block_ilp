@@ -187,5 +187,7 @@ class ilp_element_plugin_page_break extends ilp_element_plugin {
         return false;
     }
 
+    public function delete_entry_record($entryid = null){
 
+    }
 }

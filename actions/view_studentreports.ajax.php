@@ -309,7 +309,7 @@ if (!empty($studentslist)) {
 
         require_once ($CFG->dirroot . '/blocks/ilp/plugins/tabs/ilp_dashboard_reports_tab.php');
 
-        $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
+        $courseid = isset($course_id) ? $course_id : null;
         $dashboard_reports_tab = new ilp_dashboard_reports_tab($student->id, $courseid);
 
         $dashboard_reports_tab->get_capabilites(null, $report_id);
@@ -394,7 +394,6 @@ if (!empty($studentslist)) {
 
                 }
 
-                $courseid = isset($courserelatedfield_id) ? $courserelatedfield_id : null;
                 $access_report_editreports = $dashboard_reports_tab;
                 $reportentry_table = $helper->generate_entry($reportfields, $entry, $entry_data, $courseid, $dashboard_reports_tab, $displaysummary, $dontdisplay, $has_courserelated, $comments, $comments_html, $report_id, $student, $readonly);
                 if ($single_user) {

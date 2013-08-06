@@ -85,12 +85,9 @@ if (!empty($reportfields))	{
 	foreach ($reportfields as $field) {
 		//get the plugin record that for the plugin 
 		$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
-
-        if ($pluginrecord->name != 'ilp_element_plugin_page_break') {
-            include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$pluginrecord->name}.php");
-            $delete_entry = new $pluginrecord->name();
-            $delete_entry->delete_entry_record($entry_id);
-        }
+        include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$pluginrecord->name}.php");
+        $delete_entry = new $pluginrecord->name();
+        $delete_entry->delete_entry_record($entry_id);
 
 	}
 }
