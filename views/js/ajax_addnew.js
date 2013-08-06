@@ -331,6 +331,9 @@ M.ilp_ajax_addnew = {
         var Y = this.Y;
         e.preventDefault();
 
+        if (tinyMCE !== undefined && tinyMCE.hasOwnProperty('triggerSave')) {
+            tinyMCE.triggerSave();
+        }
         var formwrapper =new Object();
         formwrapper.id = 'mform1';
 
@@ -524,6 +527,9 @@ M.ilp_ajax_addnew = {
     submit_editentry_form: function(e, url, formarea, submitbuttonloadericon, edit_id) {
         var Y = this.Y;
         e.preventDefault();
+        if (tinyMCE !== undefined && tinyMCE.hasOwnProperty('triggerSave')) {
+            tinyMCE.triggerSave();
+        }
 
         var formwrapper =new Object();
         formwrapper.id = 'mform1';
