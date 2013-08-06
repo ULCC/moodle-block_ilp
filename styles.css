@@ -679,6 +679,7 @@ tooltip.tooltip {
 }
 tooltip.tooltip:hover span{
     top: -50%;
+    left: 100%;
     display:inline;
     position:absolute;
     color:#111;
