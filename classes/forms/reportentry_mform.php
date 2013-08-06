@@ -44,6 +44,10 @@ class report_entry_mform extends ilp_moodleform {
 
 			// call the parent constructor
        	 	parent::__construct("{$CFG->wwwroot}/blocks/ilp/actions/edit_reportentry.php");
+            /*$this->_form->_elements[9]->_attributes = array(
+                'class'=>'123', 'name'=>'345', 'type'=>'hidden'
+            );
+            $this->_form->_elementIndex['345'] = 9;*/
 		}
 
 
@@ -104,8 +108,11 @@ class report_entry_mform extends ilp_moodleform {
 
         	if (!empty($reportfields)) {
 
+                $breakcounter = 0;
+                $fieldcounter = 0;
                 foreach ($reportfields as $field) {
 
+                    $fieldcounter ++;
                     //get the plugin record that for the plugin
                     $pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
 
@@ -113,28 +120,33 @@ class report_entry_mform extends ilp_moodleform {
                     $classname = $pluginrecord->name;
 
 
-                    //only show the fields that are on the current page
                     if ($pluginrecord->tablename == 'block_ilp_plu_pb') {
-                        $breaksfound++;
-                        if ($breaksfound    ==  $this->currentpage) break;
+                        if ($breakcounter) {
+                            $mform->addElement('html', '</div>');
+                        }
+                        $breakcounter ++;
+                        $marker = '<div class="hiddenelement pagebreak-marker pagebreak-marker-' . $breakcounter . '">';
+
+                        $mform->addElement('html', $marker);
+                        continue;
+                    }
+                    include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
+
+                    if(!class_exists($classname)) {
+                        print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
                     }
 
-                    if ($breaksfound == $this->currentpage-1)  {
+                    //instantiate the plugin class
+                    $pluginclass	=	new $classname();
 
-                        include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
+                    $pluginclass->load($field->id);
 
-                        if(!class_exists($classname)) {
-                            print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
-                        }
+                    //call the plugins entry_form function which will add an instance of the plugin
+                    //to the form
+                    $pluginclass->entry_form($mform);
 
-                        //instantiate the plugin class
-                        $pluginclass	=	new $classname();
-
-                        $pluginclass->load($field->id);
-
-                        //call the plugins entry_form function which will add an instance of the plugin
-                        //to the form
-                        $pluginclass->entry_form($mform);
+                    if (count($reportfields) == $fieldcounter && $breakcounter) {
+                        $mform->addElement('html', '</div>');
                     }
                 }
 
@@ -145,13 +157,14 @@ class report_entry_mform extends ilp_moodleform {
 
 
 
+            $prev_attrs = array('class'=>'hiddenelement');
             //only show previous if this is not the first page
-            if (!empty($pagebreakcount) && $this->currentpage > 1)    $buttonarray[] = &$mform->createElement('submit', 'previousbutton', get_string('previous','block_ilp'));
-            if (empty($pagebreakcount) || (!empty($pagebreakcount) && $this->currentpage ==  $pagebreakcount+1)) $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('submit'));
+            if (!empty($pagebreakcount))    $buttonarray[] = &$mform->createElement('submit', 'previousbutton', get_string('previous','block_ilp'), $prev_attrs);
+            $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('submit'));
             $buttonarray[] = &$mform->createElement('cancel');
 
             //only show next if this is not the last page
-            if (!empty($pagebreakcount) && $this->currentpage !=  $pagebreakcount+1)    $buttonarray[] = &$mform->createElement('submit', 'nextbutton', get_string('next','block_ilp'));
+            if (!empty($pagebreakcount))    $buttonarray[] = &$mform->createElement('submit', 'nextbutton', get_string('next','block_ilp'));
 
             $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
             //close the fieldset

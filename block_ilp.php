@@ -130,7 +130,7 @@ class block_ilp extends block_list {
          global $COURSE;
          $course_id = (!empty($COURSE->id)) ? $COURSE->id : '';
          $printlink = '<a href="' . $CFG->wwwroot . '/blocks/ilp/actions/define_batch_print.php?course_id=' . $course_id . '&tutor=' . $tutor . '">';
-         $printicon = '<img src="' . $CFG->wwwroot . '/blocks/ilp/pix/icons/print_icon_med.png" alt="' . get_string("print","block_ilp") . '" class="ilp_print_icon"></a>';
+         $printicon = get_string("print","block_ilp") . '</a>';
          $this->content->icons[] = $printlink . $printicon;
 
       } else if(isloggedin()) {

@@ -514,6 +514,7 @@ $string['total_entry_found']            = 'Total entry found';
 $string['vault_entry_entry_not_found']  = 'No entry found in vault';
 $string['send_to_vault']                = 'Send to vault';
 $string['bring_from_vault']             = 'Bring from vault';
+$string['ilp_dashboard_vault_tab_pluginnamesettings'] = 'Vault tab Configuration';
 
 //Reports
 $string['ilp_dashboard_reports_tab'] 					= 'forms tab';
@@ -521,6 +522,7 @@ $string['ilp_dashboard_reports_tab_name'] 				= 'Forms';
 $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
 $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
 $string['ilp_dashboard_reports_tab_default'] 			= 'Default form';
+$string['ilp_dashboard_reports_tab_pluginnamesettings'] = 'Forms tab Configuration';
 
 // Entries
 $string['ilp_dashboard_entries_tab'] 					= 'entries tab';
@@ -532,6 +534,7 @@ $string['ilp_dashboard_entries_tab_displaythumbs'] 		    = 'Display thumbnail li
 $string['ilp_dashboard_entries_tab_displaylinks'] 		    = 'Display text links';
 $string['ilp_dashboard_entries_tab_graphs'] 		        = 'Graph(s):';
 $string['ilp_dashboard_entries_tab_displayicons'] 		        = 'Display icon links';
+$string['ilp_dashboard_entries_tab_pluginnamesettings'] = 'Entries tab Configuration';
 
 // Archive
 
@@ -571,6 +574,8 @@ $string['ilp_dashboard_archive_tab_reporttutorheader']	 				= 'Tutor';
 $string['ilp_dashboard_archive_tab_studentinfo_student']	 				= 'Student text';
 $string['ilp_dashboard_archive_tab_studentinfo_teacher']	 				= 'Teacher text';
 $string['ilp_dashboard_archive_tab_studentinfo_shared']	 					= 'Shared text';
+
+$string['ilp_dashboard_archive_tab_pluginnamesettings'] = 'Archive tab Configuration';
 
 	global $CFG;
 
