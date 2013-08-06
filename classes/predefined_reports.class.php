@@ -417,6 +417,7 @@ class ilp_predefined_reports{
 		$formdata->name = $name;
 		$formdata->description = $description;
 		$formdata->status = 1;
+        $formdata->vault = 0;
         $formdata->reptype = $report_type;
 		$course_id = 0;	//not necessary for report creation, so just a dummy value
 		$mform	= new edit_report_mform( $course_id, null );

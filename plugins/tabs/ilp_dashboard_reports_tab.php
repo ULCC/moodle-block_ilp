@@ -476,6 +476,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
        $PAGE->requires->js_init_call('M.ilp_ajax_addnew.init', $jsarguments, true, $jsmodule);
 
+        $jsarguments = array();
+
+        $jsmodule = array(
+            'name'     	=> 'ilp_edit_reportentry',
+            'fullpath' 	=> '/blocks/ilp/views/js/edit_reportentry.js',
+            'requires'  	=> array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim', 'node-event-simulate')
+        );
+
+        $PAGE->requires->js_init_call('M.ilp_edit_reportentry.init', $jsarguments, true, $jsmodule);
+
       $pluginoutput	    =	"";
 
       if ($this->dbc->get_user_by_id($this->student_id)) {
