@@ -73,8 +73,11 @@ if (!empty($reports)) {
     foreach ($reports as $row) {
         $data = array();
 
-        $data[] 		=	$row->name;
-
+        $form_name = $row->name;
+        if (!is_numeric($row->vault)) {
+            $form_name .= ' [' . get_string('warning_vault_has_no_value', 'block_ilp') . ']';
+        }
+        $data[] 		=	$form_name;
         if ($row->position != 1) {
             //if the field is in any position except 1 it needs a up icon
             $title 	=	get_string('moveup','block_ilp');
