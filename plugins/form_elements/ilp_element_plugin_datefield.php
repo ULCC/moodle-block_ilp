@@ -416,6 +416,26 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
         //count how many times code for creating events should run (once for each calendar selected)
         $loops = $scalendar + $ucalendar;
 
+        $course_id_param = '&course_id=';
+        if (isset($this->course_id)) {
+            $course_id_param .= $this->course_id;
+        }
+
+        $tabitem_param = '';
+        $selectedtab_param = '';
+        $tab_plugins = $this->dbc->get_tab_plugins();
+        if ($tab_plugins) {
+            foreach ($tab_plugins as $tab_plugin) {
+                if ($tab_plugin->name == 'ilp_dashboard_reports_tab') {
+                    break;
+                }
+            }
+            $report_tab_id = $tab_plugin->id;
+            $tabitem_param = '&tabitem=' . $report_tab_id . ':' . $data->report_id;
+            $selectedtab_param = '&selectedtab=' . $report_tab_id;
+        }
+        $ilp_profile_url = $CFG->wwwroot . '/blocks/ilp/actions/view_main.php?user_id=' . $data->user_id . $course_id_param . $tabitem_param . $selectedtab_param;
+        $ilp_profile_link = '<a href="' . $ilp_profile_url . '" class="ilp_cal_profile_link">' . $title . '</a>';
 
       if ($datetype=!0){
         //if event empty (false), create it
@@ -426,7 +446,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
                 $event = new stdClass();
                 $event->name        = $title;
                 //link to ilp has been removed due to moodle encoding html and outputing it.
-                $event->description = $title;
+                $event->description = $ilp_profile_link;
                 $event->format      = 0;
                 $event->courseid    = 0;
                 $event->groupid     = 0;
@@ -439,6 +459,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
                 $event->timeduration = 0;
                 $event->id = $this->dbc->save_event($event);
 
+                $this->dbc->update_event_description($event, $ilp_profile_link);
                 $record					=	new stdClass();
                 $record->entry_id		=	$entry_id;
                 $record->reportfield_id	=	$reportfield_id;

@@ -79,6 +79,7 @@ class ilp_element_plugin {
     
     var $req;
 
+    var $course_id;
 	/*
 	* local file for pre-populating particular types
 	* filename is classname . '_pre_items.config'
@@ -128,7 +129,9 @@ class ilp_element_plugin {
         return $this->tablename;
     }
     
-    
+    public function set_course_id($course_id) {
+        $this->course_id = $course_id;
+    }
 
     /**
      * Edit the plugin instance

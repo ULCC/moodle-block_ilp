@@ -2671,6 +2671,18 @@ class ilp_db_functions	extends ilp_logging {
         }
     }
 
+    /*
+     * The Moodle update event function is converting the link from html entities to text;
+     * This ensures that they remain as HTML entities.
+     */
+    public function update_event_description($event, $ilp_profile_link) {
+        $ilp_profile_link = html_entity_decode($ilp_profile_link);
+        $event_descupdate = new stdClass();
+        $event_descupdate->id = $event->id;
+        $event_descupdate->description = $ilp_profile_link;
+        $this->dbc->update_record('event', $event_descupdate);
+    }
+
     /**
      *
      * Updates a calendar event with new details
