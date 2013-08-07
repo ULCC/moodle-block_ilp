@@ -976,3 +976,8 @@ table.report-entry-table {
 .ilp .left-reports td.ilp_element_plugin_state img {
     display: block;
 }
+
+.calendar_event_user .ilp_cal_profile_link {
+    font-size: 26px;
+    font-weight: 700;
+}
