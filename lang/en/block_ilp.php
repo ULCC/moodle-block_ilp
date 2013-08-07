@@ -206,6 +206,7 @@ $string['gotoprintpreview']='Generate';
 	$string['myilp']				=	'My ILP';
 	$string['multipleentries']		=	'Allow Multiple Entries';
     $string ['reportrecurrence']    =   'Allow Report Recurrence';
+    $string['warning_vault_has_no_value'] = 'Warning: Vault has no value';
 	
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';
