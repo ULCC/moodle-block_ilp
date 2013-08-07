@@ -164,7 +164,7 @@ $string['gotoprintpreview']='Generate';
 	$string['installedreports']		=	'Installed Forms';
     $string['installedelements']	=	'Installed Elements';
     $string['insummary']	        =	'In summary';
-	$string['warininglist']			=	'Warining List';
+	$string['warininglist']			=	'Warning List';
 	
 	
 	
