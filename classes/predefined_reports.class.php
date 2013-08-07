@@ -376,10 +376,14 @@ class ilp_predefined_reports{
 			,'radio' => 'ilp_element_plugin_rdo'
 			,'html' => 'ilp_element_plugin_html_editor'
 			,'dropdown' => 'ilp_element_plugin_dd'
-			,'date_deadline' => 'ilp_element_plugin_date_deadline'
-			,'date' => 'ilp_element_plugin_date'
+			,'date' => 'ilp_element_plugin_datefield'
 			,'course' => 'ilp_element_plugin_course'
 			,'cat' => 'ilp_element_plugin_category'
+            ,'pagebreak' => 'ilp_element_plugin_page_break'
+            ,'goal' => 'ilp_element_plugin_goal'
+            ,'freehtml' => 'ilp_element_plugin_free_html'
+            ,'file' => 'ilp_element_plugin_file'
+            ,'checkbox' => 'ilp_element_plugin_checkbox'
 		);
 		$plugin_name = false;
 		if( in_array( $element_type, array_keys( $plugin_name_list ) ) ){
@@ -391,6 +395,9 @@ class ilp_predefined_reports{
             }
             catch( exception $e ){
                 exit( $e->getMessage() );
+            }
+            if (!$plugin) {
+                echo '<br />' . $plugin_name . ' not found in DB<br />';
             }
 			return $plugin->id;
 		}
