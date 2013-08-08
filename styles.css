@@ -981,3 +981,11 @@ table.report-entry-table {
     font-size: 26px;
     font-weight: 700;
 }
+
+.ilp .pagelinks.formsconfig {
+    margin: 5px;
+}
+
+.ilp .pagelinks.formfieldsconfig {
+    margin: 5px;
+}
