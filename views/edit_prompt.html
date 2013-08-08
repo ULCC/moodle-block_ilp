@@ -3,7 +3,7 @@ echo $OUTPUT->header();
 ?>
 <div class="ilp">
 <?php 
-echo $OUTPUT->heading(get_string('reportfields', 'block_ilp'));
+echo $OUTPUT->heading($report_details->name . ': ' . get_string('reportfields', 'block_ilp'));
 
 $promptmform->display();
 ?>

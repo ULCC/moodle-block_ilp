@@ -12,7 +12,7 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
 //include any neccessary files
 
@@ -20,7 +20,10 @@ global $USER, $CFG, $SESSION, $PARSER;
 require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
 //if set get the id of the report to be edited
-$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	
+$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);
+
+$url = new moodle_url($CFG->wwwroot . '/blocks/ilp/actions/edit_report_status.php?report_id=' . $report_id);
+$PAGE->set_url($url);
 
 // instantiate the db
 $dbc = new ilp_db();
