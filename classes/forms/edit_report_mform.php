@@ -91,12 +91,18 @@ class edit_report_mform extends ilp_moodleform {
 	        $mform->addElement('checkbox', 'maxedit',get_String('maxedit','block_ilp'),null);
 	        
 	        $mform->addElement('checkbox', 'comments',get_String('allowcomments','block_ilp'),null);
-	        
-	       	$mform->addElement('checkbox', 'frequency', get_String('multipleentries','block_ilp'),null);
 
             $mform->addElement('html', '<noscript>');
             $mform->addElement('html', get_string('reportnojs','block_ilp'));
             $mform->addElement('html', '</noscript>');
+
+            // maximum entries element
+            $mform->addElement(
+                'text',
+                'reportmaxentries',
+                get_string('maxentries', 'block_ilp'),
+                array('class' => 'form_input')
+            );
 
             $radioarray[]   =&  $mform->createElement( 'radio', 'reptype', '', get_string('openend','block_ilp'), 1);
             $radioarray[]   =&  $mform->createElement( 'radio', 'reptype', '',get_string('finaldate','block_ilp') , 2);
@@ -113,15 +119,6 @@ class edit_report_mform extends ilp_moodleform {
 
             $mform->addRule('reptype', null, 'required', null, 'client');
 
-            $mform->addElement('advcheckbox', 'recurrent', get_string('reportrecurrence','block_ilp'),null,null,array(0,1));
-
-            // maximum entries element
-            $mform->addElement(
-                'text',
-                'reportmaxentries',
-                get_string('maxentries', 'block_ilp'),
-                array('class' => 'form_input')
-            );
             $mform->setType('reportmaxentries', PARAM_INT);
 
             //specific date selector
@@ -133,6 +130,10 @@ class edit_report_mform extends ilp_moodleform {
                 array('class' => 'lockdate')
             );
 
+
+            $mform->addElement('checkbox', 'frequency', get_String('multipleentries','block_ilp'),null);
+
+            $mform->addElement('advcheckbox', 'recurrent', get_string('reportrecurrence','block_ilp'),null,null,array(0,1));
 
             $mform->addElement('html', '<fieldset id="recurringfieldset" class="ilpfieldset">');
             $mform->addElement('html', '<legend >'.get_string('recurringrules','block_ilp').'</legend>');
