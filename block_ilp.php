@@ -131,8 +131,11 @@ class block_ilp extends block_list {
          $course_id = (!empty($COURSE->id)) ? $COURSE->id : '';
          $printlink = '<a href="' . $CFG->wwwroot . '/blocks/ilp/actions/define_batch_print.php?course_id=' . $course_id . '&tutor=' . $tutor . '">';
          $printicon = get_string("print","block_ilp") . '</a>';
-         $this->content->items[] = $printlink . $printicon;
-          $this->content->icons[] = '';
+         $allow_batch_print = get_config('block_ilp', 'allow_batch_print');
+          if ($allow_batch_print !== '0') {
+             $this->content->items[] = $printlink . $printicon;
+             $this->content->icons[] = '';
+          }
 
       } else if(isloggedin()) {
          // Show additional items (current status, progress bar etc. based on config

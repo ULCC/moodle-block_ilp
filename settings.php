@@ -205,6 +205,15 @@ $allow_export = new admin_setting_configcheckbox('block_ilp/allow_export', get_s
 
 $settings->add($allow_export);
 
+$allow_page_print = new admin_setting_configcheckbox('block_ilp/allow_page_print', get_string('settings_allow_page_print', 'block_ilp'), get_string('settings_allow_page_print_desc', 'block_ilp'), 1);
+
+$settings->add($allow_page_print);
+
+$allow_batch_print = new admin_setting_configcheckbox('block_ilp/allow_batch_print', get_string('settings_allow_batch_print', 'block_ilp'), get_string('settings_allow_batch_print_desc', 'block_ilp'), 1);
+
+$settings->add($allow_batch_print);
+
+
 $settings->add($misplugin_settings);
 
 global $CFG;

@@ -164,8 +164,15 @@ if ($dbc->has_plugin_field($report_id,'ilp_element_plugin_state'))	{
     <input type='hidden' name='report_id' value='<?php echo $report_id; ?>' >
 
 	</form>
+<?php
+$allow_page_print = get_config('block_ilp', 'allow_page_print');
 
-<div class="entry_floatright"><a href='#' onclick="M.ilp_standard_functions.printfunction()"><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a></div>
+if ($allow_page_print !== '0') {
+?>
+    <div class="entry_floatright">
+        <a href='#' onclick="M.ilp_standard_functions.printfunction()"><img src='<?php echo $CFG->wwwroot."/blocks/ilp/pix/icons/print_icon_med.png"; ?>' alt='<?php get_string("print","block_ilp"); ?>' class='ilp_print_icon' ></a>
+    </div>
+<?php } ?>
 <div class='clearer'></div>
     <span id='expandcollapselinks' class="float-right">
         <a href="#" id="studentreport_expandall">

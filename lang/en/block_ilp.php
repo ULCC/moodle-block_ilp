@@ -115,6 +115,13 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
     $string['settings_allow_export'] = 'Allow Export';
     $string['settings_allow_export_desc'] = 'Global setting to turn the export functionality off or on';
     $string['export_has_been_disabled']='Export has been disabled. Please enable this in the Site Admin settings for Block ILP';
+
+    $string['settings_allow_batch_print'] = 'Allow Batch Print';
+    $string['settings_allow_batch_print_desc'] = 'Global setting to turn the batch print functionality off or on';
+    $string['batch_print_has_been_disabled']='Batch print has been disabled. Please enable this in the Site Admin settings for Block ILP';
+
+    $string['settings_allow_page_print_desc'] = 'Global setting to turn the Page Print button off or on';
+    $string['settings_allow_page_print'] = 'Display Page Print button';
 	$string['enablereport'] 		= 	'Enable Form';
     $string['enabled'] 				= 	'Enabled';
     $string['expandentries']		=	'Expand entries';
