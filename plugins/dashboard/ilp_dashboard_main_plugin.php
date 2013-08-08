@@ -38,7 +38,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG,$OUTPUT,$PARSER;
+		global	$CFG,$OUTPUT,$PARSER, $PAGE;
 
 		//set any variables needed by the display page	
 		
@@ -78,7 +78,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			
 			//set the $deactivatedtabs var to null
 			$deactivatedtabs		=   null;	
-			
+
 			foreach	($dashboardtabs	as $dt)	{
 				
 				$classname	=	$dt->name;
@@ -97,11 +97,13 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			        }
 
 					$dasttab	=	new $classname($this->student_id,$this->course_id);
-					
-					$tabrows[]	=	new tabobject($dt->id,$linkurl."&selectedtab={$dt->id}&tabitem={$dt->id}",$dasttab->display_name());
+                    $fulllink_url = $linkurl . "&selectedtab={$dt->id}&tabitem={$dt->id}";
+                    $dash_tab_name = $dasttab->display_name();
+					$tabrows[]	=	new tabobject($dt->id, $fulllink_url, $dash_tab_name);
 	
 					if ($dasttab->is_selected($selectedtab)) {
-	
+
+                        $PAGE->navbar->add($dash_tab_name, $fulllink_url, 'title');
 						//this gets the display information from the tab plugin
 						$tabcontent		=	$dasttab->display($tabitem);
 	
