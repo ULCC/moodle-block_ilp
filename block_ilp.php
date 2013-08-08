@@ -131,7 +131,8 @@ class block_ilp extends block_list {
          $course_id = (!empty($COURSE->id)) ? $COURSE->id : '';
          $printlink = '<a href="' . $CFG->wwwroot . '/blocks/ilp/actions/define_batch_print.php?course_id=' . $course_id . '&tutor=' . $tutor . '">';
          $printicon = get_string("print","block_ilp") . '</a>';
-         $this->content->icons[] = $printlink . $printicon;
+         $this->content->items[] = $printlink . $printicon;
+          $this->content->icons[] = '';
 
       } else if(isloggedin()) {
          // Show additional items (current status, progress bar etc. based on config
@@ -183,7 +184,9 @@ class block_ilp extends block_list {
           }
       }
 
-      if($dbc->ilp_admin())
+       $allow_export = get_config('block_ilp', 'allow_export');
+
+      if($dbc->ilp_admin() && $allow_export !== '0')
       {
          $label=get_string('export','block_ilp');
          $this->content->items[] = "<a href='$CFG->wwwroot/blocks/ilp/actions/define_batch_export.php?course_id=$course_id'>$label</a>";
