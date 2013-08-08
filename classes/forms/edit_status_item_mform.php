@@ -108,6 +108,7 @@ class edit_status_item_mform extends ilp_moodleform {
         }
 
 		function specific_process_data( $data ){
+
             global $CFG, $DB;
             require_once($CFG->dirroot.'/lib/filestorage/file_storage.php');
             require_once($CFG->dirroot.'/lib/filelib.php');
@@ -124,7 +125,7 @@ class edit_status_item_mform extends ilp_moodleform {
             $sep = "\n";
             $keysep = ":";
 			//entries from data to go into $this->tablename and $this->items_tablename
-	
+
             $gradekeylist = array(
                  'pass', 'fail'
             );
@@ -143,7 +144,7 @@ class edit_status_item_mform extends ilp_moodleform {
                  }
              }
             //we now have 2 lists: $pass_list and $fail_list
-	  	
+
 			$element_id = ILP_DEFAULT_USERSTATUS_RECORD;
 	 		$plgrec = $this->dbc->get_form_element_data( $this->tablename, $element_id );
 			//$itemrecord is a container for item data
@@ -179,7 +180,7 @@ class edit_status_item_mform extends ilp_moodleform {
                     }
 				}
 			}
-	
+
             //that's dealt with the fresh options submitted
             //but we still need to re-assign pass and fail to the existing items, should they have changed
             foreach( $this->dbc->listelement_item_exists( $this->items_tablename, array() ) as $obj ){
@@ -236,7 +237,7 @@ class edit_status_item_mform extends ilp_moodleform {
                         $oldvalue = trim( $obj->$fieldname );
                         if( isset( $data->$form_element_name ) ){
                             $newvalue = trim( $data->$form_element_name );
-                            if( $newvalue && $oldvalue != $newvalue ){
+                            if( $oldvalue != $newvalue ){
                                 $obj->$fieldname = $newvalue;
                                 $update = true;
                             }

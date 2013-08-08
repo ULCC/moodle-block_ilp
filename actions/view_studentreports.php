@@ -91,6 +91,8 @@ $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/view_studentreports.php",$PARS
 
 $report     =   $dbc->get_report_by_id($report_id);
 
+$PAGE->navbar->add($report->name,null,'title');
+
 if (empty($report)) {
     print_error('reportnotfound','block_ilp');
 }
