@@ -601,8 +601,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   //This is dubious - readonly is being assumed to mean "batch mode"
                   //But the whole class needs seriously re-written anyway.
                   //output the print icon
-                  echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
-								 ";
+                  echo "{$stateselector}";
+
+                   $allow_page_print = get_config('block_ilp', 'allow_page_print');
+
+                   if ($allow_page_print !== '0') {
+                       echo "<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
+                                     ";
+                   }
                }
 
                //create the entries list var that will hold the entry information

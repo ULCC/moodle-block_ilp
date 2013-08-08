@@ -69,7 +69,6 @@ if (!empty($items)) {
 	}
 }
 
-
 $pagelayout			=	new admin_setting_configtext('block_ilp/pagelayout',get_string('pagelayout','block_ilp'),get_string('pagelayoutconfig','block_ilp'),'standard');
 $settings->add($pagelayout);
 
@@ -202,7 +201,21 @@ $misplugin_settings 	= new admin_setting_heading('block_ilp/mis_plugins', get_st
 // Get MIS plugin settings
 // -----------------------------------------------------------------------------
 
+$allow_export = new admin_setting_configcheckbox('block_ilp/allow_export', get_string('settings_allow_export', 'block_ilp'), get_string('settings_allow_export_desc', 'block_ilp'), 1);
+
+$settings->add($allow_export);
+
+$allow_page_print = new admin_setting_configcheckbox('block_ilp/allow_page_print', get_string('settings_allow_page_print', 'block_ilp'), get_string('settings_allow_page_print_desc', 'block_ilp'), 1);
+
+$settings->add($allow_page_print);
+
+$allow_batch_print = new admin_setting_configcheckbox('block_ilp/allow_batch_print', get_string('settings_allow_batch_print', 'block_ilp'), get_string('settings_allow_batch_print_desc', 'block_ilp'), 1);
+
+$settings->add($allow_batch_print);
+
+
 $settings->add($misplugin_settings);
+
 global $CFG;
 
 $plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';

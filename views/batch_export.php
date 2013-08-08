@@ -7,6 +7,11 @@
 // $data the data from that form.
 
 // $data->course_id has already been tested for content
+$allow_export = get_config('block_ilp', 'allow_export');
+
+if ($allow_export === '0') {
+    print_error(get_string('export_has_been_disabled', 'block_ilp'));
+}
 
 if(!$dbc->ilp_admin())
 {
