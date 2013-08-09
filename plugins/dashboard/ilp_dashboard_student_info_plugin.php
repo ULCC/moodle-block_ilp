@@ -326,6 +326,25 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
          }
       }
 
+       // Get warning status if appropriate
+
+       $student_warning_info = '';
+       $ilp_db = new ilp_db();
+       $warningstatus_pl = $ilp_db->get_plugin_by_name('block_ilp_plugin', 'ilp_element_plugin_warningstatus');
+       $allreports = $ilp_db->get_enabledreports_with_entry($student->id);
+
+       foreach ($allreports as $_report) {
+           $allfields = $ilp_db->get_report_fields($_report->id);
+
+           foreach ($allfields as $_field) {
+               if ($_field->plugin_id == $warningstatus_pl->id) {
+                   // Show the ws contents.
+                   $student_warning_info = $ilp_db->get_entrywarningstatus($_report->entryid, $warningstatus_pl->id);
+               }
+           }
+       }
+       // use get_report_fields
+
       //instantiate the percentage bar class in case there are any percentage bars
       $pbar	=	new ilp_percentage_bar();
 

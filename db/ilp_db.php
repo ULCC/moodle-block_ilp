@@ -869,6 +869,23 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /**
+     * Returns a list of all ilp reports with an enabled status
+     *
+     * @param array $reports a array contain the ids of reports that
+     * you do not want included in the return values
+     * @return mixed array containing recordset objects or false
+     */
+    function get_enabledreports_with_entry($userid=null)	{
+
+        $sql	=	"SELECT	DISTINCT	e.id as entryid, re.*
+    				 FROM		{block_ilp_report} re
+    				 INNER JOIN {block_ilp_entry} e ON (re.id = e.report_id AND e.user_id = " . $userid . ")
+    				 WHERE		status	=	".ILP_ENABLED;
+
+        return	$this->dbc->get_records_sql($sql);
+    }
+
+    /**
      * Creates a record in the block_ilp_coursereports table that allows
      * a report to be shown in a course
      *
@@ -1067,6 +1084,29 @@ class ilp_db_functions	extends ilp_logging {
 
         return 		$this->dbc->get_record_sql($sql, array('entry_id'=>$entry_id));
     }
+
+    /**
+     * get the status of the
+     *
+     * @param int 	$entry_id the entry id of the records that will be returned
+     * @param int 	$reportfield_id the id of the report field
+     *
+     * @return mixed object the entry record or false
+     */
+    function get_entrywarningstatus($entry_id,$reportfield_id)	{
+        global 	$CFG;
+
+        $sql	=	"SELECT			 si.*
+					 FROM			{block_ilp_plu_wsts_ent} as us,
+					 				{block_ilp_plu_wsts_items} as si,
+					 				{block_ilp_entry} as e
+					 WHERE			e.id                =   :entry_id
+					 AND            e.id           =   us.entry_id
+					 AND            us.parent_id		=	si.id";
+
+        return 		$this->dbc->get_record_sql($sql, array('entry_id'=>$entry_id));
+    }
+
 
 
     /**
