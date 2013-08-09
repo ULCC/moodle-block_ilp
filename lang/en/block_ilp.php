@@ -247,6 +247,8 @@ $string['noreports']='No reports available';
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
 
+$string['ilp_element_plugin_warningstatus_description'] = 'Warning Status';
+$string['ilp_element_plugin_warningstatus_type'] = 'warning status';
     $string['notinsummary']	        =	'Not in summary';
 	$string['nothingtodisplay']		=	'Nothing to display';
     $string['pagelayout']           =   'Page Layout';

@@ -181,7 +181,10 @@ class ilp_element_plugin {
         }   else    {
             //new element - check for config file
             if(file_exists($this->local_config_file)) {
-                $reportfield->optionlist = self::itemlist_flatten( parse_ini_file( $this->local_config_file ) );
+                $parsed_ini_file = parse_ini_file( $this->local_config_file );
+                $flattened = self::itemlist_flatten( $parsed_ini_file );
+                if(!is_object($reportfield)) $reportfield = new stdClass();
+                $reportfield->optionlist = $flattened;
             }
 	}
 
