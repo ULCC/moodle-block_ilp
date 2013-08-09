@@ -28,7 +28,10 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/predefined_reports.class.php');
 // instantiate the db
 $dbc = new ilp_db();
 
-
+if(!$dbc->ilp_admin())
+{
+    print_error(get_string('nopermission'));
+}
 
 
 // setup the navigation breadcrumbs
