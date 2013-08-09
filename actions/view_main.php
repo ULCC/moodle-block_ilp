@@ -46,13 +46,13 @@ if ($user_id != $USER->id) {
 	$PAGE->navbar->add(get_string('myilp', 'block_ilp'),$dashboardurl,'title');
 }
 
-
+$ilp_user_url = $CFG->wwwroot . '/blocks/ilp/actions/view_main.php?user_id=' . $user_id;
 
 // setup the navigation breadcrumbs
 
 
 //user intials
-$PAGE->navbar->add(fullname($plpuser),$userprofileurl,'title');
+$PAGE->navbar->add(fullname($plpuser), $ilp_user_url,'title');
 
 //section name
 $PAGE->navbar->add(get_string('dashboard','block_ilp'),null,'title');

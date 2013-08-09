@@ -8,12 +8,24 @@
 * called 'opts', listing the available options for that element
 */
 $reportlist[] = array(
-			'title' => 'Your Progression',
-			'description' => 'A simple self-evaluation report',
+			'title' => 'My Expectations',
+			'description' => 'Use this area to state your views on why you have chosen to study a particular course, detailing your aims and expectations from it.',
 			'fieldlist' => array(
 				array(
-					'type' => 'textarea',
-					'label' => 'My Progression',
+					'type' => 'course',
+					'label' => 'Course',
+					'description' => 'generic description',
+					'req' => 0
+				),
+				array(
+					'type' => 'html',
+					'label' => 'Aims and Expectations',
+					'description' => 'generic description',
+					'req' => 0
+				),
+				array(
+					'type' => 'date',
+					'label' => 'Date',
 					'description' => 'generic description',
 					'req' => 0
 				)
