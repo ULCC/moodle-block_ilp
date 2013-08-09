@@ -75,13 +75,14 @@ $globalsettings 	= new admin_setting_heading('block_ilp/userstatus', get_string(
 
 $settings->add($globalsettings);
 
-$items				=	$dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);
-
-$options			=	array();
-if (!empty($items)) {
-	foreach ($items as $i) {
-		$options[$i->id]	=	$i->name;
-	}
+$options = array();
+if ($ilp_is_installed) {
+    $items				=	$dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);
+    if (!empty($items)) {
+        foreach ($items as $i) {
+            $options[$i->id]	=	$i->name;
+        }
+    }
 }
 
 $pagelayout			=	new admin_setting_configtext('block_ilp/pagelayout',get_string('pagelayout','block_ilp'),get_string('pagelayoutconfig','block_ilp'),'standard');
