@@ -242,8 +242,9 @@ if (!empty($studentslist)) {
         //thus there status is the default
         if(!empty($student->u_status)){
             if($student->u_display_option == 'icon'){
-                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$student->u_status_id/$student->u_status_icon".ilp_get_status_icon($student->u_status_id);
+                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$student->u_status_id/".ilp_get_status_icon($student->u_status_id);
                 //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
+
                 $this_file = "<tooltip class='tooltip'>
                                     <img src=\"$path\" alt=\"$student->u_status_description\"  width='50px'/>
                                     <span " . ((empty($student->u_status_description)) ? "class='hiddenelement'" : "") . ">
