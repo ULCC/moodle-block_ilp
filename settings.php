@@ -20,30 +20,45 @@ require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 // instantiate the assmgr db
 $dbc = new ilp_db();
 
+$ilp_is_installed = in_array('block_ilp', $DB->get_tables());
+
+
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin.class.php');
 //install new plugins
-ilp_element_plugin::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_element_plugin::install_new_plugins();
+}
 
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_template.class.php');
 //install new templates
-ilp_dashboard_template::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_dashboard_template::install_new_plugins();
+}
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_plugin.class.php');
 //install new dashboard plugins
-ilp_dashboard_plugin::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_dashboard_plugin::install_new_plugins();
+}
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
 //install new tabs
-ilp_dashboard_tab::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_dashboard_tab::install_new_plugins();
+}
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_mis_plugin.class.php');
 //install new mis plugins
-ilp_mis_plugin::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_mis_plugin::install_new_plugins();
+}
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_graph_plugin.class.php');
 //install new graphs
-ilp_graph_plugin::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_graph_plugin::install_new_plugins();
+}
 
 
 $globalsettings 	= new admin_setting_heading('block_ilp/reportconfig', get_string('reports', 'block_ilp'), '');
