@@ -18,7 +18,7 @@ class ilp_dashboard_student_info_print_plugin extends ilp_dashboard_student_info
 
    protected $formdata;
 
-   function __construct($student_id,$formdata)
+   function __construct($student_id = null, $formdata = null)
    {
       parent::__construct($student_id);
       $this->formdata=$formdata;
