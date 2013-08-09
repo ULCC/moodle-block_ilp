@@ -98,7 +98,7 @@ class ilp_dashboard_mis_attendance_tab  extends ilp_dashboard_tab {
 	 * @return none
 	  */
 	function display($selectedtab=null)	{
-		global 	$CFG,$PARSER;
+		global 	$CFG,$PARSER, $PAGE;
 
 
 		$pluginoutput	=	"";
@@ -135,6 +135,10 @@ class ilp_dashboard_mis_attendance_tab  extends ilp_dashboard_tab {
 					require_once $CFG->dirroot.'/blocks/ilp/plugins/mis/'.$misplugin->name.'.php';
 
 		        	$misplu	=	new $misplugin->name();
+
+                    if (method_exists($misplu, 'tab_name')) {
+                        $PAGE->navbar->add($misplu->tab_name(), '', 'title');
+                    }
 
 		        	$misplu->set_data($user->idnumber,$this->student_id);
 
