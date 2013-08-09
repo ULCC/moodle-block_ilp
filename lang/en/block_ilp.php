@@ -266,6 +266,9 @@ $string['noreports']='No reports available';
     $string['previous'] 		    = 	'Previous';
     $string['previewreport'] 		= 	'Preview Forms';
 	$string['predefinedreports'] 	= 	'Predefined Forms';
+    $string['settings_add_predefined_link'] = 'Add Predefined Forms';
+    $string['settings_add_predefined_link_desc'] = 'To use the predefined report feature, please go to:<br />/blocks/ilp/actions/add_predefined_report.php<br /><br />
+    **Warning** This will immediately add new forms to your ILP block and activate these.';
 	$string['previewdescription']	= 	'Below is a preview of the form you are creating if you are happy with the form click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
     $string['preferencecreationsuc'] 		= 	'Preference created';
     $string['previousstudent'] 		= 	'Prev student';
