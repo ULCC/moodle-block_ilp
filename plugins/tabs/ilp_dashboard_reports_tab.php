@@ -869,7 +869,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
    	 static function language_strings(&$string) {
-        $string['ilp_dashboard_reports_tab_default_tab'] 					= 'Default form to sisplay';
+        $string['ilp_dashboard_reports_tab_default_tab'] 					= 'Default form to display';
         $string['ilp_dashboard_reports_tab_default_tabdesc'] 				= 'Default form to display';
         
         return $string;
