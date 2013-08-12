@@ -316,5 +316,19 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
         $this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
 
     }
+	
+		/**
+	 * Adds the string values from the tab to the language file
+	 *
+	 * @param	array &$string the language strings array passed by reference so we  
+	 * just need to simply add the plugins entries on to it
+	 */
+	 static function language_strings(&$string) {
+        $string['ilp_dashboard_reports_tab_graphstatus'] 					= 'Entries Display Type';
+        $string['ilp_dashboard_reports_tab_graphstatusdesc'] 				= 'How do you want to display the entries on the tab.';
+        
+        return $string;
+    }
+	
 
 }
