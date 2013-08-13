@@ -1,4 +1,4 @@
-@block_ajax_marking
+@block_ilp
 Feature: Installing the ILP Block
 
     In order to use the block
