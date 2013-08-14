@@ -886,7 +886,7 @@ class ilp_db_functions	extends ilp_logging {
 
         $sql	=	"SELECT	DISTINCT	e.id as entryid, re.*
     				 FROM		{block_ilp_report} re
-    				 INNER JOIN {block_ilp_entry} e ON (re.id = e.report_id AND e.user_id = " . $userid . ")
+    				 INNER JOIN {block_ilp_entry} e ON (re.id = e.report_id" . (($userid) ? " AND e.user_id = " . $userid : "") . ")
     				 INNER JOIN {block_ilp_report_field} rf ON (rf.report_id = re.id AND rf.plugin_id = " . $pluginid .")
     				 WHERE		status	=	".ILP_ENABLED;
 
@@ -2384,6 +2384,14 @@ class ilp_db_functions	extends ilp_logging {
             return array();
         }
 
+        $secondstatus_leftjoin = '';
+
+        if (strpos($sql_sort, 'warningstatus_title') !== false) {
+            $secondstatus_leftjoin = ' LEFT JOIN {block_ilp_plu_wsts_ent} secondsts ';
+            $secondstatus_leftjoin .= ' ON (secondsts.user_id = u.id) ';
+            $sql_sort = str_replace('warningstatus_title', 'secondsts.value', $sql_sort);
+        }
+
         $select = "SELECT 		u.id as id,
         				u.idnumber as idnumber,
         				u.firstname as firstname,
@@ -2400,7 +2408,7 @@ class ilp_db_functions	extends ilp_logging {
         				u.email as email ";
 
         $from = " FROM 			{user} as u LEFT JOIN {block_ilp_user_status} as us on (u.id = us.user_id) LEFT JOIN
-        						{block_ilp_plu_sts_items} as si on (us.parent_id = si.id)";
+        						{block_ilp_plu_sts_items} as si on (us.parent_id = si.id)" . $secondstatus_leftjoin;
 
         $where = "";
 
