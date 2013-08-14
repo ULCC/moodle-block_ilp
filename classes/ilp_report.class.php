@@ -54,7 +54,9 @@ class ilp_report
       if(isset($r))
          return $r;
 
-      foreach($DB->get_fieldset_select('block_ilp_report','id','1') as $rid)
+      $r = array();
+
+      foreach($DB->get_fieldset_select('block_ilp_report','id','1 = 1 ') as $rid)
       {
          $report=static::from_id($rid);
          if(!$report->deleted or $includeDeleted)

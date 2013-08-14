@@ -329,7 +329,7 @@
 		<FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true" NEXT="parent_id"/>
 		<FIELD NAME="parent_id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="value"/>
 		<FIELD NAME="value" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="parent_id" NEXT="name"/>
-		<FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="" SEQUENCE="false" PREVIOUS="value" NEXT="hexcolour"/>
+		<FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" PREVIOUS="value" NEXT="hexcolour"/>
 		<FIELD NAME="hexcolour" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="name" NEXT="passfail"/>
 		<FIELD NAME="passfail" TYPE="int" LENGTH="2" NOTNULL="true" SEQUENCE="false" PREVIOUS="hexcolour" NEXT="timemodified"/>
 		<FIELD NAME="timemodified" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false" PREVIOUS="passfail" NEXT="timecreated"/>

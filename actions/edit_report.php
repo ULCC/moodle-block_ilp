@@ -12,7 +12,7 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
 //include any neccessary files
 
@@ -24,9 +24,9 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_report_mform.php');
 
 
 //if set get the id of the report to be edited
-$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	
+$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);
 
-
+$PAGE->set_url($CFG->wwwroot . '/blocks/ilp/actions/edit_report.php?report_id=' . $report_id);
 // instantiate the db
 $dbc = new ilp_db();
 
