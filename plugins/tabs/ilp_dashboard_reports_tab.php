@@ -869,4 +869,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       $this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
 
    }
+   	 static function language_strings(&$string) {
+        $string['ilp_dashboard_reports_tab_default_tab'] 					= 'Default form to display';
+        $string['ilp_dashboard_reports_tab_default_tabdesc'] 				= 'Default form to display';
+        
+        return $string;
+    }
 }

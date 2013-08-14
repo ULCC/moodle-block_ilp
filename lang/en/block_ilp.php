@@ -539,6 +539,8 @@ $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
 $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
 $string['ilp_dashboard_reports_tab_default'] 			= 'Default form';
 $string['ilp_dashboard_reports_tab_pluginnamesettings'] = 'Forms tab Configuration';
+$string['ilp_dashboard_reports_tab_default_tab'] 					= 'Default form to display';
+$string['ilp_dashboard_reports_tab_default_tabdesc'] 				= 'Default form to display';
 
 // Entries
 $string['ilp_dashboard_entries_tab'] 					= 'entries tab';
@@ -551,7 +553,8 @@ $string['ilp_dashboard_entries_tab_displaylinks'] 		    = 'Display text links';
 $string['ilp_dashboard_entries_tab_graphs'] 		        = 'Graph(s):';
 $string['ilp_dashboard_entries_tab_displayicons'] 		        = 'Display icon links';
 $string['ilp_dashboard_entries_tab_pluginnamesettings'] = 'Entries tab Configuration';
-
+$string['ilp_dashboard_reports_tab_graphstatus'] 					= 'Entries Display Type';
+$string['ilp_dashboard_reports_tab_graphstatusdesc'] 				= 'How do you want to display the entries on the tab.';
 // Archive
 
 $string['ilp_dashboard_archive_tab'] 					= 'Archive';

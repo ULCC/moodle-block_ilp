@@ -247,6 +247,9 @@ class ilp_mis_misc_fees extends ilp_mis_plugin	{
          $string['ilp_mis_misc_fees_yearfilter_year']                 = 'Year filter date';
          $string['ilp_mis_misc_fees_yearfilter_yeardesc']             = 'The date that will be filtered on';
 
+		 $string['ilp_mis_misc_fees_prelimcalls']						= 'Preliminary db calls';
+         $string['ilp_mis_misc_fees_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+        
 
          return $string;
     }

@@ -291,8 +291,8 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
         $string['ilp_mis_learner_profile_contact_disp_emercontact']				= 'Emergency Contact';
         $string['ilp_mis_learner_profile_contact_disp_emernumber']				= 'Emergency Number';
 
-         $string['ilp_mis_learner_profile_contact_prelimcalls']						= 'Preliminary db calls';
-         $string['ilp_mis_learner_profile_contact_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
+         $string['ilp_mis_learner_contact_prelimcalls']						= 'Preliminary db calls';
+         $string['ilp_mis_learner_contact_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
          $string['ilp_mis_learner_profile_contact_tab_name']					= 'Contact Details';
 
 
