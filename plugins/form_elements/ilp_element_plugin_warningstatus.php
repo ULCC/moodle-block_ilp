@@ -8,6 +8,7 @@ class ilp_element_plugin_warningstatus extends ilp_element_plugin_itemlist{
     public $data_entry_tablename;
     public $optionlist_keyfield;
     public $selecttype;
+    public $user_id;
 
     /**
      * Constructor
@@ -23,6 +24,9 @@ class ilp_element_plugin_warningstatus extends ilp_element_plugin_itemlist{
         parent::__construct();
     }
 
+    public function set_user_id($user_id) {
+        $this->user_id = $user_id;
+    }
     /**
      * Loads the data for this field
      *
@@ -62,21 +66,15 @@ class ilp_element_plugin_warningstatus extends ilp_element_plugin_itemlist{
         //default entry_data
         $fieldname	=	$reportfield_id."_field";
 
-        //find out if this instance of the plugin saves its data to the user status table or the sts_ent table
-        if (!empty($this->savetype)) {
-            $userstatus	=	$this->dbc->get_entrystatus($entry_id,$reportfield_id);
-            $entryobj->$fieldname	=	(!empty($userstatus->value)) ? array($userstatus->value) : '';
-        } else {
-            $entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
-            if (!empty($entry)) {
-                $fielddata	=	array();
-                //loop through all of the data for this entry in the particular entry
-                foreach($entry as $e) {
-                    $fielddata[]	=	$e->parent_id;
-                }
-                //save the data to the objects field
-                $entryobj->$fieldname	=	$fielddata;
+        $entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id,true);
+        if (!empty($entry)) {
+            $fielddata	=	array();
+            //loop through all of the data for this entry in the particular entry
+            foreach($entry as $e) {
+                $fielddata[]	=	$e->parent_id;
             }
+            //save the data to the objects field
+            $entryobj->$fieldname	=	$fielddata;
         }
     }
 
@@ -117,35 +115,24 @@ class ilp_element_plugin_warningstatus extends ilp_element_plugin_itemlist{
     public function view_data( $reportfield_id,$entry_id,&$entryobj, $returnvalue=false ){
         $fieldname	=	$reportfield_id."_field";
 
-        if (!empty($this->savetype)) {
-            $statusdata	=	$this->dbc->get_entrystatus($entry_id,$reportfield_id);
-            if (!empty($statusdata)) {
-                $comma	= "";
-                $statusdata = (is_array($statusdata)) ?   $statusdata : array($statusdata);
-                //loop through all of the data for this entry in the particular entry
-                foreach($statusdata as $s) {
-                    $entryobj->$fieldname	.=	$s->name.$comma;
+        $entry	=	$this->dbc->get_entry_data($this->data_entry_tablename,'user_id',$entryobj->user_id);
+
+        if (!empty($returnvalue)) $entryobj->$fieldname = array();
+        if (!empty($entry)) {
+            $comma	= "";
+            //loop through all of the data for this entry in the particular entry
+            foreach($entry as $e) {
+                $name = $this->dbc->get_warning_status_name($e->value);
+                if (empty($returnvalue)) {
+                    $entryobj->$fieldname	.=	"{$comma}{$name}";
                     $comma	=	",";
+                } else {
+                    array_push($entryobj->$fieldname,$name);
                 }
-            }
-        } else  {
-            $entry	=	$this->dbc->get_entry_data($this->data_entry_tablename,'entry_id',$entry_id);
 
-            if (!empty($returnvalue)) $entryobj->$fieldname = array();
-            if (!empty($entry)) {
-                $comma	= "";
-                //loop through all of the data for this entry in the particular entry
-                foreach($entry as $e) {
-                    if (empty($returnvalue)) {
-                        $entryobj->$fieldname	.=	"{$comma}{$e->value}";
-                        $comma	=	",";
-                    } else {
-                        array_push($entryobj->$fieldname,$e->value);
-                    }
-
-                }
             }
         }
+
     }
 
 
@@ -448,34 +435,17 @@ class ilp_element_plugin_warningstatus extends ilp_element_plugin_itemlist{
         //get selected state item record from items table
         $state_item				=	$this->dbc->get_state_item_id($this->tablename,$pluginrecord->id,$ev, 'value', $this->items_tablename );
 
-        if (!empty($state_item) && !empty($this->savetype))   {
-            //get the users status if they have one
-            $userstatus =   $this->dbc->get_user_status($data->user_id);
-
-            //if the user has a status update it else create a new one
-            if ($userstatus) {
-
-                $userstatus->user_modified_id   =   $USER->id;
-                $userstatus->parent_id          =   $state_item->id;
-                return $this->dbc->update_userstatus($userstatus);
-
-            }   else    {
-                $userstatus     =   new stdClass();
-                $userstatus->user_modified_id   =   $USER->id;
-                $userstatus->parent_id          =   $state_item->id;
-                $userstatus->user_id            =   $data->user_id;
-                return $this->dbc->create_status($userstatus);
-            }
-        } else if (!empty($state_item)){
+        if (!empty($state_item)){
 
             //delete the status record attached to this entry if it exists
-            $this->dbc->delete_element_record_by_id( $this->data_entry_tablename, $entry_id, array('audit_type'=>$this->audit_type()) );
+            $this->dbc->delete_element_record_by_id( $this->data_entry_tablename, $data->user_id, array(), 'user_id' );
 
             //save the new status into the table
             $pluginentry     =   new stdClass();
             $pluginentry->parent_id	=	$state_item->id;
             $pluginentry->value 	= 	$state_item->value;
-            $pluginentry->entry_id 	= 	$entry_id;
+            $pluginentry->entry_id 	= 	-1;
+            $pluginentry->user_id 	= 	$data->user_id;
 
             return 	$this->dbc->create_plugin_entry($this->data_entry_tablename,$pluginentry);
         }
@@ -515,16 +485,15 @@ class ilp_element_plugin_warningstatus extends ilp_element_plugin_itemlist{
             $select->setMultiple(true);
         }
 
+
+        $warning_status = $this->dbc->get_current_warning_status($this->user_id);
+        if ($warning_status) {
+            $select->setSelected($warning_status->value);
+        }
+
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType('label', PARAM_RAW);
 
-        if (!empty($this->savetype))    {
-            if (isset($mform->_elements[5]->_attributes['value'])) $userstatus =    $this->dbc->get_user_status($mform->_elements[5]->_attributes['value']);
-            if (!empty($userstatus))    {
-                $statusitem     =   $this->dbc->get_status_item_by_id($userstatus->parent_id);
-                $select->setSelected($statusitem->value);
-            }
-        }
     }
 
 

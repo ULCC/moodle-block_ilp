@@ -25,8 +25,8 @@ if (!empty($nextstudent)) {
 
 	<?php
 	echo '<div id="middle-studentinfo">';
-    if (!empty($student_warning_info)) {
-        echo '<h5>' . $student_warning_info->name . '</h5>';
+    if (!empty($student_warning_info) && $display_warning_status) {
+        echo '<h5 class="ilp_element_plugin_warningstatus">' . $warning_status_name . '</h5>';
         }
 	echo $this->generate_middle_studentinfo_content($tutorslist, $statusitem, $can_editstatus, $percentagebars, $pbar, $userstatuscolor);
     echo '</div>';

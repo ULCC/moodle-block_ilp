@@ -139,6 +139,10 @@ class report_entry_mform extends ilp_moodleform {
                     //instantiate the plugin class
                     $pluginclass	=	new $classname();
 
+                    if (method_exists($pluginclass, 'set_user_id')) {
+                        $pluginclass->set_user_id($this->user_id);
+                    }
+
                     $pluginclass->load($field->id);
 
                     //call the plugins entry_form function which will add an instance of the plugin

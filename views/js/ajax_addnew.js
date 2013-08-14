@@ -417,6 +417,12 @@ M.ilp_ajax_addnew = {
                         M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
                         M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
 
+                        // depends on the newly created entry with a 2nd status being the first in the list.
+                        var warningstatus = entrycontainer.one('.ilp_element_plugin_warningstatus');
+
+                        if (warningstatus) {
+                            Y.all('.ilp_element_plugin_warningstatus').setHTML(warningstatus.getHTML());
+                        }
                         var nothingtodisplay = Y.one('.nothingtodisplay');
                         if (nothingtodisplay) {
                             nothingtodisplay.addClass('hiddenelement');
@@ -578,6 +584,12 @@ M.ilp_ajax_addnew = {
                         M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
                         M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
                         M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+
+                        var warningstatus = Y.one('.reports-container-' + edit_id).one('.ilp_element_plugin_warningstatus');
+
+                        if (warningstatus) {
+                            Y.all('.ilp_element_plugin_warningstatus').setHTML(warningstatus.getHTML());
+                        }
                     }
                 }
             },

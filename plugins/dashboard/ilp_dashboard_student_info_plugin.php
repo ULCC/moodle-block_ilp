@@ -328,22 +328,16 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
        // Get warning status if appropriate
 
-       $student_warning_info = '';
-       $ilp_db = new ilp_db();
-       $warningstatus_pl = $ilp_db->get_plugin_by_name('block_ilp_plugin', 'ilp_element_plugin_warningstatus');
-       $allreports = $ilp_db->get_enabledreports_with_entry($student->id);
+       $display_warning_status = false;
+       if ($student_warning_info = $this->dbc->get_current_warning_status($this->student_id)) {
+           $warningstatus_pl = $this->dbc->get_plugin_by_name('block_ilp_plugin', 'ilp_element_plugin_warningstatus');
+           $enabled_reports_with_warning_status = $this->dbc->get_enabledreports_with_entry($student->id, $warningstatus_pl->id);
 
-       foreach ($allreports as $_report) {
-           $allfields = $ilp_db->get_report_fields($_report->id);
-
-           foreach ($allfields as $_field) {
-               if ($_field->plugin_id == $warningstatus_pl->id) {
-                   // Show the ws contents.
-                   $student_warning_info = $ilp_db->get_entrywarningstatus($_report->entryid, $warningstatus_pl->id);
-               }
+           if ($enabled_reports_with_warning_status) {
+               $display_warning_status = true;
+               $warning_status_name = $this->dbc->get_warning_status_name($student_warning_info->value);
            }
        }
-       // use get_report_fields
 
       //instantiate the percentage bar class in case there are any percentage bars
       $pbar	=	new ilp_percentage_bar();

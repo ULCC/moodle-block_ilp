@@ -805,6 +805,13 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 
+    public function get_current_warning_status($user_id) {
+        return $this->dbc->get_record("block_ilp_plu_wsts_ent",array('user_id'=>$user_id));
+    }
+
+    public function get_warning_status_name($value) {
+        return $this->dbc->get_field("block_ilp_plu_wsts_items", 'name', array('value'=>$value));
+    }
     /**
      * Update a plugin entry record in the table given
      *
@@ -875,11 +882,12 @@ class ilp_db_functions	extends ilp_logging {
      * you do not want included in the return values
      * @return mixed array containing recordset objects or false
      */
-    function get_enabledreports_with_entry($userid=null)	{
+    function get_enabledreports_with_entry($userid=null, $pluginid = null)	{
 
         $sql	=	"SELECT	DISTINCT	e.id as entryid, re.*
     				 FROM		{block_ilp_report} re
     				 INNER JOIN {block_ilp_entry} e ON (re.id = e.report_id AND e.user_id = " . $userid . ")
+    				 INNER JOIN {block_ilp_report_field} rf ON (rf.report_id = re.id AND rf.plugin_id = " . $pluginid .")
     				 WHERE		status	=	".ILP_ENABLED;
 
         return	$this->dbc->get_records_sql($sql);
@@ -1077,6 +1085,28 @@ class ilp_db_functions	extends ilp_logging {
         $sql	=	"SELECT			 si.*
 					 FROM			{block_ilp_user_status} as us,
 					 				{block_ilp_plu_sts_items} as si,
+					 				{block_ilp_entry} as e
+					 WHERE			e.id                =   :entry_id
+					 AND            e.user_id           =   us.user_id
+					 AND            us.parent_id		=	si.id";
+
+        return 		$this->dbc->get_record_sql($sql, array('entry_id'=>$entry_id));
+    }
+
+    /**
+     * get the status of the
+     *
+     * @param int 	$entry_id the entry id of the records that will be returned
+     * @param int 	$reportfield_id the id of the report field
+     *
+     * @return mixed object the entry record or false
+     */
+    function get_entry_warning_status($entry_id,$reportfield_id)	{
+        global 	$CFG;
+
+        $sql	=	"SELECT			 si.*
+					 FROM			{block_ilp_user_w_status} as us,
+					 				{block_ilp_plu_wsts_items} as si,
 					 				{block_ilp_entry} as e
 					 WHERE			e.id                =   :entry_id
 					 AND            e.user_id           =   us.user_id
@@ -1321,8 +1351,8 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return mixed true or false
      */
-    function delete_element_record_by_id ( $tablename,$id, $extraparams=array() ) {
-        return $this->delete_records( $tablename, array('id'=>$id), $extraparams );
+    function delete_element_record_by_id ( $tablename, $id, $extraparams=array(), $id_field = 'id' ) {
+        return $this->delete_records( $tablename, array($id_field=>$id), $extraparams );
     }
 
     /**
@@ -2122,8 +2152,8 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->set_field('block_ilp_report','deleted', $deleted, array('id'=>$report_id));
     }
 
-    function create_statusfield($statusfield)	{
-        $this->insert_record('block_ilp_plu_sts', $statusfield);
+    function create_statusfield($statusfield, $tablename = 'block_ilp_plu_sts')	{
+        $this->insert_record($tablename, $statusfield);
     }
 
 
@@ -2215,8 +2245,8 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @return mixed object containing recordset with matching id or false
      */
-    function get_status_item_by_id($id)	{
-        return $this->dbc->get_record('block_ilp_plu_sts_items',array('id'=>$id));
+    function get_status_item_by_id($id, $tablename = 'block_ilp_plu_sts_items')	{
+        return $this->dbc->get_record($tablename,array('id'=>$id));
     }
 
     /**

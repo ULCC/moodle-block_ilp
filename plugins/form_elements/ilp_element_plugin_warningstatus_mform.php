@@ -11,8 +11,8 @@ class ilp_element_plugin_warningstatus_mform  extends ilp_element_plugin_itemlis
 
     function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
         parent::__construct($report_id,$plugin_id,$creator_id,$reportfield_id);
-        $this->tablename = "block_ilp_plu_sts";
-        $this->items_tablename = "block_ilp_plu_sts_items";
+        $this->tablename = "block_ilp_plu_wsts";
+        $this->items_tablename = "block_ilp_plu_wsts_items";
     }
 
 
@@ -44,7 +44,7 @@ class ilp_element_plugin_warningstatus_mform  extends ilp_element_plugin_itemlis
             $statusfield->savetype			        =	$data->savetype;
             $statusfield->creator_id				=	$USER->id;
 
-            $this->dbc->create_statusfield($statusfield);
+            $this->dbc->create_statusfield($statusfield, $this->tablename);
 
     }
 
