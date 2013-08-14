@@ -93,6 +93,8 @@ if (!empty($attendanceclass)) {
 
 //get all enabled reports in this ilp
 $reports = $dbc->get_reports(ILP_ENABLED);
+$vaulted_reports = $dbc->get_reports_vaulted();
+$vaulted_report_ids = array_keys($vaulted_reports);
 
 //get the mamximum reports that can be displayed on the screen in the list
 $maxreports = get_config('block_ilp', 'ilp_max_reports');
@@ -107,7 +109,11 @@ $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 
 
 //we are going to create headers and columns for all enabled reports
-foreach ($reports as $r) {
+foreach ($reports as $reportid => $r) {
+    if (in_array($reportid, $vaulted_report_ids)) {
+        unset($reports[$reportid]);
+        continue;
+    }
     $headers[] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_studentreports.php?course_id={$course_id}&tutor={$tutor}&report_id={$r->id}&group_id={$group_id}'>".$r->name."</a>";
     $columns[] = $r->id;
     $expandcollapse[]   = $r->id;
