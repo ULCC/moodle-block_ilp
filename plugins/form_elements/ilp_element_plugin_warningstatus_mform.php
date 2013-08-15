@@ -30,8 +30,6 @@ class ilp_element_plugin_warningstatus_mform  extends ilp_element_plugin_itemlis
         //THE status id should be the first status item id 1
         $mform->setDefault('status_id', '1');
 
-        $mform->addElement('advcheckbox', 'savetype', get_string('updatestatus', 'block_ilp'), '', array('group' => 1), array(0, 1));
-
     }
 
 

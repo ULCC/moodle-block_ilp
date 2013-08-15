@@ -965,6 +965,37 @@ function xmldb_block_ilp_upgrade($oldversion) {
         if(!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
+
+    }
+    if ($oldversion < 2013081502) {
+        $start_item = new stdClass();
+        $start_item->parent_id = 1;
+        $start_item->value = 'w1';
+        $start_item->name = 'W1';
+        $start_item->hexcolour = '';
+        $start_item->icon = 'icon';
+        $start_item->display_option = 'text';
+        $start_item->description = 'warning one';
+        $start_item->bg_colour = '';
+        $start_item->passfail = 0;
+        $start_item->timemodified = time();
+        $start_item->timecreated = time();
+        $DB->insert_record('block_ilp_plu_wsts_items', $start_item);
+
+        $start_item->value = 'w2';
+        $start_item->name = 'W2';
+        $start_item->description = 'warning two';
+        $DB->insert_record('block_ilp_plu_wsts_items', $start_item);
+
+        $start_item->value = 'w3';
+        $start_item->name = 'W3';
+        $start_item->description = 'warning three';
+        $DB->insert_record('block_ilp_plu_wsts_items', $start_item);
+
+        $start_item->value = 'w4';
+        $start_item->name = 'W4';
+        $start_item->description = 'warning four';
+        $DB->insert_record('block_ilp_plu_wsts_items', $start_item);
     }
     return true;
 }
