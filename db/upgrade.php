@@ -816,6 +816,156 @@ function xmldb_block_ilp_upgrade($oldversion) {
         }
     }
 
+    if ($oldversion < 2013081501){
+        $table = new $xmldb_table( 'block_ilp_plu_wsts' );
+        $set_attributes = method_exists($xmldb_key, 'set_attributes') ? 'set_attributes' : 'setAttributes';
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_report = new $xmldb_field('reportfield_id');
+        $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, null);
+        $table->addField($table_report);
+
+        //1=single, 2=multi cf blocks/ilp/constants.php
+        $table_optiontype = new $xmldb_field('selecttype');
+        $table_optiontype->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, null);
+        $table->addField($table_optiontype);
+
+        //0= save to sts_ent, 2= save to userstatus (update user status)
+        $table_optiontype = new $xmldb_field('savetype');
+        $table_optiontype->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, null);
+        $table->addField($table_optiontype);
+
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        $table_key = new $xmldb_key('textplugin_unique_reportfield');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN_UNIQUE, array('reportfield_id'),'block_ilp_report_field','id');
+        $table->addKey($table_key);
+
+
+        if(!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        $table = new $xmldb_table( 'block_ilp_plu_wsts_items' );
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_textfieldid = new $xmldb_field('parent_id');
+        $table_textfieldid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_textfieldid);
+
+        $table_itemvalue = new $xmldb_field('value');
+        $table_itemvalue->$set_attributes(XMLDB_TYPE_CHAR, 255, null, null);
+        $table->addField($table_itemvalue);
+
+        $table_itemname = new $xmldb_field('name');
+        $table_itemname->$set_attributes(XMLDB_TYPE_CHAR, 255, null, XMLDB_NOTNULL);
+        $table->addField($table_itemname);
+
+        $table_hexcolour = new $xmldb_field('hexcolour');
+        $table_hexcolour->$set_attributes(XMLDB_TYPE_CHAR, 255, null);
+        $table->addField($table_hexcolour);
+
+        $table_icon = new $xmldb_field('icon');
+        $table_icon->$set_attributes(XMLDB_TYPE_CHAR, 45, null);
+        $table->addField($table_icon);
+
+        $table_display_option = new $xmldb_field('display_option');
+        $table_display_option->$set_attributes(XMLDB_TYPE_CHAR, 4, null);
+        $table->addField($table_display_option);
+
+        $table_description = new $xmldb_field('description');
+        $table_description->$set_attributes(XMLDB_TYPE_CHAR, 255, null);
+        $table->addField($table_description);
+
+        $table_bg_colour = new $xmldb_field('bg_colour');
+        $table_bg_colour->$set_attributes(XMLDB_TYPE_CHAR, 45, null);
+        $table->addField($table_bg_colour);
+
+        //special field to categorise states as pass or fail
+        //0=unset,1=fail,2=pass
+        $table_itempassfail = new $xmldb_field( 'passfail' );
+        $table_itempassfail->$set_attributes( XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL, '0', null, null, '0' );
+        $table->addField( $table_itempassfail );
+
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        $table_key = new $xmldb_key('listplugin_unique_fk');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), 'block_ilp_plu_wsts', 'id');
+        $table->addKey($table_key);
+
+        if(!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // create the new table to store responses to fields
+        $table = new $xmldb_table( 'block_ilp_plu_wsts_ent' );
+
+        $table_id = new $xmldb_field('id');
+        $table_id->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE);
+        $table->addField($table_id);
+
+        $table_maxlength = new $xmldb_field('parent_id');
+        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_maxlength);
+
+        $table_item_id = new $xmldb_field('value');	//foreign key -> $this->items_tablename
+        $table_item_id->$set_attributes(XMLDB_TYPE_CHAR, 255, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_item_id);
+
+        $table_report = new $xmldb_field('entry_id');
+        $table_report->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_report);
+
+        $table_timemodified = new $xmldb_field('timemodified');
+        $table_timemodified->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timemodified);
+
+        $table_timecreated = new $xmldb_field('timecreated');
+        $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_timecreated);
+
+        $table_userid = new $xmldb_field('user_id');
+        $table_userid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_userid);
+
+        $table_key = new $xmldb_key('primary');
+        $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
+        $table->addKey($table_key);
+
+        $table_key = new $xmldb_key('listpluginentry_unique_fk');
+        $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), 'block_ilp_plu_wsts', 'id');
+        $table->addKey($table_key);
+
+        if(!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+    }
     return true;
 }
 

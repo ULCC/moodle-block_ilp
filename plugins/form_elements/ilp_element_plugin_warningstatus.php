@@ -272,6 +272,10 @@ class ilp_element_plugin_warningstatus extends ilp_element_plugin_itemlist{
         $table_timecreated->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
         $table->addField($table_timecreated);
 
+        $table_userid = new $this->xmldb_field('user_id');
+        $table_userid->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table->addField($table_userid);
+
         $table_key = new $this->xmldb_key('primary');
         $table_key->$set_attributes(XMLDB_KEY_PRIMARY, array('id'));
         $table->addKey($table_key);
