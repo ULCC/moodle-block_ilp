@@ -247,9 +247,13 @@ $string['noreports']='No reports available';
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
 
-$string['ilp_element_plugin_warningstatus_description'] = 'Warning Status';
-$string['warningstatus_title'] = 'Warning Status';
-$string['ilp_element_plugin_warningstatus_type'] = 'warning status';
+$string['ilp_element_plugin_warningstatus_description'] = 'Manual Status';
+$string['warningstatus_title'] = 'Manual Status';
+$string['warningstatus_items'] = 'Manual Status Items';
+$string['warningstatus_namefor'] = 'Name for';
+
+$string['ilp_element_plugin_warningstatus_type'] = 'manual status';
+$string['editsecondstatusitems'] = 'Edit Manual Status Items';
     $string['notinsummary']	        =	'Not in summary';
 	$string['nothingtodisplay']		=	'Nothing to display';
     $string['pagelayout']           =   'Page Layout';

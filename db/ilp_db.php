@@ -430,6 +430,17 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /**
+     * Get the warning status item for a user
+     *
+     * @param string $tablename the name of the table that will be updated
+     * @param int $user_id
+     * @return mixed object containing the plugin instance record or false
+     */
+    public function get_secondstatus_userrecord($tablename = 'block_ilp_plu_wsts_ent',$user_id) {
+        return $this->dbc->get_record($tablename, array('user_id' => $user_id));
+    }
+
+    /**
      * This is the same as get_form_element_plugin() above
      * @todo refactor calls to this function
      * Returns the plugin record that has the matching id
@@ -1038,6 +1049,28 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /**
+     * Updates a second status record
+     *
+     * @param object $secondstatus_userrecord the object that we want to update
+     *
+     * @return bool true or false
+     */
+    function update_secondstatus($secondstatus_userrecord) {
+        return	$this->update_record("block_ilp_plu_wsts_ent", $secondstatus_userrecord);
+    }
+
+    /**
+     * Updates a second status item record
+     *
+     * @param object $secondstatus_item the object that we want to update
+     *
+     * @return bool true or false
+     */
+    function update_secondstatus_item($secondstatus_item) {
+        return	$this->update_record("block_ilp_plu_wsts_items", $secondstatus_item);
+    }
+
+    /**
      * get the data entry record with the id given
      *
      * @param string tablename the name of the table that will be interrogated
@@ -1071,6 +1104,9 @@ class ilp_db_functions	extends ilp_logging {
     }
 
 
+    public function get_secondstatus_items() {
+        return $this->dbc->get_records('block_ilp_plu_wsts_items');
+    }
     /**
      * get the status of the
      *

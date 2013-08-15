@@ -71,6 +71,9 @@ $settings->add(new admin_setting_heading('block_ilp_report_configuration', '', $
 $link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
 $settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
 
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_secondstatus_items.php">' . get_string('editsecondstatusitems', 'block_ilp') . '</a>';
+$settings->add(new admin_setting_heading('editsecondstatusitems', '', $link));
+
 $globalsettings 	= new admin_setting_heading('block_ilp/userstatus', get_string('userstatus', 'block_ilp'), '');
 
 $settings->add($globalsettings);
