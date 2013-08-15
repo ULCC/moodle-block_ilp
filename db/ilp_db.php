@@ -348,6 +348,9 @@ class ilp_db_functions	extends ilp_logging {
         return $this->insert_record("block_ilp_report",$report);
     }
 
+    public function special_insert($tablename, $object) {
+        return $this->insert_record($tablename, $object);
+    }
     /**
      * Returns the position number a new report field should take
      *
@@ -673,6 +676,17 @@ class ilp_db_functions	extends ilp_logging {
      */
     function get_report_by_id($id) {
        return ilp_report::from_id($id);
+    }
+
+    /**
+     * get a report record using the id given
+     *
+     * @param int $id the id of the record that you want to retrieve
+     *
+     * @return mixed object or false if no record found
+     */
+    function get_report_by_other($field, $value) {
+        return $this->dbc->get_record('block_ilp_report', array($field=>$value));
     }
 
     /**

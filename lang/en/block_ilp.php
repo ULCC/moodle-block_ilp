@@ -71,6 +71,7 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
     $string['deadline']		 					= 	'deadline';
     $string['deadlinestate']		 			= 	'Deadline state';
 
+    $string['clone_form'] = 'Clone Form';
 	$string['deadlinenotification']		 = 	'Deadline Notification';
 	$string['deadlinenotificationconfig']		 = 	'How many days before a deadline a target deadline should a reminder be sent to a user to remind them of the deadline';
 	
