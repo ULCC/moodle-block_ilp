@@ -234,7 +234,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed the id of the inserted record or false
      */
     function create_form_element_plugin($name,$tablename) {
-        $type = new object();
+        $type = new stdClass();
         $type->name 		= $name;
         $type->tablename 	= $tablename;
 
@@ -296,7 +296,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed the id of the inserted record or false
      */
     function create_plugin($table,$name,$tablename=NULL) {
-        $type = new object();
+        $type = new stdClass();
         $type->name 		    = $name;
         $type->tablename 		= $tablename;
 
@@ -2612,7 +2612,7 @@ class ilp_db_functions	extends ilp_logging {
 
     /*
      * Adds all field items from a previous parent field to a new parent field.
-     *
+     *  (E.g. checkbox options associated with the previous field)
      * @param $old_parent_id
      * @param $new_parent_id
      * @param $tablename

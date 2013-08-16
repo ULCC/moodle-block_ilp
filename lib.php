@@ -18,6 +18,9 @@ function var_crap($var,$header="") {
 	
 }
 
+/*
+ * Prints object to a file ** WARNING ** This will overwrite any files with the same name in moodle/local/
+ */
 function print_ob_to_localfile($object_toprint, $filename = 'testFile.txt') {
     global $CFG;
     $myFile = $CFG->dirroot . "/local/" . $filename;
