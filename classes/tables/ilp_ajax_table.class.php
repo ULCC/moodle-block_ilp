@@ -540,12 +540,12 @@ class ilp_ajax_table extends ilp_flexible_table {
     }
 
     /**
-     * Prints a single row of the table
+     * Prints two rows of a table one show and the second hidden
      *
      * @param object $row One row from the DB results object
      * @param string $classname An optional CSS class for the row
      */
-    function print_row($row, $classname = '',$onclick = null) {
+    function print_row($row, $classname = '',$onclick = null,$hiddendata=null) {
 
         static $suppress_lastrow = NULL;
         static $oddeven = 1;
@@ -556,7 +556,7 @@ class ilp_ajax_table extends ilp_flexible_table {
             $rowclasses[] = $classname;
         }
 
-       $onclickevent =  (!empty($onclick)) ? ' onclick="'.$onclick.'" ' : '';
+        $onclickevent =  (!empty($onclick)) ? ' onclick="'.$onclick.'" ' : '';
 
         echo '<tr  class="' . implode(' ', $rowclasses) . '">';
 
@@ -585,6 +585,19 @@ class ilp_ajax_table extends ilp_flexible_table {
         }
 
         echo '</tr>';
+
+        if (!empty($hiddendata)) {
+            //the hidden row
+            echo '<tr  class="' . implode(' ', $rowclasses) . '">';
+
+            $colcount = count($this->columns);
+            foreach ($hiddendata as $index => $data) {
+                echo '<td colspan="'.$colcount.'">';
+                echo $data;
+                echo '</td>';
+            }
+            echo "</tr>";
+        }
 
         $suppress_enabled = array_sum($this->column_suppress);
         if ($suppress_enabled) {
