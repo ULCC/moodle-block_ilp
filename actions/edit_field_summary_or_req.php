@@ -12,8 +12,9 @@
 
 require_once('../configpath.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
+$PAGE->set_url($CFG->wwwroot . '/blocks/ilp/actions/edit_field_summary_or_req.php');
 //include any neccessary files
 
 // Meta includes

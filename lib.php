@@ -9,7 +9,8 @@
  * @version 2.0
  */
 
-
+require_once($CFG->dirroot.'/blocks/ilp/libs/actionslib.php');
+require_once($CFG->dirroot.'/blocks/ilp/libs/classeslib.php');
 
 function var_crap($var,$header="") {
 	echo "<pre> {$header} <br />";

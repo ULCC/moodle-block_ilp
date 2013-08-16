@@ -1,6 +1,6 @@
 <?php
 
-public function format_text_with_options($text, $format, $options) {
+function format_text_with_options($text, $format, $options) {
     if (is_null($options)){
         $options = new stdClass;
     }
@@ -21,7 +21,7 @@ public function format_text_with_options($text, $format, $options) {
 }
 
 
-public function create_plugin_from_optionlist($optionlist, $itemrecord) {
+function create_plugin_from_optionlist($optionlist, $itemrecord) {
     foreach( $optionlist as $key=>$itemname ){
         $itemrecord->value = $key;
         $itemrecord->name = $itemname;

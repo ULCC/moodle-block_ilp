@@ -14,8 +14,6 @@ require_once($CFG->dirroot."/blocks/ilp/classes/ilp_formslib.class.php");
 //include the library file
 require_once($CFG->dirroot.'/blocks/ilp/lib.php');
 
-require_once($CFG->dirroot.'/blocks/ilp/lib/actionslib.php');
-
 //include the static constants
 require_once($CFG->dirroot.'/blocks/ilp/constants.php');
 
