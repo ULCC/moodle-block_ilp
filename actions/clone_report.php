@@ -47,7 +47,10 @@ if ($mform->is_cancelled()) {
 if($mform->is_submitted()) {
     // check the validation rules
     if($mform->is_validated()) {
-print_object($mform->get_data());
+        $data = $mform->get_data();
+        $params = 'report_id=' . $report_id . '&currentname=' . $data->currentname . '&newname=' . $data->newname;
+        $params .= '&current_to_vault=' . $data->current_to_vault . '&new_to_visible=' . $data->new_to_visible;
+        redirect($CFG->wwwroot . '/blocks/ilp/actions/run_clone_report.php?' . $params);
     }
 }
 

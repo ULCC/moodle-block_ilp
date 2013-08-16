@@ -58,6 +58,34 @@ class clone_report_mform extends ilp_moodleform {
 
 
         function validation( $data, $files ){
+            $dbc = new ilp_db;
+
+            $errors = array();
+
+            if ($report = $dbc->get_report_by_other('name', $data['currentname'])) {
+                if ($report->id != $this->report_id) {
+                    $errors['currentname'] = get_string('form_already_exists', 'block_ilp', $data['currentname']);
+                }
+            }
+
+            if ($report = $dbc->get_report_by_other('name', $data['newname'])) {
+                if ($report->id != $this->report_id) {
+                    $errors['newname'] = get_string('form_already_exists', 'block_ilp', $data['newname']);
+                }
+            }
+
+            if ($data['currentname'] == $data['newname']) {
+                $errors['newname'] = get_string('new_name_diff_old_name', 'block_ilp');
+            }
+
+            if (!$data['currentname']) {
+                $errors['currentname'] = get_string('form_name_not_blank', 'block_ilp');
+            }
+
+            if (!$data['newname']) {
+                $errors['newname'] = get_string('form_name_not_blank', 'block_ilp');
+            }
+            return $errors;
         }
 
 }

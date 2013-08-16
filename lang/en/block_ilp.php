@@ -72,6 +72,15 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
     $string['deadlinestate']		 			= 	'Deadline state';
 
     $string['clone_form'] = 'Clone Form';
+    $string['current_form_name'] = 'Current Name';
+    $string['new_form_name'] = 'Copy Name';
+    $string['current_form_to_vault'] = 'Send current form to the vault?';
+    $string['new_form_to_visible'] = 'Set new form to be visible?';
+    $string['form_already_exists'] = 'Form with name {$a} already exists';
+    $string['new_name_diff_old_name'] = 'The new name must be different from the old name';
+    $string['form_name_not_blank'] = 'The form name cannot be blank';
+    $string['new_cloned_form_created'] = 'The form {$a} was created successfully';
+
 	$string['deadlinenotification']		 = 	'Deadline Notification';
 	$string['deadlinenotificationconfig']		 = 	'How many days before a deadline a target deadline should a reminder be sent to a user to remind them of the deadline';
 	
