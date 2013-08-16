@@ -67,8 +67,10 @@ if ($copy_id) {
         $specific_field_data = $dbc->get_plugin_record($plugin->tablename, $old_field_id);
         if ($specific_field_data) {
             $specific_field_data->reportfield_id = $field_copy;
+            $old_field_data_id = $specific_field_data->id;
             unset($specific_field_data->id);
-            $dbc->special_insert($plugin->tablename, $specific_field_data);
+            $field_data_id = $dbc->special_insert($plugin->tablename, $specific_field_data);
+            $dbc->add_old_items_to_new_field($old_field_data_id, $field_data_id, $plugin->tablename);
         }
     }
 

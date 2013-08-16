@@ -2610,6 +2610,32 @@ class ilp_db_functions	extends ilp_logging {
         return array();
     }
 
+    /*
+     * Adds all field items from a previous parent field to a new parent field.
+     *
+     * @param $old_parent_id
+     * @param $new_parent_id
+     * @param $tablename
+     * @return array of ids of items created
+     */
+    function add_old_items_to_new_field($old_parent_id, $new_parent_id, $tablename) {
+        global $DB;
+        $dbman = $DB->get_manager();
+        $newitem_ids = array();
+        $items_table = $tablename . '_items';
+        if ($dbman->table_exists($items_table)) {
+            $old_items = $this->dbc->get_records($items_table, array('parent_id'=>$old_parent_id));
+            if ($old_items) {
+                foreach ($old_items as $old_item) {
+                    $new_item = clone $old_item;
+                    $new_item->parent_id = $new_parent_id;
+                    unset($new_item->id);
+                    $newitem_ids[] = $this->dbc->insert_record($items_table, $new_item);
+                }
+            }
+        }
+        return $newitem_ids;
+    }
 
     /**
      * Returns the graph plugin with the id given
