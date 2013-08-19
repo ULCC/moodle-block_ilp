@@ -96,7 +96,7 @@ class ilp_element_plugin {
 
         
         // include the assmgr db
-        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
         // instantiate the assmgr db
         $this->dbc = new ilp_db();
@@ -155,7 +155,7 @@ class ilp_element_plugin {
         $classname = get_class($this).'_mform';
 
         // include the moodle form for this table
-        include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
+        include_once("{$CFG->dirroot}/blocks/ilp/classes/forms/element_plugins/{$classname}.php");
 
         if(!class_exists($classname)) {
             print_error('noeditilpform', 'block_ilp', '', get_class($this));

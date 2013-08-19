@@ -15,7 +15,7 @@
     require_once($pchartpath."/class/pImage.class.php");
 
     // include the ilp db
-    require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+    require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
     //the id of the report  that the field will be in
     $report_id = required_param('report_id', PARAM_INT);

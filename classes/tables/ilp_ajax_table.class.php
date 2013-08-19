@@ -87,7 +87,7 @@ class ilp_ajax_table extends ilp_flexible_table {
         );
 
         // include and instantiate the db class
-        require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
+        require_once($CFG->dirroot."/blocks/ilp/classes/database/ilp_db.php");
         $this->dbc = new ilp_db();
 
         if (!isset($SESSION->flextable)) {

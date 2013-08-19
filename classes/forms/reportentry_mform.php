@@ -58,7 +58,7 @@ class report_entry_mform extends ilp_moodleform {
 			 global $USER, $CFG;
 
 	         // include the assmgr db
-        	require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        	require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
         	$dbc = new ilp_db;
 

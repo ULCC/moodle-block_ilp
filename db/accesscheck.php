@@ -12,7 +12,7 @@
 
 global $CFG, $PARSER,$USER,$PAGE;
 
-require_once($CFG->dirroot."/blocks/ilp/db/ilp_db.php");
+require_once($CFG->dirroot."/blocks/ilp/classes/database/ilp_db.php");
 
 //get the user id if it is not set then we will pass the global $USER->id 
 $user_id   = $PARSER->optional_param('user_id',$USER->id,PARAM_INT);

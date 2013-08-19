@@ -29,7 +29,7 @@ class block_ilp extends block_list {
       global $CFG, $USER, $COURSE, $SITE;
 
       // include  db class
-      require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+      require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
       // include the parser class
       require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_parser.class.php');

@@ -28,7 +28,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 			$this->report_id	=	$report_id;
 			
 			// include the ilb db
-        	require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        	require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 			
 			$this->dbc			=	new ilp_db();
 			

@@ -119,7 +119,7 @@ function xmldb_block_ilp_upgrade($oldversion) {
     if ($oldversion < 2012022405)	{
 
         //include ilp db class
-        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
         require_once($CFG->dirroot.'/blocks/ilp/lib.php');
         $dbc                =   new ilp_db();
@@ -656,7 +656,7 @@ function xmldb_block_ilp_upgrade($oldversion) {
     if ($oldversion < 2013031828)	{
 
         //include ilp db class
-        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
         require_once($CFG->dirroot.'/blocks/ilp/lib.php');
         $dbc                =   new ilp_db();

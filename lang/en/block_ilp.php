@@ -614,7 +614,7 @@ $string['ilp_dashboard_archive_tab_pluginnamesettings'] = 'Archive tab Configura
 	global $CFG;
 
 	// Include ilp db class
-	require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+	require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 	
 	$dbc = new ilp_db();
 	$plugins = $CFG->dirroot.'/blocks/ilp/plugins/form_elements';
