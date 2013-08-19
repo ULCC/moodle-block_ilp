@@ -991,8 +991,9 @@ class ilp_db_functions	extends ilp_logging {
     function has_report_permission($report_id,$role_id,$capability_id)	{
         global $USER, $CFG;
 
-        if($this->ilp_admin($USER))
-           return true;
+        if($this->ilp_admin($USER)){
+            return true;
+        }
 
         require_once($CFG->dirroot."/blocks/ilp/lib.php");
         //adding addtional lines that return true if the user is either a site admin or has the ilpviewall capabilty at site level
