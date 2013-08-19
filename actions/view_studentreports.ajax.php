@@ -10,7 +10,7 @@
  */
 
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER, $OUTPUT;
 

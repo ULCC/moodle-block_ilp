@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER;
 
@@ -47,19 +47,9 @@ $movesuc	=	true;
 //loop through fields returned
 if (!empty($reportfields)) {
 	foreach($reportfields as $field) {
-		
-		if ($field->id != $reportfield_id) {
-			
-			
-			//if the field is being moved up all other fields have postion value increased
-			//if the field is being moved down all other fields have postion value decreased 
-			//move up = 1 move down = 0
-			$newposition = (empty($move)) ? $field->position-1 : $field->position+1;
-		} else {
-			//move the field 
-			$newposition = (!empty($move)) ? $field->position- 1 : $field->position+1;
-		}
-		
+
+        $newposition = manage_position($field, $reportfield_id, $move);
+
 		if (!$dbc->set_new_position($field->id,$newposition)) $movesuc = false;
 	}
 } else {

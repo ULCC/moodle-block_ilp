@@ -9,7 +9,7 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 

@@ -809,23 +809,7 @@ class ilp_flexible_table {
      */
     function format_text($text, $format=FORMAT_MOODLE, $options=NULL, $courseid=NULL){
         if (!$this->is_downloading()){
-            if (is_null($options)){
-                $options = new stdClass;
-            }
-            //some sensible defaults
-            if (!isset($options->para)){
-                $options->para = false;
-            }
-            if (!isset($options->newlines)){
-                $options->newlines = false;
-            }
-            if (!isset($options->smiley)) {
-                $options->smiley = false;
-            }
-            if (!isset($options->filter)) {
-                $options->filter = false;
-            }
-            return format_text($text, $format, $options);
+            return format_text_with_options($text, $format, $options);
         } else {
             $eci =& $this->export_class_instance();
             return $eci->format_text($text, $format, $options, $courseid);
@@ -1705,22 +1689,6 @@ EOF;
         exit;
     }
     function format_text($text, $format=FORMAT_MOODLE, $options=NULL, $courseid=NULL){
-        if (is_null($options)){
-            $options = new stdClass;
-        }
-        //some sensible defaults
-        if (!isset($options->para)){
-            $options->para = false;
-        }
-        if (!isset($options->newlines)){
-            $options->newlines = false;
-        }
-        if (!isset($options->smiley)) {
-            $options->smiley = false;
-        }
-        if (!isset($options->filter)) {
-            $options->filter = false;
-        }
-        return format_text($text, $format, $options);
+        return format_text_with_options($text, $format, $options);
     }
 }

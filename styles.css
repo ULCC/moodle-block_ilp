@@ -989,3 +989,19 @@ table.report-entry-table {
 .ilp .pagelinks.formfieldsconfig {
     margin: 5px;
 }
+
+#studentinfo-container .secondsts_cntr, #studentinfo-container .std_info_cntr {
+    float: left;
+}
+
+#studentinfo-container .secondsts_cntr {
+    margin-left: 10px;
+}
+#studentinfo-container .secondsts_cntr #select_usersecondstatus {
+    font-size: 10px;
+}
+
+h5.ilp_element_plugin_warningstatus {
+    margin-top: 0;
+    display: inline;
+}

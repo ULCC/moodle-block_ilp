@@ -9,7 +9,9 @@
  * @version 2.0
  */
 
-
+require_once(__DIR__.'/../../config.php');
+require_once($CFG->dirroot.'/blocks/ilp/libs/actionslib.php');
+require_once($CFG->dirroot.'/blocks/ilp/libs/classeslib.php');
 
 function var_crap($var,$header="") {
 	echo "<pre> {$header} <br />";
@@ -18,6 +20,9 @@ function var_crap($var,$header="") {
 	
 }
 
+/*
+ * Prints object to a file ** WARNING ** This will overwrite any files with the same name in moodle/local/
+ */
 function print_ob_to_localfile($object_toprint, $filename = 'testFile.txt') {
     global $CFG;
     $myFile = $CFG->dirroot . "/local/" . $filename;

@@ -1,6 +1,6 @@
 <pre>
 <?php
-require_once('../configpath.php');
+require_once('../lib.php');
 require_once( $CFG->dirroot . '/lib/xmldb/xmldb_object.php' );
 require_once( $CFG->dirroot . '/lib/xmldb/xmldb_table.php' );
 

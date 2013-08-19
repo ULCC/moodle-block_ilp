@@ -71,6 +71,16 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
     $string['deadline']		 					= 	'deadline';
     $string['deadlinestate']		 			= 	'Deadline state';
 
+    $string['clone_form'] = 'Clone Form';
+    $string['current_form_name'] = 'Current Name';
+    $string['new_form_name'] = 'Copy Name';
+    $string['current_form_to_vault'] = 'Send current form to the vault?';
+    $string['new_form_to_visible'] = 'Set new form to be visible?';
+    $string['form_already_exists'] = 'Form with name {$a} already exists';
+    $string['new_name_diff_old_name'] = 'The new name must be different from the old name';
+    $string['form_name_not_blank'] = 'The form name cannot be blank';
+    $string['new_cloned_form_created'] = 'The form {$a} was created successfully';
+
 	$string['deadlinenotification']		 = 	'Deadline Notification';
 	$string['deadlinenotificationconfig']		 = 	'How many days before a deadline a target deadline should a reminder be sent to a user to remind them of the deadline';
 	
@@ -247,6 +257,13 @@ $string['noreports']='No reports available';
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
 
+$string['ilp_element_plugin_warningstatus_description'] = 'Manual Status';
+$string['warningstatus_title'] = 'Manual Status';
+$string['warningstatus_items'] = 'Manual Status Items';
+$string['warningstatus_namefor'] = 'Name for';
+
+$string['ilp_element_plugin_warningstatus_type'] = 'manual status';
+$string['editsecondstatusitems'] = 'Edit Manual Status Items';
     $string['notinsummary']	        =	'Not in summary';
 	$string['nothingtodisplay']		=	'Nothing to display';
     $string['pagelayout']           =   'Page Layout';
@@ -266,6 +283,9 @@ $string['noreports']='No reports available';
     $string['previous'] 		    = 	'Previous';
     $string['previewreport'] 		= 	'Preview Forms';
 	$string['predefinedreports'] 	= 	'Predefined Forms';
+    $string['settings_add_predefined_link'] = 'Add Predefined Forms';
+    $string['settings_add_predefined_link_desc'] = 'To use the predefined report feature, please go to:<br />/blocks/ilp/actions/add_predefined_report.php<br /><br />
+    **Warning** This will immediately add new forms to your ILP block and activate these.';
 	$string['previewdescription']	= 	'Below is a preview of the form you are creating if you are happy with the form click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
     $string['preferencecreationsuc'] 		= 	'Preference created';
     $string['previousstudent'] 		= 	'Prev student';

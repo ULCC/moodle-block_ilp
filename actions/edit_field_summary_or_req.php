@@ -10,10 +10,11 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
+$PAGE->set_url($CFG->wwwroot . '/blocks/ilp/actions/edit_field_summary_or_req.php');
 //include any neccessary files
 
 // Meta includes
@@ -25,6 +26,8 @@ $report_id = $PARSER->required_param('report_id', PARAM_INT);
 //the id of the reportfield used when editing
 $reportfield_id = $PARSER->required_param('reportfield_id' ,PARAM_INT);
 
+$alter_required_setting = $PARSER->optional_param('required_setting', 0,PARAM_INT);
+
 // instantiate the db
 $dbc = new ilp_db();
 
@@ -34,10 +37,18 @@ $dbc = new ilp_db();
 //get the field record
 $reportfield =	$dbc->get_report_field_data($reportfield_id);
 
-//if the report field is currently required set it to 0 not required and vice versa 
-$reportfield->summary	=	(empty($reportfield->summary)) ? 1 : 0;
+//if the report field is currently required set it to 0 not required and vice versa
+if ($alter_required_setting) {
+    $reportfield->req	=	(empty($reportfield->req)) ? 1 : 0;
+    $succ_string = 'fieldreqsuc';
+    $fail_string = 'fieldreqerror';
+} else {
+    $reportfield->summary	=	(empty($reportfield->summary)) ? 1 : 0;
+    $succ_string = 'fieldchangesuc';
+    $fail_string = 'fieldchangeerror';
+}
 
-$resulttext = ($dbc->update_report_field($reportfield)) ? get_string("fieldchangesuc", 'block_ilp') : get_string("fieldchangeerror", 'block_ilp');
+$resulttext = ($dbc->update_report_field($reportfield)) ? get_string($succ_string, 'block_ilp') : get_string($fail_string, 'block_ilp');
 
 $return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_prompt.php?report_id='.$report_id;
 redirect($return_url, $resulttext, ILP_REDIRECT_DELAY);

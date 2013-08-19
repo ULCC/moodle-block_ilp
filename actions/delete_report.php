@@ -10,9 +10,9 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
 //include any neccessary files
 
@@ -20,7 +20,9 @@ global $USER, $CFG, $SESSION, $PARSER;
 require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
 //if set get the id of the report to be edited
-$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	
+$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);
+
+$PAGE->set_url($CFG->wwwroot . '/blocks/ilp/actions/delete_report.php?report_id=' . $report_id);
 
 // instantiate the db
 $dbc = new ilp_db();
