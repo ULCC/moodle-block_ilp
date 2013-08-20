@@ -7,11 +7,11 @@
  * To change this template use File | Settings | File Templates.
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER;
 
-require_once($CFG->dirroot . '/blocks/ilp/db/admin_accesscheck.php');
+require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 
 require_once($CFG->dirroot . '/blocks/ilp/constants.php');
 

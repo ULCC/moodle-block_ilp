@@ -110,7 +110,7 @@ if (!empty($reportfields)) {
         $icon	= 	$CFG->wwwroot."/blocks/ilp/pix/icons/";
         $icon	.= 	(!empty($row->req)) ? "required.gif" : "notrequired.gif";
 
-        $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_required.php?reportfield_id={$row->id}&report_id={$report_id}'>
+        $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_summary_or_req.php?required_setting=1&reportfield_id={$row->id}&report_id={$report_id}'>
 									<img class='required' src='{$icon}' alt='{$title}' title='{$title}' />
 								</a>";
         //set the summary row
@@ -118,7 +118,7 @@ if (!empty($reportfields)) {
         $icon	= 	$CFG->wwwroot."/blocks/ilp/pix/icons/";
         $icon	.= 	(!empty($row->summary)) ? "summary.png" : "notinsummary.png";
 
-        $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_summary.php?reportfield_id={$row->id}&report_id={$report_id}'>
+        $data[] 			=	"<a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_field_summary_or_req.php?reportfield_id={$row->id}&report_id={$report_id}'>
 									<img class='required' src='{$icon}' alt='{$title}' title='{$title}' height='16' width='16'/>
 								</a>";
 

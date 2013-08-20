@@ -12,7 +12,7 @@ class ilp_element_plugin_free_html_mform  extends ilp_element_plugin_mform {
         if( is_array( $data ) ){
             $data = (object) $data;
         }
-	 	if ( empty( $data->description ) )  $this->errors['markup_required'] = get_string('ilp_element_plugin_free_html_markup_required','block_ilp');
+	 	if ( empty( $data->description ) )  $this->errors['description'] = get_string('ilp_element_plugin_free_html_markup_required','block_ilp');
         return $this->errors;
     }
     

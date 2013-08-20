@@ -1,5 +1,5 @@
 <?php
-require_once('../configpath.php');
+require_once('../lib.php');
 
 $csslink = new moodle_url($CFG->wwwroot.'/blocks/ilp/css/style.css');
 $PAGE->requires->css($csslink);

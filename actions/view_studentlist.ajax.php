@@ -10,7 +10,7 @@
  */
 
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER, $OUTPUT;
 
@@ -95,6 +95,15 @@ if (!empty($attendanceclass)) {
 $reports = $dbc->get_reports(ILP_ENABLED);
 $vaulted_reports = $dbc->get_reports_vaulted();
 $vaulted_report_ids = array_keys($vaulted_reports);
+
+$warningstatus_pl = $dbc->get_plugin_by_name('block_ilp_plugin', 'ilp_element_plugin_warningstatus');
+$entries_with_warningstatus = $dbc->get_enabledreports_with_entry(null, $warningstatus_pl->id);
+
+if ($entries_with_warningstatus) {
+    $headers[] = get_string('warningstatus_title','block_ilp');
+    $columns[] = 'warningstatus_title';
+    $expandcollapse[]   = 'warningstatus_title';
+}
 
 //get the mamximum reports that can be displayed on the screen in the list
 $maxreports = get_config('block_ilp', 'ilp_max_reports');
@@ -303,6 +312,15 @@ if (!empty($studentslist)) {
 	        }
         }
 
+        if ($entries_with_warningstatus) {
+            $student_warning_info = $dbc->get_current_warning_status($student->id);
+            if ($student_warning_info) {
+                $warningstatus = $dbc->get_warning_status_name($student_warning_info->value);
+            } else {
+                $warningstatus = '';
+            }
+            $data['warningstatus_title'] = $warningstatus;
+        }
         foreach ($reports as $r) {
             //get the number of this report that have been created
            $datavalid=isset($allStates[$r->id][$student->id]);

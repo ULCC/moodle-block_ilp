@@ -989,3 +989,36 @@ table.report-entry-table {
 .ilp .pagelinks.formfieldsconfig {
     margin: 5px;
 }
+
+#studentinfo-container .secondsts_cntr, #studentinfo-container .std_info_cntr {
+    float: left;
+}
+
+#studentinfo-container .secondsts_cntr {
+    margin-left: 10px;
+}
+#studentinfo-container .secondsts_cntr #select_usersecondstatus {
+    font-size: 10px;
+}
+
+h5.ilp_element_plugin_warningstatus {
+    margin-top: 0;
+    display: inline;
+}
+table.quals-course, table.quals-course td, table.quals-course th{
+    border: solid black 1px;
+}
+
+table.quals-course {
+    width: 90%;
+}
+
+table.quals-course th, table.quals-course td {
+    width: 33%;
+}
+
+#ilp_mis_learner_quals .intro {
+    width: 90%;
+    border: solid black 1px;
+    margin-bottom: 20px;
+}

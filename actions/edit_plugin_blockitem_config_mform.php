@@ -66,7 +66,7 @@ class blockitem_config_form extends moodleform {
 
         $enabled_mis_plugins = array();
 
-        require_once($CFG->dirroot . '/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot . '/blocks/ilp/classes/database/ilp_db.php');
 
         $dbc = new ilp_db();
         $mis_plugins = ilp_records_to_menu($dbc->get_mis_plugins(), 'id', 'name');

@@ -15,7 +15,7 @@
 global $CFG;
 
 // include the assmgr db
-require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
 // instantiate the assmgr db
 $dbc = new ilp_db();
@@ -70,6 +70,9 @@ $settings->add(new admin_setting_heading('block_ilp_report_configuration', '', $
 
 $link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
 $settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
+
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_secondstatus_items.php">' . get_string('editsecondstatusitems', 'block_ilp') . '</a>';
+$settings->add(new admin_setting_heading('editsecondstatusitems', '', $link));
 
 $globalsettings 	= new admin_setting_heading('block_ilp/userstatus', get_string('userstatus', 'block_ilp'), '');
 
@@ -346,5 +349,7 @@ $settings->add($globalsettings);
 $link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/upload_seal.php">'.get_string('config_uploadseal', 'block_ilp').'</a>';
 $settings->add(new admin_setting_heading('block_ilp_upload_seal', '', $link));
 
+$settings_add_predefined_link 	= new admin_setting_heading('block_ilp/add_predefined', get_string('settings_add_predefined_link', 'block_ilp'), get_string('settings_add_predefined_link_desc', 'block_ilp'));
+$settings->add($settings_add_predefined_link);
 
 ?>

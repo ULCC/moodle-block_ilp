@@ -326,6 +326,29 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
          }
       }
 
+       // Get warning status if appropriate
+
+       $second_status_file = $CFG->dirroot . '/blocks/ilp/plugins/form_elements/ilp_element_plugin_warningstatus.php';
+       $second_status_file_exists = file_exists($second_status_file);
+       $display_warning_status = false;
+       $show_secondsts = !$fromblock && !$display_only_middle_studentinfo;
+       if ($show_secondsts && $second_status_file_exists && $student_warning_info = $this->dbc->get_current_warning_status($this->student_id)) {
+           $warningstatus_pl = $this->dbc->get_plugin_by_name('block_ilp_plugin', 'ilp_element_plugin_warningstatus');
+           $enabled_reports_with_warning_status = $this->dbc->get_enabledreports_with_entry($student->id, $warningstatus_pl->id);
+
+           if ($enabled_reports_with_warning_status) {
+               $display_warning_status = true;
+               $warning_status_name = $this->dbc->get_warning_status_name($student_warning_info->value);
+               require_once($second_status_file);
+               $warning_status = new ilp_element_plugin_warningstatus();
+               $firstoption = array('' => get_string('warningstatus_title', 'block_ilp'));
+               $optionlist = $warning_status->get_option_list(true);
+               $second_sts_form = $this->generate_second_sts_form($optionlist, $student_warning_info->value);
+               $second_sts_loader = html_writer::tag('img', '',
+                   array('src'=>$CFG->wwwroot . '/blocks/ilp/pix/loading.gif', 'id'=>'secondstsloadingicon', 'class'=>'hiddenelement'));
+           }
+       }
+
       //instantiate the percentage bar class in case there are any percentage bars
       $pbar	=	new ilp_percentage_bar();
 
@@ -443,6 +466,22 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
    }
 
+    public function generate_second_sts_form($optionlist, $selected_value) {
+        global $CFG;
+        $form = "<form>";
+        $form .= "<select id='select_usersecondstatus'  name='select_usersecondstatus' >";
+
+        foreach ($optionlist	as  $value => $name) {
+
+            $selected	=	($value	==	$selected_value) ? 'selected="selected"' : '';
+
+            $form .= "<option value='" . $value . "' $selected >" . $name . "</option>";
+        }
+
+        $form .= '</select>';
+        $form .= "</form>";
+        return $form;
+    }
 
    /**
     * Adds the string values from the tab to the language file

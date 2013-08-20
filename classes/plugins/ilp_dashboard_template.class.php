@@ -53,7 +53,7 @@ abstract class ilp_dashboard_template extends ilp_plugin {
     	global $CFG;
 
         // include the ilp db
-        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
         // instantiate the ilp db class needed as this function will be called
         //when not in object context

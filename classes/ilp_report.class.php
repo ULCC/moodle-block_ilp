@@ -10,7 +10,7 @@
  * @package ILP
  * @version 2.0
  */
-include_once("$CFG->dirroot/blocks/ilp/db/ilp_db.php");
+include_once("$CFG->dirroot/blocks/ilp/classes/database/ilp_db.php");
 
 class ilp_report
 {
