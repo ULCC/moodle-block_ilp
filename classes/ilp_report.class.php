@@ -10,7 +10,7 @@
  * @package ILP
  * @version 2.0
  */
-include_once("$CFG->dirroot/blocks/ilp/db/ilp_db.php");
+include_once("$CFG->dirroot/blocks/ilp/classes/database/ilp_db.php");
 
 class ilp_report
 {
@@ -54,7 +54,9 @@ class ilp_report
       if(isset($r))
          return $r;
 
-      foreach($DB->get_fieldset_select('block_ilp_report','id','1') as $rid)
+      $r = array();
+
+      foreach($DB->get_fieldset_select('block_ilp_report','id','1 = 1 ') as $rid)
       {
          $report=static::from_id($rid);
          if(!$report->deleted or $includeDeleted)

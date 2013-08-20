@@ -105,12 +105,7 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 			//$itemrecord is a container for item data
 			$itemrecord = new stdClass();	
 			$itemrecord->parent_id = $element_id;
-			foreach( $optionlist as $key=>$itemname ){
-				//one item row inserted here
-				$itemrecord->value = $key;
-				$itemrecord->name = $itemname;
-	 			$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
-			}
+            create_plugin_from_optionlist($optionlist, $itemrecord);
 	 	} else {
 	 		//get the old record from the elements plugins table 
 	 		$oldrecord				=	$this->dbc->get_form_element_by_reportfield($this->tablename,$data->reportfield_id);
@@ -137,12 +132,7 @@ class ilp_element_plugin_itemlist_mform extends ilp_element_plugin_mform {
 				}
 			}
 			//now write fresh options from $data
-			foreach( $optionlist as $key=>$itemname ){
-				//one item row inserted here
-				$itemrecord->value = $key;
-				$itemrecord->name = $itemname;
-		 		$this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
-			}
+            create_plugin_from_optionlist($optionlist, $itemrecord);
 	
 	 		//create a new object to hold the updated data
 	 		$pluginrecord 			=	new stdClass();

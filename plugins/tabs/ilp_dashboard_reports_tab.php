@@ -23,6 +23,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
    static       $access_report_viewcomment;
    static       $reportentries;
    static       $reportfields;
+   static       $access_report_viewotherilp;
 
 
     function __construct($student_id=null,$course_id=null)	{
@@ -48,11 +49,24 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
    }
 
+    /**
+     * Generates the add-new-entry element.
+     * Gets the capabilites from static or as loaded in the display and shows the element accordingly.
+     * @param string url of script to be requested via AJAX
+     * @param bool $access_report_addreports
+     * @param bool $multiple_entries
+     * @param bool $reportavailable
+     * @param int $studentid
+     * @param int $ajax (0 or 1)
+     * @param int $num_entries the number of existing entries
+     * @param int $displaysummary displays only fields with summary flag
+     * @return string
+     */
     public function generate_addnewentry($addnewentry_url, $access_report_addreports = null, $multiple_entries = null, $reportavailable = null, $studentid = null, $ajax = null, $num_entries = false, $displaysummary = null) {
         global $CFG;
+        $access_report_addreports = static::$access_report_addreports;
         if ($ajax) {
             // If not being called from 'display' of this class
-            $access_report_addreports = static::$access_report_addreports;
             $multiple_entries = static::$multiple_entries;
             $reportavailable = static::$reportavailable;
         }
@@ -88,6 +102,12 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return '';
     }
 
+    /**
+     * Generates the AJAX loader icon.
+     * @param string $container_classes used in Javascript selectors
+     * @param string $eltype
+     * @return string
+     */
     public function get_loader_icon($container_classes, $eltype = 'div') {
         global $CFG;
         $src = $CFG->wwwroot . '/blocks/ilp/pix/loading.gif';
@@ -95,7 +115,17 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return html_writer::tag($eltype, $loadericon, array('class'=>$container_classes));
     }
 
-    public function generate_comments($comments, $ajax, $url_params, $entry_id = null, $access = array()) {
+    /**
+     * Generates the comments below each entry.
+     * When a new comment is added via AJAX, the full comment list for that entry is re-generated for display.
+     * @param array $comments
+     * @param int $ajax
+     * @param string $url_params
+     * @param int $entry_id
+     * @param array $access array of access requirements
+     * @return string
+     */
+    public function generate_comments($comments, $ajax, $url_params, $entry_id = null, $access = array(), $readonly = false) {
         global $OUTPUT, $USER, $CFG;
         $o  = '';
 
@@ -104,6 +134,9 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $access = array('access_report_editcomment' => static::$access_report_editcomment,'access_report_deletecomment'=>static::$access_report_deletecomment);
         }
 
+        if ($readonly) {
+            $access = array();
+        }
         if ($comments) {
             foreach ($comments as $c) {
                 $comment_creator = $this->dbc->get_user_by_id($c->creator_id);
@@ -137,6 +170,15 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return $o;
     }
 
+    /**
+     * Generates the left-hand part of the content of a report entry.
+     * This is designed for use by the standard display and for newly added/edited reports via ajax.
+     * @param array $reportfields
+     * @param array $dontdisplay array of fields not to show
+     * @param int $displaysummary displays only fields with summary flag
+     * @param object $entry_data
+     * @return string
+     */
     public function generate_left_reports($reportfields = null, $dontdisplay, $displaysummary, $entry_data) {
         if (!$reportfields) {
             $reportfields = static::$reportfields;
@@ -156,7 +198,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
            {
               $fieldcontent = html_writer::tag('th', '<strong>' . $field->label . '</strong>: ');
               $fieldvalue = (!empty($entry_data->$fieldname)) ? $entry_data->$fieldname : '';
-              $fieldcontent .= html_writer::tag('td', $fieldvalue);
+              $attrs = array('class'=>$field->pluginname);
+              $fieldcontent .= html_writer::tag('td', $fieldvalue, $attrs);
               $table .= html_writer::tag('tr', $fieldcontent);
            }
         }
@@ -164,6 +207,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         return html_writer::tag('div', $table, array('class'=>'left-reports'));
     }
 
+    /**
+     * Generates the right-hand part of the content of a report entry.
+     * This is used by the standard display and for newly added/edited reports via ajax in the reports tab.
+     * @param bool $has_courserelated
+     * @param bool $has_deadline
+     * @param object $entry_data
+     * @return string
+     */
     public function generate_right_reports($has_courserelated, $has_deadline, $entry_data) {
         $content = '';
         $fieldcontent = array(
@@ -223,22 +274,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $course_id = (is_object($PARSER)) ? $PARSER->optional_param('course_id', SITEID, PARAM_INT)  : SITEID;
             $user_id = (is_object($PARSER)) ? $PARSER->optional_param('user_id', $USER->id, PARAM_INT)  : $USER->id;
 
-            if ($course_id != SITEID && !empty($course_id))	{
-               if (method_exists($PAGE,'set_context')) {
-                  //check if the siteid has been set if not
-                  $PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
-               }	else {
-                  $PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);
-               }
-            } else {
-               if (method_exists($PAGE,'set_context')) {
-                  //check if the siteid has been set if not
-                  $PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
-               }	else {
-                  $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
-               }
-            }
-
             $this->secondrow	=	array();
 
             //create a tab for each enabled report
@@ -289,7 +324,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
 
         if ($this->dbc->get_user_by_id($this->student_id)) {
-
+           require_once("$CFG->dirroot/blocks/ilp/classes/ilp_report_rules.class.php");
             //get the selecttab param if has been set
             $this->selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
 
@@ -314,13 +349,15 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
             $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
             if ($report	=$this->dbc->get_report_by_id($report_id)) {
-
-               if($report->status==ILP_ENABLED and $report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport'))
+                $context = $PAGE->context;
+               if($report->status==ILP_ENABLED and $report->has_cap($USER->id,$context,'block/ilp:viewreport'))
                {
+
                   $reportname	=	$report->name;
                   //get all of the fields in the current report, they will be returned in order as
                   //no position has been specified
-                  $reportfields		=	$this->dbc->get_report_fields_by_position($report_id);
+                  $reportfields		=	$this->dbc->get_report_fields_by_position($report_id, null, null, true);
+
                   static::$reportfields = $reportfields;
                   $reporticon	= (!empty($report->iconfile)) ? '' : '';
 
@@ -366,6 +403,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
 
                   static::$access_report_deletecomment=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
+
+                  static::$access_report_viewotherilp=$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
+
+                   if (empty(static::$access_report_viewotherilp) && $USER->id != $this->student_id) {
+                       //the user doesnt have the capability to create this type of report entry
+                       print_error('accessnotallowed','block_ilp');
+
+                   }
 
                   //get all of the entries for this report
 
@@ -431,6 +476,16 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
        $PAGE->requires->js_init_call('M.ilp_ajax_addnew.init', $jsarguments, true, $jsmodule);
 
+        $jsarguments = array();
+
+        $jsmodule = array(
+            'name'     	=> 'ilp_edit_reportentry',
+            'fullpath' 	=> '/blocks/ilp/views/js/edit_reportentry.js',
+            'requires'  	=> array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim', 'node-event-simulate')
+        );
+
+        $PAGE->requires->js_init_call('M.ilp_edit_reportentry.init', $jsarguments, true, $jsmodule);
+
       $pluginoutput	    =	"";
 
       if ($this->dbc->get_user_by_id($this->student_id)) {
@@ -459,6 +514,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
          $state_id	= (!empty($seltab[2])) ? $seltab[2] : false;
 
          if ($report=ilp_report::from_id($report_id)) {
+             $PAGE->navbar->add($report->name, '', 'title');
             if ($report->status == ILP_ENABLED and $report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport')) {
                $reportname	=	$report->name;
                //get all of the fields in the current report, they will be returned in order as
@@ -545,8 +601,14 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
                   //This is dubious - readonly is being assumed to mean "batch mode"
                   //But the whole class needs seriously re-written anyway.
                   //output the print icon
-                  echo "{$stateselector}<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
-								 ";
+                  echo "{$stateselector}";
+
+                   $allow_page_print = get_config('block_ilp', 'allow_page_print');
+
+                   if ($allow_page_print !== '0') {
+                       echo "<div class='entry_floatright'><a href='#' onclick='M.ilp_standard_functions.printfunction()' ><img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/print_icon_med.png' alt='".get_string("print","block_ilp")."' class='ilp_print_icon' width='32px' height='32px' ></a></div>
+                                     ";
+                   }
                }
 
                //create the entries list var that will hold the entry information
@@ -775,24 +837,6 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 	}
 
 
-
-   /**
-    * Adds the string values from the tab to the language file
-    *
-    * @param	array &$string the language strings array passed by reference so we
-    * just need to simply add the plugins entries on to it
-    */
-   static function language_strings(&$string) {
-      $string['ilp_dashboard_reports_tab'] 					= 'entries tab';
-      $string['ilp_dashboard_reports_tab_name'] 				= 'Reports';
-      $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
-      $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
-      $string['ilp_dashboard_reports_tab_default'] 			= 'Default report';
-
-      return $string;
-   }
-
-
    /**
     * Adds config settings for the plugin to the given mform
     * by default this allows config option allows a tab to be enabled or dispabled
@@ -825,4 +869,10 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
       $this->config_select_element($mform,$classname.'_pluginstatus',$options,get_string($classname.'_name', 'block_ilp'),get_string('tabstatusdesc', 'block_ilp'),0);
 
    }
+   	 static function language_strings(&$string) {
+        $string['ilp_dashboard_reports_tab_default_tab'] 					= 'Default form to display';
+        $string['ilp_dashboard_reports_tab_default_tabdesc'] 				= 'Default form to display';
+        
+        return $string;
+    }
 }

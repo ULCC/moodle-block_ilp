@@ -9,7 +9,7 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER;
 
@@ -27,6 +27,7 @@ $report_id = $PARSER->required_param('report_id', PARAM_INT);
 // instantiate the db
 $dbc = new ilp_db();
 
+$report_details = $dbc->get_report_by_id($report_id);
 
 // setup the navigation breadcrumbs
 
@@ -53,6 +54,8 @@ $PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
 //section name
 $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php",'title');
 
+$PAGE->navbar->add($report_details->name,null,'report_name');
+
 //get string for create report
 $PAGE->navbar->add(get_string('reportpermissions', 'block_ilp'),null,'title');
 
@@ -65,6 +68,12 @@ $PAGE->set_pagetype('ilp-configuration');
 $PAGE->set_pagelayout(ILP_PAGELAYOUT);
 $PAGE->set_url('/blocks/ilp/actions/edit_report_permissions.php', $PARSER->get_params());
 
+$svgcleverness = can_use_rotated_text();
+
+if ($svgcleverness) {
+    $csslink = new moodle_url($CFG->wwwroot . '/blocks/ilp/css/textrotate.css');
+    $PAGE->requires->css($csslink);
+}
 
 $blockcapabilities	=	$dbc->get_block_capabilities();
 
@@ -82,7 +91,7 @@ $mform	=	new edit_report_permissions_mform($report_id);
 //was the form cancelled?
 if ($mform->is_cancelled()) {
 	//send the user back to report configuration page
-	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?course_id='.$course_id;
+	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/edit_report_configuration.php?course_id=' . (isset($course_id)) ? $course_id : '';
     redirect($return_url, null, ILP_REDIRECT_DELAY);
 }
 

@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER;
 
@@ -45,7 +45,6 @@ $dbc = new ilp_db();
 //siteadmin or modules
 //we need to determine which moodle we are in and give the correct area name
 $sectionname	=	get_string('administrationsite');
-
 $PAGE->navbar->add($sectionname,null,'title');
 
 
@@ -63,7 +62,13 @@ $url	=	$CFG->wwwroot."/admin/settings.php?section=blocksettingilp";
 $PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
 
 //section name
-$PAGE->navbar->add(get_string('pluginconfig', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_plugin_config.php?pluginnane={$pluginname}&plugintype={$plugintype}",'title');
+
+if (get_string_manager()->string_exists($pluginname . '_pluginnamesettings', 'block_ilp')) {
+    $pageheading = get_string($pluginname . '_pluginnamesettings', 'block_ilp');
+} else {
+    $pageheading = get_string('pluginconfig', 'block_ilp');
+}
+$PAGE->navbar->add($pageheading,$CFG->wwwroot."/blocks/ilp/actions/edit_plugin_config.php?pluginnane={$pluginname}&plugintype={$plugintype}",'title');
 
 
 // setup the page title and heading

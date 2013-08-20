@@ -292,6 +292,11 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         $table_key = new $this->xmldb_key('listpluginentry_unique_fk');
         $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), $this->tablename, 'id');
         $table->addKey($table_key);
+
+        if(!$this->dbman->table_exists($table)) {
+            $this->dbman->create_table($table);
+        }
+
    }
 
     static function language_strings(&$string) {
@@ -595,7 +600,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             // below code is for upload icon for status
             $icon_options = array('subdirs'=>0, 'maxbytes'=>$CFG->userquota, 'maxfiles'=>1, 'accepted_types'=>array('*.ico', '*.png', '*.jpg', '*.gif', '*.jpeg'));
 
-            $context = get_context_instance(CONTEXT_SYSTEM);
+            $context = context_system::instance();
             $component = 'block_ilp';
             $file_area = 'icon';
             $item_id = $option->id;
@@ -607,8 +612,8 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             //above code is for upload icon status.
             $mform->addElement( 'html', '<hr />');
 
-            if( !$data_exists ){
-                $deleteurl = $CFG->wwwroot . 'blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
+            if (!$data_exists){
+                $deleteurl = $CFG->wwwroot . '/blocks/ilp/actions/edit_status_items?delete_item&id=' . $option->id;
                 $mform->addElement(
                     'static',
                     'delete_link',

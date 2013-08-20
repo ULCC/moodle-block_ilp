@@ -1,5 +1,5 @@
 <?php
-include_once(__DIR__.'/../configpath.php');
+require_once('../lib.php');
 global $USER, $CFG, $SESSION, $PARSER;
 
 // Meta includes

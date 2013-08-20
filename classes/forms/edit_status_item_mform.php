@@ -49,7 +49,7 @@ class edit_status_item_mform extends ilp_moodleform {
        		 	$fieldsettitle = get_string('edit_status_items', 'block_ilp');
         	
        		 	//create a new fieldset
-       		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset">');
+       		 	$mform->addElement('html', '<fieldset id="reportfieldset" class="clearfix ilpfieldset"><div>');
        		    $mform->addElement('html', '<legend >'.$fieldsettitle.'</legend>');
 
         	
@@ -73,7 +73,7 @@ class edit_status_item_mform extends ilp_moodleform {
 		        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
 	        
 		        //close the fieldset
-		        $mform->addElement('html', '</fieldset>');
+		        $mform->addElement('html', '</div></fieldset>');
 		}
 		
 		/**
@@ -108,10 +108,11 @@ class edit_status_item_mform extends ilp_moodleform {
         }
 
 		function specific_process_data( $data ){
+
             global $CFG, $DB;
             require_once($CFG->dirroot.'/lib/filestorage/file_storage.php');
             require_once($CFG->dirroot.'/lib/filelib.php');
-            $context = get_context_instance(CONTEXT_SYSTEM);
+            $context = context_system::instance();
 			//if we are here, we can assume $data is valid
 			$optionlist = array();
 			if( in_array( 'optionlist' , array_keys( (array) $data ) ) ){
@@ -124,7 +125,7 @@ class edit_status_item_mform extends ilp_moodleform {
             $sep = "\n";
             $keysep = ":";
 			//entries from data to go into $this->tablename and $this->items_tablename
-	
+
             $gradekeylist = array(
                  'pass', 'fail'
             );
@@ -143,7 +144,7 @@ class edit_status_item_mform extends ilp_moodleform {
                  }
              }
             //we now have 2 lists: $pass_list and $fail_list
-	  	
+
 			$element_id = ILP_DEFAULT_USERSTATUS_RECORD;
 	 		$plgrec = $this->dbc->get_form_element_data( $this->tablename, $element_id );
 			//$itemrecord is a container for item data
@@ -179,7 +180,7 @@ class edit_status_item_mform extends ilp_moodleform {
                     }
 				}
 			}
-	
+
             //that's dealt with the fresh options submitted
             //but we still need to re-assign pass and fail to the existing items, should they have changed
             foreach( $this->dbc->listelement_item_exists( $this->items_tablename, array() ) as $obj ){
@@ -226,17 +227,17 @@ class edit_status_item_mform extends ilp_moodleform {
                         $file_name = $DB->get_field_sql("SELECT filename FROM {files} where component = 'ilp' and filearea='icon' and itemid=$obj->id and filesize != 0");
                         if($file_name){
                             $newvalue = '';//???? get the icon file name
-                            $obj->$fieldname = $file_name;
+                            $obj->$fieldname = 'icon';
                             $update = true;
                         }else {
-                            $obj->$fieldname = '';
+                            $obj->$fieldname = 'icon';
                             $update = true;
                         }
                     }else {
                         $oldvalue = trim( $obj->$fieldname );
                         if( isset( $data->$form_element_name ) ){
                             $newvalue = trim( $data->$form_element_name );
-                            if( $newvalue && $oldvalue != $newvalue ){
+                            if( $oldvalue != $newvalue ){
                                 $obj->$fieldname = $newvalue;
                                 $update = true;
                             }

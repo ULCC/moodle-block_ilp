@@ -15,35 +15,50 @@
 global $CFG;
 
 // include the assmgr db
-require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
 // instantiate the assmgr db
 $dbc = new ilp_db();
 
+$ilp_is_installed = in_array('block_ilp', $DB->get_tables());
+
+
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin.class.php');
 //install new plugins
-ilp_element_plugin::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_element_plugin::install_new_plugins();
+}
 
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_template.class.php');
 //install new templates
-ilp_dashboard_template::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_dashboard_template::install_new_plugins();
+}
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_plugin.class.php');
 //install new dashboard plugins
-ilp_dashboard_plugin::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_dashboard_plugin::install_new_plugins();
+}
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
 //install new tabs
-ilp_dashboard_tab::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_dashboard_tab::install_new_plugins();
+}
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_mis_plugin.class.php');
 //install new mis plugins
-ilp_mis_plugin::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_mis_plugin::install_new_plugins();
+}
 
 require_once ($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_graph_plugin.class.php');
 //install new graphs
-ilp_graph_plugin::install_new_plugins();
+if ($ilp_is_installed) {
+    ilp_graph_plugin::install_new_plugins();
+}
 
 
 $globalsettings 	= new admin_setting_heading('block_ilp/reportconfig', get_string('reports', 'block_ilp'), '');
@@ -56,19 +71,22 @@ $settings->add(new admin_setting_heading('block_ilp_report_configuration', '', $
 $link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_status_items.php">'.get_string('editstatusitems', 'block_ilp').'</a>';
 $settings->add(new admin_setting_heading('block_ilp_statusitems', '', $link));
 
+$link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/edit_secondstatus_items.php">' . get_string('editsecondstatusitems', 'block_ilp') . '</a>';
+$settings->add(new admin_setting_heading('editsecondstatusitems', '', $link));
+
 $globalsettings 	= new admin_setting_heading('block_ilp/userstatus', get_string('userstatus', 'block_ilp'), '');
 
 $settings->add($globalsettings);
 
-$items				=	$dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);
-
-$options			=	array();
-if (!empty($items)) {
-	foreach ($items as $i) {
-		$options[$i->id]	=	$i->name;
-	}
+$options = array();
+if ($ilp_is_installed) {
+    $items				=	$dbc->get_status_items(ILP_DEFAULT_USERSTATUS_RECORD);
+    if (!empty($items)) {
+        foreach ($items as $i) {
+            $options[$i->id]	=	$i->name;
+        }
+    }
 }
-
 
 $pagelayout			=	new admin_setting_configtext('block_ilp/pagelayout',get_string('pagelayout','block_ilp'),get_string('pagelayoutconfig','block_ilp'),'standard');
 $settings->add($pagelayout);
@@ -202,7 +220,21 @@ $misplugin_settings 	= new admin_setting_heading('block_ilp/mis_plugins', get_st
 // Get MIS plugin settings
 // -----------------------------------------------------------------------------
 
+$allow_export = new admin_setting_configcheckbox('block_ilp/allow_export', get_string('settings_allow_export', 'block_ilp'), get_string('settings_allow_export_desc', 'block_ilp'), 1);
+
+$settings->add($allow_export);
+
+$allow_page_print = new admin_setting_configcheckbox('block_ilp/allow_page_print', get_string('settings_allow_page_print', 'block_ilp'), get_string('settings_allow_page_print_desc', 'block_ilp'), 1);
+
+$settings->add($allow_page_print);
+
+$allow_batch_print = new admin_setting_configcheckbox('block_ilp/allow_batch_print', get_string('settings_allow_batch_print', 'block_ilp'), get_string('settings_allow_batch_print_desc', 'block_ilp'), 1);
+
+$settings->add($allow_batch_print);
+
+
 $settings->add($misplugin_settings);
+
 global $CFG;
 
 $plugins = $CFG->dirroot.'/blocks/ilp/plugins/mis';
@@ -317,5 +349,7 @@ $settings->add($globalsettings);
 $link ='<a href="'.$CFG->wwwroot.'/blocks/ilp/actions/upload_seal.php">'.get_string('config_uploadseal', 'block_ilp').'</a>';
 $settings->add(new admin_setting_heading('block_ilp_upload_seal', '', $link));
 
+$settings_add_predefined_link 	= new admin_setting_heading('block_ilp/add_predefined', get_string('settings_add_predefined_link', 'block_ilp'), get_string('settings_add_predefined_link_desc', 'block_ilp'));
+$settings->add($settings_add_predefined_link);
 
 ?>

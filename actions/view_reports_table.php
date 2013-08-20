@@ -28,11 +28,13 @@ $columns[]	=	'editgraphs';
 $columns[]	=	'editpermission';
 $columns[]	=	'changestatus';
 $columns[]	=	'send_to_vault';
+$columns[]	=	'clone_report';
 $columns[]	=	'delete';
 
 
 //setup the array holding the header texts
 $headers	=	array();
+$headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
 $headers[]	=	'';
@@ -73,8 +75,11 @@ if (!empty($reports)) {
     foreach ($reports as $row) {
         $data = array();
 
-        $data[] 		=	$row->name;
-
+        $form_name = $row->name;
+        if (!is_numeric($row->vault)) {
+            $form_name .= ' [' . get_string('warning_vault_has_no_value', 'block_ilp') . ']';
+        }
+        $data[] 		=	$form_name;
         if ($row->position != 1) {
             //if the field is in any position except 1 it needs a up icon
             $title 	=	get_string('moveup','block_ilp');
@@ -136,6 +141,11 @@ if (!empty($reports)) {
         $icon_vault	= 	(empty($row->vault)) ? $CFG->wwwroot."/blocks/ilp/pix/bring_from_vault.png" : $CFG->wwwroot."/blocks/ilp/pix/send_to_vault.png";
         $data[] = "<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/edit_report_status_vault.php?report_id={$row->id}'>
 									<img class='send_to_vault' src='". $icon_vault ."' alt='$title_vault' title='$title_vault' />
+								 </a></div>";
+
+        // set the clone report field.
+        $data[] 			=	"<div align='center'><a href='{$CFG->wwwroot}/blocks/ilp/actions/clone_report.php?report_id={$row->id}'>
+									<img class='clone_report' src='".$OUTPUT->pix_url("/t/copy")."' alt='".get_string('clone_form', 'block_ilp')."' title='".get_string('clone_form', 'block_ilp')."' />
 								 </a></div>";
 
         //set the delete field this is not enabled at the moment

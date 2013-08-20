@@ -17,7 +17,7 @@
 require_once($CFG->dirroot . '/blocks/ilp/classes/plugins/ilp_plugin.class.php');
 
 //require the ilp_mis_connection.php file 
-require_once($CFG->dirroot . '/blocks/ilp/db/ilp_mis_connection.php');
+require_once($CFG->dirroot . '/blocks/ilp/classes/database/ilp_mis_connection.php');
 
 
 abstract class ilp_mis_plugin extends ilp_plugin
@@ -134,7 +134,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
         global $CFG;
 
         // include the ilp db
-        require_once($CFG->dirroot . '/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot . '/blocks/ilp/classes/database/ilp_db.php');
 
         // instantiate the ilp db class needed as this function will be called 
         //when not in object context

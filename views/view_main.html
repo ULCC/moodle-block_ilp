@@ -1,5 +1,10 @@
 <?php
 
+ob_start();
+// Call the display function
+$template->display_template($user_id,$course_id);
+$template_html = ob_get_clean();
+
 echo $OUTPUT->header();
 
 $jsmodule = array(
@@ -14,9 +19,8 @@ $PAGE->requires->js_init_call('M.ilp_standard_functions.init', null, true, $jsmo
 
 ?>
 <div class="ilp">
-<?php 
-//call the display function to 
-$template->display_template($user_id,$course_id);
+<?php
+echo $template_html;
 ?>
 </div>
 <?php

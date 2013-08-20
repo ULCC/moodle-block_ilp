@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
@@ -80,13 +80,12 @@ $dbc = new ilp_db();
 //get all of the fields in the current report, they will be returned in order as
 //no position has been specified
 $reportfields		=	$dbc->get_report_fields_by_position($report_id);
-			
+
 if (!empty($reportfields))	{ 
 	foreach ($reportfields as $field) {
 		//get the plugin record that for the plugin 
 		$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
         include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$pluginrecord->name}.php");
-
         $delete_entry = new $pluginrecord->name();
         $delete_entry->delete_entry_record($entry_id);
 

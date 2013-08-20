@@ -10,9 +10,9 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
 //include any neccessary files
 
@@ -24,9 +24,9 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/forms/edit_report_mform.php');
 
 
 //if set get the id of the report to be edited
-$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	
+$report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);
 
-
+$PAGE->set_url($CFG->wwwroot . '/blocks/ilp/actions/edit_report.php?report_id=' . $report_id);
 // instantiate the db
 $dbc = new ilp_db();
 
@@ -63,6 +63,10 @@ if($mform->is_submitted()) {
     	$formdata->comments		=	(empty($formdata->comments)) ? 0 : $formdata->comments;
     	
     	$formdata->frequency	=	(empty($formdata->frequency)) ? 0 : $formdata->frequency;
+
+        if (!isset($formdata->vault)) {
+            $formdata->vault = 0;
+        }
     	
         // process the data
     	$success = $mform->process_data($formdata);

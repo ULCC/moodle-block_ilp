@@ -60,10 +60,10 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
         $o = '';
         if($statusitem->display_option == 'icon'){
             if($statusitem->icon){
-                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$statusitem->id/$statusitem->icon";
+                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$statusitem->id/".ilp_get_status_icon($statusitem->id);
                 $this_file = "<a class='tooltip'>
                                     <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
-                                    <span>
+                                    <span " . ((empty($statusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
                 $this_file .= html_entity_decode($statusitem->description);
                 $this_file .="</span></a>";
@@ -118,12 +118,12 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
             $byid=array_flip($studentlist);
 
-            if(isset($studentlist[$byid[$student->id]+1]))
+            if(isset($byid[$student->id]) && isset($studentlist[$byid[$student->id]+1]))
             {
                $nextstudent    =   $studentlist[$byid[$student->id]+1];
             }
 
-            if(isset($studentlist[$byid[$student->id]-1]))
+            if(isset($byid[$student->id]) && isset($studentlist[$byid[$student->id]-1]))
             {
                $prevstudent    =   $studentlist[$byid[$student->id]-1];
             }
@@ -182,20 +182,11 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
       //check if the set_context method exists
       if (!isset($PAGE->context) === false) {
          if ($course_id != SITEID && !empty($course_id))	{
-            if (method_exists($PAGE,'set_context')) {
-               //check if the siteid has been set if not
-               $PAGE->set_context(get_context_instance(CONTEXT_COURSE,$course_id));
-            }	else {
-               $PAGE->context = get_context_instance(CONTEXT_COURSE,$course_id);
-            }
+               $PAGE->set_context(context_course::instance($course_id));
          } else {
-            if (method_exists($PAGE,'set_context')) {
                //check if the siteid has been set if not
-               $PAGE->set_context(get_context_instance(CONTEXT_USER,$user_id));
-            }	else {
-               $PAGE->context = get_context_instance(CONTEXT_USER,$user_id);
-            }
-         }
+               $PAGE->set_context(context_user::instance($user_id));
+        }
       }
 
       $access_viewotherilp	=	has_capability('block/ilp:viewotherilp', $PAGE->context);
@@ -324,7 +315,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                if (!empty($reportinfo->total)) {
                   $reportinfo->total     =   $reportinfo->total -  $reportinfo->notcounted;
                   //calculate the percentage
-                  $reportinfo->percentage	=	$reportinfo->actual/$reportinfo->total	* 100;
+                  $reportinfo->percentage	=	($reportinfo->actual) ? $reportinfo->actual/$reportinfo->total	* 100 : 0;
 
                   $reportinfo->name	=	$r->name;
 
@@ -334,6 +325,29 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
             }
          }
       }
+
+       // Get warning status if appropriate
+
+       $second_status_file = $CFG->dirroot . '/blocks/ilp/plugins/form_elements/ilp_element_plugin_warningstatus.php';
+       $second_status_file_exists = file_exists($second_status_file);
+       $display_warning_status = false;
+       $show_secondsts = !$fromblock && !$display_only_middle_studentinfo;
+       if ($show_secondsts && $second_status_file_exists && $student_warning_info = $this->dbc->get_current_warning_status($this->student_id)) {
+           $warningstatus_pl = $this->dbc->get_plugin_by_name('block_ilp_plugin', 'ilp_element_plugin_warningstatus');
+           $enabled_reports_with_warning_status = $this->dbc->get_enabledreports_with_entry($student->id, $warningstatus_pl->id);
+
+           if ($enabled_reports_with_warning_status) {
+               $display_warning_status = true;
+               $warning_status_name = $this->dbc->get_warning_status_name($student_warning_info->value);
+               require_once($second_status_file);
+               $warning_status = new ilp_element_plugin_warningstatus();
+               $firstoption = array('' => get_string('warningstatus_title', 'block_ilp'));
+               $optionlist = $warning_status->get_option_list(true);
+               $second_sts_form = $this->generate_second_sts_form($optionlist, $student_warning_info->value);
+               $second_sts_loader = html_writer::tag('img', '',
+                   array('src'=>$CFG->wwwroot . '/blocks/ilp/pix/loading.gif', 'id'=>'secondstsloadingicon', 'class'=>'hiddenelement'));
+           }
+       }
 
       //instantiate the percentage bar class in case there are any percentage bars
       $pbar	=	new ilp_percentage_bar();
@@ -452,6 +466,22 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
    }
 
+    public function generate_second_sts_form($optionlist, $selected_value) {
+        global $CFG;
+        $form = "<form>";
+        $form .= "<select id='select_usersecondstatus'  name='select_usersecondstatus' >";
+
+        foreach ($optionlist	as  $value => $name) {
+
+            $selected	=	($value	==	$selected_value) ? 'selected="selected"' : '';
+
+            $form .= "<option value='" . $value . "' $selected >" . $name . "</option>";
+        }
+
+        $form .= '</select>';
+        $form .= "</form>";
+        return $form;
+    }
 
    /**
     * Adds the string values from the tab to the language file

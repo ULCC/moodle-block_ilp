@@ -9,8 +9,13 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 //include any necessary files
+$allow_batch_print = get_config('block_ilp', 'allow_batch_print');
+
+if ($allow_batch_print === '0') {
+    print_error(get_string('batch_print_has_been_disabled', 'block_ilp'));
+}
 
 $jsmodule = array(
    'name'     	=> 'ilp_view_print_preview',

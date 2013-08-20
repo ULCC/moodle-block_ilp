@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
@@ -118,6 +118,16 @@ if (!empty($nextpressed))   {
 if (!empty($previouspressed))   {
     $currentpage--;
 }
+
+$jsarguments = array();
+
+$jsmodule = array(
+    'name'     	=> 'ilp_edit_reportentry',
+    'fullpath' 	=> '/blocks/ilp/views/js/edit_reportentry.js',
+    'requires'  	=> array('event','dom','node','io-form','anim-base','anim-xy','anim-easing','anim', 'node-event-simulate')
+);
+
+$PAGE->requires->js_init_call('M.ilp_edit_reportentry.init', $jsarguments, true, $jsmodule);
 
 $mform	= new	report_entry_mform($report_id,$user_id,$entry_id,$course_id, $currentpage);
 

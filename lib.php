@@ -9,13 +9,87 @@
  * @version 2.0
  */
 
+require_once(__DIR__.'/../../config.php');
+require_once($CFG->dirroot.'/blocks/ilp/libs/actionslib.php');
+require_once($CFG->dirroot.'/blocks/ilp/libs/classeslib.php');
 
+//include the ilp parser class
+require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_parser.class.php');
+
+//include ilp db class
+require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
+
+require_once($CFG->dirroot."/blocks/ilp/classes/ilp_formslib.class.php");
+
+//include the library file
+require_once($CFG->dirroot.'/blocks/ilp/lib.php');
+
+//include the static constants
+require_once($CFG->dirroot.'/blocks/ilp/constants.php');
 
 function var_crap($var,$header="") {
 	echo "<pre> {$header} <br />";
 	var_dump($var);
 	echo "</pre>";
 	
+}
+
+function ilp_autoloader( $classname )
+{
+    global $CFG;
+    if (!class_exists($classname)) {
+        $nopattern_associations = array (
+          'ilp_db' => '/classes/database/ilp_db.php',
+          'ilp_mis_connection' => '/classes/database/ilp_mis_connection.php',
+        );
+        if (isset($nopattern_associations[$classname])) {
+            require_once $CFG->dirroot . '/blocks/ilp' . $nopattern_associations[$classname];
+            return true;
+        } else {
+            $classname_sections = explode('_', $classname);
+            $firstsec = $classname_sections[0];
+            $num_secs = count($classname_sections);
+            $lastsec = $classname_sections[$num_secs - 1];
+            $subfolder = '/';
+            $class_suffix = '.class';
+            switch ($lastsec) {
+                case 'mform':
+                    if (strpos($classname, 'ilp_element_plugin') === 0) {
+                        // If classname begins with 'ilp_element_plugin'
+                        $subfolder = '/classes/forms/element_plugins/';
+                    } else {
+                        $subfolder = '/classes/forms/';
+                    }
+                    $class_suffix = '';
+                    break;
+                case 'table':
+                    $subfolder = '/classes/tables/';
+                    break;
+                default:
+                    break;
+            }
+            $filename = $CFG->dirroot . '/blocks/ilp' . $subfolder . $classname . $class_suffix . '.php';
+            if (file_exists($filename)) {
+                require_once $filename;
+            }
+        }
+    }
+
+}
+spl_autoload_register( 'ilp_autoloader' );
+
+/*
+ * Prints object to a file ** WARNING ** This will overwrite any files with the same name in moodle/local/
+ */
+function print_ob_to_localfile($object_toprint, $filename = 'testFile.txt') {
+    global $CFG;
+    $myFile = $CFG->dirroot . "/local/" . $filename;
+    $fh = fopen($myFile, 'w') or die("can't open file");
+    ob_start();
+    print_object($object_toprint);
+    $stringData = ob_get_clean();
+    fwrite($fh, $stringData);
+    fclose($fh);
 }
 
 /**
@@ -327,4 +401,19 @@ function block_ilp_pluginfile($course,$birecord,$context, $filearea, $args, $for
 
     session_get_instance()->write_close();
     send_stored_file($file, 60*60, 0, $forcedownload);
+}
+
+function ilp_get_status_icon($iconid)
+{
+   $context=context_system::instance();
+   $fs = get_file_storage();
+
+   foreach($fs->get_area_files($context->id, 'block_ilp', 'icon', $iconid) as $file)
+   {
+      if(!$file->is_directory())
+      {
+         return $file->get_filename();
+      }
+   }
+   return '';
 }

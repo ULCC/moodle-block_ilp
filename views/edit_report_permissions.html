@@ -3,8 +3,12 @@ echo $OUTPUT->header();
 ?>
 <div class="ilp yui-skin-sam">
 <?php
-echo $OUTPUT->heading(get_string('reportpermissions','block_ilp')); 
+echo $OUTPUT->heading($report_details->name . ': ' . get_string('reportpermissions','block_ilp'));
 
+if ($svgcleverness) {
+    $PAGE->requires->js('/blocks/ilp/views/js/textrotate.js');
+    $PAGE->requires->js_function_call('block_ilp_textrotate_init', null, true);
+}
 $mform->display();
 
 ?>

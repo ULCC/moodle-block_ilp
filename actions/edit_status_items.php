@@ -1,11 +1,13 @@
 <?php
-require_once('../configpath.php');
+require_once('../lib.php');
 
 $csslink = new moodle_url($CFG->wwwroot.'/blocks/ilp/css/style.css');
 $PAGE->requires->css($csslink);
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
+
+$PAGE->set_url($CFG->wwwroot . '/blocks/ilp/actions/edit_status_items.php');
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/admin_actions_includes.php');
 

@@ -16,7 +16,7 @@ global $USER, $CFG, $SESSION, $PARSER;
 
 
 		// include the ilp db
-        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 		
 		// instantiate the db
 		$dbc = new ilp_db();

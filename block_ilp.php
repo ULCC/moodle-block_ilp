@@ -28,8 +28,11 @@ class block_ilp extends block_list {
    function get_content() {
       global $CFG, $USER, $COURSE, $SITE;
 
+      if(!isloggedin())
+	return $this->content;
+
       // include  db class
-      require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+      require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
       // include the parser class
       require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_parser.class.php');
@@ -73,12 +76,12 @@ class block_ilp extends block_list {
       //choose which display they will see
 
       $found_current_course = false;
-      $sitecontext = get_context_instance(CONTEXT_SYSTEM);
+      $sitecontext = context_system::instance();
       $viewall=(has_capability('block/ilp:ilpviewall', $sitecontext,$USER->id,false) or ilp_is_siteadmin($USER));
       $initial_course_id=0;
 
       foreach($my_courses as $c) {
-         $coursecontext = get_context_instance(CONTEXT_COURSE, $c->id);
+         $coursecontext = context_course::instance($c->id);
          $set_course_groups_link = false;
 
          //we need to get the capabilites of the current user so we can deceide what to display in the block
@@ -112,6 +115,7 @@ class block_ilp extends block_list {
       //check if the user has the viewotherilp capability
       if (!empty($access_viewotherilp) || !empty($usertutees)) {
 
+         $tutor = 0;
          if (!empty($access_viewotherilp)) {
             $label = get_string('mycoursegroups', 'block_ilp');
             $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=0&course_id={$initial_course_id}";
@@ -124,7 +128,17 @@ class block_ilp extends block_list {
             $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
             $this->content->items[] = "<a href='{$url}'>{$label}</a>";
             $this->content->icons[] = "";
+            $tutor = 1;
          }
+         global $COURSE;
+         $course_id = (!empty($COURSE->id)) ? $COURSE->id : '';
+         $printlink = '<a href="' . $CFG->wwwroot . '/blocks/ilp/actions/define_batch_print.php?course_id=' . $course_id . '&tutor=' . $tutor . '">';
+         $printicon = get_string("print","block_ilp") . '</a>';
+         $allow_batch_print = get_config('block_ilp', 'allow_batch_print');
+          if ($allow_batch_print !== '0') {
+             $this->content->items[] = $printlink . $printicon;
+             $this->content->icons[] = '';
+          }
 
       } else if(isloggedin()) {
          // Show additional items (current status, progress bar etc. based on config
@@ -134,13 +148,14 @@ class block_ilp extends block_list {
 
           $courseurl	=	(!empty($course_id) && $course_id != 1) ? "&course_id={$course_id}" : '';
           $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}$courseurl";
+          $coreprofileurl  = "{$CFG->wwwroot}/user/profile.php?id={$USER->id}";
 
           if (get_config('block_ilp', 'show_userpicture')) {
-              $this->content->items[] = html_writer::link($url, $blockitems['picture']);
+              $this->content->items[] = $blockitems['picture'];
           }
 
           if (get_config('block_ilp', 'show_linked_name')) {
-              $this->content->items[] = html_writer::link($url, $blockitems['name']);
+              $this->content->items[] = html_writer::link($coreprofileurl, $blockitems['name']);
           }
 
          //additional check to stop users from being able to access the ilp in course context
@@ -175,7 +190,9 @@ class block_ilp extends block_list {
           }
       }
 
-      if($dbc->ilp_admin())
+       $allow_export = get_config('block_ilp', 'allow_export');
+
+      if($dbc->ilp_admin() && $allow_export !== '0')
       {
          $label=get_string('export','block_ilp');
          $this->content->items[] = "<a href='$CFG->wwwroot/blocks/ilp/actions/define_batch_export.php?course_id=$course_id'>$label</a>";

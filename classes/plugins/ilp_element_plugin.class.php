@@ -79,6 +79,7 @@ class ilp_element_plugin {
     
     var $req;
 
+    var $course_id;
 	/*
 	* local file for pre-populating particular types
 	* filename is classname . '_pre_items.config'
@@ -95,7 +96,7 @@ class ilp_element_plugin {
 
         
         // include the assmgr db
-        require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+        require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 
         // instantiate the assmgr db
         $this->dbc = new ilp_db();
@@ -128,7 +129,9 @@ class ilp_element_plugin {
         return $this->tablename;
     }
     
-    
+    public function set_course_id($course_id) {
+        $this->course_id = $course_id;
+    }
 
     /**
      * Edit the plugin instance
@@ -152,7 +155,7 @@ class ilp_element_plugin {
         $classname = get_class($this).'_mform';
 
         // include the moodle form for this table
-        include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
+        include_once("{$CFG->dirroot}/blocks/ilp/classes/forms/element_plugins/{$classname}.php");
 
         if(!class_exists($classname)) {
             print_error('noeditilpform', 'block_ilp', '', get_class($this));
@@ -178,7 +181,10 @@ class ilp_element_plugin {
         }   else    {
             //new element - check for config file
             if(file_exists($this->local_config_file)) {
-                $reportfield->optionlist = self::itemlist_flatten( parse_ini_file( $this->local_config_file ) );
+                $parsed_ini_file = parse_ini_file( $this->local_config_file );
+                $flattened = self::itemlist_flatten( $parsed_ini_file );
+                if(!is_object($reportfield)) $reportfield = new stdClass();
+                $reportfield->optionlist = $flattened;
             }
 	}
 

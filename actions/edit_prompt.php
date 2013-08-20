@@ -10,7 +10,7 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER;
 
@@ -28,6 +28,8 @@ $report_id = $PARSER->required_param('report_id', PARAM_INT);
 
 // instantiate the db
 $dbc = new ilp_db();
+
+$report_details = $dbc->get_report_by_id($report_id);
 
 //set the required level of permission needed to view this page
 
@@ -57,6 +59,9 @@ $PAGE->navbar->add(get_string('blockname', 'block_ilp'),$url,'title');
 
 //section name
 $PAGE->navbar->add(get_string('reportconfiguration', 'block_ilp'),$CFG->wwwroot."/blocks/ilp/actions/edit_report_configuration.php",'title');
+
+//get string for create report
+$PAGE->navbar->add($report_details->name,null,'report_name');
 
 //get string for create report
 $PAGE->navbar->add(get_string('reportfields', 'block_ilp'),null,'title');

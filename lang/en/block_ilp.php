@@ -30,8 +30,8 @@ $string['showattendance']='Attendance Information';
 
     $string['availablereports']		= 	'Available Forms';
     $string['average']      		= 	'Average';
-$string['batchreportselect']='Selecting Reports';
-$string['batchreportselect_help']='To select a single file to print, simply click on it. To select additional reports, click on them while holding down the Alt-key (Windows or Linux) or the Cmd-key (Apple). You can also select a range of reports by holding down the shift key when clicking on a second report.';
+$string['batchreportselect']='Selecting Forms';
+$string['batchreportselect_help']='To select a single file to print, simply click on it. To select additional forms, click on them while holding down the Alt-key (Windows or Linux) or the Cmd-key (Apple). You can also select a range of forms by holding down the shift key when clicking on a second report.';
 	$string['blockname'] 			= 	'ILP 2.0';
 	$string['blocksettings'] 		= 	'ILP 2.0 Settings';
 	$string['binary_icon']			=	'Icon File';
@@ -71,6 +71,16 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
     $string['deadline']		 					= 	'deadline';
     $string['deadlinestate']		 			= 	'Deadline state';
 
+    $string['clone_form'] = 'Clone Form';
+    $string['current_form_name'] = 'Current Name';
+    $string['new_form_name'] = 'Copy Name';
+    $string['current_form_to_vault'] = 'Send current form to the vault?';
+    $string['new_form_to_visible'] = 'Set new form to be visible?';
+    $string['form_already_exists'] = 'Form with name {$a} already exists';
+    $string['new_name_diff_old_name'] = 'The new name must be different from the old name';
+    $string['form_name_not_blank'] = 'The form name cannot be blank';
+    $string['new_cloned_form_created'] = 'The form {$a} was created successfully';
+
 	$string['deadlinenotification']		 = 	'Deadline Notification';
 	$string['deadlinenotificationconfig']		 = 	'How many days before a deadline a target deadline should a reminder be sent to a user to remind them of the deadline';
 	
@@ -87,11 +97,11 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
 	$string['description']			=	'Description';
 	$string['display'] 				= 	'Display';
 	$string['displaydesc'] 				= 	'Default number of learners to display on the view student list page';
-	$string['displayingreports'] 				= 	'Display Reports';
+	$string['displayingreports'] 				= 	'Display Forms';
 
 	$string['description']			        =	'Description';
 	$string['display'] 				        = 	'Display';
-    $string['displayingreports'] 			= 	'Display Reports';
+    $string['displayingreports'] 			= 	'Display Forms';
     $string['displaysummary'] 				= 	'Display summary';
     $string['displayuserentries'] 	        = 	'Learner entries';
     $string['displaynonuserentries'] 	    = 	'Non learner entries';
@@ -111,7 +121,17 @@ $string['batchreportselect_help']='To select a single file to print, simply clic
     $string['entrydeleted']		=	'The Forms was successfully deleted';
     $string['exceededmaxentries']	=	'You have reached the maximum number of {$a->maxentries} entries for this form';
     $string['expandall']			=	'Expand all';
-$string['export']='Export';
+    $string['export']='Export';
+    $string['settings_allow_export'] = 'Allow Export';
+    $string['settings_allow_export_desc'] = 'Global setting to turn the export functionality off or on';
+    $string['export_has_been_disabled']='Export has been disabled. Please enable this in the Site Admin settings for Block ILP';
+
+    $string['settings_allow_batch_print'] = 'Allow Batch Print';
+    $string['settings_allow_batch_print_desc'] = 'Global setting to turn the batch print functionality off or on';
+    $string['batch_print_has_been_disabled']='Batch print has been disabled. Please enable this in the Site Admin settings for Block ILP';
+
+    $string['settings_allow_page_print_desc'] = 'Global setting to turn the Page Print button off or on';
+    $string['settings_allow_page_print'] = 'Display Page Print button';
 	$string['enablereport'] 		= 	'Enable Form';
     $string['enabled'] 				= 	'Enabled';
     $string['expandentries']		=	'Expand entries';
@@ -164,7 +184,7 @@ $string['gotoprintpreview']='Generate';
 	$string['installedreports']		=	'Installed Forms';
     $string['installedelements']	=	'Installed Elements';
     $string['insummary']	        =	'In summary';
-	$string['warininglist']			=	'Warining List';
+	$string['warininglist']			=	'Warning List';
 	
 	
 	
@@ -178,8 +198,8 @@ $string['gotoprintpreview']='Generate';
     $string['maxedit'] 				= 	'Use Maximum Edit';
     $string['maxentries'] 				= 	'Max number of entries';
 	$string['maxeditexceed'] 		= 	'The length of time in which you may edit this entry has past. The entry may not be edited';	
-	$string['maxreports']			= 	'Maximum Reports In Lists';
-	$string['maxreportsconfig']			= 	'The maximum number of reports displayed in a list. Change this setting if you are having to scroll list due to a large number or reports.';
+	$string['maxreports']			= 	'Maximum Forms In Lists';
+	$string['maxreportsconfig']			= 	'The maximum number of forms displayed in a list. Change this setting if you are having to scroll list due to a large number or forms.';
 	$string['midcsscolour']			=	'Mid range CSS colour';
 	$string['midcsscolourconfig']	=	'The colour used to display statuses and percentage bars that are in the mid range';
 	$string['miscoptions']		 	= 	'Misc Options';
@@ -206,6 +226,7 @@ $string['gotoprintpreview']='Generate';
 	$string['myilp']				=	'My ILP';
 	$string['multipleentries']		=	'Allow Multiple Entries';
     $string ['reportrecurrence']    =   'Allow Report Recurrence';
+    $string['warning_vault_has_no_value'] = 'Warning: Vault has no value';
 	
 	
 	$string['mypersonallearningplan']	=	'My Personal Plan';
@@ -236,6 +257,13 @@ $string['noreports']='No reports available';
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
 
+$string['ilp_element_plugin_warningstatus_description'] = 'Manual Status';
+$string['warningstatus_title'] = 'Manual Status';
+$string['warningstatus_items'] = 'Manual Status Items';
+$string['warningstatus_namefor'] = 'Name for';
+
+$string['ilp_element_plugin_warningstatus_type'] = 'manual status';
+$string['editsecondstatusitems'] = 'Edit Manual Status Items';
     $string['notinsummary']	        =	'Not in summary';
 	$string['nothingtodisplay']		=	'Nothing to display';
     $string['pagelayout']           =   'Page Layout';
@@ -250,15 +278,18 @@ $string['noreports']='No reports available';
 	$string['pluginconfig'] 		= 	'Plugin Config';
 	$string['pluginname'] 			= 	'ILP block';
 	$string['plugintype'] 			= 	'Plugin Type';
-	$string['print'] 				= 	'Print';
+	$string['print'] 				= 	'Batch Print';
     $string['preview'] 				= 	'Preview';
     $string['previous'] 		    = 	'Previous';
     $string['previewreport'] 		= 	'Preview Forms';
 	$string['predefinedreports'] 	= 	'Predefined Forms';
+    $string['settings_add_predefined_link'] = 'Add Predefined Forms';
+    $string['settings_add_predefined_link_desc'] = 'To use the predefined report feature, please go to:<br />/blocks/ilp/actions/add_predefined_report.php<br /><br />
+    **Warning** This will immediately add new forms to your ILP block and activate these.';
 	$string['previewdescription']	= 	'Below is a preview of the form you are creating if you are happy with the form click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
     $string['preferencecreationsuc'] 		= 	'Preference created';
     $string['previousstudent'] 		= 	'Prev student';
-$string['printreports']='Reports';
+$string['printreports']='Forms';
 	$string['punctuality']			= 	'Punctuality';
 $string['showpunctuality']='Punctuality Information';
     $string['removefield']			= 	'Remove 1 field';
@@ -504,10 +535,86 @@ $string['ilp_mis_attendance_plugin_registerprelimcalls'] = 'Preliminary database
 
 $string['config_uploadseal']='Upload Institute Seal';
 $string['upload_seal']='Image for institute seal';
+
+// Strings moved from tab classes
+
+//Vault
+$string['ilp_dashboard_vault_tab'] 		= 'Vault';
+$string['ilp_dashboard_vault_tab_name'] = 'Vault';
+$string['total_entry_found']            = 'Total entry found';
+$string['vault_entry_entry_not_found']  = 'No entry found in vault';
+$string['send_to_vault']                = 'Send to vault';
+$string['bring_from_vault']             = 'Bring from vault';
+$string['ilp_dashboard_vault_tab_pluginnamesettings'] = 'Vault tab Configuration';
+
+//Reports
+$string['ilp_dashboard_reports_tab'] 					= 'forms tab';
+$string['ilp_dashboard_reports_tab_name'] 				= 'Forms';
+$string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
+$string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
+$string['ilp_dashboard_reports_tab_default'] 			= 'Default form';
+$string['ilp_dashboard_reports_tab_pluginnamesettings'] = 'Forms tab Configuration';
+$string['ilp_dashboard_reports_tab_default_tab'] 					= 'Default form to display';
+$string['ilp_dashboard_reports_tab_default_tabdesc'] 				= 'Default form to display';
+
+// Entries
+$string['ilp_dashboard_entries_tab'] 					= 'entries tab';
+$string['ilp_dashboard_entries_tab_name'] 				= 'Entries';
+$string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
+$string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
+$string['ilp_dashboard_entries_tab_graphstatusdesc'] 		= 'Should liniks to graphical stats be displayed on the entries tab if installed';
+$string['ilp_dashboard_entries_tab_displaythumbs'] 		    = 'Display thumbnail links';
+$string['ilp_dashboard_entries_tab_displaylinks'] 		    = 'Display text links';
+$string['ilp_dashboard_entries_tab_graphs'] 		        = 'Graph(s):';
+$string['ilp_dashboard_entries_tab_displayicons'] 		        = 'Display icon links';
+$string['ilp_dashboard_entries_tab_pluginnamesettings'] = 'Entries tab Configuration';
+$string['ilp_dashboard_reports_tab_graphstatus'] 					= 'Entries Display Type';
+$string['ilp_dashboard_reports_tab_graphstatusdesc'] 				= 'How do you want to display the entries on the tab.';
+// Archive
+
+$string['ilp_dashboard_archive_tab'] 					= 'Archive';
+$string['ilp_dashboard_archive_tab_name'] 				= 'Archives';
+
+$string['ilp_dashboard_archive_tab_targetname'] 				= 'Name';
+$string['ilp_dashboard_archive_tab_targetagreed'] 				= 'Target';
+$string['ilp_dashboard_archive_tab_targetcategory'] 			= 'Category';
+$string['ilp_dashboard_archive_tab_addedby'] 					= 'Set By';
+$string['ilp_dashboard_archive_tab_targetset'] 					= 'Set';
+$string['ilp_dashboard_archive_tab_targetdeadline'] 			= 'Deadline';
+$string['ilp_dashboard_archive_tab_concername'] 				= '&nbsp;';     //requested for Coulsdon, but should do for everybody
+$string['ilp_dashboard_archive_tab_report1']	 				= 'Report1';
+$string['ilp_dashboard_archive_tab_report2']	 				= 'Report2';
+$string['ilp_dashboard_archive_tab_report3']	 				= 'Report3';
+$string['ilp_dashboard_archive_tab_report4']	 				= 'Report4';
+$string['ilp_dashboard_archive_tab_report5']	 				= 'Report5';
+$string['ilp_dashboard_archive_tab_target']		 				= 'Target';
+$string['ilp_dashboard_archive_tab_student']	 				= 'Student';
+$string['ilp_dashboard_archive_tab_teacher']	 				= 'Teacher';
+$string['ilp_dashboard_archive_tab_tutor']		 				= 'Tutor';
+
+$string['ilp_dashboard_archive_tab_reportdesc']	 				= 'The title of this report';
+
+$string['ilp_dashboard_archive_tab_reportoneheader']	 				= 'Report 1';
+$string['ilp_dashboard_archive_tab_reporttwoheader']	 				= 'Report 2';
+$string['ilp_dashboard_archive_tab_reportthreeheader']	 				= 'Report 3';
+$string['ilp_dashboard_archive_tab_reportfourheader']	 				= 'Report 4';
+$string['ilp_dashboard_archive_tab_reportfiveheader']	 				= 'Report 5';
+$string['ilp_dashboard_archive_tab_reportstudentheader']	 			= 'Student Info';
+$string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
+$string['ilp_dashboard_archive_tab_reporttargetheader']	 				= 'My Target';
+$string['ilp_dashboard_archive_tab_reportteacherheader']	 				= 'Teacher';
+$string['ilp_dashboard_archive_tab_reporttutorheader']	 				= 'Tutor';
+
+$string['ilp_dashboard_archive_tab_studentinfo_student']	 				= 'Student text';
+$string['ilp_dashboard_archive_tab_studentinfo_teacher']	 				= 'Teacher text';
+$string['ilp_dashboard_archive_tab_studentinfo_shared']	 					= 'Shared text';
+
+$string['ilp_dashboard_archive_tab_pluginnamesettings'] = 'Archive tab Configuration';
+
 	global $CFG;
 
 	// Include ilp db class
-	require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
+	require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
 	
 	$dbc = new ilp_db();
 	$plugins = $CFG->dirroot.'/blocks/ilp/plugins/form_elements';
@@ -538,10 +645,14 @@ $string['upload_seal']='Image for institute seal';
 	// get all the currently installed tab plugins plugins
 	$tab_plugins = ilp_records_to_menu($dbc->get_dashboard_tabs(), 'id', 'name');
 
+    // Get the list of tab plugins to skip
+    $core_tab_plugins = explode('|', ILP_CORE_TAB_PLUGINS);
 	//this section gets language strings for all tab plugins 
-	
+
 	foreach ($tab_plugins as $plugin_file) {
-		
+		if (in_array($plugin_file, $core_tab_plugins)) {
+            continue;
+        }
 	    if (file_exists($tabs.'/'.$plugin_file.".php")) 
 	    {
 	        require_once($tabs.'/'.$plugin_file.".php");

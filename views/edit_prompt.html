@@ -3,11 +3,15 @@ echo $OUTPUT->header();
 ?>
 <div class="ilp">
 <?php 
-echo $OUTPUT->heading(get_string('reportfields', 'block_ilp'));
+echo $OUTPUT->heading($report_details->name . ': ' . get_string('reportfields', 'block_ilp'));
 
 $promptmform->display();
 ?>
-
+    <div class="pagelinks formfieldsconfig">
+        <a href="<?php echo $previewreporturl; ?>" class="button">
+            <?php echo get_string("viewreportpreview","block_ilp");?>
+        </a>
+    </div>
 
 <fieldset id="ilpreportfieldset" class="clearfix ilpfieldset">
 <legend class="ftoggler"><?php echo get_string('preview','block_ilp');?></legend>
@@ -15,7 +19,7 @@ $promptmform->display();
 require_once($CFG->dirroot.'/blocks/ilp/actions/view_reportfields_table.php');
 ?>
 </fieldset>
-<div><a href="<?php echo $previewreporturl; ?>" class="button"><?php echo get_string("viewreportpreview","block_ilp");?></a></div>
+
 
 </div>
 <?php

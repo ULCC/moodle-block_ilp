@@ -38,7 +38,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 	 * @see ilp_dashboard_plugin::display()
 	 */
 	function display()	{	
-		global	$CFG,$OUTPUT,$PARSER;
+		global	$CFG,$OUTPUT,$PARSER, $PAGE;
 
 		//set any variables needed by the display page	
 		
@@ -63,7 +63,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			
 			//get the actual tab item that was selected
 			$tabitem		=	$PARSER->optional_param('tabitem',$defaulttab.':1',PARAM_RAW);
-			
+
 			$tabs = array();
    			$tabrows = array();
 			
@@ -78,7 +78,7 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			
 			//set the $deactivatedtabs var to null
 			$deactivatedtabs		=   null;	
-			
+
 			foreach	($dashboardtabs	as $dt)	{
 				
 				$classname	=	$dt->name;
@@ -97,14 +97,13 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			        }
 
 					$dasttab	=	new $classname($this->student_id,$this->course_id);
-					if (!$this->check_for_content_in_tab($classname, $student)) {
-                        continue;
-                    }
-
-					$tabrows[]	=	new tabobject($dt->id,$linkurl."&selectedtab={$dt->id}&tabitem={$dt->id}",$dasttab->display_name());
+                    $fulllink_url = $linkurl . "&selectedtab={$dt->id}&tabitem={$dt->id}";
+                    $dash_tab_name = $dasttab->display_name();
+					$tabrows[]	=	new tabobject($dt->id, $fulllink_url, $dash_tab_name);
 	
 					if ($dasttab->is_selected($selectedtab)) {
-	
+
+                        $PAGE->navbar->add($dash_tab_name, $fulllink_url, 'title');
 						//this gets the display information from the tab plugin
 						$tabcontent		=	$dasttab->display($tabitem);
 	
@@ -149,33 +148,4 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 			print_error('studentnotfound','block_ilp');
 		}
 	}
-
-    /*
-     * Returns true or false to allow suppression of individual tabs, for example if there is nothing to show.
-     * @param string $classname name of the tab class
-     * @param int $student standard moodle student details
-     * @return bool : false to suppress display of tab
-     */
-    private function check_for_content_in_tab($classname, $student) {
-        global $CFG;
-        switch ($classname) {
-            case 'ilp_dashboard_mis_skillsbuilder_tab':
-                $suppress_if_empty = false;
-                if ($suppress_if_empty) {
-                    include_once $CFG->dirroot . '/blocks/ilp/plugins/mis/ilp_mis_learner_skillsbuilder.php';
-                    if (class_exists('ilp_mis_learner_skillsbuilder')) {
-                        $skillsbuilder = new ilp_mis_learner_skillsbuilder();
-                        $skillsbuilder->set_data($student->idnumber, $student->id);
-                        $skillsbuilder_data = $skillsbuilder->get_data();
-                        if (empty($skillsbuilder_data)) {
-                            return false;
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
 }

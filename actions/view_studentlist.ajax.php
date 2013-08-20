@@ -10,7 +10,7 @@
  */
 
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER, $OUTPUT;
 
@@ -93,6 +93,17 @@ if (!empty($attendanceclass)) {
 
 //get all enabled reports in this ilp
 $reports = $dbc->get_reports(ILP_ENABLED);
+$vaulted_reports = $dbc->get_reports_vaulted();
+$vaulted_report_ids = array_keys($vaulted_reports);
+
+$warningstatus_pl = $dbc->get_plugin_by_name('block_ilp_plugin', 'ilp_element_plugin_warningstatus');
+$entries_with_warningstatus = $dbc->get_enabledreports_with_entry(null, $warningstatus_pl->id);
+
+if ($entries_with_warningstatus) {
+    $headers[] = get_string('warningstatus_title','block_ilp');
+    $columns[] = 'warningstatus_title';
+    $expandcollapse[]   = 'warningstatus_title';
+}
 
 //get the mamximum reports that can be displayed on the screen in the list
 $maxreports = get_config('block_ilp', 'ilp_max_reports');
@@ -107,7 +118,11 @@ $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 
 
 //we are going to create headers and columns for all enabled reports
-foreach ($reports as $r) {
+foreach ($reports as $reportid => $r) {
+    if (in_array($reportid, $vaulted_report_ids)) {
+        unset($reports[$reportid]);
+        continue;
+    }
     $headers[] = "<a href='{$CFG->wwwroot}/blocks/ilp/actions/view_studentreports.php?course_id={$course_id}&tutor={$tutor}&report_id={$r->id}&group_id={$group_id}'>".$r->name."</a>";
     $columns[] = $r->id;
     $expandcollapse[]   = $r->id;
@@ -178,11 +193,12 @@ $defaultstatusitem = $dbc->get_status_item_by_id($defaultstatusitem_id);
 
 if(!empty($defaultstatusitem)){
     if($defaultstatusitem->display_option == 'icon'){
-        $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$defaultstatusitem->id/$defaultstatusitem->icon";
+       $filename=ilp_get_status_icon($defaultstatusitem->id);
+        $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$defaultstatusitem->id/$filename";
         //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
         $this_file = "<tooltip class='tooltip'>
-                                    <img src=\"$path\" alt=\"$defaultstatusitem->description\"  width='50px'/>
-                                    <span>
+                                    <img src='$path' alt='$defaultstatusitem->description'  width='50px'/>
+                                    <span " . ((empty($defaultstatusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
         $this_file .= html_entity_decode($defaultstatusitem->description);
         $this_file .="</span></tooltip>";
@@ -190,7 +206,7 @@ if(!empty($defaultstatusitem)){
     }else{
         $this_file = "<tooltip class='tooltip'>
                                     $defaultstatusitem->name
-                                    <span>
+                                    <span " . ((empty($defaultstatusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
         $this_file .= html_entity_decode($defaultstatusitem->description);
         $this_file .="</span></tooltip>";
@@ -199,7 +215,6 @@ if(!empty($defaultstatusitem)){
 }else {
     $status_item = get_string('unknown', 'block_ilp');
 }
-
 //this is needed if the current user has capabilities in the course context, it allows view_main page to view the user
 //in the course context
 $course_param   = (!empty($course_id)) ? "&course_id={$course_id}" : '';
@@ -250,11 +265,11 @@ if (!empty($studentslist)) {
         //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
         if(!empty($student->u_status)){
             if($student->u_display_option == 'icon'){
-                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$student->u_status_id/$student->u_status_icon";
+                $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$student->u_status_id/".ilp_get_status_icon($student->u_status_id);
                 //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
                 $this_file = "<tooltip class='tooltip'>
                                     <img src=\"$path\" alt=\"$student->u_status_description\"  width='50px'/>
-                                    <span>
+                                    <span " . ((empty($student->u_status_description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
                 $this_file .= html_entity_decode($student->u_status_description);
                 $this_file .="</span></tooltip>";
@@ -262,7 +277,7 @@ if (!empty($studentslist)) {
             }else {
                 $this_file = "<tooltip class='tooltip'>";
                 $this_file .= $student->u_status;
-                $this_file .="<span>
+                $this_file .="<span " . ((empty($student->u_status_description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
                 $this_file .= html_entity_decode($student->u_status_description);
                 $this_file .="</span></tooltip>";
@@ -297,6 +312,15 @@ if (!empty($studentslist)) {
 	        }
         }
 
+        if ($entries_with_warningstatus) {
+            $student_warning_info = $dbc->get_current_warning_status($student->id);
+            if ($student_warning_info) {
+                $warningstatus = $dbc->get_warning_status_name($student_warning_info->value);
+            } else {
+                $warningstatus = '';
+            }
+            $data['warningstatus_title'] = $warningstatus;
+        }
         foreach ($reports as $r) {
             //get the number of this report that have been created
            $datavalid=isset($allStates[$r->id][$student->id]);

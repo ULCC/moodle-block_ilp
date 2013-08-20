@@ -9,7 +9,7 @@
  * @version 2.0
  */
 
-require_once('../configpath.php');
+require_once('../lib.php');
 
 global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
@@ -110,7 +110,7 @@ if (!empty($course_id)) {
 
 
    foreach ($ucourses as $uc) {
-      $coursecontext = get_context_instance(CONTEXT_COURSE, $uc->id);
+      $coursecontext = context_course::instance($uc->id);
       //if the user has the capability to view the course then add it to the array
       if (has_capability('block/ilp:viewotherilp', $coursecontext,$USER->id,false))	{
          $user_courses[]	=	$uc;
