@@ -41,36 +41,26 @@ class block_ilp extends block_list {
       require_once($CFG->dirroot.'/blocks/ilp/lib.php');
 
       // db class manager
-      $dbc = new ilp_db();
+       $dbc = new ilp_db();
 
-      // get the course id
-      $course_id = optional_param('id', $SITE->id, PARAM_INT);
+       // get the course
+       $course = $dbc->get_course($COURSE->id);
 
-      //this is to handle the /user/view.php page where id is reserved for the userid ...
-      //allow the current course to be course=XX
-      $current_course_id = optional_param('course', null, PARAM_INT);
-      if( !$current_course_id ){
-         $current_course_id = optional_param('id', null, PARAM_INT); //if there's no explicit course id, id might be a course id
-      }
+       // cache the content of the block
+       if($this->content !== null) {
+           return $this->content;
+       }
 
-      // get the course
-      $course = $dbc->get_course($course_id);
+       //get all course that the current user is enrolled in
+       $my_courses		=	$dbc->get_user_courses($USER->id);
+       $access_viewilp		=	false;
+       $access_viewotherilp	= 	false;
 
-      // cache the content of the block
-      if($this->content !== null) {
-         return $this->content;
-      }
-
-      //get all course that the current user is enrolled in
-      $my_courses		=	$dbc->get_user_courses($USER->id);
-      $access_viewilp		=	false;
-      $access_viewotherilp	= 	false;
-
-      if (empty($my_courses))	{
-         $c		=	new stdClass();
-         $c->id		=	$course_id;
-         $my_courses	=	array($c);
-      }
+       if (empty($my_courses))	{
+           $c		=	new stdClass();
+           $c->id		=	$COURSE->id;
+           $my_courses	=	array($c);
+       }
 
       //we are going to loop through all the courses the user is enrolled in so that we can
       //choose which display they will see
@@ -96,7 +86,7 @@ class block_ilp extends block_list {
 
          if( $set_course_groups_link and !$found_current_course ){
             $initial_course_id	=	$c->id;
-            if( $c->id == $current_course_id ){
+            if( $c->id == $COURSE->id ){
                //current course is part of my_courses, so this should be the preselection for the linked page
                //so stop changing the value for the link
                $found_current_course = true;
