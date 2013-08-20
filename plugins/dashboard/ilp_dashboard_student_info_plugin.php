@@ -58,6 +58,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
     function generate_ajax_updatable($statusitem, $userstatuscolor) {
         global $CFG;
         $o = '';
+        $textcolor = (!empty($statusitem->hexcolour)) ? $statusitem->hexcolour : $statusitem->value;
         if($statusitem->display_option == 'icon'){
             if($statusitem->icon){
                 $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$statusitem->id/".ilp_get_status_icon($statusitem->id);
@@ -78,7 +79,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
             $o .= html_writer::tag(
                 'div', $statusitem->name, array(
                     'class'=>'dashboard_status_icon ajaxstatuschange',
-                    'style'=>'background:' . $statusitem->bg_colour . '; color:' . $statusitem->name
+                    'style'=>'background:' . $statusitem->bg_colour . '; color:' . $textcolor
                 )
             );
 
