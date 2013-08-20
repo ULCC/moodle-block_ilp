@@ -28,6 +28,9 @@ class block_ilp extends block_list {
    function get_content() {
       global $CFG, $USER, $COURSE, $SITE;
 
+      if(!isloggedin())
+	return $this->content;
+
       // include  db class
       require_once($CFG->dirroot.'/blocks/ilp/db/ilp_db.php');
 
