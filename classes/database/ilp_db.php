@@ -296,7 +296,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed the id of the inserted record or false
      */
     function create_plugin($table,$name,$tablename=NULL) {
-        $type = new stdClass();
+        $type = new object();
         $type->name 		    = $name;
         $type->tablename 		= $tablename;
 
