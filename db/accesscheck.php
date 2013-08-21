@@ -12,13 +12,14 @@
 
 global $CFG, $PARSER,$USER,$PAGE;
 
+require_once $CFG->dirroot . "/blocks/ilp/lib.php";
 require_once($CFG->dirroot."/blocks/ilp/classes/database/ilp_db.php");
 
 //get the user id if it is not set then we will pass the global $USER->id 
-$user_id   = $PARSER->optional_param('user_id',$USER->id,PARAM_INT);
+$user_id   = optional_param('user_id',$USER->id,PARAM_INT);
 
 // get the id of the course
-$course_id = $PARSER->optional_param('course_id', 0,PARAM_INT);
+$course_id = optional_param('course_id', 0,PARAM_INT);
 
 
 // the user must be logged in
