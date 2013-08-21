@@ -21,11 +21,11 @@ function format_text_with_options($text, $format, $options) {
 }
 
 
-function create_plugin_from_optionlist($optionlist, $itemrecord) {
+function create_plugin_from_optionlist($optionlist, $itemrecord, $tablename, $dbc) {
     foreach( $optionlist as $key=>$itemname ){
         $itemrecord->value = $key;
         $itemrecord->name = $itemname;
-        $this->dbc->create_plugin_record($this->items_tablename,$itemrecord);
+        $dbc->create_plugin_record($tablename,$itemrecord);
     }
 }
 
