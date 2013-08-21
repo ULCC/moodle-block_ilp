@@ -265,7 +265,7 @@ if (!empty($studentslist)) {
         //$data['u_status'] = (!empty($student->u_status)) ? $student->u_status : $status_item;
         if(!empty($student->u_status)){
             $studentstatus = $dbc->get_status_item_by_id($student->u_status_id);
-            $textcolor = (!empty($studentstatus->hexcolour)) ? $studentstatus->hexcolour : $studentstatus->value;
+            $textcolor = (!empty($studentstatus->hexcolour)) ? $studentstatus->hexcolour : $studentstatus->name;
             if($student->u_display_option == 'icon'){
                 $path="$CFG->wwwroot/pluginfile.php/1/block_ilp/icon/$student->u_status_id/".ilp_get_status_icon($student->u_status_id);
                 //$this_file = "<img src=\"$path\" alt=\"\" width='50px' />";
@@ -275,7 +275,7 @@ if (!empty($studentslist)) {
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
                 $this_file .= html_entity_decode($student->u_status_description);
                 $this_file .="</span></tooltip>";
-                $data['u_status'] = '<div align="center" style="background: '. $student->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
+                $data['u_status'] = '<div align="center" style="background: '. $studentstatus->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
             }else {
                 $this_file = "<tooltip class='tooltip'>";
                 $this_file .= $student->u_status;
@@ -283,7 +283,7 @@ if (!empty($studentslist)) {
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
                 $this_file .= html_entity_decode($student->u_status_description);
                 $this_file .="</span></tooltip>";
-                $data['u_status'] = '<div align="center" style="background: '. $student->bg_colour .';color:' . $textcolor . '" class="ilp_user_status">' . $this_file . '</div>';
+                $data['u_status'] = '<div align="center" style="background-color: '. $studentstatus->bg_colour .';color:' . $textcolor . '" class="ilp_user_status">' . $this_file . '</div>';
             }
         }else {
             $data['u_status'] = $status_item;
