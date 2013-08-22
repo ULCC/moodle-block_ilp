@@ -821,6 +821,17 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /**
+     * Returns the role that matches the id given
+     *
+     * @param int $roleid the id of the role that will be retrieved
+     *
+     * @return mixed object containing role record or false
+     */
+    function get_role_by_id($roleid)	{
+        return $this->dbc->get_record("role",array('id'=>$roleid));
+    }
+
+    /**
      * Create a plugin entry in the table given
      *
      * @return mixed int id of new reocrd or false

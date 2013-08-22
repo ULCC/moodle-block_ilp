@@ -31,7 +31,7 @@ $dbc	=	new ilp_db();
 $role_ids	=	 array();
 
 
-$authuserrole	=	$dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
+$authuserrole	=	$dbc->get_role_by_id($CFG->defaultuserroleid);
 if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
 
 if ($roles = get_user_roles($context, $USER->id)) {

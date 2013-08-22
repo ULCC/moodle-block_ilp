@@ -145,6 +145,7 @@ class ilp_report
  */
    function has_cap($user,$context,$cap)
    {
+       global $CFG;
       static $userroles=array();
 
       if(is_object($user))
@@ -172,7 +173,7 @@ class ilp_report
          $role_ids= array();
          $cacheline=array();
 
-         $authuserrole=$this->dbc->get_role_by_name(ILP_AUTH_USER_ROLE);
+         $authuserrole=$this->dbc->get_role_by_id($CFG->defaultuserroleid);
          if (!empty($authuserrole)) $role_ids[]=$authuserrole->id;
 
          if ($roles = get_user_roles($context, $user))

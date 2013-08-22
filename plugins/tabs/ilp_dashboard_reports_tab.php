@@ -350,7 +350,8 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
 
             if ($report	=$this->dbc->get_report_by_id($report_id)) {
                 $context = $PAGE->context;
-               if($report->status==ILP_ENABLED and $report->has_cap($USER->id,$context,'block/ilp:viewreport'))
+
+               if($report->status==ILP_ENABLED && $report->has_cap($USER->id,$context,'block/ilp:viewreport'))
                {
 
                   $reportname	=	$report->name;
