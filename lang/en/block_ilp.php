@@ -305,7 +305,7 @@ $string['showpunctuality']='Punctuality Information';
 
 
 	$string['req'] 					= 	'Required';
-	$string['reports'] 				= 	'Forms';
+	$string['reports'] 				= 	'Entries';
 $string['report']='Report';
 	$string['reportconfiguration'] 				= 	'Forms Configuration';
 	$string['reportconfigurationsection'] 		= 	'Form Configuration Section';
