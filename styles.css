@@ -647,9 +647,9 @@ a.tooltip span
 
 
 .ilp_user_status {
-    width: 60px;
+    width: 75px;
     height: 55px;
-    padding: 5px;
+    padding: 2px;
     font-size: 18px;
     font-weight: bold;
 }
