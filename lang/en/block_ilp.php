@@ -1,4 +1,6 @@
 <?php
+global $CFG;
+
 	$string['achieved'] 			= 	'Achieved';
 	$string['addall'] 				= 	'Add all';
 
@@ -284,7 +286,7 @@ $string['editsecondstatusitems'] = 'Edit Manual Status Items';
     $string['previewreport'] 		= 	'Preview Forms';
 	$string['predefinedreports'] 	= 	'Predefined Forms';
     $string['settings_add_predefined_link'] = 'Add Predefined Forms';
-    $string['settings_add_predefined_link_desc'] = 'To use the predefined report feature, please go to:<br />/blocks/ilp/actions/add_predefined_report.php<br /><br />
+    $string['settings_add_predefined_link_desc'] = 'To use the predefined report feature, please go to:<br />' . $CFG->wwwroot . '/blocks/ilp/actions/add_predefined_reports.php<br /><br />
     **Warning** This will immediately add new forms to your ILP block and activate these.';
 	$string['previewdescription']	= 	'Below is a preview of the form you are creating if you are happy with the form click continue to proceed to the next page to assign permissions to your report if you are not happy click previous to edit the report';
     $string['preferencecreationsuc'] 		= 	'Preference created';
@@ -305,7 +307,7 @@ $string['showpunctuality']='Punctuality Information';
 
 
 	$string['req'] 					= 	'Required';
-	$string['reports'] 				= 	'Forms';
+	$string['reports'] 				= 	'Entries';
 $string['report']='Report';
 	$string['reportconfiguration'] 				= 	'Forms Configuration';
 	$string['reportconfigurationsection'] 		= 	'Form Configuration Section';
@@ -549,7 +551,7 @@ $string['ilp_dashboard_vault_tab_pluginnamesettings'] = 'Vault tab Configuration
 
 //Reports
 $string['ilp_dashboard_reports_tab'] 					= 'forms tab';
-$string['ilp_dashboard_reports_tab_name'] 				= 'Forms';
+$string['ilp_dashboard_reports_tab_name'] 				= 'Entries';
 $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
 $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
 $string['ilp_dashboard_reports_tab_default'] 			= 'Default form';
@@ -559,7 +561,7 @@ $string['ilp_dashboard_reports_tab_default_tabdesc'] 				= 'Default form to disp
 
 // Entries
 $string['ilp_dashboard_entries_tab'] 					= 'entries tab';
-$string['ilp_dashboard_entries_tab_name'] 				= 'Entries';
+$string['ilp_dashboard_entries_tab_name'] 				= 'Forms';
 $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
 $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
 $string['ilp_dashboard_entries_tab_graphstatusdesc'] 		= 'Should liniks to graphical stats be displayed on the entries tab if installed';

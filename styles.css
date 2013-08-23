@@ -647,9 +647,9 @@ a.tooltip span
 
 
 .ilp_user_status {
-    width: 60px;
+    width: 75px;
     height: 55px;
-    padding: 5px;
+    padding: 2px;
     font-size: 18px;
     font-weight: bold;
 }
@@ -1068,4 +1068,24 @@ table.quals-course th, table.quals-course td {
 
 #ilp_mis_learner_skillsbuilder .overall_result {
     font-weight: 800;
+}
+
+.ilp .generaltable th,
+.ilp .generaltable td,
+.ilp .flexiblegeneraltable  th,
+.ilp .flexiblegeneraltable  td,
+.ilp .flexible  th,
+.ilp .flexible  td{
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+.ilp .generaltable .header,
+.ilp .generaltable th,
+.ilp .flexiblegeneraltable .header,
+.ilp .flexiblegeneraltable th,
+.ilp .flexible .header,
+.ilp .flexible th{
+    background: #f3f3f3;
+    border-bottom-width: 2px;
 }
