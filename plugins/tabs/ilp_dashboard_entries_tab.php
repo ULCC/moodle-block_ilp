@@ -124,36 +124,26 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
         $reporttab		=	$this->dbc->get_plugin_record_by_classname('block_ilp_dash_tab','ilp_dashboard_reports_tab');
 
         //get all enabled reports in this ilp
-        $reports		=	$this->dbc->get_reports_by_position(null,null,false);
+        $reports		=	ilp_report::get_enabledreports();
         $reportslist	=	array();
         if (!empty($reports)) {
-
-            $role_ids	=	ilp_get_user_role_ids($PAGE->context,$USER->id);
-            $authuserrole	=	$this->dbc->get_role_by_id($CFG->defaultuserroleid);
-            if (!empty($authuserrole)) $role_ids[]	=	$authuserrole->id;
 
             //cycle through all reports and save the relevant details
             foreach ($reports	as $r) {
 
-                $addcapability		=	$this->dbc->get_capability_by_name('block/ilp:addreport');
+                if ($r->vault == 1 || !$r->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport')) {
+                    continue;
+                }
 
-                $editcapability		=	$this->dbc->get_capability_by_name('block/ilp:editreport');
+                $canviewreport		=	true;
 
-                $viewcapability		=	$this->dbc->get_capability_by_name('block/ilp:viewreport');
+                $caneditreport		=	$r->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
 
-                $viewothercapability		=	$this->dbc->get_capability_by_name('block/ilp:viewotherilp');
+                $canaddreport		=	$r->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
 
-                $addviewextcapability = $this->dbc->get_capability_by_name('block/ilp:addviewextension');
+                $canviewothersreports		=	$r->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
 
-                $caneditreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$editcapability->id);
-
-                $canaddreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$addcapability->id);
-
-                $canviewreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$viewcapability->id);
-
-                $canviewothersreports		=	$this->dbc->has_report_permission($r->id,$role_ids,$viewothercapability->id);
-
-                $canaddviewextreport		=	$this->dbc->has_report_permission($r->id,$role_ids,$addviewextcapability->id);
+                $canaddviewextreport		=	$r->has_cap($USER->id,$PAGE->context,'block/ilp:viewextension');
 
                 if (!empty($caneditreport) || !empty($canaddreport) || !empty($canviewreport) ) {
 
@@ -172,8 +162,7 @@ class ilp_dashboard_entries_tab extends ilp_dashboard_tab {
                     $detail->entries		=	($this->dbc->count_report_entries($r->id,$this->student_id)) ? $this->dbc->count_report_entries($r->id,$this->student_id) : 0;
                     $detail->state_report	=	false;
 
-                    $res = $this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state');
-                    if ($res) {
+                    if ($this->dbc->has_plugin_field($r->id,'ilp_element_plugin_state')) {
                         //get the number of entries achieved
                         $detail->achieved	=	$this->dbc->count_report_entries_with_state($r->id,$this->student_id,ILP_STATE_PASS);
 
