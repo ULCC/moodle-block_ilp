@@ -157,9 +157,9 @@ class ilp_report
       }
 
       $cacheline=$this->cache->get($user);
-      if($cacheline!==false and isset($cacheline[$user][$context->id][$cap]))
+      if($cacheline!==false and isset($cacheline[$user][$context->id][$this->id][$cap]))
       {
-         return $cacheline[$user][$context->id][$cap];
+         return $cacheline[$user][$context->id][$this->id][$cap];
       }
 
 // Not in cache, try the mini-cache for roles
@@ -197,7 +197,7 @@ class ilp_report
          $flag=false;
       }
 
-      $cacheline[$user][$context->id][$cap]=$flag;
+      $cacheline[$user][$context->id][$this->id][$cap]=$flag;
 
       $this->cache->set($user,$cacheline);
 
