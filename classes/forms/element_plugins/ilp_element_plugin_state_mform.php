@@ -1,6 +1,6 @@
 <?php
 
-require_once($CFG->dirroot.'/blocks/ilp/plugins/form_elements/ilp_element_plugin_dd_mform.php');
+require_once($CFG->dirroot.'/blocks/ilp/classes/forms/element_plugins/ilp_element_plugin_dd_mform.php');
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin_itemlist_mform.class.php');
 //require_once($CFG->dirroot.'/blocks/ilp/plugins/form_elements/ilp_element_plugin_dd.php');
 

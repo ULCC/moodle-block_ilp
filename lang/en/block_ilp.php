@@ -307,7 +307,7 @@ $string['showpunctuality']='Punctuality Information';
 
 
 	$string['req'] 					= 	'Required';
-	$string['reports'] 				= 	'Forms';
+	$string['reports'] 				= 	'Entries';
 $string['report']='Report';
 	$string['reportconfiguration'] 				= 	'Forms Configuration';
 	$string['reportconfigurationsection'] 		= 	'Form Configuration Section';
@@ -551,7 +551,7 @@ $string['ilp_dashboard_vault_tab_pluginnamesettings'] = 'Vault tab Configuration
 
 //Reports
 $string['ilp_dashboard_reports_tab'] 					= 'forms tab';
-$string['ilp_dashboard_reports_tab_name'] 				= 'Forms';
+$string['ilp_dashboard_reports_tab_name'] 				= 'Entries';
 $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
 $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
 $string['ilp_dashboard_reports_tab_default'] 			= 'Default form';
@@ -561,7 +561,7 @@ $string['ilp_dashboard_reports_tab_default_tabdesc'] 				= 'Default form to disp
 
 // Entries
 $string['ilp_dashboard_entries_tab'] 					= 'entries tab';
-$string['ilp_dashboard_entries_tab_name'] 				= 'Entries';
+$string['ilp_dashboard_entries_tab_name'] 				= 'Forms';
 $string['ilp_dashboard_entries_tab_overview'] 			= 'Overview';
 $string['ilp_dashboard_entries_tab_lastupdate'] 		= 'Last Update';
 $string['ilp_dashboard_entries_tab_graphstatusdesc'] 		= 'Should liniks to graphical stats be displayed on the entries tab if installed';
