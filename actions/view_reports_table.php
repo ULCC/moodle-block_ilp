@@ -70,6 +70,10 @@ $flextable->setup();
 
 //get the data on fields to be used in the table
 $reports		=	$dbc->get_reports_table($flextable);
+
+$minreport = $dbc->upperlower_report_position('MIN');
+$maxreport = $dbc->upperlower_report_position('MAX');
+
 $totalreportfields	=	count($reports);
 if (!empty($reports)) {
     foreach ($reports as $row) {
@@ -80,7 +84,7 @@ if (!empty($reports)) {
             $form_name .= ' [' . get_string('warning_vault_has_no_value', 'block_ilp') . ']';
         }
         $data[] 		=	$form_name;
-        if ($row->position != 1) {
+        if ($row->position != $minreport) {
             //if the field is in any position except 1 it needs a up icon
             $title 	=	get_string('moveup','block_ilp');
             $icon	=	$OUTPUT->pix_url("/t/up");
@@ -93,7 +97,7 @@ if (!empty($reports)) {
             $data[] 	=	"";
         }
 
-        if ($totalreportfields != $row->position) {
+        if ($row->position != $maxreport) {
             //if the field is in any position except last it needs a down icon
             $title 	=	get_string('movedown','block_ilp');
             $icon	=	$OUTPUT->pix_url("/t/down");
