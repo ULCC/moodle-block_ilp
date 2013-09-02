@@ -39,7 +39,7 @@ if ($null_position_report) {
 }
 
 if (!$dbc->report_position_sequence_is_continuous($min_position)) {
-    !$dbc->report_position_resequence(1);
+    $dbc->report_position_resequence(1);
 }
 
 

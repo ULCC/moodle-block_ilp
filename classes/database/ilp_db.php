@@ -188,6 +188,18 @@ class ilp_db_functions	extends ilp_logging {
         return true;
     }
 
+    public function report_field_position_sequence_is_continuous($report_id, $expected_min_position) {
+        $query = 'SELECT label, position FROM {block_ilp_report_field} r WHERE report_id = ' . $report_id . ' ORDER BY r.position';
+        $fields =  $this->dbc->get_records_sql($query);
+        foreach ($fields as $field) {
+            if ($field->position != $expected_min_position) {
+                return false;
+            }
+            $expected_min_position ++;
+        }
+        return true;
+    }
+
     public function report_position_resequence($position) {
         $query = 'SELECT * FROM {block_ilp_report} WHERE position is not null AND deleted = 0 ORDER BY position';
         $reports =  $this->dbc->get_records_sql($query);
@@ -198,8 +210,23 @@ class ilp_db_functions	extends ilp_logging {
         }
     }
 
+    public function report_field_position_resequence($report_id, $position) {
+        $query = 'SELECT * FROM {block_ilp_report_field} r WHERE report_id = ' . $report_id . ' ORDER BY r.position';
+        $fields =  $this->dbc->get_records_sql($query);
+        foreach ($fields as $field) {
+            $field->position = $position;
+            $this->dbc->update_record('block_ilp_report_field', $field);
+            $position ++;
+        }
+    }
+
     public function upperlower_report_position($minmax = 'MIN') {
         $query = 'SELECT '.$minmax.'(position) FROM mdl_block_ilp_report r WHERE position is not null AND deleted = 0';
+        return $this->dbc->get_field_sql($query);
+    }
+
+    public function upperlower_report_field_position($report_id, $minmax = 'MIN') {
+        $query = 'SELECT ' . $minmax . '(position) FROM {block_ilp_report_field} r WHERE report_id = ' . $report_id . ' ORDER BY r.position';
         return $this->dbc->get_field_sql($query);
     }
 

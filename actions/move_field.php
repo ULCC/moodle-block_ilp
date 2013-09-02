@@ -12,7 +12,7 @@
 
 require_once('../lib.php');
 
-global $USER, $CFG, $SESSION, $PARSER;
+global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 
 //include any neccessary files
 
@@ -33,6 +33,8 @@ $position = $PARSER->required_param('position' ,PARAM_INT);
 
 //the id of the reportfield used when editing
 $move = $PARSER->required_param('move' ,PARAM_INT);
+
+$PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/move_field.php");
 
 // instantiate the db
 $dbc = new ilp_db();
