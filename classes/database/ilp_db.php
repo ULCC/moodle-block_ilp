@@ -171,6 +171,46 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_record("block_ilp_report_field",array("id"=>$reportfield_id));
     }
 
+    public function null_position_reports() {
+        $query = 'SELECT * FROM {block_ilp_report} WHERE position is null AND deleted = 0';
+        return $this->dbc->get_records_sql($query);
+    }
+
+    public function report_position_sequence_is_continuous($expected_min_position) {
+        $query = 'SELECT * FROM {block_ilp_report} WHERE position is not null AND deleted = 0 ORDER BY position';
+        $reports =  $this->dbc->get_records_sql($query);
+        foreach ($reports as $report) {
+            if ($report->position != $expected_min_position) {
+                return false;
+            }
+            $expected_min_position ++;
+        }
+        return true;
+    }
+
+    public function report_position_resequence($position) {
+        $query = 'SELECT * FROM {block_ilp_report} WHERE position is not null AND deleted = 0 ORDER BY position';
+        $reports =  $this->dbc->get_records_sql($query);
+        foreach ($reports as $report) {
+            $report->position = $position;
+            $this->dbc->update_record('block_ilp_report', $report);
+            $position ++;
+        }
+    }
+
+    public function upperlower_report_position($minmax = 'MIN') {
+        $query = 'SELECT '.$minmax.'(position) FROM mdl_block_ilp_report r WHERE position is not null AND deleted = 0';
+        return $this->dbc->get_field_sql($query);
+    }
+
+    public function create_report_positions_where_null($reports, $current_min) {
+        $reports = array_reverse($reports);
+        foreach ($reports as $report) {
+            $current_min --;
+            $report->position = $current_min;
+            $this->dbc->update_record('block_ilp_report', $report);
+        }
+    }
     /**
      * Returns the record from the given ilp form element plugin table with the id given
      *
@@ -490,7 +530,7 @@ class ilp_db_functions	extends ilp_logging {
      * @param bool $deleted
      * @return mixed object containing the plugin record or false
      */
-    function get_reports_by_position($position=null,$type=null,$disabled=true,$deleted=true) {
+    function get_reports_by_position($position=null,$type=null,$disabled=true,$deleted=true, $include_vaulted = false) {
 
         $positionsql	=	"";
         //the operand that will be used
@@ -516,7 +556,10 @@ class ilp_db_functions	extends ilp_logging {
             $disabledsql    =   "{$and} status = 1 ";
         }
 
-        $vaultsql = $and . ' vault = 0 ';
+        $vaultsql = '';
+        if (!$include_vaulted) {
+            $vaultsql = $and . ' vault = 0 ';
+        }
 
         $where = (!empty($position) ||empty($disabled) || !empty($deleted) || !empty($vaultsql) ) ? " WHERE" : "";
 

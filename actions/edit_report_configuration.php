@@ -30,6 +30,21 @@ $report_id	= $PARSER->optional_param('report_id',NULL,PARAM_INT);	;
 // instantiate the db
 $dbc = new ilp_db();
 
+// If any reports exist with null values for position, give them a position that retains the current order.
+$null_position_report = $dbc->null_position_reports();
+$min_position = $dbc->upperlower_report_position('MIN');
+
+if ($null_position_report) {
+    $dbc->create_report_positions_where_null($null_position_report, $min_position);
+}
+
+if (!$dbc->report_position_sequence_is_continuous($min_position)) {
+    !$dbc->report_position_resequence(1);
+}
+
+
+
+
 // setup the navigation breadcrumbs
 
 //siteadmin or modules
