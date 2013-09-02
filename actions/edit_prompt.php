@@ -29,6 +29,12 @@ $report_id = $PARSER->required_param('report_id', PARAM_INT);
 // instantiate the db
 $dbc = new ilp_db();
 
+$min_position = $dbc->upperlower_report_field_position($report_id, 'MIN');
+
+if (!$dbc->report_field_position_sequence_is_continuous($report_id, $min_position)) {
+    $dbc->report_field_position_resequence($report_id, 1);
+}
+
 $report_details = $dbc->get_report_by_id($report_id);
 
 //set the required level of permission needed to view this page

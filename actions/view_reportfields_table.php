@@ -58,6 +58,8 @@ $flextable->setup();
 
 //get the data on fields to be used in the table
 $reportfields		=	$dbc->get_report_fields_by_position($report_id);
+$min_position = $dbc->upperlower_report_field_position($report_id, 'MIN');
+$max_position = $dbc->upperlower_report_field_position($report_id, 'MAX');
 $totalreportfields	=	count($reportfields);
 
 if (!empty($reportfields)) {
@@ -73,7 +75,7 @@ if (!empty($reportfields)) {
 				
 		$data[] 		=	get_string($plugintype,'block_ilp');
 		
-		if ($row->position != 1) {
+		if ($row->position != $min_position) {
 			//if the field is in any position except 1 it needs a up icon 
 			$title 	=	get_string('moveup','block_ilp');
 			$icon	=	$OUTPUT->pix_url("/t/up");
@@ -86,7 +88,7 @@ if (!empty($reportfields)) {
 			$data[] 	=	"";
 		}
 		
-		if ($totalreportfields != $row->position) {
+		if ($row->position != $max_position) {
 			//if the field is in any position except last it needs a down icon
 			$title 	=	get_string('movedown','block_ilp');
 			$icon	=	$OUTPUT->pix_url("/t/down");
