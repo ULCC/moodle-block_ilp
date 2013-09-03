@@ -270,6 +270,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                $pluginobj = new $class();
                $method = array($pluginobj, 'plugin_type');
 
+                $allmis_plugins[$plugin_file] = $pluginobj;
                if (is_callable($method,true)) {
                   //we only want mis plugins that are of type overview
                   if ($pluginobj->plugin_type() == 'overview') {
@@ -374,9 +375,10 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
 
              $att_percent = '';
              $pun_percent = '';
-             if (!empty($misoverviewplugins) && isset($student->idnumber)) {
+
+             if (!empty($allmis_plugins) && isset($student->idnumber)) {
                  $count = 0;
-                 foreach ($misoverviewplugins as $plugin_file => $mp)	{
+                 foreach ($allmis_plugins as $plugin_file => $mp)	{
                      $att_punc_config = get_config('block_ilp', 'show_attendancepunctuality_mis_plugin');
                      // Before accessing the blockitem config, show the first enabled plug in; otherwise, only show the selected mis plugin.
                      $config_set_up_conditions = $att_punc_config && $plugin_file == $att_punc_config;
@@ -384,9 +386,15 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                      if (!$config_set_up_conditions && !$pre_config_set_up_conditions) {
                          continue;
                      }
+
                      $mp->set_data($student->idnumber);
-                     $att_percent = $mp->getAttendance();
-                     $pun_percent = $mp->getPunctuality();
+                     if (method_exists($mp, 'getAttendance'))	{
+                         $att_percent = $mp->getAttendance();
+                     }
+                     if (method_exists($mp, 'getPunctuality'))	{
+                         $pun_percent = $pun_percent = $mp->getPunctuality();
+                     }
+
                      $count ++;
                  }
              }
