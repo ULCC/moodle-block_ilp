@@ -9,6 +9,7 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
     public $fields;
     public $mcbdata;
     public $courselist;
+    public $attendance;
 
 
     protected $monthlist = array();
@@ -490,6 +491,8 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
                 }
 
                 //fill the couse month array position with percentage for the month
+                $this->setAttendance($monthpercent);
+
                 $mcbdata[$courseid][$month]['percent'] = $monthpercent;
 
                 foreach(array('markstotal','markspresent',
@@ -577,6 +580,14 @@ class ilp_mis_attendance_plugin_mcb extends ilp_mis_attendance_plugin
     function tab_name()
     {
         return 'Monthly Course Breakdown';
+    }
+
+    public function setAttendance($value) {
+        $this->attendance = $value;
+    }
+
+    public function getAttendance() {
+        return $this->attendance;
     }
 
 
