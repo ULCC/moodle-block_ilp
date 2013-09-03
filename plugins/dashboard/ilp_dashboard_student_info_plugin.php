@@ -392,7 +392,7 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                          $att_percent = $mp->getAttendance();
                      }
                      if (method_exists($mp, 'getPunctuality'))	{
-                         $pun_percent = $pun_percent = $mp->getPunctuality();
+                         $pun_percent = $mp->getPunctuality();
                      }
 
                      $count ++;
