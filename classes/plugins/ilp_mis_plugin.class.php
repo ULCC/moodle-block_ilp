@@ -97,7 +97,7 @@ abstract class ilp_mis_plugin extends ilp_plugin
 
        if($this->tabletype == ILP_MIS_STOREDPROCEDURE)
        {
-          $sql=$this->db->sql_for_stored_sql($table, $params);
+          $sql=$this->db->sql_for_stored_values($table, $params);
        }
        else
        {
