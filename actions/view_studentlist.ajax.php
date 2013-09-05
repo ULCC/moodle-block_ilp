@@ -92,7 +92,7 @@ if (!empty($attendanceclass)) {
 }
 
 //get all enabled reports in this ilp
-$reports = $dbc->get_reports(ILP_ENABLED);
+$reports = $dbc->get_reports(ILP_ENABLED, 'position ASC');
 $vaulted_reports = $dbc->get_reports_vaulted();
 $vaulted_report_ids = array_keys($vaulted_reports);
 
