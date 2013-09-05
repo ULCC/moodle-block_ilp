@@ -1792,8 +1792,8 @@ class ilp_db_functions	extends ilp_logging {
      * have
      * @return	mixed array of recordsets or false
      */
-    public function	get_reports($status)	{
-        return $this->dbc->get_records('block_ilp_report',array('status'=>$status));
+    public function	get_reports($status, $orderby = null)	{
+        return $this->dbc->get_records('block_ilp_report',array('status'=>$status), $orderby);
     }
 
 
