@@ -38,6 +38,7 @@ class ilp_element_plugin_file_mform  extends ilp_element_plugin_mform {
         $mform->setType('maxfiles', PARAM_INT);
 
         $optionlist     =   array(
+                                  'all' => get_string('all'),
                                   'web_image'=>'Web image',
                                   'non_web_image'=>'Non web image',
                                   'audio'=>'Audio',
@@ -53,7 +54,12 @@ class ilp_element_plugin_file_mform  extends ilp_element_plugin_mform {
                                   'moodle'=>'Moodle',
                                   'application'=>'Application',
                                   'script'=>'Script',
-                                  'plaintext'=>'Plain text'
+                                  'plaintext'=>'Plain text',
+                                  '.pdf'=>'PDF',
+                                  '.ppt'=>'Powerpoint (PPT)',
+                                  '.pptx'=>'Powerpoint (PPTX)',
+                                  '.zip'=>'Compressed (ZIP)',
+                                  '.csv'=>'Comma Separated Values (CSV)'
                                   );
 
         $select =   $mform->addElement(
@@ -61,7 +67,7 @@ class ilp_element_plugin_file_mform  extends ilp_element_plugin_mform {
                                         'acceptedtypes',
                                         get_string('ilp_element_plugin_file_acceptedfiles', 'block_ilp'),
                                         $optionlist,
-                                        array('class' => 'form_input')
+                                        array('class' => 'form_input acceptedtypes')
                                     );
 
         $select->setMultiple(true);
