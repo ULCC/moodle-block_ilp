@@ -120,8 +120,8 @@ class block_ilp extends block_list {
             $this->content->icons[] = "";
             $tutor = 1;
          }
-         global $COURSE;
-         $course_id = (!empty($COURSE->id)) ? $COURSE->id : '';
+
+         $course_id = (!empty($COURSE->id)) ? $COURSE->id : $initial_course_id;
          $printlink = '<a href="' . $CFG->wwwroot . '/blocks/ilp/actions/define_batch_print.php?course_id=' . $course_id . '&tutor=' . $tutor . '">';
          $printicon = get_string("print","block_ilp") . '</a>';
          $allow_batch_print = get_config('block_ilp', 'allow_batch_print');
@@ -136,6 +136,7 @@ class block_ilp extends block_list {
          $student_info_plugin = new ilp_dashboard_student_info_plugin($USER->id);
          $blockitems = $student_info_plugin->display(null, true);
 
+          $course_id = (!empty($COURSE->id)) ? $COURSE->id : $initial_course_id;
           $courseurl	=	(!empty($course_id) && $course_id != 1) ? "&course_id={$course_id}" : '';
           $url  = "{$CFG->wwwroot}/blocks/ilp/actions/view_main.php?user_id={$USER->id}$courseurl";
           $coreprofileurl  = "{$CFG->wwwroot}/user/profile.php?id={$USER->id}";
