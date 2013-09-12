@@ -79,10 +79,18 @@ class ilp_report
       if(empty($all))
          return $all;
 
-      return array_filter($all,function($report) use($not_wanted)
+      $reports = array_filter($all,function($report) use($not_wanted)
                           {
                              return (!in_array($report->id,$not_wanted) and $report->status==ILP_ENABLED);
                           });
+
+      usort( $reports, 'ilp_report::reportSortByPosition' );
+
+      return $reports;
+   }
+
+   static function reportSortByPosition( $a, $b ) {
+    return $a->position == $b->position ? 0 : ( $a->position > $b->position ) ? 1 : -1;
    }
 
 /**
