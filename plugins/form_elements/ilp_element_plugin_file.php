@@ -217,6 +217,7 @@ class ilp_element_plugin_file extends ilp_element_plugin {
     		$this->label = '';
     	}
 
+            $this->acceptedtypes = $this->interpret_accepted_types();
 
         if (empty($this->multiple))    {
 
@@ -227,7 +228,7 @@ class ilp_element_plugin_file extends ilp_element_plugin {
                                 array('subdirs' => 0,
                                       'maxsize' => $this->maxsize,
                                       'maxfiles' => 1,
-                                      'accepted_types' => $this->acceptedtypes )
+                                      'accepted_types' => $this->acceptedtypes)
                                );
         }   else    {
             $mform->addElement('filemanager',
@@ -245,6 +246,23 @@ class ilp_element_plugin_file extends ilp_element_plugin {
 	 }
 
 
+   private function interpret_accepted_types() {
+       $acceptedtypes = $this->acceptedtypes;
+       if (in_array('document', $acceptedtypes)) {
+           $acceptedtypes[] = '.pdf';
+       }
+       if (in_array('document', $acceptedtypes)) {
+           $acceptedtypes[] = '.ppt';
+           $acceptedtypes[] = '.pptx';
+       }
+       if (in_array('application', $acceptedtypes)) {
+           $acceptedtypes[] = '.zip';
+       }
+       if (in_array('text', $acceptedtypes)) {
+           $acceptedtypes[] = '.csv';
+       }
+       return $acceptedtypes;
+   }
    function entry_process_data($reportfield_id,$entry_id,$data)   {
        return $this->entry_specific_process_data($reportfield_id,$entry_id,$data);
    }
