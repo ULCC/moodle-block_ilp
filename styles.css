@@ -1089,3 +1089,8 @@ table.quals-course th, table.quals-course td {
     background: #f3f3f3;
     border-bottom-width: 2px;
 }
+
+
+.ilp .form_input.acceptedtypes {
+    height: 200px;
+}

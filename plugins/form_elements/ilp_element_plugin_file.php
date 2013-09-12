@@ -217,52 +217,26 @@ class ilp_element_plugin_file extends ilp_element_plugin {
     		$this->label = '';
     	}
 
-            $this->acceptedtypes = $this->interpret_accepted_types();
-
-        if (empty($this->multiple))    {
-
-             $mform->addElement('filemanager',
-                                $fieldname,
-                                $this->label,
-                                null,
-                                array('subdirs' => 0,
+            $max_files = (empty($this->multiple)) ? 1 : $this->maxfiles;
+            $filemanager_config = array('subdirs' => 0,
                                       'maxsize' => $this->maxsize,
-                                      'maxfiles' => 1,
-                                      'accepted_types' => $this->acceptedtypes)
-                               );
-        }   else    {
+                                      'maxfiles' => $max_files );
+            if (!in_array('all', $this->acceptedtypes)) {
+                $filemanager_config['accepted_types'] = $this->acceptedtypes;
+            }
+
             $mform->addElement('filemanager',
                                 $fieldname,
                                 $this->label,
                                 null,
-                                array('subdirs' => 0,
-                                      'maxsize' => $this->maxsize,
-                                      'maxfiles' => $this->maxfiles,
-                                      'accepted_types' => $this->acceptedtypes )
+                                $filemanager_config
                               );
-        }
+
 
         if (!empty($this->required)) $mform->addRule($fieldname, null, 'required', null, 'client');
 	 }
 
 
-   private function interpret_accepted_types() {
-       $acceptedtypes = $this->acceptedtypes;
-       if (in_array('document', $acceptedtypes)) {
-           $acceptedtypes[] = '.pdf';
-       }
-       if (in_array('document', $acceptedtypes)) {
-           $acceptedtypes[] = '.ppt';
-           $acceptedtypes[] = '.pptx';
-       }
-       if (in_array('application', $acceptedtypes)) {
-           $acceptedtypes[] = '.zip';
-       }
-       if (in_array('text', $acceptedtypes)) {
-           $acceptedtypes[] = '.csv';
-       }
-       return $acceptedtypes;
-   }
    function entry_process_data($reportfield_id,$entry_id,$data)   {
        return $this->entry_specific_process_data($reportfield_id,$entry_id,$data);
    }
