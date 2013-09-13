@@ -219,7 +219,7 @@ class ilp_element_plugin_file extends ilp_element_plugin {
 
             $max_files = (empty($this->multiple)) ? 1 : $this->maxfiles;
             $filemanager_config = array('subdirs' => 0,
-                                      'maxsize' => $this->maxsize,
+                                      'maxbytes' => $this->maxsize,
                                       'maxfiles' => $max_files );
             if (!in_array('all', $this->acceptedtypes)) {
                 $filemanager_config['accepted_types'] = $this->acceptedtypes;
