@@ -19,10 +19,7 @@ global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
-// Include the report permissions file
-require_once($CFG->dirroot.'/blocks/ilp/report_permissions.php');
-
-//if set get the id of the report 
+//if set get the id of the report
 $report_id	= $PARSER->required_param('report_id',PARAM_INT);	
 
 
@@ -67,6 +64,10 @@ $dbc = new ilp_db();
 
 //get the report 
 $report		=	$dbc->get_report_by_id($report_id);
+
+$access_report_createreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
+$access_report_editreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:editreport');
+$access_viewotherilp = $report->has_cap($USER->id,$PAGE->context,'block/ilp:viewotherilp');
 
 //if the report is not found throw an error of if the report has a status of disabled
 if (empty($report) || empty($report->status) || !empty($report->deleted)) {

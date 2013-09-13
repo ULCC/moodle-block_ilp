@@ -19,10 +19,7 @@ global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
-// Include the report permissions file
-require_once($CFG->dirroot.'/blocks/ilp/report_permissions.php');
-
-//if set get the id of the report 
+//if set get the id of the report
 $report_id	= $PARSER->required_param('report_id',PARAM_INT);	
 
 
@@ -35,7 +32,6 @@ $entry_id	= $PARSER->required_param('entry_id',PARAM_INT);
 
 //if set get the id of the report entry to be edited
 $comment_id	= $PARSER->required_param('comment_id',PARAM_INT);
-
 
 //get the id of the course that is currently being used
 $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
@@ -51,6 +47,8 @@ $dbc = new ilp_db();
 
 //get the report 
 $report		=	$dbc->get_report_by_id($report_id);
+
+$access_report_deletecomment = $report->has_cap($USER->id,$PAGE->context,'block/ilp:deletecomment');
 
 //if the report is not found throw an error of if the report has a status of disabled
 if (empty($report) || empty($report->status)) {
