@@ -20,7 +20,9 @@ $user_id   = optional_param('user_id',$USER->id,PARAM_INT);
 
 // get the id of the course
 $course_id = optional_param('course_id', 0,PARAM_INT);
-
+if (!$course_id) {
+    $course_id = optional_param('courseid', 0,PARAM_INT);
+}
 
 // the user must be logged in
 require_login(0, false);
