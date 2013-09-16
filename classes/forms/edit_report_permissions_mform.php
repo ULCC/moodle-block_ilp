@@ -68,7 +68,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 			$mform->addElement('html','<tr>');
 
 			//insert first balnk table cell
-			$mform->addElement('html','<td>');
+			$mform->addElement('html','<td class="first-child">');
 			$mform->addElement('html','');
 			$mform->addElement('html','</td>');
 			
@@ -92,7 +92,7 @@ class edit_report_permissions_mform extends ilp_moodleform {
 				$mform->addElement('html','<tr>');
 				$displayname = (!empty($r->name)) ? $r->name : $r->shortname;
 				//set the row title
-				$mform->addElement('html','<td calss="rowtitle">');
+				$mform->addElement('html','<td class="rowtitle first-child">');
 				$mform->addElement('html',$displayname);
 				$mform->addElement('html','</td>');
 				

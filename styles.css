@@ -1094,3 +1094,7 @@ table.quals-course th, table.quals-course td {
 .ilp .form_input.acceptedtypes {
     height: 200px;
 }
+
+.ilp #ilppermissionstable .first-child {
+    width: 90px;
+}
