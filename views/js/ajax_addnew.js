@@ -72,6 +72,10 @@ M.ilp_ajax_addnew = {
                                 formarea.setHTML('');
                             });
 
+                            var mceText = Y.one('.mceText');
+                            if(mceText) {
+                                mceText.simulate("click");
+                            }
 
                             YUI().use('event', function (Y) {
                                 Y.one('#mform1').on('submit', function (e) {
