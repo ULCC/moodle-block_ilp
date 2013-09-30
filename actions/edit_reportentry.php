@@ -140,6 +140,23 @@ if($mform->is_submitted()) {
     //TODO: reimplement validation
    // if($mform->is_validated()) {
 
+//Flush any cache entries that contain this user.
+//This is pretty awful but still has a significent speed advantage
+   $CACHE=cache::make('block_ilp','ilp_miscache');
+   if($keysets=$CACHE->get('keysets'))
+   {
+      $invalid=array();
+      foreach(array_keys($keysets) as $key)
+      {
+         if(in_array($user_id,explode('|',$key)))
+         {
+            $invalid[]=$key;
+            unset($keysets[$key]);
+         }
+      }
+      cache_helper::invalidate_by_definition('block_ilp','ilp_miscache',array(),$invalid);
+      $CACHE->set('keysets',$keysets);
+   }
 
         //call the next function which will carry out the necessary actions if the next button was pressed
         $mform->next($report_id,$currentpage);

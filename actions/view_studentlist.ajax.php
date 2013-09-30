@@ -245,11 +245,17 @@ if (!empty($studentslist)) {
 
    $studentids=array_keys($studentslist);
 
-   $cachekey='statelist:'.implode($studentids,'|');
+   $cachekey='statelist:|'.implode($studentids,'|');
    if(($allStates=$CACHE->get($cachekey))===false)
    {
       $allStates=$dbc->fetch_all_report_entries_with_state($studentids);
       $CACHE->set($cachekey,$allStates);
+      if(!$keysets=$CACHE->get('keysets'))
+      {
+         $keysets=array();
+      }
+      $keysets[$cachekey]=1;
+      $CACHE->set('keysets',$keysets);
    }
 
     foreach ($studentslist as $student) {
