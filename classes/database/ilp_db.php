@@ -44,7 +44,7 @@ class ilp_db {
      * @return mixed The result of the query.
      */
     function __call($method, $params) {
-        // sanatise everything coming into the database here
+        // Sanitise everything coming into the database here
         $params = $this->encode($params);
 
         // hand control to the ilp_db_functions()
@@ -110,7 +110,7 @@ class ilp_db {
     /**
      * Decodes mixed params.
      *
-     * @param mixed The encoded object/array/string/etc
+     * @param mixed $data The encoded object/array/string/etc
      * @return mixed The decoded version
      */
     static function decode_htmlchars(&$data) {
@@ -131,7 +131,7 @@ class ilp_db {
 
 
 /**
- * Databse class holding functions to actually perform the queries.
+ * Database class holding functions to actually perform the queries.
  *
  * This extends the logging class which intercepts all insert, update and delete
  * actions that are executed on the database and makes a record of what data was
@@ -143,7 +143,7 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * The Moodle 2 database, or the emulator.
      *
-     * @var ADODB connection
+     * @var moodle_database
      */
     var $dbc;
 
@@ -171,11 +171,18 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_record("block_ilp_report_field",array("id"=>$reportfield_id));
     }
 
+    /**
+     * @return array
+     */
     public function null_position_reports() {
         $query = 'SELECT * FROM {block_ilp_report} WHERE position is null AND deleted = 0';
         return $this->dbc->get_records_sql($query);
     }
 
+    /**
+     * @param $expected_min_position
+     * @return bool
+     */
     public function report_position_sequence_is_continuous($expected_min_position) {
         $query = 'SELECT * FROM {block_ilp_report} WHERE position is not null AND deleted = 0 ORDER BY position';
         $reports =  $this->dbc->get_records_sql($query);
@@ -188,6 +195,11 @@ class ilp_db_functions	extends ilp_logging {
         return true;
     }
 
+    /**
+     * @param $report_id
+     * @param $expected_min_position
+     * @return bool
+     */
     public function report_field_position_sequence_is_continuous($report_id, $expected_min_position) {
         $query = 'SELECT label, position FROM {block_ilp_report_field} r WHERE report_id = ' . $report_id . ' ORDER BY r.position';
         $fields =  $this->dbc->get_records_sql($query);
@@ -200,6 +212,9 @@ class ilp_db_functions	extends ilp_logging {
         return true;
     }
 
+    /**
+     * @param $position
+     */
     public function report_position_resequence($position) {
         $query = 'SELECT * FROM {block_ilp_report} WHERE position is not null AND deleted = 0 ORDER BY position';
         $reports =  $this->dbc->get_records_sql($query);
@@ -210,6 +225,10 @@ class ilp_db_functions	extends ilp_logging {
         }
     }
 
+    /**
+     * @param $report_id
+     * @param $position
+     */
     public function report_field_position_resequence($report_id, $position) {
         $query = 'SELECT * FROM {block_ilp_report_field} r WHERE report_id = ' . $report_id . ' ORDER BY r.position';
         $fields =  $this->dbc->get_records_sql($query);
@@ -220,16 +239,29 @@ class ilp_db_functions	extends ilp_logging {
         }
     }
 
+    /**
+     * @param string $minmax
+     * @return mixed
+     */
     public function upperlower_report_position($minmax = 'MIN') {
         $query = 'SELECT '.$minmax.'(position) FROM mdl_block_ilp_report r WHERE position is not null AND deleted = 0';
         return $this->dbc->get_field_sql($query);
     }
 
+    /**
+     * @param $report_id
+     * @param string $minmax
+     * @return mixed
+     */
     public function upperlower_report_field_position($report_id, $minmax = 'MIN') {
         $query = 'SELECT ' . $minmax . '(position) FROM {block_ilp_report_field} r WHERE report_id = ' . $report_id . ' ORDER BY r.position';
         return $this->dbc->get_field_sql($query);
     }
 
+    /**
+     * @param $reports
+     * @param $current_min
+     */
     public function create_report_positions_where_null($reports, $current_min) {
         $reports = array_reverse($reports);
         foreach ($reports as $report) {
@@ -418,6 +450,11 @@ class ilp_db_functions	extends ilp_logging {
         return $this->insert_record("block_ilp_report",$report);
     }
 
+    /**
+     * @param $tablename
+     * @param $object
+     * @return mixed
+     */
     public function special_insert($tablename, $object) {
         return $this->insert_record($tablename, $object);
     }
@@ -925,11 +962,18 @@ class ilp_db_functions	extends ilp_logging {
         return $this->insert_record($tablename, $pluginentry);
     }
 
-
+    /**
+     * @param $user_id
+     * @return mixed
+     */
     public function get_current_warning_status($user_id) {
         return $this->dbc->get_record("block_ilp_plu_wsts_ent",array('user_id'=>$user_id));
     }
 
+    /**
+     * @param $value
+     * @return mixed
+     */
     public function get_warning_status_name($value) {
         return $this->dbc->get_field("block_ilp_plu_wsts_items", 'name', array('value'=>$value));
     }
@@ -1106,6 +1150,10 @@ class ilp_db_functions	extends ilp_logging {
         return 	(!empty($permissions) || !empty($is_admin)) ? true	:	false;
     }
 
+    /**
+     * @param int $user
+     * @return bool
+     */
     function ilp_admin($user=0)
     {
        if(empty($user))
@@ -1221,7 +1269,9 @@ class ilp_db_functions	extends ilp_logging {
         return !$multiple ? $this->dbc->get_record_sql($sql, $params) : $this->dbc->get_records_sql($sql, $params);
     }
 
-
+    /**
+     * @return array
+     */
     public function get_secondstatus_items() {
         return $this->dbc->get_records('block_ilp_plu_wsts_items');
     }
@@ -1342,6 +1392,11 @@ class ilp_db_functions	extends ilp_logging {
     * @param string $tablename
     * @param int $reportfield_id
     */
+    /**
+     * @param $tablename
+     * @param $reportfield_id
+     * @return array
+     */
     function plugin_data_item_exists_gradebooktracker( $tablename, $reportfield_id ){
         global $CFG;
         $tablename 		= $CFG->prefix . $tablename;
@@ -1742,7 +1797,9 @@ class ilp_db_functions	extends ilp_logging {
         return $res->n;
     }
 
-
+    /**
+     * @return mixed
+     */
     public	function get_enabled_template()	{
         return $this->dbc->get_record('block_ilp_dash_temp',array('status'=>'1'));
     }
@@ -2326,6 +2383,10 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->set_field('block_ilp_report','deleted', $deleted, array('id'=>$report_id));
     }
 
+    /**
+     * @param $statusfield
+     * @param string $tablename
+     */
     function create_statusfield($statusfield, $tablename = 'block_ilp_plu_sts')	{
         $this->insert_record($tablename, $statusfield);
     }
@@ -2552,6 +2613,14 @@ class ilp_db_functions	extends ilp_logging {
         return $data;
     }
 
+    /**
+     * @param $student_ids
+     * @param $status_id
+     * @param string $sql_where
+     * @param string $sql_sort
+     * @param bool $includenull
+     * @return array
+     */
     function get_studentlist_details($student_ids,$status_id, $sql_where='',$sql_sort='',$includenull=false)
     {
         global $CFG, $DB;
@@ -2746,6 +2815,12 @@ class ilp_db_functions	extends ilp_logging {
      * @param $tablename
      * @return array of ids of items created
      */
+    /**
+     * @param $old_parent_id
+     * @param $new_parent_id
+     * @param $tablename
+     * @return array
+     */
     function add_old_items_to_new_field($old_parent_id, $new_parent_id, $tablename) {
         global $DB;
         $dbman = $DB->get_manager();
@@ -2903,10 +2978,19 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_record($tablename,array('name'=>$classname));
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     function setting_exists($name)	{
         return $this->dbc->get_record('config_plugins',array('name'=>$name,'plugin'=>'block_ilp'));
     }
 
+    /**
+     * @param $name
+     * @param $value
+     * @return bool|int
+     */
     function insert_config_setting($name,$value) {
         $setting	=	new stdClass();
         $setting->plugin	=	'block_ilp';
@@ -2916,11 +3000,19 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->insert_record('config_plugins',$setting);
     }
 
+    /**
+     * @param $setting
+     * @return bool
+     */
     function update_config_setting($setting) {
         return $this->dbc->update_record('config_plugins',$setting);
     }
 
-
+    /**
+     * @param $entry_id
+     * @param $reportfield_id
+     * @return mixed
+     */
     function get_report_coursefield($entry_id,$reportfield_id)	{
 
         $sql	=	"SELECT 	*
@@ -2957,6 +3049,10 @@ class ilp_db_functions	extends ilp_logging {
     /*
      * The Moodle update event function is converting the link from html entities to text;
      * This ensures that they remain as HTML entities.
+     */
+    /**
+     * @param $event
+     * @param $ilp_profile_link
      */
     public function update_event_description($event, $ilp_profile_link) {
         $ilp_profile_link = html_entity_decode($ilp_profile_link);
@@ -2998,12 +3094,18 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_record_sql($sql, array('reportfield_id'=>$reportfield_id, 'entry_id'=>$entry_id));
     }
 
-
+    /**
+     * @param $reportfield_id
+     * @return mixed
+     */
     function get_reportfield_by_id($reportfield_id)	{
         return $this->dbc->get_record('block_ilp_report_field',array('id'=>$reportfield_id));
     }
 
-
+    /**
+     * @param $record
+     * @return mixed
+     */
     function create_event_cross_reference($record) {
         return $this->insert_record('block_ilp_cal_events',$record);
     }
