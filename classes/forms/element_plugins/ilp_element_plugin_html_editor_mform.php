@@ -2,11 +2,15 @@
 
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin_mform.class.php');
 
+/**
+ * Class ilp_element_plugin_html_editor_mform
+ */
 class ilp_element_plugin_html_editor_mform  extends ilp_element_plugin_mform {
-	
-	  	
-	
-	  protected function specific_definition($mform) {
+
+    /**
+    * Force extending class to add its own form fields
+    */
+    protected function specific_definition($mform) {
 
 	  	//set the maximum length of the field default to 255
         $mform->addElement(
@@ -32,8 +36,11 @@ class ilp_element_plugin_html_editor_mform  extends ilp_element_plugin_mform {
         //$mform->addRule('maximumlength', null, 'required', null, 'client');
         $mform->setType('maximumlength', PARAM_INT);
 	}
-	
-	 protected function specific_validation($data) {
+
+    /**
+     * Force extending class to add its own server-side validation
+     */
+    protected function specific_validation($data) {
  	
 	 	$data = (object) $data;
  	
@@ -42,8 +49,11 @@ class ilp_element_plugin_html_editor_mform  extends ilp_element_plugin_mform {
 	 	
 	 	return $this->errors;
 	 }
-	 
-	 protected function specific_process_data($data) {
+
+    /**
+     * Force extending class to add its own processing method
+     */
+    protected function specific_process_data($data) {
 	  	
 	 	$plgrec = (!empty($data->reportfield_id)) ? $this->dbc->get_plugin_record("block_ilp_plu_hte",$data->reportfield_id) : false;
 	 	
