@@ -230,8 +230,8 @@ class ilp_db_functions	extends ilp_logging {
      * @param $position
      */
     public function report_field_position_resequence($report_id, $position) {
-        $query = 'SELECT * FROM {block_ilp_report_field} r WHERE report_id = ' . $report_id . ' ORDER BY r.position';
-        $fields =  $this->dbc->get_records_sql($query);
+        $query = 'SELECT * FROM {block_ilp_report_field} r WHERE report_id = :report_id ORDER BY r.position';
+        $fields =  $this->dbc->get_records_sql($query, array('report_id' => $report_id));
         foreach ($fields as $field) {
             $field->position = $position;
             $this->dbc->update_record('block_ilp_report_field', $field);
@@ -254,8 +254,12 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed
      */
     public function upperlower_report_field_position($report_id, $minmax = 'MIN') {
-        $query = 'SELECT ' . $minmax . '(position) FROM {block_ilp_report_field} r WHERE report_id = ' . $report_id . ' ORDER BY r.position';
-        return $this->dbc->get_field_sql($query);
+        // Prevent SQL injection.
+        if ($minmax != 'MIN') {
+            $minmax = 'MAX';
+        }
+        $query = 'SELECT ' . $minmax . '(r.position) FROM {block_ilp_report_field} r WHERE r.report_id = :report_id';
+        return $this->dbc->get_field_sql($query, array('report_id' => $report_id));
     }
 
     /**
@@ -332,7 +336,7 @@ class ilp_db_functions	extends ilp_logging {
      * Creates a new form element plugin record.
      *
      * @param string $name the name of the new form element plugin
-     * @param $tablename
+     * @param string $tablename
      * @return mixed the id of the inserted record or false
      */
     function create_form_element_plugin($name,$tablename) {
@@ -367,7 +371,6 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_tabs() {
-        global $CFG;
 
         $tableexists = in_array('block_ilp_dash_tab',$this->dbc->get_tables());
 
@@ -381,7 +384,6 @@ class ilp_db_functions	extends ilp_logging {
      * @return array Result objects
      */
     function get_dashboard_templates() {
-        global $CFG;
 
         $tableexists = in_array('block_ilp_dash_temp',$this->dbc->get_tables());
 
@@ -398,7 +400,7 @@ class ilp_db_functions	extends ilp_logging {
      * @return mixed the id of the inserted record or false
      */
     function create_plugin($table,$name,$tablename=NULL) {
-        $type = new object();
+        $type = new stdClass();
         $type->name 		    = $name;
         $type->tablename 		= $tablename;
 
@@ -451,7 +453,7 @@ class ilp_db_functions	extends ilp_logging {
     }
 
     /**
-     * @param $tablename
+     * @param string $tablename
      * @param $object
      * @return mixed
      */
@@ -981,8 +983,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Update a plugin entry record in the table given
      *
-     * @param $tablename
-     * @param $pluginentry
+     * @param string $tablename
+     * @param stdClass $pluginentry
      * @return bool true or false
      */
     function update_plugin_entry($tablename,$pluginentry)	{
