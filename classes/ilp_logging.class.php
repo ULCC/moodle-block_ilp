@@ -19,7 +19,8 @@ class ilp_logging {
      * add a entry into the ilp_log table
      *
      * @param string $table The name of the table being updated
-     * @param object $paramsobject the object that contains the data that will be used in the update
+     * @param $paramsobj
+     * @internal param object $paramsobject the object that contains the data that will be used in the update
      * @return mixed The success of the action
      */
     protected function update_record($table,$paramsobj) {
@@ -43,7 +44,8 @@ class ilp_logging {
      * ilp_log table
      *
      * @param string $table The name of the table where the record will be created
-     * @param object $paramsobject the object that contains the data that will be used to create the record
+     * @param $paramsobj
+     * @internal param object $paramsobject the object that contains the data that will be used to create the record
      * @return mixed The id of the insert or false if unsuccessful
      */
     protected function insert_record($table,$paramsobj) {
@@ -65,6 +67,7 @@ class ilp_logging {
      *
      * @param string $table The name of the table where the record will be created
      * @param mixed $params the object (or array) that contains the data that will be used to create the record
+     * @param $extraparams
      * @extraparams mixed $key=>$value pairs of extra data to be inseted in logging table
      * @return mixed The success of the action
      */
@@ -337,14 +340,13 @@ class ilp_logging {
 		return $this->dbc->get_records('block_ilp_plugin');
 	}
 
-
-     /**
+    /**
      * function to return the action type of given action
      *
      * @param string $table the table the action is targetting
      * @param int $action the action whose type we want
-     * @param int $candidate_id the user id of the candidate
      * @param int $candidate_id the user id of the creator
+     * @param $creator_id
      * @return string the attribute type
      */
 	private function action_type($table,$action,$candidate_id,$creator_id) {
