@@ -23,7 +23,7 @@ class ilp_db {
     /**
      * Constructor to instantiate the db connection.
      *
-     * @return void
+     * @return \ilp_db
      */
     function __construct() {
         global $CFG;
@@ -150,7 +150,7 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Constructor for the ilp_db_functions class
      *
-     * @return void
+     * @return \ilp_db_functions
      */
     function __construct() {
         global $CFG, $DB;
@@ -252,7 +252,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Returns all report field records for the report with the given id
      *
-     * @param int    $report_id the id of the report whose fields will be retrieved
+     * @param int $report_id the id of the report whose fields will be retrieved
+     * @param bool $orderbyposition
      * @return array containing report field objects that match criteria
      */
     function get_report_fields($report_id,$orderbyposition=false) {
@@ -270,7 +271,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Gets the reocrd with id matching the given plugin_id
      *
-     * @param string $name the name of the new form element plugin
+     * @param $plugin_id
+     * @internal param string $name the name of the new form element plugin
      * @return mixed the id of the inserted record or false
      */
     function get_form_element_plugin($plugin_id){
@@ -298,6 +300,7 @@ class ilp_db_functions	extends ilp_logging {
      * Creates a new form element plugin record.
      *
      * @param string $name the name of the new form element plugin
+     * @param $tablename
      * @return mixed the id of the inserted record or false
      */
     function create_form_element_plugin($name,$tablename) {
@@ -354,12 +357,12 @@ class ilp_db_functions	extends ilp_logging {
         return (!empty($tableexists)) ? $this->dbc->get_records('block_ilp_dash_temp', array()) : false;
     }
 
-
     /**
      * Creates a new  plugin record.
      *
-     * @param string $tablename	the name of the table the record will be saved to
+     * @param $table
      * @param string $name the name of the new form element plugin
+     * @param string $tablename    the name of the table the record will be saved to
      * @return mixed the id of the inserted record or false
      */
     function create_plugin($table,$name,$tablename=NULL) {
@@ -526,6 +529,7 @@ class ilp_db_functions	extends ilp_logging {
      * Sets the new position of a field
      *
      * @param int $reportfield_id the id of the reportfield whose position will be changed
+     * @param $newposition
      * @return mixed object containing the plugin record or false
      */
     function set_new_position($reportfield_id,$newposition) {
@@ -536,12 +540,12 @@ class ilp_db_functions	extends ilp_logging {
      * Sets the new position of a report
      *
      * @param int $report_id the id of the report whose position will be changed
+     * @param $newposition
      * @return mixed object containing the plugin record or false
      */
     function set_new_report_position($report_id,$newposition) {
         return $this->dbc->set_field('block_ilp_report',"position",$newposition,array('id'=>$report_id));
     }
-
 
     /**
      * Returns all reports with a position less than or greater than
@@ -555,6 +559,7 @@ class ilp_db_functions	extends ilp_logging {
      *         or less than position. move up = 1 move down 0
      * @param bool $disabled should disabled reports be returned
      * @param bool $deleted
+     * @param bool $include_vaulted
      * @return mixed object containing the plugin record or false
      */
     function get_reports_by_position($position=null,$type=null,$disabled=true,$deleted=true, $include_vaulted = false) {
@@ -662,9 +667,10 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @param int $report_id the id of the report whose fields will be returned
      * @param int $position the position of fields that will be returned
-     *  	greater than or less than depending on $type
+     *    greater than or less than depending on $type
      * @param  int $type determines whether fields returned will be greater than
-     * 		or less than position. move up = 1 move down 0
+     *        or less than position. move up = 1 move down 0
+     * @param null $plugin_details
      * @return mixed object containing the plugin record or false
      */
     function get_report_fields_by_position($report_id,$position=null,$type=null, $plugin_details = null) {
@@ -699,13 +705,13 @@ class ilp_db_functions	extends ilp_logging {
         return		$this->dbc->get_records_sql($sql, $params);
     }
 
-
     /**
      * Delete the record from the given table with the reportfield_id matching the given id
      *
      * @param string $tablename the table that you want to delete the record from
      * @param int $id the id of the record that you want to delete
      *
+     * @param array $extraparams
      * @return bool true or false
      */
     function delete_form_element_by_reportfield( $tablename,$id, $extraparams=array() ) {
@@ -718,18 +724,19 @@ class ilp_db_functions	extends ilp_logging {
      * @param string $tablename the table that you want to delete the record from
      * @param int $parent_id the parent_id that all fields to be deleted should have
      *
+     * @param array $extraparams
      * @return bool true or false
      */
     function delete_items($tablename,$parent_id, $extraparams=array() ) {
         return $this->delete_records( $tablename, array('parent_id' => $parent_id), $extraparams );
     }
 
-
     /**
      * Delete a report field record
      *
      * @param int $id the id of the record that you want to delete
      *
+     * @param array $extraparams
      * @return bool true or false
      */
     function delete_report_field( $id, $extraparams=array() ) {
@@ -751,7 +758,9 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * get a report record using the id given
      *
-     * @param int $id the id of the record that you want to retrieve
+     * @param $field
+     * @param $value
+     * @internal param int $id the id of the record that you want to retrieve
      *
      * @return mixed object or false if no record found
      */
@@ -764,7 +773,8 @@ class ilp_db_functions	extends ilp_logging {
      * the object must contain a id param with the id of the record
      * to be updated
      *
-     * @param object $reportfield an object containing the data on the record
+     * @param $report
+     * @internal param object $reportfield an object containing the data on the record
      * @return bool true or false depending on result of query
      */
     function update_report($report) {
@@ -788,6 +798,7 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * returns whether any permission exists for the given report
      *
+     * @param $report_id
      * @return bool true or false
      */
     function permissions_exist($report_id) {
@@ -797,7 +808,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Deletes all report permission
      *
-     * @param int $id the id of the record that you want to delete
+     * @param $report_id
+     * @internal param int $id the id of the record that you want to delete
      *
      * @return bool true or false
      */
@@ -820,6 +832,7 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Returns permissions for the report with the given id
      *
+     * @param $report_id
      * @return mixed object containing all permissions records or false
      */
     function get_report_permissions($report_id)	{
@@ -904,6 +917,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Create a plugin entry in the table given
      *
+     * @param $tablename
+     * @param $pluginentry
      * @return mixed int id of new reocrd or false
      */
     function create_plugin_entry($tablename,$pluginentry)	{
@@ -918,9 +933,12 @@ class ilp_db_functions	extends ilp_logging {
     public function get_warning_status_name($value) {
         return $this->dbc->get_field("block_ilp_plu_wsts_items", 'name', array('value'=>$value));
     }
+
     /**
      * Update a plugin entry record in the table given
      *
+     * @param $tablename
+     * @param $pluginentry
      * @return bool true or false
      */
     function update_plugin_entry($tablename,$pluginentry)	{
@@ -930,9 +948,10 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Returns a list of all reports currently enabled in a course
      *
-     * @param int 	$course_id the id of the course who we want to
+     * @param int $course_id the id of the course who we want to
      * get report for
-     *  @param int $report_id the id of the report
+     * @param int $report_id the id of the report
+     * @param null $status
      * @return mixed array containing recordset objects or false
      */
     function get_coursereports($course_id,$report_id=null,$status=null) {
@@ -965,7 +984,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Returns a list of all ilp reports with an enabled status
      *
-     * @param array $reports a array contain the ids of reports that
+     * @param null $report_ids
+     * @internal param array $reports a array contain the ids of reports that
      * you do not want included in the return values
      * @return mixed array containing recordset objects or false
      */
@@ -984,7 +1004,9 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Returns a list of all ilp reports with an enabled status
      *
-     * @param array $reports a array contain the ids of reports that
+     * @param null $userid
+     * @param null $pluginid
+     * @internal param array $reports a array contain the ids of reports that
      * you do not want included in the return values
      * @return mixed array containing recordset objects or false
      */
@@ -1269,17 +1291,20 @@ class ilp_db_functions	extends ilp_logging {
         return 		$this->dbc->get_record_sql($sql, array('entry_id'=>$entry_id));
     }
 
-
-
     /**
      * check if any user data has been uploaded to a particular list-type reportfield
      * if it has then admin should not be allowed to delete any existing
      * options
-     * @param string tablename
-     * @param int reportfield_id
-     * @param string item_table - use this item_table if item_table name is not simply $tablename . "_items"
-     * @param string item_key - use this foreign key if specific item_table has been sent as arg. Send empty string to simply get all rows from the item table
-     * @param string item_value_field - field from the item table to use as the value submitted to the user entry table
+     * @param $tablename
+     * @param $reportfield_id
+     * @param bool $item_table
+     * @param bool $item_key
+     * @param bool $item_value_field
+     * @internal param \tablename $string
+     * @internal param \reportfield_id $int
+     * @internal param \item_table $string - use this item_table if item_table name is not simply $tablename . "_items"
+     * @internal param \item_key $string - use this foreign key if specific item_table has been sent as arg. Send empty string to simply get all rows from the item table
+     * @internal param \item_value_field $string - field from the item table to use as the value submitted to the user entry table
      * @return mixed array of objects or false
      */
     function plugin_data_item_exists( $tablename, $reportfield_id, $item_table=false, $item_key=false, $item_value_field=false ){
@@ -1331,14 +1356,14 @@ class ilp_db_functions	extends ilp_logging {
         return	$this->dbc->get_records_sql($sql, array('reportfield_id'=>$reportfield_id));
     }
 
-
-
-
     /**
      * delete option items for a plugin list-type element
      * $tablename is the element table eg block_ilp_plu_category
-     * @param string tablename
-     * @param int reportfield_id
+     * @param $tablename
+     * @param $reportfield_id
+     * @param array $extraparams
+     * @internal param \tablename $string
+     * @internal param \reportfield_id $int
      *
      * @return boolean true or false
      */
@@ -1359,8 +1384,11 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * delete option items for a plugin list-type element referenced by element_id (parent_id) instead of reportfield_id
      * $tablename is the element table eg block_ilp_plu_category
-     * @param string tablename
-     * @param int reportfield_id
+     * @param $tablename
+     * @param $parent_id
+     * @param array $extraparams
+     * @internal param \tablename $string
+     * @internal param \reportfield_id $int
      *
      * @return boolean true or false
      */
@@ -1433,8 +1461,11 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * supply a reportfield id for a dropdown type element
      * dropdown options are returned
-     * @param int
-     * @param string
+     * @param $reportfield_id
+     * @param $tablename
+     * @param bool $field
+     * @internal param $int
+     * @internal param $string
      * @return array of objects
      */
     function get_optionlist( $reportfield_id, $tablename, $field=false ){
@@ -1479,8 +1510,10 @@ class ilp_db_functions	extends ilp_logging {
      *
      * @param   string $tablename the name of the table that the record
      * will be deleted form
-     * @param	int $id the id of the record you will be deleting
+     * @param    int $id the id of the record you will be deleting
      *
+     * @param array $extraparams
+     * @param string $id_field
      * @return mixed true or false
      */
     function delete_element_record_by_id ( $tablename, $id, $extraparams=array(), $id_field = 'id' ) {
@@ -1490,8 +1523,10 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Deletes a record in the given table matching its id field
      *
-     * @param	int $entry_id the id of the record you will be deleting
+     * @param $tablename
+     * @param    int $entry_id the id of the record you will be deleting
      *
+     * @param array $extraparams
      * @return mixed true or false
      */
     function delete_entryfield($tablename,$entry_id, $extraparams=array())	{
@@ -1512,7 +1547,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Deletes a entrys comment
      *
-     * @param	int $comment_id the id of the record you will be deleting
+     * @param $entry_id
+     * @internal param int $comment_id the id of the record you will be deleting
      *
      * @return mixed true or false
      */
@@ -1574,13 +1610,14 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_records_sql($sql, $params);
     }
 
-
     /**
      * Returns all user entries for the given report
      *
      * @param  int $report_id the id of the report that we are looking for
-     * @param  int $user_id	the id of user who will be retrieving report entries for
-     * @param  int $state_id if set only entries that have a specified state are returned
+     * @param  int $user_id    the id of user who will be retrieving report entries for
+     * @param null $start
+     * @param null $end
+     * @internal param int $state_id if set only entries that have a specified state are returned
      * @return mixed array of objects containing databases recordsets or false
      */
     function get_user_report_entries_between_time($report_id,$user_id,$start=null,$end=null)	{
@@ -1615,20 +1652,17 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_records_sql($sql, $params);
     }
 
-
-
-
     /**
      * Returns all entries by the specidified user for the specified report that with a datedeadline date less than the given date.
      * This function is intended for use on reports that have a state field and and a date dealine field. The function will also
      * take a array or
      *
-     * @param int   $report_id  the id of the report that the entries will be for
-     * @param int   $user_id    the user id of the user whose entries will be returned
-     * @param int   $time       a unix timestamp of the date at which the entry datedeadline should have be less than if not set it
+     * @param int $report_id  the id of the report that the entries will be for
+     * @param int $user_id    the user id of the user whose entries will be returned
+     * @param int $time       a unix timestamp of the date at which the entry datedeadline should have be less than if not set it
      *                          the time is set to the current timestamp
-     * @param int   $state      expected to be one of ILP_STATE_UNSET, ILP_STATE_FAIL, ILP_STATE_PASS,ILP_STATE_NOTCOUNTED
-     * @param array $entries    the user may provide an array containing the ids of report entries that will then be checked
+     * @param int $state expected to be one of ILP_STATE_UNSET, ILP_STATE_FAIL, ILP_STATE_PASS,ILP_STATE_NOTCOUNTED
+     * @param array|bool $entries the user may provide an array containing the ids of report entries that will then be checked
      *                          to see if they fit the given critera if a entry does not it will not be returned
      * @return array
      */
@@ -1751,11 +1785,11 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_record($tablename,array("reportfield_id"=>$reportfield_id));
     }
 
-
     /**
      * gets max position for a report and returns 1 more
      * if no entries yet, returns 1
      * @param int $report_id
+     * @param $tablename
      * @return int
      */
     public function get_next_position( $report_id, $tablename ){
@@ -1783,28 +1817,28 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->record_exists( $table, array( $field => $value ) );
     }
 
-
-
     /**
      * Returns all records in the reports table with the given status
      *
-     * @param int	$status	the status that the returned report records shoulds
+     * @param int $status    the status that the returned report records shoulds
      * have
-     * @return	mixed array of recordsets or false
+     * @param null $orderby
+     * @return    mixed array of recordsets or false
      */
     public function	get_reports($status, $orderby = null)	{
         return $this->dbc->get_records('block_ilp_report',array('status'=>$status), $orderby);
     }
 
-
     /**
      * Count the number of entries for given user in the given report
      *
-     * @param	int $report_id	the id of the report whose entries will be counted
-     * @param	int $user_id the id of the  user whose entries will be counted
+     * @param    int $report_id    the id of the report whose entries will be counted
+     * @param    int $user_id the id of the  user whose entries will be counted
      *
      *
-     * @return	mixed int the number of entries or false
+     * @param null $timestart
+     * @param null $timeend
+     * @return    mixed int the number of entries or false
      */
 
     public function count_report_entries($report_id,$user_id,$timestart=null,$timeend=null)	{
@@ -1885,7 +1919,8 @@ class ilp_db_functions	extends ilp_logging {
      * @param int $report_id the id of the report that we will
      * check if it has a the plugins field
      *
-     * @return	bool true or false
+     * @param $pluginname
+     * @return    bool true or false
      */
     public function	has_plugin_field($report_id,$pluginname)	{
 
@@ -1931,16 +1966,18 @@ class ilp_db_functions	extends ilp_logging {
         return $r;
 
     }
+
     /**
      * Count the number of entries in the given report with a pass state
      *
-     * @param	int $report_id	the id of the report whose entries will be counted
-     * @param	int $user_id the id of the  user whose entries will be counted
-     * @param	int	$state the state that the report entry should have
-     * @param	bool $count true if the function should return a count or false to return the
+     * @param    int $report_id    the id of the report whose entries will be counted
+     * @param    int $user_id the id of the  user whose entries will be counted
+     * @param    int $state the state that the report entry should have
+     * @param    bool $count true if the function should return a count or false to return the
      * entry records (defaults true)
      *
-     * @return	mixed int the number of entries or false
+     * @param bool $entry_id
+     * @return    mixed int the number of entries or false
      */
     public  function count_report_entries_with_state($report_id,$user_id,$state,$count=true,$entry_id=false)	{
 
@@ -2144,15 +2181,15 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_record($tablename,array('name'=>$pluginname));
     }
 
-
     /**
      * Get all state items for the given report
      *
-     * @param	int $report_id	the id of the report whose entries will be counted
-     * @param	int $user_id the id of the  user whose entries will be counted
-     * @param	int	$state the state that the report entry should have
+     * @param    int $report_id    the id of the report whose entries will be counted
+     * @param $pluginname
+     * @internal param int $user_id the id of the  user whose entries will be counted
+     * @internal param int $state the state that the report entry should have
      *
-     * @return	mixed int the number of entries or false
+     * @return    mixed int the number of entries or false
      */
     public	function get_report_state_items($report_id,$pluginname)	{
 
@@ -2175,18 +2212,16 @@ class ilp_db_functions	extends ilp_logging {
         return 		$this->dbc->get_records_sql($sql, array('report_id'=>$report_id, 'pluginname'=>$pluginname));
     }
 
-
-
     /**
      * Returns the id of the item with the given value
      *
-     * @param	int $parent_id	the id of the state item record that is the parent of the item
-     * @param	int $itemvalue the actual value of the field
-     * @param	string $keyfield field from $itemtable to use as key
-
-     * @param	string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
+     * @param $tablename
+     * @param    int $parent_id    the id of the state item record that is the parent of the item
+     * @param    int $itemvalue the actual value of the field
+     * @param    string $keyfield field from $itemtable to use as key
+     * @param bool|string $itemtable name of item table to use if this element type does not follow the '_items' naming convention
      *
-     * @return	mixed object or false
+     * @return    mixed object or false
      */
     public function get_state_item_id($tablename,$parent_id,$itemvalue, $keyfield='id', $itemtable=false )	{
 
@@ -2237,9 +2272,10 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Returns the entry comment with the given id
      *
-     * @param	int	$commnet_id	the id of the comment being retrieved
+     * @param $comment_id
+     * @internal param int $commnet_id the id of the comment being retrieved
      *
-     * @return	mixed  object containing the record or bool false
+     * @return    mixed  object containing the record or bool false
      */
     function get_comment_by_id($comment_id)	{
         return 	$this->dbc->get_record('block_ilp_entry_comment',array('id'=>$comment_id));
@@ -2249,7 +2285,8 @@ class ilp_db_functions	extends ilp_logging {
      * Returns the items that can be used for user status, note this should always be the first status field
      * created so item parent ids should have a value of 1
      *
-     * @return	mixed  object containing the record or bool false
+     * @param int $parent_id
+     * @return    mixed  object containing the record or bool false
      */
     function get_user_status_items($parent_id=1)	{
         return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$parent_id));
@@ -2258,27 +2295,32 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * This function sets the status of a report sending to vault or bringing back from valut
      *
-     * @return	mixed  object containing the record or bool false
+     * @param $report_id
+     * @param $status
+     * @return    mixed  object containing the record or bool false
      */
     function set_report_vault_status ($report_id,$status)	{
         return $this->dbc->set_field('block_ilp_report','vault', $status, array('id'=>$report_id));
     }
-    
+
     /**
      * This function sets the status of a report enabled or disabled
      *
-     * @return	mixed  object containing the record or bool false
+     * @param $report_id
+     * @param $status
+     * @return    mixed  object containing the record or bool false
      */
     function set_report_status ($report_id,$status)	{
         //return $this->dbc->set_field('block_ilp_report',array('status'=>$status),array('id'=>$report_id));
         return $this->dbc->set_field('block_ilp_report','status', $status, array('id'=>$report_id));
     }
 
-
     /**
      * This function sets the delete field of a reportd
      *
-     * @return	mixed  object containing the record or bool false
+     * @param $report_id
+     * @param $deleted
+     * @return    mixed  object containing the record or bool false
      */
     function delete_report($report_id,$deleted)	{
         return $this->dbc->set_field('block_ilp_report','deleted', $deleted, array('id'=>$report_id));
@@ -2338,7 +2380,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Gets the dashboard plugin record for the
      *
-     * @param string $plugin_name the name of the template
+     * @param $name
+     * @internal param string $plugin_name the name of the template
      *
      * @return mixed array of objects containing the regions or false
      */
@@ -2369,12 +2412,12 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_records('block_ilp_plu_sts_items',array('parent_id'=>$id));
     }
 
-
     /**
      * Returns the status item with the id given
      *
      * @param int $id the id of the status item we want to return
      *
+     * @param string $tablename
      * @return mixed object containing recordset with matching id or false
      */
     function get_status_item_by_id($id, $tablename = 'block_ilp_plu_sts_items')	{
@@ -2432,6 +2475,8 @@ class ilp_db_functions	extends ilp_logging {
      * @param int $course_id the id of the course whose enrolled users
      * we want to retrieve
      *
+     * @param null $group_id
+     * @param bool $fullrecords
      * @return mixed array of object containing all users enrolled in the course
      * or bool false
      */
@@ -2584,10 +2629,11 @@ class ilp_db_functions	extends ilp_logging {
      *
      * Returns the latest entry reocrd for the given student
      *
-     * @param int $student_id the id of the student whose
+     * @param $user_id
+     * @internal param int $student_id the id of the student whose
      * last entry will be retrieved
      *
-     * @return
+     * @return mixed
      */
     function get_lastupdate($user_id) {
 
@@ -2798,10 +2844,11 @@ class ilp_db_functions	extends ilp_logging {
      * Used to check if a report field with the given label already exists in the report
      * with the given report_id
      *
-     * @param	string $label	the label that is being test to see if it exists
-     * @param	int $report_id the id of the report that will be checked
+     * @param    string $label    the label that is being test to see if it exists
+     * @param    int $report_id the id of the report that will be checked
      *
-     * @return	mixed array of recordsets or bool false
+     * @param $field_id
+     * @return    mixed array of recordsets or bool false
      */
     function label_exists($label,$report_id,$field_id)	{
 
@@ -2843,14 +2890,14 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_record('block_ilp_plugin',array('tablename'=>$tablename));
     }
 
-
     /**
      * Returns the record with a class name matching the one given in the given table
      *
-     * @param	string 	$name the name of the plugin that we want to match
-     * @param	string 	$tablename the name of the table that will be queried
+     * @param    string $tablename the name of the table that will be queried
      *
-     * @return	mixed object recordset or bool false
+     * @param $classname
+     * @internal param string $name the name of the plugin that we want to match
+     * @return    mixed object recordset or bool false
      */
     function get_plugin_record_by_classname($tablename,$classname) {
         return $this->dbc->get_record($tablename,array('name'=>$classname));
@@ -3013,7 +3060,8 @@ class ilp_db_functions	extends ilp_logging {
     /**
      * Returns the ilp_report_graph record with the id given
      *
-     * @param int    $graph_id the id of the report graph that you want to get the data on
+     * @param $reportgraph_id
+     * @internal param int $graph_id the id of the report graph that you want to get the data on
      * @return object containing data from the report graph record that matches criteria
      */
     function get_report_graph_data($reportgraph_id) {
@@ -3032,13 +3080,14 @@ class ilp_db_functions	extends ilp_logging {
         return $this->dbc->get_records($tablename,array("reportgraph_id"=>$reportgraph_id));
     }
 
-
     /**
      * Deletes a record from the specified table with the matching criteria
      *
      * @param   string $tablename the name of the table that the record
      * will be deleted form
-     * @param	int $param criteria that should be matched to delete the field. Criteria must be specified
+     * @param $params
+     * @param array $extraparams
+     * @internal param int $param criteria that should be matched to delete the field. Criteria must be specified
      * no blanket deletes are allowed
      *
      * @return mixed true or false
