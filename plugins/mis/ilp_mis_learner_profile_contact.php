@@ -100,7 +100,7 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  				if 	(get_config('block_ilp','mis_learner_contact_addressthree')) $this->fields['addressthree']	=	get_config('block_ilp','mis_learner_contact_addressthree');
  				if 	(get_config('block_ilp','mis_learner_contact_addressfour')) $this->fields['addressfour']	=	get_config('block_ilp','mis_learner_contact_addressfour');
  				if 	(get_config('block_ilp','mis_learner_contact_postcode')) 	$this->fields['postcode']	=	get_config('block_ilp','mis_learner_contact_postcode');
-
+                if  (get_config('block_ilp','mis_learner_contact_tutor'))   $this->fields['tutor']      =   get_config('block_ilp','mis_learner_contact_tutor');
 
                 $prelimdbcalls   =    get_config('block_ilp','mis_learner_contact_prelimcalls');
 
@@ -189,7 +189,9 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
  	 	$this->config_text_element($mform,'mis_learner_contact_addressfour',get_string('ilp_mis_learner_contact_addressfour', 'block_ilp'),get_string('ilp_mis_learner_contact_addressfourdesc', 'block_ilp'),'Address4');
  	 	
  	 	$this->config_text_element($mform,'mis_learner_contact_postcode',get_string('ilp_mis_learner_contact_postcode', 'block_ilp'),get_string('ilp_mis_learner_contact_postcodedesc', 'block_ilp'),'postcode');
- 	 	
+
+        $this->config_text_element($mform,'mis_learner_contact_tutor',get_string('ilp_mis_learner_contact_tutor', 'block_ilp'),get_string('ilp_mis_learner_contact_tutordesc', 'block_ilp'),'tutor');
+
  	 	$options = array(
     		 ILP_IDTYPE_STRING 	=> get_string('stringid','block_ilp'),
     		 ILP_IDTYPE_INT		=> get_string('intid','block_ilp') 
@@ -272,7 +274,10 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
         
         $string['ilp_mis_learner_contact_postcode']							= 'Postcode field';
         $string['ilp_mis_learner_contact_postcodedesc']						= 'The field that holds postcode data';
-                
+
+        $string['ilp_mis_learner_contact_tutor']              = 'Tutor field';
+        $string['ilp_mis_learner_contact_tutordesc']            = 'The field that holds tutor data';
+
         $string['ilp_mis_learner_contact_tabletype']						= 'Table type';
         $string['ilp_mis_learner_contact_tabletypedesc']					= 'Does this plugin connect to a table or stored procedure';        
         
@@ -291,10 +296,10 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
         $string['ilp_mis_learner_profile_contact_disp_emercontact']				= 'Emergency Contact';
         $string['ilp_mis_learner_profile_contact_disp_emernumber']				= 'Emergency Number';
 
-         $string['ilp_mis_learner_contact_prelimcalls']						= 'Preliminary db calls';
          $string['ilp_mis_learner_contact_prelimcallsdesc']					= 'preliminary calls that need to be made to the db before the sql is executed';
          $string['ilp_mis_learner_profile_contact_tab_name']					= 'Contact Details';
-
+        $string['ilp_mis_learner_profile_contact_disp_tutor']                   = 'Tutor';
+        $string['ilp_mis_learner_profile_contact_prelimcalls']					= 'Preliminary db calls';
 
          return $string;
     }

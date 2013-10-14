@@ -1,0 +1,38 @@
+<div id="ilp_mis_learner_profile_contact">
+
+    <div class="contactboxes">
+
+        <?php if (isset($this->fields['care']) && !empty($this->data[$this->fields['care']])) {?>
+        <label><B><?php  echo get_string('ilp_mis_learner_care_support_care','block_ilp') ?></B></label>
+        <?php echo $this->data[$this->fields['care']]; ?><br/>
+        <?php } ?>
+        <?php if (isset($this->fields['careContact']) && !empty($this->data[$this->fields['careContact']])) {?>
+        <label><B><?php echo get_string('ilp_mis_learner_care_support_careContact','block_ilp') ?></B></label>
+        <?php echo $this->data[$this->fields['careContact']]; ?><br/>
+        <?php } ?>
+    </div>
+
+    <div class="contactboxes">
+
+        <?php if (isset($this->fields['als']) && !empty($this->data[$this->fields['als']])) {?>
+        <label><B><?php echo get_string('ilp_mis_learner_care_support_als','block_ilp') ?></B></label>
+        <?php echo $this->data[$this->fields['als']]; ?><br/>
+        <?php } ?>
+        <?php if (isset($this->fields['LSF']) && !empty($this->data[$this->fields['LSF']])) {?>
+        <label><B><?php echo get_string('ilp_mis_learner_care_support_lsf','block_ilp') ?></B></label>
+        <?php echo $this->data[$this->fields['LSF']]; ?><br/>
+        <?php } ?>
+
+    </div>
+
+    <div class="contactboxes">
+
+        <?php if (isset($this->fields['Medical']) && !empty($this->data[$this->fields['Medical']])) {?>
+        <label><B><?php echo get_string('ilp_mis_learner_profile_care_support_disp_medical','block_ilp') ?></B></label>
+        <?php echo $this->data[$this->fields['Medical']]; ?><br/>
+        <?php } ?>
+
+    </div>
+
+</div>
+<div class="clearer"></div>

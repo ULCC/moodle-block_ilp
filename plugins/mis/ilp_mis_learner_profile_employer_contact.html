@@ -1,0 +1,36 @@
+<div id="ilp_mis_learner_profile_contact">
+
+    <div class="contactboxes">
+        <h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_personal','block_ilp') ?></h3>
+        <?php if (isset($this->fields['companyNameEmp']) && !empty($this->data[$this->fields['companyNameEmp']])) {?>
+        <label><B><?php  echo get_string('ilp_mis_learner_employer_contact_companyNameEmp','block_ilp') ?></B></label>
+        <?php echo $this->data[$this->fields['companyNameEmp']]; ?><br/>
+        <?php } ?>
+        <?php if (isset($this->fields['contactNameEmp']) && !empty($this->data[$this->fields['contactNameEmp']])) {?>
+        <label><B><?php echo get_string('ilp_mis_learner_employer_contact_contactNameEmp','block_ilp') ?></B></label>
+        <?php echo $this->data[$this->fields['contactNameEmp']]; ?><br/>
+        <?php } ?>
+    </div>
+
+    <div class="contactboxes">
+        <h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_contact','block_ilp') ?></h3>
+        <?php if (isset($this->fields['emailEmp']) && !empty($this->data[$this->fields['emailEmp']])) {?>
+        <?php echo $this->data[$this->fields['emailEmp']]; ?><br/>
+        <?php } ?>
+        <?php if (isset($this->fields['phoneEmp']) && !empty($this->data[$this->fields['phoneEmp']])) {?>
+        <label><B><?php echo get_string('ilp_mis_learner_profile_employer_contact_disp_phoneEmp','block_ilp') ?></B></label>
+        <?php echo $this->data[$this->fields['phoneEmp']]; ?><br/>
+        <?php } ?>
+
+    </div>
+
+    <div class="contactboxes">
+        <h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_address','block_ilp') ?></h3>
+        <?php if (isset($this->fields['addrEmp']) && !empty($this->data[$this->fields['addrEmp']])) {?>
+        <?php echo $this->data[$this->fields['addrEmp']]; ?><br/>
+        <?php } ?>
+
+    </div>
+
+</div>
+<div class="clearer"></div>
