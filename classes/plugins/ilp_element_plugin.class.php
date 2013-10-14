@@ -67,18 +67,39 @@ class ilp_element_plugin {
      * @var string
      */
 	var	$description;
+    /**
+     * @var string
+     */
     var $xmldb_table;
 
+    /**
+     * @var string
+     */
     var $xmldb_field;
 
+    /**
+     * @var string
+     */
     var $xmldb_key;
 
+    /**
+     * @var database_manager
+     */
     var $dbman;
 
+    /**
+     * @var
+     */
     var $set_attributes;
-    
+
+    /**
+     * @var
+     */
     var $req;
 
+    /**
+     * @var
+     */
     var $course_id;
 	/*
 	* local file for pre-populating particular types
@@ -86,7 +107,10 @@ class ilp_element_plugin {
 	* eg ilp_element_plugin_category_pre_items.conf
 	* in the local plugins directory
 	*/
-    public $local_config_file;	
+    /**
+     * @var
+     */
+    public $local_config_file;
 
     /**
      * Constructor
@@ -128,7 +152,10 @@ class ilp_element_plugin {
     public function get_tablename() {
         return $this->tablename;
     }
-    
+
+    /**
+     * @param $course_id
+     */
     public function set_course_id($course_id) {
         $this->course_id = $course_id;
     }
@@ -136,10 +163,13 @@ class ilp_element_plugin {
     /**
      * Edit the plugin instance
      *
-     * @param object $plugin
+     * @param $report_id
+     * @param $plugin_id
+     * @param $reportfield_id
+     * @internal param object $plugin
      */
     public final function edit($report_id,$plugin_id,$reportfield_id) {
-        global $CFG, $PARSER,$USER;
+        global $CFG, $USER;
 
         //get the report field record
         $reportfield		=	$this->dbc->get_report_field_data($reportfield_id);
@@ -368,8 +398,11 @@ class ilp_element_plugin {
         return true;
     }
 
-
-
+    /**
+     * @param $resource_name
+     * @param null $course
+     * @return array
+     */
     function get_resource_enabled_instances($resource_name,$course=null) {
 
         $enabled_courses = array();
@@ -494,7 +527,10 @@ class ilp_element_plugin {
 	 	
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
 	 	if (!empty($entry)) {
+            echo 'Raw data is: '. $entry->value;
+            echo '<br />';
 	 		$entryobj->$fieldname	=	html_entity_decode($entry->value, ENT_QUOTES, 'UTF-8');
+            echo 'Decoded data is: '. $entryobj->$fieldname;
 	 	}
 	 }
 	 
@@ -573,11 +609,19 @@ class ilp_element_plugin {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function is_exportable()
     {
        return true;
     }
 
+    /**
+     * @param $fieldid
+     * @param $report_entry_id
+     * @param $item
+     */
     public function export_data($fieldid,$report_entry_id,&$item)
     {
        return $this->view_data($fieldid,$report_entry_id,$item);
