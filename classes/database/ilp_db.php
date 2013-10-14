@@ -17,6 +17,7 @@ require_once($CFG->dirroot.'/blocks/ilp/classes/ilp_report.class.php');
  *
  * Acts as a wrapper for {@link ilp_db_functions} with a magic method to intercept
  * function calls.
+ *
  */
 class ilp_db {
 

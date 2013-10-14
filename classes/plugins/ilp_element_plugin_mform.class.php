@@ -1,15 +1,38 @@
 <?php
 
+/**
+ * Class ilp_element_plugin_mform
+ */
 abstract class ilp_element_plugin_mform extends ilp_moodleform {
-	
-	public		$report_id;
-	public 		$plugin_id;
-	public 		$creator_id;
-	public 		$course_id;
-	public 		$dbc;
-	
-	
-	function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
+
+    /**
+     * @var
+     */
+    public		$report_id;
+    /**
+     * @var
+     */
+    public 		$plugin_id;
+    /**
+     * @var
+     */
+    public 		$creator_id;
+    /**
+     * @var
+     */
+    public 		$course_id;
+    /**
+     * @var ilp_db
+     */
+    public 		$dbc;
+
+    /**
+     * @param $report_id
+     * @param $plugin_id
+     * @param $creator_id
+     * @param null $reportfield_id
+     */
+    function __construct($report_id,$plugin_id,$creator_id,$reportfield_id=null) {
 		global $CFG;
 		
 		$this->report_id		=	$report_id;
@@ -23,7 +46,6 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
 	}
 	
 	function definition() {
-        global $USER, $CFG;
 
         //get the plugin type by getting the plugin name
         $currentplugin	=	$this->dbc->get_form_element_plugin($this->plugin_id);
@@ -135,6 +157,8 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
      * Performs server-side validation of the unique constraints.
      *
      * @param object $data The data to be saved
+     * @param array $files
+     * @return array
      */
     function validation($data, $files) {
         $this->errors = array();
@@ -193,5 +217,3 @@ abstract class ilp_element_plugin_mform extends ilp_moodleform {
     
 }
 
-
-?>

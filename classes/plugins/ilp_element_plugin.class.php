@@ -527,23 +527,20 @@ class ilp_element_plugin {
 	 	
 	 	$entry	=	$this->dbc->get_pluginentry($this->tablename,$entry_id,$reportfield_id);
 	 	if (!empty($entry)) {
-            echo 'Raw data is: '. $entry->value;
-            echo '<br />';
 	 		$entryobj->$fieldname	=	html_entity_decode($entry->value, ENT_QUOTES, 'UTF-8');
-            echo 'Decoded data is: '. $entryobj->$fieldname;
 	 	}
 	 }
 	 
 	  /**
-	  * places entry data formated for viewing for the report field given  into the  
+	  * places entry data formatted for viewing for the report field given  into the
 	  * entryobj given by the user. By default the entry_data function is called to provide
-	  * the data. Any child class which needs to have its data formated should override this
+	  * the data. Any child class which needs to have its data formatted should override this
 	  * function. 
 	  * 
 	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
-      * @@param bool returnvalue should a label or value be returned
+      * @param bool $returnvalue should a label or value be returned
 	  */
 	  public function view_data($reportfield_id, $entry_id, &$entryobj, $returnvalue = false ){
 		$this->entry_data( $reportfield_id,$entry_id, $entryobj );
@@ -561,8 +558,8 @@ class ilp_element_plugin {
     }
     
 	 /**
-	  * Function that determiones whether the class in question should have its data displayed in any view page
-	  * this should be set to true (so the class willnot have to implement) however if the plugin class
+	  * Function that determines whether the class in question should have its data displayed in any view page
+	  * this should be set to true (so the class will not have to implement) however if the plugin class
 	  * does not process data (e.g free_html class) then the function should be implemented and should return
 	  * false  
 	  */
@@ -602,7 +599,7 @@ class ilp_element_plugin {
 
     /**
      * Function that determines whether the class in question is editable this should be set to true
-     * (so the class willnot have to implement) however if the form element class is not editable (e.g page_break class)
+     * (so the class will not have to implement) however if the form element class is not editable (e.g page_break class)
      * then the function should be implemented and should return false
      */
     public function is_editable()   {
