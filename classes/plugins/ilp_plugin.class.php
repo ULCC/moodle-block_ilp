@@ -54,17 +54,35 @@ class ilp_plugin {
      * @var int
      */
 	var $plugin_id;
-	
-	var	$dbc;
-	
-	var $xmldb_table;
 
+    /**
+     * @var ilp_db|ilp_db_functions
+     */
+    var	$dbc;
+
+    /**
+     * @var string
+     */
+    var $xmldb_table;
+
+    /**
+     * @var string
+     */
     var $xmldb_field;
 
+    /**
+     * @var string
+     */
     var $xmldb_key;
 
+    /**
+     * @var database_manager
+     */
     var $dbman;
 
+    /**
+     * @var
+     */
     var $set_attributes;
 
     /**
@@ -225,6 +243,13 @@ class ilp_plugin {
  	 	$mform->setDefault("s_{$elementname}",$value);
  	 }
 
+    /**
+     * @param $mform
+     * @param $elementname
+     * @param $label
+     * @param $description
+     * @param string $defaultvalue
+     */
     function config_htmleditor_element(&$mform,$elementname,$label,$description,$defaultvalue='') {
 
         //check if the value is already in the config table
@@ -298,13 +323,18 @@ class ilp_plugin {
  	 	$mform->setDefault("s_{$elementname}",$value);
 	 }
 
-
-
-	 function config_form(&$mform)	{
+    /**
+     * @param $mform
+     */
+    function config_form(&$mform)	{
 	 	
 	 }
-	 
-	 function config_save($data)	{
+
+    /**
+     * @param $data
+     * @return bool
+     */
+    function config_save($data)	{
 	 	global $CFG;
 
 	 	foreach ($data as $name => $value)	{
