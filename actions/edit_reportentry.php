@@ -251,7 +251,6 @@ if (!empty($entry_id)) {
 			//call the plugin class entry data method
 			$pluginclass->entry_data($field->id,$entry_id,$entry_data);
 
-            echo print_r($entry_data);
 		}
 
 		//loop through the plugins and get the data for each one
@@ -278,7 +277,7 @@ if ($user_id != $USER->id) {
 	$PAGE->navbar->add(get_string('myilp', 'block_ilp'),$dashboardurl,'title');
 }
 
-//user intials
+//user initials
 $PAGE->navbar->add(fullname($plpuser),$userprofileurl,'title');
 
 //section name
@@ -296,4 +295,4 @@ $PAGE->set_url($CFG->wwwroot."/blocks/ilp/actions/edit_reportentry.php",$PARSER-
 
 //require edit_reportentry html
 require_once($CFG->dirroot.'/blocks/ilp/views/edit_reportentry.html');
-?>
+
