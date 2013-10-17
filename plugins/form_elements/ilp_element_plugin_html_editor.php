@@ -207,7 +207,9 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
         $fieldname	=	"{$this->reportfield_id}_field";
 
         if (!empty($this->description)) {
-            $mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
+            $mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description,
+                                                                                                          ENT_QUOTES,
+                                                                                                          'UTF-8'),ILP_STRIP_TAGS_DESCRIPTION));
             $this->label = '';
         }
         //text field for element label
@@ -222,7 +224,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
         if ($my_entry && isset($_GET['entry_id'])){
             $my_entry_data = $DB->get_record('block_ilp_plu_hte_ent', array('parent_id'=>$my_entry->id, 'entry_id'=>$_GET['entry_id']));
             if($my_entry_data){
-                $mform->setDefault($fieldname, array('text'=>html_entity_decode($my_entry_data->value, ENT_COMPAT, 'UTF-8'), 'format'=>FORMAT_HTML));
+                $mform->setDefault($fieldname, array('text'=>html_entity_decode($my_entry_data->value, ENT_QUOTES, 'UTF-8'), 'format'=>FORMAT_HTML));
             }
         }
 

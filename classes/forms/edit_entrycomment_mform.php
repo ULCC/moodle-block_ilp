@@ -91,7 +91,9 @@ class edit_entrycomment_mform extends ilp_moodleform {
             if($this->comment_id){
                 $my_data = $DB->get_record('block_ilp_entry_comment', array('id'=>$this->comment_id));
                 if($my_data){
-                    $mform->setDefault('value', array('text'=>html_entity_decode($my_data->value), 'format'=>FORMAT_HTML));
+                    $mform->setDefault('value', array('text'=>html_entity_decode($my_data->value,
+                                                                                 ENT_QUOTES,
+                                                                                 'UTF-8'), 'format'=>FORMAT_HTML));
                 }
             }
 

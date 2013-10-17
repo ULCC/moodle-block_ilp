@@ -176,7 +176,7 @@ if(!empty($defaultstatusitem)){
                                     <img src=\"$path\" alt=\"$defaultstatusitem->description\"  width='50px'/>
                                     <span " . ((empty($defaultstatusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
-        $this_file .= html_entity_decode($defaultstatusitem->description);
+        $this_file .= html_entity_decode($defaultstatusitem->description, ENT_QUOTES, 'UTF-8');
         $this_file .="</span></tooltip>";
         $status_item = '<div align="center" style="background: '. $defaultstatusitem->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
     }else{
@@ -184,7 +184,7 @@ if(!empty($defaultstatusitem)){
                                     $defaultstatusitem->name
                                     <span " . ((empty($defaultstatusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
-        $this_file .= html_entity_decode($defaultstatusitem->description);
+        $this_file .= html_entity_decode($defaultstatusitem->description, ENT_QUOTES, 'UTF-8');
         $this_file .="</span></tooltip>";
         $status_item = '<div align="center" style="background: '. $defaultstatusitem->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
     }
@@ -249,7 +249,7 @@ if (!empty($studentslist)) {
                                     <img src=\"$path\" alt=\"$student->u_status_description\"  width='50px'/>
                                     <span " . ((empty($student->u_status_description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
-                $this_file .= html_entity_decode($student->u_status_description);
+                $this_file .= html_entity_decode($student->u_status_description, ENT_QUOTES, 'UTF-8');
                 $this_file .="</span></tooltip>";
                 $data['u_status'] = '<div align="center" style="background: '. $student->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
             }else {
@@ -257,7 +257,7 @@ if (!empty($studentslist)) {
                 $this_file .= $student->u_status;
                 $this_file .="<span " . ((empty($student->u_status_description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
-                $this_file .= html_entity_decode($student->u_status_description);
+                $this_file .= html_entity_decode($student->u_status_description, ENT_QUOTES, 'UTF-8');
                 $this_file .="</span></tooltip>";
                 $data['u_status'] = '<div align="center" style="background: '. $student->bg_colour .';" class="ilp_user_status">' . $this_file . '</div>';
             }

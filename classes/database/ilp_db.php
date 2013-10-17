@@ -104,7 +104,7 @@ class ilp_db {
             }
             return $data;
         } else {
-            return html_entity_decode($data, ENT_QUOTES, 'utf-8');
+            return html_entity_decode($data, ENT_QUOTES, 'UTF-8');
         }
     }
 

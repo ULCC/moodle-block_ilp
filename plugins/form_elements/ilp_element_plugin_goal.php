@@ -228,7 +228,9 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 	  $entry_id=optional_param('entry_id',0,PARAM_INT);
 
 	  if (!empty($this->description)) {
-	       $mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
+	       $mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description,
+                                                                                                         ENT_QUOTES,
+                                                                                                         'UTF-8'),ILP_STRIP_TAGS_DESCRIPTION));
 	       $this->label = '';
 	  }
 

@@ -351,7 +351,9 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
         $fieldname	=	"{$this->reportfield_id}_field";
 
         if (!empty($this->description)) {
-            $mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description),ILP_STRIP_TAGS_DESCRIPTION));
+            $mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description,
+                                                                                                          ENT_QUOTES,
+                                                                                                          'UTF-8'),ILP_STRIP_TAGS_DESCRIPTION));
             $this->label = '';
         }
 
@@ -575,7 +577,9 @@ global $CFG;
                     $img	=	 "<img src='{$CFG->wwwroot}/blocks/ilp/pix/icons/overdue.jpg' alt='' width='32px' height='32px' />";
                 }
             }
-            $entryobj->$fieldname	=	userdate(html_entity_decode($entry->value),'%a %d %B %Y')." ".$img;
+            $entryobj->$fieldname	=	userdate(html_entity_decode($entry->value,
+                                                                      ENT_QUOTES,
+                                                                      'UTF-8'),'%a %d %B %Y')." ".$img;
         }
 
     }
