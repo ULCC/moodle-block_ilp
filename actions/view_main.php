@@ -19,8 +19,9 @@ global $USER, $CFG, $SESSION, $PARSER, $PAGE, $DB;
 // Meta includes
 require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
-//get the id of the course that is currently being used
-$user_id = $PARSER->required_param('user_id', PARAM_INT);
+// Get the id of the user that is currently being used or set to logged in USER.
+$user_id = $PARSER->optional_param('user_id', 0, PARAM_INT);
+$user_id = $user_id ? $user_id : $USER->id;
 
 //get the id of the course that is currently being used
 $course_id = $PARSER->optional_param('course_id', NULL, PARAM_INT);
