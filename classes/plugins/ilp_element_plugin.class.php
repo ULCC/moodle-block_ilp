@@ -511,16 +511,16 @@ class ilp_element_plugin {
 	 }
 
 	 /**
-	  * places entry data for the report field given into the entryobj given by the user 
+	  * Places entry data for the report field given into the entryobj given by the user
 	  * 
 	  * @param int $reportfield_id the id of the reportfield that the entry is attached to 
 	  * @param int $entry_id the id of the entry
 	  * @param object $entryobj an object that will add parameters to
 	  */
-	 public function entry_data( $reportfield_id,$entry_id,&$entryobj ){
-	 	//this function will suffice for 90% of plugins who only have one value field (named value) i
-	 	//in the _ent table of the plugin. However if your plugin has more fields you should override
-	 	//the function 
+	 public function entry_data($reportfield_id, $entry_id, &$entryobj) {
+	 	// This function will suffice for 90% of plugins who only have one value field (named value) i
+	 	// in the _ent table of the plugin. However if your plugin has more fields you should override
+	 	// the function
 	 	
 		//default entry_data 	
 	 	$fieldname	=	$reportfield_id."_field";
