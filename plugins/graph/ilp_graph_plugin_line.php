@@ -150,7 +150,7 @@ class ilp_graph_plugin_line extends ilp_graph_plugin {
             if (empty($return)) {
 
                 echo "<div id='graph_container'>";
-                echo html_entity_decode($reportgraph->description);
+                echo html_entity_decode($reportgraph->description, ENT_QUOTES, 'UTF-8');
                 echo "<img src='$CFG->wwwroot/blocks/ilp/plugins/graph/line/ilp_graph_plugin_line_display.php?report_id=$report_id&user_id=$user_id&reportgraph_id=$reportgraph_id' height='$height' width='$width' />";
                 echo "</div>";
 

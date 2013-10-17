@@ -66,13 +66,15 @@ class ilp_dashboard_student_info_plugin extends ilp_dashboard_plugin {
                                     <img src=\"$path\" alt=\"$statusitem->description\" class='icon_file'/>
                                     <span " . ((empty($statusitem->description)) ? "class='hiddenelement'" : "") . ">
                                     <img class='callout' src='$CFG->wwwroot/blocks/ilp/pix/callout.gif'/>";
-                $this_file .= html_entity_decode($statusitem->description);
+                $this_file .= html_entity_decode($statusitem->description, ENT_QUOTES, 'UTF-8');
                 $this_file .="</span></a>";
                 //we found there is a icon, so we need to display it
                 $o .= html_writer::tag('div', $this_file, array('class'=>'dashboard_status_icon ajaxstatuschange',
                     'style'=>'background: '. $statusitem->bg_colour));
             } else {
-                $o .= html_writer::tag('div', html_entity_decode($statusitem->description), array('class'=>'dashboard_status_icon ajaxstatuschange',
+                $o .= html_writer::tag('div', html_entity_decode($statusitem->description,
+                                                                 ENT_QUOTES,
+                                                                 'UTF-8'), array('class'=>'dashboard_status_icon ajaxstatuschange',
                     'style'=>'background: '. $statusitem->bg_colour));
             }
         } else {

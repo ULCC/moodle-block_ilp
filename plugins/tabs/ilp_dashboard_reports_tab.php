@@ -140,7 +140,7 @@ class ilp_dashboard_reports_tab extends ilp_dashboard_tab {
         if ($comments) {
             foreach ($comments as $c) {
                 $comment_creator = $this->dbc->get_user_by_id($c->creator_id);
-                $commentval	= html_entity_decode($c->value);
+                $commentval	= html_entity_decode($c->value, ENT_QUOTES, 'UTF-8');
                 $o .= html_writer::start_tag('div', array('class'=>'comment', 'id'=>'comment-id-' . $c->id));
                 $o .= html_writer::tag('p', $commentval);
                 $o .= html_writer::tag('div','', array('class'=>'editarea editarea-' . $c->id));

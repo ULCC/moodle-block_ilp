@@ -108,8 +108,8 @@ class ilp_ajax_table extends ilp_flexible_table {
             // now let's load the hidden column info from db
 
             $existing_data = $DB->get_record_select('block_ilp_user_choice',
-                                                    "`user_id`=$USER->id and ".$DB->sql_compare_text('element_id').' = :element_id',
-                                                    array('element_id'=>$uniqueid));
+                                                    "user_id = :user_id AND ".$DB->sql_compare_text('element_id').' = :element_id',
+                                                    array('user_id' => $USER->id, 'element_id' => $uniqueid));
             if($existing_data){
                 //load them
                 $user_choice = explode(',',$existing_data->choice);
@@ -268,8 +268,8 @@ class ilp_ajax_table extends ilp_flexible_table {
         }
 
         $existing_data = $DB->get_record_select('block_ilp_user_choice',
-                                                "`user_id`=$USER->id and ".$DB->sql_compare_text('element_id').' = :element_id',
-                                                array('element_id'=>$data->element_id));
+                                                "user_id = :user_id and ".$DB->sql_compare_text('element_id').' = :element_id',
+                                                array('user_id' => $USER->id, 'element_id' => $data->element_id));
 
         if($existing_data){
             $data->id = $existing_data->id;

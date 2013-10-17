@@ -1,22 +1,48 @@
 <?php
 
+global $CFG;
+
 //require the ilp_plugin.php class 
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_dashboard_tab.class.php');
 
+/**
+ * Class ilp_dashboard_archive_tab
+ */
 class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
-	
-	public		$student_id;
-	public 		$filepath;	
-	public		$linkurl;
-	public 		$selectedtab;
-	public		$role_ids;
-	public 		$capability;
-	
-	
-	function __construct($student_id=null,$course_id=null)	{
-		global 	$CFG,$USER,$PAGE;
+
+    /**
+     * @var null
+     */
+    public		$student_id;
+    /**
+     * @var
+     */
+    public 		$filepath;
+    /**
+     * @var string
+     */
+    public		$linkurl;
+    /**
+     * @var bool
+     */
+    public 		$selectedtab;
+    /**
+     * @var
+     */
+    public		$role_ids;
+    /**
+     * @var
+     */
+    public 		$capability;
+
+    /**
+     * @param null $student_id
+     * @param null $course_id
+     */
+    function __construct($student_id=null,$course_id=null)	{
+		global 	$CFG;
 		
-		$this->linkurl					=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id=".$student_id."&course_id={$course_id}";
+		$this->linkurl	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id=".$student_id."&course_id={$course_id}";
 		
 		$this->student_id	=	$student_id;
 		
@@ -44,8 +70,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
      * Override this to define the second tab row should be defined in this function  
      */
     function define_second_row()	{
-    	global 	$CFG,$USER,$PAGE,$OUTPUT,$PARSER;
-    	
+
     	$reportone		=	get_config('block_ilp','mis_archive_tab_reportone');
     	$reporttwo		=	get_config('block_ilp','mis_archive_tab_reporttwo');
     	$reportthree	=	get_config('block_ilp','mis_archive_tab_reportthree');
@@ -94,10 +119,10 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 	 * @param	string $selectedtab the tab that has been selected this variable
 	 * this variable should be used to determined what to display
 	 * 
-	 * @return none
+	 * @return string
 	  */
 	function display($selectedtab=null)	{
-		global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+		global 	$CFG, $PAGE, $PARSER;
 		
 		//get the selecttab param if has been set
 		$this->selectedtab = $PARSER->optional_param('selectedtab', NULL, PARAM_INT);
@@ -195,8 +220,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 	  * @param int $student_id
 	  */ 	 
     function ilp_display_student_info($student_id)	{
- 	 		global	$CFG;
- 	 	
+
  	 		$infotexts			=	array();
  	 		
  	 		$studentinfo		=	$this->dbc->get_per_student_info($student_id);
@@ -228,10 +252,12 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 	 	 		$this->get_archive_student_info($infotexts);
  	 		}
  	 }
- 	 
- 	 function ilp_display_tutor_info($student_id)	{
- 	 		global	$CFG;
- 	 	
+
+    /**
+     * @param $student_id
+     */
+    function ilp_display_tutor_info($student_id)	{
+
  	 		$tutorinfo		=	$this->dbc->get_per_tutor_info($student_id);
  	 		
  	 		$infotexts			=	array();
@@ -284,9 +310,12 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
  	 			}
  	 		}
  	 }
- 	 
- 	 function get_archive_student_info($studentinforeport)	{
- 	 		global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+
+    /**
+     * @param $studentinforeport
+     */
+    function get_archive_student_info($studentinforeport)	{
+ 	 		global 	$CFG;
  	 		
 	 	 	foreach ($studentinforeport as $sir) {
 		 				 	 			
@@ -296,8 +325,6 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 		 		$sir->coursename	= 	(!empty($course)) ? $course->fullname : false; 
 		 		$sir->creationtime	=	userdate($sir->lastchanged_datetime, get_string('strftimedate'));
 		 			
-		 		$comments			=	false;
-				
 		 		$post					=	$sir;
 		 		$post->displayfields	=	array();
 		 		$post->displayfields[]	=	array('label'=>get_string('ilp_dashboard_archive_tab_studentinfo_'.$sir->type, 'block_ilp'),'content'=>$post->text);
@@ -313,8 +340,7 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
  	  * 
  	  */
  	 function ilp_display_targets($student_id)	{
- 	 		global	$CFG;
- 	 	
+
  	 		$archivetargetposts		=	$this->dbc->get_student_target_posts($student_id);	
  	 		
  	 		if (!empty($archivetargetposts)) {
@@ -325,10 +351,12 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
  	 	
  	 	
  	 }
- 	 
- 	 
- 	 function get_archive_student_ilptargets_lists($archivetargetposts)	{
- 	 	global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+
+    /**
+     * @param $archivetargetposts
+     */
+    function get_archive_student_ilptargets_lists($archivetargetposts)	{
+ 	 	global 	$CFG;
  	 	
  	 	foreach ($archivetargetposts as $atp) {
 	 		$category			=	$this->dbc->get_archive_category($atp->category);
@@ -357,8 +385,12 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 	 		include($CFG->dirroot.'/blocks/ilp/plugins/tabs/ilp_dashboard_archive_tab.html');
 	 	}
 	 }
-	 
-	 function ilp_display_concerns($student_id,$reporttype_id=false)	{
+
+    /**
+     * @param $student_id
+     * @param bool $reporttype_id
+     */
+    function ilp_display_concerns($student_id,$reporttype_id=false)	{
 	 	global	$CFG;
 	 	
 	 	$archiveconcerns	=	$this->dbc->get_student_concern_posts($student_id,$reporttype_id);
@@ -367,10 +399,12 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 	 		$this->get_archive_student_concern_lists($archiveconcerns);
 	 	}
 	 }
-	 
-	 
-	 function get_archive_student_concern_lists($archiveconcerns)	{
-	 	global 	$CFG, $PAGE, $USER, $OUTPUT, $PARSER;
+
+    /**
+     * @param $archiveconcerns
+     */
+    function get_archive_student_concern_lists($archiveconcerns)	{
+	 	global 	$CFG;
  	 	
  	 	foreach ($archiveconcerns as $ac) {
 	 		$setby				=	$this->dbc->get_user_by_id($ac->setbyuserid);
@@ -442,12 +476,15 @@ class ilp_dashboard_archive_tab extends ilp_dashboard_tab {
 	
 }
 
-
-
-
+/**
+ * Class ilp_archive_db
+ */
 class ilp_archive_db extends ilp_db	{
-	
-	function __construct() {
+
+    /**
+     *
+     */
+    function __construct() {
         global $CFG;
 
         // include the static constants
@@ -463,15 +500,25 @@ class ilp_archive_db extends ilp_db	{
 	
 }
 
-
+/**
+ * Class ilp_archive_db_functions
+ */
 class ilp_archive_db_functions extends ilp_db_functions	{
-	
-	function __construct() {
+
+    /**
+     *
+     */
+    function __construct() {
 		parent::__construct();
 	}
-	
-	
-	function get_student_target_posts($student_id,$status=-1,$sortorder='DESC')	{
+
+    /**
+     * @param $student_id
+     * @param $status
+     * @param string $sortorder
+     * @return array
+     */
+    function get_student_target_posts($student_id,$status=-1,$sortorder='DESC')	{
 		global $CFG;
 		
 		$sql	=	"SELECT 	{$CFG->prefix}ilptarget_posts.*, up.username
@@ -481,8 +528,14 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 		
 		return 	$this->dbc->get_records_sql($sql);
 	}
-	
-	function get_student_concern_posts($student_id,$reporttype_id=false,$sortorder='DESC')	{
+
+    /**
+     * @param $student_id
+     * @param bool $reporttype_id
+     * @param string $sortorder
+     * @return array
+     */
+    function get_student_concern_posts($student_id,$reporttype_id=false,$sortorder='DESC')	{
 		global 	$CFG;
 
         $statussql  =  ($reporttype_id !== false) ? "AND status = {$reporttype_id}"	: "";
@@ -497,35 +550,60 @@ class ilp_archive_db_functions extends ilp_db_functions	{
 		return $this->dbc->get_records_sql($sql);
 		
 	}
-	
-	function get_archive_category($category_id)	{
+
+    /**
+     * @param $category_id
+     * @return bool|mixed
+     */
+    function get_archive_category($category_id)	{
 		return (!empty($category_id)) ? $this->dbc->get_record('ilp_post_category',array('id'=>$category_id)) : false;
 	}
-	
-	function get_target_comments($target_id)	{
+
+    /**
+     * @param $target_id
+     * @return array
+     */
+    function get_target_comments($target_id)	{
 		return $this->dbc->get_records('ilptarget_comments',array('targetpost'=>$target_id));
 	}
-	
-	function get_concern_comments($concern_id)	{
+
+    /**
+     * @param $concern_id
+     * @return array
+     */
+    function get_concern_comments($concern_id)	{
 		return $this->dbc->get_records('ilpconcern_comments',array('concernspost'=>$concern_id));
 	}
-	
-	
-	function get_per_student_info($student_id)	{
+
+    /**
+     * @param $student_id
+     * @return mixed
+     */
+    function get_per_student_info($student_id)	{
 		return $this->dbc->get_record('ilp_student_info_per_student',array('student_userid'=>$student_id));
 	}
-	
-	function get_per_teacher_info($student_id)	{
+
+    /**
+     * @param $student_id
+     * @return array
+     */
+    function get_per_teacher_info($student_id)	{
 		return $this->dbc->get_records('ilp_student_info_per_teacher',array('student_userid'=>$student_id));
 	}
-	
-	function get_per_tutor_info($student_id)	{
+
+    /**
+     * @param $student_id
+     * @return array
+     */
+    function get_per_tutor_info($student_id)	{
 		return $this->dbc->get_records('ilp_student_info_per_tutor',array('student_userid'=>$student_id));
 	}
-	
-	
-	
-	function get_info_text($text_id)	{
+
+    /**
+     * @param $text_id
+     * @return mixed
+     */
+    function get_info_text($text_id)	{
 	   	return  $this->dbc->get_record('ilp_student_info_text',array('id'=>$text_id)) ;
 	}
 	
