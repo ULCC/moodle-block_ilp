@@ -1,15 +1,32 @@
 <?php
 
+global $CFG;
+
 require_once($CFG->dirroot.'/blocks/ilp/classes/plugins/ilp_element_plugin.class.php');
 
+/**
+ * Class ilp_element_plugin_html_editor
+ */
 class ilp_element_plugin_html_editor extends ilp_element_plugin {
 
+    /**
+     * @var string
+     */
     public $tablename;
+    /**
+     * @var string
+     */
     public $data_entry_tablename;
+    /**
+     * @var
+     */
     public $minimumlength;		//defined by the form creator to validate user input
+    /**
+     * @var
+     */
     public $maximumlength;		//defined by the form creator to validate user input
 
-        /**
+    /**
      * Constructor
      */
     function __construct() {
@@ -18,7 +35,6 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
 
         parent::__construct();
     }
-
 
     /**
      * TODO comment this
@@ -139,7 +155,6 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
             $this->dbman->create_table($table);
         }
 
-
     }
 
     /**
@@ -153,7 +168,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
         drop_table($table);
     }
 
-     /**
+    /**
      *
      */
     public function audit_type() {
@@ -161,8 +176,8 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
     }
 
     /**
-    * function used to return the language strings for the plugin
-    */
+     * function used to return the language strings for the plugin
+     */
     static function language_strings(&$string) {
         $string['ilp_element_plugin_html_editor'] 		= 'Htmleditor';
         $string['ilp_element_plugin_html_editor_type'] = 'HTML editor';
@@ -186,7 +201,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
      * this function returns the mform elements that will be added to a report form
      *
      */
-    public	function entry_form( &$mform ) {
+    public	function entry_form(MoodleQuickForm &$mform ) {
         global $DB;
         //create the fieldname
         $fieldname	=	"{$this->reportfield_id}_field";
@@ -207,7 +222,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
         if ($my_entry && isset($_GET['entry_id'])){
             $my_entry_data = $DB->get_record('block_ilp_plu_hte_ent', array('parent_id'=>$my_entry->id, 'entry_id'=>$_GET['entry_id']));
             if($my_entry_data){
-                $mform->setDefault($fieldname, array('text'=>html_entity_decode($my_entry_data->value), 'format'=>FORMAT_HTML));
+                $mform->setDefault($fieldname, array('text'=>html_entity_decode($my_entry_data->value, ENT_COMPAT, 'UTF-8'), 'format'=>FORMAT_HTML));
             }
         }
 
@@ -237,7 +252,7 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
      * the function expects the data object to contain the id of the entry (it should have been
      * created before this function is called) in a param called id.
      */
-    public	function entry_process_data($reportfield_id,$entry_id,$data) {
+    public function entry_process_data($reportfield_id,$entry_id,$data) {
 
         //check to see if a entry record already exists for the reportfield in this plugin
 
