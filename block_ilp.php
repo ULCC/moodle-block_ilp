@@ -98,7 +98,6 @@ class block_ilp extends block_list {
       }
 
       $usertutees=$dbc->get_user_tutees($USER->id);
-
       $this->content = new stdClass;
       $this->content->footer = '';
 
@@ -121,7 +120,7 @@ class block_ilp extends block_list {
             $tutor = 1;
          }
 
-         $course_id = (!empty($COURSE->id)) ? $COURSE->id : $initial_course_id;
+         $course_id=$initial_course_id;
          $printlink = '<a href="' . $CFG->wwwroot . '/blocks/ilp/actions/define_batch_print.php?course_id=' . $course_id . '&tutor=' . $tutor . '">';
          $printicon = get_string("print","block_ilp") . '</a>';
          $allow_batch_print = get_config('block_ilp', 'allow_batch_print');
