@@ -53,15 +53,30 @@ class batch_print_setup_mform extends ilp_moodleform
 
          if($dbc->ilp_admin())
          {
+            $adminflag=true;
             $rawcourses=$DB->get_recordset('course');
          }
          else
          {
+            $adminflag=false;
             $rawcourses=$dbc->get_user_courses($USER->id);
          }
 
+         $adminflag=($adminflag or
+                     has_capability('block/ilp:ilpviewall',context_system::instance(),$USER->id,false) or
+                     ilp_is_siteadmin($USER));
+
          foreach($rawcourses as $id=>$c)
          {
+            if(!$adminflag) //Need to check each course for permission
+            {
+               if(!has_capability('block/ilp:viewotherilp', context::instance_by_id($c->ctxid),$USER->id,false))
+               {
+                  unset($rawcourses[$id]);
+                  continue;
+               }
+            }
+
             $courseoptions[$id]=$c->shortname;
 
             foreach(groups_get_all_groups($id) as $g)
@@ -73,11 +88,14 @@ class batch_print_setup_mform extends ilp_moodleform
             }
          }
 
+         if(!$rawcourses)
+         {
+            print_error(get_string('nocoursesbatch','block_ilp'));
+         }
 //Sort courses by name and create drop down.
          natcasesort($courseoptions);
          $mform->addElement('select','course_id',get_string('course'),$courseoptions);
          $mform->setDefault('course_id',$imports['course_id']);
-
 
 //Put the groups in to name order and create drop down
          natcasesort($groupoptions);

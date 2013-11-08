@@ -256,6 +256,7 @@ $string['gotoprintpreview']='Generate';
 	$string['notapplicable']		=	'N/A';
 
 $string['noreports']='No reports available';
+$string['nocoursesbatch']='You have no courses to print';
     $string['nothingtodisplay']		=	'Nothing to display';
     $string['onemonthdata']		    =	'past 1 months data';
 
