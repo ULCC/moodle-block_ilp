@@ -479,4 +479,130 @@ class ilp_report
        return $text;
     }
 
+//Is it possible to do anything (other than delete) with this report
+//in respect of this user.
+//Needs refactored; the student is only involved in one test,
+//Should be split into report_locked and report_available or
+//something like that.
+    function report_availabilty($student_id)
+    {
+       //if a maximum number of entries has been set lets see if the student has reached this number
+       if (!empty($this->reportmaxentries))  {
+          $studententries   =   $this->dbc->count_report_entries($this->report_id,$student_id);
+
+          if ($studententries >= $this->reportmaxentries) {
+             $extension  =   $this->extension_check('reportmaxentries');
+
+             if (empty($extension) || $studententries >= $extension->value) {
+                $temp             =   new stdClass();
+                $temp->entries    =   $studententries;
+                $temp->maxentries    =  (!empty($extension))? $extension->value : $this->reportmaxentries;
+                return false;
+             }
+          }
+       }
+
+       //if this report has a lock date check if the date has passed
+       if ($this->reporttype ==  ILP_RT_RECURRING_FINALDATE  || $this->reporttype == ILP_RT_FINALDATE)   {
+
+          if ( $this->reportlockdate < time() )   {
+             //find out if this student has been given a report extension
+             $extension  =   $this->extension_check('reportlockdate');
+             if (empty($extension) || $extension->value < time()) {
+                $temp               =   new stdClass();
+                $temp->expiredate   =  (!empty($extension))? date('d-m-Y',$extension->value) : date('d-m-Y',$this->reportlockdate);
+                return false;
+             }
+          }
+       }
+
+       //if the report is a recurring report
+       if ($this->reporttype ==  ILP_RT_RECURRING || $this->reporttype ==  ILP_RT_RECURRING_FINALDATE)   {
+          $recurringstart  =   0;
+
+          if ($this->recurstart == ILP_RECURRING_REPORTCREATION)   {
+             //rules started at report creation
+             $recurringstart  =   $this->timecreated;
+          }   else if ($this->recurstart == ILP_RECURRING_SPECIFICDATE) {
+             //rules started at specific date
+             $recurringstart  =   $this->recurdate;
+          }  else {
+             //rules started at first entry
+             $studententries =   $this->dbc->get_user_report_entries($this->id,$student_id);
+
+             if (!empty($studententries))    {
+                //get the creation time of the first user entry
+                $recurringstart  = reset($studententries);
+                $recurringstart = $recurringstart->timecreated;
+             }
+          }
+
+          if (!empty($recurringstart)) {
+             $recurringperiod    =   $this->recurring_period($recurringstart,$this->recurfrequency);
+
+             $entriescount       =   $this->dbc->count_report_entries($this->id,$student_id,$recurringperiod['start'],$recurringperiod['end']);
+
+             if (!empty($entriescount) && $entriescount >= $this->recurmax) {
+                $extension  =   $this->extension_check('recurmax');
+                if (empty($extension) || $extension->value <= $entriescount) {
+                   $temp             =   new stdClass();
+                   $temp->entries    =   $entriescount;
+                   $temp->maxentries   =  (!empty($extension))? $extension->value : $this->recurmax;
+                   return false;
+                }
+             }
+          }
+       }
+       return true;
+    }
+
+    function extension_check($param,$action="report_extension")
+    {
+       $preferencerecords =   $this->dbc->get_preferences($this->report_id,null,$action,$this->student_id);
+       $preference =   false;
+
+       foreach($preferencerecords as $p)
+       {
+          if ($p->param == $param)
+          {
+             $preference =   $p;
+             break;
+          }
+       }
+       return $preference;
+    }
+
+    /**
+     * returns the start and end dates for the recurring period that the user is currently in
+     *
+     * @param $recurringstart        timestamp of the date when the recurring period started
+     * @param $frequency    the frequency of the recurring period
+     *
+     */
+    function recurring_period($recurringstart,$frequency)
+    {
+       if ($frequency  ==  ILP_RECURRING_DAY){
+          //$start
+          $strstart   =   date("d-m-Y",$recurringstart);
+          $recurringend   =   strtotime("{$strstart} + 1 day");
+          if ( time() > $recurringstart && time() < $recurringend )   {
+             return array('start'=>$recurringstart,'end'=>$recurringend);
+          } else  {
+             return $this->recurring_period($recurringend,$frequency);
+          }
+       } else {
+          $strstart   =   date("d-m-Y",$recurringstart);
+          $recurringend   =   strtotime("{$strstart} + $frequency weeks");
+          if ( time() > $recurringstart && time() < $recurringend )   {
+             return array('start'=>$recurringstart,'end'=>$recurringend);
+          } else  {
+             return $this->recurring_period($recurringend,$frequency);
+          }
+       }
+    }
+
+    function can_add_extensions()
+    {
+       return !($this->frequency ==1 && $this->reporttype==1 && $this->reportmaxentries==null);
+    }
 }
