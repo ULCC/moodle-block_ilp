@@ -20,6 +20,7 @@ class report_entry_mform extends ilp_moodleform {
 		public 		$user_id;
 		public		$dbc;
         public      $formdata;
+        public   $dontfreeze;
 
 		/**
      	 * TODO comment this
@@ -33,6 +34,7 @@ class report_entry_mform extends ilp_moodleform {
 			$this->user_id		=	$user_id;
 			$this->entry_id		=	$entry_id;
             $this->currentpage  =   $currentpage;
+            $this->canfreeze   =   array();
 
 			$this->dbc			=	new ilp_db();
 
@@ -99,7 +101,6 @@ class report_entry_mform extends ilp_moodleform {
             $mform->addElement('hidden', 'page_data',1);
             $mform->setType('page_data', PARAM_INT);
 
-
             if ($count  =   $this->dbc->element_type_exists($this->report_id,'block_ilp_plu_pb')) {
                 $pagebreakcount =   $count;
             }
@@ -118,7 +119,6 @@ class report_entry_mform extends ilp_moodleform {
 
                     //take the name field from the plugin as it will be used to call the instantiate the plugin class
                     $classname = $pluginrecord->name;
-
 
                     if ($pluginrecord->tablename == 'block_ilp_plu_pb') {
                         if ($breakcounter) {
@@ -148,9 +148,13 @@ class report_entry_mform extends ilp_moodleform {
                     //call the plugins entry_form function which will add an instance of the plugin
                     //to the form
                     $pluginclass->entry_form($mform);
-
                     if (count($reportfields) == $fieldcounter && $breakcounter) {
                         $mform->addElement('html', '</div>');
+                    }
+
+                    if($classname!='ilp_element_plugin_state')
+                    {
+                       $this->canfreeze[]=$pluginclass->reportfield_id.'_field';
                     }
                 }
 
@@ -158,8 +162,6 @@ class report_entry_mform extends ilp_moodleform {
 
 //	        $buttonarray[] = &$mform->createElement('submit', 'submitbutton', get_string('submit'));
 //	        $buttonarray[] = &$mform->createElement('cancel');
-
-
 
             $prev_attrs = array('class'=>'hiddenelement');
             //only show previous if this is not the first page
@@ -174,6 +176,17 @@ class report_entry_mform extends ilp_moodleform {
             //close the fieldset
 	        $mform->addElement('html', '</div></fieldset>');
 		}
+
+//The form represents a report which has passed its editing deadline.
+//Freeze all the visible forms except "state" drop downs.
+        function expired()
+        {
+           $mform =& $this->_form;
+           foreach($this->canfreeze as $f)
+           {
+              $mform->freeze($f);
+           }
+        }
 
 
 		/**
