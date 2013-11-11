@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Creates an entry for an report 
+ * Creates an entry for an report
  *
  * @copyright &copy; 2011 University of London Computer Centre
  * @author http://www.ulcc.ac.uk, http://moodle.ulcc.ac.uk
@@ -20,7 +20,7 @@ global $USER, $CFG, $SESSION, $PARSER, $PAGE;
 require_once($CFG->dirroot.'/blocks/ilp/actions_includes.php');
 
 //if set get the id of the report
-$report_id	= $PARSER->required_param('report_id',PARAM_INT);	
+$report_id	= $PARSER->required_param('report_id',PARAM_INT);
 
 
 //get the id of the course that is currently being used
@@ -62,7 +62,7 @@ $tabitem    =   optional_param('tabitem',null,PARAM_INT);
 // instantiate the db
 $dbc = new ilp_db();
 
-//get the report 
+//get the report
 $report		=	$dbc->get_report_by_id($report_id);
 
 $access_report_createreports = $report->has_cap($USER->id,$PAGE->context,'block/ilp:addreport');
@@ -75,13 +75,13 @@ if (empty($report) || empty($report->status) || !empty($report->deleted)) {
 }
 
 
-//check if the any of the users roles in the 
+//check if the any of the users roles in the
 //current context has the create report capability for this report
 
 if (empty($access_report_createreports))	{
 	//the user doesnt have the capability to create this type of report entry
 
-	print_error('userdoesnothavecreatecapability','block_ilp');	
+	print_error('userdoesnothavecreatecapability','block_ilp');
 }
 
 
@@ -89,19 +89,19 @@ if (!empty($entry_id))	{
 	if (empty($access_report_editreports))	{
 		//the user doesnt have the capability to edit this type of report entry
 
-		print_error('userdoesnothavedeletecapability','block_ilp');	
-	}	
-} 
+		print_error('userdoesnothavedeletecapability','block_ilp');
+	}
+}
 
 $reportfields		=	$dbc->get_report_fields_by_position($report_id);
 
-//we will only attempt to display a report if there are elements in the 
-//form. if not we will send the user back to the dashboard 
+//we will only attempt to display a report if there are elements in the
+//form. if not we will send the user back to the dashboard
 if (empty($reportfields)) {
 	//send the user back to the dashboard page telling them that the report is not ready for display
 	$return_url = $CFG->wwwroot.'/blocks/ilp/actions/view_main.php?user_id='.$user_id.'&course_id='.$course_id;
     redirect($return_url, get_string("reportnotready", 'block_ilp'), ILP_REDIRECT_DELAY);
-} 
+}
 
 //require the reportentry_mform so we can display the report
 require_once($CFG->dirroot.'/blocks/ilp/classes/forms/reportentry_mform.php');
@@ -207,57 +207,47 @@ if($mform->is_submitted()) {
 if (!empty($entry_id)) {
 	//create a entry_data object this will hold the data that will be passed to the form
 	$entry_data		=	new stdClass();
-	
+
 	//get the main entry record
 	$entry	=	$dbc->get_entry_by_id($entry_id);
 
 	if (!empty($entry)) 	{
-		//check if the maximum edit field has been set for this report
-		if (!empty($report->maxedit)) 	{
-			//calculate the age of the report entry
-			$entryage	=	time() 	-	$entry->timecreated;
-		}
-		
-		
 		//get all of the fields in the current report, they will be returned in order as
 		//no position has been specified
 		$reportfields		=	$dbc->get_report_fields_by_position($report_id);
-				
+
 		foreach ($reportfields as $field) {
-			
-			//get the plugin record that for the plugin 
+			//get the plugin record that for the plugin
 			$pluginrecord	=	$dbc->get_plugin_by_id($field->plugin_id);
-			
+
 			//take the name field from the plugin as it will be used to call the instantiate the plugin class
 			$classname = $pluginrecord->name;
-			
+
 			// include the class for the plugin
 			include_once("{$CFG->dirroot}/blocks/ilp/plugins/form_elements/{$classname}.php");
-			
+
 			if(!class_exists($classname)) {
 			 	print_error('noclassforplugin', 'block_ilp', '', $pluginrecord->name);
 			}
-			
+
 			//instantiate the plugin class
 			$pluginclass	=	new $classname();
-			
-			$pluginclass->load($field->id);
-	
-			//create the fieldname
-			$fieldname	=	$field->id."_field";		
 
 			$pluginclass->load($field->id);
-			
+
+			//create the fieldname
+			$fieldname	=	$field->id."_field";
+
+			$pluginclass->load($field->id);
+
 			//call the plugin class entry data method
 			$pluginclass->entry_data($field->id,$entry_id,$entry_data);
 		}
 
 		//loop through the plugins and get the data for each one
 		$mform->set_data($entry_data);
-	}	
-} 
-
-
+	}
+}
 
 $plpuser	=	$dbc->get_user_by_id($user_id);
 
@@ -269,7 +259,7 @@ if ($user_id != $USER->id) {
 	} else {
 		$listurl	=	"{$CFG->wwwroot}/blocks/ilp/actions/view_studentlist.php?tutor=1&course_id=0";
 	}
-	
+
 	$PAGE->navbar->add(get_string('ilps', 'block_ilp'),$listurl,'title');
 	$PAGE->navbar->add(get_string('ilpname', 'block_ilp'),$dashboardurl,'title');
 } else {
@@ -289,7 +279,13 @@ $ilp_dashboard_reports_tab_instance = new ilp_dashboard_reports_tab($user_id, $r
 
 ob_start();
 
+if(!$report->report_availabilty($user_id))
+{
+   $mform->expired();
+}
+
 $mform->display();
+
 echo $ilp_dashboard_reports_tab_instance->get_loader_icon('ajaxloadicon-addingnewentrywrapper', 'span');
 
 $formhtml = ob_get_clean();
