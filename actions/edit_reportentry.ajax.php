@@ -204,6 +204,7 @@ if($mform->is_submitted()) {
 
 }
 
+$expired=false;
 if (!empty($entry_id)) {
 	//create a entry_data object this will hold the data that will be passed to the form
 	$entry_data		=	new stdClass();
@@ -212,6 +213,14 @@ if (!empty($entry_id)) {
 	$entry	=	$dbc->get_entry_by_id($entry_id);
 
 	if (!empty($entry)) 	{
+       //check if the maximum edit field has been set for this report
+       if (!empty($report->maxedit))
+       {
+          file_put_contents('ajax.log',print_r($report,true));
+          //calculate the age of the report entry
+          $expired=((time()-$entry->timecreated)>$CFG->maxeditingtime);
+       }
+
 		//get all of the fields in the current report, they will be returned in order as
 		//no position has been specified
 		$reportfields		=	$dbc->get_report_fields_by_position($report_id);
@@ -279,7 +288,7 @@ $ilp_dashboard_reports_tab_instance = new ilp_dashboard_reports_tab($user_id, $r
 
 ob_start();
 
-if(!$report->report_availabilty($user_id))
+if($expired or !$report->report_availabilty($user_id))
 {
    $mform->expired();
 }

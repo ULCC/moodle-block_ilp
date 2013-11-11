@@ -483,9 +483,13 @@ class ilp_report
 //in respect of this user.
 //Needs refactored; the student is only involved in one test,
 //Should be split into report_locked and report_available or
-//something like that.
+//something like that?
     function report_availabilty($student_id)
     {
+       global $CFG;
+
+       $now=time();
+
        //if a maximum number of entries has been set lets see if the student has reached this number
        if (!empty($this->reportmaxentries))  {
           $studententries   =   $this->dbc->count_report_entries($this->report_id,$student_id);
@@ -505,10 +509,10 @@ class ilp_report
        //if this report has a lock date check if the date has passed
        if ($this->reporttype ==  ILP_RT_RECURRING_FINALDATE  || $this->reporttype == ILP_RT_FINALDATE)   {
 
-          if ( $this->reportlockdate < time() )   {
+          if ( $this->reportlockdate < $now )   {
              //find out if this student has been given a report extension
              $extension  =   $this->extension_check('reportlockdate');
-             if (empty($extension) || $extension->value < time()) {
+             if (empty($extension) || $extension->value < $now) {
                 $temp               =   new stdClass();
                 $temp->expiredate   =  (!empty($extension))? date('d-m-Y',$extension->value) : date('d-m-Y',$this->reportlockdate);
                 return false;
