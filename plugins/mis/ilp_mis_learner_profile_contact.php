@@ -291,8 +291,10 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
         $string['ilp_mis_learner_profile_contact_disp_studentid']				= 'Student ID';
         $string['ilp_mis_learner_profile_contact_disp_enrolmentdate']			= 'Enrolment Date';
         $string['ilp_mis_learner_profile_contact_disp_dob']						= 'Date of birth';
+        $string['ilp_mis_learner_profile_contact_disp_email']					= 'Email';
         $string['ilp_mis_learner_profile_contact_disp_phone']					= 'Phone';
         $string['ilp_mis_learner_profile_contact_disp_mobile']					= 'Mobile';
+        $string['ilp_mis_learner_profile_contact_disp_postcode']				= 'Postcode';
         $string['ilp_mis_learner_profile_contact_disp_emercontact']				= 'Emergency Contact';
         $string['ilp_mis_learner_profile_contact_disp_emernumber']				= 'Emergency Number';
 

@@ -2,26 +2,26 @@
 
     <div class="contactboxes">
         <h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_personal','block_ilp') ?></h3>
-        <?php if (isset($this->fields['EmergConName']) && !empty($this->data[$this->fields['EmergConName']])) {?>
         <label><B><?php  echo get_string('ilp_mis_learner_emergency_contact_emergConName','block_ilp') ?></B></label>
+        <?php if (isset($this->fields['EmergConName']) && !empty($this->data[$this->fields['EmergConName']])) {?>
         <?php echo $this->data[$this->fields['EmergConName']]; ?><br/>
-        <?php } ?>
-        <?php if (isset($this->fields['EmergConRel']) && !empty($this->data[$this->fields['EmergConRel']])) {?>
+        <?php } else { ?> <br/> <?php } ?>
         <label><B><?php echo get_string('ilp_mis_learner_emergency_contact_emergConRel','block_ilp') ?></B></label>
+        <?php if (isset($this->fields['EmergConRel']) && !empty($this->data[$this->fields['EmergConRel']])) {?>
         <?php echo $this->data[$this->fields['EmergConRel']]; ?><br/>
-        <?php } ?>
+        <?php } else { ?> <br/> <?php } ?>
     </div>
 
     <div class="contactboxes">
         <h3><?php echo get_string('ilp_mis_learner_profile_contact_disp_contact','block_ilp') ?></h3>
-        <?php if (isset($this->fields['EmergConDayTel']) && !empty($this->data[$this->fields['EmergConDayTel']])) {?>
         <label><B><?php echo get_string('ilp_mis_learner_emergency_contact_emergConDayTel','block_ilp') ?></B></label>
+        <?php if (isset($this->fields['EmergConDayTel']) && !empty($this->data[$this->fields['EmergConDayTel']])) {?>
         <?php   echo $this->data[$this->fields['EmergConDayTel']]; ?><br/>
-        <?php } ?>
-        <?php if (isset($this->fields['EmergConEveTel']) && !empty($this->data[$this->fields['EmergConEveTel']])) {?>
+        <?php } else { ?> <br/> <?php } ?>
         <label><B><?php echo get_string('ilp_mis_learner_emergency_contact_emergConEveTel','block_ilp') ?></B></label>
+        <?php if (isset($this->fields['EmergConEveTel']) && !empty($this->data[$this->fields['EmergConEveTel']])) {?>
         <?php echo $this->data[$this->fields['EmergConEveTel']]; ?><br/>
-        <?php } ?>
+        <?php } else { ?> <br/> <?php } ?>
     </div>
 
 
