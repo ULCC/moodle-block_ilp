@@ -227,7 +227,9 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
 	 static function language_strings(&$string) {
 
         $string['ilp_mis_learner_contact_pluginname']						= 'Contact Details';
-        
+
+        $string['ilp_mis_learner_contact_prelimcalls']						= 'Preliminary db calls';
+
         $string['ilp_mis_learner_contact_pluginnamesettings']				= 'Contact Details Configuration';
         
         $string['ilp_mis_learner_contact_table']							= 'MIS table';
@@ -307,7 +309,7 @@ class ilp_mis_learner_profile_contact extends ilp_mis_plugin	{
     }
 
     
-    static function plugin_type()	{
+    function plugin_type()	{
     	return 'learnerprofile';
     }
  	
