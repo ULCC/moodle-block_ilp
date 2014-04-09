@@ -231,7 +231,7 @@ class ilp_mis_learner_profile_care_support extends ilp_mis_plugin
         return $string;
     }
 
-    function plugin_type()
+    public static function plugin_type()
     {
         return 'learnerprofile';
     }

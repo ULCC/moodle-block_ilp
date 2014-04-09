@@ -231,7 +231,7 @@ class ilp_mis_learner_profile_employer_contact extends ilp_mis_plugin
     }
 
 
-    function plugin_type()
+    public static function plugin_type()
     {
         return 'learnerprofile';
     }

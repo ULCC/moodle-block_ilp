@@ -131,7 +131,8 @@ foreach ($mis_plugins as $plugin_file) {
 
       require_once($plugins . '/' . $plugin_file . ".php");
 
-      if ($plugin_file::plugin_type() == 'attendance' || $plugin_file::plugin_type() == 'overview') {
+      if ($plugin_file::plugin_type() == 'attendance' || $plugin_file::plugin_type() == 'overview'
+          || $plugin_file::plugin_type() == 'learnerprofile') {
          // instantiate the object
          $class = basename($plugin_file, ".php");
          $pluginobj = new $class();
