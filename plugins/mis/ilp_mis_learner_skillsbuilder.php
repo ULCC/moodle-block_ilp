@@ -252,12 +252,14 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
 
             $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
                 array('class'=>'skillsbuilder_result'));
-            $overall_result = $english_assessments[0][$field_ids['overall recommended level']];
-            $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
-            $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
-                array('class'=>'skills_builder_youareoverall'));
-            if ($this->data[0][$field_ids['overall recommended level']]) {
-            $englishtable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+            if ($english_assessments){
+                 $overall_result = $english_assessments[0][$field_ids['overall recommended level']];
+                 $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+                 $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+                                array('class'=>'skills_builder_youareoverall'));
+                  if ($english_assessments[0][$field_ids['overall recommended level']]) {
+                      $englishtable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+                  }
             }
 
             $out .= html_writer::tag('div', $englishtable, array('class'=>'skillsbuilder_subjects_table_holder'));
@@ -268,14 +270,15 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
 
             $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
                 array('class'=>'skillsbuilder_result'));
-            $overall_result = $maths_assessments[0][$field_ids['overall recommended level']];
-            $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
-            $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
-                array('class'=>'skills_builder_youareoverall'));
-            if ($this->data[0][$field_ids['overall recommended level']]) {
-                $mathstable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+            if ($maths_assessments){
+                $overall_result = $maths_assessments[0][$field_ids['overall recommended level']];
+                $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+                $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+                            array('class'=>'skills_builder_youareoverall'));
+                if ($maths_assessments[0][$field_ids['overall recommended level']]) {
+                    $mathstable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+                }
             }
-
             $out .= html_writer::tag('div', $mathstable, array('class'=>'skillsbuilder_subjects_table_holder'));
         }
 
@@ -284,14 +287,15 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
 
             $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
                 array('class'=>'skillsbuilder_result'));
-            $overall_result = $ict_assessments[0][$field_ids['overall recommended level']];
-            $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
-            $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
-                array('class'=>'skills_builder_youareoverall'));
-            if ($this->data[0][$field_ids['overall recommended level']]) {
-                $icttable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+            if ($ict_assessments){
+                 $overall_result = $ict_assessments[0][$field_ids['overall recommended level']];
+                 $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+                 $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+                                array('class'=>'skills_builder_youareoverall'));
+                 if ($ict_assessments[0][$field_ids['overall recommended level']]) {
+                    $icttable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+                 }
             }
-
             $out .= html_writer::tag('div', $icttable, array('class'=>'skillsbuilder_subjects_table_holder'));
         }
 
