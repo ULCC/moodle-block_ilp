@@ -409,7 +409,7 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
      */
     function tab_name()
     {
-        return 'Skills Builder';
+        return 'Overview';
     }
 }
 
