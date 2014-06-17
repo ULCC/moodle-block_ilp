@@ -43,34 +43,22 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_table', get_string('ilp_mis_learner_skillsbuilder_table', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_tabledesc', 'block_ilp'), '');
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_studentid', get_string('ilp_mis_learner_skillsbuilder_studentid', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_studentiddesc', 'block_ilp'), '');
 
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_forskills_id', get_string('ilp_mis_learner_skillsbuilder_forskills_id', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_forskills_iddesc', 'block_ilp'), '');
+       // $this->config_text_element($mform, 'mis_learner_skillsbuilder_forskills_id', get_string('ilp_mis_learner_skillsbuilder_forskills_id', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_forskills_iddesc', 'block_ilp'), '');
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_first_name', get_string('ilp_mis_learner_skillsbuilder_first_name', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_first_namedesc', 'block_ilp'), '');
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_last_name', get_string('ilp_mis_learner_skillsbuilder_last_name', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_last_namedesc', 'block_ilp'), '');
         /*
          * studentid does this.
          * $this->config_text_element($mform, 'mis_learner_skillsbuilder_learner_ref', get_string('ilp_mis_learner_skillsbuilder_learner_ref', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_learner_refdesc', 'block_ilp'), '');
          */
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_enrolled_engish', get_string('ilp_mis_learner_skillsbuilder_date_enrolled_engish', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_enrolled_engishdesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_completed_eng_ia', get_string('ilp_mis_learner_skillsbuilder_date_completed_eng_ia', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_completed_eng_iadesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_eng_ia_level', get_string('ilp_mis_learner_skillsbuilder_eng_ia_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_eng_ia_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_eng_ia_reading_level', get_string('ilp_mis_learner_skillsbuilder_eng_ia_reading_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_eng_ia_reading_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_eng_ia_punctuation_level', get_string('ilp_mis_learner_skillsbuilder_eng_ia_punctuation_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_eng_ia_punctuation_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_eng_ia_spelling_level', get_string('ilp_mis_learner_skillsbuilder_eng_ia_spelling_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_eng_ia_spelling_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_eng_ia_grammar_level', get_string('ilp_mis_learner_skillsbuilder_eng_ia_grammar_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_eng_ia_grammar_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_enrolled_maths', get_string('ilp_mis_learner_skillsbuilder_date_enrolled_maths', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_enrolled_mathsdesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_completed_mat_ia', get_string('ilp_mis_learner_skillsbuilder_date_completed_mat_ia', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_completed_mat_iadesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_mat_ia_level', get_string('ilp_mis_learner_skillsbuilder_mat_ia_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_mat_ia_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_mat_ia_numer_level', get_string('ilp_mis_learner_skillsbuilder_mat_ia_numer_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_mat_ia_numer_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_mat_ia_hd_level', get_string('ilp_mis_learner_skillsbuilder_mat_ia_hd_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_mat_ia_hd_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_mat_ia_mss_level', get_string('ilp_mis_learner_skillsbuilder_mat_ia_mss_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_mat_ia_mss_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_completed_eng_diag', get_string('ilp_mis_learner_skillsbuilder_date_completed_eng_diag', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_completed_eng_diagdesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_eng_diag_level', get_string('ilp_mis_learner_skillsbuilder_eng_diag_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_eng_diag_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_completed_mat_diag', get_string('ilp_mis_learner_skillsbuilder_date_completed_mat_diag', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_completed_mat_diagdesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_mat_diag_level', get_string('ilp_mis_learner_skillsbuilder_mat_diag_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_mat_diag_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_enrolled_ict', get_string('ilp_mis_learner_skillsbuilder_date_enrolled_ict', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_enrolled_ictdesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_date_completed_ict', get_string('ilp_mis_learner_skillsbuilder_date_completed_ict', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_date_completed_ictdesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_ict_diag_level', get_string('ilp_mis_learner_skillsbuilder_ict_diag_level', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_ict_diag_leveldesc', 'block_ilp'), '');
-        $this->config_text_element($mform, 'mis_learner_skillsbuilder_enrolled_to_site', get_string('ilp_mis_learner_skillsbuilder_enrolled_to_site', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_enrolled_to_sitedesc', 'block_ilp'), '');
+
+        $this->config_text_element($mform, 'mis_learner_skillsbuilder_assessment_stage',get_string('ilp_mis_learner_skillsbuilder_assessment_stage', 'block_ilp'),get_string('ilp_mis_learner_skillsbuilder_assessment_stagedesc', 'block_ilp'), '');
+        $this->config_text_element($mform, 'mis_learner_skillsbuilder_assessment_title',get_string('ilp_mis_learner_skillsbuilder_assessment_title', 'block_ilp'),get_string('ilp_mis_learner_skillsbuilder_assessment_titledesc', 'block_ilp'),'');
+        $this->config_text_element($mform, 'mis_learner_skillsbuilder_overall_recommended_level', get_string('ilp_mis_learner_skillsbuilder_overall_recommended_level', 'block_ilp'),get_string('ilp_mis_learner_skillsbuilder_overall_recommended_leveldesc', 'block_ilp'), '');
+        $this->config_text_element($mform, 'mis_learner_skillsbuilder_assessment_section', get_string('ilp_mis_learner_skillsbuilder_assessment_section', 'block_ilp'),get_string('ilp_mis_learner_skillsbuilder_assessment_sectiondesc', 'block_ilp'), '');
+        $this->config_text_element($mform, 'mis_learner_skillsbuilder_section_recommended_level', get_string('ilp_mis_learner_skillsbuilder_section_recommended_level', 'block_ilp'),get_string('ilp_mis_learner_skillsbuilder_section_recommended_leveldesc', 'block_ilp'), '');
+        $this->config_text_element($mform, 'mis_learner_skillsbuilder_status', get_string('ilp_mis_learner_skillsbuilder_assessment_status', 'block_ilp'),get_string('ilp_mis_learner_skillsbuilder_assessment_statusdesc', 'block_ilp'), '');
+
+
 
         $this->config_text_element($mform, 'mis_learner_skillsbuilder_prelimcalls', get_string('ilp_mis_learner_skillsbuilder_prelimcalls', 'block_ilp'), get_string('ilp_mis_learner_skillsbuilder_prelimcallsdesc', 'block_ilp'), '');
 
@@ -152,9 +140,6 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
                 $keyfields[$sidfield] = array('=' => $mis_user_id);
 
 
-                //check if the forskills id config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_forskills_id')) $this->fields['forskills id'] = get_config('block_ilp', 'mis_learner_skillsbuilder_forskills_id');
-
                 //check if the first name config has been set and pass the value
                 if (get_config('block_ilp', 'mis_learner_skillsbuilder_first_name')) $this->fields['first name'] = get_config('block_ilp', 'mis_learner_skillsbuilder_first_name');
 
@@ -164,75 +149,30 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
                 //check if the learner ref config has been set and pass the value
                 if (get_config('block_ilp', 'mis_learner_skillsbuilder_learner_ref')) $this->fields['learner ref'] = get_config('block_ilp', 'mis_learner_skillsbuilder_learner_ref');
 
-                //check if the date enrolled engish config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_engish')) $this->fields['date enrolled engish'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_engish');
-
-                //check if the date completed eng ia config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_ia')) $this->fields['date completed eng ia'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_ia');
-
-                //check if the eng ia level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_level')) $this->fields['eng ia level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_level');
-
-                //check if the eng ia reading level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_reading_level')) $this->fields['eng ia reading level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_reading_level');
-
-                //check if the eng ia punctuation level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_punctuation_level')) $this->fields['eng ia punctuation level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_punctuation_level');
-
-                //check if the eng ia spelling level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_spelling_level')) $this->fields['eng ia spelling level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_spelling_level');
-
-                //check if the eng ia grammar level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_grammar_level')) $this->fields['eng ia grammar level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_ia_grammar_level');
-
-                //check if the date enrolled maths config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_maths')) $this->fields['date enrolled maths'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_maths');
-
-                //check if the date completed mat ia config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_ia')) $this->fields['date completed mat ia'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_ia');
-
-                //check if the mat ia level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_level')) $this->fields['mat ia level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_level');
-
-                //check if the mat ia numer level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_numer_level')) $this->fields['mat ia numer level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_numer_level');
-
-                //check if the mat ia hd level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_hd_level')) $this->fields['mat ia hd level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_hd_level');
-
-                //check if the mat ia mss level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_mss_level')) $this->fields['mat ia mss level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_ia_mss_level');
-
-                //check if the date completed eng diag config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_diag')) $this->fields['date completed eng diag'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_eng_diag');
-
                 //check if the eng diag level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_eng_diag_level')) $this->fields['eng diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_eng_diag_level');
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_assessment_stage')) $this->fields['assessment stage'] = get_config('block_ilp', 'mis_learner_skillsbuilder_assessment_stage');
 
                 //check if the date completed mat diag config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_diag')) $this->fields['date completed mat diag'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_mat_diag');
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_assessment_title')) $this->fields['assessment title'] = get_config('block_ilp', 'mis_learner_skillsbuilder_assessment_title');
 
                 //check if the mat diag level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_mat_diag_level')) $this->fields['mat diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_mat_diag_level');
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_overall_recommended_level')) $this->fields['overall recommended level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_overall_recommended_level');
 
                 //check if the date enrolled ict config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_ict')) $this->fields['date enrolled ict'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_enrolled_ict');
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_assessment_section')) $this->fields['assessment section'] = get_config('block_ilp', 'mis_learner_skillsbuilder_assessment_section');
 
                 //check if the date completed ict config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_ict')) $this->fields['date completed ict'] = get_config('block_ilp', 'mis_learner_skillsbuilder_date_completed_ict');
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_section_recommended_level')) $this->fields['section recommended level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_section_recommended_level');
 
                 //check if the ict diag level config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_ict_diag_level')) $this->fields['ict diag level'] = get_config('block_ilp', 'mis_learner_skillsbuilder_ict_diag_level');
+                if (get_config('block_ilp', 'mis_learner_skillsbuilder_status')) $this->fields['status'] = get_config('block_ilp', 'mis_learner_skillsbuilder_status');
 
-                //check if the enrolled to site config has been set and pass the value
-                if (get_config('block_ilp', 'mis_learner_skillsbuilder_enrolled_to_site')) $this->fields['enrolled to site'] = get_config('block_ilp', 'mis_learner_skillsbuilder_enrolled_to_site');
 
                 $prelimdbcalls = get_config('block_ilp', 'mis_learner_skillsbuilder_prelimcalls');
 
                 $this->data = $this->dbquery($table, $keyfields, $this->fields, null, $prelimdbcalls);
 
                 //we only need the first record so pass it back
-                $this->data = (!empty($this->data)) ? array_shift($this->data) : $this->data;
                 static::$skillsbuilder_data = $this->data;
                 static::$skillsbuilder_fields = $this->fields;
             }
@@ -279,142 +219,126 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
         $field_ids = $this->fields;
 
         $out = '';
-        $firsttable = $this->generate_first_table();
-        if ($firsttable || $this->data[$field_ids['eng ia level']]) {
-            $out .= html_writer::tag('h2', get_string('ilp_mis_learner_skillsbuilder_first_subject', 'block_ilp'));
+
+        $english_assessments = array();
+        $maths_assessments = array();
+        $ict_assessments = array();
+
+        $records = $this->data;
+
+        // separate assessments
+        foreach ($records as $record){
+
+            if ($record[$field_ids['assessment title']] == 'English Assessment'){
+                $english_assessments[] = $record;
+
+            } else if ($record[$field_ids['assessment title']] == 'Maths Assessment'){
+                 $maths_assessments[] = $record;
+
+            } else if ($record[$field_ids['assessment title']] == 'ICT Assessment'){
+                 $ict_assessments[] = $record;
+
+            }
+        }
+
+        // retrieve tables
+        $englishtable = $this->generate_assessment_table($english_assessments);
+        $mathstable = $this->generate_assessment_table($maths_assessments);
+        $icttable = $this->generate_assessment_table($ict_assessments);
+
+
+        if ($englishtable ) {
+            $out .= html_writer::tag('h2',get_string('ilp_mis_learner_skillsbuilder_english_assessment', 'block_ilp'));
 
             $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
                 array('class'=>'skillsbuilder_result'));
-            $overall_result = $this->data[$field_ids['eng ia level']];
-            $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
-            $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
-                array('class'=>'skills_builder_youareoverall'));
-            if ($this->data[$field_ids['eng ia level']]) {
-                $firsttable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+            if ($english_assessments){
+                 $overall_result = $english_assessments[0][$field_ids['overall recommended level']];
+                 $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+                 $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+                                array('class'=>'skills_builder_youareoverall'));
+                  if ($english_assessments[0][$field_ids['overall recommended level']]) {
+                      $englishtable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+                  }
             }
 
-            $out .= html_writer::tag('div', $firsttable, array('class'=>'skillsbuilder_subjects_table_holder'));
+            $out .= html_writer::tag('div', $englishtable, array('class'=>'skillsbuilder_subjects_table_holder'));
         }
 
-        $secondtable = $this->generate_second_table();
-        if ($secondtable || $this->data[$field_ids['mat ia level']]) {
-            $out .= html_writer::tag('h2', get_string('ilp_mis_learner_skillsbuilder_second_subject', 'block_ilp'));
+        if ($mathstable ) {
+            $out .= html_writer::tag('h2',get_string('ilp_mis_learner_skillsbuilder_maths_assessment', 'block_ilp'));
 
             $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
                 array('class'=>'skillsbuilder_result'));
-            $overall_result = $this->data[$field_ids['mat ia level']];
-            $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
-            $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
-                array('class'=>'skills_builder_youareoverall'));
-            if ($this->data[$field_ids['mat ia level']]) {
-                $secondtable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+            if ($maths_assessments){
+                $overall_result = $maths_assessments[0][$field_ids['overall recommended level']];
+                $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+                $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+                            array('class'=>'skills_builder_youareoverall'));
+                if ($maths_assessments[0][$field_ids['overall recommended level']]) {
+                    $mathstable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+                }
             }
-
-            $out .= html_writer::tag('div', $secondtable, array('class'=>'skillsbuilder_subjects_table_holder'));
+            $out .= html_writer::tag('div', $mathstable, array('class'=>'skillsbuilder_subjects_table_holder'));
         }
+
+        if ($icttable ) {
+            $out .= html_writer::tag('h2',get_string('ilp_mis_learner_skillsbuilder_ict_assessment', 'block_ilp'));
+
+            $resulthtml = html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_result', 'block_ilp'),
+                array('class'=>'skillsbuilder_result'));
+            if ($ict_assessments){
+                 $overall_result = $ict_assessments[0][$field_ids['overall recommended level']];
+                 $overall_result = html_writer::tag('span', $overall_result, array('class'=>'overall_result'));
+                 $resulthtml .= html_writer::tag('span', get_string('ilp_mis_learner_skillsbuilder_youareoverall', 'block_ilp') . ' ' . $overall_result,
+                                array('class'=>'skills_builder_youareoverall'));
+                 if ($ict_assessments[0][$field_ids['overall recommended level']]) {
+                    $icttable .= html_writer::tag('div', $resulthtml, array('class'=>'result_container'));
+                 }
+            }
+            $out .= html_writer::tag('div', $icttable, array('class'=>'skillsbuilder_subjects_table_holder'));
+        }
+
         return $out;
     }
 
-    public function generate_first_table() {
+
+    public function generate_assessment_table($assessments) {
+
+        $table = '';
         $field_ids = $this->fields;
-        $table1 = '<table class="subject"><tbody>';
-        $heading = html_writer::tag('th', get_string('ilp_mis_learner_skillsbuilder_section', 'block_ilp'));
-        $heading .= html_writer::tag('th', get_string('ilp_mis_learner_skillsbuilder_workingtowards', 'block_ilp'));
-        $table1 .= html_writer::tag('tr', $heading);
+        $datarows = '';
 
-        $datarows = array();
+        $table .= '<table class="subject"><tbody>';
+        $heading = html_writer::tag('th',get_string('ilp_mis_learner_skillsbuilder_assessment_section', 'block_ilp'));
+        $heading .= html_writer::tag('th',get_string('ilp_mis_learner_skillsbuilder_section_recommended_level', 'block_ilp'));
+        $heading .= html_writer::tag('th',get_string('ilp_mis_learner_skillsbuilder_assessment_status', 'block_ilp'));
+        $table .= html_writer::tag('tr', $heading);
 
-        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_1', 'block_ilp'));
-        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia reading level']]);
+        foreach ($assessments as $assessment){
+             $datarowcell = '';
+             $datarowcell .= html_writer::tag('td', $assessment[$field_ids['assessment section']]);
+             $datarowcell .= html_writer::tag('td', $assessment[$field_ids['section recommended level']]);
+             $datarowcell .= html_writer::tag('td', $assessment[$field_ids['status']]);
 
-        if ($this->data[$field_ids['eng ia reading level']]) {
-            $datarows[1] = html_writer::tag('tr', $datarowcell);
+             $datarows .= html_writer::tag('tr', $datarowcell);
         }
 
-        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_2', 'block_ilp'));
-        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia punctuation level']]);
+        $table .= $datarows;
+        $table .= '</tbody></table>';
 
-        if ($this->data[$field_ids['eng ia punctuation level']]) {
-            $datarows[2] = html_writer::tag('tr', $datarowcell);
-        }
-
-        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_3', 'block_ilp'));
-        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia grammar level']]);
-
-        if ($this->data[$field_ids['eng ia grammar level']]) {
-            $datarows[3] = html_writer::tag('tr', $datarowcell);
-        }
-
-        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_first_subject_skill_4', 'block_ilp'));
-        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['eng ia spelling level']]);
-
-        if ($this->data[$field_ids['eng ia spelling level']]) {
-            $datarows[4] = html_writer::tag('tr', $datarowcell);
-        }
-
-        if (empty($datarows)) {
-            return '';
-        }
-        $table1 .= implode('', $datarows);
-
-        $table1 .= '</tbody></table>';
-    return $table1;
-}
-
-    public function generate_second_table() {
-        $field_ids = $this->fields;
-        $table1 = '<table class="subject"><tbody>';
-        $heading = html_writer::tag('th', get_string('ilp_mis_learner_skillsbuilder_section', 'block_ilp'));
-        $heading .= html_writer::tag('th', get_string('ilp_mis_learner_skillsbuilder_workingtowards', 'block_ilp'));
-        $table1 .= html_writer::tag('tr', $heading);
-
-        $datarows = array();
-
-        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_1', 'block_ilp'));
-        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia numer level']]);
-        if ($this->data[$field_ids['mat ia numer level']]) {
-            $datarows[1] = html_writer::tag('tr', $datarowcell);
-        }
-
-        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_2', 'block_ilp'));
-        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia mss level']]);
-        if ($this->data[$field_ids['mat ia mss level']]) {
-            $datarows[2] = html_writer::tag('tr', $datarowcell);
-        }
-
-        $datarowcell = html_writer::tag('td', get_string('ilp_mis_learner_skillsbuilder_second_subject_skill_3', 'block_ilp'));
-        $datarowcell .= html_writer::tag('td', $this->data[$field_ids['mat ia hd level']]);
-        if ($this->data[$field_ids['mat ia hd level']]) {
-            $datarows[3] = html_writer::tag('tr', $datarowcell);
-        }
-
-        if (empty($datarows)) {
-            return '';
-        }
-        $table1 .= implode('', $datarows);
-
-        $table1 .= '</tbody></table>';
-        return $table1;
+        return $table;
     }
+
+
 
 
     static function language_strings(&$string)
     {
 
-        $string['ilp_mis_learner_skillsbuilder_first_subject'] = 'English';
-        $string['ilp_mis_learner_skillsbuilder_second_subject'] = 'Maths';
-
-        $string['ilp_mis_learner_skillsbuilder_section'] = 'Section';
-        $string['ilp_mis_learner_skillsbuilder_workingtowards'] = 'Working Towards';
-
-        $string['ilp_mis_learner_skillsbuilder_first_subject_skill_1'] = 'Reading';
-        $string['ilp_mis_learner_skillsbuilder_first_subject_skill_2'] = 'Punctuation';
-        $string['ilp_mis_learner_skillsbuilder_first_subject_skill_3'] = 'Grammar';
-        $string['ilp_mis_learner_skillsbuilder_first_subject_skill_4'] = 'Spelling';
-
-        $string['ilp_mis_learner_skillsbuilder_second_subject_skill_1'] = 'Number';
-        $string['ilp_mis_learner_skillsbuilder_second_subject_skill_2'] = 'MSS';
-        $string['ilp_mis_learner_skillsbuilder_second_subject_skill_3'] = 'Handling Data';
+        $string['ilp_mis_learner_skillsbuilder_english_assessment'] = 'English Assessment';
+        $string['ilp_mis_learner_skillsbuilder_maths_assessment'] = 'Maths Assessment';
+        $string['ilp_mis_learner_skillsbuilder_ict_assessment'] = 'ICT Assessment';
 
         $string['ilp_mis_learner_skillsbuilder_result'] = 'Result';
         $string['ilp_mis_learner_skillsbuilder_youareoverall'] = 'You are <span class="skills_builder_overall">overall</span> working towards';
@@ -446,107 +370,30 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
         $string['ilp_mis_learner_skillsbuilder_pluginname'] = 'Skills Builder';
         $string['ilp_mis_learner_skillsbuilder_pluginnamesettings'] = 'Skills Builder configuration';
 
-
-        $string['ilp_mis_learner_skillsbuilder_forskills_id'] = 'ForSkills ID data field';
-        $string['ilp_mis_learner_skillsbuilder_forskills_iddesc'] = 'The field that holds ForSkills ID data';
-
         $string['ilp_mis_learner_skillsbuilder_first_name'] = 'First Name data field';
         $string['ilp_mis_learner_skillsbuilder_first_namedesc'] = 'The field that holds First Name data';
 
         $string['ilp_mis_learner_skillsbuilder_last_name'] = 'Last Name data field';
         $string['ilp_mis_learner_skillsbuilder_last_namedesc'] = 'The field that holds Last Name data';
 
-        $string['ilp_mis_learner_skillsbuilder_learner_ref'] = 'Learner Ref data field';
-        $string['ilp_mis_learner_skillsbuilder_learner_refdesc'] = 'The field that holds Learner Ref data';
+        $string['ilp_mis_learner_skillsbuilder_assessment_stage'] = 'Assessment Stage';
+        $string['ilp_mis_learner_skillsbuilder_assessment_stagedesc'] = 'The field that holds Assessment Stage data';
 
-        $string['ilp_mis_learner_skillsbuilder_date_enrolled_engish'] = 'Date Enrolled Engish data field';
-        $string['ilp_mis_learner_skillsbuilder_date_enrolled_engishdesc'] = 'The field that holds Date Enrolled Engish data';
+        $string['ilp_mis_learner_skillsbuilder_assessment_title'] = 'Assessment Title';
+        $string['ilp_mis_learner_skillsbuilder_assessment_titledesc'] = 'The field that holds Assessment Title data';
 
-        $string['ilp_mis_learner_skillsbuilder_date_completed_eng_ia'] = 'Date Completed Eng IA data field';
-        $string['ilp_mis_learner_skillsbuilder_date_completed_eng_iadesc'] = 'The field that holds Date Completed Eng IA data';
+        $string['ilp_mis_learner_skillsbuilder_overall_recommended_level'] = 'Overall Recommended Level';
+        $string['ilp_mis_learner_skillsbuilder_overall_recommended_leveldesc'] = 'The field that holds Overall Recommended Level data';
 
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_level'] = 'Eng IA Level data field';
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_leveldesc'] = 'The field that holds Eng IA Level data';
+        $string['ilp_mis_learner_skillsbuilder_assessment_section'] = 'Assessment Section';
+        $string['ilp_mis_learner_skillsbuilder_assessment_sectiondesc'] = 'The field that holds Assessment Section data';
 
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_reading_level'] = 'Eng IA Reading Level data field';
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_reading_leveldesc'] = 'The field that holds Eng IA Reading Level data';
+        $string['ilp_mis_learner_skillsbuilder_section_recommended_level'] = 'Section Recommended Level';
+        $string['ilp_mis_learner_skillsbuilder_section_recommended_leveldesc'] = 'The field that holds Section Recommended Level data';
 
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_punctuation_level'] = 'Eng IA Punctuation Level data field';
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_punctuation_leveldesc'] = 'The field that holds Eng IA Punctuation Level data';
+        $string['ilp_mis_learner_skillsbuilder_assessment_status'] = 'Assessment Status';
+        $string['ilp_mis_learner_skillsbuilder_assessment_statusdesc'] = 'The field that holds Assessment Status data';
 
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_spelling_level'] = 'Eng IA Spelling Level data field';
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_spelling_leveldesc'] = 'The field that holds Eng IA Spelling Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_grammar_level'] = 'Eng IA Grammar Level data field';
-        $string['ilp_mis_learner_skillsbuilder_eng_ia_grammar_leveldesc'] = 'The field that holds Eng IA Grammar Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_date_enrolled_maths'] = 'Date Enrolled Maths data field';
-        $string['ilp_mis_learner_skillsbuilder_date_enrolled_mathsdesc'] = 'The field that holds Date Enrolled Maths data';
-
-        $string['ilp_mis_learner_skillsbuilder_date_completed_mat_ia'] = 'Date Completed Mat IA data field';
-        $string['ilp_mis_learner_skillsbuilder_date_completed_mat_iadesc'] = 'The field that holds Date Completed Mat IA data';
-
-        $string['ilp_mis_learner_skillsbuilder_mat_ia_level'] = 'Mat IA Level data field';
-        $string['ilp_mis_learner_skillsbuilder_mat_ia_leveldesc'] = 'The field that holds Mat IA Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_mat_ia_numer_level'] = 'Mat IA Numer Level data field';
-        $string['ilp_mis_learner_skillsbuilder_mat_ia_numer_leveldesc'] = 'The field that holds Mat IA Numer Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_mat_ia_hd_level'] = 'Mat IA HD Level data field';
-        $string['ilp_mis_learner_skillsbuilder_mat_ia_hd_leveldesc'] = 'The field that holds Mat IA HD Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_mat_ia_mss_level'] = 'Mat IA MSS Level data field';
-        $string['ilp_mis_learner_skillsbuilder_mat_ia_mss_leveldesc'] = 'The field that holds Mat IA MSS Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_date_completed_eng_diag'] = 'Date Completed Eng Diag data field';
-        $string['ilp_mis_learner_skillsbuilder_date_completed_eng_diagdesc'] = 'The field that holds Date Completed Eng Diag data';
-
-        $string['ilp_mis_learner_skillsbuilder_eng_diag_level'] = 'Eng Diag Level data field';
-        $string['ilp_mis_learner_skillsbuilder_eng_diag_leveldesc'] = 'The field that holds Eng Diag Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_date_completed_mat_diag'] = 'Date Completed Mat Diag data field';
-        $string['ilp_mis_learner_skillsbuilder_date_completed_mat_diagdesc'] = 'The field that holds Date Completed Mat Diag data';
-
-        $string['ilp_mis_learner_skillsbuilder_mat_diag_level'] = 'Mat Diag Level data field';
-        $string['ilp_mis_learner_skillsbuilder_mat_diag_leveldesc'] = 'The field that holds Mat Diag Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_date_enrolled_ict'] = 'Date Enrolled ICT data field';
-        $string['ilp_mis_learner_skillsbuilder_date_enrolled_ictdesc'] = 'The field that holds Date Enrolled ICT data';
-
-        $string['ilp_mis_learner_skillsbuilder_date_completed_ict'] = 'Date Completed ICT data field';
-        $string['ilp_mis_learner_skillsbuilder_date_completed_ictdesc'] = 'The field that holds Date Completed ICT data';
-
-        $string['ilp_mis_learner_skillsbuilder_ict_diag_level'] = 'ICT Diag Level data field';
-        $string['ilp_mis_learner_skillsbuilder_ict_diag_leveldesc'] = 'The field that holds ICT Diag Level data';
-
-        $string['ilp_mis_learner_skillsbuilder_enrolled_to_site'] = 'Enrolled to site data field';
-        $string['ilp_mis_learner_skillsbuilder_enrolled_to_sitedesc'] = 'The field that holds Enrolled to site data';
-        $string['ilp_mis_learner_skillsbuilder_disp_tabname'] = 'Skills Builder';
-        $string['ilp_mis_learner_skillsbuilder_disp_forskills_id'] = 'ForSkills ID';
-        $string['ilp_mis_learner_skillsbuilder_disp_first_name'] = 'First Name';
-        $string['ilp_mis_learner_skillsbuilder_disp_last_name'] = 'Last Name';
-        $string['ilp_mis_learner_skillsbuilder_disp_learner_ref'] = 'Learner Ref';
-        $string['ilp_mis_learner_skillsbuilder_disp_date_enrolled_engish'] = 'Date Enrolled Engish';
-        $string['ilp_mis_learner_skillsbuilder_disp_date_completed_eng_ia'] = 'Date Completed Eng IA';
-        $string['ilp_mis_learner_skillsbuilder_disp_eng_ia_level'] = 'Eng IA Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_eng_ia_reading_level'] = 'Eng IA Reading Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_eng_ia_punctuation_level'] = 'Eng IA Punctuation Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_eng_ia_spelling_level'] = 'Eng IA Spelling Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_eng_ia_grammar_level'] = 'Eng IA Grammar Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_date_enrolled_maths'] = 'Date Enrolled Maths';
-        $string['ilp_mis_learner_skillsbuilder_disp_date_completed_mat_ia'] = 'Date Completed Mat IA';
-        $string['ilp_mis_learner_skillsbuilder_disp_mat_ia_level'] = 'Mat IA Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_mat_ia_numer_level'] = 'Mat IA Numer Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_mat_ia_hd_level'] = 'Mat IA HD Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_mat_ia_mss_level'] = 'Mat IA MSS Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_date_completed_eng_diag'] = 'Date Completed Eng Diag';
-        $string['ilp_mis_learner_skillsbuilder_disp_eng_diag_level'] = 'Eng Diag Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_date_completed_mat_diag'] = 'Date Completed Mat Diag';
-        $string['ilp_mis_learner_skillsbuilder_disp_mat_diag_level'] = 'Mat Diag Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_date_enrolled_ict'] = 'Date Enrolled ICT';
-        $string['ilp_mis_learner_skillsbuilder_disp_date_completed_ict'] = 'Date Completed ICT';
-        $string['ilp_mis_learner_skillsbuilder_disp_ict_diag_level'] = 'ICT Diag Level';
-        $string['ilp_mis_learner_skillsbuilder_disp_enrolled_to_site'] = 'Enrolled to site';
     }
 
     static function plugin_type()
@@ -562,7 +409,7 @@ class ilp_mis_learner_skillsbuilder extends ilp_mis_plugin
      */
     function tab_name()
     {
-        return 'Skills Builder';
+        return 'Overview';
     }
 }
 
