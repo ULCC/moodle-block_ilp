@@ -72,6 +72,7 @@ $flextable = new ilp_hiddenrow_ajax_table("student_listcourse_id{$course_id}tuto
 $flextable->define_baseurl($CFG->wwwroot . "/blocks/ilp/actions/view_studentreports.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}");
 $ajax_url = $CFG->wwwroot . "/blocks/ilp/actions/view_studentreports.ajax.php?report_id={$report_id}&course_id={$course_id}&tutor={$tutor}&status_id={$status_id}&group_id={$group_id}";
 $flextable->define_ajaxurl($ajax_url);
+$flextable->pageable(true);
 
 $output = '';
 $output .= '<div class="hiddenelement thisurl">' . $ajax_url . '</div>';
