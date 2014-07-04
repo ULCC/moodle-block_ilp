@@ -83,6 +83,11 @@ class ilp_element_plugin {
     var $xmldb_key;
 
     /**
+     * @var string
+     */
+    var $xmldb_index;
+
+    /**
      * @var database_manager
      */
     var $dbman;
@@ -135,6 +140,7 @@ class ilp_element_plugin {
         $this->xmldb_table = class_exists('xmldb_table') ? 'xmldb_table' : 'XMLDBTable';
         $this->xmldb_field = class_exists('xmldb_field') ? 'xmldb_field' : 'XMLDBField';
         $this->xmldb_key   = class_exists('xmldb_key')   ? 'xmldb_key'   : 'XMLDBKey';
+        $this->xmldb_index = class_exists('xmldb_index') ? 'xmldb_index' : 'XMLDBIndex';
 
 		
     }

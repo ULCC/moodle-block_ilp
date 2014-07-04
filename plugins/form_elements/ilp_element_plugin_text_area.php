@@ -135,6 +135,10 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
        	$table_key = new $this->xmldb_key($this->tablename.'_foreign_key');
         $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), $this->tablename ,'id');
         $table->addKey($table_key);
+
+        $table_index = new $this->xmldb_index('area_entry');
+        $table_index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+        $table->addIndex($table_index);
         
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);

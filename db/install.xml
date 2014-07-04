@@ -108,6 +108,12 @@
         <KEY NAME="entry_creator" TYPE="foreign" FIELDS="creator_id" REFTABLE="user" REFFIELDS="id" COMMENT="the id of the user (in the entry table) that created the entry" PREVIOUS="entry_report" NEXT="entry_user"/>
         <KEY NAME="entry_user" TYPE="foreign" FIELDS="user_id" REFTABLE="user" REFFIELDS="id" COMMENT="the id of the user that the entry refers to" PREVIOUS="entry_creator"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="report_entry" UNIQUE="false" FIELDS="report_id, user_id"/>
+        <INDEX NAME="entry_user_timemodified" UNIQUE="false" FIELDS="timemodified, user_id"/>
+        <INDEX NAME="entry_timemodified" UNIQUE="false" FIELDS="timemodified"/>
+       </INDEXES>
+
     </TABLE>
     <TABLE NAME="block_ilp_entry_comment" COMMENT="This table holds comments made about entry records" PREVIOUS="block_ilp_entry" NEXT="block_ilp_log">
       <FIELDS>
@@ -123,6 +129,10 @@
         <KEY NAME="comment_creator" TYPE="foreign" FIELDS="creator_id" REFTABLE="user" REFFIELDS="id" COMMENT="the user id of the comment creator" PREVIOUS="primary" NEXT="comment_entry"/>
         <KEY NAME="comment_entry" TYPE="foreign" FIELDS="entry_id" REFTABLE="block_ilp_entry" REFFIELDS="id" PREVIOUS="comment_creator"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="entrycom_timemodified" UNIQUE="false" FIELDS="timemodified"/>
+      </INDEXES>
+
     </TABLE>
     <TABLE NAME="block_ilp_log" COMMENT="This table holds log information for the ilp" PREVIOUS="block_ilp_entry_comment" NEXT="block_ilp_coursereports">
       <FIELDS>
@@ -250,6 +260,9 @@
         <KEY NAME="status_user" TYPE="foreign-unique" FIELDS="user_id" REFTABLE="user" REFFIELDS="id" PREVIOUS="primary" NEXT="modfying_user"/>
         <KEY NAME="modfying_user" TYPE="foreign" FIELDS="user_modified_id" REFTABLE="user" REFFIELDS="id" PREVIOUS="status_user"/>
       </KEYS>
+      <INDEXES>
+       <INDEX NAME="userstat_timemodified" UNIQUE="false" FIELDS="timemodified"/>
+       </INDEXES>
     </TABLE>
     <TABLE NAME="block_ilp_cal_events" COMMENT="Default comment for the table, please edit me" PREVIOUS="block_ilp_user_status" NEXT="block_ilp_report_graph">
       <FIELDS>
@@ -339,12 +352,12 @@
 		<FIELD NAME="description" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="display_option" NEXT="bg_colour"/>
 		<FIELD NAME="bg_colour" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="description"/>
 	</FIELDS>
-	<INDEXES>
-		<INDEX NAME="mdl_blocilpplustsitem_par_ix" UNIQUE="false" FIELDS="parent_id"/>
-	</INDEXES>
 	<KEYS>
         <KEY NAME="plu_sts_item_id" TYPE="primary" FIELDS="id"/>
     </KEYS>
+    <INDEXES>
+         <INDEX NAME="mdl_blocilpplustsitem_par_ix" UNIQUE="false" FIELDS="parent_id"/>
+    </INDEXES>
 	</TABLE>
 	<TABLE NAME="block_ilp_user_choice" COMMENT="block_ilp_user_choice table retrofitted from MySQL" PREVIOUS="block_ilp_plu_sts_items">
 		<FIELDS>

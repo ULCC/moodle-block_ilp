@@ -444,12 +444,20 @@ class ilp_element_plugin_itemlist extends ilp_element_plugin{
        	$table_key = new $this->xmldb_key('listpluginentry_unique_fk');
         $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('parent_id'), $this->tablename, 'id');
         $table->addKey($table_key);
-        
-/*
-        $table_key = new $this->xmldb_key('textplugin_unique_entry');
-        $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('entry_id'),'block_ilp_entry','id');
-        $table->addKey($table_key);
-*/
+
+        $table_key = new $this->xmldb_index('entry_idx');
+        $table_index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('entry_id'));
+        $table->addIndex($table_index);
+
+        $table_index = new $this->xmldb_index('entry_parent_idx');
+        $table_index->set_attributes(XMLDB_INDEX_NOTUNIQUE, array('entry_id','parent_id'));
+        $table->addIndex($table_index);
+
+        /*
+                $table_key = new $this->xmldb_key('textplugin_unique_entry');
+                $table_key->$set_attributes(XMLDB_KEY_FOREIGN, array('entry_id'),'block_ilp_entry','id');
+                $table->addKey($table_key);
+        */
         
         if(!$this->dbman->table_exists($table)) {
             $this->dbman->create_table($table);
