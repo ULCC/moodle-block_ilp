@@ -277,7 +277,7 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 	  $mform->addElement('html',$jscode);
 
 	  //Create element
-	  $mform->addElement('html',"<div id='block_ilp_element_plugin_goal_{$fieldname}_div' style='display:none'>");
+	  $mform->addElement('html',"<div id='block_ilp_element_plugin_goal_{$fieldname}_div' >");
 	  $mform->addElement('select', $fieldname.'_sel1', 
 			     get_string('ilp_element_plugin_goal_courselabel','block_ilp'),
 			     $courses,array('class' => 'form_input',
