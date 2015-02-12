@@ -270,7 +270,11 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 
 	  ($realgoal=array_search($currentdata->value,$goals[$currentcourse]) or $realgoal=0);  // Javascript
 
+	  ob_start();
 	  include_once('ilp_element_plugin_goal.js');
+	  $jscode	=	ob_get_contents();
+	  ob_end_clean();
+	  $mform->addElement('html',$jscode);
 
 	  //Create element
 	  $mform->addElement('html',"<div id='block_ilp_element_plugin_goal_{$fieldname}_div' style='display:none'>");
@@ -283,7 +287,7 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 
 	  $mform->addElement('select', $fieldname.'_sel2', get_string('ilp_element_plugin_goal_goallabel','block_ilp'),
 			     $allgoals,array('class' => 'form_input'));
-	
+
 
 	  $PAGE->requires->js_init_call("block_ilp_element_plugin_goal_$fieldname.initializegoals",array("id_{$fieldname}_sel2"));
 	  $PAGE->requires->js_init_code("document.getElementById('block_ilp_element_plugin_goal_{$fieldname}_div').style.display='block'");
