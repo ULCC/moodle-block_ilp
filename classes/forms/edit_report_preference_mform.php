@@ -104,6 +104,7 @@ if ($reportrules->can_add_extensions($this->report_id)) {
              get_string('maxentries', 'block_ilp'),
              array('class' => 'form_input')
         );
+                $mform->setType('maxentries', PARAM_INT);
             }
 
         if ($report->reporttype ==  ILP_RT_RECURRING_FINALDATE || $report->reporttype == ILP_RT_RECURRING) {
@@ -126,7 +127,7 @@ if ($reportrules->can_add_extensions($this->report_id)) {
         $mform->setType('report_id', PARAM_INT);
 
         $mform->addElement('hidden', 'course_id', $this->course_id);
-        $mform->setType('report_id', PARAM_INT);
+        $mform->setType('course_id', PARAM_INT);
 
         $buttonarray[] = $mform->createElement('submit', 'saveanddisplaybutton', get_string('submit'));
         $buttonarray[] = &$mform->createElement('cancel');
@@ -140,7 +141,7 @@ if ($reportrules->can_add_extensions($this->report_id)) {
 
 
 
-    function validation( $data ){
+    function specific_validation( $data ){
 
         $data   =   (object)    $data;
 
