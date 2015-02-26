@@ -113,25 +113,6 @@ function ilp_uniqueNum() {
 }
 
 
-
-/**
- * Adds a record of an action to the log
- *
- * @param int $course_id
- * @param string $log_action the generic short name for the event
- * @param string $log_url (optional, defaults to ASSMGR_LOG_URL_PREFIX)
- * @param string $log_info Detailed explanation of what has happened
- * @return void
- */
-function ilp_add_to_log($course_id, $log_action, $log_url, $log_info) {
-
-    // prepend the url prefix if the log_url is not empty
-    $log_url = empty($log_url) ? '' : ILP_LOG_URL_PREFIX.'/'.$log_url;
-
-    // add to the moodle log
-    add_to_log($course_id, ILP_LOG_MODULE, $log_action, $log_url, $log_info);
-}
-
 /**
  * Utility function which makes a recordset into an array
  * Similar to recordset_to_menu. Array is keyed by the specified field of each record and
