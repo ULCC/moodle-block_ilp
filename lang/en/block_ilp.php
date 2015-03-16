@@ -171,6 +171,8 @@ $string['gotoprintpreview']='Generate';
     $string['graphcreationsuc'] 	= 	'Graph successfully created';
     $string['graphcreationerror'] 	= 	'Error whilst creating graph';
 
+    $string['hometabdefault'] 			= 	'Home tab default ';
+    $string['hometabdefaultconfig'] 	= 	'The default tab in user\'s home page ';
 
     $string['graphname']            = 	'Graph Name';
     $string['howoften']            = 	'How often should rules reset';
@@ -246,6 +248,7 @@ $string['gotoprintpreview']='Generate';
     $string['nodatafoundgraph']  =   'No data was found for this graph';
 	$string['none']					=	'None';
 	$string['noplugin']				=	'No Plugin';
+	$string['notabenabled']			=	'No tab is enabled';
 	$string['notrequired']	 		= 	'Not required';
 	$string['notfound']	 			= 	'Not found';
 	$string['notemplateplugins']	= 	'No plugins have been assigned to the active template. Please contact an admin';

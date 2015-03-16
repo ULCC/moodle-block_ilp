@@ -52,12 +52,9 @@ class ilp_dashboard_main_plugin extends ilp_dashboard_plugin {
 				
 			$linkurl	=	$CFG->wwwroot."/blocks/ilp/actions/view_main.php?user_id={$this->student_id}&course_id={$this->course_id}";
 			
-			//get the entries tab if this installed it will be set as the default tab
-			$plugin				=	$this->dbc->get_tab_plugin_by_name('ilp_dashboard_entries_tab');
-			
-			//default to entires tab if it is  alvailable if not use id 1 
-			$defaulttab			=	(!empty($plugin)) ?	$plugin->id:	1;
-			
+			//get the default tab from the settings page
+            $defaulttab	= get_config('block_ilp', 'hometabdefault');
+
 			//get the selectedtab param if it is in the url
 			$selectedtab	=	$PARSER->optional_param('selectedtab',$defaulttab,PARAM_RAW);
 			
