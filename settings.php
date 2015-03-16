@@ -234,7 +234,33 @@ $allow_batch_print = new admin_setting_configcheckbox('block_ilp/allow_batch_pri
 $settings->add($allow_batch_print);
 
 
-$settings->add($misplugin_settings);
+//options for default tab in user's home
+$tabs = $dbc->get_dashboard_tabs();
+foreach ($tabs as $tab){
+
+    $classname	=	$tab->name;
+
+    //find out if the tab is enabled
+    $status	= get_config('block_ilp',$classname.'_pluginstatus');
+    if ($status	== ILP_ENABLED) {
+         //include the dashboard_tab class file
+        include_once("{$CFG->dirroot}/blocks/ilp/plugins/tabs/{$classname}.php");
+
+        if(!class_exists($classname)) {
+         print_error('pluginclassnotfound', 'block_ilp', '', $classname);
+        }
+
+        $dasttab	=	new $classname();
+        $dash_tab_name = $dasttab->display_name();
+        $taboptions[$tab->id] = $dash_tab_name;
+    }
+}
+// if no tab is enabled, display the message
+if (empty($taboptions)){
+    $taboptions[0] = 'No tab is enabled';
+}
+$configure_home_tab_default = new admin_setting_configselect('block_ilp/hometabdefault',get_string('hometabdefault','block_ilp'),get_string('hometabdefaultconfig','block_ilp'),'',$taboptions);
+$settings->add($configure_home_tab_default);
 
 global $CFG;
 
