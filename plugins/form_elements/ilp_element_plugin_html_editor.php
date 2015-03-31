@@ -86,11 +86,11 @@ class ilp_element_plugin_html_editor extends ilp_element_plugin {
         $table->addField($table_report);
 
         $table_minlength = new $this->xmldb_field('minimumlength');
-        $table_minlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_minlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
         $table->addField($table_minlength);
 
         $table_maxlength = new $this->xmldb_field('maximumlength');
-        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_maxlength->$set_attributes(XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
         $table->addField($table_maxlength);
 
         $table_timemodified = new $this->xmldb_field('timemodified');

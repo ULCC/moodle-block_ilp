@@ -1195,6 +1195,46 @@ function xmldb_block_ilp_upgrade($oldversion) {
     }
 
 
+
+
+
+    // Update default values in html_editor and datefield tables
+    if ($oldversion < 2015033100)	{
+
+        $table = new $xmldb_table( 'block_ilp_plu_hte' );
+
+        $field = new xmldb_field('minimumlength',XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
+        $dbman->change_field_default($table,$field);
+
+        $field = new xmldb_field('maximumlength',XMLDB_TYPE_INTEGER, 10, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
+        $dbman->change_field_default($table,$field);
+
+        $table = new $xmldb_table( 'block_ilp_plu_datf' );
+
+        $field = new xmldb_field('datetype',XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
+        $dbman->change_field_default($table,$field);
+
+        $field = new xmldb_field('scalendar',XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
+        $dbman->change_field_default($table,$field);
+
+        $field = new xmldb_field('ucalendar',XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
+        $dbman->change_field_default($table,$field);
+
+        $field = new xmldb_field('reminder',XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
+        $dbman->change_field_default($table,$field);
+
+
+        // Ilp savepoint reached.
+        upgrade_block_savepoint(true, 2015033100, 'ilp');
+    }
+
+
+
+
+
+
+
+
     return true;
 }
 
