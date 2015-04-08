@@ -64,12 +64,14 @@ class ilp_element_plugin_category extends ilp_element_plugin_itemlist{
 								$optionlist,
 				        		array('class' => 'form_input')
 				       	 	);
-				       	 	
-       	 	
-				       	 	
-				       	 	
-        
-        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+
+
+
+
         $mform->setType($fieldname, PARAM_RAW);
+
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'server');
+
 	}
 }

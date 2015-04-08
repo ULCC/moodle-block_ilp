@@ -295,7 +295,8 @@ class ilp_element_plugin_goal extends ilp_element_plugin {
 	  $mform->setDefault($fieldname.'_sel1',$currentcourse);
 	  $mform->setDefault($fieldname.'_sel2',$currentgoal);
 
-	  if (!empty($this->req)) 
+	  if (!empty($this->req))
+           $fieldname = "id_".$fieldname;
 	       $mform->addRule($fieldname, null, 'required', null, 'client');
      }
 

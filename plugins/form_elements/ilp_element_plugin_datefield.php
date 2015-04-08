@@ -368,10 +368,11 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
             array('class' => 'form_input', 'optional' => false )
         );
 
-        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
-
         //@todo decide correct PARAM type for date element
         $mform->setType($fieldname, PARAM_RAW);
+
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'server');
     }
 
 

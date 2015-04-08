@@ -138,7 +138,7 @@ if($mform->is_submitted()) {
     // check the validation rules
     //the server side validation checks have been taken out as they stop multipage forms from working I will reimplement
     //TODO: reimplement validation
-   // if($mform->is_validated()) {
+   if($mform->is_validated()) {
 
 //Flush any cache entries that contain this user.
 //This is pretty awful but still has a significent speed advantage
@@ -192,7 +192,7 @@ if($mform->is_submitted()) {
             redirect($return_url, get_string("reportcreationsuc", 'block_ilp'), ILP_REDIRECT_DELAY);
         }
 
-    //}
+    }
 }
 
 

@@ -195,6 +195,8 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
     	
     	//create the fieldname
     	$fieldname	=	"{$this->reportfield_id}_field";
+
+        //$fieldname  =   "id_".$fieldname;
     	if (!empty($this->description)) {
     	$mform->addElement('static', "{$fieldname}_desc", $this->label, strip_tags(html_entity_decode($this->description,
                                                                                                       ENT_QUOTES,
@@ -208,10 +210,15 @@ class ilp_element_plugin_text_area extends ilp_element_plugin {
             "$this->label",
             array('class' => 'form_input','rows'=> '20', 'cols'=>'65')
         );
-        
+
+
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'client');
         if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'client');
-        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'server');
+        if (!empty($this->minimumlength)) $mform->addRule($fieldname, null, 'minlength', $this->minimumlength, 'server');
+        if (!empty($this->maximumlength)) $mform->addRule($fieldname, null, 'maxlength', $this->maximumlength, 'server');
         $mform->setType($fieldname, PARAM_RAW);
 
     }

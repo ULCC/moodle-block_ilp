@@ -14,6 +14,42 @@ M.ilp_edit_reportentry = {
             this.prepare_next();
             this.prepare_prev();
         }
+
+
+
+        submitbuttons = Y.all("input[type=submit]").each(function (ele)  {
+
+            console.log("submit changes");
+
+
+             Y.on("click",function (e,ele)  {
+                 e.preventDefault();
+
+                res = validate_report_entry_mform(document.getElementById('mform1'));
+
+                 if (res == true)   {
+                     //create a hidden input that will hold the data that would have been passed by the button
+                     //just in case its needed
+                     var extrahidden = Y.Node.create('<input type="hidden">');
+                     extrahidden.setAttribute('name', this.get("name"));
+                     extrahidden.setAttribute('value', this.get("value"));
+
+                     var submitid = this.get("id");
+                     Y.one('form#mform1').append(extrahidden);
+
+                     //disable the button
+                     this.setAttribute('disabled', 'true');
+                     //brings the button back to life just in case the user doesnt leave the page
+                     setTimeout(function(){ document.getElementById("id_submitbutton").disabled = false; }, 2000);
+
+                     //submit the form
+                     Y.one('form#mform1').submit();
+                 }
+
+            }, ele);
+
+        });
+
     },
     prepare_next: function() {
         var nextbutton = Y.one('#id_nextbutton');

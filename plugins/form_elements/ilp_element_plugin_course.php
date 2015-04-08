@@ -223,8 +223,9 @@ class ilp_element_plugin_course extends ilp_element_plugin_itemlist{
 
 		if (!empty($course_id)) $select->setValue($course_id);
 
-
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'server');
+
         $mform->setType('label', PARAM_RAW);
 
     }

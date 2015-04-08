@@ -497,6 +497,8 @@ class ilp_element_plugin_warningstatus extends ilp_element_plugin_itemlist{
             $select->setSelected($warning_status->value);
         }
 
+        $fieldname  =   "id_".$fieldname;
+
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType('label', PARAM_RAW);
 

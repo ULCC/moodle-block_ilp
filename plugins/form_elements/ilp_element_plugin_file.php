@@ -234,8 +234,8 @@ class ilp_element_plugin_file extends ilp_element_plugin {
                                 $filemanager_config
                               );
 
-
         if (!empty($this->required)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        if (!empty($this->required)) $mform->addRule($fieldname, null, 'required', null, 'server');
 	 }
 
 

@@ -57,8 +57,10 @@ class ilp_element_plugin_free_html extends ilp_element_plugin {
             html_entity_decode($this->description)
         );
 
-        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
         $mform->setType($fieldname, PARAM_RAW);
+
+        $fieldname  =   "id_".$fieldname;
+
     }
 
     public function audit_type() {

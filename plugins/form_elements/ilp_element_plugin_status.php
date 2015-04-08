@@ -519,6 +519,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
         }
 
         if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'client');
+        if (!empty($this->req)) $mform->addRule($fieldname, null, 'required', null, 'server');
         $mform->setType('label', PARAM_RAW);
 
         if (!empty($this->savetype))    {
