@@ -76,19 +76,19 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
         $table->addField($table_report);
 
         $table_datetype = new $this->xmldb_field('datetype');
-        $table_datetype->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_datetype->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
         $table->addField($table_datetype);
 
         $table_scalendar = new $this->xmldb_field('scalendar');
-        $table_scalendar->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_scalendar->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
         $table->addField($table_scalendar);
 
         $table_ucalendar = new $this->xmldb_field('ucalendar');
-        $table_ucalendar->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_ucalendar->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
         $table->addField($table_ucalendar);
 
         $table_reminder = new $this->xmldb_field('reminder');
-        $table_reminder->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $table_reminder->$set_attributes(XMLDB_TYPE_INTEGER, 1, XMLDB_UNSIGNED, XMLDB_NOTNULL,null,0);
         $table->addField($table_reminder);
 
         $table_timemodified = new $this->xmldb_field('timemodified');
