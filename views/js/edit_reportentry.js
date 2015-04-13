@@ -17,33 +17,39 @@ M.ilp_edit_reportentry = {
 
 
 
-        submitbuttons = Y.all("input[type=submit]").each(function (ele)  {
 
-            console.log("submit changes");
+        submitbuttons = Y.all("input[type=submit]").each(function (ele)  {
 
 
              Y.on("click",function (e,ele)  {
-                 e.preventDefault();
+                 var path = window.location.pathname;
+                 var pagename = path.split("/").pop();
 
-                res = validate_report_entry_mform(document.getElementById('mform1'));
 
-                 if (res == true)   {
-                     //create a hidden input that will hold the data that would have been passed by the button
-                     //just in case its needed
-                     var extrahidden = Y.Node.create('<input type="hidden">');
-                     extrahidden.setAttribute('name', this.get("name"));
-                     extrahidden.setAttribute('value', this.get("value"));
+                 //this action is only requried on edit_reportentry.php
+                 if (pagename == 'edit_reportentry.php')  {
+                    e.preventDefault();
 
-                     var submitid = this.get("id");
-                     Y.one('form#mform1').append(extrahidden);
+                    res = validate_report_entry_mform(document.getElementById('mform1'));
 
-                     //disable the button
-                     this.setAttribute('disabled', 'true');
-                     //brings the button back to life just in case the user doesnt leave the page
-                     setTimeout(function(){ document.getElementById("id_submitbutton").disabled = false; }, 2000);
+                     if (res == true)   {
+                         //create a hidden input that will hold the data that would have been passed by the button
+                         //just in case its needed
+                         var extrahidden = Y.Node.create('<input type="hidden">');
+                         extrahidden.setAttribute('name', this.get("name"));
+                         extrahidden.setAttribute('value', this.get("value"));
 
-                     //submit the form
-                     Y.one('form#mform1').submit();
+                         var submitid = this.get("id");
+                         Y.one('form#mform1').append(extrahidden);
+
+                         //disable the button
+                         this.setAttribute('disabled', 'true');
+                         //brings the button back to life just in case the user doesnt leave the page
+                         setTimeout(function(){ document.getElementById("id_submitbutton").disabled = false; }, 2000);
+
+                         //submit the form
+                         Y.one('form#mform1').submit();
+                     }
                  }
 
             }, ele);
