@@ -12,6 +12,7 @@ M.ilp_ajax_addnew = {
     editcomment_button_clicked : null,
     delete_button_clicked : null,
     addnew_button_clicked : null,
+    addcomment_button_clicked : null,
 
 
     init: function(Y, root, pagename) {
@@ -22,6 +23,7 @@ M.ilp_ajax_addnew = {
         this.delete_button_clicked = [];
         this.editcomment_button_clicked = [];
         this.addnew_button_clicked = false;
+        this.addcomment_button_clicked = [];
 
         if (pagename == 'view_studentreports') {
             M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
@@ -42,65 +44,88 @@ M.ilp_ajax_addnew = {
     prepare_addcomments_for_ajax: function() {
         var Y = this.Y;
         var root = this.root;
+
+
+
         var commentadds = Y.all('.add-comment-ajax');
         commentadds.each( function (commentadd) {
+
+
+            var addcomment_id_dom = commentadd.get('id');
+            M.ilp_ajax_addnew.addcomment_button_clicked[addcomment_id_dom]   = false;
+            commentadd.setStyle('cursor', 'pointer');
+
+
             commentadd.on('click', function() {
                 var entryid = commentadd.get('id');
-                var formarea_icon = Y.one('.loader-icon-' + entryid + ' .ajaxloadicon');
-                formarea_icon.removeClass('hiddenelement');
-                var report_id = Y.one('.' + entryid + '-report_id').get('text');
-                var user_id = Y.one('.' + entryid + '-user_id').get('text');
-                var selectedtab = Y.one('.' + entryid + '-selectedtab').get('text');
-                var tabitem = Y.one('.' + entryid + '-tabitem').get('text');
-                var course_id = Y.one('.' + entryid + '-course_id').get('text');
-                var url_params = 'report_id=' + report_id + '&user_id=' + user_id + '&selectedtab=' + selectedtab + '&tabitem=' + tabitem + '&courseid=' + course_id;
-                var numerical_entry_id = entryid.replace('ajax_com-', '');
-                var cfg = {
-                    method: "POST",
-                    on: {
-                        success : function(id, o, args) {
-                            var formarea = Y.one('.add-form-' + entryid);
-                            var response = Y.JSON.parse(o.responseText);
-                            var form = Y.Node.create(response.html); // Create a Node from the HTML
-                            formarea_icon.addClass('hiddenelement');
-                            formarea.setHTML(form);
-                            scriptel = document.createElement('script'); // Create a <script> tag
-                            scriptel.textContent = response.script; // Put the Javascript inside the script tag
-                            document.body.appendChild(scriptel); // Add the script tag to the page.
 
-                            var comment_send_params =new Object();
-                            comment_send_params.dom_entryid = entryid;
-                            comment_send_params.entryid = numerical_entry_id;
-                            comment_send_params.report_id = report_id;
-                            comment_send_params.user_id = user_id;
-                            comment_send_params.selectedtab = selectedtab;
-                            comment_send_params.tabitem = tabitem;
-                            comment_send_params.course_id = course_id;
-                            var cancel = Y.one('.add-form-' + entryid + ' ' + '#id_cancel');
-                            cancel.setAttribute('type', 'button');
+                if (M.ilp_ajax_addnew.addcomment_button_clicked[entryid] == false) {
 
-                            cancel.on('click', function(){
-                                formarea.setHTML('');
-                            });
+                    M.ilp_ajax_addnew.addcomment_button_clicked[entryid]    = true;
 
-                            var mceText = Y.one('.mceText');
-                            if(mceText) {
-                                mceText.simulate("click");
-                            }
+                    M.ilp_ajax_addnew.disable_ajax_buttons(null);
 
-                            YUI().use('event', function (Y) {
-                                Y.one('#mform1').on('submit', function (e) {
-                                    var loadericon = Y.one('.add-form-' + entryid + ' .ajaxloadicon');
-                                    Y.one('.add-form-' + entryid + ' .fitem_actionbuttons .felement.fgroup').prepend(loadericon);
-                                    loadericon.removeClass('hiddenelement');
-                                    // Whatever else you want to do goes here
-                                    M.ilp_ajax_addnew.submit_form(e, this._node, formarea, comment_send_params, loadericon);
+                    commentadd.setStyle('cursor', 'not-allowed');
+                    var formarea_icon = Y.one('.loader-icon-' + entryid + ' .ajaxloadicon');
+                    formarea_icon.removeClass('hiddenelement');
+                    var report_id = Y.one('.' + entryid + '-report_id').get('text');
+                    var user_id = Y.one('.' + entryid + '-user_id').get('text');
+                    var selectedtab = Y.one('.' + entryid + '-selectedtab').get('text');
+                    var tabitem = Y.one('.' + entryid + '-tabitem').get('text');
+                    var course_id = Y.one('.' + entryid + '-course_id').get('text');
+                    var url_params = 'report_id=' + report_id + '&user_id=' + user_id + '&selectedtab=' + selectedtab + '&tabitem=' + tabitem + '&courseid=' + course_id;
+                    var numerical_entry_id = entryid.replace('ajax_com-', '');
+                    var cfg = {
+                        method: "POST",
+                        on: {
+                            success : function(id, o, args) {
+                                var formarea = Y.one('.add-form-' + entryid);
+                                var response = Y.JSON.parse(o.responseText);
+                                var form = Y.Node.create(response.html); // Create a Node from the HTML
+                                formarea_icon.addClass('hiddenelement');
+                                formarea.setHTML(form);
+                                scriptel = document.createElement('script'); // Create a <script> tag
+                                scriptel.textContent = response.script; // Put the Javascript inside the script tag
+                                document.body.appendChild(scriptel); // Add the script tag to the page.
+
+                                var comment_send_params =new Object();
+                                comment_send_params.dom_entryid = entryid;
+                                comment_send_params.entryid = numerical_entry_id;
+                                comment_send_params.report_id = report_id;
+                                comment_send_params.user_id = user_id;
+                                comment_send_params.selectedtab = selectedtab;
+                                comment_send_params.tabitem = tabitem;
+                                comment_send_params.course_id = course_id;
+                                var cancel = Y.one('.add-form-' + entryid + ' ' + '#id_cancel');
+                                cancel.setAttribute('type', 'button');
+
+                                cancel.on('click', function(){
+                                    formarea.setHTML('');
+                                    commentadd.setStyle('cursor', 'pointer');
+                                    M.ilp_ajax_addnew.addcomment_button_clicked[entryid]    = false;
+                                    M.ilp_ajax_addnew.enable_ajax_buttons();
+
                                 });
-                            });
+
+                                var mceText = Y.one('.mceText');
+                                if(mceText) {
+                                    mceText.simulate("click");
+                                }
+
+                                YUI().use('event', function (Y) {
+                                    Y.one('#mform1').on('submit', function (e) {
+                                        var loadericon = Y.one('.add-form-' + entryid + ' .ajaxloadicon');
+                                        Y.one('.add-form-' + entryid + ' .fitem_actionbuttons .felement.fgroup').prepend(loadericon);
+                                        loadericon.removeClass('hiddenelement');
+                                        // Whatever else you want to do goes here
+                                        M.ilp_ajax_addnew.submit_form(e, this._node, formarea, comment_send_params, loadericon);
+                                    });
+                                });
+                            }
                         }
-                    }
-                };
-                Y.io(root + '/blocks/ilp/actions/edit_entrycomment.ajax.php?entry_id=' + numerical_entry_id + '&' + url_params, cfg);
+                    };
+                    Y.io(root + '/blocks/ilp/actions/edit_entrycomment.ajax.php?entry_id=' + numerical_entry_id + '&' + url_params, cfg);
+                }
             });
         });
     },
@@ -133,8 +158,10 @@ M.ilp_ajax_addnew = {
                     var numcomments = Y.one('span.numcomments-' + comment_send_params.dom_entryid);
                     numcomments.set('text', parseInt(numcomments.get('text')) + 1);
                     loadericon.addClass('hiddenelement');
+
                     M.ilp_ajax_addnew.prepare_edits_for_ajax();
                     M.ilp_ajax_addnew.prepare_deletes_for_ajax();
+                    M.ilp_ajax_addnew.enable_ajax_buttons();
                     if (this.pagename !== 'view_studentreports') {
                         M.ilp_dashboard_reports_tab.init(Y);
                     }
@@ -187,6 +214,9 @@ M.ilp_ajax_addnew = {
                                 cancel.setAttribute('type', 'button');
                                 cancel.on('click', function(){
                                     formarea.setHTML('');
+                                    M.ilp_ajax_addnew.enable_ajax_buttons();
+                                    M.ilp_ajax_addnew.editcomment_button_clicked[comment_id_dom]    = false;
+
                                 });
 
                                 YUI().use('event', function (Y) {
@@ -194,6 +224,7 @@ M.ilp_ajax_addnew = {
                                         var loadericon = Y.one('.editarea-' + comment_id + ' .ajaxloadicon');
                                         Y.one('.editarea-' + comment_id + ' .fitem_actionbuttons .felement.fgroup').prepend(loadericon);
                                         loadericon.removeClass('hiddenelement');
+
                                         M.ilp_ajax_addnew.submit_edit_form(e, this._node, formarea, url, entry_id, loadericon, comment_id_dom);
                                     });
                                 });
@@ -225,9 +256,10 @@ M.ilp_ajax_addnew = {
                     var comments_container = Y.one('#entry_' + entry_id + '_container');
                     var content = Y.JSON.parse(o.responseText);
                     comments_container.setHTML(content);
-                    // The entry's comments have been re-loaded to capture the new changes; these need the seem script attached.
-                    M.ilp_ajax_addnew.prepare_edits_for_ajax();
+
+                    M.ilp_ajax_addnew.enable_ajax_buttons();
                     M.ilp_ajax_addnew.prepare_deletes_for_ajax();
+
                     M.ilp_ajax_addnew.editcomment_button_clicked[comment_id_dom]    = true;
                     loadericon.addClass('hiddenelement');
                 }
@@ -277,9 +309,9 @@ M.ilp_ajax_addnew = {
                 if (M.ilp_ajax_addnew.addnew_button_clicked == false)   {
 
                     newentrylink.setStyle('cursor', 'not-allowed');
-                    M.ilp_ajax_addnew.addnew_button_clicked = true;
 
-                    M.ilp_ajax_addnew.disable_entry_edits_for_ajax(null);
+
+                    M.ilp_ajax_addnew.disable_ajax_buttons(null);
 
                     var loadericon = Y.one('.addnewentry-loader .ajaxloadicon');
                     loadericon.removeClass('hiddenelement');
@@ -301,8 +333,7 @@ M.ilp_ajax_addnew = {
                                 cancel.setAttribute('type', 'button');
                                 cancel.on('click', function(){
                                     newentryarea.setHTML('');
-                                    M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
-                                    M.ilp_ajax_addnew.addnew_button_clicked = false;
+                                    M.ilp_ajax_addnew.enable_ajax_buttons();
                                     newentrylink.setStyle('cursor', 'pointer');
                                 });
 
@@ -353,6 +384,7 @@ M.ilp_ajax_addnew = {
                             cancel.setAttribute('type', 'button');
                             cancel.on('click', function(){
                                 newentryarea.setHTML('');
+                                M.ilp_ajax_addnew.enable_ajax_buttons();
                             });
 
                             YUI().use('event', function (Y) {
@@ -439,9 +471,9 @@ M.ilp_ajax_addnew = {
                                     var numentries_int = parseInt(numentries_dom.get('text'));
                                     numentries_int ++;
                                     numentries_dom.set('text', numentries_int);
-                                    M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
+
+                                    M.ilp_ajax_addnew.enable_ajax_buttons();
                                     M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
-                                    M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
                                     M.ilp_view_studentreports.prepare_comment_showhide();
                                 }
                             }
@@ -459,9 +491,9 @@ M.ilp_ajax_addnew = {
                             M.ilp_dashboard_reports_tab.init(Y);
                             Y.one('.reports-container-container').one('.view-comments').removeClass('new-entry');
                         }
-                        M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
+
                         M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
-                        M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+                        M.ilp_ajax_addnew.enable_ajax_buttons();
 
                         // depends on the newly created entry with a 2nd status being the first in the list.
                         var warningstatus = entrycontainer.one('.ilp_element_plugin_warningstatus');
@@ -583,7 +615,7 @@ M.ilp_ajax_addnew = {
                     var url = edit.getData('link');
                     var entry_id = edit.getData('entry');
 
-                    M.ilp_ajax_addnew.disable_entry_edits_for_ajax(edit_id_dom);
+                    M.ilp_ajax_addnew.disable_ajax_buttons(null);
 
                     var cfg = {
                         method: "POST",
@@ -603,7 +635,8 @@ M.ilp_ajax_addnew = {
                                 cancel.setAttribute('type', 'button');
                                 cancel.on('click', function(){
                                     formarea.setHTML('');
-                                    M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+                                    M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
+                                    M.ilp_ajax_addnew.enable_ajax_buttons();
                                     M.ilp_ajax_addnew.edit_button_clicked[edit_id_dom]    = false;
 
                                 });
@@ -662,10 +695,10 @@ M.ilp_ajax_addnew = {
                                 success : function(id, o, args) {
                                     var response = Y.JSON.parse(o.responseText);
                                     Y.one('.reports-container-' + edit_id).setHTML(Y.Node.create(response.html));
-                                    M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
                                     M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
-                                    M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
                                     M.ilp_view_studentreports.prepare_comment_showhide();
+
+                                    M.ilp_ajax_addnew.enable_ajax_buttons();
                                 }
                             }
                         };
@@ -681,9 +714,9 @@ M.ilp_ajax_addnew = {
                         Y.one('.left-report-cont-' + edit_id).setHTML(left_report);
                         var right_report = Y.Node.create(response.right_report);
                         Y.one('.right-report-cont-' + edit_id).setHTML(right_report);
-                        M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
+
                         M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
-                        M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+                        M.ilp_ajax_addnew.enable_ajax_buttons();
 
                         var warningstatus = Y.one('.reports-container-' + edit_id).one('.ilp_element_plugin_warningstatus');
 
@@ -698,25 +731,74 @@ M.ilp_ajax_addnew = {
         });
     },
 
+
+    disable_ajax_buttons: function(e)   {
+
+        M.ilp_ajax_addnew.disable_entry_edits_for_ajax(null,null);
+        M.ilp_ajax_addnew.disable_addcomments_for_ajax(null,null);
+        M.ilp_ajax_addnew.disable_addnew_for_ajax(null);
+
+    },
+
+    enable_ajax_buttons: function(e) {
+        M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
+        M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+        M.ilp_ajax_addnew.enable_addnew_for_ajax();
+    },
+
+
+    //this function disables all edit entry buttons
     disable_entry_edits_for_ajax: function(e, edit_id_dom)    {
+
         var edits = Y.all('.entry-edition');
         edits.each( function (edit) {
 
             var local_edit_id_dom = edit.get('id');
 
             if (edit_id_dom != local_edit_id_dom) {
-
+                M.ilp_ajax_addnew.edit_button_clicked[local_edit_id_dom]    =   true;
                 edit.setStyle('cursor', 'not-allowed');
                 edit.on('click', function() {
-
                 });
             }
-
-
-
-
         });
+    },
+
+
+    //this function disables all add comment buttons
+    disable_addcomments_for_ajax: function(e, comment_id_dom)    {
+
+        var commentadds = Y.all('.add-comment-ajax');
+        commentadds.each( function (commentadd) {
+
+            var local_comment_id_dom = commentadd.get('id');
+
+            if (comment_id_dom != local_comment_id_dom) {
+                M.ilp_ajax_addnew.addcomment_button_clicked[local_comment_id_dom]    =   true;
+                commentadd.setStyle('cursor', 'not-allowed');
+                commentadd.on('click', function() {
+                });
+            }
+        });
+    },
+
+    //disables the add new entry button
+    disable_addnew_for_ajax: function(e)   {
+        M.ilp_ajax_addnew.addnew_button_clicked = true;
+    },
+
+
+    //disables the add new entry button
+    enable_addnew_for_ajax: function(e)   {
+        M.ilp_ajax_addnew.addnew_button_clicked = false;
     }
+
+
+
+
+
+
+
 
 }
 
