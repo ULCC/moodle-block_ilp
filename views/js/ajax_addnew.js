@@ -13,6 +13,7 @@ M.ilp_ajax_addnew = {
     delete_button_clicked : null,
     addnew_button_clicked : null,
     addcomment_button_clicked : null,
+    deletecomment_button_clicked : null,
 
 
     init: function(Y, root, pagename) {
@@ -24,6 +25,7 @@ M.ilp_ajax_addnew = {
         this.editcomment_button_clicked = [];
         this.addnew_button_clicked = false;
         this.addcomment_button_clicked = [];
+        this.deletecomment_button_clicked    =   [];
 
         if (pagename == 'view_studentreports') {
             M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
@@ -189,6 +191,8 @@ M.ilp_ajax_addnew = {
 
                     M.ilp_ajax_addnew.editcomment_button_clicked[comment_id_dom]    = true;
 
+                    M.ilp_ajax_addnew.disable_ajax_buttons();
+
                     var comment_id = comment_id_dom.replace('edit-comment-ajax-', '');
                     var edit_loader_icon = Y.one('.editcomment-loader-icon-' + comment_id + ' .ajaxloadicon');
                     edit_loader_icon.removeClass('hiddenelement');
@@ -259,8 +263,6 @@ M.ilp_ajax_addnew = {
 
                     M.ilp_ajax_addnew.enable_ajax_buttons();
                     M.ilp_ajax_addnew.prepare_deletes_for_ajax();
-
-                    M.ilp_ajax_addnew.editcomment_button_clicked[comment_id_dom]    = true;
                     loadericon.addClass('hiddenelement');
                 }
             },
@@ -272,28 +274,48 @@ M.ilp_ajax_addnew = {
     prepare_deletes_for_ajax: function() {
         var commentdeletes = Y.all('.delete-comment-ajax');
         commentdeletes.each( function (commentdelete) {
+
+            var comment_id_dom = commentdelete.get('id');
+
+            M.ilp_ajax_addnew.deletecomment_button_clicked[comment_id_dom]    =   false;
+
             commentdelete.setStyle('cursor', 'pointer');
             commentdelete.on('click', function() {
+
+
                 var comment_id_dom = commentdelete.get('id');
-                var comment_id = comment_id_dom.replace('delete-comment-ajax-', '');
-                var delete_loader_icon = Y.one('.deletecomment-loader-icon-' + comment_id + ' .ajaxloadicon');
-                delete_loader_icon.removeClass('hiddenelement');
 
-                var url = commentdelete.getData('link');
-                var entry_id = commentdelete.getData('entry');
+                if (M.ilp_ajax_addnew.deletecomment_button_clicked[comment_id_dom] == false)   {
 
-                var cfg = {
-                    method: "POST",
-                    on: {
-                        success : function(id, o, args) {
-                            Y.one('#comment-id-' + comment_id).hide();
-                            var numcomments = Y.one('span.numcomments-' + 'ajax_com-' + entry_id);
-                            numcomments.set('text', parseInt(numcomments.get('text')) - 1);
-                            delete_loader_icon.addClass('hiddenelement');
+                    M.ilp_ajax_addnew.deletecomment_button_clicked[comment_id_dom] = true;
+
+                    var comment_id = comment_id_dom.replace('delete-comment-ajax-', '');
+                    var delete_loader_icon = Y.one('.deletecomment-loader-icon-' + comment_id + ' .ajaxloadicon');
+                    delete_loader_icon.removeClass('hiddenelement');
+
+                    var url = commentdelete.getData('link');
+                    var entry_id = commentdelete.getData('entry');
+
+                    var cfg = {
+                        method: "POST",
+                        on: {
+                            success : function(id, o, args) {
+                                Y.one('#comment-id-' + comment_id).hide();
+                                var numcomments = Y.one('span.numcomments-' + 'ajax_com-' + entry_id);
+                                numcomments.set('text', parseInt(numcomments.get('text')) - 1);
+                                delete_loader_icon.addClass('hiddenelement');
+
+                                if (parseInt(numcomments.get('text') == 0))   {
+
+
+
+                                }
+
+                            }
                         }
-                    }
-                };
-                Y.io(url, cfg);
+                    };
+                    Y.io(url, cfg);
+                }
             });
 
         });
@@ -520,17 +542,17 @@ M.ilp_ajax_addnew = {
         var entrydeletes = Y.all('.entry-deletion');
         entrydeletes.each( function (entrydelete) {
 
-            var entry_id = entrydelete.getData('entry');
+            var entry_id_dom = entrydelete.getData('id');
 
             entrydelete.setStyle('cursor', 'pointer');
 
-            M.ilp_ajax_addnew.delete_button_clicked[entry_id]    = false;
+            M.ilp_ajax_addnew.delete_button_clicked[entry_id_dom]    = false;
 
             entrydelete.on('click', function() {
                 var entry_id_dom = entrydelete.get('id');
                 var entry_id = entrydelete.getData('entry');
 
-                if (M.ilp_ajax_addnew.delete_button_clicked[entry_id] == false) {
+                if (M.ilp_ajax_addnew.delete_button_clicked[entry_id_dom] == false) {
 
                     var delete_loader_icon = Y.one('.delete_entry-loader-' + entry_id + ' .ajaxloadicon');
                     delete_loader_icon.removeClass('hiddenelement');
@@ -554,15 +576,6 @@ M.ilp_ajax_addnew = {
                                     var addentry = Y.one('._addnewentry');
                                 }
 
-                                var edits = Y.all('.entry-edition');
-
-                                edits.each( function (edit) {
-
-                                    var edit_id_dom = edit.get('id');
-                                    M.ilp_ajax_addnew.edit_button_clicked[edit_id_dom]    = false;
-                                    edit.setStyle('cursor', 'pointer');
-
-                                });
 
 
                                 if (addentry) {
@@ -732,18 +745,35 @@ M.ilp_ajax_addnew = {
     },
 
 
+    //central function that calls the functions that disable all clickable
+    // links whilst creation or editing is taking place
     disable_ajax_buttons: function(e)   {
 
-        M.ilp_ajax_addnew.disable_entry_edits_for_ajax(null,null);
+        //comment buttons
         M.ilp_ajax_addnew.disable_addcomments_for_ajax(null,null);
-        M.ilp_ajax_addnew.disable_addnew_for_ajax(null);
+        M.ilp_ajax_addnew.disable_editcomments_for_ajax(null,null);
+        M.ilp_ajax_addnew.disable_deletecomments_for_ajax(null,null);
+
+        //entry buttons
+        M.ilp_ajax_addnew.disable_delete_for_ajax(null,null);
+        M.ilp_ajax_addnew.disable_addnew_for_ajax(null,null);
+        M.ilp_ajax_addnew.disable_entry_edits_for_ajax(null,null);
+
+
 
     },
 
+    //central function that calls the functions that enable all clickable
+    //links
     enable_ajax_buttons: function(e) {
         M.ilp_ajax_addnew.prepare_addcomments_for_ajax();
         M.ilp_ajax_addnew.prepare_entry_edits_for_ajax();
+        M.ilp_ajax_addnew.prepare_delete_entries_for_ajax();
+
         M.ilp_ajax_addnew.enable_addnew_for_ajax();
+        M.ilp_ajax_addnew.prepare_edits_for_ajax();
+        M.ilp_ajax_addnew.prepare_deletes_for_ajax();
+
     },
 
 
@@ -758,8 +788,6 @@ M.ilp_ajax_addnew = {
             if (edit_id_dom != local_edit_id_dom) {
                 M.ilp_ajax_addnew.edit_button_clicked[local_edit_id_dom]    =   true;
                 edit.setStyle('cursor', 'not-allowed');
-                edit.on('click', function() {
-                });
             }
         });
     },
@@ -776,11 +804,53 @@ M.ilp_ajax_addnew = {
             if (comment_id_dom != local_comment_id_dom) {
                 M.ilp_ajax_addnew.addcomment_button_clicked[local_comment_id_dom]    =   true;
                 commentadd.setStyle('cursor', 'not-allowed');
-                commentadd.on('click', function() {
-                });
             }
         });
     },
+
+    disable_delete_for_ajax: function(e, delete_id)    {
+
+        var deletebuttons = Y.all('.entry-deletion');
+        deletebuttons.each( function (deletebutton) {
+
+            var local_delete_id = deletebutton.get('id');
+
+            if (delete_id != local_delete_id) {
+                M.ilp_ajax_addnew.delete_button_clicked[local_delete_id]    =   true;
+                deletebutton.setStyle('cursor', 'not-allowed');
+
+            }
+        });
+    },
+
+    disable_editcomments_for_ajax: function(e, editcomment_id)    {
+        var editcommentsbuttons = Y.all('.edit-comment-ajax');
+        editcommentsbuttons.each( function (editcommentsbut) {
+
+            var local_editcomment_id = editcommentsbut.get('id');
+
+            if (editcomment_id != local_editcomment_id) {
+                M.ilp_ajax_addnew.editcomment_button_clicked[local_editcomment_id]    =   true;
+                editcommentsbut.setStyle('cursor', 'not-allowed');
+            }
+        });
+    },
+
+    disable_deletecomments_for_ajax: function(e, delcomment_id)    {
+        var deletecommentsbuttons = Y.all('.delete-comment-ajax');
+        deletecommentsbuttons.each( function (deletecommentsbut) {
+
+            var local_delcomment_id = deletecommentsbut.get('id');
+
+            if (delcomment_id != local_delcomment_id) {
+                M.ilp_ajax_addnew.deletecomment_button_clicked[local_delcomment_id]    =   true;
+                deletecommentsbut.setStyle('cursor', 'not-allowed');
+            }
+        });
+    },
+
+
+
 
     //disables the add new entry button
     disable_addnew_for_ajax: function(e)   {
