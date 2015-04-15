@@ -543,16 +543,27 @@ M.ilp_ajax_addnew = {
         entrydeletes.each( function (entrydelete) {
 
             var entry_id_dom = entrydelete.getData('id');
+            var entry_id = entrydelete.getData('entry');
 
             entrydelete.setStyle('cursor', 'pointer');
 
-            M.ilp_ajax_addnew.delete_button_clicked[entry_id_dom]    = false;
+            M.ilp_ajax_addnew.delete_button_clicked[entry_id]    = false;
+
+
+
+            console.log(entry_id);
+
+            console.log(M.ilp_ajax_addnew.delete_button_clicked[entry_id]);
 
             entrydelete.on('click', function() {
                 var entry_id_dom = entrydelete.get('id');
                 var entry_id = entrydelete.getData('entry');
 
-                if (M.ilp_ajax_addnew.delete_button_clicked[entry_id_dom] == false) {
+                console.log(entry_id);
+
+                console.log(M.ilp_ajax_addnew.delete_button_clicked[entry_id]);
+
+                if (M.ilp_ajax_addnew.delete_button_clicked[entry_id] == false) {
 
                     var delete_loader_icon = Y.one('.delete_entry-loader-' + entry_id + ' .ajaxloadicon');
                     delete_loader_icon.removeClass('hiddenelement');
@@ -813,7 +824,7 @@ M.ilp_ajax_addnew = {
         var deletebuttons = Y.all('.entry-deletion');
         deletebuttons.each( function (deletebutton) {
 
-            var local_delete_id = deletebutton.get('id');
+            var local_delete_id = deletebutton.get('entry');
 
             if (delete_id != local_delete_id) {
                 M.ilp_ajax_addnew.delete_button_clicked[local_delete_id]    =   true;
