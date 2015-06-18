@@ -119,7 +119,8 @@ $maxreports = (!empty($maxreports)) ? $maxreports : ILP_DEFAULT_LIST_REPORTS;
 
 //we are going to create headers and columns for all enabled reports
 foreach ($reports as $reportid => $r) {
-    if (in_array($reportid, $vaulted_report_ids)) {
+    $report		=	$dbc->get_report_by_id($reportid);
+    if (in_array($reportid, $vaulted_report_ids) || !$report->has_cap($USER->id,$PAGE->context,'block/ilp:viewreport')) {
         unset($reports[$reportid]);
         continue;
     }
