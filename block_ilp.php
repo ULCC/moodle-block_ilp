@@ -10,7 +10,6 @@
  */
 
 class block_ilp extends block_list {
-
    /**
     * Sets initial block variables. Part of the blocks API
     *

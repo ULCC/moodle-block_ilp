@@ -30,7 +30,14 @@ M.ilp_edit_reportentry = {
                  if (pagename == 'edit_reportentry.php')  {
                     e.preventDefault();
 
-                    res = validate_report_entry_mform(document.getElementById('mform1'));
+                     if(typeof validate_report_entry_mform == 'function')
+                     {
+                         res = validate_report_entry_mform(document.getElementById('mform1'));
+                     }
+                     else
+                     {
+                         res=true;
+                     }
 
                      if (res == true)   {
                          //create a hidden input that will hold the data that would have been passed by the button
