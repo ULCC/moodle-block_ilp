@@ -25,10 +25,15 @@ M.ilp_edit_reportentry = {
                  var path = window.location.pathname;
                  var pagename = path.split("/").pop();
 
-
                  //this action is only requried on edit_reportentry.php
                  if (pagename == 'edit_reportentry.php')  {
-                    e.preventDefault();
+                    var submitted = Y.one('form#mform1').getData('submitted');
+
+                    if (submitted == 'submitted')
+                    {
+                        e.preventDefault();
+                        return;
+                    }
 
                      if(typeof validate_report_entry_mform == 'function')
                      {
@@ -40,22 +45,9 @@ M.ilp_edit_reportentry = {
                      }
 
                      if (res == true)   {
-                         //create a hidden input that will hold the data that would have been passed by the button
-                         //just in case its needed
-                         var extrahidden = Y.Node.create('<input type="hidden">');
-                         extrahidden.setAttribute('name', this.get("name"));
-                         extrahidden.setAttribute('value', this.get("value"));
-
-                         var submitid = this.get("id");
-                         Y.one('form#mform1').append(extrahidden);
-
-                         //disable the button
-                         this.setAttribute('disabled', 'true');
-                         //brings the button back to life just in case the user doesnt leave the page
-                         setTimeout(function(){ document.getElementById("id_submitbutton").disabled = false; }, 2000);
-
-                         //submit the form
-                         Y.one('form#mform1').submit();
+                         Y.one('form#mform1').setData('submitted', 'submitted');
+                     } else {
+                         e.preventDefault();
                      }
                  }
 
