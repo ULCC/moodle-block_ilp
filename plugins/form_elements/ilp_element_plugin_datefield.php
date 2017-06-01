@@ -390,7 +390,7 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
      * @param array $data          - the element data
      */
     public	function entry_specific_process_data($reportfield_id, $entry_id, $data) {
-        global $CFG;
+        global $CFG, $DB;
 
         /*
           * parent method is fine for simple form element types
@@ -412,13 +412,17 @@ class ilp_element_plugin_datefield extends ilp_element_plugin {
         $ucalendar = $this->ucalendar;
 
         //set report name(title) for the report depending on its type
+        $title = '';
         if ($datetype==1){
             $title		=	(!empty($report))	? $report->name." ".get_string('deadline','block_ilp') : get_string('deadline','block_ilp');
         }
         elseif ($datetype==2){
             $title		=	(!empty($report))	? $report->name." ".get_string('review','block_ilp') : get_string('review','block_ilp');
         }
-
+        // add the user's name to the calendar event title/description
+        if ($user = $DB->get_record('user', array('id' => $data->user_id), '*', MUST_EXIST)) {
+            $title = sprintf("%s for %s %s", $title, $user->firstname, $user->lastname);
+        }
         //count how many times code for creating events should run (once for each calendar selected)
         $loops = $scalendar + $ucalendar;
 
