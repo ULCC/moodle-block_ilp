@@ -617,6 +617,10 @@ $string['ilp_dashboard_archive_tab_studentinfo_shared']	 					= 'Shared text';
 
 $string['ilp_dashboard_archive_tab_pluginnamesettings'] = 'Archive tab Configuration';
 
+// Stop doing really nasty stuff during tests.
+// TODO: these should really be moved into proper sub-plugins.     
+if ((!defined('BEHAT_SITE_RUNNING') || BEHAT_SITE_RUNNING == false) &&
+        (!defined('PHPUNIT_TEST') || PHPUNIT_TEST == false)) {
 	global $CFG;
 
 	// Include ilp db class
@@ -711,3 +715,4 @@ $string['ilp_dashboard_archive_tab_pluginnamesettings'] = 'Archive tab Configura
             }
         }
     }
+}
