@@ -27,8 +27,14 @@ class block_ilp extends block_list {
    function get_content() {
       global $CFG, $USER, $COURSE, $SITE;
 
-      if(!isloggedin())
-	return $this->content;
+      if(!isloggedin()) {
+          return $this->content;
+      }
+
+      // cache the content of the block
+      if($this->content !== null) {
+          return $this->content;
+      }
 
       // include  db class
       require_once($CFG->dirroot.'/blocks/ilp/classes/database/ilp_db.php');
@@ -41,14 +47,6 @@ class block_ilp extends block_list {
 
       // db class manager
        $dbc = new ilp_db();
-
-       // get the course
-       $course = $dbc->get_course($COURSE->id);
-
-       // cache the content of the block
-       if($this->content !== null) {
-           return $this->content;
-       }
 
        //get all course that the current user is enrolled in
        $my_courses		=	$dbc->get_user_courses($USER->id);
