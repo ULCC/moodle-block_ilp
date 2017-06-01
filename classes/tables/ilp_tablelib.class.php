@@ -1106,7 +1106,7 @@ class ilp_flexible_table {
                         $lsortorder = get_string('asc');
                     }
 
-                    $override = new object();
+                    $override = new stdClass();
                     $override->firstname = 'firstname';
                     $override->lastname = 'lastname';
                     $fullnamelanguage = get_string('fullnamedisplay', '', $override);
@@ -1309,7 +1309,7 @@ class ilp_table_sql extends ilp_flexible_table{
      * appropriate clause of the query.
      */
     function set_sql($fields, $from, $where, $params=array()){
-        $this->sql = new object();
+        $this->sql = new stdClass();
         $this->sql->fields = $fields;
         $this->sql->from = $from;
         $this->sql->where = $where;

@@ -697,7 +697,7 @@ class ilp_ajax_table extends ilp_flexible_table {
                         }
                     }
 
-                    $override = new object();
+                    $override = new stdClass();
                     $override->firstname = 'firstname';
                     $override->lastname = 'lastname';
                     $fullnamelanguage = get_string('fullnamedisplay', '', $override);
@@ -978,7 +978,7 @@ class ilp_ajax_table extends ilp_flexible_table {
                     }
 
                     // output the text describing where we are
-                    $strings = new object();
+                    $strings = new stdClass();
                     $strings->startpos = empty($this->totalcols) ? 0 : $this->currhoz+1;
                     $endpos = $this->currhoz+$this->hozsize;
                     $strings->endpos = ($endpos > $this->totalcols) ? $this->totalcols : $endpos;
