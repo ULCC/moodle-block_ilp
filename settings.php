@@ -10,7 +10,11 @@
  * @version 2.0
  */
 
+defined('MOODLE_INTERNAL') || die;
 
+if (!$ADMIN->fulltree) {
+    return;
+}
 
 global $CFG;
 

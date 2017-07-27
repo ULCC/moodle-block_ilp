@@ -165,7 +165,7 @@ class ilp_logging {
                     $newobject->entry_table = $table;
                     $attributes = array( 'id', 'entry_id', 'parent_id', 'value' , 'entry_table', 'audit_type' );
 
-	                $log = new object();
+	                $log = new stdClass();
 	                $log->creator_id = $USER->id;
 	                $log->user_id = $USER->id;
 	                $log->candidate_id = $USER->id;
@@ -206,7 +206,7 @@ class ilp_logging {
 	            if ((in_array($key,$attributes) &&
 	                ($this->diff_object($table,$newobject,$currobject,$key,$action) || $action == ILP_LOG_DELETE))) {
 	
-	                $log = new object();
+	                $log = new stdClass();
 	                $log->creator_id = $USER->id;
 	
 	                $log->user_id = $USER->id;

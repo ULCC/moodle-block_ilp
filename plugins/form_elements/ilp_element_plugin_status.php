@@ -560,6 +560,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                 array('class' => 'form_input')
             );
             $A->setValue( $option->value );
+            $mform->setType('itemvalue_' . $option->id, PARAM_ALPHANUMEXT);
 
             $B = $mform->addElement(
                 'text',
@@ -568,6 +569,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
                 array('class' => 'form_input')
             );
             $B->setValue( $option->name );
+            $mform->setType('itemname_' . $option->id, PARAM_ALPHANUMEXT);
 
             $C = $mform->addElement(
                 'text',
@@ -579,6 +581,7 @@ class ilp_element_plugin_status extends ilp_element_plugin_itemlist{
             $hexcolour 	= (isset($option->hexcolour)) ? $option->hexcolour : "";
 
             $C->setValue( $hexcolour );
+            $mform->setType('itemhexcolour_' . $option->id, PARAM_ALPHANUMEXT);
 
             $description = $mform->addElement(
                 'text',

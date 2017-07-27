@@ -59,7 +59,7 @@
             //loop through all entries
             foreach($userentries as $ue)   {
 
-                $entry_data =   new object();
+                $entry_data = new stdClass();
 
                 for($i=0;$i<count($rgfarray);$i++)  {
                     $rf =   $dbc->get_reportfield_by_id($rgfarray[$i]);
