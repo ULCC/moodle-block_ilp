@@ -35,7 +35,7 @@ class ilp_moodleform extends moodleform {
      * @param <type> $attributes
      * @param <type> $editable
      */
-    function ilp_moodleform($action=null, $customdata=null, $method='post', $target='', $attributes=null, $editable=true) {
+    function __construct($action=null, $customdata=null, $method='post', $target='', $attributes=null, $editable=true) {
         if (empty($action)){
             $action = strip_querystring(qualified_me());
         }
@@ -204,13 +204,6 @@ class ilp_moodleform extends moodleform {
     }
 }
 
-
-
-
-
-
-
-
 /*
  * This class wraps the main Moodle form class so that stuff from HTMLarea fields can be encoded
  * and decoded properly. It is called when a new form is created by the ilp_moodleform class
@@ -227,13 +220,13 @@ class ilp_MoodleQuickForm extends MoodleQuickForm {
      * @param    bool        $trackSubmit       (optional)Whether to track if the form was submitted by adding a special hidden field
      * @access   public
      */
-    function ilp_MoodleQuickForm($formName, $method, $action, $target='', $attributes=array()) {
+    function __construct($formName, $method, $action, $target='', $attributes=array()) {
 
         global $CFG,$OUTPUT;
 
         static $formcounter = 1;
 
-        HTML_Common::HTML_Common($attributes);
+        HTML_Common::__construct($attributes);
         $target = empty($target) ? array() : array('target' => $target);
         $this->_formName = $formName;
 
@@ -312,6 +305,3 @@ class ilp_MoodleQuickForm extends MoodleQuickForm {
     
 }
 
-
-
-?>
